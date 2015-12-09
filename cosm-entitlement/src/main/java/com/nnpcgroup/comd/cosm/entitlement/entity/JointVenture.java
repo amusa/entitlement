@@ -16,9 +16,10 @@ import javax.persistence.OneToOne;
 public class JointVenture extends FiscalArrangement {
 
     private static final long serialVersionUID = 7758288081166549749L;
-    @OneToOne
+    
     protected EquityType equityType;
 
+    @OneToOne
     public EquityType getEquityType() {
         return equityType;
     }
@@ -27,7 +28,6 @@ public class JointVenture extends FiscalArrangement {
         this.equityType = equityType;
     }
     
-    
-    
+     
     
 }

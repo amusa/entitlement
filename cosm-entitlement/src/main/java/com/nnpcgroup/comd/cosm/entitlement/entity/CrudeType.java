@@ -27,7 +27,7 @@ public class CrudeType implements Serializable {
     private String code;
     private String crudeType;
     private Terminal terminal;
-    private Collection<FiscalPartnership> fiscalAssets;
+    private Collection<ContractStream> contractStreams;
 
     @Id
     public String getCode() {
@@ -59,12 +59,12 @@ public class CrudeType implements Serializable {
     }
         
     @OneToMany(mappedBy = "crudeType")
-    public Collection<FiscalPartnership> getFiscalAssets() {
-        return fiscalAssets;
+    public Collection<ContractStream> getContractStreams() {
+        return contractStreams;
     }
 
-    public void setFiscalAssets(Collection<FiscalPartnership> fiscalAssets) {
-        this.fiscalAssets = fiscalAssets;
+    public void setContractStreams(Collection<ContractStream> contractStreams) {
+        this.contractStreams = contractStreams;
     }
     
     

@@ -27,7 +27,7 @@ public abstract class Production implements Serializable {
     private Long id;
     private int periodYear;
     private int periodMonth;
-    private FiscalPartnership partnership;
+    private ContractStream contractStream;
     private Double openingStock;    
     private Double closingStock;
     private Double productionVolume;    
@@ -38,10 +38,10 @@ public abstract class Production implements Serializable {
     public Production() {
     }
             
-    public Production(int periodYear, int periodMonth, FiscalPartnership partnership, Double openingStock, Double productionVolume) {
+    public Production(int periodYear, int periodMonth, ContractStream contractStream, Double openingStock, Double productionVolume) {
         this.periodYear = periodYear;
         this.periodMonth = periodMonth;
-        this.partnership = partnership;
+        this.contractStream = contractStream;
         this.openingStock = openingStock;
         this.productionVolume = productionVolume;
     }
@@ -78,12 +78,12 @@ public abstract class Production implements Serializable {
 
     @ManyToOne
     @NotNull
-    public FiscalPartnership getPartnership() {
-        return partnership;
+    public ContractStream getPartnership() {
+        return contractStream;
     }
 
-    public void setPartnership(FiscalPartnership partnership) {
-        this.partnership = partnership;
+    public void setPartnership(ContractStream contractStream) {
+        this.contractStream = contractStream;
     }
          
     @NotNull
@@ -103,6 +103,7 @@ public abstract class Production implements Serializable {
         this.closingStock = closingStock;
     }
         
+    @NotNull
     public Double getProductionVolume() {
         return productionVolume;
     }
@@ -111,6 +112,7 @@ public abstract class Production implements Serializable {
         this.productionVolume = productionVolume;
     }
 
+    @NotNull
     public Double getOwnShareEntitlement() {
         return ownShareEntitlement;
     }

@@ -29,7 +29,7 @@ public abstract class FiscalArrangement implements Serializable  {
     protected long id;
     protected String title;
     protected Company operator;
-    protected Collection<FiscalPartnership> partnership;
+    protected Collection<ContractStream> contractStreams;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -63,12 +63,12 @@ public abstract class FiscalArrangement implements Serializable  {
     
  
     @OneToMany(mappedBy = "fiscalArrangement")
-    public Collection<FiscalPartnership> getPartnerships() {
-        return partnership;
+    public Collection<ContractStream> getContractStreams() {
+        return contractStreams;
     } 
 
-    public void setPartnerships(Collection<FiscalPartnership> partnership) {
-        this.partnership = partnership;
+    public void setContractStreams(Collection<ContractStream> contractStreams) {
+        this.contractStreams = contractStreams;
     }
     
     

@@ -14,4 +14,6 @@ import javax.persistence.Entity;
 @Entity
 public class CarryAlternativeFunding extends AlternativeFundingJv {
     
+    private static final long serialVersionUID = 7743736261443373185L;
+    
 }

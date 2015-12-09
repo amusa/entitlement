@@ -15,6 +15,15 @@ import javax.persistence.Entity;
 public class PlanProduction extends Production {
 
     private static final long serialVersionUID = 5176195132775152290L;
+
+    public PlanProduction() {
+    }
+
+    public PlanProduction(int periodYear, int periodMonth, ContractStream partnership, Double openingStock, Double productionVolume) {
+        super(periodYear, periodMonth, partnership, openingStock, productionVolume);
+    }
+    
+    
     
     
     

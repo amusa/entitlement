@@ -20,7 +20,7 @@ import javax.validation.constraints.NotNull;
  */
 @Entity
 @Table(name = "STOCK_FORECAST")
-public class StockForecast implements Serializable {
+public class ProductionPlanBAK implements Serializable {
     private static final long serialVersionUID = 1L;
     
     
@@ -37,10 +37,10 @@ public class StockForecast implements Serializable {
     private Double shareEntitlement;
     private Double adjustedEntitlement; 
 
-    public StockForecast() {
+    public ProductionPlanBAK() {
     }
        
-    public StockForecast(Long id, int periodYear, int periodMonth, FiscalPartnership partnership, Double openingStock, Double planGrossProduction) {
+    public ProductionPlanBAK(Long id, int periodYear, int periodMonth, FiscalPartnership partnership, Double openingStock, Double planGrossProduction) {
         this.id = id;
         this.periodYear = periodYear;
         this.periodMonth = periodMonth;

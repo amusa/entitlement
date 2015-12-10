@@ -8,6 +8,7 @@ package com.nnpcgroup.comd.cosm.entitlement.ejb;
 import com.nnpcgroup.comd.cosm.entitlement.entity.ActualPscProduction;
 import com.nnpcgroup.comd.cosm.entitlement.entity.Production;
 import com.nnpcgroup.comd.cosm.entitlement.entity.PscProduction;
+import com.nnpcgroup.comd.cosm.entitlement.util.PSC;
 import javax.ejb.Stateless;
 
 /**
@@ -15,11 +16,12 @@ import javax.ejb.Stateless;
  * @author 18359
  */
 @Stateless
+ @PSC
 public class PscProductionBean extends ProductionBean {
 
     @Override
     public Double calculateEntitlement() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return 1.0;
     }
 
     // Add business logic below. (Right-click in editor and choose

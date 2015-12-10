@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="JvProductionEditDlg" widgetVar="JvProductionEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.EditJvProductionTitle}">
+            <h:form id="JvProductionEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{jvProductionController.selected != null}">
+                        <p:outputLabel value="#{bundle.EditJvProductionLabel_id}" for="id" />
+                        <p:inputText id="id" value="#{jvProductionController.selected.id}" title="#{bundle.EditJvProductionTitle_id}" />
+                        <p:outputLabel value="#{bundle.EditJvProductionLabel_periodYear}" for="periodYear" />
+                        <p:inputText id="periodYear" value="#{jvProductionController.selected.periodYear}" title="#{bundle.EditJvProductionTitle_periodYear}" />
+                        <p:outputLabel value="#{bundle.EditJvProductionLabel_periodMonth}" for="periodMonth" />
+                        <p:inputText id="periodMonth" value="#{jvProductionController.selected.periodMonth}" title="#{bundle.EditJvProductionTitle_periodMonth}" />
+                        <p:outputLabel value="#{bundle.EditJvProductionLabel_partnership}" for="partnership" />
+                        <p:selectOneMenu id="partnership" value="#{jvProductionController.selected.partnership}" >
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{contractStreamController.itemsAvailableSelectOne}"
+                                           var="partnershipItem"
+                                           itemValue="#{partnershipItem}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundle.EditJvProductionLabel_openingStock}" for="openingStock" />
+                        <p:inputText id="openingStock" value="#{jvProductionController.selected.openingStock}" title="#{bundle.EditJvProductionTitle_openingStock}" />
+                        <p:outputLabel value="#{bundle.EditJvProductionLabel_closingStock}" for="closingStock" />
+                        <p:inputText id="closingStock" value="#{jvProductionController.selected.closingStock}" title="#{bundle.EditJvProductionTitle_closingStock}" />
+                        <p:outputLabel value="#{bundle.EditJvProductionLabel_productionVolume}" for="productionVolume" />
+                        <p:inputText id="productionVolume" value="#{jvProductionController.selected.productionVolume}" title="#{bundle.EditJvProductionTitle_productionVolume}" />
+                        <p:outputLabel value="#{bundle.EditJvProductionLabel_ownShareEntitlement}" for="ownShareEntitlement" />
+                        <p:inputText id="ownShareEntitlement" value="#{jvProductionController.selected.ownShareEntitlement}" title="#{bundle.EditJvProductionTitle_ownShareEntitlement}" />
+                        <p:outputLabel value="#{bundle.EditJvProductionLabel_partnerShareEntitlement}" for="partnerShareEntitlement" />
+                        <p:inputText id="partnerShareEntitlement" value="#{jvProductionController.selected.partnerShareEntitlement}" title="#{bundle.EditJvProductionTitle_partnerShareEntitlement}" />
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{jvProductionController.update}" value="#{bundle.Save}" update="display,:JvProductionListForm:datalist,:growl" oncomplete="handleSubmit(args, 'JvProductionEditDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="JvProductionEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

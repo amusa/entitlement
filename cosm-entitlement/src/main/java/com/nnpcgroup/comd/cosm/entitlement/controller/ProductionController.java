@@ -26,6 +26,7 @@ public class ProductionController implements Serializable {
     @EJB
     @JV
     private ProductionBean productionBean;
+   
     private Production production;
 
     /**
@@ -41,6 +42,8 @@ public class ProductionController implements Serializable {
     public void setProduction(Production production) {
         this.production = production;
     }
+    
+    
     
     
 

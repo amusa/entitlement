@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="JvProductionViewDlg" widgetVar="JvProductionViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewJvProductionTitle}">
+            <h:form id="JvProductionViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{jvProductionController.selected != null}">
+                        <h:outputText value="#{bundle.ViewJvProductionLabel_id}"/>
+                        <h:outputText value="#{jvProductionController.selected.id}" title="#{bundle.ViewJvProductionTitle_id}"/>
+                        <h:outputText value="#{bundle.ViewJvProductionLabel_periodYear}"/>
+                        <h:outputText value="#{jvProductionController.selected.periodYear}" title="#{bundle.ViewJvProductionTitle_periodYear}"/>
+                        <h:outputText value="#{bundle.ViewJvProductionLabel_periodMonth}"/>
+                        <h:outputText value="#{jvProductionController.selected.periodMonth}" title="#{bundle.ViewJvProductionTitle_periodMonth}"/>
+                        <h:outputText value="#{bundle.ViewJvProductionLabel_partnership}"/>
+                        <h:outputText value="#{jvProductionController.selected.partnership}" title="#{bundle.ViewJvProductionTitle_partnership}"/>
+                        <h:outputText value="#{bundle.ViewJvProductionLabel_openingStock}"/>
+                        <h:outputText value="#{jvProductionController.selected.openingStock}" title="#{bundle.ViewJvProductionTitle_openingStock}"/>
+                        <h:outputText value="#{bundle.ViewJvProductionLabel_closingStock}"/>
+                        <h:outputText value="#{jvProductionController.selected.closingStock}" title="#{bundle.ViewJvProductionTitle_closingStock}"/>
+                        <h:outputText value="#{bundle.ViewJvProductionLabel_productionVolume}"/>
+                        <h:outputText value="#{jvProductionController.selected.productionVolume}" title="#{bundle.ViewJvProductionTitle_productionVolume}"/>
+                        <h:outputText value="#{bundle.ViewJvProductionLabel_ownShareEntitlement}"/>
+                        <h:outputText value="#{jvProductionController.selected.ownShareEntitlement}" title="#{bundle.ViewJvProductionTitle_ownShareEntitlement}"/>
+                        <h:outputText value="#{bundle.ViewJvProductionLabel_partnerShareEntitlement}"/>
+                        <h:outputText value="#{jvProductionController.selected.partnerShareEntitlement}" title="#{bundle.ViewJvProductionTitle_partnerShareEntitlement}"/>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="JvProductionViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

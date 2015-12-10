@@ -5,6 +5,7 @@
  */
 package com.nnpcgroup.comd.cosm.entitlement.entity;
 
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
 /**
@@ -12,15 +13,20 @@ import javax.persistence.Entity;
  * @author 18359
  */
 @Entity
-public class ActualProduction extends Production {
+@DiscriminatorValue("ACTUAL_JV")
+public class ActualJvProduction extends JvProduction {
 
-    private static final long serialVersionUID = -5206065666784730417L;
+    private static final long serialVersionUID = 2917192116735019964L;
 
     private Double lineFillContribution;
     private Double deadStockContribution;
     private Double ajustedOwnEntitlement;
     private Double adjustedPartnerEntitlement;
 
+    
+    public ActualJvProduction() {
+    }
+        
     public Double getLineFillContribution() {
         return lineFillContribution;
     }
@@ -52,9 +58,5 @@ public class ActualProduction extends Production {
     public void setAdjustedPartnerEntitlement(Double adjustedPartnerEntitlement) {
         this.adjustedPartnerEntitlement = adjustedPartnerEntitlement;
     }
-    
-    
-    
-    
-    
+
 }

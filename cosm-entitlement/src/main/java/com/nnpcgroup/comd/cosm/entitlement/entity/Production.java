@@ -6,10 +6,13 @@
 package com.nnpcgroup.comd.cosm.entitlement.entity;
 
 import java.io.Serializable;
+import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -20,8 +23,11 @@ import javax.validation.constraints.NotNull;
  */
 @Entity
 @Table(name = "PRODUCTION")
+@Inheritance(strategy=InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name="PROD_TYPE")
 public abstract class Production implements Serializable {
-    private static final long serialVersionUID = 1L;
+
+    private static final long serialVersionUID = -795843614381155072L;
     
     
     private Long id;
@@ -30,9 +36,10 @@ public abstract class Production implements Serializable {
     private ContractStream contractStream;
     private Double openingStock;    
     private Double closingStock;
-    private Double productionVolume;    
+    private Double productionVolume;  
     private Double ownShareEntitlement;
-    private Double partnerShareEntitlement;
+    private Double partnerShareEntitlement;   
+    
      
 
     public Production() {

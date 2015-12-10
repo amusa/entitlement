@@ -5,6 +5,7 @@
  */
 package com.nnpcgroup.comd.cosm.entitlement.entity;
 
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
 /**
@@ -12,19 +13,12 @@ import javax.persistence.Entity;
  * @author 18359
  */
 @Entity
-public class PlanProduction extends Production {
+@DiscriminatorValue("JV")
+public class JvProduction extends Production {
 
     private static final long serialVersionUID = 5176195132775152290L;
 
-    public PlanProduction() {
+    public JvProduction() {
     }
 
-    public PlanProduction(int periodYear, int periodMonth, ContractStream partnership, Double openingStock, Double productionVolume) {
-        super(periodYear, periodMonth, partnership, openingStock, productionVolume);
-    }
-    
-    
-    
-    
-    
 }

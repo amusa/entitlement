@@ -1,7 +1,11 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
-<!--[if IE 9 ]><html class="ie9"><![endif]-->
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:jsf="http://xmlns.jcp.org/jsf"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+    <!--[if IE 9 ]><html class="ie9"><![endif]-->
     <h:head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
         <meta name="format-detection" content="telephone=no"/>
@@ -9,9 +13,9 @@
 
         <meta name="description" content="Violate Responsive Admin Template"/>
         <meta name="keywords" content="Super Admin, Admin, Template, Bootstrap"/>
-        
+
         <title>Super Admin Responsive Template</title>
-            
+
         <!-- CSS -->
         <h:outputStylesheet name="css/bootstrap.min.css"/>
         <h:outputStylesheet name="css/animate.min.css"/>
@@ -21,13 +25,13 @@
         <h:outputStylesheet name="css/style.css"/>
         <h:outputStylesheet name="css/icons.css"/>
         <h:outputStylesheet name="css/generics.css"/>
-                
+
     </h:head>
     <h:body id="skin-blur-violate">
-       <header id="header" class="media">
+        <header id="header" class="media">
             <a href="" id="menu-toggle"></a> 
             <a class="logo pull-left" href="index.html">SUPER ADMIN 1.0</a>
-            
+
             <div class="media-body">
                 <div class="media" id="top-menu">
                     <div class="pull-left tm-icon">
@@ -44,7 +48,7 @@
                             <span>Updates</span>
                         </a>
                     </div>
-                    
+
                     <div id="weather" class="animated pull-right"></div>
 
                     <div id="time" class="pull-right">
@@ -61,14 +65,14 @@
                 </div>
             </div>
         </header>
-        
+
         <div class="clearfix"></div>
-        
+
         <section id="main" class="p-relative" role="main">
-            
+
             <!-- Sidebar -->
             <aside id="sidebar">
-                
+
                 <!-- Sidbar Widgets -->
                 <div class="side-widgets overflow">
                     <!-- Profile Menu -->
@@ -85,27 +89,14 @@
                         <h4 class="m-0">Malinda Hollaway</h4>
                         @malinda-h
                     </div>
-                    
+
                     <!-- Calendar -->
                     <div class="s-widget m-b-25">
                         <div id="sidebar-calendar"></div>
                     </div>
-                    
-                    <!-- Feeds -->
-                    <div class="s-widget m-b-25">
-                        <h2 class="tile-title">
-                           News Feeds
-                        </h2>
-                        
-                        <div class="s-widget-body">
-                            <div id="news-feed"></div>
-                        </div>
-                    </div>
-                    
-                    
 
                 </div>
-                
+
                 <!-- Side Menu -->
                 <ul class="list-unstyled side-menu">
                     <li>
@@ -190,19 +181,19 @@
                         </ul>
                     </li>
                 </ul>
-                
+
             </aside>
-        
+
             <!-- Content -->
             <section id="content" class="container">
-            
+
                 <!-- Messages Drawer -->
                 <div id="messages" class="tile drawer animated">
                     <div class="listview narrow">
                         <div class="media">
                             <a href="">Send a New Message</a>
                             <span class="drawer-close">times;</span>
-                            
+
                         </div>
                         <div class="overflow" style="height: 254px">
                             <div class="media">
@@ -292,7 +283,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Notification Drawer -->
                 <div id="notifications" class="tile drawer animated">
                     <div class="listview narrow">
@@ -361,238 +352,78 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Breadcrumb -->
                 <ol class="breadcrumb hidden-xs">
                     <li><a href="#">Home</a></li>
                     <li><a href="#">Library</a></li>
                     <li class="active">Data</li>
                 </ol>
-                
-                <h4 class="page-title">MALLINDA HOLLAWAY'S PROFILE</h4>
-                
+
+                <h4 class="page-title">ENTITLEMENT FOR M+2</h4>
+
                 <div class="block-area">
                     <div class="row">
                         <div class="col-md-9">
-<!--                            <div class="tile-light p-5 m-b-15">
-                                <div class="cover p-relative">
-                                    <img src="img/cover-bg.jpg" class="w-100" alt=""/>
-                                    <img class="profile-pic" src="img/profile-pic.jpg" alt=""/>
-                                    <div class="profile-btn">
-                                        <button class="btn btn-alt btn-sm"><i class="icon-bubble"></i> <span>Message</span></button>
-                                        <button class="btn btn-alt btn-sm"><i class="icon-user-2"></i> <span>Friend</span></button>
-                                    </div>
-                                </div>
-                                <div class="p-5 m-t-15">
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis eget risus rhoncus, cursus purus vitae, venenatis eros. Phasellus at tincidunt risus. Integer sed massa fermentum, feugiat arcu quis, ultrices nisi. Quisque commodo nisi scelerisque, tempus diam ac, dignissim tellus. Mauris adipiscing elit tortor, dignissim auctor diam mollis sed. Nulla eu dui non velit accumsan scelerisque eget et felis.
-                                </div>
-                            </div>-->
-                            
-<!--                            <div class="m-b-15 text-center profile-summary">
-                                <button class="btn btn-sm">42 Followers</button>
-                                <button class="btn btn-sm">69 Followings</button>
-                                <button class="btn btn-sm hidden-xs">120 Comments</button>
-                                <button class="btn btn-sm hidden-xs">165 Likes</button>
-                            </div>-->
-                            
+                            <h3 class="block-title">ENTITLEMENT FOR M+2</h3>
                             <div class="row">
-                                <!-- Works -->
-<!--                                <div class="col-md-7">
-                                    <div class="tile">
-                                        <h2 class="tile-title">Works in progress</h2>
-                                        <div class="tile-config dropdown">
-                                            <a data-toggle="dropdown" href="" class="tooltips tile-menu" title="" data-original-title="Options"></a>
-                                            <ul class="dropdown-menu pull-right text-right"> 
-                                                <li><a href="">Edit</a></li>
-                                                <li><a href="">Delete</a></li>
-                                            </ul>
-                                        </div>
-                                        
-                                        <div class="p-10">
-                                            <div class="m-b-10">
-                                                Joomla CMS website for Lexus Inc. - 60%
-                                                <div class="progress progress-striped progress-alt">
-                                                    <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%"></div>
-                                                </div>
-                                            </div>
-                                            
-                                            <div class="m-b-10">
-                                                Lotus Design's AMC updates - 90%
-                                                <div class="progress progress-striped progress-alt">
-                                                    <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width: 90%"></div>
-                                                </div>
-                                            </div>    
-                                            
-                                            <div class="m-b-10">
-                                                Chrome Extension developement - 33%
-                                                <div class="progress progress-striped progress-alt">
-                                                    <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="33" aria-valuemin="0" aria-valuemax="100" style="width: 33%"></div>
-                                                </div>
-                                            </div>
-                                            
-                                            <div class="m-b-10">
-                                                Wireframes for new website - 50%
-                                                <div class="progress progress-striped progress-alt">
-                                                    <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 50%"></div>
-                                                </div>
-                                            </div>
-                                            
-                                            <div>
-                                                Wordpress Website &amp; Plugin - 99%
-                                                <div class="progress progress-striped progress-alt">
-                                                    <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="99" aria-valuemin="0" aria-valuemax="100" style="width: 99%"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                     Completed Projects 
-                                    <div class="tile">
-                                        <h2 class="tile-title m-b-5">Completed Projects</h2>
-                                        <div class="tile-config dropdown">
-                                            <a data-toggle="dropdown" href="" class="tooltips tile-menu" title="" data-original-title="Options"></a>
-                                            <ul class="dropdown-menu pull-right text-right"> 
-                                                <li><a href="">Edit</a></li>
-                                                <li><a href="">Delete</a></li>
-                                            </ul>
-                                        </div>
-                                        
-                                        <div class="p-10 news">
-                                            <div class="col-xs-4">
-                                                <div class="tile p-5 m-b-10">
-                                                    <a target="_blank" title="Medical-Pro Bootstrap Responsive Template" href="https://wrapbootstrap.com/theme/medical-pro-responsive-template-WB06421XL">
-                                                        <img class="w-100" src="img/projects/1.png" alt=""/>
-                                                        <small class="t-overflow m-t-10">Medical-Pro Bootstrap Responsive</small>
-                                                    </a>
-                                                    <div class="clearfix"></div>
-                                                </div>
-                                            </div>
-                                            <div class="col-xs-4">
-                                                <div class="tile p-5 m-b-10">
-                                                    <a target="_blank" title="Black Pearl Responsive Admin Template" href="https://wrapbootstrap.com/theme/black-pearl-responsive-admin-template-WB040H333">
-                                                        <img class="w-100" src="img/projects/2.png" alt=""/>
-                                                        <small class="t-overflow m-t-10">Black Pearl Responsive Admin Template</small>
-                                                    </a>
-                                                    <div class="clearfix"></div>
-                                                </div>
-                                            </div>
-                                            <div class="col-xs-4">
-                                                <div class="tile p-5 m-b-10">
-                                                    <a target="_blank" title="UNEKUE Single Page Portfolio Template" href="https://wrapbootstrap.com/theme/unekue-single-page-portfolio-template-WB04R2B18">
-                                                        <img class="w-100" src="img/projects/3.png" alt=""/>
-                                                        <small class="t-overflow m-t-10">UNEKUE Single Page Portfolio Template</small>
-                                                    </a>
-                                                    <div class="clearfix"></div>
-                                                </div>
-                                            </div>
-                                            
-                                            
-                                            <div class="clearfix"></div>
-                                        </div>
-                                    </div>
-                                    
-                                </div>-->
-                                
-                                
-<!--                                <div class="col-md-5">
-                                    <div class="tile">
-                                        <h2 class="tile-title">Recent Activities</h2>
-                                        <div class="tile-config dropdown">
-                                            <a data-toggle="dropdown" href="" class="tooltips tile-menu" title="" data-original-title="Options"></a>
-                                            <ul class="dropdown-menu pull-right text-right"> 
-                                                <li><a href="">Edit</a></li>
-                                                <li><a href="">Delete</a></li>
-                                            </ul>
-                                        </div>
-                                        
-                                        <div class="listview narrow">
-                                            <div class="media">
-                                                <div class="pull-right">
-                                                    <img width="37" src="img/profile-pics/1.jpg" alt=""/>
-                                                </div>
-                                                <div class="media-body">
-                                                    Connected with <a class="news-title underline" href="">Mitchell Christein</a>
-                                                    <div class="clearfix"></div>
-                                                    <small class="muted">30 Minutes ago</small>
-                                                </div>
-                                            </div>
-                                            <div class="media">
-                                                <div class="pull-right">
-                                                    <img width="37" src="img/profile-pics/4.jpg" alt=""/>
-                                                </div>
-                                                <div class="media-body">
-                                                    <a class="news-title underline" href="">Wayne Cerolina</a> Accepted your friend request
-                                                    <div class="clearfix"></div>
-                                                    <small class="muted">2 Hours ago</small>
-                                                </div>
-                                            </div>
-                                            <div class="media">
-                                                <div class="media-body">
-                                                    <a class="news-title" href="">Uploaded 7 files to DOCS folder</a>
-                                                    <div class="clearfix"></div>
-                                                    <small class="muted">3 Hours ago</small>
-                                                </div>
-                                            </div>
-                                            <div class="media">
-                                                <div class="media-body">
-                                                    Joined the Group <a class="news-title underline" href="">'90s Rock Hits'</a>
-                                                    <div class="clearfix"></div>
-                                                    <small class="muted">5 Hours ago</small>
-                                                </div>
-                                            </div>
-                                            <div class="media">
-                                                <div class="pull-right">
-                                                    <img width="37" src="img/profile-pics/5.jpg" alt=""/>
-                                                </div>
-                                                <div class="media-body">
-                                                    Wrote on <a class="news-title underline" href="">David Villa's</a> Wall
-                                                    <div class="clearfix"></div>
-                                                    <small class="muted">8 Hours ago</small>
-                                                </div>
-                                            </div>
-                                            <div class="media">
-                                                <div class="media-body">
-                                                    Signed up an Affiliate
-                                                    <div class="clearfix"></div>
-                                                    <small class="muted">6 Hours ago</small>
-                                                </div>
-                                            </div>
-                                            <div class="media">
-                                                <div class="media-body">
-                                                    Completed and submited the project <a class="news-title underline" href="">Joomla</a>
-                                                    <div class="clearfix"></div>
-                                                    <small class="muted">12 Hours ago</small>
-                                                </div>
-                                            </div>
-                                            <div class="media">
-                                                <div class="media-body">
-                                                    Travelled to <a class="news-title underline" href="">San Fransisco</a>, United States
-                                                    <div class="clearfix"></div>
-                                                    <small class="muted">12 Hours ago</small>
-                                                </div>
-                                            </div>
-                                            <div class="media">
-                                                <div class="pull-right">
-                                                    <img width="37" src="img/profile-pics/6.jpg" alt=""/>
-                                                </div>
-                                                <div class="media-body">
-                                                    Conneted with <a class="news-title underline" href="">Emma Stone</a>
-                                                    <div class="clearfix"></div>
-                                                    <small class="muted">2 Days ago</small>
-                                                </div>
-                                            </div>
-                                            <div class="media p-5 text-center l-100">
-                                                <a href=""><small>VIEW ALL</small></a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>-->
+                                <input type="submit" value="Get Forecast from SAP" class="btn btn-block m-b-10"/>
+                                <input type="submit" value="Manual Entry" class="btn"/>
                             </div>
-                            
+
+                            <div class="row">
+                                <!-- Responsive Table Hover -->
+                                <div class="block-area" id="responsiveTable">
+                                    <h3 class="block-title">Responsive Table</h3>
+                                    <p:dataTable class="" />
+                                    <div class="table-responsive overflow">
+                                        <table class="table table-bordered table-hover tile">
+                                            <thead>
+                                                <tr>
+                                                    <th>S#</th>
+                                                    <th>Year</th>
+                                                    <th>Month</th>
+                                                    <th>Asset Stream</th>
+                                                    <th>Gross Production Volume</th>
+                                                    <th>Crude Type</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>1</td>
+                                                    <td>2015 </td>
+                                                    <td>1 </td>
+                                                    <td>BL</td>
+                                                    <td>23,30021</td>
+                                                    <td>Bonny Light</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>2</td>
+                                                    <td>Malinda</td>
+                                                    <td>Hollaway</td>
+                                                    <td>@hollway</td>
+                                                    <td>hollaway@mal</td>
+                                                    <td>holla@asianet.ch</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>3</td>
+                                                    <td>Wayn</td>
+                                                    <td>Parnel</td>
+                                                    <td>@wayne123</td>
+                                                    <td>wayn@3rt</td>
+                                                    <td>wayne-parn@gmail.com</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                            </div>
+
                         </div>
-                        
+
                         <div class="col-md-3">
-                            
+
                             <!-- About Me -->
                             <div class="tile">
                                 <h2 class="tile-title">About me</h2>
@@ -603,65 +434,61 @@
                                         <li><a href="">Delete</a></li>
                                     </ul>
                                 </div>
-                                
+
                                 <div class="listview icon-list">
                                     <div class="media">
                                         <i class="icon pull-left">&amp;#61744</i>
                                         <div class="media-body">Software Developer at Google</div>
                                     </div>
-                                    
+
                                     <div class="media">
                                         <i class="icon pull-left">&amp;#61753</i>
                                         <div class="media-body">Studied at Oxford University</div>
                                     </div>
-                                    
+
                                     <div class="media">
                                         <i class="icon pull-left">&amp;#61713</i>
                                         <div class="media-body">Lives in Saturn, Milkyway</div>
                                     </div>
-                                    
+
                                     <div class="media">
                                         <i class="icon pull-left">&amp;#61742</i>
                                         <div class="media-body">From Titan, Jupitor</div>
                                     </div>
                                 </div>
                             </div>
-                            
-                            
+
+
                         </div>
                     </div>
-                    
+
                     <br/><br/><br/>
                 </div> 
             </section>
         </section>
-        
-        
-        
-        <!-- All JS functions -->
-        <h:outputScript name="js/functions.js"/>
-        
+
         <!-- Javascript Libraries -->
         <!-- jQuery -->
         <!-- jQuery Library -->
         <h:outputScript name="js/jquery.min.js" />
-        
+
         <!-- Bootstrap -->
         <h:outputScript name="js/bootstrap.min.js" />
-        
+
         <!-- UX -->
         <h:outputScript name="js/scroll.min.js"/> <!-- Custom Scrollbar -->
-        
+
         <!-- Other -->
         <h:outputScript name="js/calendar.min.js"/> <!-- Calendar -->
         <h:outputScript name="js/weather.min.js"/> <!-- Weather -->
         <h:outputScript name="js/feeds.min.js"/> <!-- News Feeds -->
-        
+
         <!--  Form Related -->
         <!-- Custom Checkbox + Radio -->
         <h:outputScript name="js/icheck.js" />
-        
+
         <!-- All JS functions -->
-        <h:outputScript name="js/functions.js" />
+        <h:outputScript name="js/functions.js" />        
+
     </h:body>
 </html>

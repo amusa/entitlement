@@ -6,6 +6,7 @@
 package com.nnpcgroup.comd.cosm.entitlement.ejb;
 
 import com.nnpcgroup.comd.cosm.entitlement.entity.Production;
+import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -13,20 +14,24 @@ import javax.persistence.PersistenceContext;
  *
  * @author 18359
  */
-public abstract class ProductionBean extends AbstractBean<Production> implements Entitlement{
+public abstract class ProductionBean extends AbstractBean<Production> implements Entitlement {
+
+    private static final Logger log = Logger.getLogger(ProductionBean.class.getName());
 
     @PersistenceContext(unitName = "entitlementPU")
     private EntityManager em;
 
     @Override
     protected EntityManager getEntityManager() {
+        log.info("ProductionBean::setEntityManager() called...");
         return em;
     }
 
     public ProductionBean() {
         super(Production.class);
+        log.info("ProductionBean::constructor  called...");
     }
-    
+
 //    public List<Production> getProductions() {
 //        List<Production> productions = new ArrayList<>();
 //
@@ -43,5 +48,4 @@ public abstract class ProductionBean extends AbstractBean<Production> implements
 //        
 //        return productions;
 //    }
-
 }

@@ -6,6 +6,7 @@
 package com.nnpcgroup.comd.cosm.entitlement.ejb;
 
 import java.util.List;
+import javax.enterprise.context.Dependent;
 import javax.persistence.EntityManager;
 
 /**

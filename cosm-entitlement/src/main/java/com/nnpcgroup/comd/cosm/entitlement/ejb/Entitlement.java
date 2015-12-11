@@ -6,12 +6,14 @@
 package com.nnpcgroup.comd.cosm.entitlement.ejb;
 
 import com.nnpcgroup.comd.cosm.entitlement.entity.Production;
+import javax.enterprise.context.Dependent;
 
 /**
  *
  * @author 18359
  */
-interface Entitlement {
+@Dependent
+public interface Entitlement {
     
    public Double calculateEntitlement(); 
    public Production createProductionEntity();

@@ -30,7 +30,6 @@ public class ProductionController implements Serializable {
 
     private static final long serialVersionUID = -7596150432081506756L;
 
-    
     private Production production;
     private List<Production>productions;
     private static final Logger log = Logger.getLogger(ProductionController.class.getName());
@@ -77,6 +76,8 @@ public class ProductionController implements Serializable {
     public Double getEntitlement(){
         return productionBean.calculateEntitlement();
     }
+    
+    
     
 
 }

@@ -16,18 +16,17 @@ import javax.ejb.Stateless;
  *
  * @author 18359
  */
-
 @Stateless
 @JV
-public class JvProductionBean extends ProductionBean{
-     private static final Logger log = Logger.getLogger(JvProductionBean.class.getName());
+public class JvProductionBean extends ProductionBean {
+
+    private static final Logger log = Logger.getLogger(JvProductionBean.class.getName());
 
     public JvProductionBean() {
         super();
         log.info("JvProductionBean::constructor activated...");
-        
+
     }
-    
 
     @Override
     public Double calculateEntitlement() {
@@ -37,16 +36,15 @@ public class JvProductionBean extends ProductionBean{
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
-
-   @Override
+    @Override
     public Production createProductionEntity() {
         log.info("JvProductionBean::createProductionEntity() called...");
         return new JvProduction();
     }
 
-   @Override
+    @Override
     public Production createActualProductionEntity() {
-         log.info("JvProductionBean::createActualProductionEntity() called...");
+        log.info("JvProductionBean::createActualProductionEntity() called...");
         return new ActualJvProduction();
     }
 

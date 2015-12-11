@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="EquityTypeViewDlg" widgetVar="EquityTypeViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewEquityTypeTitle}">
+            <h:form id="EquityTypeViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{equityTypeController.selected != null}">
+                        <h:outputText value="#{bundle.ViewEquityTypeLabel_code}"/>
+                        <h:outputText value="#{equityTypeController.selected.code}" title="#{bundle.ViewEquityTypeTitle_code}"/>
+                        <h:outputText value="#{bundle.ViewEquityTypeLabel_description}"/>
+                        <h:outputText value="#{equityTypeController.selected.description}" title="#{bundle.ViewEquityTypeTitle_description}"/>
+                        <h:outputText value="#{bundle.ViewEquityTypeLabel_ownEquity}"/>
+                        <h:outputText value="#{equityTypeController.selected.ownEquity}" title="#{bundle.ViewEquityTypeTitle_ownEquity}"/>
+                        <h:outputText value="#{bundle.ViewEquityTypeLabel_partnerEquity}"/>
+                        <h:outputText value="#{equityTypeController.selected.partnerEquity}" title="#{bundle.ViewEquityTypeTitle_partnerEquity}"/>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="EquityTypeViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

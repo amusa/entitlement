@@ -5,7 +5,7 @@
  */
 package com.nnpcgroup.comd.cosm.entitlement.ejb;
 
-import com.nnpcgroup.comd.cosm.entitlement.entity.FiscalArrangement;
+import com.nnpcgroup.comd.cosm.entitlement.entity.JointVenture;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -15,7 +15,7 @@ import javax.persistence.PersistenceContext;
  * @author 18359
  */
 @Stateless
-public class FiscalArrangementBean extends AbstractBean<FiscalArrangement> {
+public class JointVentureFacade extends AbstractFacade<JointVenture> {
 
     @PersistenceContext(unitName = "entitlementPU")
     private EntityManager em;
@@ -25,8 +25,8 @@ public class FiscalArrangementBean extends AbstractBean<FiscalArrangement> {
         return em;
     }
 
-    public FiscalArrangementBean() {
-        super(FiscalArrangement.class);
+    public JointVentureFacade() {
+        super(JointVenture.class);
     }
     
 }

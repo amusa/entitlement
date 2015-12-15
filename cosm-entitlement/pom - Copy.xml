@@ -17,18 +17,7 @@
     <properties>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <mysql.server>localhost</mysql.server>
-        <mysql.port>3306</mysql.port>
-        <mysql.driver.groupId>mysql</mysql.driver.groupId>
-        <mysql.driver.artifactId>mysql-connector-java</mysql.driver.artifactId>
-        <mysql.driver.version>5.1.34</mysql.driver.version>
-        <mysql.db.schema>entitlement</mysql.db.schema>
-        <mysql.db.user>root</mysql.db.user>
-        <mysql.db.password>Myr00t</mysql.db.password>
-        <db.jdbc.url>jdbc:mysql://${mysql.server}:${mysql.port}/${mysql.db.schema}</db.jdbc.url>
-        <mysql.driver.name>mysql.jar</mysql.driver.name>
-        <wildfly-home>${env.JBOSS_HOME}</wildfly-home>
-        <wildfly.hibernate.datasource.name>java:/jdbc/entitlementDS</wildfly.hibernate.datasource.name>        
+        <project.deploy.host>localhost</project.deploy.host>
     </properties>
     
     <dependencies>
@@ -50,6 +39,12 @@
             <version>4.3.1.Final</version>
             <scope>provided</scope>
         </dependency>
+        <!--        <dependency>
+            <groupId>unknown.binary</groupId>
+            <artifactId>hibernate-jpamodelgen-4.3.1.Final</artifactId>
+            <version>SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>-->
         <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-web-api</artifactId>
@@ -125,80 +120,85 @@
             <plugin>
                 <groupId>org.wildfly.plugins</groupId>
                 <artifactId>wildfly-maven-plugin</artifactId>
+                <!--                <version>1.1.0.Alpha5</version>-->
                 <version>1.0.2.Final</version>
                 <configuration>
-                    <jboss-home>${wildfly-home}</jboss-home>
+                    <groupId>mysql</groupId>
+                    <artifactId>mysql-connector-java</artifactId>
+                    <fileName>mysql-connector-java-5.1.29-bin.jar</fileName>
+                    <executions>
+                        <execution>
+                            <phase>install</phase>
+                            <goals>
+                                <goal>deploy</goal>
+                            </goals>
+                        </execution>
+                        <execution>
+                            <id>deploy-driver-MySQL</id>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>deploy-artifact</goal>
+                            </goals>
+                            <configuration />
+                        </execution>
+                        <execution>
+                            <id>add-datasource</id>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>add-resource</goal>
+                            </goals>
+                            <configuration>
+                                <address>subsystem=datasources,data-source=java:jdbc/entitlementDS</address>
+                                <resources>
+                                    <resource>
+                                        <properties>
+                                            <jndi-name>java:jdbc/entitlementDS</jndi-name>
+                                            <enabled>true</enabled>
+                                            <connection-url>jdbc:mysql://${project.deploy.host}:3306/entitlement?zeroDateTimeBehavior=convertToNull</connection-url>
+                                            <driver-class>com.mysql.jdbc.Driver</driver-class>
+                                            <driver-name>mysql</driver-name>
+                                            <user-name>root</user-name>
+                                            <password>Myr00t</password>
+                                        </properties>
+                                    </resource>
+                                </resources>
+                            </configuration>
+                        </execution>
+                    </executions>
+                    <filename>${project.artifactId}-${project.version}.war</filename>
                 </configuration>
-                
-                <executions>
-                    
-                    <!-- Undeploy the application on clean -->
-                    <execution>
-                        <id>undeploy</id>
-                        <phase>clean</phase>
-                        <goals>
-                            <goal>undeploy</goal>
-                        </goals>
-                        <configuration>
-                            <ignoreMissingDeployment>true</ignoreMissingDeployment>
-                        </configuration>
-                    </execution>
-                    
-                    <!-- Deploy the application on install -->
-                    <execution>
-                        <id>deploy</id>
-                        <phase>install</phase>
-                        <goals>
-                            <goal>deploy</goal>
-                        </goals>
-                    </execution>
-                    
-                    <!-- Deploy the JDBC library -->
-                    <execution>
-                        <id>deploy-driver-MySQL</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>deploy-artifact</goal>
-                        </goals>                        
-                        <configuration>
-                            <groupId>${mysql.driver.groupId}</groupId>
-                            <artifactId>${mysql.driver.artifactId}</artifactId>
-                            <version>${mysql.driver.version}</version>
-                            <driver-name>mysql.jar</driver-name>
-                            <driver-name>mysql.jar</driver-name>
-                            
-
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>add-datasource</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>add-resource</goal>
-                        </goals>
-                        <configuration>
-                            <address>subsystem=datasources</address>
-                            <resources>
-                                <resource>
-                                    <address>data-source=EntitlementDS</address>
-                                    <properties>
-                                        <jndi-name>${wildfly.hibernate.datasource.name}</jndi-name>
-                                        <enabled>true</enabled>
-                                        <connection-url>${db.jdbc.url}?zeroDateTimeBehavior=convertToNull</connection-url>
-                                        <driver-class>com.mysql.jdbc.Driver</driver-class>
-                                        <driver-name>mysql-connector-java-5.1.29.jar</driver-name>
-                                        <!--                                        <driver-name>mysql.jar</driver-name>-->
-                                        <database-name>${mysql.db.schema}</database-name>
-                                        <user-name>${mysql.db.user}</user-name>
-                                        <password>${mysql.db.password}</password>                                        
-                                    </properties>
-                                </resource>
-                            </resources>
-                        </configuration>
-                        
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>
+    
+    <profiles>
+        <profile>
+            <!-- The default profile skips all tests, though you can tune 
+            it to run just unit tests based on a custom pattern -->
+            <!-- Seperate profiles are provided for running all tests, including 
+            Arquillian tests that execute in the specified container -->
+            <id>default</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>2.4.3</version>
+                        <configuration>
+                            <skip>true</skip>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+    <repositories>
+        <repository>
+            <id>unknown-jars-temp-repo</id>
+            <name>A temporary repository created by NetBeans for libraries and jars it could not identify. Please replace the dependencies in this repository with correct ones and delete this repository.</name>
+            <url>file:${project.basedir}/lib</url>
+        </repository>
+    </repositories>
 </project>

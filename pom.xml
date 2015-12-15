@@ -7,11 +7,12 @@
     <packaging>pom</packaging>
     <modules>
         <module>cosm-common</module>
-    <module>cosm-admin</module>
-    <module>cosm-lifting</module>
+        <module>cosm-admin</module>
+        <module>cosm-lifting</module>
         <module>cosm-entitlement</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+    
 </project>

@@ -5,6 +5,7 @@
  */
 package com.nnpcgroup.comd.cosm.entitlement.entity;
 
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
 /**
@@ -12,6 +13,7 @@ import javax.persistence.Entity;
  * @author 18359
  */
 @Entity
+@DiscriminatorValue("PSC")
 public class ProductionSharingContract extends FiscalArrangement{
     
     private static final long serialVersionUID = -165902073936311783L;

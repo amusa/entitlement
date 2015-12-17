@@ -5,6 +5,7 @@
  */
 package com.nnpcgroup.comd.cosm.entitlement.entity;
 
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
 
@@ -13,6 +14,7 @@ import javax.persistence.OneToOne;
  * @author 18359
  */
 @Entity
+@DiscriminatorValue("JV")
 public class JointVenture extends FiscalArrangement {
 
     private static final long serialVersionUID = 7758288081166549749L;

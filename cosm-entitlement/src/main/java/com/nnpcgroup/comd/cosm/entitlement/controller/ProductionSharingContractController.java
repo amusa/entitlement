@@ -23,6 +23,8 @@ import javax.faces.convert.FacesConverter;
 @SessionScoped
 public class ProductionSharingContractController implements Serializable {
 
+    private static final long serialVersionUID = 1720728647859890689L;
+
     @EJB
     private com.nnpcgroup.comd.cosm.entitlement.ejb.ProductionSharingContractFacade ejbFacade;
     private List<ProductionSharingContract> items = null;

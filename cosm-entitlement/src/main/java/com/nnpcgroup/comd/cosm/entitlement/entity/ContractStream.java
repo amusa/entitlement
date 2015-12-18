@@ -6,6 +6,7 @@
 package com.nnpcgroup.comd.cosm.entitlement.entity;
 
 import java.io.Serializable;
+import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -20,20 +21,20 @@ import javax.validation.constraints.NotNull;
  */
 @Entity
 @Table(name = "CONTRACT_STREAM")
-public class ContractStream implements Serializable{
+public class ContractStream implements Serializable {
 
     private static final long serialVersionUID = 243024160781750391L;
-    private int id;
+    private Integer id;
     private CrudeType crudeType;
     private FiscalArrangement fiscalArrangement;
-        
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -47,7 +48,6 @@ public class ContractStream implements Serializable{
         this.crudeType = crudeType;
     }
 
-    
     @ManyToOne
     public FiscalArrangement getFiscalArrangement() {
         return fiscalArrangement;
@@ -57,5 +57,33 @@ public class ContractStream implements Serializable{
         this.fiscalArrangement = fiscalArrangement;
     }
 
-        
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 67 * hash + Objects.hashCode(this.id);
+        hash = 67 * hash + Objects.hashCode(this.crudeType);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final ContractStream other = (ContractStream) obj;
+        if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
+        if (!Objects.equals(this.crudeType, other.crudeType)) {
+            return false;
+        }
+        return true;
+    }
+
 }

@@ -31,23 +31,28 @@ public class PscProductionBean extends ProductionBean {
     
     
    @Override
-    public Double calculateEntitlement() {
-        log.info("PscProductionBean::calculateEntitlement() called...");
-        return 1.0;
+    public Production computeEntitlement(Production production) {
+        log.info("PscProductionBean::Calculating PSC Entitlement...");
+        return production;
     }
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
 
    @Override
-    public Production createProductionEntity() {
+    public Production createInstance() {
         log.info("PscProductionBean::createProductionEntity called...");
         return new PscProduction();
     }
 
-   @Override
-    public Production createActualProductionEntity() {
-        log.info("PscProductionBean::createActualProductionEntity called...");
-        return new ActualPscProduction();
+   
+    @Override
+    public Production computeOpeningStock(Production production) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Production computeClosingStock(Production production) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

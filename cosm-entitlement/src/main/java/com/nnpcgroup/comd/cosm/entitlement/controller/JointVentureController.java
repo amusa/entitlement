@@ -3,7 +3,7 @@ package com.nnpcgroup.comd.cosm.entitlement.controller;
 import com.nnpcgroup.comd.cosm.entitlement.entity.JointVenture;
 import com.nnpcgroup.comd.cosm.entitlement.controller.util.JsfUtil;
 import com.nnpcgroup.comd.cosm.entitlement.controller.util.JsfUtil.PersistAction;
-import com.nnpcgroup.comd.cosm.entitlement.ejb.JointVentureFacade;
+import com.nnpcgroup.comd.cosm.entitlement.ejb.JointVentureBean;
 
 import java.io.Serializable;
 import java.util.List;
@@ -12,22 +12,23 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
+import javax.enterprise.context.RequestScoped;
+
 import javax.inject.Named;
-import javax.enterprise.context.SessionScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
-@Named("jointVentureController")
-@SessionScoped
+@Named("jvController")
+@RequestScoped
 public class JointVentureController implements Serializable {
 
     private static final long serialVersionUID = 2953220859300701424L;
 
     @EJB
-    private com.nnpcgroup.comd.cosm.entitlement.ejb.JointVentureFacade ejbFacade;
-    private List<JointVenture> items = null;
+    private JointVentureBean jvBean;
+    private List<JointVenture> jvItems = null;
     private JointVenture selected;
 
     public JointVentureController() {
@@ -47,8 +48,8 @@ public class JointVentureController implements Serializable {
     protected void initializeEmbeddableKey() {
     }
 
-    private JointVentureFacade getFacade() {
-        return ejbFacade;
+    private JointVentureBean getJvBean() {
+        return jvBean;
     }
 
     public JointVenture prepareCreate() {
@@ -60,7 +61,7 @@ public class JointVentureController implements Serializable {
     public void create() {
         persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("JointVentureCreated"));
         if (!JsfUtil.isValidationFailed()) {
-            items = null;    // Invalidate list of items to trigger re-query.
+            jvItems = null;    // Invalidate list of items to trigger re-query.
         }
     }
 
@@ -72,15 +73,15 @@ public class JointVentureController implements Serializable {
         persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("JointVentureDeleted"));
         if (!JsfUtil.isValidationFailed()) {
             selected = null; // Remove selection
-            items = null;    // Invalidate list of items to trigger re-query.
+            jvItems = null;    // Invalidate list of items to trigger re-query.
         }
     }
 
-    public List<JointVenture> getItems() {
-        if (items == null) {
-            items = getFacade().findAll();
+    public List<JointVenture> getJvItems() {
+        if (jvItems == null) {
+            jvItems = getJvBean().findAll();
         }
-        return items;
+        return jvItems;
     }
 
     private void persist(PersistAction persistAction, String successMessage) {
@@ -88,9 +89,9 @@ public class JointVentureController implements Serializable {
             setEmbeddableKeys();
             try {
                 if (persistAction != PersistAction.DELETE) {
-                    getFacade().edit(selected);
+                    getJvBean().edit(selected);
                 } else {
-                    getFacade().remove(selected);
+                    getJvBean().remove(selected);
                 }
                 JsfUtil.addSuccessMessage(successMessage);
             } catch (EJBException ex) {
@@ -112,15 +113,15 @@ public class JointVentureController implements Serializable {
     }
 
     public JointVenture getJointVenture(long id) {
-        return getFacade().find(id);
+        return getJvBean().find(id);
     }
 
     public List<JointVenture> getItemsAvailableSelectMany() {
-        return getFacade().findAll();
+        return getJvBean().findAll();
     }
 
     public List<JointVenture> getItemsAvailableSelectOne() {
-        return getFacade().findAll();
+        return getJvBean().findAll();
     }
 
     @FacesConverter(forClass = JointVenture.class)

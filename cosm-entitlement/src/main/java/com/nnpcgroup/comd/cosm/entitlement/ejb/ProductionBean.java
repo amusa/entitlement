@@ -6,9 +6,14 @@
 package com.nnpcgroup.comd.cosm.entitlement.ejb;
 
 import com.nnpcgroup.comd.cosm.entitlement.entity.Production;
+import java.util.List;
 import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 /**
  *
@@ -32,20 +37,27 @@ public abstract class ProductionBean extends AbstractBean<Production> implements
         log.info("ProductionBean::constructor  called...");
     }
 
-//    public List<Production> getProductions() {
-//        List<Production> productions = new ArrayList<>();
-//
-//        Production prod = new PlanProduction(2015, 1, null, 134100.00, 1438107.00);
-//        productions.add(prod);
-//        prod = new PlanProduction(2015, 1, null, 134100.00, 1438107.00);
-//        productions.add(prod);
-//        prod = new PlanProduction(2015, 2, null, 205177.20, 205177.20);
-//        productions.add(prod);
-//        prod = new PlanProduction(2015, 1, null, 9493.00, 110403.00);
-//        productions.add(prod);
-//        prod = new PlanProduction(2015, 2, null, 609.60, 1070.80);
-//        productions.add(prod);
-//        
-//        return productions;
-//    }
+    public List<Production> findByYearAndMonth(int year, int month) {
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+
+// Query for a List of objects.
+        CriteriaQuery cq = cb.createQuery();
+        Root e = cq.from(Production.class);
+        cq.where(
+                cb.and(cb.equal(e.get("periodYear"), year),
+                        cb.equal(e.get("periodMonth"), month)
+                ));
+
+        Query query = getEntityManager().createQuery(cq);
+        List<Production> productions = query.getResultList();
+
+        return productions;
+    }
+
+    @Override
+    public Production enrich(Production production) {
+        return computeEntitlement(
+                computeOpeningStock(production)
+        );
+    }
 }

@@ -86,4 +86,11 @@ public class ContractStream implements Serializable {
         return true;
     }
 
+    @Override
+    public String toString() {
+        return fiscalArrangement.title+"/"+crudeType.getCrudeType();
+    }
+    
+    
+
 }

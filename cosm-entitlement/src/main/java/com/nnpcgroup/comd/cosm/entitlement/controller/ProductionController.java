@@ -11,13 +11,11 @@ import com.nnpcgroup.comd.cosm.entitlement.entity.Production;
 import com.nnpcgroup.comd.cosm.entitlement.util.JV;
 import javax.inject.Named;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
-import javax.faces.event.ActionEvent;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.inject.Inject;
 
@@ -36,7 +34,7 @@ public class ProductionController implements Serializable {
     @JV
     private ProductionBean productionBean;
 
-    private Production production;
+    private Production currentProduction;
     private List<Production> productions;
     private boolean manualEntry = false;
 
@@ -49,14 +47,14 @@ public class ProductionController implements Serializable {
         // log.log(Level.INFO, "Entitlement calculated: {0}", entitlement.calculateEntitlement());
     }
 
-    public Production getProduction() {
+    public Production getCurrentProduction() {
         log.info("ProductionController::getProduction called...");
-        return production;
+        return currentProduction;
     }
 
-    public void setProduction(Production production) {
+    public void setCurrentProduction(Production currentProduction) {
         log.info("ProductionController::setProduction called...");
-        this.production = production;
+        this.currentProduction = currentProduction;
     }
 
     public List<Production> getProductions() {
@@ -72,18 +70,22 @@ public class ProductionController implements Serializable {
     @PostConstruct
     public void postConstruct() {
         log.info("ProductionController::postConstructor initializing production...");
-        production = productionBean.createProductionEntity();
+        currentProduction = productionBean.createInstance();
     }
-
-    public Double getEntitlement() {
-        return productionBean.calculateEntitlement();
-    }
-
+    
     public void processManualEntry(AjaxBehaviorEvent event) {
         log.info("ProductionController::processManualEntry called...");
         log.info("*******setting manualEntry to true********");
+       // currentProduction = new JvProduction();
         setManualEntry(true);
 
+    }
+
+    public void addProductionItem(AjaxBehaviorEvent event) {
+        log.info("ProductionController::addProductionItem called...");
+        productions.add(currentProduction);
+        currentProduction = new JvProduction();
+        
     }
 
     public boolean isManualEntry() {

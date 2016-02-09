@@ -28,8 +28,7 @@ import javax.validation.constraints.NotNull;
 public abstract class Production implements Serializable {
 
     private static final long serialVersionUID = -795843614381155072L;
-    
-    
+        
     private Long id;
     private int periodYear;
     private int periodMonth;
@@ -39,8 +38,7 @@ public abstract class Production implements Serializable {
     private Double productionVolume;  
     private Double ownShareEntitlement;
     private Double partnerShareEntitlement;   
-    
-     
+        
 
     public Production() {
     }
@@ -85,11 +83,11 @@ public abstract class Production implements Serializable {
 
     @ManyToOne
     @NotNull
-    public ContractStream getPartnership() {
+    public ContractStream getContractStream() {
         return contractStream;
     }
 
-    public void setPartnership(ContractStream contractStream) {
+    public void setContractStream(ContractStream contractStream) {
         this.contractStream = contractStream;
     }
          

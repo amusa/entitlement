@@ -13,7 +13,7 @@ import javax.persistence.Entity;
  * @author 18359
  */
 @Entity
-@DiscriminatorValue("ACTUAL_JV")
+@DiscriminatorValue("JV_ACTUAL")
 public class ActualJvProduction extends JvProduction {
 
     private static final long serialVersionUID = 2917192116735019964L;

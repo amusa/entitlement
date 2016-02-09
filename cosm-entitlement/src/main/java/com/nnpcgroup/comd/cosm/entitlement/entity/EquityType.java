@@ -85,7 +85,7 @@ public class EquityType implements Serializable {
 
     @Override
     public String toString() {
-        return "com.nnpcgroup.comd.cosm.entitlement.entity.EquityType[ code=" + code + " ]";
+        return description;
     }
     
 }

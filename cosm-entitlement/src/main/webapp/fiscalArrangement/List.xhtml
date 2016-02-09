@@ -16,8 +16,8 @@
         <ui:define name="body">
             <h:form id="FiscalArrangementListForm">
                 <p:panel header="#{bundle.ListFiscalArrangementTitle}">
-                    <p:dataTable id="datalist" value="#{fiscalArrangementController.items}" var="item"
-                                 selectionMode="single" selection="#{fiscalArrangementController.selected}"
+                    <p:dataTable id="datalist" value="#{fiscalController.fiscalArrangements}" var="item"
+                                 selectionMode="single" selection="#{fiscalController.currentFiscal}"
                                  paginator="true"
                                  rowKey="#{item.id}"
                                  rows="10"
@@ -46,10 +46,10 @@
                             <h:outputText value="#{item.operator}"/>
                         </p:column>
                         <f:facet name="footer">
-                            <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{fiscalArrangementController.prepareCreate}" update=":FiscalArrangementCreateForm" oncomplete="PF('FiscalArrangementCreateDialog').show()"/>
-                            <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{bundle.View}" update=":FiscalArrangementViewForm" oncomplete="PF('FiscalArrangementViewDialog').show()" disabled="#{empty fiscalArrangementController.selected}"/>
-                            <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{bundle.Edit}" update=":FiscalArrangementEditForm" oncomplete="PF('FiscalArrangementEditDialog').show()" disabled="#{empty fiscalArrangementController.selected}"/>
-                            <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{bundle.Delete}" actionListener="#{fiscalArrangementController.destroy}" update=":growl,datalist" disabled="#{empty fiscalArrangementController.selected}"/>
+                            <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{fiscalController.prepareCreate}" update=":FiscalArrangementCreateForm" oncomplete="PF('FiscalArrangementCreateDialog').show()"/>
+                            <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{bundle.View}" update=":FiscalArrangementViewForm" oncomplete="PF('FiscalArrangementViewDialog').show()" disabled="#{empty fiscalController.currentFiscal}"/>
+                            <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{bundle.Edit}" update=":FiscalArrangementEditForm" oncomplete="PF('FiscalArrangementEditDialog').show()" disabled="#{empty fiscalController.currentFiscal}"/>
+                            <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{bundle.Delete}" actionListener="#{fiscalController.destroy}" update=":growl,datalist" disabled="#{empty fiscalController.currentFiscal}"/>
                         </f:facet>
                     </p:dataTable>
                 </p:panel>

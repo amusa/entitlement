@@ -5,12 +5,12 @@
  */
 package com.nnpcgroup.comd.cosm.entitlement.ejb;
 
+import com.nnpcgroup.comd.cosm.entitlement.entity.ActualJvProduction;
 import com.nnpcgroup.comd.cosm.entitlement.entity.EquityType;
 import com.nnpcgroup.comd.cosm.entitlement.entity.FiscalArrangement;
 import com.nnpcgroup.comd.cosm.entitlement.entity.JointVenture;
-import com.nnpcgroup.comd.cosm.entitlement.entity.JvProduction;
 import com.nnpcgroup.comd.cosm.entitlement.entity.Production;
-import com.nnpcgroup.comd.cosm.entitlement.util.JV;
+import com.nnpcgroup.comd.cosm.entitlement.util.JVACTUAL;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
 
@@ -19,33 +19,33 @@ import javax.ejb.Stateless;
  * @author 18359
  */
 @Stateless
-@JV
-public class JvProductionBean extends ProductionBean {
+@JVACTUAL
+public class JvActualProductionBean extends ProductionBean {
 
-    private static final Logger log = Logger.getLogger(JvProductionBean.class.getName());
+    private static final Logger log = Logger.getLogger(JvActualProductionBean.class.getName());
 
-    public JvProductionBean() {
+    public JvActualProductionBean() {
         super();
-        log.info("JvProductionBean::constructor activated...");
+        log.info("JvActualProductionBean::constructor activated...");
 
     }
 
     @Override
     public Production createInstance() {
-        log.info("JvProductionBean::createProductionEntity() called...");
-        return new JvProduction();
+        log.info("JvActualProductionBean::createProductionEntity() called...");
+        return new ActualJvProduction();
     }
     
     @Override
     public Production computeOpeningStock(Production production) {
-        log.info("JvProductionBean::computing Opening stock...");
+        log.info("JvActualProductionBean::computing Opening stock...");
         production.setOpeningStock(0.0);//TODO:compute JV Production opening stock
         return production;
     }
 
     @Override
     public Production computeEntitlement(Production production) {
-        log.info("JvProductionBean::computing Entitlement...");
+        log.info("JvActualProductionBean::computing Entitlement...");
         FiscalArrangement fa;
         JointVenture jv;
 
@@ -75,7 +75,7 @@ public class JvProductionBean extends ProductionBean {
 
     @Override
     public Production computeClosingStock(Production production) {
-        log.info("JvProductionBean::computing Closing stock...");
+        log.info("JvActualProductionBean::computing Closing stock...");
         return production;
     }
 

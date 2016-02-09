@@ -5,7 +5,7 @@
  */
 package com.nnpcgroup.comd.cosm.entitlement.ejb;
 
-import com.nnpcgroup.comd.cosm.entitlement.entity.JointVenture;
+import com.nnpcgroup.comd.cosm.entitlement.entity.ContractStream;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -15,7 +15,7 @@ import javax.persistence.PersistenceContext;
  * @author 18359
  */
 @Stateless
-public class JointVentureFacade extends AbstractFacade<JointVenture> {
+public class ContractStreamBean extends AbstractFacade<ContractStream> {
 
     @PersistenceContext(unitName = "entitlementPU")
     private EntityManager em;
@@ -25,8 +25,8 @@ public class JointVentureFacade extends AbstractFacade<JointVenture> {
         return em;
     }
 
-    public JointVentureFacade() {
-        super(JointVenture.class);
+    public ContractStreamBean() {
+        super(ContractStream.class);
     }
     
 }

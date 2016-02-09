@@ -61,5 +61,12 @@ public abstract class AbstractBean<T> {
         javax.persistence.Query q = getEntityManager().createQuery(cq);
         return ((Long) q.getSingleResult()).intValue();
     }
-    
+
+    public void create(List<T> entityList) {
+        for (T e : entityList) {
+            getEntityManager().persist(e);
+        }
+
+    }
+
 }

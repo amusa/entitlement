@@ -16,8 +16,8 @@
         <ui:define name="body">
             <h:form id="JointVentureListForm">
                 <p:panel header="#{bundle.ListJointVentureTitle}">
-                    <p:dataTable id="datalist" value="#{jointVentureController.items}" var="item"
-                                 selectionMode="single" selection="#{jointVentureController.selected}"
+                    <p:dataTable id="datalist" value="#{jvController.jvItems}" var="item"
+                                 selectionMode="single" selection="#{jvController.selected}"
                                  paginator="true"
                                  rowKey="#{item.id}"
                                  rows="10"
@@ -52,10 +52,10 @@
                             <h:outputText value="#{item.operator}"/>
                         </p:column>
                         <f:facet name="footer">
-                            <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{jointVentureController.prepareCreate}" update=":JointVentureCreateForm" oncomplete="PF('JointVentureCreateDialog').show()"/>
-                            <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{bundle.View}" update=":JointVentureViewForm" oncomplete="PF('JointVentureViewDialog').show()" disabled="#{empty jointVentureController.selected}"/>
-                            <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{bundle.Edit}" update=":JointVentureEditForm" oncomplete="PF('JointVentureEditDialog').show()" disabled="#{empty jointVentureController.selected}"/>
-                            <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{bundle.Delete}" actionListener="#{jointVentureController.destroy}" update=":growl,datalist" disabled="#{empty jointVentureController.selected}"/>
+                            <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{jvController.prepareCreate}" update=":JointVentureCreateForm" oncomplete="PF('JointVentureCreateDialog').show()"/>
+                            <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{bundle.View}" update=":JointVentureViewForm" oncomplete="PF('JointVentureViewDialog').show()" disabled="#{empty jvController.selected}"/>
+                            <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{bundle.Edit}" update=":JointVentureEditForm" oncomplete="PF('JointVentureEditDialog').show()" disabled="#{empty jvController.selected}"/>
+                            <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{bundle.Delete}" actionListener="#{jvController.destroy}" update=":growl,datalist" disabled="#{empty jvController.selected}"/>
                         </f:facet>
                     </p:dataTable>
                 </p:panel>

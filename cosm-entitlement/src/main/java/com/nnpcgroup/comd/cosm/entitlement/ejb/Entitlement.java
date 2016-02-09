@@ -15,8 +15,10 @@ import javax.enterprise.context.Dependent;
 @Dependent
 public interface Entitlement {
     
-   public Double calculateEntitlement(); 
-   public Production createProductionEntity();
-   public Production createActualProductionEntity();
+   public Production computeEntitlement(Production production);     
+   public Production createInstance();
+   public Production enrich(Production production);
+   public Production computeOpeningStock(Production production);
+   public Production computeClosingStock(Production production);
 
 }

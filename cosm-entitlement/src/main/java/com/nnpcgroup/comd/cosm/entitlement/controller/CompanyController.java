@@ -13,15 +13,17 @@ import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.inject.Named;
-import javax.enterprise.context.SessionScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
 @Named("companyController")
-@SessionScoped
+@RequestScoped
 public class CompanyController implements Serializable {
+
+    private static final long serialVersionUID = -6982105129966859253L;
 
     @EJB
     private com.nnpcgroup.comd.cosm.entitlement.ejb.CompanyFacade ejbFacade;

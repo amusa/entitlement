@@ -13,16 +13,16 @@
         <h:head>
 
             <ui:define name="title">
-                <h:outputText value="JV Actualization"></h:outputText>
+                <h:outputText value="JV Production"></h:outputText>
             </ui:define>
         </h:head>
 
 
         <ui:define name="body">
-            <div class="row">                
-                <h:form id="jvActualForm">
+            <div id="prod_div" class="row">                
+                <h:form id="jvProdForm">
                     <p:growl id="msgs" showDetail="false" />
-                    <p:panelGrid id="ActualParamPanel" columns="2">
+                    <p:panelGrid id="paramPanel" columns="2">
                         <h:outputText value="Year"/>
                         <p:inputText id="periodYear" value="#{jvProdController.periodYear}" 
                                      class="form-control input-sm m-b-10" pt:placeholder="Year"/>
@@ -30,20 +30,50 @@
                         <p:inputText id="periodMonth" value = "#{jvProdController.periodMonth}" 
                                      class="form-control input-sm m-b-10" pt:placeholder="Month"
                                      />
+                        <p:commandButton  value="Get Forecast From SAP"  class="btn" disabled="true" >
+                            <p:ajax event="click" update="prodTable"  />
+                        </p:commandButton>
 
-                        <p:commandButton  value="Get Forecast"  class="btn" >
+                        <p:commandButton  value="Manual Entry"  class="btn" >
                             <p:ajax listener="#{jvProdController.processManualEntry}" event="click"
-                                    process="ActualParamPanel periodYear periodMonth"
-                                    update="forecast_panel forecastTable actual_panel actualTable msgs"/>
+                                    process="paramPanel periodYear periodMonth"
+                                    update="jvProdForm manualGroup manualForm prod_panel prodTable manualGroup manualForm  csOptions grossProd msgs"/>
 
                         </p:commandButton>
-                    </p:panelGrid>
+                    </p:panelGrid>   
 
                     <hr class="whiter m-t-20" />
                     <!-- Multi Column -->
-                    <h:panelGroup id="forecast_panel">
 
-                        <p:dataTable id="forecastTable" var="prod" value="#{jvProdController.productions}" class="table table-bordered table-hover tile">                                                    
+                    <p:panel id="manualGroup" >
+
+                        <p:panelGrid id="manualForm" columns="2" rendered="#{jvProdController.manualEntry}">                           
+                            <h:outputText value="Asset Stream/Crude Type"/>
+                            <p:selectOneMenu id="csOptions" value="#{jvProdController.currentProduction.contractStream}" class="select">                                              
+                                <f:selectItems value="#{contractStreamController.itemsAvailableSelectOne}"/>   
+                                <p:ajax event="change" update="addProduction"/>     
+                            </p:selectOneMenu>
+
+                            <h:outputText value="Gross Production"/>
+                            <p:inputText id="grossProd" value = "#{jvProdController.currentProduction.productionVolume}"  class="form-control input-sm m-b-10" pt:placeholder="Gross Production">
+                                <p:ajax event="change" update="addProduction" />
+                            </p:inputText>
+
+
+                            <p:commandButton  id="addProduction" value="Add"  disabled="#{jvProdController.currentProduction.productionVolume eq null}">                           
+                                <p:ajax listener="#{jvProdController.addProductionItem}" update="manualGroup prod_panel prodTable  csOptions msgs" 
+                                        process="paramPanel periodYear periodMonth manualGroup manualForm  csOptions grossProd"/>                            
+                            </p:commandButton>
+
+
+                        </p:panelGrid>
+                    </p:panel>
+
+                    <hr class="whiter m-t-20" />
+
+                    <h:panelGroup id="prod_panel">
+
+                        <p:dataTable id="prodTable" var="prod" value="#{jvProdController.productions}" class="table table-bordered table-hover tile">                                                    
                             <p:column >                                                        
                                 <f:facet name="header">
                                     <h:outputText value="Year" />   
@@ -60,7 +90,7 @@
                                 <f:facet name="header">
                                     <h:outputText value="Asset Stream/Crude Type"/>
                                 </f:facet>
-                                <h:outputText value="#{prod.contractStream.fiscalArrangement.title}/#{prod.contractStream.crudeType.crudeType}"/>                                                        
+                                <h:outputText value="#{prod.contractStream.fiscalArrangement.title}/#{prod.contractStream.crudeType.code}"/>                                                        
                             </p:column>
                             <p:column>
                                 <f:facet name="header">
@@ -86,26 +116,17 @@
                                 </f:facet>                                                            
                                 <h:outputText value="#{prod.partnerShareEntitlement}"/>
                             </p:column>
-                            <p:column>
-                                <f:facet name="header">
-                                    <h:outputText value="Action" />
-                                </f:facet>                                                            
-                                <p:commandLink value="Actualize"/>
-                            </p:column>
 
                         </p:dataTable>
 
                     </h:panelGroup>
 
-
-                    <hr class="whiter m-t-20" />
-
-                   
-
                     <p:commandButton id="saveProductions" value="Save"  class="btn btn-sm" >                                    
 
                         <p:ajax listener="#{jvProdController.saveProductions}" event="click"
-                                update="forecast_panel forecastTable msgs" />
+                                update="prod_panel msgs"
+                                />                            
+
 
                     </p:commandButton>
 

@@ -4,20 +4,43 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
 
     <ui:composition>
 
-        <p:dialog id="CompanyViewDlg" widgetVar="CompanyViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewCompanyTitle}">
-            <h:form id="CompanyViewForm">
+        <p:dialog id="JvViewDlg" widgetVar="JvViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewCompanyTitle}">
+            <h:form id="JvViewForm">
                 <h:panelGroup id="display">
-                    <p:panelGrid columns="2" rendered="#{companyController.selected != null}">
-                        <h:outputText value="#{bundle.ViewCompanyLabel_id}"/>
-                        <h:outputText value="#{companyController.selected.id}" title="#{bundle.ViewCompanyTitle_id}"/>
-                        <h:outputText value="#{bundle.ViewCompanyLabel_name}"/>
-                        <h:outputText value="#{companyController.selected.name}" title="#{bundle.ViewCompanyTitle_name}"/>
+                    <p:panelGrid columns="2" rendered="#{jvProdController.currentProduction != null}">
+                        <p:outputLabel value="Year" for="periodYear"/>
+                        <p:outputLabel id="periodYear" value="#{jvProdController.currentProduction.periodYear}" 
+                                       class="form-control input-sm m-b-10" pt:placeholder="Year"/>
+                        <p:outputLabel value="Month" for="periodMonth"/>
+                        <p:outputLabel id="periodMonth" value = "#{jvProdController.currentProduction.periodMonth}" 
+                                       class="form-control input-sm m-b-10" pt:placeholder="Month"
+                                       />
+                        <p:outputLabel value="Asset Stream/Crude Type" for="csOptions"/>
+                        <p:outputLabel id="csOptions" value="#{jvProdController.currentProduction.contractStream.fiscalArrangement.title}/#{jvProdController.currentProduction.contractStream.crudeType.code}" />
+                        
+                        <p:outputLabel value="Gross Production" for="grossProd" />
+                        <p:outputLabel id="grossProd" value = "#{jvProdController.currentProduction.productionVolume}"  class="form-control input-sm m-b-10" pt:placeholder="Gross Production"
+                                       />
+                                                
+                        <p:outputLabel value="Opening Stock" for="openingStock" />
+                        <p:outputLabel id="openingStock" value="#{jvProdController.currentProduction.openingStock}" title="OpeningStock" />
+
+                        <p:outputLabel value="Own Entitlement" for="ownShareEntitlement" />
+                        <p:outputLabel id="ownShareEntitlement" value="#{jvProdController.currentProduction.ownShareEntitlement}" title="OwnShareEntitlement" />
+
+                        <p:outputLabel value="Partner Entitlement" for="partnerShareEntitlement" />
+                        <p:outputLabel id="partnerShareEntitlement" value="#{jvProdController.currentProduction.partnerShareEntitlement}" title="PartnerShareEntitlement" />
+
+                        <p:outputLabel value="Closing Stock" for="closingStock" />
+                        <p:outputLabel id="closingStock" value="#{jvProdController.currentProduction.closingStock}" title="ClosingStock" />
+
                     </p:panelGrid>
-                    <p:commandButton value="#{bundle.Close}" onclick="CompanyViewDialog.hide()"/>
+                    <p:commandButton value="#{bundle.Close}" onclick="JvViewDialog.hide()"/>
                 </h:panelGroup>
             </h:form>
         </p:dialog>

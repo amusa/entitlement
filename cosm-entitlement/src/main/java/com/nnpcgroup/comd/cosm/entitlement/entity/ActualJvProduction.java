@@ -20,7 +20,7 @@ public class ActualJvProduction extends JvProduction {
 
     private Double lineFillContribution;
     private Double deadStockContribution;
-    private Double ajustedOwnEntitlement;
+    private Double adjustedOwnEntitlement;
     private Double adjustedPartnerEntitlement;
 
     
@@ -43,12 +43,12 @@ public class ActualJvProduction extends JvProduction {
         this.deadStockContribution = deadStockContribution;
     }
 
-    public Double getAjustedOwnEntitlement() {
-        return ajustedOwnEntitlement;
+    public Double getAdjustedOwnEntitlement() {
+        return adjustedOwnEntitlement;
     }
 
-    public void setAjustedOwnEntitlement(Double ajustedOwnEntitlement) {
-        this.ajustedOwnEntitlement = ajustedOwnEntitlement;
+    public void setAdjustedOwnEntitlement(Double adjustedOwnEntitlement) {
+        this.adjustedOwnEntitlement = adjustedOwnEntitlement;
     }
 
     public Double getAdjustedPartnerEntitlement() {

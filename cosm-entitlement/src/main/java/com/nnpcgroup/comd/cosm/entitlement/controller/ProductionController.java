@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.inject.Inject;
@@ -30,8 +31,9 @@ public class ProductionController implements Serializable {
     private static final long serialVersionUID = -7596150432081506756L;
     private static final Logger log = Logger.getLogger(ProductionController.class.getName());
 
-    @Inject
-    @JV
+//    @Inject
+//    @JV
+    @EJB
     private ProductionBean productionBean;
 
     private Production currentProduction;
@@ -70,7 +72,7 @@ public class ProductionController implements Serializable {
     @PostConstruct
     public void postConstruct() {
         log.info("ProductionController::postConstructor initializing production...");
-        currentProduction = productionBean.createInstance();
+      //  currentProduction = productionBean.createInstance();
     }
     
     public void processManualEntry(AjaxBehaviorEvent event) {

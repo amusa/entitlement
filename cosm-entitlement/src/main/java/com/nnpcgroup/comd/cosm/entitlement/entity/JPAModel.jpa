@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<jpa:entity-mappings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:java="http://jcp.org/en/jsr/detail?id=270" xmlns:jpa="http://java.sun.com/xml/ns/persistence/orm" xs="false" id="_145518055522823" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm orm_2_1.xsd">
+    <jpa:entity xre="false" compositePrimaryKeyType="NONE" sm="false" abstract="true" class="Production" visibile="true" minimized="false" rootElement="_145518055522823" id="_145518055528832">
+        <jpa:attributes>
+            <basic attribute-type="int" visibile="true" name="periodYear" id="_145518055528834">
+                <annotation>
+                    <name>javax.validation.constraints.NotNull</name>
+                </annotation>
+            </basic>
+            <basic attribute-type="int" visibile="true" name="periodMonth" id="_145518055528835">
+                <annotation>
+                    <name>javax.validation.constraints.NotNull</name>
+                </annotation>
+            </basic>
+            <basic attribute-type="Double" visibile="true" name="openingStock" id="_145518055528837">
+                <annotation>
+                    <name>javax.validation.constraints.NotNull</name>
+                </annotation>
+            </basic>
+            <basic attribute-type="Double" visibile="true" name="closingStock" id="_145518055528838"/>
+            <basic attribute-type="Double" visibile="true" name="productionVolume" id="_145518055528839">
+                <annotation>
+                    <name>javax.validation.constraints.NotNull</name>
+                </annotation>
+            </basic>
+            <basic attribute-type="Double" visibile="true" name="ownShareEntitlement" id="_145518055528840">
+                <annotation>
+                    <name>javax.validation.constraints.NotNull</name>
+                </annotation>
+            </basic>
+            <basic attribute-type="Double" visibile="true" name="partnerShareEntitlement" id="_145518055528841"/>
+            <jpa:id attribute-type="Long" visibile="true" name="id" id="_145518055528833">
+                <jpa:generated-value strategy="IDENTITY"/>
+            </jpa:id>
+        </jpa:attributes>
+        <jpa:table name="PRODUCTION"/>
+        <jpa:inheritance strategy="SINGLE_TABLE"/>
+        <jpa:discriminator-column name="PROD_TYPE"/>
+    </jpa:entity>
+    <jpa:entity xre="false" compositePrimaryKeyType="NONE" sm="false" abstract="false" class="JvProduction" superclassId="_145518055528832" visibile="true" minimized="false" rootElement="_145518055522823" id="_145518055528831">
+        <jpa:attributes/>
+    </jpa:entity>
+    <jpa:entity xre="false" compositePrimaryKeyType="NONE" sm="false" abstract="false" class="ActualJvProduction" superclassId="_145518055528831" visibile="true" minimized="false" rootElement="_145518055522823" id="_145518055528826">
+        <jpa:attributes>
+            <basic attribute-type="Double" visibile="true" name="lineFillContribution" id="_145518055528827"/>
+            <basic attribute-type="Double" visibile="true" name="deadStockContribution" id="_145518055528828"/>
+            <basic attribute-type="Double" visibile="true" name="ajustedOwnEntitlement" id="_145518055528829"/>
+            <basic attribute-type="Double" visibile="true" name="adjustedPartnerEntitlement" id="_145518055528830"/>
+        </jpa:attributes>
+    </jpa:entity>
+    <jpa:entity xre="false" compositePrimaryKeyType="NONE" sm="false" abstract="false" class="ActualPscProduction" superclassId="_145518055570872" visibile="true" minimized="false" rootElement="_145518055522823" id="_145518055531842">
+        <jpa:attributes/>
+    </jpa:entity>
+    <jpa:entity xre="false" compositePrimaryKeyType="NONE" sm="false" abstract="true" class="FiscalArrangement" visibile="true" minimized="false" rootElement="_145518055522823" id="_145518055535846">
+        <jpa:attributes>
+            <basic attribute-type="String" visibile="true" name="title" id="_145518055535848">
+                <annotation>
+                    <name>javax.validation.constraints.NotNull</name>
+                </annotation>
+            </basic>
+            <jpa:id attribute-type="Long" visibile="true" name="id" id="_145518055535847">
+                <jpa:column unique="false" nullable="true" insertable="true" updatable="true"/>
+                <jpa:generated-value strategy="IDENTITY"/>
+            </jpa:id>
+        </jpa:attributes>
+        <jpa:table name="FISCAL_ARRANGEMENT"/>
+    </jpa:entity>
+    <jpa:entity xre="false" compositePrimaryKeyType="NONE" sm="false" abstract="false" class="JointVenture" superclassId="_145518055535846" visibile="true" minimized="false" rootElement="_145518055522823" id="_145518055535844">
+        <jpa:attributes/>
+    </jpa:entity>
+    <jpa:entity xre="false" compositePrimaryKeyType="NONE" sm="false" abstract="false" class="AlternativeFundingJv" superclassId="_145518055535844" visibile="true" minimized="false" rootElement="_145518055522823" id="_145518055535843">
+        <jpa:attributes/>
+    </jpa:entity>
+    <jpa:entity xre="false" compositePrimaryKeyType="NONE" sm="false" abstract="false" class="CarryAlternativeFunding" superclassId="_145518055535843" visibile="true" minimized="false" rootElement="_145518055522823" id="_145518055538851">
+        <jpa:attributes/>
+        <jpa:attribute-override name="title">
+            <jpa:column unique="false" nullable="true" insertable="true" updatable="true" length="255" precision="0"/>
+        </jpa:attribute-override>
+        <jpa:association-override name="operator">
+            <jpa:join-table/>
+        </jpa:association-override>
+    </jpa:entity>
+    <jpa:entity xre="false" compositePrimaryKeyType="NONE" sm="false" abstract="false" class="ModifiedCarryAlternativeFunding" superclassId="_145518055535843" visibile="true" minimized="false" rootElement="_145518055522823" id="_145518055562870">
+        <jpa:attributes/>
+    </jpa:entity>
+    <jpa:entity xre="false" compositePrimaryKeyType="NONE" sm="false" abstract="false" class="ProductionSharingContract" superclassId="_145518055535846" visibile="true" minimized="false" rootElement="_145518055522823" id="_145518055567871">
+        <jpa:attributes/>
+    </jpa:entity>
+    <jpa:entity xre="false" compositePrimaryKeyType="NONE" sm="false" abstract="false" class="PscProduction" superclassId="_145518055528832" visibile="true" minimized="false" rootElement="_145518055522823" id="_145518055570872">
+        <jpa:attributes/>
+    </jpa:entity>
+    <jpa:diagram id="_145518055522824">
+        <plane elementRef="_145518055522823" id="_145518055522825_p">
+            <shape elementRef="_145518055528832" id="_145518055528832_gui">
+                <Bounds x="1030.0" y="-44.0" width="184.0" height="218.0"/>
+            </shape>
+            <shape elementRef="_145518055528831" id="_145518055528831_gui">
+                <Bounds x="904.0" y="326.0" width="171.0" height="24.0"/>
+            </shape>
+            <shape elementRef="_145518055528826" id="_145518055528826_gui">
+                <Bounds x="886.0" y="411.0" width="207.0" height="121.0"/>
+            </shape>
+            <shape elementRef="_145518055531842" id="_145518055531842_gui">
+                <Bounds x="1132.0" y="411.0" width="216.0" height="24.0"/>
+            </shape>
+            <shape elementRef="_145518055535846" id="_145518055535846_gui">
+                <Bounds x="169.0" y="28.0" width="204.0" height="92.0"/>
+            </shape>
+            <shape elementRef="_145518055535844" id="_145518055535844_gui">
+                <Bounds x="283.0" y="281.0" width="169.0" height="24.0"/>
+            </shape>
+            <shape elementRef="_145518055535843" id="_145518055535843_gui">
+                <Bounds x="260.0" y="350.0" width="214.0" height="24.0"/>
+            </shape>
+            <shape elementRef="_145518055538851" id="_145518055538851_gui">
+                <Bounds x="348.0" y="447.0" width="232.0" height="24.0"/>
+            </shape>
+            <shape elementRef="_145518055562870" id="_145518055562870_gui">
+                <Bounds x="25.0" y="447.0" width="280.0" height="24.0"/>
+            </shape>
+            <shape elementRef="_145518055567871" id="_145518055567871_gui">
+                <Bounds x="-3.0" y="279.0" width="251.0" height="24.0"/>
+            </shape>
+            <shape elementRef="_145518055570872" id="_145518055570872_gui">
+                <Bounds x="1150.0" y="326.0" width="180.0" height="24.0"/>
+            </shape>
+        </plane>
+    </jpa:diagram>
+</jpa:entity-mappings>

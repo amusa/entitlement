@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+
+    <ui:composition>
+
+        <p:dialog id="JvActualizeEditDlg" widgetVar="JvActualizeCreateDlg" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateCompanyTitle}">
+            <h:form id="JvActualizeEditForm">
+                <h:panelGroup id="display">
+
+                    <p:panelGrid id="ActualizePanel"  columns="2" rendered="#{jvActualController.currentActualProduction != null}">
+                        <p:outputLabel value="PeriodYear:" for="periodYear" />
+                        <p:inputText id="periodYear" value="#{jvActualController.currentActualProduction.periodYear}" title="PeriodYear" />
+
+                        <p:outputLabel value="PeriodMonth:" for="periodMonth" />
+                        <p:inputText id="periodMonth" value="#{jvActualController.currentActualProduction.periodMonth}" title="PeriodMonth" />
+
+                        <p:outputLabel value="ContractStream:" for="contractStream" />
+                        <p:selectOneMenu id="contractStream" value="#{jvActualController.currentActualProduction.contractStream}" >
+                            <f:selectItems value="#{contractStreamController.itemsAvailableSelectOne}"/>
+                        </p:selectOneMenu>
+                        
+                        <p:outputLabel value="ProductionVolume:" for="productionVolume" />
+                        <p:inputText id="productionVolume" value="#{jvActualController.currentActualProduction.productionVolume}" title="Production Volume" >
+                            <p:ajax event="change" listener="#{jvActualController.productionVolumeChange}"  
+                                    update="display openingStock closingStock ownShareEntitlement partnerShareEntitlement deadStockContribution lineFillContribution ajustedOwnEntitlement adjustedPartnerEntitlement" />
+                        </p:inputText>
+
+                        <p:outputLabel value="OpeningStock:" for="openingStock" />
+                        <p:inputText id="openingStock" value="#{jvActualController.currentActualProduction.openingStock}" title="OpeningStock" />
+                        
+                        <p:outputLabel value="OwnShareEntitlement:" for="ownShareEntitlement" />
+                        <p:inputText id="ownShareEntitlement" value="#{jvActualController.currentActualProduction.ownShareEntitlement}" title="OwnShareEntitlement" />
+
+                        <p:outputLabel value="PartnerShareEntitlement:" for="partnerShareEntitlement" />
+                        <p:inputText id="partnerShareEntitlement" value="#{jvActualController.currentActualProduction.partnerShareEntitlement}" title="PartnerShareEntitlement" />
+
+
+                        <p:outputLabel value="LineFillContribution:" for="lineFillContribution" />
+                        <p:inputText id="lineFillContribution" value="#{jvActualController.currentActualProduction.lineFillContribution}" title="LineFillContribution" />
+
+                        <p:outputLabel value="DeadStockContribution:" for="deadStockContribution" />
+                        <p:inputText id="deadStockContribution" value="#{jvActualController.currentActualProduction.deadStockContribution}" title="DeadStockContribution" />
+
+                        <p:outputLabel value="AjustedOwnEntitlement:" for="ajustedOwnEntitlement" />
+                        <p:inputText id="ajustedOwnEntitlement" value="#{jvActualController.currentActualProduction.adjustedOwnEntitlement}" title="AjustedOwnEntitlement" />
+
+                        <p:outputLabel value="AdjustedPartnerEntitlement:" for="adjustedPartnerEntitlement" />
+                        <p:inputText id="adjustedPartnerEntitlement" value="#{jvActualController.currentActualProduction.adjustedPartnerEntitlement}" title="AdjustedPartnerEntitlement" />
+
+                        <p:outputLabel value="ClosingStock:" for="closingStock" />
+                        <p:inputText id="closingStock" value="#{jvActualController.currentActualProduction.closingStock}" title="ClosingStock" />
+                        
+                    </p:panelGrid>
+
+                    <p:commandButton actionListener="#{jvActualController.create}" value="#{bundle.Save}" update="display,:growl" oncomplete="handleSubmit(args,'JvActualizeEditDlg');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="JvActualizeEditDlg.hide()"/>
+
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

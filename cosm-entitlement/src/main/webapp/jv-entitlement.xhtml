@@ -40,7 +40,7 @@
                 <!-- Multi Column -->
 
                 <h:form id="manual_form">
-                    <h:panelGroup id="manual_panel" >
+                    <h:panelGroup id="manual_panel" rendered="#{jvProdController.manualEntry}">
 
                         <div class="block-area" id="multi-column">
                             <div class="col-md-4">
@@ -54,25 +54,12 @@
                                              />
                             </div>
                             <div class="clearfix"></div>
-                            <div class="col-md-4 m-b-10">
-                                <select  class="select" value="#{jvProdController.currentFiscal}">
-                                    <ui:repeat value="#{fiscalController.fiscalList}" var="item">
-                                        <option value="#{item.id}">#{item.title}</option>                                        
-                                    </ui:repeat>  
-                                    <f:ajax event="click" listener="#{jvProdController.fiscalListChanged}" render="csOptions"/>
-                                </select> 
 
-                            </div>
-                            <div class="col-md-4 m-b-10">
-                                
-                                
-                                
+                            <div class="col-md-4 m-b-10">                                
                                 <h:selectOneMenu id="csOptions" value="#{jvProdController.currentProduction.contractStream}" class="select"
-                                                 >
-                                    <f:selectItems value="#{fiscalController.contractStreamSelectOptions}"/>      
-
+                                                 pt:placeholder="Asset/Crude Type">                                                 
+                                    <f:selectItems value="#{contractStreamController.itemsAvailableSelectOne}"/>
                                 </h:selectOneMenu>
-
                             </div>
                             <div class="col-md-4">
                                 <h:inputText id="grossProd" class="form-control input-sm m-b-10" pt:placeholder="Gross Production"
@@ -83,8 +70,11 @@
 
                             <div class="col-md-10">
                                 <h:commandButton  id="addProduction" value="Add"  class="btn btn-sm"                                                   >
-                                    <f:ajax listener="#{jvProdController.processManualEntry}" event="click" render="prod_panel"/>
+                                    <f:ajax listener="#{jvProdController.processManualEntry}" event="click" render="prod_panel prodTable msgs"
+                                            execute="paramPanel periodYear periodMonth manualGroup manualForm  csOptions grossProd"/>
                                 </h:commandButton>
+
+                                
                             </div>                                   
                         </div>
 

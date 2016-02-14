@@ -6,21 +6,25 @@
 package com.nnpcgroup.comd.cosm.entitlement.controller;
 
 import com.nnpcgroup.comd.cosm.entitlement.controller.util.JsfUtil;
-import com.nnpcgroup.comd.cosm.entitlement.ejb.ProductionBean;
+import com.nnpcgroup.comd.cosm.entitlement.ejb.JvActualProductionBean;
+import com.nnpcgroup.comd.cosm.entitlement.entity.ActualJvProduction;
 import com.nnpcgroup.comd.cosm.entitlement.entity.ContractStream;
 import com.nnpcgroup.comd.cosm.entitlement.entity.FiscalArrangement;
+import com.nnpcgroup.comd.cosm.entitlement.entity.JvProduction;
 import com.nnpcgroup.comd.cosm.entitlement.entity.Production;
 import com.nnpcgroup.comd.cosm.entitlement.util.JVACTUAL;
 import javax.inject.Named;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
+import javax.ejb.EJBException;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.event.AjaxBehaviorEvent;
-import javax.inject.Inject;
 
 /**
  *
@@ -33,13 +37,15 @@ public class JvActualProductionController implements Serializable {
     private static final Logger log = Logger.getLogger(JvActualProductionController.class.getName());
     private static final long serialVersionUID = -5506490644508725206L;
 
-    @Inject
-    @JVACTUAL
-    private ProductionBean productionBean;
+//    @Inject
+//    @JVACTUAL
+    @EJB
+    private JvActualProductionBean productionBean;
 
-    private Production currentProduction;
+    private ActualJvProduction currentProduction;
+    //private ActualJvProduction currentActualProduction;
 
-    private List<Production> productions;
+    private List<ActualJvProduction> productions;
 
     private boolean manualEntry = false;
     private FiscalArrangement currentFiscal;
@@ -59,17 +65,26 @@ public class JvActualProductionController implements Serializable {
         return currentProduction;
     }
 
-    public void setCurrentProduction(Production currentProduction) {
+    public void setCurrentProduction(ActualJvProduction currentProduction) {
         log.info("JvActualProductionController::setProduction called...");
         this.currentProduction = currentProduction;
     }
 
-    public List<Production> getProductions() {
+    public ActualJvProduction getCurrentActualProduction() {
+        log.info("JvActualProductionController::getActualCurrentProduction called...");
+        return (ActualJvProduction) currentProduction;
+    }
+
+    public void setCurrentActualProduction(ActualJvProduction currentActualProduction) {
+        this.currentProduction = currentActualProduction;
+    }
+
+    public List<ActualJvProduction> getProductions() {
         log.info("JvActualProductionController::getProductions called...");
         return productions;
     }
 
-    public void setProductions(List<Production> productions) {
+    public void setProductions(List<ActualJvProduction> productions) {
         log.info("JvActualProductionController::setProductions called...");
         this.productions = productions;
     }
@@ -173,6 +188,95 @@ public class JvActualProductionController implements Serializable {
     public void setPeriodMonth(int periodMonth) {
         log.log(Level.INFO, "************JvActualProductionController::setPeriodMonth called with value {0}", periodMonth);
         this.periodMonth = periodMonth;
+    }
+
+    public void actualize(Production production) {
+        log.log(Level.INFO, "************JvActualProductionController::actualizing {0}...", production);
+
+        currentProduction = productionBean.findByContractStreamPeriod(
+                production.getPeriodYear(),
+                production.getPeriodMonth(),
+                production.getContractStream());
+        log.log(Level.INFO, "************JvActualProductionController::findByContractStreamPeriod returning {0}...", currentProduction);
+
+        if (currentProduction == null) {
+            log.log(Level.INFO, "************JvActualProductionController::actualizing returning new JV Production instance...");
+            currentProduction = productionBean.createInstance();
+            log.log(Level.INFO, "************JvActualProductionController::productionBean.createInstance() returning {0}...", currentProduction);
+            currentProduction.setPeriodYear(production.getPeriodYear());
+            currentProduction.setPeriodMonth(production.getPeriodMonth());
+            currentProduction.setContractStream(production.getContractStream());
+
+           // productionBean.enrich(currentProduction);
+
+        }
+    }
+    
+    public void productionVolumeChange(){
+        productionBean.enrich(currentProduction);
+        log.log(Level.INFO, 
+                "Production Enriched::Own entmt={0},Partner entmt={1}, Linefill={2}, Deadstock={3}, Adj Own={4}, Adj Partner={5}...",
+                new Object[]{currentProduction.getOwnShareEntitlement(),
+                currentProduction.getPartnerShareEntitlement(),
+                currentProduction.getLineFillContribution(),
+                currentProduction.getDeadStockContribution(),
+                currentProduction.getAdjustedOwnEntitlement(),
+                currentProduction.getAdjustedPartnerEntitlement()});
+
+    }
+
+    public void destroy() {
+        persist(JsfUtil.PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("CompanyDeleted"));
+        if (!JsfUtil.isValidationFailed()) {
+            currentProduction = null; // Remove selection
+            productions = null;    // Invalidate list of items to trigger re-query.
+        }
+    }
+
+    public ActualJvProduction prepareCreate() {
+        currentProduction = productionBean.createInstance();
+        currentProduction.setPeriodYear(periodYear);
+        currentProduction.setPeriodMonth(periodMonth);
+        return currentProduction;
+    }
+    
+    public void create() {
+        persist(JsfUtil.PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("CompanyCreated"));
+        if (!JsfUtil.isValidationFailed()) {
+            productions = null;    // Invalidate list of items to trigger re-query.
+        }
+    }
+
+    public void update() {
+        persist(JsfUtil.PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("CompanyUpdated"));
+    }
+
+    private void persist(JsfUtil.PersistAction persistAction, String successMessage) {
+        if (currentProduction != null) {
+            //setEmbeddableKeys();
+            try {
+                if (persistAction != JsfUtil.PersistAction.DELETE) {
+                    productionBean.edit(currentProduction);
+                } else {
+                    productionBean.remove(currentProduction);
+                }
+                JsfUtil.addSuccessMessage(successMessage);
+            } catch (EJBException ex) {
+                String msg = "";
+                Throwable cause = ex.getCause();
+                if (cause != null) {
+                    msg = cause.getLocalizedMessage();
+                }
+                if (msg.length() > 0) {
+                    JsfUtil.addErrorMessage(msg);
+                } else {
+                    JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
+                }
+            } catch (Exception ex) {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+                JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
+            }
+        }
     }
 
 }

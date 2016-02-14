@@ -6,12 +6,12 @@
 package com.nnpcgroup.comd.cosm.entitlement.ejb;
 
 import java.util.List;
-import javax.enterprise.context.Dependent;
 import javax.persistence.EntityManager;
 
 /**
  *
  * @author 18359
+ * @param <T>
  */
 public abstract class AbstractBean<T> {
 
@@ -65,6 +65,13 @@ public abstract class AbstractBean<T> {
     public void create(List<T> entityList) {
         for (T e : entityList) {
             getEntityManager().persist(e);
+        }
+
+    }
+    
+    public void edit(List<T> entityList) {
+        for (T e : entityList) {
+            getEntityManager().merge(e);
         }
 
     }

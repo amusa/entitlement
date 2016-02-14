@@ -14,7 +14,7 @@ import javax.persistence.Entity;
  */
 @Entity
 @DiscriminatorValue("PSC_ACTUAL")
-public class ActualPscProduction extends JvProduction {
+public class ActualPscProduction extends PscProduction {
 
     private static final long serialVersionUID = 1116299259496444592L;
     

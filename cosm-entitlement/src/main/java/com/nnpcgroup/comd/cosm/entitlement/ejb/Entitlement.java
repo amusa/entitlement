@@ -5,20 +5,20 @@
  */
 package com.nnpcgroup.comd.cosm.entitlement.ejb;
 
-import com.nnpcgroup.comd.cosm.entitlement.entity.Production;
 import javax.enterprise.context.Dependent;
 
 /**
  *
  * @author 18359
+ * @param <T>
  */
 @Dependent
-public interface Entitlement {
+public interface Entitlement<T> {
     
-   public Production computeEntitlement(Production production);     
-   public Production createInstance();
-   public Production enrich(Production production);
-   public Production computeOpeningStock(Production production);
-   public Production computeClosingStock(Production production);
+   public T computeEntitlement(T production);     
+   //public T createInstance();
+   public T enrich(T production);
+   public T computeOpeningStock(T production);
+   public T computeClosingStock(T production);
 
 }

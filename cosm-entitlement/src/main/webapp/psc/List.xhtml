@@ -10,12 +10,12 @@
 
 
         <ui:define name="title">
-            <h:outputText value="#{bundle.ListProductionSharingContractTitle}"></h:outputText>
+            <h:outputText value="#{bundle.PSCListHeader}"></h:outputText>
         </ui:define>
 
         <ui:define name="body">
             <h:form id="ProductionSharingContractListForm">
-                <p:panel header="#{bundle.ListProductionSharingContractTitle}">
+                <p:panel header="#{bundle.PSCListHeader}">
                     <p:dataTable id="datalist" value="#{productionSharingContractController.items}" var="item"
                                  selectionMode="single" selection="#{productionSharingContractController.selected}"
                                  paginator="true"
@@ -26,24 +26,18 @@
 
                         <p:ajax event="rowSelect"   update="createButton viewButton editButton deleteButton"/>
                         <p:ajax event="rowUnselect" update="createButton viewButton editButton deleteButton"/>
-
+                        
                         <p:column>
                             <f:facet name="header">
-                                <h:outputText value="#{bundle.ListProductionSharingContractTitle_id}"/>
-                            </f:facet>
-                            <h:outputText value="#{item.id}"/>
-                        </p:column>
-                        <p:column>
-                            <f:facet name="header">
-                                <h:outputText value="#{bundle.ListProductionSharingContractTitle_title}"/>
+                                <h:outputText value="#{bundle.PSCListTitle}"/>
                             </f:facet>
                             <h:outputText value="#{item.title}"/>
                         </p:column>
                         <p:column>
                             <f:facet name="header">
-                                <h:outputText value="#{bundle.ListProductionSharingContractTitle_operator}"/>
+                                <h:outputText value="#{bundle.Operator}"/>
                             </f:facet>
-                            <h:outputText value="#{item.operator}"/>
+                            <h:outputText value="#{item.operator.name}"/>
                         </p:column>
                         <f:facet name="footer">
                             <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{productionSharingContractController.prepareCreate}" update=":ProductionSharingContractCreateForm" oncomplete="PF('ProductionSharingContractCreateDialog').show()"/>

@@ -1,59 +1,126 @@
 package com.nnpcgroup.comd.cosm.entitlement.controller;
 
-import com.nnpcgroup.comd.cosm.entitlement.controller.util.JsfUtil;
-import com.nnpcgroup.comd.cosm.entitlement.ejb.ContractStreamBean;
 import com.nnpcgroup.comd.cosm.entitlement.entity.ContractStream;
+import com.nnpcgroup.comd.cosm.entitlement.controller.util.JsfUtil;
+import com.nnpcgroup.comd.cosm.entitlement.controller.util.JsfUtil.PersistAction;
+import com.nnpcgroup.comd.cosm.entitlement.ejb.ContractStreamBean;
+
 import java.io.Serializable;
+import java.util.List;
+import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
+import javax.ejb.EJBException;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
-import javax.faces.model.DataModel;
-import javax.faces.model.SelectItem;
 
 @Named("contractStreamController")
 @SessionScoped
 public class ContractStreamController implements Serializable {
 
-    private static final long serialVersionUID = 3964009055767422659L;
+    private static final long serialVersionUID = 3411266588734031876L;
 
-    private ContractStream current;
-    private DataModel items = null;
     @EJB
-    private ContractStreamBean contractStreamBean;
-    
-    private int selectedItemIndex;
+    private ContractStreamBean ejbFacade;
+    private List<ContractStream> items = null;
+    private ContractStream selected;
 
     public ContractStreamController() {
     }
 
     public ContractStream getSelected() {
-        if (current == null) {
-            current = new ContractStream();
-            selectedItemIndex = -1;
+        return selected;
+    }
+
+    public void setSelected(ContractStream selected) {
+        this.selected = selected;
+    }
+
+    protected void setEmbeddableKeys() {
+    }
+
+    protected void initializeEmbeddableKey() {
+    }
+
+    private ContractStreamBean getFacade() {
+        return ejbFacade;
+    }
+
+    public ContractStream prepareCreate() {
+        selected = new ContractStream();
+        initializeEmbeddableKey();
+        return selected;
+    }
+
+    public void create() {
+        persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("ContractStreamCreated"));
+        if (!JsfUtil.isValidationFailed()) {
+            items = null;    // Invalidate list of items to trigger re-query.
         }
-        return current;
     }
 
-    private ContractStreamBean getContractStreamBean() {
-        return contractStreamBean;
-    }
-    
-    
-    
-    public SelectItem[] getItemsAvailableSelectMany() {
-        return JsfUtil.getSelectItems(contractStreamBean.findAll(), false);
+    public void update() {
+        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("ContractStreamUpdated"));
     }
 
-    public SelectItem[] getItemsAvailableSelectOne() {
-        return JsfUtil.getSelectItems(contractStreamBean.findAll(), true);
+    public void destroy() {
+        persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("ContractStreamDeleted"));
+        if (!JsfUtil.isValidationFailed()) {
+            selected = null; // Remove selection
+            items = null;    // Invalidate list of items to trigger re-query.
+        }
+    }
+
+    public List<ContractStream> getItems() {
+        if (items == null) {
+            items = getFacade().findAll();
+        }
+        return items;
+    }
+
+    private void persist(PersistAction persistAction, String successMessage) {
+        if (selected != null) {
+            setEmbeddableKeys();
+            try {
+                if (persistAction != PersistAction.DELETE) {
+                    getFacade().edit(selected);
+                } else {
+                    getFacade().remove(selected);
+                }
+                JsfUtil.addSuccessMessage(successMessage);
+            } catch (EJBException ex) {
+                String msg = "";
+                Throwable cause = ex.getCause();
+                if (cause != null) {
+                    msg = cause.getLocalizedMessage();
+                }
+                if (msg.length() > 0) {
+                    JsfUtil.addErrorMessage(msg);
+                } else {
+                    JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
+                }
+            } catch (Exception ex) {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+                JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
+            }
+        }
     }
 
     public ContractStream getContractStream(java.lang.Integer id) {
-        return contractStreamBean.find(id);
+        return getFacade().find(id);
+    }
+
+    public List<ContractStream> getItemsAvailableSelectMany() {
+        return getFacade().findAll();
+    }
+
+    public List<ContractStream> getItemsAvailableSelectOne() {
+        return getFacade().findAll();
     }
 
     @FacesConverter(forClass = ContractStream.class)
@@ -90,7 +157,8 @@ public class ContractStreamController implements Serializable {
                 ContractStream o = (ContractStream) object;
                 return getStringKey(o.getId());
             } else {
-                throw new IllegalArgumentException("object " + object + " is of type " + object.getClass().getName() + "; expected type: " + ContractStream.class.getName());
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), ContractStream.class.getName()});
+                return null;
             }
         }
 

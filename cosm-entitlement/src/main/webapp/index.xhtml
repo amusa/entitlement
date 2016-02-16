@@ -155,7 +155,7 @@
                     </div>
                 </div>
 
-                 <!-- Side Menu -->
+                <!-- Side Menu -->
                 <ul class="list-unstyled side-menu">
                     <li class="active">
                         <a class="sa-side-home" href="index.xhtml">
@@ -163,13 +163,13 @@
                         </a>
                     </li>
                     <li>                        
-                        <a class="sa-side-typography" href="jv/forecast-list.xhtml">
-                            <span class="menu-item">Joint Venture Arrangement</span>
+                        <a class="sa-side-typography" href="faces/jv/prod/forecast-list.xhtml">
+                            <span class="menu-item">Joint Venture Entitlement</span>
                         </a>
                     </li>
                     <li>                       
-                        <a class="sa-side-widget" href="productionSharingContract/List.xhtml">
-                            <span class="menu-item">Production Sharing Contract</span>
+                        <a class="sa-side-widget" href="#">
+                            <span class="menu-item">PSC Entitlement</span>
                         </a>
                     </li>
                     <li>
@@ -1030,9 +1030,18 @@
         <h:outputScript name="js/functions.js" />
 
 
-        
-       
+
+
+        <br />
+        <h:link outcome="/contractStream/List" value="Show All ContractStream Items"/>
+        <br />
+        <h:link outcome="/crudeType/List" value="Show All CrudeType Items"/>
+        <br />
+        <h:link outcome="/terminal/List" value="Show All Terminal Items"/>
     </h:body>
+
+
+
 
 
 

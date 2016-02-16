@@ -3,7 +3,7 @@ package com.nnpcgroup.comd.cosm.entitlement.controller;
 import com.nnpcgroup.comd.cosm.entitlement.entity.EquityType;
 import com.nnpcgroup.comd.cosm.entitlement.controller.util.JsfUtil;
 import com.nnpcgroup.comd.cosm.entitlement.controller.util.JsfUtil.PersistAction;
-import com.nnpcgroup.comd.cosm.entitlement.ejb.EquityTypeFacade;
+import com.nnpcgroup.comd.cosm.entitlement.ejb.EquityTypeBean;
 
 import java.io.Serializable;
 import java.util.List;
@@ -24,7 +24,7 @@ import javax.faces.convert.FacesConverter;
 public class EquityTypeController implements Serializable {
 
     @EJB
-    private com.nnpcgroup.comd.cosm.entitlement.ejb.EquityTypeFacade ejbFacade;
+    private com.nnpcgroup.comd.cosm.entitlement.ejb.EquityTypeBean ejbFacade;
     private List<EquityType> items = null;
     private EquityType selected;
 
@@ -45,7 +45,7 @@ public class EquityTypeController implements Serializable {
     protected void initializeEmbeddableKey() {
     }
 
-    private EquityTypeFacade getFacade() {
+    private EquityTypeBean getFacade() {
         return ejbFacade;
     }
 

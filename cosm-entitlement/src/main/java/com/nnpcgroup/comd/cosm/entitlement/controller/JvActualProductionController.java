@@ -226,7 +226,7 @@ public class JvActualProductionController implements Serializable {
     }
 
     public void destroy() {
-        persist(JsfUtil.PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("CompanyDeleted"));
+        persist(JsfUtil.PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("ProductionDeleted"));
         if (!JsfUtil.isValidationFailed()) {
             currentProduction = null; // Remove selection
             productions = null;    // Invalidate list of items to trigger re-query.
@@ -234,6 +234,7 @@ public class JvActualProductionController implements Serializable {
     }
 
     public ActualJvProduction prepareCreate() {
+        log.log(Level.INFO,"Preparing new instance of ActualJvProduction for create...");
         currentProduction = productionBean.createInstance();
         currentProduction.setPeriodYear(periodYear);
         currentProduction.setPeriodMonth(periodMonth);
@@ -241,14 +242,14 @@ public class JvActualProductionController implements Serializable {
     }
     
     public void create() {
-        persist(JsfUtil.PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("CompanyCreated"));
+        persist(JsfUtil.PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("ProductionCreated"));
         if (!JsfUtil.isValidationFailed()) {
             productions = null;    // Invalidate list of items to trigger re-query.
         }
     }
 
     public void update() {
-        persist(JsfUtil.PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("CompanyUpdated"));
+        persist(JsfUtil.PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("ProductionUpdated"));
     }
 
     private void persist(JsfUtil.PersistAction persistAction, String successMessage) {

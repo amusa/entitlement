@@ -4,53 +4,33 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui"
-      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+      xmlns:p="http://primefaces.org/ui">
 
     <ui:composition>
 
-        <p:dialog id="JvCreateDlg" widgetVar="JvCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateCompanyTitle}">
-            <h:form id="JvCreateForm">
+        <p:dialog id="JointVentureCreateDlg" widgetVar="JointVentureCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateJointVentureTitle}">
+            <h:form id="JointVentureCreateForm">
                 <h:panelGroup id="display">
-                    <p:panelGrid id="ActualParamPanel" columns="2" rendered="#{jvProdController.currentProduction != null}">
-                        <p:outputLabel value="Year" for="periodYear"/>
-                        <p:inputText id="periodYear" value="#{jvProdController.currentProduction.periodYear}" 
-                                     class="form-control input-sm m-b-10" pt:placeholder="Year"/>
-                        <p:outputLabel value="Month" for="periodMonth"/>
-                        <p:inputText id="periodMonth" value = "#{jvProdController.currentProduction.periodMonth}" 
-                                     class="form-control input-sm m-b-10" pt:placeholder="Month"
-                                     />
-
-                        <p:outputLabel value="Asset Stream/Crude Type" for="csOptions"/>
-                        <p:selectOneMenu id="csOptions" value="#{jvProdController.currentProduction.contractStream}" class="select" >
-                            <f:selectItems value="#{contractStreamController.itemsAvailableSelectOne}"/>
-                            <p:ajax/>
+                    <p:panelGrid columns="2" rendered="#{jointVentureController.selected != null}">
+                        <p:outputLabel value="#{bundle.CreateJointVentureLabel_equityType}" for="equityType" />
+                        <p:selectOneMenu id="equityType" value="#{jointVentureController.selected.equityType}" >
+                            <f:selectItems value="#{equityTypeController.itemsAvailableSelectOne}"
+                                           var="equityTypeItem"
+                                           itemValue="#{equityTypeItem}"/>
                         </p:selectOneMenu>
-
-                        <p:outputLabel value="Gross Production" for="grossProd"/>
-                        <p:inputText id="grossProd" value = "#{jvProdController.currentProduction.productionVolume}"  class="form-control input-sm m-b-10" pt:placeholder="Gross Production"
-                                     >
-                            <p:ajax event="change" listener="#{jvProdController.productionVolumeChange}"  
-                                    update="display openingStock ownShareEntitlement partnerShareEntitlement closingStock"
-                                    />
-                        </p:inputText>
-
-                        <p:outputLabel value="Opening Stock" for="openingStock" />
-                        <p:inputText id="openingStock" value="#{jvProdController.currentProduction.openingStock}" title="OpeningStock" />
-
-                        <p:outputLabel value="Own Entitlement" for="ownShareEntitlement" />
-                        <p:inputText id="ownShareEntitlement" value="#{jvProdController.currentProduction.ownShareEntitlement}" title="OwnShareEntitlement" />
-
-                        <p:outputLabel value="Partner Entitlement" for="partnerShareEntitlement" />
-                        <p:inputText id="partnerShareEntitlement" value="#{jvProdController.currentProduction.partnerShareEntitlement}" title="PartnerShareEntitlement" />
-
-                        <p:outputLabel value="Closing Stock" for="closingStock" />
-                        <p:inputText id="closingStock" value="#{jvProdController.currentProduction.closingStock}" title="ClosingStock" />
-
+                        <p:outputLabel value="#{bundle.CreateJointVentureLabel_id}" for="id" />
+                        <p:inputText id="id" value="#{jointVentureController.selected.id}" title="#{bundle.CreateJointVentureTitle_id}" />
+                        <p:outputLabel value="#{bundle.CreateJointVentureLabel_title}" for="title" />
+                        <p:inputText id="title" value="#{jointVentureController.selected.title}" title="#{bundle.CreateJointVentureTitle_title}" />
+                        <p:outputLabel value="#{bundle.CreateJointVentureLabel_operator}" for="operator" />
+                        <p:selectOneMenu id="operator" value="#{jointVentureController.selected.operator}" >
+                            <f:selectItems value="#{companyController.itemsAvailableSelectOne}"
+                                           var="operatorItem"
+                                           itemValue="#{operatorItem}"/>
+                        </p:selectOneMenu>
                     </p:panelGrid>
-                    <p:commandButton actionListener="#{jvProdController.create}" value="#{bundle.Save}" update="display,:jvForecastListForm:forecastTable,:growl" oncomplete="handleSubmit(args,'JvCreateDialog');"/>
-                    <p:commandButton value="#{bundle.Cancel}" onclick="JvCreateDialog.hide()"/>
-
+                    <p:commandButton actionListener="#{jointVentureController.create}" value="#{bundle.Save}" update="display,:JointVentureListForm:datalist,:growl" oncomplete="handleSubmit(args,'JointVentureCreateDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="JointVentureCreateDialog.hide()"/>
                 </h:panelGroup>
             </h:form>
         </p:dialog>

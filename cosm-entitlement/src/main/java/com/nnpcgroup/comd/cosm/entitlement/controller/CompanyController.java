@@ -3,7 +3,7 @@ package com.nnpcgroup.comd.cosm.entitlement.controller;
 import com.nnpcgroup.comd.cosm.entitlement.entity.Company;
 import com.nnpcgroup.comd.cosm.entitlement.controller.util.JsfUtil;
 import com.nnpcgroup.comd.cosm.entitlement.controller.util.JsfUtil.PersistAction;
-import com.nnpcgroup.comd.cosm.entitlement.ejb.CompanyFacade;
+import com.nnpcgroup.comd.cosm.entitlement.ejb.CompanyBean;
 
 import java.io.Serializable;
 import java.util.List;
@@ -26,7 +26,7 @@ public class CompanyController implements Serializable {
     private static final long serialVersionUID = -6982105129966859253L;
 
     @EJB
-    private com.nnpcgroup.comd.cosm.entitlement.ejb.CompanyFacade ejbFacade;
+    private com.nnpcgroup.comd.cosm.entitlement.ejb.CompanyBean ejbFacade;
     private List<Company> items = null;
     private Company selected;
 
@@ -47,7 +47,7 @@ public class CompanyController implements Serializable {
     protected void initializeEmbeddableKey() {
     }
 
-    private CompanyFacade getFacade() {
+    private CompanyBean getFacade() {
         return ejbFacade;
     }
 

@@ -9,61 +9,57 @@
 
     <ui:composition>
 
-        <p:dialog id="JvActualizeCreateDlg" widgetVar="JvActualizeCreateDlg" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateCompanyTitle}">
-            <h:form id="JvActualizeCreateForm">
+        <p:dialog id="JvActualizeEditDlg" widgetVar="JvActualizeEditDlg" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.EditJvActualProductionTitle}">
+            <h:form id="JvActualizeEditForm">
                 <h:panelGroup id="display">
 
                     <p:panelGrid id="ActualizePanel"  columns="2" rendered="#{jvActualController.currentActualProduction != null}">
-                        <p:outputLabel value="PeriodYear:" for="periodYear" />
+                        <p:outputLabel value="Year:" for="periodYear" />
                         <p:inputText id="periodYear" value="#{jvActualController.currentActualProduction.periodYear}" title="PeriodYear" />
 
-                        <p:outputLabel value="PeriodMonth:" for="periodMonth" />
+                        <p:outputLabel value="Month:" for="periodMonth" />
                         <p:inputText id="periodMonth" value="#{jvActualController.currentActualProduction.periodMonth}" title="PeriodMonth" />
 
-                        <p:outputLabel value="ContractStream:" for="contractStream" />
+                        <p:outputLabel value="Asset/Crude Type:" for="contractStream" />
                         <p:selectOneMenu id="contractStream" value="#{jvActualController.currentActualProduction.contractStream}" >
                             <f:selectItems value="#{contractStreamController.itemsAvailableSelectOne}"/>
-                            <p:ajax/>
                         </p:selectOneMenu>
-
-                        <p:outputLabel value="ProductionVolume:" for="productionVolume" />
+                        
+                        <p:outputLabel value="Production Volume:" for="productionVolume" />
                         <p:inputText id="productionVolume" value="#{jvActualController.currentActualProduction.productionVolume}" title="Production Volume" >
                             <p:ajax event="change" listener="#{jvActualController.productionVolumeChange}"  
-                                   
                                     update="display openingStock closingStock ownShareEntitlement partnerShareEntitlement deadStockContribution lineFillContribution ajustedOwnEntitlement adjustedPartnerEntitlement" />
                         </p:inputText>
 
-                        <p:outputLabel value="OpeningStock:" for="openingStock" />
-                        <p:inputText id="openingStock" value="#{jvActualController.currentActualProduction.openingStock}" title="OpeningStock" >
-                            <p:ajax/>
-                        </p:inputText>
-
-                        <p:outputLabel value="OwnShareEntitlement:" for="ownShareEntitlement" />
+                        <p:outputLabel value="Opening Stock:" for="openingStock" />
+                        <p:inputText id="openingStock" value="#{jvActualController.currentActualProduction.openingStock}" title="OpeningStock" />
+                        
+                        <p:outputLabel value="Own Entitlement:" for="ownShareEntitlement" />
                         <p:inputText id="ownShareEntitlement" value="#{jvActualController.currentActualProduction.ownShareEntitlement}" title="OwnShareEntitlement" />
 
-                        <p:outputLabel value="PartnerShareEntitlement:" for="partnerShareEntitlement" />
+                        <p:outputLabel value="Partner Entitlement:" for="partnerShareEntitlement" />
                         <p:inputText id="partnerShareEntitlement" value="#{jvActualController.currentActualProduction.partnerShareEntitlement}" title="PartnerShareEntitlement" />
 
 
-                        <p:outputLabel value="LineFillContribution:" for="lineFillContribution" />
+                        <p:outputLabel value="Line Fill Contribution:" for="lineFillContribution" />
                         <p:inputText id="lineFillContribution" value="#{jvActualController.currentActualProduction.lineFillContribution}" title="LineFillContribution" />
 
-                        <p:outputLabel value="DeadStockContribution:" for="deadStockContribution" />
+                        <p:outputLabel value="Dead Stock Contribution:" for="deadStockContribution" />
                         <p:inputText id="deadStockContribution" value="#{jvActualController.currentActualProduction.deadStockContribution}" title="DeadStockContribution" />
 
-                        <p:outputLabel value="AjustedOwnEntitlement:" for="ajustedOwnEntitlement" />
+                        <p:outputLabel value="Adj Own Entitlement:" for="ajustedOwnEntitlement" />
                         <p:inputText id="ajustedOwnEntitlement" value="#{jvActualController.currentActualProduction.adjustedOwnEntitlement}" title="AjustedOwnEntitlement" />
 
-                        <p:outputLabel value="AdjustedPartnerEntitlement:" for="adjustedPartnerEntitlement" />
+                        <p:outputLabel value="Adj Partner Entitlement:" for="adjustedPartnerEntitlement" />
                         <p:inputText id="adjustedPartnerEntitlement" value="#{jvActualController.currentActualProduction.adjustedPartnerEntitlement}" title="AdjustedPartnerEntitlement" />
 
-                        <p:outputLabel value="ClosingStock:" for="closingStock" />
+                        <p:outputLabel value="Closing Stock:" for="closingStock" />
                         <p:inputText id="closingStock" value="#{jvActualController.currentActualProduction.closingStock}" title="ClosingStock" />
-
+                        
                     </p:panelGrid>
 
-                    <p:commandButton actionListener="#{jvActualController.create}" value="#{bundle.Save}" update="display,:growl" oncomplete="handleSubmit(args,'JvActualizeCreateDlg');"/>
-                    <p:commandButton value="#{bundle.Cancel}" onclick="JvActualizeCreateDlg.hide()"/>
+                    <p:commandButton actionListener="#{jvActualController.create}" value="#{bundle.Save}" update="display,:growl" oncomplete="handleSubmit(args,'JvActualizeEditDlg');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="JvActualizeEditDlg.hide()"/>
 
                 </h:panelGroup>
             </h:form>

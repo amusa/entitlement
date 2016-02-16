@@ -96,6 +96,12 @@ public class CrudeType implements Serializable {
         }
         return true;
     }
+
+    @Override
+    public String toString() {
+        return getCode();
+    }
+    
     
     
 }

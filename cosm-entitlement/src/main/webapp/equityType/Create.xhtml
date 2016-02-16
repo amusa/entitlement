@@ -12,13 +12,13 @@
             <h:form id="EquityTypeCreateForm">
                 <h:panelGroup id="display">
                     <p:panelGrid columns="2" rendered="#{equityTypeController.selected != null}">
-                        <p:outputLabel value="#{bundle.CreateEquityTypeLabel_code}" for="code" />
+                        <p:outputLabel value="#{bundle.EquityTypeCode}" for="code" />
                         <p:inputText id="code" value="#{equityTypeController.selected.code}" title="#{bundle.CreateEquityTypeTitle_code}" />
-                        <p:outputLabel value="#{bundle.CreateEquityTypeLabel_description}" for="description" />
+                        <p:outputLabel value="#{bundle.EquityTypeDesc}" for="description" />
                         <p:inputText id="description" value="#{equityTypeController.selected.description}" title="#{bundle.CreateEquityTypeTitle_description}" />
-                        <p:outputLabel value="#{bundle.CreateEquityTypeLabel_ownEquity}" for="ownEquity" />
+                        <p:outputLabel value="#{bundle.EquityTypeOwn}" for="ownEquity" />
                         <p:inputText id="ownEquity" value="#{equityTypeController.selected.ownEquity}" title="#{bundle.CreateEquityTypeTitle_ownEquity}" />
-                        <p:outputLabel value="#{bundle.CreateEquityTypeLabel_partnerEquity}" for="partnerEquity" />
+                        <p:outputLabel value="#{bundle.EquityTypePartner}" for="partnerEquity" />
                         <p:inputText id="partnerEquity" value="#{equityTypeController.selected.partnerEquity}" title="#{bundle.CreateEquityTypeTitle_partnerEquity}" />
                     </p:panelGrid>
                     <p:commandButton actionListener="#{equityTypeController.create}" value="#{bundle.Save}" update="display,:EquityTypeListForm:datalist,:growl" oncomplete="handleSubmit(args,'EquityTypeCreateDialog');"/>

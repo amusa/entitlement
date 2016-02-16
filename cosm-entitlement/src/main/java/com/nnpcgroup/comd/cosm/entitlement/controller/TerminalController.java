@@ -1,9 +1,9 @@
 package com.nnpcgroup.comd.cosm.entitlement.controller;
 
-import com.nnpcgroup.comd.cosm.entitlement.entity.ProductionSharingContract;
+import com.nnpcgroup.comd.cosm.entitlement.entity.Terminal;
 import com.nnpcgroup.comd.cosm.entitlement.controller.util.JsfUtil;
 import com.nnpcgroup.comd.cosm.entitlement.controller.util.JsfUtil.PersistAction;
-import com.nnpcgroup.comd.cosm.entitlement.ejb.ProductionSharingContractBean;
+import com.nnpcgroup.comd.cosm.entitlement.ejb.TerminalBean;
 
 import java.io.Serializable;
 import java.util.List;
@@ -19,25 +19,25 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
-@Named("productionSharingContractController")
+@Named("terminalController")
 @SessionScoped
-public class ProductionSharingContractController implements Serializable {
+public class TerminalController implements Serializable {
 
-    private static final long serialVersionUID = 1720728647859890689L;
+    private static final long serialVersionUID = -939264365351707541L;
 
     @EJB
-    private com.nnpcgroup.comd.cosm.entitlement.ejb.ProductionSharingContractBean ejbFacade;
-    private List<ProductionSharingContract> items = null;
-    private ProductionSharingContract selected;
+    private com.nnpcgroup.comd.cosm.entitlement.ejb.TerminalBean ejbFacade;
+    private List<Terminal> items = null;
+    private Terminal selected;
 
-    public ProductionSharingContractController() {
+    public TerminalController() {
     }
 
-    public ProductionSharingContract getSelected() {
+    public Terminal getSelected() {
         return selected;
     }
 
-    public void setSelected(ProductionSharingContract selected) {
+    public void setSelected(Terminal selected) {
         this.selected = selected;
     }
 
@@ -47,36 +47,36 @@ public class ProductionSharingContractController implements Serializable {
     protected void initializeEmbeddableKey() {
     }
 
-    private ProductionSharingContractBean getFacade() {
+    private TerminalBean getFacade() {
         return ejbFacade;
     }
 
-    public ProductionSharingContract prepareCreate() {
-        selected = new ProductionSharingContract();
+    public Terminal prepareCreate() {
+        selected = new Terminal();
         initializeEmbeddableKey();
         return selected;
     }
 
     public void create() {
-        persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("ProductionSharingContractCreated"));
+        persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("TerminalCreated"));
         if (!JsfUtil.isValidationFailed()) {
             items = null;    // Invalidate list of items to trigger re-query.
         }
     }
 
     public void update() {
-        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("ProductionSharingContractUpdated"));
+        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("TerminalUpdated"));
     }
 
     public void destroy() {
-        persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("ProductionSharingContractDeleted"));
+        persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("TerminalDeleted"));
         if (!JsfUtil.isValidationFailed()) {
             selected = null; // Remove selection
             items = null;    // Invalidate list of items to trigger re-query.
         }
     }
 
-    public List<ProductionSharingContract> getItems() {
+    public List<Terminal> getItems() {
         if (items == null) {
             items = getFacade().findAll();
         }
@@ -111,38 +111,38 @@ public class ProductionSharingContractController implements Serializable {
         }
     }
 
-    public ProductionSharingContract getProductionSharingContract(long id) {
+    public Terminal getTerminal(java.lang.String id) {
         return getFacade().find(id);
     }
 
-    public List<ProductionSharingContract> getItemsAvailableSelectMany() {
+    public List<Terminal> getItemsAvailableSelectMany() {
         return getFacade().findAll();
     }
 
-    public List<ProductionSharingContract> getItemsAvailableSelectOne() {
+    public List<Terminal> getItemsAvailableSelectOne() {
         return getFacade().findAll();
     }
 
-    @FacesConverter(forClass = ProductionSharingContract.class)
-    public static class ProductionSharingContractControllerConverter implements Converter {
+    @FacesConverter(forClass = Terminal.class)
+    public static class TerminalControllerConverter implements Converter {
 
         @Override
         public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
             if (value == null || value.length() == 0) {
                 return null;
             }
-            ProductionSharingContractController controller = (ProductionSharingContractController) facesContext.getApplication().getELResolver().
-                    getValue(facesContext.getELContext(), null, "productionSharingContractController");
-            return controller.getProductionSharingContract(getKey(value));
+            TerminalController controller = (TerminalController) facesContext.getApplication().getELResolver().
+                    getValue(facesContext.getELContext(), null, "terminalController");
+            return controller.getTerminal(getKey(value));
         }
 
-        long getKey(String value) {
-            long key;
-            key = Long.parseLong(value);
+        java.lang.String getKey(String value) {
+            java.lang.String key;
+            key = value;
             return key;
         }
 
-        String getStringKey(long value) {
+        String getStringKey(java.lang.String value) {
             StringBuilder sb = new StringBuilder();
             sb.append(value);
             return sb.toString();
@@ -153,11 +153,11 @@ public class ProductionSharingContractController implements Serializable {
             if (object == null) {
                 return null;
             }
-            if (object instanceof ProductionSharingContract) {
-                ProductionSharingContract o = (ProductionSharingContract) object;
-                return getStringKey(o.getId());
+            if (object instanceof Terminal) {
+                Terminal o = (Terminal) object;
+                return getStringKey(o.getCode());
             } else {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), ProductionSharingContract.class.getName()});
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), Terminal.class.getName()});
                 return null;
             }
         }

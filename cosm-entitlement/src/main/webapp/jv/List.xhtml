@@ -26,30 +26,24 @@
 
                         <p:ajax event="rowSelect"   update="createButton viewButton editButton deleteButton"/>
                         <p:ajax event="rowUnselect" update="createButton viewButton editButton deleteButton"/>
-
+                                               
                         <p:column>
                             <f:facet name="header">
-                                <h:outputText value="#{bundle.ListJointVentureTitle_equityType}"/>
-                            </f:facet>
-                            <h:outputText value="#{item.equityType}"/>
-                        </p:column>
-                        <p:column>
-                            <f:facet name="header">
-                                <h:outputText value="#{bundle.ListJointVentureTitle_id}"/>
-                            </f:facet>
-                            <h:outputText value="#{item.id}"/>
-                        </p:column>
-                        <p:column>
-                            <f:facet name="header">
-                                <h:outputText value="#{bundle.ListJointVentureTitle_title}"/>
+                                <h:outputText value="#{bundle.JointVentureListTitle}"/>
                             </f:facet>
                             <h:outputText value="#{item.title}"/>
                         </p:column>
                         <p:column>
                             <f:facet name="header">
-                                <h:outputText value="#{bundle.ListJointVentureTitle_operator}"/>
+                                <h:outputText value="#{bundle.Operator}"/>
                             </f:facet>
-                            <h:outputText value="#{item.operator}"/>
+                            <h:outputText value="#{item.operator.name}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.EquityType}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.equityType.description}"/>
                         </p:column>
                         <f:facet name="footer">
                             <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{jvController.prepareCreate}" update=":JointVentureCreateForm" oncomplete="PF('JointVentureCreateDialog').show()"/>

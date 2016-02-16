@@ -1,9 +1,9 @@
 package com.nnpcgroup.comd.cosm.entitlement.controller;
 
-import com.nnpcgroup.comd.cosm.entitlement.entity.ProductionSharingContract;
+import com.nnpcgroup.comd.cosm.entitlement.entity.CrudeType;
 import com.nnpcgroup.comd.cosm.entitlement.controller.util.JsfUtil;
 import com.nnpcgroup.comd.cosm.entitlement.controller.util.JsfUtil.PersistAction;
-import com.nnpcgroup.comd.cosm.entitlement.ejb.ProductionSharingContractBean;
+import com.nnpcgroup.comd.cosm.entitlement.ejb.CrudeTypeBean;
 
 import java.io.Serializable;
 import java.util.List;
@@ -19,25 +19,23 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
-@Named("productionSharingContractController")
+@Named("crudeTypeController")
 @SessionScoped
-public class ProductionSharingContractController implements Serializable {
-
-    private static final long serialVersionUID = 1720728647859890689L;
+public class CrudeTypeController implements Serializable {
 
     @EJB
-    private com.nnpcgroup.comd.cosm.entitlement.ejb.ProductionSharingContractBean ejbFacade;
-    private List<ProductionSharingContract> items = null;
-    private ProductionSharingContract selected;
+    private com.nnpcgroup.comd.cosm.entitlement.ejb.CrudeTypeBean ejbFacade;
+    private List<CrudeType> items = null;
+    private CrudeType selected;
 
-    public ProductionSharingContractController() {
+    public CrudeTypeController() {
     }
 
-    public ProductionSharingContract getSelected() {
+    public CrudeType getSelected() {
         return selected;
     }
 
-    public void setSelected(ProductionSharingContract selected) {
+    public void setSelected(CrudeType selected) {
         this.selected = selected;
     }
 
@@ -47,36 +45,36 @@ public class ProductionSharingContractController implements Serializable {
     protected void initializeEmbeddableKey() {
     }
 
-    private ProductionSharingContractBean getFacade() {
+    private CrudeTypeBean getFacade() {
         return ejbFacade;
     }
 
-    public ProductionSharingContract prepareCreate() {
-        selected = new ProductionSharingContract();
+    public CrudeType prepareCreate() {
+        selected = new CrudeType();
         initializeEmbeddableKey();
         return selected;
     }
 
     public void create() {
-        persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("ProductionSharingContractCreated"));
+        persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("CrudeTypeCreated"));
         if (!JsfUtil.isValidationFailed()) {
             items = null;    // Invalidate list of items to trigger re-query.
         }
     }
 
     public void update() {
-        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("ProductionSharingContractUpdated"));
+        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("CrudeTypeUpdated"));
     }
 
     public void destroy() {
-        persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("ProductionSharingContractDeleted"));
+        persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("CrudeTypeDeleted"));
         if (!JsfUtil.isValidationFailed()) {
             selected = null; // Remove selection
             items = null;    // Invalidate list of items to trigger re-query.
         }
     }
 
-    public List<ProductionSharingContract> getItems() {
+    public List<CrudeType> getItems() {
         if (items == null) {
             items = getFacade().findAll();
         }
@@ -111,38 +109,38 @@ public class ProductionSharingContractController implements Serializable {
         }
     }
 
-    public ProductionSharingContract getProductionSharingContract(long id) {
+    public CrudeType getCrudeType(java.lang.String id) {
         return getFacade().find(id);
     }
 
-    public List<ProductionSharingContract> getItemsAvailableSelectMany() {
+    public List<CrudeType> getItemsAvailableSelectMany() {
         return getFacade().findAll();
     }
 
-    public List<ProductionSharingContract> getItemsAvailableSelectOne() {
+    public List<CrudeType> getItemsAvailableSelectOne() {
         return getFacade().findAll();
     }
 
-    @FacesConverter(forClass = ProductionSharingContract.class)
-    public static class ProductionSharingContractControllerConverter implements Converter {
+    @FacesConverter(forClass = CrudeType.class)
+    public static class CrudeTypeControllerConverter implements Converter {
 
         @Override
         public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
             if (value == null || value.length() == 0) {
                 return null;
             }
-            ProductionSharingContractController controller = (ProductionSharingContractController) facesContext.getApplication().getELResolver().
-                    getValue(facesContext.getELContext(), null, "productionSharingContractController");
-            return controller.getProductionSharingContract(getKey(value));
+            CrudeTypeController controller = (CrudeTypeController) facesContext.getApplication().getELResolver().
+                    getValue(facesContext.getELContext(), null, "crudeTypeController");
+            return controller.getCrudeType(getKey(value));
         }
 
-        long getKey(String value) {
-            long key;
-            key = Long.parseLong(value);
+        java.lang.String getKey(String value) {
+            java.lang.String key;
+            key = value;
             return key;
         }
 
-        String getStringKey(long value) {
+        String getStringKey(java.lang.String value) {
             StringBuilder sb = new StringBuilder();
             sb.append(value);
             return sb.toString();
@@ -153,11 +151,11 @@ public class ProductionSharingContractController implements Serializable {
             if (object == null) {
                 return null;
             }
-            if (object instanceof ProductionSharingContract) {
-                ProductionSharingContract o = (ProductionSharingContract) object;
-                return getStringKey(o.getId());
+            if (object instanceof CrudeType) {
+                CrudeType o = (CrudeType) object;
+                return getStringKey(o.getCode());
             } else {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), ProductionSharingContract.class.getName()});
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), CrudeType.class.getName()});
                 return null;
             }
         }

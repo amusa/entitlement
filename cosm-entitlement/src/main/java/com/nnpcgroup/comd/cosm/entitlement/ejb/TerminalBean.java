@@ -5,7 +5,7 @@
  */
 package com.nnpcgroup.comd.cosm.entitlement.ejb;
 
-import com.nnpcgroup.comd.cosm.entitlement.entity.JointVenture;
+import com.nnpcgroup.comd.cosm.entitlement.entity.Terminal;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -15,7 +15,7 @@ import javax.persistence.PersistenceContext;
  * @author 18359
  */
 @Stateless
-public class JointVentureBean extends AbstractBean<JointVenture> {
+public class TerminalBean extends AbstractBean<Terminal> {
 
     @PersistenceContext(unitName = "entitlementPU")
     private EntityManager em;
@@ -25,8 +25,8 @@ public class JointVentureBean extends AbstractBean<JointVenture> {
         return em;
     }
 
-    public JointVentureBean() {
-        super(JointVenture.class);
+    public TerminalBean() {
+        super(Terminal.class);
     }
     
 }

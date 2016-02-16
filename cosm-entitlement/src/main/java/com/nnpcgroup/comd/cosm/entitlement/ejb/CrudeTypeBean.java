@@ -5,7 +5,7 @@
  */
 package com.nnpcgroup.comd.cosm.entitlement.ejb;
 
-import com.nnpcgroup.comd.cosm.entitlement.entity.EquityType;
+import com.nnpcgroup.comd.cosm.entitlement.entity.CrudeType;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -15,7 +15,7 @@ import javax.persistence.PersistenceContext;
  * @author 18359
  */
 @Stateless
-public class EquityTypeFacade extends AbstractFacade<EquityType> {
+public class CrudeTypeBean extends AbstractBean<CrudeType> {
 
     @PersistenceContext(unitName = "entitlementPU")
     private EntityManager em;
@@ -25,8 +25,8 @@ public class EquityTypeFacade extends AbstractFacade<EquityType> {
         return em;
     }
 
-    public EquityTypeFacade() {
-        super(EquityType.class);
+    public CrudeTypeBean() {
+        super(CrudeType.class);
     }
     
 }

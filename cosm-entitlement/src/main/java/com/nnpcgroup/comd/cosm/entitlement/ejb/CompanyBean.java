@@ -5,7 +5,7 @@
  */
 package com.nnpcgroup.comd.cosm.entitlement.ejb;
 
-import com.nnpcgroup.comd.cosm.entitlement.entity.ProductionSharingContract;
+import com.nnpcgroup.comd.cosm.entitlement.entity.Company;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -15,7 +15,7 @@ import javax.persistence.PersistenceContext;
  * @author 18359
  */
 @Stateless
-public class ProductionSharingContractFacade extends AbstractFacade<ProductionSharingContract> {
+public class CompanyBean extends AbstractBean<Company> {
 
     @PersistenceContext(unitName = "entitlementPU")
     private EntityManager em;
@@ -25,8 +25,8 @@ public class ProductionSharingContractFacade extends AbstractFacade<ProductionSh
         return em;
     }
 
-    public ProductionSharingContractFacade() {
-        super(ProductionSharingContract.class);
+    public CompanyBean() {
+        super(Company.class);
     }
     
 }

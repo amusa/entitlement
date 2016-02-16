@@ -15,7 +15,7 @@ import javax.persistence.PersistenceContext;
  * @author 18359
  */
 @Stateless
-public class FiscalArrangementBean extends AbstractFacade<FiscalArrangement> {
+public class FiscalArrangementBean extends AbstractBean<FiscalArrangement> {
 
     @PersistenceContext(unitName = "entitlementPU")
     private EntityManager em;

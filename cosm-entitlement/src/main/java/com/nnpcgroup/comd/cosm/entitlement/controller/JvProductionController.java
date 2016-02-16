@@ -57,11 +57,11 @@ public class JvProductionController implements Serializable {
     }
 
     public JvProduction getCurrentProduction() {
-        log.log(Level.INFO, "ProductionController::getCurrentProduction returning...", 
+        log.log(Level.INFO, "ProductionController::getCurrentProduction returning...",
                 currentProduction);
         return currentProduction;
     }
- 
+
     public void setCurrentProduction(JvProduction currentProduction) {
         log.info("ProductionController::setProduction called...");
         this.currentProduction = currentProduction;
@@ -89,6 +89,9 @@ public class JvProductionController implements Serializable {
         log.info("JvProductionController::processManualEntry called...");
         log.info("*******setting manualEntry to true********");
         // currentProduction = new JvProduction();
+        if (periodYear == null || periodMonth == null) {
+            return;
+        }
         currentProduction = productionBean.createInstance();
         log.log(Level.INFO, "ProductionBean instance = {0}", productionBean);
         productions = productionBean.findByYearAndMonth(periodYear, periodMonth);
@@ -106,7 +109,7 @@ public class JvProductionController implements Serializable {
     }
 
     public void destroy() {
-        persist(JsfUtil.PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("CompanyDeleted"));
+        persist(JsfUtil.PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("ProductionDeleted"));
         if (!JsfUtil.isValidationFailed()) {
             currentProduction = null; // Remove selection
             productions = null;    // Invalidate list of items to trigger re-query.
@@ -114,14 +117,14 @@ public class JvProductionController implements Serializable {
     }
 
     public void create() {
-        persist(JsfUtil.PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("CompanyCreated"));
+        persist(JsfUtil.PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("ProductionCreated"));
         if (!JsfUtil.isValidationFailed()) {
             productions = null;    // Invalidate list of items to trigger re-query.
         }
     }
 
     public void update() {
-        persist(JsfUtil.PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("CompanyUpdated"));
+        persist(JsfUtil.PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("ProductionUpdated"));
     }
 
     private void persist(JsfUtil.PersistAction persistAction, String successMessage) {

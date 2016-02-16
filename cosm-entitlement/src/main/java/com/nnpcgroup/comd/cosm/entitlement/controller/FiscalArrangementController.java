@@ -29,7 +29,7 @@ public class FiscalArrangementController implements Serializable {
 
     private FiscalArrangement currentFiscal;
     private JointVenture current;
-    private List<? extends FiscalArrangement> fiscalArrangements;
+    private List<FiscalArrangement> fiscalArrangements;
     
 
     @EJB
@@ -68,7 +68,7 @@ public class FiscalArrangementController implements Serializable {
         return fiscalArrangements;
     }
 
-    public void setFiscalArrangements(List<? extends FiscalArrangement> fiscalArrangements) {
+    public void setFiscalArrangements(List<FiscalArrangement> fiscalArrangements) {
 
         this.fiscalArrangements = fiscalArrangements;
     }

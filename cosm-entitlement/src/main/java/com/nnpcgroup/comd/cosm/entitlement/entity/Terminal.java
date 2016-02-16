@@ -102,7 +102,7 @@ public class Terminal implements Serializable {
 
     @Override
     public String toString() {
-        return "com.nnpcgroup.comd.cosm.entitlement.entity.Terminal[ id=" + code + " ]";
+        return getName();
     }
 
     

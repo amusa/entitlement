@@ -9,46 +9,46 @@
 
     <ui:composition>
 
-        <p:dialog id="JvActualizeViewDlg" widgetVar="JvActualizeViewDlg" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateCompanyTitle}">
+        <p:dialog id="JvActualizeViewDlg" widgetVar="JvActualizeViewDlg" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewJvActualProductionTitle}">
             <h:form id="JvActualizeViewForm">
                 <h:panelGroup id="display">
 
                     <p:panelGrid id="ActualizePanel"  columns="2" rendered="#{jvActualController.currentActualProduction != null}">
-                        <p:outputLabel value="PeriodYear:" for="periodYear" />
+                        <p:outputLabel value="Year:" for="periodYear" />
                         <p:outputLabel id="periodYear" value="#{jvActualController.currentActualProduction.periodYear}" title="PeriodYear" />
 
-                        <p:outputLabel value="PeriodMonth:" for="periodMonth" />
+                        <p:outputLabel value="Month:" for="periodMonth" />
                         <p:outputLabel id="periodMonth" value="#{jvActualController.currentActualProduction.periodMonth}" title="PeriodMonth" />
 
-                        <p:outputLabel value="ContractStream:" for="contractStream" />                        
-                        <p:outputLabel id="contractStream" value="#{jvActualController.currentActualProduction.contractStream}" />
-                      
-                        <p:outputLabel value="ProductionVolume:" for="productionVolume" />
+                        <p:outputLabel value="Asset/Crude Type" for="contractStream" />                        
+                        <p:outputLabel id="contractStream" value="#{jvActualController.currentActualProduction.contractStream.fiscalArrangement.title}/#{jvActualController.currentActualProduction.contractStream.crudeType.code}" />
+                                              
+                        <p:outputLabel value="Production Volume:" for="productionVolume" />
                         <p:outputLabel id="productionVolume" value="#{jvActualController.currentActualProduction.productionVolume}" title="Production Volume" />
                           
-                        <p:outputLabel value="OpeningStock:" for="openingStock" />
+                        <p:outputLabel value="Opening Stock:" for="openingStock" />
                         <p:outputLabel id="openingStock" value="#{jvActualController.currentActualProduction.openingStock}" title="OpeningStock" />
 
-                        <p:outputLabel value="OwnShareEntitlement:" for="ownShareEntitlement" />
+                        <p:outputLabel value="Own Entitlement:" for="ownShareEntitlement" />
                         <p:outputLabel id="ownShareEntitlement" value="#{jvActualController.currentActualProduction.ownShareEntitlement}" title="OwnShareEntitlement" />
 
-                        <p:outputLabel value="PartnerShareEntitlement:" for="partnerShareEntitlement" />
+                        <p:outputLabel value="Partner Entitlement:" for="partnerShareEntitlement" />
                         <p:outputLabel id="partnerShareEntitlement" value="#{jvActualController.currentActualProduction.partnerShareEntitlement}" title="PartnerShareEntitlement" />
 
 
-                        <p:outputLabel value="LineFillContribution:" for="lineFillContribution" />
+                        <p:outputLabel value="Line Fill Contrib:" for="lineFillContribution" />
                         <p:outputLabel id="lineFillContribution" value="#{jvActualController.currentActualProduction.lineFillContribution}" title="LineFillContribution" />
 
-                        <p:outputLabel value="DeadStockContribution:" for="deadStockContribution" />
+                        <p:outputLabel value="Dead Stock Contrib:" for="deadStockContribution" />
                         <p:outputLabel id="deadStockContribution" value="#{jvActualController.currentActualProduction.deadStockContribution}" title="DeadStockContribution" />
 
-                        <p:outputLabel value="AjustedOwnEntitlement:" for="ajustedOwnEntitlement" />
+                        <p:outputLabel value="Adj Own Entitlement:" for="ajustedOwnEntitlement" />
                         <p:outputLabel id="ajustedOwnEntitlement" value="#{jvActualController.currentActualProduction.adjustedOwnEntitlement}" title="AjustedOwnEntitlement" />
 
-                        <p:outputLabel value="AdjustedPartnerEntitlement:" for="adjustedPartnerEntitlement" />
+                        <p:outputLabel value="Adj Partner Entitlement:" for="adjustedPartnerEntitlement" />
                         <p:outputLabel id="adjustedPartnerEntitlement" value="#{jvActualController.currentActualProduction.adjustedPartnerEntitlement}" title="AdjustedPartnerEntitlement" />
 
-                        <p:outputLabel value="ClosingStock:" for="closingStock" />
+                        <p:outputLabel value="Closing Stock:" for="closingStock" />
                         <p:outputLabel id="closingStock" value="#{jvActualController.currentActualProduction.closingStock}" title="ClosingStock" />
 
                     </p:panelGrid>

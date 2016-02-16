@@ -15,7 +15,7 @@ import javax.persistence.PersistenceContext;
  * @author 18359
  */
 @Stateless
-public class ContractStreamBean extends AbstractFacade<ContractStream> {
+public class ContractStreamBean extends AbstractBean<ContractStream> {
 
     @PersistenceContext(unitName = "entitlementPU")
     private EntityManager em;

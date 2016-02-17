@@ -10,8 +10,6 @@ import com.nnpcgroup.comd.cosm.entitlement.entity.ContractStream;
 import com.nnpcgroup.comd.cosm.entitlement.entity.EquityType;
 import com.nnpcgroup.comd.cosm.entitlement.entity.FiscalArrangement;
 import com.nnpcgroup.comd.cosm.entitlement.entity.JointVenture;
-import com.nnpcgroup.comd.cosm.entitlement.entity.Terminal;
-import com.nnpcgroup.comd.cosm.entitlement.util.JVACTUAL;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -70,12 +68,14 @@ public class JvActualProductionBean extends ProductionTemplate<ActualJvProductio
         log.log(Level.INFO, "Production={0} production.getProductionVolume()={1} production.getOpeningStock()={2} EquityType={3}...",
                 new Object[]{production, production.getProductionVolume(), production.getOpeningStock(), et});
 
-        ownEntitlement = (production.getProductionVolume()
-                + production.getOpeningStock())
+        ownEntitlement = (production.getGrossProduction()
+                + production.getOpeningStock()
+                - production.getStockAdjustment())
                 * et.getOwnEquity() * 0.01;
 
-        partnerEntitlement = (production.getProductionVolume()
-                + production.getOpeningStock())
+        partnerEntitlement = (production.getGrossProduction()
+                + production.getOpeningStock()
+                - production.getStockAdjustment())
                 * et.getPartnerEquity() * 0.01;
 
         production.setOwnShareEntitlement(ownEntitlement);
@@ -122,60 +122,55 @@ public class JvActualProductionBean extends ProductionTemplate<ActualJvProductio
     public ActualJvProduction enrich(ActualJvProduction production) {
         log.log(Level.INFO, "Enriching production {0}...", production);
         return computeClosingStock(
-                computeAdjustedEntitlement(
-                        computeTerminalLosses(
-                                super.enrich(production)
-                        )
-                ));
+                super.enrich(production)
+        );
     }
 
     // @Override
-    public ActualJvProduction computeAdjustedEntitlement(ActualJvProduction production) {
-        log.log(Level.INFO, "Computing adjusted Entitlement for {0}...", production);
-        //assert (production instanceof ActualJvProduction);
-        //ActualJvProduction jvProd = (ActualJvProduction) production;
-        Double terminalLoss = production.getDeadStockContribution() + production.getLineFillContribution();
-        Double availability = production.getOpeningStock() + production.getProductionVolume();
-        Double adjAvailability = availability - terminalLoss;
-
-        FiscalArrangement fa;
-        JointVenture jv;
-
-        fa = production.getContractStream().getFiscalArrangement();
-
-        assert (fa instanceof JointVenture);
-
-        jv = (JointVenture) fa;
-        EquityType et = jv.getEquityType();
-
-        Double adjOwnEntitlement;
-        Double adjPartnerEntitlement;
-
-        adjOwnEntitlement = adjAvailability * et.getOwnEquity() * 0.01;
-
-        adjPartnerEntitlement = adjAvailability * et.getPartnerEquity() * 0.01;
-
-        production.setAdjustedOwnEntitlement(adjOwnEntitlement);
-        production.setAdjustedPartnerEntitlement(adjPartnerEntitlement);
-        log.log(Level.INFO, "Adjusted Entitlement: Own={0} Partner={1}...",
-                new Object[]{production.getAdjustedOwnEntitlement(), production.getAdjustedPartnerEntitlement()});
-        return production;
-    }
-
+//    public ActualJvProduction computeAdjustedEntitlement(ActualJvProduction production) {
+//        log.log(Level.INFO, "Computing adjusted Entitlement for {0}...", production);
+//        //assert (production instanceof ActualJvProduction);
+//        //ActualJvProduction jvProd = (ActualJvProduction) production;
+//        //Double terminalLoss = 
+//        Double availability = production.getOpeningStock() + production.getProductionVolume();
+//        Double adjAvailability = availability - terminalLoss;
+//
+//        FiscalArrangement fa;
+//        JointVenture jv;
+//
+//        fa = production.getContractStream().getFiscalArrangement();
+//
+//        assert (fa instanceof JointVenture);
+//
+//        jv = (JointVenture) fa;
+//        EquityType et = jv.getEquityType();
+//
+//        Double adjOwnEntitlement;
+//        Double adjPartnerEntitlement;
+//
+//        adjOwnEntitlement = adjAvailability * et.getOwnEquity() * 0.01;
+//
+//        adjPartnerEntitlement = adjAvailability * et.getPartnerEquity() * 0.01;
+//
+//        production.setAdjustedOwnEntitlement(adjOwnEntitlement);
+//        production.setAdjustedPartnerEntitlement(adjPartnerEntitlement);
+//        log.log(Level.INFO, "Adjusted Entitlement: Own={0} Partner={1}...",
+//                new Object[]{production.getAdjustedOwnEntitlement(), production.getAdjustedPartnerEntitlement()});
+//        return production;
+//    }
     // @Override
-    public ActualJvProduction computeTerminalLosses(ActualJvProduction production) {
-        log.log(Level.INFO, "Computing Terminal Loss for production {0}...", production);
-        //assert (production instanceof ActualJvProduction);
-        //ActualJvProduction jvProd = (ActualJvProduction) production;
-
-        Terminal terminal = production.getContractStream().getCrudeType().getTerminal();
-        production.setDeadStockContribution(terminal.getDeadStockVolume());
-        production.setLineFillContribution(terminal.getLineFillVolume());
-        log.log(Level.INFO, "Terminal Losses: Deadstock={0} Linefill={1}...", new Object[]{production.getDeadStockContribution(), production.getLineFillContribution()});
-
-        return production;
-    }
-
+//    public ActualJvProduction computeTerminalLosses(ActualJvProduction production) {
+//        log.log(Level.INFO, "Computing Terminal Loss for production {0}...", production);
+//        //assert (production instanceof ActualJvProduction);
+//        //ActualJvProduction jvProd = (ActualJvProduction) production;
+//
+//        Terminal terminal = production.getContractStream().getCrudeType().getTerminal();
+//        production.setDeadStockContribution(terminal.getDeadStockVolume());
+//        production.setLineFillContribution(terminal.getLineFillVolume());
+//        log.log(Level.INFO, "Terminal Losses: Deadstock={0} Linefill={1}...", new Object[]{production.getDeadStockContribution(), production.getLineFillContribution()});
+//
+//        return production;
+//    }
     @Override
     public List<ActualJvProduction> findByYearAndMonth(int year, int month) {
         CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();

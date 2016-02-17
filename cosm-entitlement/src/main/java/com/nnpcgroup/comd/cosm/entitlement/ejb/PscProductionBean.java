@@ -6,8 +6,7 @@
 package com.nnpcgroup.comd.cosm.entitlement.ejb;
 
 import com.nnpcgroup.comd.cosm.entitlement.entity.ContractStream;
-import com.nnpcgroup.comd.cosm.entitlement.entity.PscProduction;
-import com.nnpcgroup.comd.cosm.entitlement.util.PSC;
+import com.nnpcgroup.comd.cosm.entitlement.entity.ActualPscProduction;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
@@ -19,19 +18,19 @@ import javax.ejb.Stateless;
 
 @Stateless
 //@PSC
-public class PscProductionBean extends ProductionTemplate<PscProduction> {
+public class PscProductionBean extends ProductionTemplate<ActualPscProduction> {
 
     private static final Logger log = Logger.getLogger(PscProductionBean.class.getName());
 
     public PscProductionBean() {
-        super(PscProduction.class);
+        super(ActualPscProduction.class);
         log.info("PscProductionBean::constructor activated...");
     }
 
     
     
    @Override
-    public PscProduction computeEntitlement(PscProduction production) {
+    public ActualPscProduction computeEntitlement(ActualPscProduction production) {
         log.info("PscProductionBean::Calculating PSC Entitlement...");
         return production;
     }
@@ -40,29 +39,29 @@ public class PscProductionBean extends ProductionTemplate<PscProduction> {
     // "Insert Code > Add Business Method")
 
    @Override
-    public PscProduction createInstance() {
+    public ActualPscProduction createInstance() {
         log.info("PscProductionBean::createProductionEntity called...");
-        return new PscProduction();
+        return new ActualPscProduction();
     }
 
    
     @Override
-    public PscProduction computeOpeningStock(PscProduction production) {
+    public ActualPscProduction computeOpeningStock(ActualPscProduction production) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public PscProduction computeClosingStock(PscProduction production) {
+    public ActualPscProduction computeClosingStock(ActualPscProduction production) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
    // @Override
-    public PscProduction findByContractStreamPeriod(int year, int month, ContractStream cs) {
+    public ActualPscProduction findByContractStreamPeriod(int year, int month, ContractStream cs) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-   // @Override
-    public List<PscProduction> findByYearAndMonth(int year, int month) {
+    @Override
+    public List<ActualPscProduction> findByYearAndMonth(int year, int month) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

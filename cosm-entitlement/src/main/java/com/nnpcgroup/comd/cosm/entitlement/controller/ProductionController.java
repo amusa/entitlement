@@ -6,7 +6,7 @@
 package com.nnpcgroup.comd.cosm.entitlement.controller;
 
 import com.nnpcgroup.comd.cosm.entitlement.ejb.ProductionBean;
-import com.nnpcgroup.comd.cosm.entitlement.entity.JvProduction;
+
 import com.nnpcgroup.comd.cosm.entitlement.entity.Production;
 import com.nnpcgroup.comd.cosm.entitlement.util.JV;
 import javax.inject.Named;
@@ -86,7 +86,7 @@ public class ProductionController implements Serializable {
     public void addProductionItem(AjaxBehaviorEvent event) {
         log.info("ProductionController::addProductionItem called...");
         productions.add(currentProduction);
-        currentProduction = new JvProduction();
+       // currentProduction = new Production();
         
     }
 

@@ -10,9 +10,7 @@ import com.nnpcgroup.comd.cosm.entitlement.ejb.JvActualProductionBean;
 import com.nnpcgroup.comd.cosm.entitlement.entity.ActualJvProduction;
 import com.nnpcgroup.comd.cosm.entitlement.entity.ContractStream;
 import com.nnpcgroup.comd.cosm.entitlement.entity.FiscalArrangement;
-import com.nnpcgroup.comd.cosm.entitlement.entity.JvProduction;
 import com.nnpcgroup.comd.cosm.entitlement.entity.Production;
-import com.nnpcgroup.comd.cosm.entitlement.util.JVACTUAL;
 import javax.inject.Named;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -207,21 +205,17 @@ public class JvActualProductionController implements Serializable {
             currentProduction.setPeriodMonth(production.getPeriodMonth());
             currentProduction.setContractStream(production.getContractStream());
 
-           // productionBean.enrich(currentProduction);
-
+            // productionBean.enrich(currentProduction);
         }
     }
-    
-    public void productionVolumeChange(){
+
+    public void productionVolumeChange() {
         productionBean.enrich(currentProduction);
-        log.log(Level.INFO, 
-                "Production Enriched::Own entmt={0},Partner entmt={1}, Linefill={2}, Deadstock={3}, Adj Own={4}, Adj Partner={5}...",
+        log.log(Level.INFO,
+                "Production Enriched::Own entmt={0},Partner entmt={1}, Stock Adj={2}...",
                 new Object[]{currentProduction.getOwnShareEntitlement(),
-                currentProduction.getPartnerShareEntitlement(),
-                currentProduction.getLineFillContribution(),
-                currentProduction.getDeadStockContribution(),
-                currentProduction.getAdjustedOwnEntitlement(),
-                currentProduction.getAdjustedPartnerEntitlement()});
+                    currentProduction.getPartnerShareEntitlement(),
+                    currentProduction.getStockAdjustment()});
 
     }
 
@@ -234,13 +228,13 @@ public class JvActualProductionController implements Serializable {
     }
 
     public ActualJvProduction prepareCreate() {
-        log.log(Level.INFO,"Preparing new instance of ActualJvProduction for create...");
+        log.log(Level.INFO, "Preparing new instance of ActualJvProduction for create...");
         currentProduction = productionBean.createInstance();
         currentProduction.setPeriodYear(periodYear);
         currentProduction.setPeriodMonth(periodMonth);
         return currentProduction;
     }
-    
+
     public void create() {
         persist(JsfUtil.PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("ProductionCreated"));
         if (!JsfUtil.isValidationFailed()) {

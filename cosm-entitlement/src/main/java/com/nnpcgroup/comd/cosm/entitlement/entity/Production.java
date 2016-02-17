@@ -23,26 +23,27 @@ import javax.validation.constraints.NotNull;
  */
 @Entity
 @Table(name = "PRODUCTION")
-@Inheritance(strategy=InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name="PROD_TYPE")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "PROD_TYPE")
 public abstract class Production implements Serializable {
 
     private static final long serialVersionUID = -795843614381155072L;
-        
+
     private Long id;
     private int periodYear;
     private int periodMonth;
     private ContractStream contractStream;
-    private Double openingStock;    
+    private Double openingStock;
     private Double closingStock;
-    private Double productionVolume;  
+    private Double grossProduction;
+    private Double productionVolume;
     private Double ownShareEntitlement;
-    private Double partnerShareEntitlement;   
-        
+    private Double partnerShareEntitlement;
+    private Double lifting;
 
     public Production() {
     }
-            
+
     public Production(int periodYear, int periodMonth, ContractStream contractStream, Double openingStock, Double productionVolume) {
         this.periodYear = periodYear;
         this.periodMonth = periodMonth;
@@ -51,14 +52,12 @@ public abstract class Production implements Serializable {
         this.productionVolume = productionVolume;
     }
 
-            
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long getId() {
         return id;
     }
 
-    
     public void setId(Long id) {
         this.id = id;
     }
@@ -90,7 +89,7 @@ public abstract class Production implements Serializable {
     public void setContractStream(ContractStream contractStream) {
         this.contractStream = contractStream;
     }
-         
+
     @NotNull
     public Double getOpeningStock() {
         return openingStock;
@@ -107,7 +106,7 @@ public abstract class Production implements Serializable {
     public void setClosingStock(Double closingStock) {
         this.closingStock = closingStock;
     }
-        
+
     @NotNull
     public Double getProductionVolume() {
         return productionVolume;
@@ -134,5 +133,20 @@ public abstract class Production implements Serializable {
         this.partnerShareEntitlement = partnerShareEntitlement;
     }
 
-       
+    public Double getGrossProduction() {
+        return grossProduction;
+    }
+
+    public void setGrossProduction(Double grossProduction) {
+        this.grossProduction = grossProduction;
+    }
+
+    public Double getLifting() {
+        return lifting;
+    }
+
+    public void setLifting(Double lifting) {
+        this.lifting = lifting;
+    }
+
 }

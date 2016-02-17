@@ -5,7 +5,7 @@
  */
 package com.nnpcgroup.comd.cosm.entitlement.ejb;
 
-import com.nnpcgroup.comd.cosm.entitlement.entity.JvProduction;
+
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;

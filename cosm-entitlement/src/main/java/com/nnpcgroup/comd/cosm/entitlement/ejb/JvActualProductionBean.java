@@ -10,11 +10,11 @@ import com.nnpcgroup.comd.cosm.entitlement.entity.ContractStream;
 import com.nnpcgroup.comd.cosm.entitlement.entity.EquityType;
 import com.nnpcgroup.comd.cosm.entitlement.entity.FiscalArrangement;
 import com.nnpcgroup.comd.cosm.entitlement.entity.JointVenture;
+import com.nnpcgroup.comd.cosm.entitlement.entity.Production;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
-import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -43,13 +43,6 @@ public class JvActualProductionBean extends ProductionTemplate<ActualJvProductio
     }
 
     @Override
-    public ActualJvProduction computeOpeningStock(ActualJvProduction production) {
-        log.info("JvActualProductionBean::computing Opening stock...");
-        production.setOpeningStock(0.0);//TODO:compute Actual JV Production opening stock
-        return production;
-    }
-
-    @Override
     public ActualJvProduction computeEntitlement(ActualJvProduction production) {
         log.log(Level.INFO, "JvActualProductionBean::computing Entitlement for production {0}...", production);
         FiscalArrangement fa;
@@ -64,18 +57,25 @@ public class JvActualProductionBean extends ProductionTemplate<ActualJvProductio
 
         Double ownEntitlement;
         Double partnerEntitlement;
+        Double grossProd = production.getGrossProduction();
+        Double openingStock = production.getOpeningStock();
+        Double stockAdjustment = production.getStockAdjustment() == null ? 0 : production.getStockAdjustment();
 
         log.log(Level.INFO, "Production={0} production.getProductionVolume()={1} production.getOpeningStock()={2} EquityType={3}...",
                 new Object[]{production, production.getProductionVolume(), production.getOpeningStock(), et});
 
-        ownEntitlement = (production.getGrossProduction()
-                + production.getOpeningStock()
-                - production.getStockAdjustment())
+        if (grossProd == null) {
+            log.log(Level.INFO, "Gross production is NULL!");
+            return production;
+        }
+        ownEntitlement = (grossProd
+                + openingStock
+                - stockAdjustment)
                 * et.getOwnEquity() * 0.01;
 
-        partnerEntitlement = (production.getGrossProduction()
-                + production.getOpeningStock()
-                - production.getStockAdjustment())
+        partnerEntitlement = (grossProd
+                + openingStock
+                - stockAdjustment)
                 * et.getPartnerEquity() * 0.01;
 
         production.setOwnShareEntitlement(ownEntitlement);
@@ -87,45 +87,51 @@ public class JvActualProductionBean extends ProductionTemplate<ActualJvProductio
     @Override
     public ActualJvProduction computeClosingStock(ActualJvProduction production) {
         log.log(Level.INFO, "JvActualProductionBean::computing Closing stock for production {0}...", production);
-        production.setClosingStock(0.0);
-        return production;
-    }
+        Double grossProd = production.getGrossProduction() == null ? 0 : production.getGrossProduction();
+        Double lifting = production.getLifting() == null ? 0 : production.getLifting();
+        Double stockAdjustment = production.getStockAdjustment() == null ? 0 : production.getStockAdjustment();
+        log.log(Level.INFO, "JvActualProductionBean::computeClosingStock parameters "
+                + "grossProd={0} stockAdj={1} lifting={2}", new Object[]{grossProd, stockAdjustment, lifting});
+        Double closingStock = grossProd - stockAdjustment - lifting;
 
-    //@Override
-    public ActualJvProduction findByContractStreamPeriod(int year, int month, ContractStream cs) {
-        log.info("JvActualProductionBean::findByContractStreamPeriod called...");
-        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
-
-// Query for a List of objects.
-        ActualJvProduction production;
-
-        CriteriaQuery cq = cb.createQuery();
-        Root e = cq.from(ActualJvProduction.class);
-        try {
-            cq.where(
-                    cb.and(cb.equal(e.get("periodYear"), year),
-                            cb.equal(e.get("periodMonth"), month),
-                            cb.equal(e.get("contractStream"), cs)
-                    ));
-
-            Query query = getEntityManager().createQuery(cq);
-
-            production = (ActualJvProduction) query.getSingleResult();
-        } catch (NoResultException nre) {
-            return null;
-        }
+        production.setClosingStock(closingStock);
 
         return production;
     }
 
-    @Override
-    public ActualJvProduction enrich(ActualJvProduction production) {
-        log.log(Level.INFO, "Enriching production {0}...", production);
-        return computeClosingStock(
-                super.enrich(production)
-        );
-    }
-
+//    @Override
+//    public ActualJvProduction findByContractStreamPeriod(int year, int month, ContractStream cs) {
+//        log.info("JvActualProductionBean::findByContractStreamPeriod called...");
+//        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+//
+//// Query for a List of objects.
+//        ActualJvProduction production;
+//
+//        CriteriaQuery cq = cb.createQuery();
+//        Root e = cq.from(ActualJvProduction.class);
+//        try {
+//            cq.where(
+//                    cb.and(cb.equal(e.get("periodYear"), year),
+//                            cb.equal(e.get("periodMonth"), month),
+//                            cb.equal(e.get("contractStream"), cs)
+//                    ));
+//
+//            Query query = getEntityManager().createQuery(cq);
+//
+//            production = (ActualJvProduction) query.getSingleResult();
+//        } catch (NoResultException nre) {
+//            return null;
+//        }
+//
+//        return production;
+//    }
+//    @Override
+//    public ActualJvProduction enrich(ActualJvProduction production) {
+//        log.log(Level.INFO, "Enriching production {0}...", production);
+//        return computeClosingStock(
+//                super.enrich(production)
+//        );
+//    }
     // @Override
 //    public ActualJvProduction computeAdjustedEntitlement(ActualJvProduction production) {
 //        log.log(Level.INFO, "Computing adjusted Entitlement for {0}...", production);
@@ -176,7 +182,8 @@ public class JvActualProductionBean extends ProductionTemplate<ActualJvProductio
         CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
 // Query for a List of objects.
         CriteriaQuery cq = cb.createQuery();
-        Root e = cq.from(ActualJvProduction.class);
+        Root e = cq.from(ActualJvProduction.class
+        );
         cq.where(
                 cb.and(cb.equal(e.get("periodYear"), year),
                         cb.equal(e.get("periodMonth"), month)
@@ -188,4 +195,11 @@ public class JvActualProductionBean extends ProductionTemplate<ActualJvProductio
         return productions;
     }
 
+//    @Override
+//    public ActualJvProduction computeGrossProduction(ActualJvProduction production) {
+//        Double prodVolume = production.getProductionVolume();
+//        Double grossProd = prodVolume * 30; //TODO:Calculate days for each month
+//        production.setGrossProduction(grossProd);
+//        return production;
+//    }
 }

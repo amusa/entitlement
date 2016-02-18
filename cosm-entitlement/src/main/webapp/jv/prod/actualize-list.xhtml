@@ -85,9 +85,27 @@
                             </p:column>
                             <p:column>
                                 <f:facet name="header">
-                                    <h:outputText value="Gross Production vol (est)" />
+                                    <h:outputText value="Daily Prod vol (est)" />
                                 </f:facet>                                                            
                                 <h:outputText value="#{prod.productionVolume}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Gross Prod vol (est)" />
+                                </f:facet>                                                            
+                                <h:outputText value="#{prod.grossProduction}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Stock Adjustment" />
+                                </f:facet>                                                            
+                                <h:outputText value="#{prod.stockAdjustment}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Nomination/Lifting (Vol)" />
+                                </f:facet>                                                            
+                                <h:outputText value="#{prod.lifting}"/>
                             </p:column>
                             <p:column>
                                 <f:facet name="header">
@@ -101,35 +119,7 @@
                                 </f:facet>                                                            
                                 <h:outputText value="#{prod.partnerShareEntitlement}"/>
                             </p:column>
-
-                            <p:column>
-                                <f:facet name="header">
-                                    <h:outputText value="Deadstock Contribution" />
-                                </f:facet>                                                            
-                                <h:outputText value="#{prod.deadStockContribution}"/>
-                            </p:column>
-
-                            <p:column>
-                                <f:facet name="header">
-                                    <h:outputText value="Linefill Contribution" />
-                                </f:facet>                                                            
-                                <h:outputText value="#{prod.lineFillContribution}"/>
-                            </p:column>
-
-                            <p:column>
-                                <f:facet name="header">
-                                    <h:outputText value="Adj Own Entitlement" />
-                                </f:facet>                                                            
-                                <h:outputText value="#{prod.adjustedOwnEntitlement}"/>
-                            </p:column>
-
-                            <p:column>
-                                <f:facet name="header">
-                                    <h:outputText value="Adj Partner Entitlement" />
-                                </f:facet>                                                            
-                                <h:outputText value="#{prod.adjustedPartnerEntitlement}"/>
-                            </p:column>
-
+                            
                             <p:column>
                                 <f:facet name="header">
                                     <h:outputText value="Closing Stock" />

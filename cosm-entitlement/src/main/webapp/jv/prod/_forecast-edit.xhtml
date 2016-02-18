@@ -28,12 +28,17 @@
 
                         </p:selectOneMenu>
 
-                        <p:outputLabel value="Gross Production" for="grossProd"/>
-                        <p:inputText id="grossProd" value = "#{jvProdController.currentProduction.productionVolume}"  class="form-control input-sm m-b-10" pt:placeholder="Gross Production"
+                        <p:outputLabel value="Daily Prod" for="dailyProd"/>
+                        <p:inputText id="dailyProd" value = "#{jvProdController.currentProduction.productionVolume}"  class="form-control input-sm m-b-10" pt:placeholder="Gross Production"
                                      />
-
+                        <p:outputLabel value="Gross Production" for="grossProd"/>
+                        <p:inputText id="grossProd" value = "#{jvProdController.currentProduction.grossProduction}"  class="form-control input-sm m-b-10" pt:placeholder="Gross Production"
+                                     />
                         <p:outputLabel value="Opening Stock" for="openingStock" />
                         <p:inputText id="openingStock" value="#{jvProdController.currentProduction.openingStock}" title="OpeningStock" />
+
+                        <p:outputLabel value="Lifting" for="lifting" />
+                        <p:inputText id="lifting" value="#{jvProdController.currentProduction.lifting}" title="Lifting" />
 
                         <p:outputLabel value="Own Entitlement" for="ownShareEntitlement" />
                         <p:inputText id="ownShareEntitlement" value="#{jvProdController.currentProduction.ownShareEntitlement}" title="OwnShareEntitlement" />

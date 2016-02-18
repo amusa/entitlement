@@ -81,9 +81,21 @@
                             </p:column>
                             <p:column>
                                 <f:facet name="header">
-                                    <h:outputText value="Gross Production vol (est)" />
+                                    <h:outputText value="Prod vol (daily est)" />
                                 </f:facet>                                                            
                                 <h:outputText value="#{prod.productionVolume}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Gross Prod vol (est)" />
+                                </f:facet>                                                            
+                                <h:outputText value="#{prod.grossProduction}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Lifting" />
+                                </f:facet>                                                            
+                                <h:outputText value="#{prod.lifting}"/>
                             </p:column>
                             <p:column>
                                 <f:facet name="header">
@@ -97,7 +109,12 @@
                                 </f:facet>                                                            
                                 <h:outputText value="#{prod.partnerShareEntitlement}"/>
                             </p:column>
-                            
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Closing Stock" />
+                                </f:facet>                                                            
+                                <h:outputText value="#{prod.closingStock}"/>
+                            </p:column>
                             <f:facet name="footer">
                                 <p:commandButton id="actualizeButton" icon="ui-icon-plus"   value="#{bundle.Actualize}" actionListener="#{jvActualController.actualize(jvProdController.currentProduction)}" update="JvActualizeCreateForm" oncomplete="PF('JvActualizeCreateDlg').show()" disabled="#{empty jvProdController.currentProduction}"/>
                                 <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{jvProdController.prepareCreate}" update=":JvCreateForm" oncomplete="PF('JvCreateDialog').show()"/>

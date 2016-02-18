@@ -5,12 +5,19 @@
  */
 package com.nnpcgroup.comd.cosm.entitlement.ejb;
 
-
+import com.nnpcgroup.comd.cosm.entitlement.entity.ContractStream;
+import com.nnpcgroup.comd.cosm.entitlement.entity.ForecastJvProduction;
+import com.nnpcgroup.comd.cosm.entitlement.entity.Production;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 /**
  *
@@ -33,17 +40,90 @@ public abstract class ProductionTemplate<T> extends AbstractBean<T> {
         log.info("ProductionBean::setEntityManager() called...");
         return em;
     }
-    public abstract List<T> findByYearAndMonth(int year, int month) ;
+
+    public abstract List<T> findByYearAndMonth(int year, int month);
+
+    public T findByContractStreamPeriod(int year, int month, ContractStream cs) {
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+
+// Query for a List of objects.
+        T production;
+
+        CriteriaQuery cq = cb.createQuery();
+        Root e = cq.from(entityClass);
+        try {
+            cq.where(
+                    cb.and(cb.equal(e.get("periodYear"), year),
+                            cb.equal(e.get("periodMonth"), month),
+                            cb.equal(e.get("contractStream"), cs)
+                    ));
+
+            Query query = getEntityManager().createQuery(cq);
+
+            production = (T) query.getSingleResult();
+        } catch (NoResultException nre) {
+            return null;
+        }
+
+        return production;
+    }
 
     public abstract T computeEntitlement(T production);
 
     public abstract T createInstance();
 
-   // public abstract T enrich(T production);
+    // public abstract T enrich(T production);
+    //public abstract T computeOpeningStock(T production);
+    public T computeOpeningStock(T production) {
+        Production prod = (Production) getPreviousMonthProduction(production);
+        if (prod != null) {
+            Double openingStock = prod.getClosingStock();
+            ((Production) production).setOpeningStock(openingStock);
+        } else {
+            ((Production) production).setOpeningStock(0.0);
+        }
+        return production;
+    }
 
-    public abstract T computeOpeningStock(T production);
+    public T getPreviousMonthProduction(T production) {
+        int month = ((Production) production).getPeriodMonth();
+        int year = ((Production) production).getPeriodYear();
+        ContractStream cs = ((Production) production).getContractStream();
 
-    public abstract T computeClosingStock(T production);
+        if (month > 1) {
+            --month;
+        } else {
+            month = 12;
+            --year;
+        }
+
+        T prod = findByContractStreamPeriod(year, month, cs);
+
+        return prod;
+
+    }
+
+    public T computeClosingStock(T production) {
+        Double openingStock = ((Production) production).getOpeningStock();
+        Double grossProd = ((Production) production).getGrossProduction();
+        Double lifting = ((Production) production).getLifting();
+
+        openingStock = openingStock == null ? 0 : openingStock;
+        grossProd = grossProd == null ? 0 : grossProd;
+        lifting = lifting == null ? 0 : lifting;
+
+        Double closingStock = (openingStock + grossProd) - lifting;
+        ((Production) production).setClosingStock(closingStock);
+
+        return production;
+    }
+
+    public T computeGrossProduction(T production) {
+        Double prodVolume = ((Production) production).getProductionVolume();
+        Double grossProd = prodVolume * 30; //TODO:Calculate days for each month
+        ((Production) production).setGrossProduction(grossProd);
+        return production;
+    }
 
 //    public ProductionBean() {
 //        super(Production.class);
@@ -52,11 +132,13 @@ public abstract class ProductionTemplate<T> extends AbstractBean<T> {
     // public abstract List<? super Production> findByYearAndMonth(int year, int month);
     //public abstract Production findByContractStreamPeriod(int year, int month, ContractStream cs);
     //@Override
-    
     public T enrich(T production) {
         log.log(Level.INFO, "Enriching production {0}...", production);
-        return computeEntitlement(
-                computeOpeningStock(production)
-        );
+        return computeClosingStock(
+                computeEntitlement(
+                        computeGrossProduction(
+                                computeOpeningStock(production)
+                        )));
     }
+
 }

@@ -24,16 +24,26 @@
                         <p:selectOneMenu id="contractStream" value="#{jvActualController.currentActualProduction.contractStream}" >
                             <f:selectItems value="#{contractStreamController.itemsAvailableSelectOne}"/>
                         </p:selectOneMenu>
-                        
-                        <p:outputLabel value="Production Volume:" for="productionVolume" />
+
+                        <p:outputLabel value="Daily Prod Vol:" for="productionVolume" />
                         <p:inputText id="productionVolume" value="#{jvActualController.currentActualProduction.productionVolume}" title="Production Volume" >
                             <p:ajax event="change" listener="#{jvActualController.productionVolumeChange}"  
-                                    update="display openingStock closingStock ownShareEntitlement partnerShareEntitlement deadStockContribution lineFillContribution ajustedOwnEntitlement adjustedPartnerEntitlement" />
+                                    update="display grossVolume openingStock closingStock ownShareEntitlement partnerShareEntitlement" />
                         </p:inputText>
+
+                        <p:outputLabel value="Gross Prod Vol:" for="grossVolume" />
+                        <p:inputText id="grossVolume" value="#{jvActualController.currentActualProduction.productionVolume}" title="Production Volume" />
 
                         <p:outputLabel value="Opening Stock:" for="openingStock" />
                         <p:inputText id="openingStock" value="#{jvActualController.currentActualProduction.openingStock}" title="OpeningStock" />
-                        
+
+                        <p:outputLabel value="Stock Adjustment:" for="stockAdjustment" />
+                        <p:inputText id="stockAdjustment" value="#{jvActualController.currentActualProduction.stockAdjustment}" title="AdjustedPartnerEntitlement" />
+
+                        <p:outputLabel value="Lifting" for="lifting" />
+                        <p:inputText id="lifting" value="#{jvActualController.currentProduction.lifting}" title="Lifting" />
+
+
                         <p:outputLabel value="Own Entitlement:" for="ownShareEntitlement" />
                         <p:inputText id="ownShareEntitlement" value="#{jvActualController.currentActualProduction.ownShareEntitlement}" title="OwnShareEntitlement" />
 
@@ -41,21 +51,9 @@
                         <p:inputText id="partnerShareEntitlement" value="#{jvActualController.currentActualProduction.partnerShareEntitlement}" title="PartnerShareEntitlement" />
 
 
-                        <p:outputLabel value="Line Fill Contribution:" for="lineFillContribution" />
-                        <p:inputText id="lineFillContribution" value="#{jvActualController.currentActualProduction.lineFillContribution}" title="LineFillContribution" />
-
-                        <p:outputLabel value="Dead Stock Contribution:" for="deadStockContribution" />
-                        <p:inputText id="deadStockContribution" value="#{jvActualController.currentActualProduction.deadStockContribution}" title="DeadStockContribution" />
-
-                        <p:outputLabel value="Adj Own Entitlement:" for="ajustedOwnEntitlement" />
-                        <p:inputText id="ajustedOwnEntitlement" value="#{jvActualController.currentActualProduction.adjustedOwnEntitlement}" title="AjustedOwnEntitlement" />
-
-                        <p:outputLabel value="Adj Partner Entitlement:" for="adjustedPartnerEntitlement" />
-                        <p:inputText id="adjustedPartnerEntitlement" value="#{jvActualController.currentActualProduction.adjustedPartnerEntitlement}" title="AdjustedPartnerEntitlement" />
-
                         <p:outputLabel value="Closing Stock:" for="closingStock" />
                         <p:inputText id="closingStock" value="#{jvActualController.currentActualProduction.closingStock}" title="ClosingStock" />
-                        
+
                     </p:panelGrid>
 
                     <p:commandButton actionListener="#{jvActualController.create}" value="#{bundle.Save}" update="display,:growl" oncomplete="handleSubmit(args,'JvActualizeEditDlg');"/>

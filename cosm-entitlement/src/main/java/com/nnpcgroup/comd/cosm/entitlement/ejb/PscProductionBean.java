@@ -15,7 +15,6 @@ import javax.ejb.Stateless;
  *
  * @author 18359
  */
-
 @Stateless
 //@PSC
 public class PscProductionBean extends ProductionTemplate<ActualPscProduction> {
@@ -27,9 +26,7 @@ public class PscProductionBean extends ProductionTemplate<ActualPscProduction> {
         log.info("PscProductionBean::constructor activated...");
     }
 
-    
-    
-   @Override
+    @Override
     public ActualPscProduction computeEntitlement(ActualPscProduction production) {
         log.info("PscProductionBean::Calculating PSC Entitlement...");
         return production;
@@ -37,14 +34,12 @@ public class PscProductionBean extends ProductionTemplate<ActualPscProduction> {
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
-
-   @Override
+    @Override
     public ActualPscProduction createInstance() {
         log.info("PscProductionBean::createProductionEntity called...");
         return new ActualPscProduction();
     }
 
-   
     @Override
     public ActualPscProduction computeOpeningStock(ActualPscProduction production) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -55,7 +50,7 @@ public class PscProductionBean extends ProductionTemplate<ActualPscProduction> {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-   // @Override
+    // @Override
     public ActualPscProduction findByContractStreamPeriod(int year, int month, ContractStream cs) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
@@ -65,5 +60,12 @@ public class PscProductionBean extends ProductionTemplate<ActualPscProduction> {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    
+    @Override
+    public ActualPscProduction computeGrossProduction(ActualPscProduction production) {
+        Double prodVolume = production.getProductionVolume();
+        Double grossProd = prodVolume * 30; //TODO:Calculate days for each month
+        production.setGrossProduction(grossProd);
+        return production;
+    }
+
 }

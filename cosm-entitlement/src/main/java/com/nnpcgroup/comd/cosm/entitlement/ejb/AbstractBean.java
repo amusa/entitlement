@@ -15,7 +15,7 @@ import javax.persistence.EntityManager;
  */
 public abstract class AbstractBean<T> {
 
-    private Class<T> entityClass;
+    protected final Class<T> entityClass;
 
     public AbstractBean(Class<T> entityClass) {
         this.entityClass = entityClass;

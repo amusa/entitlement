@@ -22,22 +22,27 @@
                                        />
                         <p:outputLabel value="Asset Stream/Crude Type" for="csOptions"/>
                         <p:outputLabel id="csOptions" value="#{jvProdController.currentProduction.contractStream.fiscalArrangement.title}/#{jvProdController.currentProduction.contractStream.crudeType.code}" />
-                        
-                        <p:outputLabel value="Gross Production" for="grossProd" />
-                        <p:outputLabel id="grossProd" value = "#{jvProdController.currentProduction.productionVolume}"  class="form-control input-sm m-b-10" pt:placeholder="Gross Production"
+
+                        <p:outputLabel value="Daily Prod Vol" for="dailyProd" />
+                        <p:outputLabel id="dailyProd" value = "#{jvProdController.currentProduction.productionVolume}"  class="form-control input-sm m-b-10" pt:placeholder="Gross Production"
                                        />
-                                                
+                        <p:outputLabel value="Gross Prod Vol" for="grossProd" />
+                        <p:outputLabel id="grossProd" value = "#{jvProdController.currentProduction.grossProduction}"  class="form-control input-sm m-b-10" pt:placeholder="Gross Production"
+                                       />       
                         <p:outputLabel value="Opening Stock" for="openingStock" />
-                        <p:outputLabel id="openingStock" value="#{jvProdController.currentProduction.openingStock}" title="OpeningStock" />
+                        <p:outputLabel id="openingStock" value="#{jvProdController.currentProduction.openingStock}" title="Opening Stock" />
+
+                        <p:outputLabel value="Lifting" for="lifting" />
+                        <p:outputLabel id="lifting" value="#{jvProdController.currentProduction.lifting}" title="Lifting" />
 
                         <p:outputLabel value="Own Entitlement" for="ownShareEntitlement" />
-                        <p:outputLabel id="ownShareEntitlement" value="#{jvProdController.currentProduction.ownShareEntitlement}" title="OwnShareEntitlement" />
+                        <p:outputLabel id="ownShareEntitlement" value="#{jvProdController.currentProduction.ownShareEntitlement}" title="Own Entitlement" />
 
                         <p:outputLabel value="Partner Entitlement" for="partnerShareEntitlement" />
                         <p:outputLabel id="partnerShareEntitlement" value="#{jvProdController.currentProduction.partnerShareEntitlement}" title="PartnerShareEntitlement" />
 
                         <p:outputLabel value="Closing Stock" for="closingStock" />
-                        <p:outputLabel id="closingStock" value="#{jvProdController.currentProduction.closingStock}" title="ClosingStock" />
+                        <p:outputLabel id="closingStock" value="#{jvProdController.currentProduction.closingStock}" title="Closing Stock" />
 
                     </p:panelGrid>
                     <p:commandButton value="#{bundle.Close}" onclick="JvViewDialog.hide()"/>

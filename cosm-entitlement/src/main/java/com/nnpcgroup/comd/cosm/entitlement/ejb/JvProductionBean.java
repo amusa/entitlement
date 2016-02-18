@@ -5,12 +5,10 @@
  */
 package com.nnpcgroup.comd.cosm.entitlement.ejb;
 
-import com.nnpcgroup.comd.cosm.entitlement.entity.ContractStream;
 import com.nnpcgroup.comd.cosm.entitlement.entity.EquityType;
 import com.nnpcgroup.comd.cosm.entitlement.entity.FiscalArrangement;
 import com.nnpcgroup.comd.cosm.entitlement.entity.ForecastJvProduction;
 import com.nnpcgroup.comd.cosm.entitlement.entity.JointVenture;
-import com.nnpcgroup.comd.cosm.entitlement.entity.Production;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -38,14 +36,12 @@ public class JvProductionBean extends ProductionTemplate<ForecastJvProduction> {
         return new ForecastJvProduction();
     }
 
-    @Override
-    public ForecastJvProduction computeOpeningStock(ForecastJvProduction production) {
-        log.info("JvProductionBean::computing Opening stock...");
-        production.setOpeningStock(0.0);//TODO:compute JV Production opening stock
-        return production;
-    }
-    
-
+//    @Override
+//    public ForecastJvProduction computeOpeningStock(ForecastJvProduction production) {
+//        log.info("JvProductionBean::computing Opening stock...");
+//        production.setOpeningStock(0.0);//TODO:compute JV Production opening stock
+//        return production;
+//    }
     @Override
     public List<ForecastJvProduction> findByYearAndMonth(int year, int month) {
         log.log(Level.INFO, "Parameters: year={0}, month={1}", new Object[]{year, month});
@@ -85,13 +81,18 @@ public class JvProductionBean extends ProductionTemplate<ForecastJvProduction> {
 
         Double ownEntitlement;
         Double partnerEntitlement;
+        Double grossProd = production.getGrossProduction();
+        Double openingStock = production.getOpeningStock();
+      
+        grossProd = grossProd == null ? 0 : grossProd;
+        openingStock = openingStock == null ? 0 : openingStock;
 
-        ownEntitlement = (production.getGrossProduction()
-                + production.getOpeningStock())
+        ownEntitlement = (grossProd
+                + openingStock)
                 * et.getOwnEquity() * 0.01;
 
-        partnerEntitlement = (production.getGrossProduction()
-                + production.getOpeningStock())
+        partnerEntitlement = (grossProd
+                + openingStock)
                 * et.getPartnerEquity() * 0.01;
 
         production.setOwnShareEntitlement(ownEntitlement);
@@ -100,15 +101,30 @@ public class JvProductionBean extends ProductionTemplate<ForecastJvProduction> {
         return production;
     }
 
-    @Override
-    public ForecastJvProduction computeClosingStock(ForecastJvProduction production) {
-        log.info("JvProductionBean::computing Closing stock...");
-        return production;
-    }
-
-    //@Override
-    public Production findByContractStreamPeriod(int year, int month, ContractStream cs) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
+//    @Override
+//    public ForecastJvProduction findByContractStreamPeriod(int year, int month, ContractStream cs) {
+//       log.info("ForecastProductionBean::findByContractStreamPeriod called...");
+//        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+//
+//// Query for a List of objects.
+//        ForecastJvProduction production;
+//
+//        CriteriaQuery cq = cb.createQuery();
+//        Root e = cq.from(ForecastJvProduction.class);
+//        try {
+//            cq.where(
+//                    cb.and(cb.equal(e.get("periodYear"), year),
+//                            cb.equal(e.get("periodMonth"), month),
+//                            cb.equal(e.get("contractStream"), cs)
+//                    ));
+//
+//            Query query = getEntityManager().createQuery(cq);
+//
+//            production = (ForecastJvProduction) query.getSingleResult();
+//        } catch (NoResultException nre) {
+//            return null;
+//        }
+//
+//        return production;
+//    }
 }

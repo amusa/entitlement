@@ -37,7 +37,7 @@
                         <p:commandButton  value="Manual Entry"  class="btn" >
                             <p:ajax listener="#{jvProdController.processManualEntry}" event="click"
                                     process="paramPanel periodYear periodMonth"
-                                    update="jvProdForm manualGroup manualForm prod_panel prodTable manualGroup manualForm  csOptions grossProd msgs"/>
+                                    update="jvProdForm manualGroup manualForm prod_panel prodTable manualGroup manualForm  csOptions prodVolume msgs"/>
 
                         </p:commandButton>
                     </p:panelGrid>   
@@ -54,15 +54,19 @@
                                 <p:ajax event="change" update="addProduction"/>     
                             </p:selectOneMenu>
 
-                            <h:outputText value="Gross Production"/>
-                            <p:inputText id="grossProd" value = "#{jvProdController.currentProduction.productionVolume}"  class="form-control input-sm m-b-10" pt:placeholder="Gross Production">
+                            <h:outputText value="Daily Allowable"/>
+                            <p:inputText id="prodVolume" value = "#{jvProdController.currentProduction.productionVolume}"  class="form-control input-sm m-b-10" pt:placeholder="Gross Production">
                                 <p:ajax event="change" update="addProduction" />
                             </p:inputText>
 
+                            <h:outputText value="Nomination/Lifting"/>
+                            <p:inputText id="lifting" value = "#{jvProdController.currentProduction.lifting}"  class="form-control input-sm m-b-10" pt:placeholder="Gross Production">
+
+                            </p:inputText>
 
                             <p:commandButton  id="addProduction" value="Add"  disabled="#{jvProdController.currentProduction.productionVolume eq null}">                           
                                 <p:ajax listener="#{jvProdController.addProductionItem}" update="manualGroup prod_panel prodTable  csOptions msgs" 
-                                        process="paramPanel periodYear periodMonth manualGroup manualForm  csOptions grossProd"/>                            
+                                        process="paramPanel periodYear periodMonth manualGroup manualForm  csOptions prodVolume"/>                            
                             </p:commandButton>
 
 
@@ -100,9 +104,21 @@
                             </p:column>
                             <p:column>
                                 <f:facet name="header">
-                                    <h:outputText value="Gross Production vol (est)" />
+                                    <h:outputText value="Daily Prod vol (est)" />
                                 </f:facet>                                                            
                                 <h:outputText value="#{prod.productionVolume}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Gross Prod vol (est)" />
+                                </f:facet>                                                            
+                                <h:outputText value="#{prod.grossProduction}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Lifting" />
+                                </f:facet>                                                            
+                                <h:outputText value="#{prod.lifting}"/>
                             </p:column>
                             <p:column>
                                 <f:facet name="header">
@@ -116,7 +132,12 @@
                                 </f:facet>                                                            
                                 <h:outputText value="#{prod.partnerShareEntitlement}"/>
                             </p:column>
-
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Closing Stock" />
+                                </f:facet>                                                            
+                                <h:outputText value="#{prod.closingStock}"/>
+                            </p:column>
                         </p:dataTable>
 
                     </h:panelGroup>

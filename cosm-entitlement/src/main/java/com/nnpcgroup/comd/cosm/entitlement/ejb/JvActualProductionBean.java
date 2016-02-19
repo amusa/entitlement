@@ -6,11 +6,9 @@
 package com.nnpcgroup.comd.cosm.entitlement.ejb;
 
 import com.nnpcgroup.comd.cosm.entitlement.entity.ActualJvProduction;
-import com.nnpcgroup.comd.cosm.entitlement.entity.ContractStream;
 import com.nnpcgroup.comd.cosm.entitlement.entity.EquityType;
 import com.nnpcgroup.comd.cosm.entitlement.entity.FiscalArrangement;
 import com.nnpcgroup.comd.cosm.entitlement.entity.JointVenture;
-import com.nnpcgroup.comd.cosm.entitlement.entity.Production;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -58,7 +56,6 @@ public class JvActualProductionBean extends ProductionTemplate<ActualJvProductio
         Double ownEntitlement;
         Double partnerEntitlement;
         Double grossProd = production.getGrossProduction();
-        Double openingStock = production.getOpeningStock();
         Double stockAdjustment = production.getStockAdjustment() == null ? 0 : production.getStockAdjustment();
 
         log.log(Level.INFO, "Production={0} production.getProductionVolume()={1} production.getOpeningStock()={2} EquityType={3}...",
@@ -69,13 +66,11 @@ public class JvActualProductionBean extends ProductionTemplate<ActualJvProductio
             return production;
         }
         ownEntitlement = (grossProd
-                + openingStock
-                - stockAdjustment)
+                + stockAdjustment)
                 * et.getOwnEquity() * 0.01;
 
         partnerEntitlement = (grossProd
-                + openingStock
-                - stockAdjustment)
+                + stockAdjustment)
                 * et.getPartnerEquity() * 0.01;
 
         production.setOwnShareEntitlement(ownEntitlement);
@@ -84,20 +79,22 @@ public class JvActualProductionBean extends ProductionTemplate<ActualJvProductio
         return production;
     }
 
-    @Override
-    public ActualJvProduction computeClosingStock(ActualJvProduction production) {
-        log.log(Level.INFO, "JvActualProductionBean::computing Closing stock for production {0}...", production);
-        Double grossProd = production.getGrossProduction() == null ? 0 : production.getGrossProduction();
-        Double lifting = production.getLifting() == null ? 0 : production.getLifting();
-        Double stockAdjustment = production.getStockAdjustment() == null ? 0 : production.getStockAdjustment();
-        log.log(Level.INFO, "JvActualProductionBean::computeClosingStock parameters "
-                + "grossProd={0} stockAdj={1} lifting={2}", new Object[]{grossProd, stockAdjustment, lifting});
-        Double closingStock = grossProd - stockAdjustment - lifting;
-
-        production.setClosingStock(closingStock);
-
-        return production;
-    }
+//    @Override
+//    public ActualJvProduction computeClosingStock(ActualJvProduction production) {
+//        log.log(Level.INFO, "JvActualProductionBean::computing Closing stock for production {0}...", production);
+//        
+//        Double lifting = production.getLifting() == null ? 0 : production.getLifting();
+//        Double stockAdjustment = production.getStockAdjustment() == null ? 0 : production.getStockAdjustment();
+//       
+//        log.log(Level.INFO, "JvActualProductionBean::computeClosingStock parameters "
+//                + "stockAdj={1} lifting={2}", new Object[]{stockAdjustment, lifting});
+//        
+//        Double closingStock = stockAdjustment - lifting;
+//
+//        production.setClosingStock(closingStock);
+//
+//        return production;
+//    }
 
 //    @Override
 //    public ActualJvProduction findByContractStreamPeriod(int year, int month, ContractStream cs) {

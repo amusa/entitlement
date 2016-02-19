@@ -31,7 +31,7 @@
                             <p:ajax/>
                         </p:selectOneMenu>
 
-                        <p:outputLabel value="Daily Prod" for="dailyProd"/>
+                        <p:outputLabel value="Daily Prod (bpd)" for="dailyProd"/>
                         <p:inputText id="dailyProd" value = "#{jvProdController.currentProduction.productionVolume}"  class="form-control input-sm m-b-10" pt:placeholder="Gross Production"
                                      >
                             <p:ajax event="change" listener="#{jvProdController.productionVolumeChange}"  
@@ -42,26 +42,26 @@
                         <p:outputLabel value="Gross Prod" for="grossProd"/>
                         <p:inputText id="grossProd" value = "#{jvProdController.currentProduction.grossProduction}"  class="form-control input-sm m-b-10" pt:placeholder="Gross Production"/>
 
-                        <p:outputLabel value="Opening Stock" for="openingStock" />
-                        <p:inputText id="openingStock" value="#{jvProdController.currentProduction.openingStock}" title="OpeningStock" />
-
-                        <p:outputLabel value="Lifting" for="lifting" />
-                        <p:inputText id="lifting" value="#{jvProdController.currentProduction.lifting}" title="Lifting" >
-
-                            <p:ajax event="change" listener="#{jvProdController.productionVolumeChange}"  
-                                    update="display grossProd openingStock ownShareEntitlement partnerShareEntitlement closingStock"
-                                    />
-                        </p:inputText>
-
-
                         <p:outputLabel value="Own Entitlement" for="ownShareEntitlement" />
-                        <p:inputText id="ownShareEntitlement" value="#{jvProdController.currentProduction.ownShareEntitlement}" title="OwnShareEntitlement" />
+                        <p:inputText id="ownShareEntitlement" value="#{jvProdController.currentProduction.ownShareEntitlement}" title="Own Entitlement" />
 
                         <p:outputLabel value="Partner Entitlement" for="partnerShareEntitlement" />
-                        <p:inputText id="partnerShareEntitlement" value="#{jvProdController.currentProduction.partnerShareEntitlement}" title="PartnerShareEntitlement" />
+                        <p:inputText id="partnerShareEntitlement" value="#{jvProdController.currentProduction.partnerShareEntitlement}" title="Partner Entitlement" />
+
+                        <p:outputLabel value="Opening Stock" for="openingStock" />
+                        <p:inputText id="openingStock" value="#{jvProdController.currentProduction.openingStock}" title="Opening Stock" />
+
+                        <p:outputLabel value="Availability" for="availability" />
+                        <p:inputText id="availability" value="#{jvProdController.currentProduction.availability}" title="Availability"/>
+
+                        <p:outputLabel value="Lifting (Nom)" for="lifting" />
+                        <p:inputText id="lifting" value="#{jvProdController.currentProduction.lifting}" title="Lifting (Nom)"/>
+
+                        <p:outputLabel value="Lifting Cargoes" for="cargoes" />
+                        <p:inputText id="cargoes" value="#{jvProdController.currentProduction.cargos}" title="Lifting Cargoes" />
 
                         <p:outputLabel value="Closing Stock" for="closingStock" />
-                        <p:inputText id="closingStock" value="#{jvProdController.currentProduction.closingStock}" title="ClosingStock" />
+                        <p:inputText id="closingStock" value="#{jvProdController.currentProduction.closingStock}" title="Closing Stock" />
 
                     </p:panelGrid>
                     <p:commandButton actionListener="#{jvProdController.create}" value="#{bundle.Save}" update="display,:jvForecastListForm:forecastTable,:growl" oncomplete="handleSubmit(args,'JvCreateDialog');"/>

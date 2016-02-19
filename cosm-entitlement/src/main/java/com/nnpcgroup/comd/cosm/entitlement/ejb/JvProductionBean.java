@@ -82,18 +82,14 @@ public class JvProductionBean extends ProductionTemplate<ForecastJvProduction> {
         Double ownEntitlement;
         Double partnerEntitlement;
         Double grossProd = production.getGrossProduction();
-        Double openingStock = production.getOpeningStock();
-      
+       
         grossProd = grossProd == null ? 0 : grossProd;
-        openingStock = openingStock == null ? 0 : openingStock;
-
+        
         ownEntitlement = (grossProd
-                + openingStock)
-                * et.getOwnEquity() * 0.01;
+                * et.getOwnEquity() * 0.01);
 
         partnerEntitlement = (grossProd
-                + openingStock)
-                * et.getPartnerEquity() * 0.01;
+                * et.getPartnerEquity() * 0.01);
 
         production.setOwnShareEntitlement(ownEntitlement);
         production.setPartnerShareEntitlement(partnerEntitlement);

@@ -23,20 +23,14 @@
                         <p:outputLabel value="Asset/Crude Type" for="contractStream" />                        
                         <p:outputLabel id="contractStream" value="#{jvActualController.currentActualProduction.contractStream.fiscalArrangement.title}/#{jvActualController.currentActualProduction.contractStream.crudeType.code}" />
 
-                        <p:outputLabel value="Daily Prod Vol:" for="productionVolume" />
+                        <p:outputLabel value="Daily Prod (bpd)" for="productionVolume" />
                         <p:outputLabel id="productionVolume" value="#{jvActualController.currentActualProduction.productionVolume}" title="Production Volume" />
 
-                        <p:outputLabel value="Gross Prod Vol:" for="grossVolume" />
+                        <p:outputLabel value="Gross Prod" for="grossVolume" />
                         <p:outputLabel id="grossVolume" value="#{jvActualController.currentActualProduction.grossProduction}" title="Production Volume" />
-
-                        <p:outputLabel value="Opening Stock:" for="openingStock" />
-                        <p:outputLabel id="openingStock" value="#{jvActualController.currentActualProduction.openingStock}" title="OpeningStock" />
 
                         <p:outputLabel value="Stock Adjustment:" for="stockAdjustment" />
                         <p:outputLabel id="stockAdjustment" value="#{jvActualController.currentActualProduction.stockAdjustment}" title="Stock Adjustment" />
-
-                        <p:outputLabel value="Lifting" for="lifting" />
-                        <p:outputLabel id="lifting" value="#{jvActualController.currentProduction.lifting}" title="Lifting" />
 
                         <p:outputLabel value="Own Entitlement:" for="ownShareEntitlement" />
                         <p:outputLabel id="ownShareEntitlement" value="#{jvActualController.currentActualProduction.ownShareEntitlement}" title="Own Entitlement" />
@@ -44,13 +38,23 @@
                         <p:outputLabel value="Partner Entitlement:" for="partnerShareEntitlement" />
                         <p:outputLabel id="partnerShareEntitlement" value="#{jvActualController.currentActualProduction.partnerShareEntitlement}" title="Partner Entitlement" />
 
+                        <p:outputLabel value="Opening Stock:" for="openingStock" />
+                        <p:outputLabel id="openingStock" value="#{jvActualController.currentActualProduction.openingStock}" title="Opening Stock" />
+
+                        <p:outputLabel value="Availability" for="availability" />
+                        <p:outputLabel id="availability" value="#{jvActualController.currentProduction.availability}" title="Availability" />
+
+                        <p:outputLabel value="Lifting (Actual)" for="lifting" />
+                        <p:outputLabel id="lifting" value="#{jvActualController.currentProduction.lifting}" title="Lifting (Actual)" />
+
+                        <p:outputLabel value="Lifting Cargoes" for="cargoes" />
+                        <p:outputLabel id="cargoes" value="#{jvActualController.currentProduction.cargos}" title="Lifting Cargoes" />
+
                         <p:outputLabel value="Closing Stock:" for="closingStock" />
-                        <p:outputLabel id="closingStock" value="#{jvActualController.currentActualProduction.closingStock}" title="ClosingStock" />
+                        <p:outputLabel id="closingStock" value="#{jvActualController.currentActualProduction.closingStock}" title="Closing Stock" />
 
                     </p:panelGrid>
-
-                    <p:commandButton actionListener="#{jvActualController.create}" value="#{bundle.Save}" update="display,:growl" oncomplete="handleSubmit(args,'JvActualizeViewDlg');"/>
-                    <p:commandButton value="#{bundle.Cancel}" onclick="JvActualizeViewDlg.hide()"/>
+                    <p:commandButton value="#{bundle.Close}" onclick="JvActualizeViewDlg.hide()"/>
 
                 </h:panelGroup>
             </h:form>

@@ -6,7 +6,6 @@
 package com.nnpcgroup.comd.cosm.entitlement.ejb;
 
 import com.nnpcgroup.comd.cosm.entitlement.entity.ContractStream;
-import com.nnpcgroup.comd.cosm.entitlement.entity.ForecastJvProduction;
 import com.nnpcgroup.comd.cosm.entitlement.entity.Production;
 import java.util.List;
 import java.util.logging.Level;
@@ -104,15 +103,11 @@ public abstract class ProductionTemplate<T> extends AbstractBean<T> {
     }
 
     public T computeClosingStock(T production) {
-        Double openingStock = ((Production) production).getOpeningStock();
-        Double grossProd = ((Production) production).getGrossProduction();
+        Double closingStock;
+        Double availability = ((Production) production).getAvailability();
         Double lifting = ((Production) production).getLifting();
 
-        openingStock = openingStock == null ? 0 : openingStock;
-        grossProd = grossProd == null ? 0 : grossProd;
-        lifting = lifting == null ? 0 : lifting;
-
-        Double closingStock = (openingStock + grossProd) - lifting;
+        closingStock = availability - lifting;
         ((Production) production).setClosingStock(closingStock);
 
         return production;
@@ -135,10 +130,41 @@ public abstract class ProductionTemplate<T> extends AbstractBean<T> {
     public T enrich(T production) {
         log.log(Level.INFO, "Enriching production {0}...", production);
         return computeClosingStock(
-                computeEntitlement(
-                        computeGrossProduction(
-                                computeOpeningStock(production)
-                        )));
+                computeLifting(
+                        computeAvailability(
+                                computeEntitlement(
+                                        computeGrossProduction(
+                                                computeOpeningStock(production)
+                                        )
+                                )
+                        )
+                )
+        );
     }
 
+    public T computeAvailability(T production) {
+        Double availability;
+        Double ownEntitlement = ((Production) production).getOwnShareEntitlement();
+        Double openingStock = ((Production) production).getOpeningStock();
+
+        availability = ownEntitlement + openingStock;
+
+        ((Production) production).setAvailability(availability);
+
+        return production;
+    }
+
+    public T computeLifting(T production) {
+        Double liftableVolume;
+        Integer cargoes;
+        Double availability = ((Production) production).getAvailability();
+
+        cargoes = (int)(availability / 950000.0);
+        liftableVolume = cargoes * 950000.0;
+
+        ((Production) production).setCargos(cargoes);
+        ((Production) production).setLifting(liftableVolume);
+
+        return production;
+    }
 }

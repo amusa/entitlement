@@ -40,6 +40,8 @@ public abstract class Production implements Serializable {
     private Double ownShareEntitlement;
     private Double partnerShareEntitlement;
     private Double lifting;
+    private Integer cargos;
+    private Double availability;
 
     public Production() {
     }
@@ -149,4 +151,21 @@ public abstract class Production implements Serializable {
         this.lifting = lifting;
     }
 
+    public Integer getCargos() {
+        return cargos;
+    }
+
+    public void setCargos(Integer cargos) {
+        this.cargos = cargos;
+    }
+
+    public Double getAvailability() {
+        return availability;
+    }
+
+    public void setAvailability(Double availability) {
+        this.availability = availability;
+    }
+
+    
 }

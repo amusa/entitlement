@@ -25,24 +25,17 @@
                             <f:selectItems value="#{contractStreamController.itemsAvailableSelectOne}"/>
                         </p:selectOneMenu>
 
-                        <p:outputLabel value="Daily Prod Vol:" for="productionVolume" />
+                        <p:outputLabel value="Daily Prod (bpd)" for="productionVolume" />
                         <p:inputText id="productionVolume" value="#{jvActualController.currentActualProduction.productionVolume}" title="Production Volume" >
                             <p:ajax event="change" listener="#{jvActualController.productionVolumeChange}"  
                                     update="display grossVolume openingStock closingStock ownShareEntitlement partnerShareEntitlement" />
                         </p:inputText>
 
-                        <p:outputLabel value="Gross Prod Vol:" for="grossVolume" />
+                        <p:outputLabel value="Gross Prod" for="grossVolume" />
                         <p:inputText id="grossVolume" value="#{jvActualController.currentActualProduction.productionVolume}" title="Production Volume" />
-
-                        <p:outputLabel value="Opening Stock:" for="openingStock" />
-                        <p:inputText id="openingStock" value="#{jvActualController.currentActualProduction.openingStock}" title="OpeningStock" />
 
                         <p:outputLabel value="Stock Adjustment:" for="stockAdjustment" />
                         <p:inputText id="stockAdjustment" value="#{jvActualController.currentActualProduction.stockAdjustment}" title="AdjustedPartnerEntitlement" />
-
-                        <p:outputLabel value="Lifting" for="lifting" />
-                        <p:inputText id="lifting" value="#{jvActualController.currentProduction.lifting}" title="Lifting" />
-
 
                         <p:outputLabel value="Own Entitlement:" for="ownShareEntitlement" />
                         <p:inputText id="ownShareEntitlement" value="#{jvActualController.currentActualProduction.ownShareEntitlement}" title="OwnShareEntitlement" />
@@ -50,9 +43,20 @@
                         <p:outputLabel value="Partner Entitlement:" for="partnerShareEntitlement" />
                         <p:inputText id="partnerShareEntitlement" value="#{jvActualController.currentActualProduction.partnerShareEntitlement}" title="PartnerShareEntitlement" />
 
+                        <p:outputLabel value="Opening Stock:" for="openingStock" />
+                        <p:inputText id="openingStock" value="#{jvActualController.currentActualProduction.availability}" title="Availability" />
+
+                        <p:outputLabel value="Availability" for="availability" />
+                        <p:inputText id="availability" value="#{jvActualController.currentActualProduction.openingStock}" title="Opening Stock" />
+
+                        <p:outputLabel value="Lifting (Actual)" for="lifting" />
+                        <p:inputText id="lifting" value="#{jvActualController.currentProduction.lifting}" title="Lifting (Actual)" />
+
+                        <p:outputLabel value="Lifting Cargoes" for="cargoes" />
+                        <p:outputLabel id="cargoes" value="#{jvActualController.currentProduction.cargos}" title="Lifting Cargoes" />
 
                         <p:outputLabel value="Closing Stock:" for="closingStock" />
-                        <p:inputText id="closingStock" value="#{jvActualController.currentActualProduction.closingStock}" title="ClosingStock" />
+                        <p:inputText id="closingStock" value="#{jvActualController.currentActualProduction.closingStock}" title="Closing Stock" />
 
                     </p:panelGrid>
 

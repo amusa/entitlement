@@ -10,13 +10,9 @@
 
     <ui:composition template="/template.xhtml">
 
-        <h:head>
-
-            <ui:define name="title">
-                <h:outputText value="JV Production"></h:outputText>
-            </ui:define>
-        </h:head>
-
+        <ui:define name="title">
+            <h:outputText value="Create JV Production"></h:outputText>
+        </ui:define>
 
         <ui:define name="body">
             <div id="prod_div" class="row">                
@@ -54,15 +50,15 @@
                                 <p:ajax event="change" update="addProduction"/>     
                             </p:selectOneMenu>
 
-                            <h:outputText value="Daily Allowable"/>
+                            <h:outputText value="Daily Prod (bpd)"/>
                             <p:inputText id="prodVolume" value = "#{jvProdController.currentProduction.productionVolume}"  class="form-control input-sm m-b-10" pt:placeholder="Gross Production">
                                 <p:ajax event="change" update="addProduction" />
                             </p:inputText>
 
-                            <h:outputText value="Nomination/Lifting"/>
+<!--                            <h:outputText value="Lifting (Nom)"/>
                             <p:inputText id="lifting" value = "#{jvProdController.currentProduction.lifting}"  class="form-control input-sm m-b-10" pt:placeholder="Gross Production">
 
-                            </p:inputText>
+                            </p:inputText>-->
 
                             <p:commandButton  id="addProduction" value="Add"  disabled="#{jvProdController.currentProduction.productionVolume eq null}">                           
                                 <p:ajax listener="#{jvProdController.addProductionItem}" update="manualGroup prod_panel prodTable  csOptions msgs" 
@@ -95,31 +91,19 @@
                                     <h:outputText value="Asset Stream/Crude Type"/>
                                 </f:facet>
                                 <h:outputText value="#{prod.contractStream.fiscalArrangement.title}/#{prod.contractStream.crudeType.code}"/>                                                        
-                            </p:column>
+                            </p:column>                            
                             <p:column>
                                 <f:facet name="header">
-                                    <h:outputText value="Opening Stock" />
-                                </f:facet>                                                            
-                                <h:outputText value="#{prod.openingStock}"/>
-                            </p:column>
-                            <p:column>
-                                <f:facet name="header">
-                                    <h:outputText value="Daily Prod vol (est)" />
+                                    <h:outputText value="Daily Prod (bpd)" />
                                 </f:facet>                                                            
                                 <h:outputText value="#{prod.productionVolume}"/>
                             </p:column>
                             <p:column>
                                 <f:facet name="header">
-                                    <h:outputText value="Gross Prod vol (est)" />
+                                    <h:outputText value="Gross Prod" />
                                 </f:facet>                                                            
                                 <h:outputText value="#{prod.grossProduction}"/>
-                            </p:column>
-                            <p:column>
-                                <f:facet name="header">
-                                    <h:outputText value="Lifting" />
-                                </f:facet>                                                            
-                                <h:outputText value="#{prod.lifting}"/>
-                            </p:column>
+                            </p:column>                            
                             <p:column>
                                 <f:facet name="header">
                                     <h:outputText value="Own Entitlement" />
@@ -131,6 +115,30 @@
                                     <h:outputText value="Partner Entitlement" />
                                 </f:facet>                                                            
                                 <h:outputText value="#{prod.partnerShareEntitlement}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Opening Stock" />
+                                </f:facet>                                                            
+                                <h:outputText value="#{prod.openingStock}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Availability" />
+                                </f:facet>                                                            
+                                <h:outputText value="#{prod.availability}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Lifting (Nom)" />
+                                </f:facet>                                                            
+                                <h:outputText value="#{prod.lifting}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Lifting Cargoes" />
+                                </f:facet>                                                            
+                                <h:outputText value="#{prod.cargos}"/>
                             </p:column>
                             <p:column>
                                 <f:facet name="header">

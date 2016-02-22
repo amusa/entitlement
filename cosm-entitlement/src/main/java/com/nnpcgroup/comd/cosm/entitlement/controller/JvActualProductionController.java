@@ -6,10 +6,11 @@
 package com.nnpcgroup.comd.cosm.entitlement.controller;
 
 import com.nnpcgroup.comd.cosm.entitlement.controller.util.JsfUtil;
-import com.nnpcgroup.comd.cosm.entitlement.ejb.JvActualProductionBean;
-import com.nnpcgroup.comd.cosm.entitlement.entity.ActualJvProduction;
+import com.nnpcgroup.comd.cosm.entitlement.ejb.JvActualProductionServices;
+import com.nnpcgroup.comd.cosm.entitlement.ejb.impl.JvActualProductionBean;
 import com.nnpcgroup.comd.cosm.entitlement.entity.ContractStream;
 import com.nnpcgroup.comd.cosm.entitlement.entity.FiscalArrangement;
+import com.nnpcgroup.comd.cosm.entitlement.entity.JvActualProduction;
 import com.nnpcgroup.comd.cosm.entitlement.entity.Production;
 import javax.inject.Named;
 import java.io.Serializable;
@@ -35,15 +36,11 @@ public class JvActualProductionController implements Serializable {
     private static final Logger log = Logger.getLogger(JvActualProductionController.class.getName());
     private static final long serialVersionUID = -5506490644508725206L;
 
-//    @Inject
-//    @JVACTUAL
     @EJB
-    private JvActualProductionBean productionBean;
-
-    private ActualJvProduction currentProduction;
-    //private ActualJvProduction currentActualProduction;
-
-    private List<ActualJvProduction> productions;
+    private JvActualProductionServices productionBean;
+   
+    private JvActualProduction currentProduction;    
+    private List<JvActualProduction> productions;
 
     private boolean manualEntry = false;
     private FiscalArrangement currentFiscal;
@@ -63,26 +60,26 @@ public class JvActualProductionController implements Serializable {
         return currentProduction;
     }
 
-    public void setCurrentProduction(ActualJvProduction currentProduction) {
+    public void setCurrentProduction(JvActualProduction currentProduction) {
         log.info("JvActualProductionController::setProduction called...");
         this.currentProduction = currentProduction;
     }
 
-    public ActualJvProduction getCurrentActualProduction() {
+    public JvActualProduction getCurrentActualProduction() {
         log.info("JvActualProductionController::getActualCurrentProduction called...");
-        return (ActualJvProduction) currentProduction;
+        return (JvActualProduction) currentProduction;
     }
 
-    public void setCurrentActualProduction(ActualJvProduction currentActualProduction) {
+    public void setCurrentActualProduction(JvActualProduction currentActualProduction) {
         this.currentProduction = currentActualProduction;
     }
 
-    public List<ActualJvProduction> getProductions() {
+    public List<JvActualProduction> getProductions() {
         log.info("JvActualProductionController::getProductions called...");
         return productions;
     }
 
-    public void setProductions(List<ActualJvProduction> productions) {
+    public void setProductions(List<JvActualProduction> productions) {
         log.info("JvActualProductionController::setProductions called...");
         this.productions = productions;
     }
@@ -227,8 +224,8 @@ public class JvActualProductionController implements Serializable {
         }
     }
 
-    public ActualJvProduction prepareCreate() {
-        log.log(Level.INFO, "Preparing new instance of ActualJvProduction for create...");
+    public JvActualProduction prepareCreate() {
+        log.log(Level.INFO, "Preparing new instance of JvActualProduction for create...");
         currentProduction = productionBean.createInstance();
         currentProduction.setPeriodYear(periodYear);
         currentProduction.setPeriodMonth(periodMonth);

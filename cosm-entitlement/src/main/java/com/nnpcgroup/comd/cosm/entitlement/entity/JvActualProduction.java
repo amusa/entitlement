@@ -5,24 +5,22 @@
  */
 package com.nnpcgroup.comd.cosm.entitlement.entity;
 
-import javax.persistence.MappedSuperclass;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
 
 /**
  *
  * @author 18359
  */
-//@Entity
-//@DiscriminatorValue("ACTUAL")
-//@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-//@DiscriminatorColumn(name = "FA_TYPE")
-@MappedSuperclass
-public abstract class ActualProduction extends Production {
+@Entity
+@DiscriminatorValue("JV_ACTUAL")
+public class JvActualProduction extends JvProduction {
 
     private static final long serialVersionUID = 4881837273578907336L;
 
     private Double stockAdjustment;
 
-    public ActualProduction() {
+    public JvActualProduction() {
     }
 
     public Double getStockAdjustment() {

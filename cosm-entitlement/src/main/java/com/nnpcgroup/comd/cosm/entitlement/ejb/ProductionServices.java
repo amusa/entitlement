@@ -1,0 +1,39 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package com.nnpcgroup.comd.cosm.entitlement.ejb;
+
+import com.nnpcgroup.comd.cosm.entitlement.entity.ContractStream;
+import java.util.List;
+
+/**
+ *
+ * @author 18359
+ * @param <T>
+ */
+public interface ProductionServices<T> extends AbstractCrudServices<T> {
+
+    public abstract List<T> findByYearAndMonth(int year, int month);
+
+    public T findByContractStreamPeriod(int year, int month, ContractStream cs);
+
+    public abstract T computeEntitlement(T production);
+
+    public abstract T createInstance();
+
+    public T computeOpeningStock(T production);
+
+    public T getPreviousMonthProduction(T production);
+
+    public T computeClosingStock(T production);
+
+    public T computeGrossProduction(T production);
+
+    public T enrich(T production);
+
+    public T computeAvailability(T production);
+
+    public T computeLifting(T production);
+}

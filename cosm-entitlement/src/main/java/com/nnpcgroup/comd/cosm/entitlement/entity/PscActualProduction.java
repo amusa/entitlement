@@ -13,12 +13,15 @@ import javax.persistence.Entity;
  * @author 18359
  */
 @Entity
-@DiscriminatorValue("PSC_FORECAST")
-public class ForecastPscProduction extends ForecastProduction {
+@DiscriminatorValue("PSC_ACTUAL")
+public class PscActualProduction extends PscProduction {
 
-    private static final long serialVersionUID = -5206065666784730417L;
-
-    public ForecastPscProduction() {
+    private static final long serialVersionUID = 1116299259496444592L;
+    
+        
+    public PscActualProduction() {
     }
+        
+  
 
 }

@@ -6,8 +6,9 @@
 package com.nnpcgroup.comd.cosm.entitlement.controller;
 
 import com.nnpcgroup.comd.cosm.entitlement.controller.util.JsfUtil;
-import com.nnpcgroup.comd.cosm.entitlement.ejb.JvProductionBean;
-import com.nnpcgroup.comd.cosm.entitlement.entity.ForecastJvProduction;
+import com.nnpcgroup.comd.cosm.entitlement.ejb.JvForecastProductionServices;
+import com.nnpcgroup.comd.cosm.entitlement.ejb.impl.JvForecastProductionBean;
+import com.nnpcgroup.comd.cosm.entitlement.entity.JvForecastProduction;
 
 import javax.inject.Named;
 import java.io.Serializable;
@@ -33,15 +34,13 @@ public class JvProductionController implements Serializable {
 
     private static final long serialVersionUID = -7596150432081506756L;
     private static final Logger log = Logger.getLogger(JvProductionController.class.getName());
-
-    //@Inject
-    //@JV
+    
     @EJB
-    private JvProductionBean productionBean;
+    private JvForecastProductionServices productionBean;
 
-    private ForecastJvProduction currentProduction;
+    private JvForecastProduction currentProduction;
 
-    private List<ForecastJvProduction> productions;
+    private List<JvForecastProduction> productions;
 
     private boolean manualEntry = false;
     private Integer periodYear;
@@ -55,18 +54,18 @@ public class JvProductionController implements Serializable {
         // log.log(Level.INFO, "Entitlement calculated: {0}", entitlement.calculateEntitlement());
     }
 
-    public ForecastJvProduction getCurrentProduction() {
+    public JvForecastProduction getCurrentProduction() {
         log.log(Level.INFO, "ProductionController::getCurrentProduction returning...",
                 currentProduction);
         return currentProduction;
     }
 
-    public void setCurrentProduction(ForecastJvProduction currentProduction) {
+    public void setCurrentProduction(JvForecastProduction currentProduction) {
         log.info("ProductionController::setProduction called...");
         this.currentProduction = currentProduction;
     }
 
-    public List<ForecastJvProduction> getProductions() {
+    public List<JvForecastProduction> getProductions() {
         log.info("ProductionController::getProductions called...");
         if (productions == null && periodYear != null && periodMonth != null) {
             productions = productionBean.findByYearAndMonth(periodYear, periodMonth);
@@ -74,7 +73,7 @@ public class JvProductionController implements Serializable {
         return productions;
     }
 
-    public void setProductions(List<ForecastJvProduction> productions) {
+    public void setProductions(List<JvForecastProduction> productions) {
         log.info("ProductionController::setProductions called...");
         this.productions = productions;
     }
@@ -98,7 +97,7 @@ public class JvProductionController implements Serializable {
 
     }
 
-    public ForecastJvProduction prepareCreate() {
+    public JvForecastProduction prepareCreate() {
         currentProduction = productionBean.createInstance();
         if (periodYear != null && periodMonth != null) {
             currentProduction.setPeriodYear(periodYear);

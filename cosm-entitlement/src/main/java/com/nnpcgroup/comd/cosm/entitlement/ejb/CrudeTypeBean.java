@@ -5,6 +5,7 @@
  */
 package com.nnpcgroup.comd.cosm.entitlement.ejb;
 
+import com.nnpcgroup.comd.cosm.entitlement.ejb.impl.AbstractCrudServicesImpl;
 import com.nnpcgroup.comd.cosm.entitlement.entity.CrudeType;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -15,7 +16,7 @@ import javax.persistence.PersistenceContext;
  * @author 18359
  */
 @Stateless
-public class CrudeTypeBean extends AbstractBean<CrudeType> {
+public class CrudeTypeBean extends AbstractCrudServicesImpl<CrudeType> {
 
     @PersistenceContext(unitName = "entitlementPU")
     private EntityManager em;

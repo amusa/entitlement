@@ -5,6 +5,7 @@
  */
 package com.nnpcgroup.comd.cosm.entitlement.ejb;
 
+import com.nnpcgroup.comd.cosm.entitlement.ejb.impl.AbstractCrudServicesImpl;
 import com.nnpcgroup.comd.cosm.entitlement.entity.Terminal;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -15,7 +16,7 @@ import javax.persistence.PersistenceContext;
  * @author 18359
  */
 @Stateless
-public class TerminalBean extends AbstractBean<Terminal> {
+public class TerminalBean extends AbstractCrudServicesImpl<Terminal> {
 
     @PersistenceContext(unitName = "entitlementPU")
     private EntityManager em;

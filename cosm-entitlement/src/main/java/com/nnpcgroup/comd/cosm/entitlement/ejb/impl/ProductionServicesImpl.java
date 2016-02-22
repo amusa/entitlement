@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.nnpcgroup.comd.cosm.entitlement.ejb;
+package com.nnpcgroup.comd.cosm.entitlement.ejb.impl;
 
+import com.nnpcgroup.comd.cosm.entitlement.ejb.ProductionServices;
 import com.nnpcgroup.comd.cosm.entitlement.entity.ContractStream;
 import com.nnpcgroup.comd.cosm.entitlement.entity.Production;
 import java.util.List;
@@ -23,14 +24,14 @@ import javax.persistence.criteria.Root;
  * @author 18359
  * @param <T>
  */
-public abstract class ProductionTemplate<T> extends AbstractBean<T> {
+public abstract class ProductionServicesImpl<T> extends AbstractCrudServicesImpl<T> implements ProductionServices<T> {
 
-    private static final Logger log = Logger.getLogger(ProductionTemplate.class.getName());
+    private static final Logger log = Logger.getLogger(ProductionServicesImpl.class.getName());
 
     @PersistenceContext(unitName = "entitlementPU")
     private EntityManager em;
 
-    public ProductionTemplate(Class<T> entityClass) {
+    public ProductionServicesImpl(Class<T> entityClass) {
         super(entityClass);
     }
 
@@ -40,8 +41,10 @@ public abstract class ProductionTemplate<T> extends AbstractBean<T> {
         return em;
     }
 
+    @Override
     public abstract List<T> findByYearAndMonth(int year, int month);
 
+    @Override
     public T findByContractStreamPeriod(int year, int month, ContractStream cs) {
         CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
 
@@ -67,12 +70,15 @@ public abstract class ProductionTemplate<T> extends AbstractBean<T> {
         return production;
     }
 
+    @Override
     public abstract T computeEntitlement(T production);
 
+    @Override
     public abstract T createInstance();
 
     // public abstract T enrich(T production);
     //public abstract T computeOpeningStock(T production);
+    @Override
     public T computeOpeningStock(T production) {
         Production prod = (Production) getPreviousMonthProduction(production);
         if (prod != null) {
@@ -84,6 +90,7 @@ public abstract class ProductionTemplate<T> extends AbstractBean<T> {
         return production;
     }
 
+    @Override
     public T getPreviousMonthProduction(T production) {
         int month = ((Production) production).getPeriodMonth();
         int year = ((Production) production).getPeriodYear();
@@ -102,6 +109,7 @@ public abstract class ProductionTemplate<T> extends AbstractBean<T> {
 
     }
 
+    @Override
     public T computeClosingStock(T production) {
         Double closingStock;
         Double availability = ((Production) production).getAvailability();
@@ -113,6 +121,7 @@ public abstract class ProductionTemplate<T> extends AbstractBean<T> {
         return production;
     }
 
+    @Override
     public T computeGrossProduction(T production) {
         Double prodVolume = ((Production) production).getProductionVolume();
         Double grossProd = prodVolume * 30; //TODO:Calculate days for each month
@@ -127,6 +136,7 @@ public abstract class ProductionTemplate<T> extends AbstractBean<T> {
     // public abstract List<? super Production> findByYearAndMonth(int year, int month);
     //public abstract Production findByContractStreamPeriod(int year, int month, ContractStream cs);
     //@Override
+    @Override
     public T enrich(T production) {
         log.log(Level.INFO, "Enriching production {0}...", production);
         return computeClosingStock(
@@ -142,6 +152,7 @@ public abstract class ProductionTemplate<T> extends AbstractBean<T> {
         );
     }
 
+    @Override
     public T computeAvailability(T production) {
         Double availability;
         Double ownEntitlement = ((Production) production).getOwnShareEntitlement();
@@ -150,10 +161,13 @@ public abstract class ProductionTemplate<T> extends AbstractBean<T> {
         availability = ownEntitlement + openingStock;
 
         ((Production) production).setAvailability(availability);
+         log.log(Level.INFO, "Availability {0}...", availability);
+
 
         return production;
     }
 
+    @Override
     public T computeLifting(T production) {
         Double liftableVolume;
         Integer cargoes;
@@ -164,6 +178,9 @@ public abstract class ProductionTemplate<T> extends AbstractBean<T> {
 
         ((Production) production).setCargos(cargoes);
         ((Production) production).setLifting(liftableVolume);
+         log.log(Level.INFO, "liftable volume={0}, cargos={1}, availability={2}...",
+                 new Object[]{liftableVolume,cargoes, availability});
+       
 
         return production;
     }

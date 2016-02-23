@@ -5,11 +5,13 @@
  */
 package com.nnpcgroup.comd.cosm.entitlement.ejb;
 
+import com.nnpcgroup.comd.cosm.entitlement.entity.JvProduction;
+
 /**
  *
  * @author 18359
  * @param <T>
  */
-public interface JvProductionServices<T> extends ProductionServices<T> {
+public interface JvProductionServices<T extends JvProduction> extends ProductionServices<T> {
     
 }

@@ -6,6 +6,7 @@
 package com.nnpcgroup.comd.cosm.entitlement.ejb;
 
 import com.nnpcgroup.comd.cosm.entitlement.entity.ContractStream;
+import com.nnpcgroup.comd.cosm.entitlement.entity.Production;
 import java.util.List;
 
 /**
@@ -13,7 +14,7 @@ import java.util.List;
  * @author 18359
  * @param <T>
  */
-public interface ProductionServices<T> extends AbstractCrudServices<T> {
+public interface ProductionServices<T extends Production> extends AbstractCrudServices<T> {
 
     public abstract List<T> findByYearAndMonth(int year, int month);
 

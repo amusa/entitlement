@@ -6,13 +6,14 @@
 package com.nnpcgroup.comd.cosm.entitlement.ejb.impl;
 
 import com.nnpcgroup.comd.cosm.entitlement.ejb.JvProductionServices;
+import com.nnpcgroup.comd.cosm.entitlement.entity.JvProduction;
 
 /**
  *
  * @author 18359
  * @param <T>
  */
-public abstract class JvProductionServicesImpl<T> extends ProductionServicesImpl<T> implements JvProductionServices<T> {
+public abstract class JvProductionServicesImpl<T extends JvProduction> extends ProductionServicesImpl<T> implements JvProductionServices<T> {
 
     public JvProductionServicesImpl(Class<T>entityClass) {
         super(entityClass);

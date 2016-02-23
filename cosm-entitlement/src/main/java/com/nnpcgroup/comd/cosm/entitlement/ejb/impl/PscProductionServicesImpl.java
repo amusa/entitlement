@@ -6,13 +6,14 @@
 package com.nnpcgroup.comd.cosm.entitlement.ejb.impl;
 
 import com.nnpcgroup.comd.cosm.entitlement.ejb.PscProductionServices;
+import com.nnpcgroup.comd.cosm.entitlement.entity.PscProduction;
 
 /**
  *
  * @author 18359
  * @param <T>
  */
-public abstract class PscProductionServicesImpl<T> extends ProductionServicesImpl<T> implements PscProductionServices<T> {
+public abstract class PscProductionServicesImpl<T extends PscProduction> extends ProductionServicesImpl<T> implements PscProductionServices<T> {
 
     public PscProductionServicesImpl(Class<T>entityClass) {
         super(entityClass);

@@ -3,14 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.nnpcgroup.comd.cosm.entitlement.ejb;
+package com.nnpcgroup.comd.cosm.entitlement.controller;
 
-import com.nnpcgroup.comd.cosm.entitlement.entity.PscActualProduction;
+import java.util.List;
 
 /**
  *
  * @author 18359
  */
-public interface PscActualProductionServices extends PscProductionServices<PscActualProduction> {
 
+public interface MonthGenerator {
+    public List<PeriodMonth> generateMonths(int year);
+    
 }

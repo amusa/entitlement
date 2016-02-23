@@ -16,7 +16,7 @@
 
         <ui:define name="body">
             <div id="prod_div" class="row">                
-                <h:form id="jvProdForm">
+                <h:form id="jvForecastListForm">
                     <p:growl id="msgs" showDetail="false" />
                     <p:panelGrid id="paramPanel" columns="2">
                         <h:outputText value="Year"/>
@@ -27,13 +27,13 @@
                                      class="form-control input-sm m-b-10" pt:placeholder="Month"
                                      />
                         <p:commandButton  value="Get Forecast From SAP"  class="btn" disabled="true" >
-                            <p:ajax event="click" update="prodTable"  />
+                            <p:ajax event="click" update="forecastTable"  />
                         </p:commandButton>
 
                         <p:commandButton  value="Manual Entry"  class="btn" >
                             <p:ajax listener="#{jvProdController.processManualEntry}" event="click"
                                     process="paramPanel periodYear periodMonth"
-                                    update="jvProdForm manualGroup manualForm prod_panel prodTable manualGroup manualForm  csOptions prodVolume msgs"/>
+                                    update="jvForecastListForm manualGroup manualForm prod_panel forecastTable manualGroup manualForm  csOptions prodVolume msgs"/>
 
                         </p:commandButton>
                     </p:panelGrid>   
@@ -55,13 +55,13 @@
                                 <p:ajax event="change" update="addProduction" />
                             </p:inputText>
 
-<!--                            <h:outputText value="Lifting (Nom)"/>
-                            <p:inputText id="lifting" value = "#{jvProdController.currentProduction.lifting}"  class="form-control input-sm m-b-10" pt:placeholder="Gross Production">
-
-                            </p:inputText>-->
+                            <!--                            <h:outputText value="Lifting (Nom)"/>
+                                                        <p:inputText id="lifting" value = "#{jvProdController.currentProduction.lifting}"  class="form-control input-sm m-b-10" pt:placeholder="Gross Production">
+                            
+                                                        </p:inputText>-->
 
                             <p:commandButton  id="addProduction" value="Add"  disabled="#{jvProdController.currentProduction.productionVolume eq null}">                           
-                                <p:ajax listener="#{jvProdController.addProductionItem}" update="manualGroup prod_panel prodTable  csOptions msgs" 
+                                <p:ajax listener="#{jvProdController.addProductionItem}" update="manualGroup prod_panel forecastTable  csOptions msgs" 
                                         process="paramPanel periodYear periodMonth manualGroup manualForm  csOptions prodVolume"/>                            
                             </p:commandButton>
 
@@ -73,7 +73,16 @@
 
                     <h:panelGroup id="prod_panel">
 
-                        <p:dataTable id="prodTable" var="prod" value="#{jvProdController.productions}" class="table table-bordered table-hover tile">                                                    
+                        <p:dataTable id="forecastTable" var="prod" value="#{jvProdController.dataModel}" 
+                                     selectionMode="single" selection="#{jvProdController.currentProduction}"
+                                     paginator="true"
+                                     rowKey="#{prod.id}"
+                                     rows="10"
+                                     rowsPerPageTemplate="10,20,30,40,50"
+                                     class="table table-bordered table-hover tile">
+                            <p:ajax event="rowSelect"   update="actualizeButton createButton viewButton editButton deleteButton"/>
+                            <p:ajax event="rowUnselect" update="actualizeButton createButton viewButton editButton deleteButton"/>
+
                             <p:column >                                                        
                                 <f:facet name="header">
                                     <h:outputText value="Year" />   
@@ -146,6 +155,13 @@
                                 </f:facet>                                                            
                                 <h:outputText value="#{prod.closingStock}"/>
                             </p:column>
+                            <f:facet name="footer">
+                                <p:commandButton id="actualizeButton" icon="ui-icon-plus"   value="#{bundle.Actualize}" actionListener="#{jvActualController.actualize(jvProdController.currentProduction)}" update="JvActualizeCreateForm" oncomplete="PF('JvActualizeCreateDlg').show()" disabled="#{empty jvProdController.currentProduction}"/>
+                                <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{jvProdController.prepareCreate}" update=":JvCreateForm" oncomplete="PF('JvCreateDialog').show()"/>
+                                <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{bundle.View}" update=":JvViewForm" oncomplete="PF('JvViewDialog').show()" disabled="#{empty jvProdController.currentProduction}"/>
+                                <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{bundle.Edit}" update=":JvEditForm" oncomplete="PF('JvEditDialog').show()" disabled="#{empty jvProdController.currentProduction}"/>
+                                <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{bundle.Delete}" actionListener="#{jvProdController.destroy}" update="forecastTable" disabled="#{empty jvProdController.currentProduction}"/>
+                            </f:facet>
                         </p:dataTable>
 
                     </h:panelGroup>
@@ -165,7 +181,10 @@
 
                 </h:form>
             </div>
-
+            <ui:include src="_actualize-create.xhtml"/>
+            <ui:include src="_forecast-create.xhtml"/>
+            <ui:include src="_forecast-edit.xhtml"/>
+            <ui:include src="_forecast-view.xhtml"/>
 
         </ui:define>
     </ui:composition>

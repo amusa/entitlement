@@ -6,8 +6,8 @@
 package com.nnpcgroup.comd.cosm.entitlement.controller;
 
 import com.nnpcgroup.comd.cosm.entitlement.controller.util.JsfUtil;
+import com.nnpcgroup.comd.cosm.entitlement.controller.util.ProductionDataModel;
 import com.nnpcgroup.comd.cosm.entitlement.ejb.JvForecastProductionServices;
-import com.nnpcgroup.comd.cosm.entitlement.ejb.impl.JvForecastProductionBean;
 import com.nnpcgroup.comd.cosm.entitlement.entity.JvForecastProduction;
 
 import javax.inject.Named;
@@ -34,13 +34,14 @@ public class JvProductionController implements Serializable {
 
     private static final long serialVersionUID = -7596150432081506756L;
     private static final Logger log = Logger.getLogger(JvProductionController.class.getName());
-    
+
     @EJB
     private JvForecastProductionServices productionBean;
 
     private JvForecastProduction currentProduction;
 
     private List<JvForecastProduction> productions;
+    private ProductionDataModel dataModel;
 
     private boolean manualEntry = false;
     private Integer periodYear;
@@ -54,9 +55,18 @@ public class JvProductionController implements Serializable {
         // log.log(Level.INFO, "Entitlement calculated: {0}", entitlement.calculateEntitlement());
     }
 
+    public ProductionDataModel getDataModel() {
+        loadProductions();
+        dataModel = new ProductionDataModel(productions);
+        return dataModel;
+    }
+
     public JvForecastProduction getCurrentProduction() {
         log.log(Level.INFO, "ProductionController::getCurrentProduction returning...",
                 currentProduction);
+        if (currentProduction == null) {
+            currentProduction = productionBean.createInstance();
+        }
         return currentProduction;
     }
 
@@ -67,9 +77,7 @@ public class JvProductionController implements Serializable {
 
     public List<JvForecastProduction> getProductions() {
         log.info("ProductionController::getProductions called...");
-        if (productions == null && periodYear != null && periodMonth != null) {
-            productions = productionBean.findByYearAndMonth(periodYear, periodMonth);
-        }
+        loadProductions();
         return productions;
     }
 
@@ -110,14 +118,14 @@ public class JvProductionController implements Serializable {
         persist(JsfUtil.PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("ProductionDeleted"));
         if (!JsfUtil.isValidationFailed()) {
             currentProduction = null; // Remove selection
-            productions = null;    // Invalidate list of items to trigger re-query.
+           // productions = null;    // Invalidate list of items to trigger re-query.
         }
     }
 
     public void create() {
         persist(JsfUtil.PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("ProductionCreated"));
         if (!JsfUtil.isValidationFailed()) {
-            productions = null;    // Invalidate list of items to trigger re-query.
+            //productions = null;    // Invalidate list of items to trigger re-query.
         }
     }
 
@@ -153,8 +161,10 @@ public class JvProductionController implements Serializable {
         }
     }
 
-    public void loadProductions() {
-        productions = productionBean.findByYearAndMonth(periodYear, periodMonth);
+    public void loadProductions() {        
+        if (productions == null && periodYear != null && periodMonth != null) {
+            productions = productionBean.findByYearAndMonth(periodYear, periodMonth);
+        }
     }
 
     public void addProductionItem() {

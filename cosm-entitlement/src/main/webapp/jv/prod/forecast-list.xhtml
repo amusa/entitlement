@@ -23,11 +23,20 @@
                         <h:outputText value="Year"/>
                         <p:inputText id="periodYear" value="#{jvProdController.periodYear}" 
                                      class="form-control input-sm m-b-10" pt:placeholder="Year"/>
+                        <h:outputText value="Year"/>
+                        <p:selectOneMenu id="yearSelect" value="#{jvProdController.periodYear}" class="select" >                                              
+                            <f:selectItems value="#{generalController.yearsAvailableSelectOne}" var="year" itemValue="#{year.value}"/>   
+                            <p:ajax listener="#{generalController.yearChanged}" event="change" update="monthSelect"/>     
+                        </p:selectOneMenu>
                         <h:outputText value="Month"/>
                         <p:inputText id="periodMonth" value = "#{jvProdController.periodMonth}" 
                                      class="form-control input-sm m-b-10" pt:placeholder="Month"
                                      />
-
+                        <h:outputText value="Month"/>
+                        <p:selectOneMenu id="monthSelect" value="#{jvProdController.periodMonth}" class="select">                                              
+                            <f:selectItems value="#{generalController.months}" var="mth" itemValue="#{mth.month}" itemLabel="#{mth.monthStr}"/>   
+                            <p:ajax event="change" process="@this"/>     
+                        </p:selectOneMenu>
                         <p:commandButton  value="Get Forecast"  class="btn" >
                             <p:ajax listener="#{jvProdController.loadProductions}" event="click"
                                     process="ActualParamPanel periodYear periodMonth"
@@ -40,7 +49,7 @@
                     <!-- Multi Column -->
                     <h:panelGroup id="forecast_panel">
 
-                        <p:dataTable id="forecastTable" var="prod" value="#{jvProdController.productions}" 
+                        <p:dataTable id="forecastTable" var="prod" value="#{jvProdController.dataModel}" 
                                      selectionMode="single" selection="#{jvProdController.currentProduction}"
                                      paginator="true"
                                      rowKey="#{prod.id}"
@@ -79,7 +88,9 @@
                                 <f:facet name="header">
                                     <h:outputText value="Gross Prod" />
                                 </f:facet>                                                            
-                                <h:outputText value="#{prod.grossProduction}"/>
+                                <h:outputText value="#{prod.grossProduction}">
+                                    <f:convertNumber pattern="###,###,###.####" />
+                                </h:outputText>
                             </p:column>                            
                             <p:column>
                                 <f:facet name="header">

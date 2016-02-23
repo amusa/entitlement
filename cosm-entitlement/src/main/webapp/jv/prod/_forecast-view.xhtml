@@ -27,14 +27,18 @@
                         <p:outputLabel id="dailyProd" value = "#{jvProdController.currentProduction.productionVolume}"  class="form-control input-sm m-b-10" pt:placeholder="Gross Production"
                                        />
                         <p:outputLabel value="Gross Prod " for="grossProd" />
-                        <p:outputLabel id="grossProd" value = "#{jvProdController.currentProduction.grossProduction}"  class="form-control input-sm m-b-10" pt:placeholder="Gross Production"
-                                       />       
+                        <p:outputLabel id="grossProd" value = "#{jvProdController.currentProduction.grossProduction}"  class="form-control input-sm m-b-10" pt:placeholder="Gross Production">
+                            <f:convertNumber pattern="###,###,###.####" />
+                        </p:outputLabel>
+
                         <p:outputLabel value="Own Entitlement" for="ownShareEntitlement" />
-                        <p:outputLabel id="ownShareEntitlement" value="#{jvProdController.currentProduction.ownShareEntitlement}" title="Own Entitlement" />
+                        <p:outputLabel id="ownShareEntitlement" value="#{jvProdController.currentProduction.ownShareEntitlement}" title="Own Entitlement" >
+                            <f:convertNumber pattern="###,###,###.####" />
+                        </p:outputLabel>
 
                         <p:outputLabel value="Partner Entitlement" for="partnerShareEntitlement" />
                         <p:outputLabel id="partnerShareEntitlement" value="#{jvProdController.currentProduction.partnerShareEntitlement}" title="PartnerShareEntitlement" />
-                        
+
                         <p:outputLabel value="Opening Stock" for="openingStock" />
                         <p:outputLabel id="openingStock" value="#{jvProdController.currentProduction.openingStock}" title="Opening Stock" />
 

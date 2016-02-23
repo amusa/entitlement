@@ -19,7 +19,7 @@ import javax.ejb.Stateless;
  */
 @Stateless
 @Local(PscActualProductionServices.class)
-public class PscActualProductionBean extends PscProductionServicesImpl<PscActualProduction> implements PscActualProductionServices<PscActualProduction> {
+public class PscActualProductionBean extends PscProductionServicesImpl<PscActualProduction> implements PscActualProductionServices {
 
     private static final Logger log = Logger.getLogger(PscActualProductionBean.class.getName());
 

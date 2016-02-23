@@ -5,11 +5,12 @@
  */
 package com.nnpcgroup.comd.cosm.entitlement.ejb;
 
+import com.nnpcgroup.comd.cosm.entitlement.entity.PscForecastProduction;
+
 /**
  *
  * @author 18359
- * @param <T>
  */
-public interface PscForecastProductionServices<T> extends PscProductionServices<T> {
+public interface PscForecastProductionServices extends PscProductionServices<PscForecastProduction> {
     
 }

@@ -14,5 +14,6 @@ import java.util.List;
 
 public interface MonthGenerator {
     public List<PeriodMonth> generateMonths(int year);
+    public PeriodMonth find(Integer m);
     
 }

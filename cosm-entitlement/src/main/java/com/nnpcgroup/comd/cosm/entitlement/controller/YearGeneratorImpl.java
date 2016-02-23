@@ -5,6 +5,7 @@
  */
 package com.nnpcgroup.comd.cosm.entitlement.controller;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -18,9 +19,10 @@ import javax.enterprise.context.Dependent;
  * @author 18359
  */
 @Dependent
-public class YearGeneratorImpl implements YearGenerator {
+public class YearGeneratorImpl implements YearGenerator, Serializable {
 
     private static final Logger log = Logger.getLogger(YearGeneratorImpl.class.getName());
+    private static final long serialVersionUID = 6722112581626695924L;
 
     @Override
     public List<Integer> generateYears(int level) {

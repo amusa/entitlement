@@ -162,7 +162,7 @@ public class JvProductionController implements Serializable {
     }
 
     public void loadProductions() {        
-        if (productions == null && periodYear != null && periodMonth != null) {
+        if (periodYear != null && periodMonth != null) {
             productions = productionBean.findByYearAndMonth(periodYear, periodMonth);
         }
     }
@@ -236,6 +236,8 @@ public class JvProductionController implements Serializable {
     }
 
     public Integer getPeriodMonth() {
+        log.log(Level.INFO, "************JvProductionController::getPeriodMonth called. returning {0}...", periodMonth);
+        
         return periodMonth;
     }
 

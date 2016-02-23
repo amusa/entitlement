@@ -10,6 +10,9 @@ import javax.faces.model.SelectItem;
 public class JsfUtil {
 
     public static SelectItem[] getSelectItems(List<?> entities, boolean selectOne) {
+        if (entities == null) {
+            return null;
+        }
         int size = selectOne ? entities.size() + 1 : entities.size();
         SelectItem[] items = new SelectItem[size];
         int i = 0;

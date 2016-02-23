@@ -5,6 +5,7 @@
  */
 package com.nnpcgroup.comd.cosm.entitlement.controller;
 
+import java.io.Serializable;
 import java.text.DateFormatSymbols;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -18,9 +19,10 @@ import javax.enterprise.context.Dependent;
  * @author 18359
  */
 @Dependent
-public class MonthGeneratorImpl implements MonthGenerator {
+public class MonthGeneratorImpl implements MonthGenerator,Serializable {
     
     private static final Logger log = Logger.getLogger(MonthGeneratorImpl.class.getName());
+    private static final long serialVersionUID = -789804447093907772L;
     
     @Override
     public List<PeriodMonth> generateMonths(int year) {
@@ -50,6 +52,15 @@ public class MonthGeneratorImpl implements MonthGenerator {
         }
         log.log(Level.INFO, "returning months {0}", periodMonths);
         return periodMonths;
+    }
+    
+    public PeriodMonth find(Integer m){
+        DateFormatSymbols dfs = new DateFormatSymbols();
+        String[] monthSymbols = dfs.getMonths();
+        PeriodMonth pm=new PeriodMonth();
+        pm.setMonth(m);
+        pm.setMonthStr(monthSymbols[m-1]);
+        return pm;
     }
     
 }

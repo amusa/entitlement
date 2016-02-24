@@ -13,17 +13,19 @@
             <h:form id="JvCreateForm">
                 <h:panelGroup id="display">
                     <p:panelGrid id="ActualParamPanel" columns="2" rendered="#{jvProdController.currentProduction != null}">
+                        
                         <p:outputLabel value="Year" for="periodYear"/>
-                        <p:inputText id="periodYear" value="#{jvProdController.currentProduction.periodYear}" 
-                                     class="form-control input-sm m-b-10" pt:placeholder="Year">
-                            <p:ajax />
-                        </p:inputText>
+                        <p:selectOneMenu id="periodYear" value="#{jvProdController.currentProduction.periodYear}" class="select" >                                              
+                            <f:selectItems value="#{generalController.yearsAvailableSelectOne}" var="year" itemValue="#{year.value}"/>   
+                            <p:ajax listener="#{generalController.yearChanged}" event="change" update="periodMonth"/>     
+                        </p:selectOneMenu>
+                        
                         <p:outputLabel value="Month" for="periodMonth"/>
-                        <p:inputText id="periodMonth" value = "#{jvProdController.currentProduction.periodMonth}" 
-                                     class="form-control input-sm m-b-10" pt:placeholder="Month"
-                                     >
-                            <p:ajax/>
-                        </p:inputText>
+                        <p:selectOneMenu id="periodMonth" value="#{jvProdController.currentProduction.periodMonth}" class="select">                                              
+                            <f:selectItem itemValue="#{null}" itemLabel="--select--" />
+                            <f:selectItems value="#{generalController.months}" var="mth" itemValue="#{mth.month}" itemLabel="#{mth.monthStr}" />   
+                            <p:ajax />     
+                        </p:selectOneMenu>
 
                         <p:outputLabel value="Asset Stream/Crude Type" for="csOptions"/>
                         <p:selectOneMenu id="csOptions" value="#{jvProdController.currentProduction.contractStream}" class="select" >
@@ -65,7 +67,7 @@
 
                     </p:panelGrid>
                     <p:commandButton actionListener="#{jvProdController.create}" value="#{bundle.Save}" update="display,:jvForecastListForm:forecastTable,:growl" oncomplete="handleSubmit(args,'JvCreateDialog');"/>
-                    <p:commandButton value="#{bundle.Cancel}" onclick="JvCreateDialog.hide()"/>
+                    <p:commandButton actionListener="#{jvProdController.cancel}" value="#{bundle.Cancel}" onclick="JvCreateDialog.hide()" immediate="true"/>
 
                 </h:panelGroup>
             </h:form>

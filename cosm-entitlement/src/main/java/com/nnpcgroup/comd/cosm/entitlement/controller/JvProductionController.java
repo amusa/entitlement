@@ -12,17 +12,13 @@ import com.nnpcgroup.comd.cosm.entitlement.entity.JvForecastProduction;
 
 import javax.inject.Named;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.enterprise.context.SessionScoped;
-
-import javax.faces.event.AjaxBehaviorEvent;
 
 /**
  *
@@ -43,7 +39,6 @@ public class JvProductionController implements Serializable {
     private List<JvForecastProduction> productions;
     private ProductionDataModel dataModel;
 
-    private boolean manualEntry = false;
     private Integer periodYear;
     private Integer periodMonth;
 
@@ -59,11 +54,6 @@ public class JvProductionController implements Serializable {
     }
 
     public JvForecastProduction getCurrentProduction() {
-        log.log(Level.INFO, "ProductionController::getCurrentProduction returning...",
-                currentProduction);
-        if (currentProduction == null) {
-            currentProduction = productionBean.createInstance();
-        }
         return currentProduction;
     }
 
@@ -83,22 +73,6 @@ public class JvProductionController implements Serializable {
         this.productions = productions;
     }
 
-    @PostConstruct
-    public void postConstruct() {
-        log.log(Level.INFO, "JvProductionController::postConstructor initializing");
-    }
-
-    public void processManualEntry() {
-        log.info("JvProductionController::processManualEntry called...");
-        log.info("*******setting manualEntry to true********");
-
-        currentProduction = productionBean.createInstance();
-
-        setManualEntry(true);
-        loadProductions();
-
-    }
-
     public JvForecastProduction prepareCreate() {
         currentProduction = productionBean.createInstance();
         if (periodYear != null && periodMonth != null) {
@@ -113,16 +87,21 @@ public class JvProductionController implements Serializable {
         persist(JsfUtil.PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("ProductionDeleted"));
         if (!JsfUtil.isValidationFailed()) {
             dataModel.removeItem(currentProduction);
-            currentProduction = null; // Remove selection
-            // productions = null;    // Invalidate list of items to trigger re-query.
+            currentProduction = null;
         }
     }
 
     public void create() {
         persist(JsfUtil.PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("ProductionCreated"));
         if (!JsfUtil.isValidationFailed()) {
+            reset();
             loadProductions();
         }
+    }
+
+    public void cancel() {
+        reset();
+        loadProductions();
     }
 
     public void update() {
@@ -166,29 +145,7 @@ public class JvProductionController implements Serializable {
 
     public void refreshDataModel() {
         log.log(Level.INFO, "Refreshing DataModel...");
-        //if (dataModel == null) {
         dataModel = new ProductionDataModel(productions);
-
-        // }
-    }
-
-    public void addProductionItem() {
-        log.info("JvProductionController::addProductionItem called...");
-        log.log(Level.INFO, "year={0} month={1} contractStream={2} prodVolume={3}",
-                new Object[]{currentProduction.getPeriodYear(), currentProduction.getPeriodMonth(), currentProduction.getContractStream(), currentProduction.getProductionVolume()});
-
-        if (productions == null) {
-            productions = new ArrayList<>(); //TODO:use factory method
-        }
-        currentProduction.setPeriodYear(periodYear);
-        currentProduction.setPeriodMonth(periodMonth);
-
-        productionBean.enrich(currentProduction);
-
-        productions.add(currentProduction);
-
-        currentProduction = productionBean.createInstance();
-
     }
 
     public void productionVolumeChange() {
@@ -202,33 +159,9 @@ public class JvProductionController implements Serializable {
 
     }
 
-    public boolean isManualEntry() {
-        log.log(Level.INFO, "*******isManualEntry returning {0} ***********", manualEntry);
-        return manualEntry;
-    }
-
-    public void setManualEntry(boolean manualEntry) {
-        this.manualEntry = manualEntry;
-    }
-
-    public void fiscalListChanged(AjaxBehaviorEvent event) {
-        log.info("jvProductionController::fiscalListChanged called...");
-
-    }
-
-    public void saveProductions() {
-        log.log(Level.INFO, "************jvProductionController::saveProduction called...{0} records to be saved!",
-                productions.size());
-        productionBean.edit(productions);
-        reset();
-
-        JsfUtil.addSuccessMessage("JV Production Saved Successfully!");
-    }
-
     private void reset() {
-        productions = null;
-        currentProduction = productionBean.createInstance();
-        //setManualEntry(false);
+        //productions = null;
+        currentProduction = null;
     }
 
     public Integer getPeriodYear() {

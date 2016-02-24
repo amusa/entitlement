@@ -11,18 +11,6 @@
         <title><ui:insert name="title">Default Title</ui:insert></title>
         <h:outputStylesheet library="css" name="jsfcrud.css"/>
         <h:outputScript library="js" name="jsfcrud.js"/>
-
-        <!-- CSS -->
-        <!--        <h:outputStylesheet name="css/bootstrap.min.css"/>
-                <h:outputStylesheet name="css/animate.min.css"/>
-                <h:outputStylesheet name="css/font-awesome.min.css"/>
-                <h:outputStylesheet name="css/form.css"/>
-                <h:outputStylesheet name="css/calendar.css"/>
-                <h:outputStylesheet name="css/style.css"/>
-                <h:outputStylesheet name="css/icons.css"/>
-                <h:outputStylesheet name="css/generics.css"/>-->
-        <!--        <h:outputStylesheet name="css/bootstrap.min.css" />
-                <h:outputStylesheet name="css/bootstrap-theme.min.css" />-->
     </h:head>
 
     <h:body>
@@ -43,10 +31,10 @@
 
                     <p:menubar>
                         <p:menuitem value="#{bundle.Home}" outcome="/index" icon="ui-icon-home"/>
-                        <p:submenu label="#{bundle.Entitlement}">
-                            <p:menuitem value="Create Forecast" outcome="/faces/jv/prod/forecast-create.xhtml" />
+                        <p:submenu label="#{bundle.Entitlement}">                            
                             <p:menuitem value="Forecast List" outcome="/faces/jv/prod/forecast-list.xhtml" />
                             <p:menuitem value="Actualized" outcome="/faces/jv/prod/actualize-list.xhtml" />
+                            <p:menuitem value="Stock Adjustment" />
                         </p:submenu>
                         <p:submenu label="#{bundle.FiscalArrangements}">
                             <p:menuitem value="Joint Venture" outcome="/faces/jv/List.xhtml" />
@@ -76,9 +64,10 @@
                     <h:form>
                         <p:menu style="width: 95%;height: 100%">
                             <p:submenu label="Entitlement">
-                                <p:menuitem value="Create Forecast" url="/faces/jv/prod/forecast-create.xhtml" />
-                                <p:menuitem value="Forecast List" url="/faces/jv/prod/forecast-list.xhtml" />
-                                <p:menuitem value="Actualized" url="/faces/jv/prod/actualize-list.xhtml" />
+                                <p:menuitem value="Forecast" url="/faces/jv/prod/forecast-list.xhtml" />
+                                <p:menuitem value="Actualize" url="/faces/jv/prod/actualize-list.xhtml" />
+                                <p:menuitem value="Stock Adjustment" />
+                                
                             </p:submenu>
                             <p:submenu label="Fiscal Arrg">
                                 <p:menuitem value="Joint Venture" url="/faces/jv/List.xhtml" />

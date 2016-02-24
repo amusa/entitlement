@@ -32,6 +32,10 @@
                             <f:selectItems value="#{generalController.months}" var="mth" itemValue="#{mth.month}" itemLabel="#{mth.monthStr}" />   
                             <p:ajax />     
                         </p:selectOneMenu>
+                        
+                        <p:commandButton  value="Get Forecast From SAP"  class="btn" disabled="true" >
+                            <p:ajax event="click" update="forecastTable msgs"  />
+                        </p:commandButton>
 
                         <p:commandButton  value="Get Forecast"  class="btn" >
                             <p:ajax listener="#{jvProdController.loadProductions}" event="click"

@@ -52,12 +52,9 @@ public class JvProductionController implements Serializable {
      */
     public JvProductionController() {
         log.info("ProductionController::constructor activated...");
-        // log.log(Level.INFO, "Entitlement calculated: {0}", entitlement.calculateEntitlement());
     }
 
     public ProductionDataModel getDataModel() {
-        loadProductions();
-        dataModel = new ProductionDataModel(productions);
         return dataModel;
     }
 
@@ -94,14 +91,11 @@ public class JvProductionController implements Serializable {
     public void processManualEntry() {
         log.info("JvProductionController::processManualEntry called...");
         log.info("*******setting manualEntry to true********");
-        // currentProduction = new JvProduction();
-        if (periodYear == null || periodMonth == null) {
-            return;
-        }
+
         currentProduction = productionBean.createInstance();
-        log.log(Level.INFO, "ProductionBean instance = {0}", productionBean);
-        productions = productionBean.findByYearAndMonth(periodYear, periodMonth);
+
         setManualEntry(true);
+        loadProductions();
 
     }
 
@@ -115,17 +109,19 @@ public class JvProductionController implements Serializable {
     }
 
     public void destroy() {
+        log.log(Level.INFO, "Deleting {0}...", currentProduction);
         persist(JsfUtil.PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("ProductionDeleted"));
         if (!JsfUtil.isValidationFailed()) {
+            dataModel.removeItem(currentProduction);
             currentProduction = null; // Remove selection
-           // productions = null;    // Invalidate list of items to trigger re-query.
+            // productions = null;    // Invalidate list of items to trigger re-query.
         }
     }
 
     public void create() {
         persist(JsfUtil.PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("ProductionCreated"));
         if (!JsfUtil.isValidationFailed()) {
-            //productions = null;    // Invalidate list of items to trigger re-query.
+            loadProductions();
         }
     }
 
@@ -161,10 +157,19 @@ public class JvProductionController implements Serializable {
         }
     }
 
-    public void loadProductions() {        
+    public void loadProductions() {
         if (periodYear != null && periodMonth != null) {
             productions = productionBean.findByYearAndMonth(periodYear, periodMonth);
+            refreshDataModel();
         }
+    }
+
+    public void refreshDataModel() {
+        log.log(Level.INFO, "Refreshing DataModel...");
+        //if (dataModel == null) {
+        dataModel = new ProductionDataModel(productions);
+
+        // }
     }
 
     public void addProductionItem() {
@@ -181,7 +186,7 @@ public class JvProductionController implements Serializable {
         productionBean.enrich(currentProduction);
 
         productions.add(currentProduction);
-        //currentProduction = new JvProduction();
+
         currentProduction = productionBean.createInstance();
 
     }
@@ -237,7 +242,7 @@ public class JvProductionController implements Serializable {
 
     public Integer getPeriodMonth() {
         log.log(Level.INFO, "************JvProductionController::getPeriodMonth called. returning {0}...", periodMonth);
-        
+
         return periodMonth;
     }
 

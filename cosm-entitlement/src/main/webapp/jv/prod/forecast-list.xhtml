@@ -32,7 +32,7 @@
                             <f:selectItems value="#{generalController.months}" var="mth" itemValue="#{mth.month}" itemLabel="#{mth.monthStr}" />   
                             <p:ajax />     
                         </p:selectOneMenu>
-                        
+
                         <p:commandButton  value="Get Forecast"  class="btn" >
                             <p:ajax listener="#{jvProdController.loadProductions}" event="click"
                                     process="ActualParamPanel periodYear periodMonth"
@@ -78,7 +78,9 @@
                                 <f:facet name="header">
                                     <h:outputText value="Daily Prod (bpd)" />
                                 </f:facet>                                                            
-                                <h:outputText value="#{prod.productionVolume}"/>
+                                <h:outputText value="#{prod.productionVolume}">
+                                    <f:convertNumber pattern="###,###,###.####" />
+                                </h:outputText>
                             </p:column>
                             <p:column>
                                 <f:facet name="header">
@@ -92,43 +94,57 @@
                                 <f:facet name="header">
                                     <h:outputText value="Own Entitlement" />
                                 </f:facet>                                                            
-                                <h:outputText value="#{prod.ownShareEntitlement}"/>
+                                <h:outputText value="#{prod.ownShareEntitlement}" >
+                                    <f:convertNumber pattern="###,###,###.####" />
+                                </h:outputText>
                             </p:column>
                             <p:column>
                                 <f:facet name="header">
                                     <h:outputText value="Partner Entitlement" />
                                 </f:facet>                                                            
-                                <h:outputText value="#{prod.partnerShareEntitlement}"/>
+                                <h:outputText value="#{prod.partnerShareEntitlement}">
+                                    <f:convertNumber pattern="###,###,###.####" />
+                                </h:outputText>
                             </p:column>
                             <p:column>
                                 <f:facet name="header">
                                     <h:outputText value="Opening Stock" />
                                 </f:facet>                                                            
-                                <h:outputText value="#{prod.openingStock}"/>
+                                <h:outputText value="#{prod.openingStock}">
+                                    <f:convertNumber pattern="###,###,###.####" />
+                                </h:outputText>
                             </p:column>
                             <p:column>
                                 <f:facet name="header">
                                     <h:outputText value="Availability" />
                                 </f:facet>                                                            
-                                <h:outputText value="#{prod.availability}"/>
+                                <h:outputText value="#{prod.availability}">
+                                    <f:convertNumber pattern="###,###,###.####" />
+                                </h:outputText>
                             </p:column>
                             <p:column>
                                 <f:facet name="header">
                                     <h:outputText value="Lifting (Nom)" />
                                 </f:facet>                                                            
-                                <h:outputText value="#{prod.lifting}"/>
+                                <h:outputText value="#{prod.lifting}">
+                                    <f:convertNumber pattern="###,###,###.####" />
+                                </h:outputText>
                             </p:column>
                             <p:column>
                                 <f:facet name="header">
                                     <h:outputText value="Lifting Cargoes" />
                                 </f:facet>                                                            
-                                <h:outputText value="#{prod.cargos}"/>
+                                <h:outputText value="#{prod.cargos}">
+                                    <f:convertNumber pattern="###,###,###.####" />
+                                </h:outputText>
                             </p:column>
                             <p:column>
                                 <f:facet name="header">
                                     <h:outputText value="Closing Stock" />
                                 </f:facet>                                                            
-                                <h:outputText value="#{prod.closingStock}"/>
+                                <h:outputText value="#{prod.closingStock}">
+                                    <f:convertNumber pattern="###,###,###.####" />
+                                </h:outputText>
                             </p:column>
                             <f:facet name="footer">
                                 <p:commandButton id="actualizeButton" icon="ui-icon-plus"   value="#{bundle.Actualize}" actionListener="#{jvActualController.actualize(jvProdController.currentProduction)}" update="JvActualizeCreateForm" oncomplete="PF('JvActualizeCreateDlg').show()" disabled="#{empty jvProdController.currentProduction}"/>

@@ -39,5 +39,13 @@ public class ProductionDataModel<T extends Production> extends ListDataModel<T> 
 
         return prod;
     }
+    
+    public void addItem(T item){
+        ((List<T>)getWrappedData()).add(item);
+    }
+    
+    public void removeItem(T item){
+        ((List<T>)getWrappedData()).remove(item);
+    }
 
 }

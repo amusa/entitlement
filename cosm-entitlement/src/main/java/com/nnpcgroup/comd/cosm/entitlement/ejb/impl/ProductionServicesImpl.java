@@ -5,12 +5,14 @@
  */
 package com.nnpcgroup.comd.cosm.entitlement.ejb.impl;
 
+import com.nnpcgroup.comd.cosm.entitlement.controller.GeneralController;
 import com.nnpcgroup.comd.cosm.entitlement.ejb.ProductionServices;
 import com.nnpcgroup.comd.cosm.entitlement.entity.ContractStream;
 import com.nnpcgroup.comd.cosm.entitlement.entity.Production;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
@@ -31,6 +33,9 @@ public abstract class ProductionServicesImpl<T extends Production> extends Abstr
     @PersistenceContext(unitName = "entitlementPU")
     private EntityManager em;
 
+    @Inject
+    GeneralController genController;
+
     public ProductionServicesImpl(Class<T> entityClass) {
         super(entityClass);
     }
@@ -48,7 +53,6 @@ public abstract class ProductionServicesImpl<T extends Production> extends Abstr
     public T findByContractStreamPeriod(int year, int month, ContractStream cs) {
         CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
 
-// Query for a List of objects.
         T production;
 
         CriteriaQuery cq = cb.createQuery();
@@ -76,8 +80,6 @@ public abstract class ProductionServicesImpl<T extends Production> extends Abstr
     @Override
     public abstract T createInstance();
 
-    // public abstract T enrich(T production);
-    //public abstract T computeOpeningStock(T production);
     @Override
     public T computeOpeningStock(T production) {
         Production prod = (Production) getPreviousMonthProduction(production);
@@ -124,18 +126,15 @@ public abstract class ProductionServicesImpl<T extends Production> extends Abstr
     @Override
     public T computeGrossProduction(T production) {
         Double prodVolume = ((Production) production).getProductionVolume();
-        Double grossProd = prodVolume * 30; //TODO:Calculate days for each month
+        int days = genController.daysOfMonth(production.getPeriodYear(), production.getPeriodMonth());
+        Double grossProd = prodVolume * days;
+
+        log.log(Level.INFO, "Gross Production=>{0} * {1} = {2}", new Object[]{grossProd, days, grossProd});
+
         ((Production) production).setGrossProduction(grossProd);
         return production;
     }
 
-//    public ProductionBean() {
-//        super(Production.class);
-//        log.info("ProductionBean::constructor  called...");
-//    }
-    // public abstract List<? super Production> findByYearAndMonth(int year, int month);
-    //public abstract Production findByContractStreamPeriod(int year, int month, ContractStream cs);
-    //@Override
     @Override
     public T enrich(T production) {
         log.log(Level.INFO, "Enriching production {0}...", production);
@@ -161,8 +160,7 @@ public abstract class ProductionServicesImpl<T extends Production> extends Abstr
         availability = ownEntitlement + openingStock;
 
         ((Production) production).setAvailability(availability);
-         log.log(Level.INFO, "Availability {0}...", availability);
-
+        log.log(Level.INFO, "Availability {0}...", availability);
 
         return production;
     }
@@ -173,14 +171,13 @@ public abstract class ProductionServicesImpl<T extends Production> extends Abstr
         Integer cargoes;
         Double availability = ((Production) production).getAvailability();
 
-        cargoes = (int)(availability / 950000.0);
+        cargoes = (int) (availability / 950000.0);
         liftableVolume = cargoes * 950000.0;
 
         ((Production) production).setCargos(cargoes);
         ((Production) production).setLifting(liftableVolume);
-         log.log(Level.INFO, "liftable volume={0}, cargos={1}, availability={2}...",
-                 new Object[]{liftableVolume,cargoes, availability});
-       
+        log.log(Level.INFO, "liftable volume={0}, cargos={1}, availability={2}...",
+                new Object[]{liftableVolume, cargoes, availability});
 
         return production;
     }

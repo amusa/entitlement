@@ -38,7 +38,7 @@ public class JvForecastProductionBean extends JvProductionServicesImpl<JvForecas
         return new JvForecastProduction();
     }
 
-   @Override
+    @Override
     public List<JvForecastProduction> findByYearAndMonth(int year, int month) {
         log.log(Level.INFO, "Parameters: year={0}, month={1}", new Object[]{year, month});
 
@@ -67,15 +67,17 @@ public class JvForecastProductionBean extends JvProductionServicesImpl<JvForecas
         Double ownEntitlement;
         Double partnerEntitlement;
         Double grossProd = production.getGrossProduction();
-       
+
         grossProd = grossProd == null ? 0 : grossProd;
-        
+
         ownEntitlement = (grossProd
                 * et.getOwnEquity() * 0.01);
-
+        log.log(Level.INFO, "Own Entitlement=>{0} * {1} * 0.01 = {2}", new Object[]{grossProd,et.getOwnEquity(),ownEntitlement});
+        
         partnerEntitlement = (grossProd
                 * et.getPartnerEquity() * 0.01);
-
+        log.log(Level.INFO, "Partner Entitlement=>{0} * {1} * 0.01 = {2}", new Object[]{grossProd,et.getPartnerEquity(),partnerEntitlement});
+        
         production.setOwnShareEntitlement(ownEntitlement);
         production.setPartnerShareEntitlement(partnerEntitlement);
 

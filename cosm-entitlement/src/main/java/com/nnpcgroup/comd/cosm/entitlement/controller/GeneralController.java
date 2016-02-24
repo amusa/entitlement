@@ -1,17 +1,13 @@
 package com.nnpcgroup.comd.cosm.entitlement.controller;
 
 import com.nnpcgroup.comd.cosm.entitlement.controller.util.JsfUtil;
-import com.nnpcgroup.comd.cosm.entitlement.entity.FiscalArrangement;
 import java.io.Serializable;
+import java.time.YearMonth;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.enterprise.context.SessionScoped;
-import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
-import javax.faces.context.FacesContext;
-import javax.faces.convert.Converter;
-import javax.faces.convert.FacesConverter;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.model.SelectItem;
 import javax.inject.Inject;
@@ -19,7 +15,7 @@ import javax.inject.Named;
 
 @Named
 @SessionScoped
-public class GeneralController implements Serializable{
+public class GeneralController implements Serializable {
 
     private static final Logger log = Logger.getLogger(GeneralController.class.getName());
     private static final long serialVersionUID = 1090003054795280004L;
@@ -44,13 +40,13 @@ public class GeneralController implements Serializable{
     }
 
     public List<PeriodMonth> getMonths() {
-        log.log(Level.INFO, "returning months {0}...",months);
+        log.log(Level.INFO, "returning months {0}...", months);
         return months;
     }
 
     public SelectItem[] getMonthsAvailableSelectOne() {
         log.log(Level.INFO, "returning getMonthsAvailableSelectOne...");
-        
+
         return JsfUtil.getSelectItems(months, true);
     }
 
@@ -60,49 +56,54 @@ public class GeneralController implements Serializable{
 
         months = monthGen.generateMonths(year);
     }
-    
-    public PeriodMonth getPeriodMonth(Integer month){
+
+    public PeriodMonth getPeriodMonth(Integer month) {
         return monthGen.find(month);
     }
 
-    @FacesConverter(forClass = PeriodMonth.class)
-    public static class PeriodMonthConverter implements Converter {
-
-        @Override
-        public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
-            if (value == null || value.length() == 0) {
-                return null;
-            }
-            GeneralController controller = (GeneralController) facesContext.getApplication().getELResolver().
-                    getValue(facesContext.getELContext(), null, "generalController");
-
-            return controller.getPeriodMonth(getKey(value));
-        }
-
-        java.lang.Integer getKey(String value) {
-            java.lang.Integer key;
-            key = Integer.valueOf(value);
-            return key;
-        }
-
-        String getStringKey(java.lang.Integer value) {
-            StringBuilder sb = new StringBuilder();
-            sb.append(value);
-            return sb.toString();
-        }
-
-        @Override
-        public String getAsString(FacesContext facesContext, UIComponent component, Object object) {
-            if (object == null) {
-                return null;
-            }
-            if (object instanceof PeriodMonth) {
-                PeriodMonth o = (PeriodMonth) object;
-                return getStringKey(o.getMonth());
-            } else {
-                throw new IllegalArgumentException("object " + object + " is of type " + object.getClass().getName() + "; expected type: " + FiscalArrangement.class.getName());
-            }
-        }
-
+    public Integer daysOfMonth(int year, int month) {
+        YearMonth yearMonthObject = YearMonth.of(year, month);
+        return yearMonthObject.lengthOfMonth();
     }
+
+//    @FacesConverter(forClass = PeriodMonth.class)
+//    public static class PeriodMonthConverter implements Converter {
+//
+//        @Override
+//        public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
+//            if (value == null || value.length() == 0) {
+//                return null;
+//            }
+//            GeneralController controller = (GeneralController) facesContext.getApplication().getELResolver().
+//                    getValue(facesContext.getELContext(), null, "generalController");
+//
+//            return controller.getPeriodMonth(getKey(value));
+//        }
+//
+//        java.lang.Integer getKey(String value) {
+//            java.lang.Integer key;
+//            key = Integer.valueOf(value);
+//            return key;
+//        }
+//
+//        String getStringKey(java.lang.Integer value) {
+//            StringBuilder sb = new StringBuilder();
+//            sb.append(value);
+//            return sb.toString();
+//        }
+//
+//        @Override
+//        public String getAsString(FacesContext facesContext, UIComponent component, Object object) {
+//            if (object == null) {
+//                return null;
+//            }
+//            if (object instanceof PeriodMonth) {
+//                PeriodMonth o = (PeriodMonth) object;
+//                return getStringKey(o.getMonth());
+//            } else {
+//                throw new IllegalArgumentException("object " + object + " is of type " + object.getClass().getName() + "; expected type: " + FiscalArrangement.class.getName());
+//            }
+//        }
+//
+//    }
 }

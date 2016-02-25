@@ -17,7 +17,7 @@
         <ui:define name="body">
             <div class="row">   
 
-                <h:form id="jvForecastListForm">                   
+                <h:form id="jvProdListForm">                   
                     <p:growl id="msgs" showDetail="false" />
                     <p:panelGrid id="ActualParamPanel" columns="2">
                         <h:outputText value="Year"/>
@@ -34,13 +34,13 @@
                         </p:selectOneMenu>
                         
                         <p:commandButton  value="Get Forecast From SAP"  class="btn" disabled="true" >
-                            <p:ajax event="click" update="forecastTable msgs"  />
+                            <p:ajax event="click" update="prodTable msgs"  />
                         </p:commandButton>
 
                         <p:commandButton  value="Get Forecast"  class="btn" >
                             <p:ajax listener="#{jvProdController.loadProductions}" event="click"
                                     process="ActualParamPanel periodYear periodMonth"
-                                    update="forecast_panel forecastTable msgs"/>
+                                    update="forecast_panel prodTable msgs"/>
 
                         </p:commandButton>
                     </p:panelGrid>
@@ -49,7 +49,7 @@
                     <!-- Multi Column -->
                     <h:panelGroup id="forecast_panel">
 
-                        <p:dataTable id="forecastTable" var="prod" value="#{jvProdController.dataModel}" 
+                        <p:dataTable id="prodTable" var="prod" value="#{jvProdController.dataModel}" 
                                      selectionMode="single" selection="#{jvProdController.currentProduction}"
                                      paginator="true"
                                      rowKey="#{prod.id}"
@@ -83,7 +83,7 @@
                                     <h:outputText value="Daily Prod (bpd)" />
                                 </f:facet>                                                            
                                 <h:outputText value="#{prod.productionVolume}">
-                                    <f:convertNumber pattern="###,###,###.####" />
+                                    <f:convertNumber maxFractionDigits="2" groupingUsed="true" />
                                 </h:outputText>
                             </p:column>
                             <p:column>
@@ -99,7 +99,7 @@
                                     <h:outputText value="Own Entitlement" />
                                 </f:facet>                                                            
                                 <h:outputText value="#{prod.ownShareEntitlement}" >
-                                    <f:convertNumber pattern="###,###,###.####" />
+                                    <f:convertNumber maxFractionDigits="2" groupingUsed="true" />
                                 </h:outputText>
                             </p:column>
                             <p:column>
@@ -155,7 +155,7 @@
                                 <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{jvProdController.prepareCreate}" update=":JvCreateForm" oncomplete="PF('JvCreateDialog').show()"/>
                                 <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{bundle.View}" update=":JvViewForm" oncomplete="PF('JvViewDialog').show()" disabled="#{empty jvProdController.currentProduction}"/>
                                 <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{bundle.Edit}" update=":JvEditForm" oncomplete="PF('JvEditDialog').show()" disabled="#{empty jvProdController.currentProduction}"/>
-                                <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{bundle.Delete}" actionListener="#{jvProdController.destroy}" update="forecastTable" disabled="#{empty jvProdController.currentProduction}"/>
+                                <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{bundle.Delete}" actionListener="#{jvProdController.destroy}" update="prodTable" disabled="#{empty jvProdController.currentProduction}"/>
                             </f:facet>
                         </p:dataTable>
 

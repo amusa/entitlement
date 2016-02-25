@@ -16,25 +16,31 @@
 
         <ui:define name="body">
             <div class="row">                
-                <h:form id="jvActualListForm">
+                <h:form id="jvProdListForm">
                     <p:growl id="msgs" showDetail="false" />
+
                     <p:panelGrid id="ActualParamPanel" columns="2">
                         <h:outputText value="Year"/>
-                        <p:inputText id="periodYear" value="#{jvActualController.periodYear}" 
-                                     class="form-control input-sm m-b-10" pt:placeholder="Year">
-                            <p:ajax/>
-                        </p:inputText>
-                        <h:outputText value="Month"/>
-                        <p:inputText id="periodMonth" value = "#{jvActualController.periodMonth}" 
-                                     class="form-control input-sm m-b-10" pt:placeholder="Month"
-                                     >
-                            <p:ajax/>
-                        </p:inputText>
+                        <p:selectOneMenu id="periodYear" value="#{jvActualController.periodYear}" class="select" >                                              
+                            <f:selectItems value="#{generalController.yearsAvailableSelectOne}" var="year" itemValue="#{year.value}"/>   
+                            <p:ajax listener="#{generalController.yearChanged}" event="change" update="periodMonth"/>     
+                        </p:selectOneMenu>
 
-                        <p:commandButton  value="Get Actualized Production"  class="btn" >
+                        <h:outputText value="Month"/>
+                        <p:selectOneMenu id="periodMonth" value="#{jvActualController.periodMonth}" class="select">                                              
+                            <f:selectItem itemValue="#{null}" itemLabel="--select--" />
+                            <f:selectItems value="#{generalController.months}" var="mth" itemValue="#{mth.month}" itemLabel="#{mth.monthStr}" />   
+                            <p:ajax />     
+                        </p:selectOneMenu>
+
+                        <p:commandButton  value="Get Actuals From SAP"  class="btn" disabled="true" >
+                            <p:ajax event="click" update="prodTable msgs"  />
+                        </p:commandButton>
+
+                        <p:commandButton  value="Get Actuals"  class="btn" >
                             <p:ajax listener="#{jvActualController.loadProductions}" event="click"
                                     process="ActualParamPanel periodYear periodMonth"
-                                    update="actual_panel actualTable msgs"/>
+                                    update="actual_panel prodTable msgs"/>
 
                         </p:commandButton>
                     </p:panelGrid>
@@ -43,7 +49,7 @@
 
                     <h:panelGroup id="actual_panel">
 
-                        <p:dataTable id="actualTable" var="prod" value="#{jvActualController.productions}" 
+                        <p:dataTable id="prodTable" var="prod" value="#{jvActualController.productions}" 
                                      selectionMode="single" selection="#{jvActualController.currentProduction}"
                                      paginator="true"
                                      rowKey="#{prod.id}"
@@ -77,53 +83,69 @@
                                 <f:facet name="header">
                                     <h:outputText value="Daily Prod (bpd)" />
                                 </f:facet>                                                            
-                                <h:outputText value="#{prod.productionVolume}"/>
+                                <h:outputText value="#{prod.productionVolume}">
+                                    <f:convertNumber pattern="###,###,###.####" />
+                                </h:outputText>
                             </p:column>
                             <p:column>
                                 <f:facet name="header">
                                     <h:outputText value="Gross Prod" />
                                 </f:facet>                                                            
-                                <h:outputText value="#{prod.grossProduction}"/>
+                                <h:outputText value="#{prod.grossProduction}">
+                                    <f:convertNumber pattern="###,###,###.####" />
+                                </h:outputText>
                             </p:column>
                             <p:column>
                                 <f:facet name="header">
                                     <h:outputText value="Stock Adjustment" />
                                 </f:facet>                                                            
-                                <h:outputText value="#{prod.stockAdjustment}"/>
+                                <h:outputText value="#{prod.stockAdjustment}">
+                                    <f:convertNumber pattern="###,###,###.####" />
+                                </h:outputText>
                             </p:column>                            
                             <p:column>
                                 <f:facet name="header">
                                     <h:outputText value="Own Entitlement" />
                                 </f:facet>                                                            
-                                <h:outputText value="#{prod.ownShareEntitlement}"/>
+                                <h:outputText value="#{prod.ownShareEntitlement}">
+                                    <f:convertNumber pattern="###,###,###.####" />
+                                </h:outputText>
                             </p:column>
                             <p:column>
                                 <f:facet name="header">
                                     <h:outputText value="Partner Entitlement" />
                                 </f:facet>                                                            
-                                <h:outputText value="#{prod.partnerShareEntitlement}"/>
+                                <h:outputText value="#{prod.partnerShareEntitlement}">
+                                    <f:convertNumber pattern="###,###,###.####" />
+                                </h:outputText>
                             </p:column>
                             <p:column>
                                 <f:facet name="header">
                                     <h:outputText value="Opening Stock" />
                                 </f:facet>                                                            
-                                <h:outputText value="#{prod.openingStock}"/>
+                                <h:outputText value="#{prod.openingStock}">
+                                    <f:convertNumber pattern="###,###,###.####" />
+                                </h:outputText>
                             </p:column>
                             <p:column>
                                 <f:facet name="header">
                                     <h:outputText value="Availability" />
                                 </f:facet>                                                            
-                                <h:outputText value="#{prod.availability}"/>
+                                <h:outputText value="#{prod.availability}">
+                                    <f:convertNumber pattern="###,###,###.####" />
+                                </h:outputText>
                             </p:column>                            
                             <p:column>
                                 <f:facet name="header">
                                     <h:outputText value="Lifting (Actual)" />
                                 </f:facet>                                                            
-                                <h:outputText value="#{prod.lifting}"/>
+                                <h:outputText value="#{prod.lifting}">
+                                    <f:convertNumber pattern="###,###,###.####" />
+                                </h:outputText>
                             </p:column>
                             <p:column>
                                 <f:facet name="header">
-                                    <h:outputText value="Lifting Cargoes" />
+                                    <h:outputText value="Lifting Cargoes" />                                                                           
                                 </f:facet>                                                            
                                 <h:outputText value="#{prod.cargos}"/>
                             </p:column>
@@ -131,13 +153,15 @@
                                 <f:facet name="header">
                                     <h:outputText value="Closing Stock" />
                                 </f:facet>                                                            
-                                <h:outputText value="#{prod.closingStock}"/>
+                                <h:outputText value="#{prod.closingStock}">
+                                    <f:convertNumber pattern="###,###,###.####" />
+                                </h:outputText>
                             </p:column>
                             <f:facet name="footer">
                                 <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{jvActualController.prepareCreate}" update="JvActualizeCreateForm" oncomplete="PF('JvActualizeCreateDlg').show()"/>
                                 <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{bundle.View}" update="JvActualizeViewForm" oncomplete="PF('JvActualizeViewDlg').show()" disabled="#{empty jvActualController.currentProduction}"/>
                                 <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{bundle.Edit}" update="JvActualizeEditForm" oncomplete="PF('JvActualizeEditDlg').show()" disabled="#{empty jvActualController.currentProduction}"/>
-                                <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{bundle.Delete}" actionListener="#{jvActualController.destroy}" update="actualTable" disabled="#{empty jvActualController.currentProduction}"/>
+                                <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{bundle.Delete}" actionListener="#{jvActualController.destroy}" update="prodTable" disabled="#{empty jvActualController.currentProduction}"/>
                             </f:facet>
 
                         </p:dataTable>

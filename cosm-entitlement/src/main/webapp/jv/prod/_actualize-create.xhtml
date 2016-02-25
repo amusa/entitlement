@@ -12,17 +12,20 @@
         <p:dialog id="JvActualizeCreateDlg" widgetVar="JvActualizeCreateDlg" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateJvActualProductionTitle}">
             <h:form id="JvActualizeCreateForm">
                 <h:panelGroup id="display">
-
                     <p:panelGrid id="ActualizePanel"  columns="2" rendered="#{jvActualController.currentActualProduction != null}">
-                        <p:outputLabel value="Year:" for="periodYear" />
-                        <p:inputText id="periodYear" value="#{jvActualController.currentActualProduction.periodYear}" title="PeriodYear" >
-                            <p:ajax/>
-                        </p:inputText>
 
-                        <p:outputLabel value="Month:" for="periodMonth" />
-                        <p:inputText id="periodMonth" value="#{jvActualController.currentActualProduction.periodMonth}" title="PeriodMonth" >
-                            <p:ajax/>
-                        </p:inputText>
+                        <p:outputLabel value="Year" for="periodYear"/>
+                        <p:selectOneMenu id="periodYear" value="#{jvActualController.currentProduction.periodYear}" class="select" >                                              
+                            <f:selectItems value="#{generalController.yearsAvailableSelectOne}" var="year" itemValue="#{year.value}"/>   
+                            <p:ajax listener="#{generalController.yearChanged}" event="change" update="periodMonth"/>     
+                        </p:selectOneMenu>
+
+                        <p:outputLabel value="Month" for="periodMonth"/>
+                        <p:selectOneMenu id="periodMonth" value="#{jvActualController.currentProduction.periodMonth}" class="select">                                              
+                            <f:selectItem itemValue="#{null}" itemLabel="--select--" />
+                            <f:selectItems value="#{generalController.months}" var="mth" itemValue="#{mth.month}" itemLabel="#{mth.monthStr}" />   
+                            <p:ajax />     
+                        </p:selectOneMenu>
 
                         <p:outputLabel value="Asset/Crude Type" for="contractStream" />
                         <p:selectOneMenu id="contractStream" value="#{jvActualController.currentActualProduction.contractStream}" >
@@ -37,42 +40,55 @@
                         </p:inputText>
 
                         <p:outputLabel value="Gross Prod" for="grossVolume" />
-                        <p:inputText id="grossVolume" value="#{jvActualController.currentActualProduction.grossProduction}" title="Gross Prod Volume" />
+                        <p:inputText id="grossVolume" value="#{jvActualController.currentActualProduction.grossProduction}" title="Gross Prod Volume" >
+                            <f:convertNumber pattern="###,###,###.####" />
+                        </p:inputText>
 
                         <p:outputLabel value="Stock Adjustment:" for="stockAdjustment" />
                         <p:inputText id="stockAdjustment" value="#{jvActualController.currentActualProduction.stockAdjustment}" title="Stock Adjustment" >
                             <p:ajax event="change" listener="#{jvActualController.productionVolumeChange}"                                     
                                     update="display grossVolume openingStock closingStock ownShareEntitlement partnerShareEntitlement" />
-
+                            <f:convertNumber pattern="###,###,###.####" />
                         </p:inputText>
 
                         <p:outputLabel value="Own Entitlement:" for="ownShareEntitlement" />
-                        <p:inputText id="ownShareEntitlement" value="#{jvActualController.currentActualProduction.ownShareEntitlement}" title="OwnShareEntitlement" />
+                        <p:inputText id="ownShareEntitlement" value="#{jvActualController.currentActualProduction.ownShareEntitlement}" title="Own Entitlement">
+                            <f:convertNumber pattern="###,###,###.####" />
+                        </p:inputText>
 
                         <p:outputLabel value="Partner Entitlement:" for="partnerShareEntitlement" />
-                        <p:inputText id="partnerShareEntitlement" value="#{jvActualController.currentActualProduction.partnerShareEntitlement}" title="PartnerShareEntitlement" />
+                        <p:inputText id="partnerShareEntitlement" value="#{jvActualController.currentActualProduction.partnerShareEntitlement}" title="Partner Entitlement">
+                            <f:convertNumber pattern="###,###,###.####" />
+                        </p:inputText>
 
                         <p:outputLabel value="Opening Stock:" for="openingStock" />
                         <p:inputText id="openingStock" value="#{jvActualController.currentActualProduction.openingStock}" title="OpeningStock" >
                             <p:ajax/>
+                            <f:convertNumber pattern="###,###,###.####" />
                         </p:inputText>
 
                         <p:outputLabel value="Availability" for="availability" />
-                        <p:outputLabel id="availability" value="#{jvActualController.currentActualProduction.availability}" title="Availability" />
+                        <p:outputLabel id="availability" value="#{jvActualController.currentActualProduction.availability}" title="Availability" >
+                            <f:convertNumber pattern="###,###,###.####" />
+                        </p:outputLabel>
 
                         <p:outputLabel value="Lifting (Actual)" for="lifting" />
-                        <p:inputText id="lifting" value="#{jvActualController.currentProduction.lifting}" title="Lifting (Actual)" />
+                        <p:inputText id="lifting" value="#{jvActualController.currentProduction.lifting}" title="Lifting (Actual)" >
+                            <f:convertNumber pattern="###,###,###.####" />
+                        </p:inputText>
 
                         <p:outputLabel value="Lifting Cargoes" for="cargoes" />
-                        <p:outputLabel id="cargoes" value="#{jvActualController.currentProduction.cargos}" title="Lifting Cargoes" />
+                        <p:inputText id="cargoes" value="#{jvActualController.currentProduction.cargos}" title="Lifting Cargoes" />
 
                         <p:outputLabel value="Closing Stock:" for="closingStock" />
-                        <p:outputLabel id="closingStock" value="#{jvActualController.currentActualProduction.closingStock}" title="ClosingStock" />
+                        <p:outputLabel id="closingStock" value="#{jvActualController.currentActualProduction.closingStock}" title="ClosingStock" >
+                            <f:convertNumber pattern="###,###,###.####" />
+                        </p:outputLabel>
 
                     </p:panelGrid>
 
-                    <p:commandButton actionListener="#{jvActualController.create}" value="#{bundle.Save}" update="display,:growl" oncomplete="handleSubmit(args,'JvActualizeCreateDlg');"/>
-                    <p:commandButton value="#{bundle.Cancel}" onclick="JvActualizeCreateDlg.hide()"/>
+                    <p:commandButton actionListener="#{jvActualController.create}" value="#{bundle.Save}" update="display,:jvProdListForm:prodTable,:growl" oncomplete="handleSubmit(args,'JvActualizeCreateDlg');"/>
+                    <p:commandButton actionListener="#{jvActualController.cancel}"  value="#{bundle.Cancel}" onclick="JvActualizeCreateDlg.hide()" immediate="true"/>
 
                 </h:panelGroup>
             </h:form>

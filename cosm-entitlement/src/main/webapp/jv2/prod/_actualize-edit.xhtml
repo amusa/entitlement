@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+
+    <ui:composition>
+
+        <p:dialog id="JvActualizeEditDlg" widgetVar="JvActualizeEditDlg" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.EditJvActualProductionTitle}">
+            <h:form id="JvActualizeEditForm">
+                <h:panelGroup id="display">
+
+                    <p:panelGrid id="ActualizePanel"  columns="2" rendered="#{jvActualController.currentActualProduction != null}">
+                        <p:outputLabel value="Year:" for="periodYear" />
+                        <p:inputText id="periodYear" value="#{jvActualController.currentActualProduction.periodYear}" title="PeriodYear" />
+
+                        <p:outputLabel value="Month:" for="periodMonth" />
+                        <p:inputText id="periodMonth" value="#{jvActualController.currentActualProduction.periodMonth}" title="PeriodMonth" />
+
+                        <p:outputLabel value="Asset/Crude Type:" for="contractStream" />
+                        <p:selectOneMenu id="contractStream" value="#{jvActualController.currentActualProduction.contractStream}" >
+                            <f:selectItems value="#{contractStreamController.itemsAvailableSelectOne}"/>
+                        </p:selectOneMenu>
+
+                        <p:outputLabel value="Daily Prod (bpd)" for="productionVolume" />
+                        <p:inputText id="productionVolume" value="#{jvActualController.currentActualProduction.productionVolume}" title="Production Volume" >
+                            <p:ajax event="change" listener="#{jvActualController.productionVolumeChange}"  
+                                    update="display grossVolume openingStock closingStock ownShareEntitlement partnerShareEntitlement" />
+                            <f:convertNumber pattern="###,###,###.####" />
+                        </p:inputText>
+
+                        <p:outputLabel value="Gross Prod" for="grossVolume" />
+                        <p:inputText id="grossVolume" value="#{jvActualController.currentActualProduction.grossProduction}" title="Production Volume" >
+                            <f:convertNumber pattern="###,###,###.####" />
+                        </p:inputText>
+
+                        <p:outputLabel value="Stock Adjustment:" for="stockAdjustment" />
+                        <p:inputText id="stockAdjustment" value="#{jvActualController.currentActualProduction.stockAdjustment}" title="Stock Adjustment" >
+                            <f:convertNumber pattern="###,###,###.####" />
+                             <p:ajax event="change" listener="#{jvActualController.productionVolumeChange}"                                     
+                                    update="display grossVolume openingStock closingStock ownShareEntitlement partnerShareEntitlement" />
+                        </p:inputText>
+
+                        <p:outputLabel value="Own Entitlement:" for="ownShareEntitlement" />
+                        <p:inputText id="ownShareEntitlement" value="#{jvActualController.currentActualProduction.ownShareEntitlement}" title="Own Entitlement" >
+                            <f:convertNumber pattern="###,###,###.####" />
+                        </p:inputText>
+
+                        <p:outputLabel value="Partner Entitlement:" for="partnerShareEntitlement" />
+                        <p:inputText id="partnerShareEntitlement" value="#{jvActualController.currentActualProduction.partnerShareEntitlement}" title="Partner Entitlement" >
+                            <f:convertNumber pattern="###,###,###.####" />
+                        </p:inputText>
+
+                        <p:outputLabel value="Opening Stock:" for="openingStock" />
+                        <p:inputText id="openingStock" value="#{jvActualController.currentActualProduction.availability}" title="Availability" >
+                            <f:convertNumber pattern="###,###,###.####" />
+                        </p:inputText>                            
+
+                        <p:outputLabel value="Availability" for="availability" />
+                        <p:inputText id="availability" value="#{jvActualController.currentActualProduction.openingStock}" title="Opening Stock" >
+                            <f:convertNumber pattern="###,###,###.####" />
+                        </p:inputText>
+
+                        <p:outputLabel value="Lifting (Actual)" for="lifting" />
+                        <p:inputText id="lifting" value="#{jvActualController.currentProduction.lifting}" title="Lifting (Actual)" >
+                            <f:convertNumber pattern="###,###,###.####" />
+                        </p:inputText>
+
+                        <p:outputLabel value="Lifting Cargoes" for="cargoes" />
+                        <p:outputLabel id="cargoes" value="#{jvActualController.currentProduction.cargos}" title="Lifting Cargoes" />
+
+                        <p:outputLabel value="Closing Stock:" for="closingStock" />
+                        <p:inputText id="closingStock" value="#{jvActualController.currentActualProduction.closingStock}" title="Closing Stock" >
+                            <f:convertNumber pattern="###,###,###.####" />
+                        </p:inputText>
+
+                    </p:panelGrid>
+
+                    <p:commandButton actionListener="#{jvActualController.create}" value="#{bundle.Save}" update="display, :jvProdListForm:prodTable, :growl" oncomplete="handleSubmit(args,'JvActualizeEditDlg');"/>
+                    <p:commandButton actionListener="#{jvActualController.cancel}" value="#{bundle.Cancel}" onclick="JvActualizeEditDlg.hide()" immediate="true"/>
+
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

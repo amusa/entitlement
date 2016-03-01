@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+
+    <ui:composition>
+
+        <p:dialog id="JvCreateDlg" widgetVar="JvCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateJvForecastTitle}">
+            <h:form id="JvCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid id="ActualParamPanel" columns="2" rendered="#{jvProdController.currentProduction != null}">
+
+                        <p:outputLabel value="Year" for="periodYear"/>
+                        <p:selectOneMenu id="periodYear" value="#{jvProdController.currentProduction.periodYear}" class="select" >                                              
+                            <f:selectItems value="#{generalController.yearsAvailableSelectOne}" var="year" itemValue="#{year.value}"/>   
+                            <p:ajax listener="#{generalController.yearChanged}" event="change" update="periodMonth"/>     
+                        </p:selectOneMenu>
+
+                        <p:outputLabel value="Month" for="periodMonth"/>
+                        <p:selectOneMenu id="periodMonth" value="#{jvProdController.currentProduction.periodMonth}" class="select">                                              
+                            <f:selectItem itemValue="#{null}" itemLabel="--select--" />
+                            <f:selectItems value="#{generalController.months}" var="mth" itemValue="#{mth.month}" itemLabel="#{mth.monthStr}" />   
+                            <p:ajax />     
+                        </p:selectOneMenu>
+
+                        <p:outputLabel value="Asset Stream/Crude Type" for="csOptions"/>
+                        <p:selectOneMenu id="csOptions" value="#{jvProdController.currentProduction.contractStream}" class="select" >
+                            <f:selectItems value="#{contractStreamController.itemsAvailableSelectOne}"/>
+                            <p:ajax/>
+                        </p:selectOneMenu>
+
+                        <p:outputLabel value="Daily Prod (bpd)" for="dailyProd"/>
+                        <p:inputText id="dailyProd" value = "#{jvProdController.currentProduction.productionVolume}"  class="form-control input-sm m-b-10" pt:placeholder="Gross Production"
+                                     >
+                            <p:ajax event="change" listener="#{jvProdController.productionVolumeChange}"  
+                                    update="display grossProd openingStock ownShareEntitlement partnerShareEntitlement closingStock"
+                                    />
+                        </p:inputText>
+
+                        <p:outputLabel value="Gross Prod" for="grossProd"/>
+                        <p:inputText id="grossProd" value = "#{jvProdController.currentProduction.grossProduction}"  class="form-control input-sm m-b-10" pt:placeholder="Gross Production">
+                            <f:convertNumber pattern="###,###,###.####" />
+                        </p:inputText>
+
+                        <p:outputLabel value="Own Entitlement" for="ownShareEntitlement" />
+                        <p:inputText id="ownShareEntitlement" value="#{jvProdController.currentProduction.ownShareEntitlement}" title="Own Entitlement" >
+                            <f:convertNumber maxFractionDigits="2" groupingUsed="true" />
+                        </p:inputText>
+
+                        <p:outputLabel value="Partner Entitlement" for="partnerShareEntitlement" />
+                        <p:inputText id="partnerShareEntitlement" value="#{jvProdController.currentProduction.partnerShareEntitlement}" title="Partner Entitlement" >
+                            <f:convertNumber pattern="###,###,###.####" />
+                        </p:inputText>
+
+                        <p:outputLabel value="Opening Stock" for="openingStock" />
+                        <p:inputText id="openingStock" value="#{jvProdController.currentProduction.openingStock}" title="Opening Stock" >
+                            <f:convertNumber pattern="###,###,###.####" />
+                        </p:inputText>
+
+                        <p:outputLabel value="Availability" for="availability" />
+                        <p:inputText id="availability" value="#{jvProdController.currentProduction.availability}" title="Availability">
+                            <f:convertNumber pattern="###,###,###.####" />
+                        </p:inputText>
+
+                        <p:outputLabel value="Lifting (Nom)" for="lifting" />
+                        <p:inputText id="lifting" value="#{jvProdController.currentProduction.lifting}" title="Lifting (Nom)">
+                            <f:convertNumber pattern="###,###,###.####" />
+                        </p:inputText>
+
+                        <p:outputLabel value="Lifting Cargoes" for="cargoes" />
+                        <p:inputText id="cargoes" value="#{jvProdController.currentProduction.cargos}" title="Lifting Cargoes" />
+
+                        <p:outputLabel value="Closing Stock" for="closingStock" />
+                        <p:inputText id="closingStock" value="#{jvProdController.currentProduction.closingStock}" title="Closing Stock" >
+                            <f:convertNumber pattern="###,###,###.####" />
+                        </p:inputText>
+
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{jvProdController.create}" value="#{bundle.Save}" update="display,:jvProdListForm:prodTable,:growl" oncomplete="handleSubmit(args,'JvCreateDialog');"/>
+                    <p:commandButton actionListener="#{jvProdController.cancel}" value="#{bundle.Cancel}" update="display,:jvProdListForm:prodTable,:growl" onclick="JvCreateDialog.hide()" immediate="true"/>
+
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

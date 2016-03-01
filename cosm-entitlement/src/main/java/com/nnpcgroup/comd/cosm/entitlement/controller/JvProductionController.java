@@ -73,13 +73,14 @@ public class JvProductionController implements Serializable {
         this.productions = productions;
     }
 
-    public JvForecastProduction prepareCreate() {
+    public void prepareCreate() {
+        log.info("prepareCreate called...");
         currentProduction = productionBean.createInstance();
         if (periodYear != null && periodMonth != null) {
             currentProduction.setPeriodYear(periodYear);
             currentProduction.setPeriodMonth(periodMonth);
         }
-        return currentProduction;
+        //return currentProduction;
     }
 
     public void destroy() {

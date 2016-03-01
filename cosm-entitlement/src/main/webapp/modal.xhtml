@@ -1,0 +1,192 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+    <h:head>
+
+        <title>BootsFaces Basic Page</title>
+        <!-- CSS -->
+<!--                <h:outputStylesheet name="css/bootstrap.min.css"/>
+                <h:outputStylesheet name="css/animate.min.css"/>
+                <h:outputStylesheet name="css/font-awesome.min.css"/>
+                <h:outputStylesheet name="css/form.css"/>
+                <h:outputStylesheet name="css/calendar.css"/>
+                <h:outputStylesheet name="css/style.css"/>
+                <h:outputStylesheet name="css/icons.css"/>
+                <h:outputStylesheet name="css/generics.css"/>-->
+    </h:head>
+    <h:body>
+        <b:container>
+            <b:row>
+                <h:form id="loginForm">
+                    <b:container fluid="true">
+                        <b:panel title="login screen" look="primary">
+                            <b:row>
+                                <b:column colMd="2">
+                                    <h:outputLabel value="Username:" for="username" />
+                                </b:column>
+                                <b:column colMd ="4">
+                                    <b:inputText placeholder="Username" required="true" id="username" value="#{loginBean.username}">
+                                        <f:facet name="prepend">
+                                            <b:icon name="user" />
+                                        </f:facet>
+                                    </b:inputText>
+                                </b:column>
+                                <b:column  colMd="6">
+                                    <b:messages for="username" />
+                                </b:column>
+                            </b:row>
+                            <b:row>
+                                <b:column colMd="2">
+                                    <h:outputText value="Password:" />
+                                </b:column>
+                                <b:column colMd="4">
+                                    <b:inputSecret placeholder="Password" id="password" value="#{loginBean.password}">
+                                        <f:facet name="prepend">
+                                            <b:iconAwesome name="key" />
+                                        </f:facet>
+                                    </b:inputSecret>
+                                </b:column>
+                                <b:column colMd="6">
+                                    <b:messages for="password" />
+                                </b:column>
+                            </b:row>
+                            <b:row>
+                                <b:column span="2" offset="2">
+                                    <b:commandButton value="login" onclick="ajax:loginBean.login()" update="@form" look="primary"
+                                                     style="width:100%" />
+                                </b:column>
+                                <b:column span="2">
+                                    <b:commandButton value="password forgotten" onclick="ajax:loginBean.forgotPassword()" update="@form"
+                                                     look="danger" style="width:100%" />
+                                </b:column>
+                                <b:column span="3">
+                                    <b:commandButton value="Create" look="warning" pt:data-target="#amodal" pt:data-toggle="modal" 
+                                                     onclick="ajax:jvProdController.prepareCreate()" update="@form" size="lg"  style="width:100%" />
+                                </b:column>
+                            </b:row>
+                        </b:panel>  
+
+
+                    </b:container>
+                </h:form>
+            </b:row>
+            <b:modal id="amodal" title="Create JV Production" styleClass="modalPseudoClass">
+                <h:form>
+                    <h:panelGrid id="ActualParamPanel" columns="2" rendered="#{jvProdController.currentProduction ne null}">
+
+                        <h:outputLabel value="Year" for="periodYear2"/>
+                        <h:selectOneMenu id="periodYear2" value="#{jvProdController.currentProduction.periodYear}" class="select" >                                              
+                            <f:selectItems value="#{generalController.yearsAvailableSelectOne}" var="year" itemValue="#{year.value}"/>   
+                            <f:ajax listener="#{generalController.yearChanged}" event="change" render="periodMonth2"/>     
+                        </h:selectOneMenu>
+
+                        <h:outputLabel value="Month" for="periodMonth2"/>
+                        <h:selectOneMenu id="periodMonth2" value="#{jvProdController.currentProduction.periodMonth}" class="select">                                              
+                            <f:selectItem itemValue="#{null}" itemLabel="--select--" />
+                            <f:selectItems value="#{generalController.months}" var="mth" itemValue="#{mth.month}" itemLabel="#{mth.monthStr}" />   
+                            <f:ajax />     
+                        </h:selectOneMenu>
+
+                        <h:outputLabel value="Asset Stream/Crude Type" for="csOptions2"/>
+                        <h:selectOneMenu id="csOptions2" value="#{jvProdController.currentProduction.contractStream}" class="select" >
+                            <f:selectItems value="#{contractStreamController.itemsAvailableSelectOne}"/>
+                            <f:ajax/>
+                        </h:selectOneMenu>
+
+                        <h:outputLabel value="Daily Prod (bpd)" for="dailyProd2"/>
+                        <h:inputText id="dailyProd2" value = "#{jvProdController.currentProduction.productionVolume}"  class="form-control input-sm m-b-10" pt:placeholder="Gross Production"
+                                     >
+                            <f:ajax event="change" listener="#{jvProdController.productionVolumeChange}"  
+                                    render="grossProd2 openingStock2 ownShareEntitlement2 partnerShareEntitlement2 closingStock2"
+                                    />
+                        </h:inputText>
+
+                        <h:outputLabel value="Gross Prod" for="grossProd2"/>
+                        <h:inputText id="grossProd2" value = "#{jvProdController.currentProduction.grossProduction}"  class="form-control input-sm m-b-10" pt:placeholder="Gross Production">
+                            <f:convertNumber pattern="###,###,###.####" />
+                        </h:inputText>
+
+                        <h:outputLabel value="Own Entitlement" for="ownShareEntitlement2" />
+                        <h:inputText id="ownShareEntitlement2" value="#{jvProdController.currentProduction.ownShareEntitlement}" class="form-control input-sm m-b-10" title="Own Entitlement" >
+                            <f:convertNumber maxFractionDigits="2" groupingUsed="true" />
+                        </h:inputText>
+
+                        <h:outputLabel value="Partner Entitlement" for="partnerShareEntitlement2" />
+                        <h:inputText id="partnerShareEntitlement2" value="#{jvProdController.currentProduction.partnerShareEntitlement}" class="form-control input-sm m-b-10" title="Partner Entitlement" >
+                            <f:convertNumber pattern="###,###,###.####" />
+                        </h:inputText>
+
+                        <h:outputLabel value="Opening Stock" for="openingStock2" />
+                        <h:inputText id="openingStock2" value="#{jvProdController.currentProduction.openingStock}" class="form-control input-sm m-b-10" title="Opening Stock" >
+                            <f:convertNumber pattern="###,###,###.####" />
+                        </h:inputText>
+
+                        <h:outputLabel value="Availability" for="availability2" />
+                        <h:inputText id="availability2" value="#{jvProdController.currentProduction.availability}" class="form-control input-sm m-b-10" title="Availability">
+                            <f:convertNumber pattern="###,###,###.####" />
+                        </h:inputText>
+
+                        <h:outputLabel value="Lifting (Nom)" for="lifting2" />
+                        <h:inputText id="lifting2" value="#{jvProdController.currentProduction.lifting}" class="form-control input-sm m-b-10" title="Lifting (Nom)">
+                            <f:convertNumber pattern="###,###,###.####" />
+                        </h:inputText>
+
+                        <h:outputLabel value="Lifting Cargoes" for="cargoes2" />
+                        <h:inputText id="cargoes2" value="#{jvProdController.currentProduction.cargos}"  class="form-control input-sm m-b-10" title="Lifting Cargoes" />
+
+                        <h:outputLabel value="Closing Stock" for="closingStock2" />
+                        <h:inputText id="closingStock2" value="#{jvProdController.currentProduction.closingStock}" class="form-control input-sm m-b-10" title="Closing Stock" >
+                            <f:convertNumber pattern="###,###,###.####" />
+                        </h:inputText>
+
+                    </h:panelGrid>
+                </h:form>
+                <f:facet name="footer">
+                    <b:button value="close" dismiss="modal" onclick="return false;"/>
+                    <b:button value="Ok" look="primary" dismiss="modal" onclick="return false;"/>
+                </f:facet>
+            </b:modal>
+            <!--            <b:row>
+                            <b:column span="3">
+                                <a id="atrigger" class="btn btn-primary btn-lg" href="#amodal" data-toggle="modal">Trigger (HTML A tag)</a>
+                            </b:column>
+                            <b:column span="3">
+                                <button id="btrigger" class="btn btn-info btn-lg" data-target="#amodal" data-toggle="modal">Trigger (HTML Button)</button>
+                            </b:column>
+                            <b:column span="3">
+                                <b:button value="Trigger (JSF passthrough)" look="warning" pt:data-target="#amodal" pt:data-toggle="modal" onclick="return false;" size="lg"/>
+                            </b:column>
+                            <b:column span="3">
+                                <b:button value="Trigger (JavaScript)" look="success" onclick="$('.modalPseudoClass').modal();return false;" size="lg"/>
+                            </b:column>
+                        </b:row>-->
+            <!-- Modal Default -->
+            <div class="m-b-20">
+                <a data-toggle="modal" href="#modalDefault" class="btn btn-sm">Modal - Default</a>
+                <a data-toggle="modal" href="#modalNarrower" class="btn btn-sm">Modal - Narrower</a>
+                <a data-toggle="modal" href="#modalWider" class="btn btn-sm">Modal - Wider</a>
+            </div>
+            <div class="modal fade" id="modalDefault" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">times;</button>
+                            <h4 class="modal-title">Modal title</h4>
+                        </div>
+                        <div class="modal-body">
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin sodales orci ante, sed ornare eros vestibulum ut. Ut accumsan vitae eros sit amet tristique. Nullam scelerisque nunc enim, non dignissim nibh faucibus ullamcorper. Fusce pulvinar libero vel ligula iaculis ullamcorper. Integer dapibus, mi ac tempor varius, purus nibh mattis erat, vitae porta nunc nisi non tellus. Vivamus mollis ante non massa egestas fringilla. Vestibulum egestas consectetur nunc at ultricies. Morbi quis consectetur nunc.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-sm">Save changes</button>
+                            <button type="button" class="btn btn-sm" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </b:container>
+    </h:body>
+</html>

@@ -61,7 +61,8 @@
                                      rowKey="#{prod.id}"
                                      rows="10"
                                      rowsPerPageTemplate="10,20,30,40,50"
-                                     class="table table-bordered table-hover tile"> 
+                                     class="table table-bordered table-hover tile"
+                                    > 
 
                             <p:ajax event="rowSelect"   update="actualizeButton createButton viewButton editButton deleteButton"/>
                             <p:ajax event="rowUnselect" update="actualizeButton createButton viewButton editButton deleteButton"/>
@@ -84,10 +85,7 @@
                                 </f:facet>
                                 <h:outputText value="#{prod.contractStream.fiscalArrangement.title}"/>                                                        
                             </p:column> 
-                            <p:column>                                                        
-                                <f:facet name="header">
-                                    <h:outputText value="Crude Type"/>
-                                </f:facet>
+                            <p:column headerText="Crude Type" sortBy="#{prod.contractStream.crudeType.code}">  
                                 <h:outputText value="#{prod.contractStream.crudeType.code}"/>                                                        
                             </p:column>                            
                             <p:column>
@@ -122,7 +120,7 @@
                                     <f:convertNumber pattern="###,###,###.####" />
                                 </h:outputText>
                             </p:column>
-                            <p:column>
+                            <p:column sortBy="#{prod.openingStock}">
                                 <f:facet name="header">
                                     <h:outputText value="Opening Stock" />
                                 </f:facet>                                                            

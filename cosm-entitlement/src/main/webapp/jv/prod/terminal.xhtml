@@ -58,8 +58,14 @@
                                      rows="10"
                                      rowsPerPageTemplate="10,20,30,40,50"
                                      class="table table-bordered table-hover tile"> 
+                            <f:facet name="header">
+                                Terminal Blend
+                                <p:commandButton id="toggler" type="button" value="Columns"
+                                                 style="float:right" icon="ui-icon-calculator" />
+                                <!--                                <p:columnToggler datasource="productions" trigger="toggler" />-->
+                            </f:facet>
 
-                            
+
                             <p:column >                                                        
                                 <f:facet name="header">
                                     <h:outputText value="Year" />   
@@ -124,10 +130,7 @@
                                     <f:convertNumber pattern="###,###,###.####" />
                                 </h:outputText>
                             </p:column>
-                            <p:column>
-                                <f:facet name="header">
-                                    <h:outputText value="Availability" />
-                                </f:facet>                                                            
+                            <p:column headerText="Availability" sortBy="#{prod.availability}">                                                                                          
                                 <h:outputText value="#{prod.availability}">
                                     <f:convertNumber pattern="###,###,###.####" />
                                 </h:outputText>
@@ -148,7 +151,7 @@
                                     <f:convertNumber pattern="###,###,###.####" />
                                 </h:outputText>
                             </p:column>
-                            <p:column>
+                            <p:column sortBy="#{prod.closingStock}">
                                 <f:facet name="header">
                                     <h:outputText value="Closing Stock" />
                                 </f:facet>                                                            
@@ -156,6 +159,8 @@
                                     <f:convertNumber pattern="###,###,###.####" />
                                 </h:outputText>
                             </p:column>
+                           
+
                             <f:facet name="footer">
                             </f:facet>
                         </p:dataTable>

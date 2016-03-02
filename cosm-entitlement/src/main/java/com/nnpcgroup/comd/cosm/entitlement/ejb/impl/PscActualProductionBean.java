@@ -53,7 +53,7 @@ public class PscActualProductionBean extends PscProductionServicesImpl<PscActual
     }
 
     @Override
-    public PscActualProduction findByContractStreamPeriod(int year, int month, ContractStream cs) {
+    public PscActualProduction findByContractPeriod(int year, int month, ContractStream cs) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

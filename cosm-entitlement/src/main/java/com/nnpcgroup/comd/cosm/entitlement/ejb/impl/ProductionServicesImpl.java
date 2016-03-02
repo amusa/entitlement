@@ -8,6 +8,7 @@ package com.nnpcgroup.comd.cosm.entitlement.ejb.impl;
 import com.nnpcgroup.comd.cosm.entitlement.controller.GeneralController;
 import com.nnpcgroup.comd.cosm.entitlement.ejb.ProductionServices;
 import com.nnpcgroup.comd.cosm.entitlement.entity.ContractStream;
+import com.nnpcgroup.comd.cosm.entitlement.entity.FiscalArrangement;
 import com.nnpcgroup.comd.cosm.entitlement.entity.Production;
 import java.util.List;
 import java.util.logging.Level;
@@ -50,7 +51,7 @@ public abstract class ProductionServicesImpl<T extends Production> extends Abstr
     public abstract List<T> findByYearAndMonth(int year, int month);
 
     @Override
-    public T findByContractStreamPeriod(int year, int month, ContractStream cs) {
+    public T findByContractPeriod(int year, int month, ContractStream cs) {
         CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
 
         T production;
@@ -74,6 +75,34 @@ public abstract class ProductionServicesImpl<T extends Production> extends Abstr
         return production;
     }
 
+    @Override
+    public List<T> findByContractPeriod(int year, int month, FiscalArrangement fa){
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+
+        List<T> productions;
+
+        CriteriaQuery cq = cb.createQuery();
+        Root e = cq.from(entityClass);
+        try {
+            cq.where(
+                    cb.and(cb.equal(e.get("periodYear"), year),
+                            cb.equal(e.get("periodMonth"), month),
+                            cb.equal(e.get("contractStream").get("fiscalArrangement"), fa)
+                    ));
+
+            Query query = getEntityManager().createQuery(cq);
+
+            productions = query.getResultList();
+        } catch (NoResultException nre) {
+            return null;
+        }
+
+        return productions;
+
+    }
+
+    
+    
     @Override
     public abstract T computeEntitlement(T production);
 
@@ -105,7 +134,7 @@ public abstract class ProductionServicesImpl<T extends Production> extends Abstr
             --year;
         }
 
-        T prod = findByContractStreamPeriod(year, month, cs);
+        T prod = findByContractPeriod(year, month, cs);
 
         return prod;
 

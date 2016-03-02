@@ -107,7 +107,7 @@ public class JvActualProductionController implements Serializable {
     public void actualize(Production production) {
         log.log(Level.INFO, "************JvActualProductionController::actualizing {0}...", production);
 
-        currentProduction = productionBean.findByContractStreamPeriod(
+        currentProduction = productionBean.findByContractPeriod(
                 production.getPeriodYear(),
                 production.getPeriodMonth(),
                 production.getContractStream());

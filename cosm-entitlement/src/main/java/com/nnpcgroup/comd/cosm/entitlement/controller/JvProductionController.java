@@ -8,6 +8,7 @@ package com.nnpcgroup.comd.cosm.entitlement.controller;
 import com.nnpcgroup.comd.cosm.entitlement.controller.util.JsfUtil;
 import com.nnpcgroup.comd.cosm.entitlement.controller.util.ProductionDataModel;
 import com.nnpcgroup.comd.cosm.entitlement.ejb.JvForecastProductionServices;
+import com.nnpcgroup.comd.cosm.entitlement.entity.FiscalArrangement;
 import com.nnpcgroup.comd.cosm.entitlement.entity.JvForecastProduction;
 
 import javax.inject.Named;
@@ -19,6 +20,7 @@ import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.model.SelectItem;
 
 /**
  *
@@ -41,6 +43,7 @@ public class JvProductionController implements Serializable {
 
     private Integer periodYear;
     private Integer periodMonth;
+    private FiscalArrangement currentFiscalArrangement;
 
     /**
      * Creates a new instance of JvController
@@ -96,13 +99,13 @@ public class JvProductionController implements Serializable {
         persist(JsfUtil.PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("ProductionCreated"));
         if (!JsfUtil.isValidationFailed()) {
             reset();
-            loadProductions();
+            loadProductionsByContract();
         }
     }
 
     public void cancel() {
         reset();
-        loadProductions();
+        loadProductionsByContract();
     }
 
     public void update() {
@@ -140,6 +143,13 @@ public class JvProductionController implements Serializable {
     public void loadProductions() {
         if (periodYear != null && periodMonth != null) {
             productions = productionBean.findByYearAndMonth(periodYear, periodMonth);
+            refreshDataModel();
+        }
+    }
+
+    public void loadProductionsByContract() {
+        if (periodYear != null && periodMonth != null && currentFiscalArrangement != null) {
+            productions = productionBean.findByContractPeriod(periodYear, periodMonth, currentFiscalArrangement);
             refreshDataModel();
         }
     }
@@ -183,6 +193,21 @@ public class JvProductionController implements Serializable {
     public void setPeriodMonth(Integer periodMonth) {
         log.log(Level.INFO, "************JvProductionController::setPeriodMonth called with value {0}", periodMonth);
         this.periodMonth = periodMonth;
+    }
+
+    public FiscalArrangement getCurrentFiscalArrangement() {
+        return currentFiscalArrangement;
+    }
+
+    public void setCurrentFiscalArrangement(FiscalArrangement currentFiscalArrangement) {
+        this.currentFiscalArrangement = currentFiscalArrangement;
+    }
+
+    public SelectItem[] getContractStreamSelectOne() {
+        if (currentFiscalArrangement == null) {
+            return null;
+        }
+        return JsfUtil.getSelectItems(currentFiscalArrangement.getContractStreams(), true);
     }
 
 }

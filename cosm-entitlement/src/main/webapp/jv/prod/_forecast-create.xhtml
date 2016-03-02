@@ -26,10 +26,16 @@
                             <f:selectItems value="#{generalController.months}" var="mth" itemValue="#{mth.month}" itemLabel="#{mth.monthStr}" />   
                             <p:ajax />     
                         </p:selectOneMenu>
+                        
+                        <h:outputText value="Contract"/>
+                        <p:selectOneMenu id="contract" value="#{jvProdController.currentFiscalArrangement}" class="select">                                              
+                            <f:selectItems value="#{fiscalController.fiscalSelectOptions}" />   
+                            <p:ajax />     
+                        </p:selectOneMenu>
 
                         <p:outputLabel value="Asset Stream/Crude Type" for="csOptions"/>
                         <p:selectOneMenu id="csOptions" value="#{jvProdController.currentProduction.contractStream}" class="select" >
-                            <f:selectItems value="#{contractStreamController.itemsAvailableSelectOne}"/>
+                            <f:selectItems value="#{jvProdController.currentFiscalArrangement.contractStreams}"/>
                             <p:ajax/>
                         </p:selectOneMenu>
 

@@ -22,7 +22,7 @@
                 <h:graphicImage url="/resources/img/entitlement-determination-banner.png" alt="NNPC Logo" />
 
                 <h:form id="menuForm">
-                    
+
                     <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
 
                     <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
@@ -32,13 +32,17 @@
                     <p:menubar>
                         <p:menuitem value="#{bundle.Home}" outcome="/index" icon="ui-icon-home"/>
                         <p:submenu label="#{bundle.Entitlement}">                            
-                            <p:menuitem value="Forecast List" outcome="/faces/jv/prod/forecast-list.xhtml" />
-                            <p:menuitem value="Actualized" outcome="/faces/jv/prod/actualize-list.xhtml" />
+                            <p:menuitem value="Forecast" outcome="/faces/jv/prod/forecast.xhtml" />
+                            <p:menuitem value="Actualized" outcome="/faces/jv/prod/actualize.xhtml" />
                             <p:menuitem value="Stock Adjustment" />
+                        </p:submenu>
+                        <p:submenu label="#{bundle.Terminal}">                            
+                            <p:menuitem value="Crude Type Blend" outcome="/faces/jv/prod/terminal.xhtml"/>
+                            <p:menuitem value="Cargo Allocation" />                            
                         </p:submenu>
                         <p:submenu label="#{bundle.FiscalArrangements}">
                             <p:menuitem value="Joint Venture" outcome="/faces/jv/List.xhtml" />
-                            <p:menuitem value="Forecast List" outcome="/faces/jv/prod/forecast-list.xhtml" />
+                            <p:menuitem value="PSC" outcome="/faces/psc/List.xhtml" />
                             <p:menuitem value="Fiscal Assets/Crude Type" outcome="/faces/asset/List.xhtml" />
                         </p:submenu>
                         <p:submenu label="#{bundle.Maintenance}">
@@ -66,8 +70,11 @@
                             <p:submenu label="Entitlement">
                                 <p:menuitem value="Forecast" url="/faces/jv/prod/forecast-list.xhtml" />
                                 <p:menuitem value="Actualize" url="/faces/jv/prod/actualize-list.xhtml" />
-                                <p:menuitem value="Stock Adjustment" />
-                                
+                                <p:menuitem value="Stock Adjustment" />                                
+                            </p:submenu>
+                            <p:submenu label="#{bundle.Terminal}">                            
+                                <p:menuitem value="Crude Type Blend" outcome="/faces/jv/prod/terminal.xhtml"/>
+                                <p:menuitem value="Cargo Allocation" />                            
                             </p:submenu>
                             <p:submenu label="Fiscal Arrg">
                                 <p:menuitem value="Joint Venture" url="/faces/jv/List.xhtml" />

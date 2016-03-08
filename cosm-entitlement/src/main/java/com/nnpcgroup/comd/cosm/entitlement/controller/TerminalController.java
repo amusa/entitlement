@@ -18,6 +18,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
+import javax.faces.model.SelectItem;
 
 @Named("terminalController")
 @SessionScoped
@@ -115,12 +116,12 @@ public class TerminalController implements Serializable {
         return getFacade().find(id);
     }
 
-    public List<Terminal> getItemsAvailableSelectMany() {
-        return getFacade().findAll();
+    public SelectItem[] getItemsAvailableSelectMany() {        
+        return JsfUtil.getSelectItems(getFacade().findAll(), false);        
     }
 
-    public List<Terminal> getItemsAvailableSelectOne() {
-        return getFacade().findAll();
+    public SelectItem[] getItemsAvailableSelectOne() {
+        return JsfUtil.getSelectItems(getFacade().findAll(), true);
     }
 
     @FacesConverter(forClass = Terminal.class)

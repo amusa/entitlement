@@ -4,18 +4,18 @@
         <param-name>javax.faces.PROJECT_STAGE</param-name>
         <param-value>Development</param-value>
     </context-param>
-    <!--    <context-param>
+    <context-param>
         <param-name>primefaces.THEME</param-name>
         <param-value>redmond</param-value>
-    </context-param>-->
-    <context-param>
+    </context-param>
+<!--    <context-param>
         <param-name>BootsFaces_USETHEME</param-name>
         <param-value>default</param-value>
     </context-param>
     <context-param>
         <param-name>BootsFaces_THEME</param-name>
         <param-value>cerulean</param-value>
-    </context-param>
+    </context-param>-->
     <!--   <context-param>  
         <param-name>primefaces.THEME</param-name>  
         <param-value>none</param-value>  

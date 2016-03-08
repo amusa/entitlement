@@ -11,6 +11,8 @@
         <title><ui:insert name="title">Default Title</ui:insert></title>
         <h:outputStylesheet library="css" name="jsfcrud.css"/>
         <h:outputScript library="js" name="jsfcrud.js"/>
+               
+        
     </h:head>
 
     <h:body>
@@ -33,11 +35,11 @@
                         <p:menuitem value="#{bundle.Home}" outcome="/index" icon="ui-icon-home"/>
                         <p:submenu label="#{bundle.Entitlement}">                            
                             <p:menuitem value="Forecast" outcome="/faces/jv/prod/forecast.xhtml" />
-                            <p:menuitem value="Actualized" outcome="/faces/jv/prod/actualize.xhtml" />
+                            <p:menuitem value="Actualize" outcome="/faces/jv/prod/actualize.xhtml" />
                             <p:menuitem value="Stock Adjustment" />
                         </p:submenu>
                         <p:submenu label="#{bundle.Terminal}">                            
-                            <p:menuitem value="Crude Type Blend" outcome="/faces/jv/prod/terminal.xhtml"/>
+                            <p:menuitem value="Terminal Blend" outcome="/faces/jv/prod/terminal.xhtml"/>
                             <p:menuitem value="Cargo Allocation" />                            
                         </p:submenu>
                         <p:submenu label="#{bundle.FiscalArrangements}">
@@ -57,13 +59,13 @@
 
             </p:layoutUnit>
 
-            <p:layoutUnit position="south" size="60">
+            <p:layoutUnit position="south" size="10%">
                 <ui:insert name="footer">
                     <h:outputText value= "COMD (C) Copyright 2016"/>
                 </ui:insert>
             </p:layoutUnit>
 
-            <p:layoutUnit position="west" size="200">
+            <p:layoutUnit position="west" size="15%">
                 <ui:insert name="aside">
                     <h:form>
                         <p:menu style="width: 95%;height: 100%">
@@ -73,20 +75,14 @@
                                 <p:menuitem value="Stock Adjustment" />                                
                             </p:submenu>
                             <p:submenu label="#{bundle.Terminal}">                            
-                                <p:menuitem value="Crude Type Blend" outcome="/faces/jv/prod/terminal.xhtml"/>
+                                <p:menuitem value="Terminal Blend" outcome="/faces/jv/prod/terminal.xhtml"/>
                                 <p:menuitem value="Cargo Allocation" />                            
                             </p:submenu>
                             <p:submenu label="Fiscal Arrg">
                                 <p:menuitem value="Joint Venture" url="/faces/jv/List.xhtml" />
                                 <p:menuitem value="PSC" url="/faces/psc/List.xhtml" />                                
                                 <p:menuitem value="Fiscal Assets/Crude Type" url="/faces/asset/List.xhtml" /> 
-                            </p:submenu>  
-                            <p:submenu label="Others">
-                                <p:menuitem value="Crude Types" url="/faces/crudeType/List.xhtml" />
-                                <p:menuitem value="IOCs" url="/faces/company/List.xhtml" />                                
-                                <p:menuitem value="Terminal" url="/faces/terminal/List.xhtml" />
-                                <p:menuitem value="Equity Types" url="/faces/equityType/List.xhtml" />
-                            </p:submenu> 
+                            </p:submenu>                              
                         </p:menu>
                     </h:form>
                 </ui:insert>

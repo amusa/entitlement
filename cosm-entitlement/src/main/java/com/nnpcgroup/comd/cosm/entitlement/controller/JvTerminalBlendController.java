@@ -5,36 +5,47 @@
  */
 package com.nnpcgroup.comd.cosm.entitlement.controller;
 
+import com.nnpcgroup.comd.cosm.entitlement.controller.util.JsfUtil;
 import com.nnpcgroup.comd.cosm.entitlement.controller.util.ProductionDataModel;
-import com.nnpcgroup.comd.cosm.entitlement.ejb.JvForecastProductionServices;
-import com.nnpcgroup.comd.cosm.entitlement.entity.JvForecastProduction;
+import com.nnpcgroup.comd.cosm.entitlement.ejb.JvActualProductionServices;
+import com.nnpcgroup.comd.cosm.entitlement.ejb.TerminalBlendServices;
+import com.nnpcgroup.comd.cosm.entitlement.entity.JvActualProduction;
 import com.nnpcgroup.comd.cosm.entitlement.entity.Terminal;
+import com.nnpcgroup.comd.cosm.entitlement.entity.TerminalBlend;
 
 import javax.inject.Named;
 import java.io.Serializable;
 import java.util.List;
+import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
+import javax.ejb.EJBException;
 import javax.enterprise.context.SessionScoped;
 
 /**
  *
  * @author 18359
  */
-@Named(value = "jvTermProdController")
+@Named(value = "jvTermBlendController")
 @SessionScoped
-public class JvTerminalProductionController implements Serializable {
+public class JvTerminalBlendController implements Serializable {
 
     private static final long serialVersionUID = -7596150432081506756L;
-    private static final Logger log = Logger.getLogger(JvTerminalProductionController.class.getName());
+    private static final Logger log = Logger.getLogger(JvTerminalBlendController.class.getName());
 
     @EJB
-    private JvForecastProductionServices productionBean;
+    private TerminalBlendServices terminalBlendBean;
+    
+     @EJB
+    private JvActualProductionServices productionBean;
+     
+    private TerminalBlend currentTerminalBlend;
+    private List<TerminalBlend>allTerminalBlend;
 
-    private JvForecastProduction currentProduction;
+    private JvActualProduction currentProduction;
 
-    private List<JvForecastProduction> productions;
+    private List<JvActualProduction> productions;
     private ProductionDataModel dataModel;
 
     private Integer periodYear;
@@ -44,94 +55,94 @@ public class JvTerminalProductionController implements Serializable {
     /**
      * Creates a new instance of JvController
      */
-    public JvTerminalProductionController() {
-        log.info("JvTerminalProductionController::constructor activated...");
+    public JvTerminalBlendController() {
+        
     }
 
     public ProductionDataModel getDataModel() {
         return dataModel;
     }
 
-    public JvForecastProduction getCurrentProduction() {
+    public JvActualProduction getCurrentProduction() {
         return currentProduction;
     }
 
-    public void setCurrentProduction(JvForecastProduction currentProduction) {
-        log.info("ProductionController::setProduction called...");
+    public void setCurrentProduction(JvActualProduction currentProduction) {        
         this.currentProduction = currentProduction;
     }
 
-    public List<JvForecastProduction> getProductions() {
-        log.info("ProductionController::getProductions called...");
+    public List<JvActualProduction> getProductions() {       
         loadProductions();
         return productions;
     }
 
-    public void setProductions(List<JvForecastProduction> productions) {
+    public void setProductions(List<JvActualProduction> productions) {
         log.info("ProductionController::setProductions called...");
         this.productions = productions;
     }
 
-//    public void prepareCreate() {
-//        log.info("prepareCreate called...");
-//        currentProduction = productionBean.createInstance();
-//        if (periodYear != null && periodMonth != null) {
-//            currentProduction.setPeriodYear(periodYear);
-//            currentProduction.setPeriodMonth(periodMonth);
-//        }
-//        //return currentProduction;
-//    }
-//    public void destroy() {
-//        log.log(Level.INFO, "Deleting {0}...", currentProduction);
-//        persist(JsfUtil.PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("ProductionDeleted"));
-//        if (!JsfUtil.isValidationFailed()) {
-//            dataModel.removeItem(currentProduction);
-//            currentProduction = null;
-//        }
-//    }
-//    public void create() {
-//        persist(JsfUtil.PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("ProductionCreated"));
-//        if (!JsfUtil.isValidationFailed()) {
-//            reset();
-//            loadProductions();
-//        }
-//    }
-//    public void cancel() {
-//        reset();
-//        loadProductions();
-//    }
-//
-//    public void update() {
-//        persist(JsfUtil.PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("ProductionUpdated"));
-//    }
-//
-//    private void persist(JsfUtil.PersistAction persistAction, String successMessage) {
-//        if (currentProduction != null) {
-//            //setEmbeddableKeys();
-//            try {
-//                if (persistAction != JsfUtil.PersistAction.DELETE) {
-//                    productionBean.edit(currentProduction);
-//                } else {
-//                    productionBean.remove(currentProduction);
-//                }
-//                JsfUtil.addSuccessMessage(successMessage);
-//            } catch (EJBException ex) {
-//                String msg = "";
-//                Throwable cause = ex.getCause();
-//                if (cause != null) {
-//                    msg = cause.getLocalizedMessage();
-//                }
-//                if (msg.length() > 0) {
-//                    JsfUtil.addErrorMessage(msg);
-//                } else {
-//                    JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
-//                }
-//            } catch (Exception ex) {
-//                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-//                JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
-//            }
-//        }
-//    }
+    public void prepareCreate() {
+        log.info("prepareCreate called...");
+        currentProduction = new JvActualProduction();//terminalBlendBean.createInstance();
+        if (periodYear != null && periodMonth != null) {
+            currentProduction.setPeriodYear(periodYear);
+            currentProduction.setPeriodMonth(periodMonth);
+        }        
+    }
+
+    public void destroy() {
+        log.log(Level.INFO, "Deleting {0}...", currentProduction);
+        persist(JsfUtil.PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("ProductionDeleted"));
+        if (!JsfUtil.isValidationFailed()) {
+            dataModel.removeItem(currentProduction);
+            currentProduction = null;
+        }
+    }
+
+    public void create() {
+        persist(JsfUtil.PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("ProductionCreated"));
+        if (!JsfUtil.isValidationFailed()) {
+            reset();
+            loadProductions();
+        }
+    }
+
+    public void cancel() {
+        reset();
+        loadProductions();
+    }
+
+    public void update() {
+        persist(JsfUtil.PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("ProductionUpdated"));
+    }
+
+    private void persist(JsfUtil.PersistAction persistAction, String successMessage) {
+        if (allTerminalBlend != null && !allTerminalBlend.isEmpty()) {
+            //setEmbeddableKeys();
+            try {
+                if (persistAction != JsfUtil.PersistAction.DELETE) {
+                    terminalBlendBean.edit(allTerminalBlend);//TODO:Check!
+                } else {
+                    terminalBlendBean.remove(currentTerminalBlend);//TODO:Check!
+                }
+                JsfUtil.addSuccessMessage(successMessage);
+            } catch (EJBException ex) {
+                String msg = "";
+                Throwable cause = ex.getCause();
+                if (cause != null) {
+                    msg = cause.getLocalizedMessage();
+                }
+                if (msg.length() > 0) {
+                    JsfUtil.addErrorMessage(msg);
+                } else {
+                    JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
+                }
+            } catch (Exception ex) {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+                JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
+            }
+        }
+    }
     public void loadProductions() {
         if (periodYear != null && periodMonth != null && currentTerminal != null) {
             productions = productionBean.getTerminalProduction(periodYear, periodMonth, currentTerminal);

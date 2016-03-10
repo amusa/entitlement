@@ -15,20 +15,21 @@ import com.nnpcgroup.comd.cosm.entitlement.entity.TerminalBlend;
 
 import javax.inject.Named;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
-import javax.enterprise.context.SessionScoped;
+import javax.enterprise.context.RequestScoped;
 
 /**
  *
  * @author 18359
  */
 @Named(value = "jvTermBlendController")
-@SessionScoped
+@RequestScoped
 public class JvTerminalBlendController implements Serializable {
 
     private static final long serialVersionUID = -7596150432081506756L;
@@ -36,12 +37,12 @@ public class JvTerminalBlendController implements Serializable {
 
     @EJB
     private TerminalBlendServices terminalBlendBean;
-    
-     @EJB
+
+    @EJB
     private JvActualProductionServices productionBean;
-     
+
     private TerminalBlend currentTerminalBlend;
-    private List<TerminalBlend>allTerminalBlend;
+    private List<TerminalBlend> allTerminalBlend;
 
     private JvActualProduction currentProduction;
 
@@ -51,12 +52,12 @@ public class JvTerminalBlendController implements Serializable {
     private Integer periodYear;
     private Integer periodMonth;
     private Terminal currentTerminal;
-    
+
     /**
      * Creates a new instance of JvController
      */
     public JvTerminalBlendController() {
-        
+        productions = new ArrayList<>();
     }
 
     public ProductionDataModel getDataModel() {
@@ -67,11 +68,11 @@ public class JvTerminalBlendController implements Serializable {
         return currentProduction;
     }
 
-    public void setCurrentProduction(JvActualProduction currentProduction) {        
+    public void setCurrentProduction(JvActualProduction currentProduction) {
         this.currentProduction = currentProduction;
     }
 
-    public List<JvActualProduction> getProductions() {       
+    public List<JvActualProduction> getProductions() {
         loadProductions();
         return productions;
     }
@@ -87,7 +88,7 @@ public class JvTerminalBlendController implements Serializable {
         if (periodYear != null && periodMonth != null) {
             currentProduction.setPeriodYear(periodYear);
             currentProduction.setPeriodMonth(periodMonth);
-        }        
+        }
     }
 
     public void destroy() {
@@ -143,6 +144,7 @@ public class JvTerminalBlendController implements Serializable {
             }
         }
     }
+
     public void loadProductions() {
         if (periodYear != null && periodMonth != null && currentTerminal != null) {
             productions = productionBean.getTerminalProduction(periodYear, periodMonth, currentTerminal);
@@ -226,7 +228,7 @@ public class JvTerminalBlendController implements Serializable {
         Double availabilitySum = productions.stream()
                 .mapToDouble(p -> p.getAvailability())
                 .sum();
-        
+
         return availabilitySum;
     }
 
@@ -240,7 +242,7 @@ public class JvTerminalBlendController implements Serializable {
         Integer cargoesSum = (int) (availabilitySum / 950000.0);
         return cargoesSum;
     }
-  
+
     public Double getClosingStockSum() {
         Double availabilitySum = getAvailabilitySum();
         return availabilitySum % 950000.0;

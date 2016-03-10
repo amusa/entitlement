@@ -55,16 +55,7 @@ public class JvActualProductionController implements Serializable {
         log.info("JvActualProductionController::setProduction called...");
         this.currentProduction = currentProduction;
     }
-
-    public JvActualProduction getCurrentActualProduction() {
-        log.info("JvActualProductionController::getActualCurrentProduction called...");
-        return (JvActualProduction) currentProduction;
-    }
-
-    public void setCurrentActualProduction(JvActualProduction currentActualProduction) {
-        this.currentProduction = currentActualProduction;
-    }
-
+    
     public List<JvActualProduction> getProductions() {
         log.info("JvActualProductionController::getProductions called...");
         return productions;

@@ -11,8 +11,8 @@
         <title><ui:insert name="title">Default Title</ui:insert></title>
         <h:outputStylesheet library="css" name="jsfcrud.css"/>
         <h:outputScript library="js" name="jsfcrud.js"/>
-               
-        
+
+
     </h:head>
 
     <h:body>
@@ -20,7 +20,7 @@
         <p:growl id="growl" life="3000" />
 
         <p:layout fullPage="true">
-            <p:layoutUnit position="north" size="22%" >
+            <p:layoutUnit position="north" size="22%" style="border: 0">
                 <h:graphicImage url="/resources/img/entitlement-determination-banner.png" alt="NNPC Logo" />
 
                 <h:form id="menuForm">
@@ -31,51 +31,36 @@
                         <h:graphicImage value="/resources/img/ajax-loader.gif" />
                     </p:dialog>
 
-                    <p:menubar>
-                        <p:menuitem value="#{bundle.Home}" outcome="/index" icon="ui-icon-home"/>
-                        <p:submenu label="#{bundle.Entitlement}">                            
-                            <p:menuitem value="Forecast" outcome="/faces/jv/prod/forecast.xhtml" />
-                            <p:menuitem value="Actualize" outcome="/faces/jv/prod/actualize.xhtml" />
-                            <p:menuitem value="Stock Adjustment" />
-                        </p:submenu>
-                        <p:submenu label="#{bundle.Terminal}">                            
-                            <p:menuitem value="Terminal Blend" outcome="/faces/jv/prod/terminal.xhtml"/>
-                            <p:menuitem value="Cargo Allocation" />                            
-                        </p:submenu>
-                        <p:submenu label="#{bundle.FiscalArrangements}">
-                            <p:menuitem value="Joint Venture" outcome="/faces/jv/List.xhtml" />
-                            <p:menuitem value="PSC" outcome="/faces/psc/List.xhtml" />
-                            <p:menuitem value="Fiscal Assets/Crude Type" outcome="/faces/asset/List.xhtml" />
-                        </p:submenu>
-                        <p:submenu label="#{bundle.Maintenance}">
-                            <p:menuitem value="Crude Types" outcome="/faces/crudeType/List.xhtml" />
-                            <p:menuitem value="IOCS" outcome="/faces/company/List.xhtml" />
-                            <p:menuitem value="Terminal" outcome="/faces/terminal/List.xhtml" />
-                            <p:menuitem value="Equity Types" outcome="/faces/equityType/List.xhtml" />
-                        </p:submenu>
-                    </p:menubar>
+                    <ui:insert name="breadcrum">
+                        <p:breadCrumb style="border: 0;">
+                            <p:menuitem value="#{bundle.Home}" url="/faces/index.xhtml" icon="ui-icon-home"/>
+                            <p:menuitem value="Entitlement" url="#" />                            
+                        </p:breadCrumb>
+                    </ui:insert>                   
 
                 </h:form>
 
             </p:layoutUnit>
 
-            <p:layoutUnit position="south" size="10%">
+            <p:layoutUnit position="south" size="10%" style="border: 0">
                 <ui:insert name="footer">
                     <h:outputText value= "COMD (C) Copyright 2016"/>
                 </ui:insert>
             </p:layoutUnit>
 
-            <p:layoutUnit position="west" size="15%">
+            <p:layoutUnit position="west" size="15%" style="border: 0">
                 <ui:insert name="aside">
                     <h:form>
-                        <p:menu style="width: 95%;height: 100%">
+                        <p:menu style="width: 95%;height: 100%;border: 0">
                             <p:submenu label="Entitlement">
-                                <p:menuitem value="Forecast" url="/faces/jv/prod/forecast-list.xhtml" />
+                                <p:menuitem value="Forecast" url="/faces/jv/prod/forecast.xhtml" />
                                 <p:menuitem value="Actualize" url="/faces/jv/prod/actualize-list.xhtml" />
                                 <p:menuitem value="Stock Adjustment" />                                
                             </p:submenu>
                             <p:submenu label="#{bundle.Terminal}">                            
-                                <p:menuitem value="Terminal Blend" outcome="/faces/jv/prod/terminal.xhtml"/>
+                                <p:menuitem value="Terminal Blend (Nom)" outcome="/faces/jv/prod/terminal.xhtml"/>
+                                <p:menuitem value="Terminal Blend (Actual)" outcome="/faces/jv/prod/actual-terminal-blend.xhtml"/>
+
                                 <p:menuitem value="Cargo Allocation" />                            
                             </p:submenu>
                             <p:submenu label="Fiscal Arrg">
@@ -88,7 +73,7 @@
                 </ui:insert>
             </p:layoutUnit>
 
-            <p:layoutUnit position="center">
+            <p:layoutUnit position="center" style="border: 0">
                 <ui:insert name="body"/>
             </p:layoutUnit>
 

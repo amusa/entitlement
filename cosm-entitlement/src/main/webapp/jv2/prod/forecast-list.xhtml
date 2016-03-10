@@ -19,6 +19,7 @@
         </ui:define>
 
         <ui:define name="content-area">  
+            <h:messages id="growl" />
             <div class="row">   
 
                 <h:form id="jvProdListForm">                   
@@ -202,16 +203,20 @@
 
                             </f:facet>
                         </h:dataTable>
-
+                        
                     </h:panelGroup>
+                    <h:commandButton value="Create" pt:look="warning" pt:data-target="#JvActualizeCreateDlg" pt:data-toggle="modal" 
+                                     class="btn btn-sm" >
+                        <f:ajax event="click" listener="#{jvActualController.prepareCreate}" render="JvActualizeCreateForm"/>
+
+                    </h:commandButton>
 
                 </h:form>
             </div>
-
-            <!--            <ui:include src="_actualize-create.xhtml"/>
-                        <ui:include src="_forecast-create.xhtml"/>
-                        <ui:include src="_forecast-edit.xhtml"/>
-                        <ui:include src="_forecast-view.xhtml"/>-->
+            <ui:include src="_actualize-create.xhtml"/>
+            <ui:include src="_forecast-create.xhtml"/>
+            <ui:include src="_forecast-edit.xhtml"/>
+            <ui:include src="_forecast-view.xhtml"/>
         </ui:define>
 
     </ui:composition>

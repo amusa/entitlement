@@ -13,6 +13,14 @@
         <ui:define name="title">
             <h:outputText value="Joint Venture List"/>
         </ui:define>
+        
+         <ui:define name="breadcrum">
+            <p:breadCrumb style="border: 0;">
+                <p:menuitem value="#{bundle.Home}" url="/faces/index.xhtml" icon="ui-icon-home"/>
+                <p:menuitem value="Joint Venture" url="/faces/jv/prod/forecast.xhtml" />
+                <p:menuitem value="Terminal Blend (Nom)" disabled="true"/>
+            </p:breadCrumb>
+        </ui:define>
 
         <ui:define name="body">
             <div class="row">   
@@ -47,8 +55,7 @@
                         </p:commandButton>
                     </p:panelGrid>
 
-                    <hr class="whiter m-t-20" />
-                    <!-- Multi Column -->
+                    
                     <h:panelGroup id="forecast_panel">
 
                         <p:dataTable id="prodTable" var="prod" value="#{jvTermProdController.dataModel}" 

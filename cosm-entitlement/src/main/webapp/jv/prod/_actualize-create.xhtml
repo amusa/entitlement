@@ -12,7 +12,7 @@
         <p:dialog id="JvActualizeCreateDlg" widgetVar="JvActualizeCreateDlg" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateJvActualProductionTitle}">
             <h:form id="JvActualizeCreateForm">
                 <h:panelGroup id="display">
-                    <p:panelGrid id="ActualizePanel"  columns="2" rendered="#{jvActualController.currentActualProduction != null}">
+                    <p:panelGrid id="ActualizePanel"  columns="2" rendered="#{jvActualController.currentProduction != null}">
 
                         <p:outputLabel value="Year" for="periodYear"/>
                         <p:selectOneMenu id="periodYear" value="#{jvActualController.currentProduction.periodYear}" class="select" >                                              
@@ -28,47 +28,47 @@
                         </p:selectOneMenu>
 
                         <p:outputLabel value="Asset/Crude Type" for="contractStream" />
-                        <p:selectOneMenu id="contractStream" value="#{jvActualController.currentActualProduction.contractStream}" >
+                        <p:selectOneMenu id="contractStream" value="#{jvActualController.currentProduction.contractStream}" >
                             <f:selectItems value="#{contractStreamController.itemsAvailableSelectOne}"/>
                             <p:ajax/>
                         </p:selectOneMenu>
 
                         <p:outputLabel value="Daily Prod (bpd)" for="productionVolume" />
-                        <p:inputText id="productionVolume" value="#{jvActualController.currentActualProduction.productionVolume}" title="Daily Production Volume" >
+                        <p:inputText id="productionVolume" value="#{jvActualController.currentProduction.productionVolume}" title="Daily Production Volume" >
                             <p:ajax event="change" listener="#{jvActualController.productionVolumeChange}"                                     
                                     update="display grossVolume openingStock closingStock ownShareEntitlement partnerShareEntitlement" />
                         </p:inputText>
 
                         <p:outputLabel value="Gross Prod" for="grossVolume" />
-                        <p:inputText id="grossVolume" value="#{jvActualController.currentActualProduction.grossProduction}" title="Gross Prod Volume" >
+                        <p:inputText id="grossVolume" value="#{jvActualController.currentProduction.grossProduction}" title="Gross Prod Volume" >
                             <f:convertNumber pattern="###,###,###.####" />
                         </p:inputText>
 
                         <p:outputLabel value="Stock Adjustment:" for="stockAdjustment" />
-                        <p:inputText id="stockAdjustment" value="#{jvActualController.currentActualProduction.stockAdjustment}" title="Stock Adjustment" >
+                        <p:inputText id="stockAdjustment" value="#{jvActualController.currentProduction.stockAdjustment}" title="Stock Adjustment" >
                             <p:ajax event="change" listener="#{jvActualController.productionVolumeChange}"                                     
                                     update="display grossVolume openingStock closingStock ownShareEntitlement partnerShareEntitlement" />
                             <f:convertNumber pattern="###,###,###.####" />
                         </p:inputText>
 
                         <p:outputLabel value="Own Entitlement:" for="ownShareEntitlement" />
-                        <p:inputText id="ownShareEntitlement" value="#{jvActualController.currentActualProduction.ownShareEntitlement}" title="Own Entitlement">
+                        <p:inputText id="ownShareEntitlement" value="#{jvActualController.currentProduction.ownShareEntitlement}" title="Own Entitlement">
                             <f:convertNumber pattern="###,###,###.####" />
                         </p:inputText>
 
                         <p:outputLabel value="Partner Entitlement:" for="partnerShareEntitlement" />
-                        <p:inputText id="partnerShareEntitlement" value="#{jvActualController.currentActualProduction.partnerShareEntitlement}" title="Partner Entitlement">
+                        <p:inputText id="partnerShareEntitlement" value="#{jvActualController.currentProduction.partnerShareEntitlement}" title="Partner Entitlement">
                             <f:convertNumber pattern="###,###,###.####" />
                         </p:inputText>
 
                         <p:outputLabel value="Opening Stock:" for="openingStock" />
-                        <p:inputText id="openingStock" value="#{jvActualController.currentActualProduction.openingStock}" title="OpeningStock" >
+                        <p:inputText id="openingStock" value="#{jvActualController.currentProduction.openingStock}" title="OpeningStock" >
                             <p:ajax/>
                             <f:convertNumber pattern="###,###,###.####" />
                         </p:inputText>
 
                         <p:outputLabel value="Availability" for="availability" />
-                        <p:outputLabel id="availability" value="#{jvActualController.currentActualProduction.availability}" title="Availability" >
+                        <p:outputLabel id="availability" value="#{jvActualController.currentProduction.availability}" title="Availability" >
                             <f:convertNumber pattern="###,###,###.####" />
                         </p:outputLabel>
 
@@ -81,7 +81,7 @@
                         <p:inputText id="cargoes" value="#{jvActualController.currentProduction.cargos}" title="Lifting Cargoes" />
 
                         <p:outputLabel value="Closing Stock:" for="closingStock" />
-                        <p:outputLabel id="closingStock" value="#{jvActualController.currentActualProduction.closingStock}" title="ClosingStock" >
+                        <p:outputLabel id="closingStock" value="#{jvActualController.currentProduction.closingStock}" title="ClosingStock" >
                             <f:convertNumber pattern="###,###,###.####" />
                         </p:outputLabel>
 

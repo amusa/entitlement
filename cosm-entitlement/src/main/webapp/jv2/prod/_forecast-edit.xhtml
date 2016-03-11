@@ -9,78 +9,134 @@
 
     <ui:composition>
 
-        <p:dialog id="JvEditDlg" widgetVar="JvEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.EditJvForecastTitle}">
-            <h:form id="JvEditForm">
-                <h:panelGroup id="display">
-                    <p:panelGrid columns="2" rendered="#{jvProdController.currentProduction != null}">
-                        <p:outputLabel value="Year" for="periodYear"/>
-                        <p:inputText id="periodYear" value="#{jvProdController.periodYear}" 
-                                     class="form-control input-sm m-b-10" pt:placeholder="Year"/>
-                        <p:outputLabel value="Month" for="periodMonth"/>
-                        <p:inputText id="periodMonth" value = "#{jvProdController.periodMonth}" 
-                                     class="form-control input-sm m-b-10" pt:placeholder="Month"
-                                     />
+        <div class="modal fade" id="JvEditDlg" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">Edit JV Forecast</h4>
+                    </div>
+                    <h:form id="JvEditForm">
+                        <div class="modal-body">
 
-                        <p:outputLabel value="Asset Stream/Crude Type" for="csOptions"/>
-                        <p:selectOneMenu id="csOptions" value="#{jvProdController.currentProduction.contractStream}" class="select" 
-                                         >
-                            <f:selectItems value="#{contractStreamController.itemsAvailableSelectOne}"/>     
+                            <h:panelGroup id="JvEditPanel" rendered="#{jvProdController.currentProduction != null}">
+                                <div class="row">
+                                    <div class="col-md-6 m-b-15">
+                                        <h:outputLabel value="Year" for="periodYear"/>
+                                        <h:selectOneMenu id="periodYear" value="#{jvProdController.currentProduction.periodYear}" class="form-control input-sm m-b-10" >                                              
+                                            <f:selectItems value="#{generalController.yearsAvailableSelectOne}" var="year" itemValue="#{year.value}"/>   
+                                            <f:ajax listener="#{generalController.yearChanged}" event="change" render="periodMonth"/>     
+                                        </h:selectOneMenu>                                        
+                                    </div>
 
-                        </p:selectOneMenu>
+                                    <div class="col-md-6 m-b-15">
+                                        <h:outputLabel value="Month" for="periodMonth"/>
+                                        <h:selectOneMenu id="periodMonth" value="#{jvProdController.currentProduction.periodMonth}" class="form-control input-sm m-b-10">                                              
+                                            <f:selectItem itemValue="#{null}" itemLabel="--select--" />
+                                            <f:selectItems value="#{generalController.months}" var="mth" itemValue="#{mth.month}" itemLabel="#{mth.monthStr}" />   
+                                            <f:ajax />     
+                                        </h:selectOneMenu>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 m-b-15">
+                                        <h:outputLabel value="Asset/Crude Type" for="contractStream" />
+                                        <h:selectOneMenu id="contractStream" value="#{jvProdController.currentProduction.contractStream}" class="form-control input-sm m-b-10">
+                                            <f:selectItems value="#{contractStreamController.itemsAvailableSelectOne}"/>
+                                            <f:ajax/>
+                                        </h:selectOneMenu>
+                                    </div>
+                                </div>
+                                <div class="row">                                    
+                                    <div class="col-md-6 m-b-15">
+                                        <h:outputLabel value="Daily Prod (bpd)" for="productionVolume" />
+                                        <h:inputText id="productionVolume" value="#{jvProdController.currentProduction.productionVolume}" title="Daily Production Volume" class="form-control input-sm" >
+                                            <f:ajax event="change" listener="#{jvProdController.productionVolumeChange}"                                     
+                                                    render="grossVolume openingStock closingStock ownShareEntitlement partnerShareEntitlement" />
+                                        </h:inputText>
+                                    </div>
+                                    <div class="col-md-6 m-b-15">
+                                        <h:outputLabel value="Gross Prod" for="grossVolume" />
+                                        <h:inputText id="grossVolume" value="#{jvProdController.currentProduction.grossProduction}" title="Gross Prod Volume" class="form-control input-sm" >
+                                            <f:convertNumber pattern="###,###,###.####" />
+                                        </h:inputText>
+                                    </div>
+                                </div>
 
-                        <p:outputLabel value="Daily Prod (bpd)" for="dailyProd"/>
-                        <p:inputText id="dailyProd" value = "#{jvProdController.currentProduction.productionVolume}"  class="form-control input-sm m-b-10" pt:placeholder="Gross Production">
-                            <f:convertNumber pattern="###,###,###.####" />
-                             <p:ajax event="change" listener="#{jvProdController.productionVolumeChange}"  
-                                    update="display grossProd openingStock ownShareEntitlement partnerShareEntitlement closingStock"
-                                    />
-                        </p:inputText>
+                                <div class="row">
+                                    <div class="col-md-6 m-b-15">
+                                        <h:outputLabel value="Own Entitlement:" for="ownShareEntitlement" />
+                                        <h:inputText id="ownShareEntitlement" value="#{jvProdController.currentProduction.ownShareEntitlement}" title="Own Entitlement" class="form-control input-sm">
+                                            <f:convertNumber pattern="###,###,###.####" />
+                                        </h:inputText>
+                                    </div>
 
-                        <p:outputLabel value="Gross Prod" for="grossProd"/>
-                        <p:inputText id="grossProd" value = "#{jvProdController.currentProduction.grossProduction}"  class="form-control input-sm m-b-10" pt:placeholder="Gross Production">
-                            <f:convertNumber pattern="###,###,###.####" />
-                        </p:inputText>
+                                    <div class="col-md-6 m-b-15">
+                                        <h:outputLabel value="Partner Entitlement:" for="partnerShareEntitlement" />
+                                        <h:inputText id="partnerShareEntitlement" value="#{jvProdController.currentProduction.partnerShareEntitlement}" title="Partner Entitlement" class="form-control input-sm">
+                                            <f:convertNumber pattern="###,###,###.####" />
+                                        </h:inputText>
+                                    </div>
+                                </div>
 
-                        <p:outputLabel value="Own Entitlement" for="ownShareEntitlement" />
-                        <p:inputText id="ownShareEntitlement" value="#{jvProdController.currentProduction.ownShareEntitlement}" title="Own Entitlement" >
-                            <f:convertNumber pattern="###,###,###.####" />
-                        </p:inputText>
+                                <div class="row">
+                                    <div class="col-md-6 m-b-15">
+                                        <h:outputLabel value="Opening Stock:" for="openingStock" />
+                                        <h:inputText id="openingStock" value="#{jvProdController.currentProduction.openingStock}" title="Opening Stock" class="form-control input-sm">
+                                            <f:ajax/>
+                                            <f:convertNumber pattern="###,###,###.####" />
+                                        </h:inputText>
+                                    </div>
 
-                        <p:outputLabel value="Partner Entitlement" for="partnerShareEntitlement" />
-                        <p:inputText id="partnerShareEntitlement" value="#{jvProdController.currentProduction.partnerShareEntitlement}" title="Partner Entitlement" >
-                            <f:convertNumber pattern="###,###,###.####" />
-                        </p:inputText>
+                                    <div class="col-md-6 m-b-15">
+                                        <h:outputLabel value="Availability" for="availability" />
+                                        <h:outputLabel id="availability" value="#{jvProdController.currentProduction.availability}" title="Availability" class="form-control input-sm">
+                                            <f:convertNumber pattern="###,###,###.####" />
+                                        </h:outputLabel>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 m-b-15">
+                                        <h:outputLabel value="Lifting (Nom)" for="lifting" />
+                                        <h:inputText id="lifting" value="#{jvProdController.currentProduction.lifting}" title="Lifting (Nom)" class="form-control input-sm">
+                                            <f:convertNumber pattern="###,###,###.####" />
+                                        </h:inputText>
+                                    </div>
 
-                        <p:outputLabel value="Opening Stock" for="openingStock" />
-                        <p:inputText id="openingStock" value="#{jvProdController.currentProduction.openingStock}" title="OpeningStock" >
-                            <f:convertNumber pattern="###,###,###.####" />
-                        </p:inputText>
+                                    <div class="col-md-6 m-b-15">
+                                        <h:outputLabel value="Lifting Cargoes" for="cargoes" />
+                                        <h:inputText id="cargoes" value="#{jvProdController.currentProduction.cargos}" title="Lifting Cargoes" class="form-control input-sm"/>
 
-                        <p:outputLabel value="Availability" for="availability" />
-                        <p:inputText id="availability" value="#{jvProdController.currentProduction.availability}" title="Availability" >
-                            <f:convertNumber pattern="###,###,###.####" />
-                        </p:inputText>
+                                    </div>
+                                </div>
 
-                        <p:outputLabel value="Lifting (Nom)" for="lifting" />
-                        <p:inputText id="lifting" value="#{jvProdController.currentProduction.lifting}" title="Lifting (Nom)" >
-                            <f:convertNumber pattern="###,###,###.####" />
-                        </p:inputText>
+                                <div class="row">
+                                    <div class="col-md-6 m-b-15">
+                                        <h:outputLabel value="Closing Stock:" for="closingStock" />
+                                        <h:outputLabel id="closingStock" value="#{jvProdController.currentProduction.closingStock}" title="Closing Stock" class="form-control input-sm">
+                                            <f:convertNumber pattern="###,###,###.####" />
+                                        </h:outputLabel>
+                                    </div>
 
-                        <p:outputLabel value="Lifting Cargoes" for="cargoes" />
-                        <p:inputText id="cargoes" value="#{jvProdController.currentProduction.cargos}" title="Lifting Cargoes" />
-
-                        <p:outputLabel value="Closing Stock" for="closingStock" />
-                        <p:inputText id="closingStock" value="#{jvProdController.currentProduction.closingStock}" title="Closing Stock" >
-                            <f:convertNumber pattern="###,###,###.####" />
-                        </p:inputText>
+                                </div>
+                            </h:panelGroup>
 
 
-                    </p:panelGrid>
-                    <p:commandButton actionListener="#{jvProdController.update}" value="#{bundle.Save}" update="display,:jvProdListForm:prodTable,:growl" oncomplete="handleSubmit(args,'JvEditDialog');"/>
-                    <p:commandButton actionListener="#{jvProdController.cancel}"  value="#{bundle.Cancel}" onclick="JvEditDialog.hide()" immediate="true"/>
-                </h:panelGroup>
-            </h:form>
-        </p:dialog>
+                        </div>
+                        <div class="modal-footer">
+                            <h:commandButton  value="#{bundle.save}" pt:data-dismiss="modal" class="btn btn-sm">
+                                <f:ajax listener="#{jvProdController.update}" render=":jvProdListForm:prodTable,:growl"/>
+                            </h:commandButton>
+
+                            <h:commandButton   value="#{bundle.Cancel}" pt:data-dismiss="modal" immediate="true" class="btn btn-sm">
+                                <f:ajax event="click" listener="#{jvProdController.cancel}" render=":jvProdListForm:prodTable,:growl"/>
+                            </h:commandButton>   
+
+                        </div>
+                    </h:form>
+                </div>
+            </div>
+        </div> 
 
     </ui:composition>
 </html>

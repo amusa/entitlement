@@ -156,19 +156,49 @@
                                 </h:outputText>
                             </h:column>
                             <h:column>
-                                <h:panelGroup class="btn-group">
+                                <div class="btn-group">
                                     <button jsf:id="action" type="button" class="btn btn-sm dropdown-toggle" data-toggle="dropdown">
                                         Action <span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu" jsf:id="btnList">
-                                        <li><a href="#">Actualize</a></li>
+                                        <li>
+                                            <h:commandLink  pt:data-target="#JvActualizeCreateDlg" pt:look="warning" pt:data-toggle="modal" >
+                                                <span class="icon">&#61845;</span>
+                                                #{bundle.Actualize}
+                                                <f:ajax event="click" render="JvActualizeCreateForm" listener="#{jvActualController.actualize(prod)}"/>
+                                            </h:commandLink>
+                                        </li>
                                         <li class="divider"></li>
-                                        <li><a href="#">Create</a></li>
-                                        <li><a href="#">View</a></li>
-                                        <li><a href="#">Edit</a></li>  
-                                        <li><a href="#">Delete</a></li> 
+                                        <li>
+                                            <h:commandLink  pt:data-target="#JvCreateDlg" pt:look="warning" pt:data-toggle="modal" >
+                                                <span class="icon">&#61943;</span>
+                                                #{bundle.Create}
+                                                <f:ajax event="click" render="JvCreateForm" listener="#{jvProdController.prepareCreate}" />
+                                            </h:commandLink>                                       
+                                        </li>
+                                        
+                                        <li>
+                                            <h:commandLink>
+                                                <span class="icon">&#61698;</span>
+                                                #{bundle.View}
+                                                <f:ajax render="JvViewForm" />
+                                            </h:commandLink>
+                                        </li>
+                                        <li><h:commandLink pt:data-target="#JvEditDlg" pt:look="warning" pt:data-toggle="modal">
+                                                <span class="icon">&#61952;</span>
+                                                #{bundle.Edit}
+                                                <f:ajax event="click" render="JvEditForm" listener="#{jvProdController.setCurrentProduction(prod)}"/>
+                                            </h:commandLink>
+                                        </li>  
+                                        <li>
+                                            <h:commandLink>
+                                                <span class="icon">&#61918;</span>
+                                                #{bundle.Delete}
+                                                <f:ajax render="prodTable" listener="#{jvProdController.destroy(prod)}"/>
+                                            </h:commandLink>
+                                        </li> 
                                     </ul>
-                                </h:panelGroup>
+                                </div>
                             </h:column>
 
                             <f:facet name="footer">                                                                
@@ -178,19 +208,19 @@
                                     <f:ajax event="click" render="JvActualizeCreateForm" listener="#{jvActualController.actualize(jvProdController.currentProduction)}"/>
                                 </button>
 
-                                <button jsf:id="createButton" class="btn m-r-5">
+                                <button jsf:id="createButton" look="warning" data-target="#JvCreateDlg" data-toggle="modal" class="btn m-r-5">
                                     <span class="icon">&#61943;</span>
                                     #{bundle.Create}
-                                    <f:ajax event="click" render="JvCreateForm" listener="#{jvProdController.prepareCreate}" />
+                                    <f:ajax event="click" render="JvCreateForm" listener="#{jvProdController.prepareCreate}" />                                    
                                 </button>
 
-                                <button jsf:id="viewButton" class="btn m-r-5" jsf:disabled="#{empty jvProdController.currentProduction}" >
+                                <button jsf:id="viewButton" class="btn m-r-5"  >
                                     <span class="icon">&#61698;</span>
                                     #{bundle.View}
                                     <f:ajax render="JvViewForm" />
                                 </button>
-                                <button jsf:id="editButton" class="btn m-r-5" jsf:disabled="#{empty jvProdController.currentProduction}" >
-                                    <span class="icon">&#61952;</span>
+                                <button jsf:id="editButton" class="btn m-r-5"  >
+                                    <span class="icon">&#61952;</span>                                    
                                     #{bundle.Edit}
                                     <f:ajax event="click" render="JvEditForm" />
                                 </button>
@@ -203,7 +233,7 @@
 
                             </f:facet>
                         </h:dataTable>
-                        
+
                     </h:panelGroup>
                     <h:commandButton value="Create" pt:look="warning" pt:data-target="#JvActualizeCreateDlg" pt:data-toggle="modal" 
                                      class="btn btn-sm" >

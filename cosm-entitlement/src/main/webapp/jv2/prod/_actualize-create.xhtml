@@ -14,14 +14,14 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">#times;</button>
-                        <h4 class="modal-title">Create JV Production</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">JV Forecast Actualization</h4>
                     </div>
                     <h:form id="JvActualizeCreateForm">
                         <div class="modal-body">
 
 
-                            <h:panelGroup id="ActualizePanel" rendered="#{jvActualController.currentProduction != null}">
+                            <h:panelGroup id="ActualizePanel" >
                                 <div class="row">
                                     <div class="col-md-6 m-b-15">
                                         <h:outputLabel value="Year" for="periodYear"/>
@@ -134,7 +134,7 @@
                         </div>
                         <div class="modal-footer">
                             <h:commandButton value="#{bundle.Save}" class="btn btn-sm" >
-                                <f:ajax event="click" listener="#{jvActualController.create}" render=":jvProdListForm:prodTable,:growl"/>
+                                <f:ajax event="click" listener="#{jvActualController.create}" render="jvProdListForm prodTable growl"/>
                             </h:commandButton>
                             <h:commandButton   value="#{bundle.Cancel}" pt:data-dismiss="modal" immediate="true" class="btn btn-sm">
                                 <f:ajax event="click" listener="#{jvActualController.cancel}"/>

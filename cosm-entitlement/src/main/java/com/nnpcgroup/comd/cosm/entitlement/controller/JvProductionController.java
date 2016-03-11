@@ -10,6 +10,7 @@ import com.nnpcgroup.comd.cosm.entitlement.controller.util.ProductionDataModel;
 import com.nnpcgroup.comd.cosm.entitlement.ejb.JvForecastProductionServices;
 import com.nnpcgroup.comd.cosm.entitlement.entity.FiscalArrangement;
 import com.nnpcgroup.comd.cosm.entitlement.entity.JvForecastProduction;
+import com.nnpcgroup.comd.cosm.entitlement.entity.Production;
 
 import javax.inject.Named;
 import java.io.Serializable;
@@ -95,6 +96,11 @@ public class JvProductionController implements Serializable {
         }
     }
 
+    public void destroy(JvForecastProduction prod) {
+        setCurrentProduction(prod);
+        destroy();
+    }
+
     public void create() {
         persist(JsfUtil.PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("ProductionCreated"));
         if (!JsfUtil.isValidationFailed()) {
@@ -149,6 +155,7 @@ public class JvProductionController implements Serializable {
 
     public void loadProductionsByContract() {
         if (periodYear != null && periodMonth != null && currentFiscalArrangement != null) {
+            log.log(Level.INFO, "Loading Productions By Contract...");
             productions = productionBean.findByContractPeriod(periodYear, periodMonth, currentFiscalArrangement);
             refreshDataModel();
         }

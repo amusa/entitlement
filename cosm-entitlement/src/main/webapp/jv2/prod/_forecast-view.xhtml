@@ -9,69 +9,111 @@
       xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
 
     <ui:composition>
+        <div class="modal fade" id="JvViewDlg" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">View JV Forecast</h4>
+                    </div>
+                    <h:form id="JvViewForm">
+                        <div class="modal-body">
+                            <h:panelGroup id="JvViewPanel" rendered="#{jvProdController.currentProduction != null}">
+                                <div class="row">
+                                    <div class="col-md-6 m-b-15">
+                                        <h:outputLabel value="Year" for="periodYear"/>
+                                        <h:outputLabel id="periodYear" value="#{jvProdController.currentProduction.periodYear}" class="form-control input-sm m-b-10"/>   
+                                    </div>
 
-        <p:dialog id="JvViewDlg" widgetVar="JvViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewJvForecastTitle}">
-            <h:form id="JvViewForm">
-                <h:panelGroup id="display">
-                    <p:panelGrid columns="2" rendered="#{jvProdController.currentProduction != null}">
-                        <p:outputLabel value="Year" for="periodYear"/>
-                        <p:outputLabel id="periodYear" value="#{jvProdController.currentProduction.periodYear}" 
-                                       class="form-control input-sm m-b-10" pt:placeholder="Year"/>
-                        <p:outputLabel value="Month" for="periodMonth"/>
-                        <p:outputLabel id="periodMonth" value = "#{jvProdController.currentProduction.periodMonth}" 
-                                       class="form-control input-sm m-b-10" pt:placeholder="Month"
-                                       />
-                        <p:outputLabel value="Asset Stream/Crude Type" for="csOptions"/>
-                        <p:outputLabel id="csOptions" value="#{jvProdController.currentProduction.contractStream.fiscalArrangement.title}/#{jvProdController.currentProduction.contractStream.crudeType.code}" />
+                                    <div class="col-md-6 m-b-15">
+                                        <h:outputLabel value="Month" for="periodMonth"/>
+                                        <h:outputLabel id="periodMonth" value="#{jvProdController.currentProduction.periodMonth}" class="form-control input-sm m-b-10"/>   
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 m-b-15">
+                                        <h:outputLabel value="Asset/Crude Type" for="contractStream" />
+                                        <h:outputLabel id="contractStream" value="#{jvProdController.currentProduction.contractStream}" class="form-control input-sm m-b-10"/>
+                                    </div>
+                                </div>
+                                <div class="row">                                    
+                                    <div class="col-md-6 m-b-15">
+                                        <h:outputLabel value="Daily Prod (bpd)" for="productionVolume" />
+                                        <h:outputLabel id="productionVolume" value="#{jvProdController.currentProduction.productionVolume}" title="Daily Production Volume" class="form-control input-sm">
+                                            <f:convertNumber pattern="###,###,###.####" />
+                                        </h:outputLabel>
+                                    </div>
+                                    <div class="col-md-6 m-b-15">
+                                        <h:outputLabel value="Gross Prod" for="grossVolume" />
+                                        <h:outputLabel id="grossVolume" value="#{jvProdController.currentProduction.grossProduction}" title="Gross Prod Volume" class="form-control input-sm" >
+                                            <f:convertNumber pattern="###,###,###.####" />
+                                        </h:outputLabel>
+                                    </div>
+                                </div>
 
-                        <p:outputLabel value="Daily Prod (bpd)" for="dailyProd" />
-                        <p:outputLabel id="dailyProd" value = "#{jvProdController.currentProduction.productionVolume}"  class="form-control input-sm m-b-10" pt:placeholder="Gross Production">
-                            <f:convertNumber pattern="###,###,###.####" />
-                        </p:outputLabel>
+                                <div class="row">
+                                    <div class="col-md-6 m-b-15">
+                                        <h:outputLabel value="Own Entitlement:" for="ownShareEntitlement" />
+                                        <h:outputLabel id="ownShareEntitlement" value="#{jvProdController.currentProduction.ownShareEntitlement}" title="Own Entitlement" class="form-control input-sm">
+                                            <f:convertNumber pattern="###,###,###.####" />
+                                        </h:outputLabel>
+                                    </div>
 
-                        <p:outputLabel value="Gross Prod " for="grossProd" />
-                        <p:outputLabel id="grossProd" value = "#{jvProdController.currentProduction.grossProduction}"  class="form-control input-sm m-b-10" pt:placeholder="Gross Production">
-                            <f:convertNumber pattern="###,###,###.####" />
-                        </p:outputLabel>
+                                    <div class="col-md-6 m-b-15">
+                                        <h:outputLabel value="Partner Entitlement:" for="partnerShareEntitlement" />
+                                        <h:outputLabel id="partnerShareEntitlement" value="#{jvProdController.currentProduction.partnerShareEntitlement}" title="Partner Entitlement" class="form-control input-sm">
+                                            <f:convertNumber pattern="###,###,###.####" />
+                                        </h:outputLabel>
+                                    </div>
+                                </div>
 
-                        <p:outputLabel value="Own Entitlement" for="ownShareEntitlement" />
-                        <p:outputLabel id="ownShareEntitlement" value="#{jvProdController.currentProduction.ownShareEntitlement}" title="Own Entitlement" >
-                            <f:convertNumber pattern="###,###,###.####" />
-                        </p:outputLabel>
+                                <div class="row">
+                                    <div class="col-md-6 m-b-15">
+                                        <h:outputLabel value="Opening Stock:" for="openingStock" />
+                                        <h:outputLabel id="openingStock" value="#{jvProdController.currentProduction.openingStock}" title="Opening Stock" class="form-control input-sm">                                          
+                                            <f:convertNumber pattern="###,###,###.####" />
+                                        </h:outputLabel>
+                                    </div>
 
-                        <p:outputLabel value="Partner Entitlement" for="partnerShareEntitlement" />
-                        <p:outputLabel id="partnerShareEntitlement" value="#{jvProdController.currentProduction.partnerShareEntitlement}" title="Partner Entitlement" >
-                            <f:convertNumber pattern="###,###,###.####" />
-                        </p:outputLabel>
+                                    <div class="col-md-6 m-b-15">
+                                        <h:outputLabel value="Availability" for="availability" />
+                                        <h:outputLabel id="availability" value="#{jvProdController.currentProduction.availability}" title="Availability" class="form-control input-sm">
+                                            <f:convertNumber pattern="###,###,###.####" />
+                                        </h:outputLabel>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 m-b-15">
+                                        <h:outputLabel value="Lifting (Nom)" for="lifting" />
+                                        <h:outputLabel id="lifting" value="#{jvProdController.currentProduction.lifting}" title="Lifting (Nom)" class="form-control input-sm">
+                                            <f:convertNumber pattern="###,###,###.####" />
+                                        </h:outputLabel>
+                                    </div>
 
-                        <p:outputLabel value="Opening Stock" for="openingStock" />
-                        <p:outputLabel id="openingStock" value="#{jvProdController.currentProduction.openingStock}" title="Opening Stock" >
-                            <f:convertNumber pattern="###,###,###.####" />
-                        </p:outputLabel>
+                                    <div class="col-md-6 m-b-15">
+                                        <h:outputLabel value="Lifting Cargoes" for="cargoes" />
+                                        <h:outputLabel id="cargoes" value="#{jvProdController.currentProduction.cargos}" title="Lifting Cargoes" class="form-control input-sm"/>
+                                    </div>
+                                </div>
 
-                        <p:outputLabel value="Availability" for="availability" />
-                        <p:outputLabel id="availability" value="#{jvProdController.currentProduction.availability}" title="Availability" >
-                            <f:convertNumber pattern="###,###,###.####" />
-                        </p:outputLabel>
+                                <div class="row">
+                                    <div class="col-md-6 m-b-15">
+                                        <h:outputLabel value="Closing Stock:" for="closingStock" />
+                                        <h:outputLabel id="closingStock" value="#{jvProdController.currentProduction.closingStock}" title="Closing Stock" class="form-control input-sm">
+                                            <f:convertNumber pattern="###,###,###.####" />
+                                        </h:outputLabel>
+                                    </div>
 
-                        <p:outputLabel value="Lifting (Nom)" for="lifting" />
-                        <p:outputLabel id="lifting" value="#{jvProdController.currentProduction.lifting}" title="Lifting (Nom)" >
-                            <f:convertNumber pattern="###,###,###.####" />
-                        </p:outputLabel>
+                                </div>
+                            </h:panelGroup>
 
-                        <p:outputLabel value="Lifting Cargoes" for="cargoes" />
-                        <p:outputLabel id="cargoes" value="#{jvProdController.currentProduction.cargos}" title="Lifting Cargoes" />
-
-                        <p:outputLabel value="Closing Stock" for="closingStock" />
-                        <p:outputLabel id="closingStock" value="#{jvProdController.currentProduction.closingStock}" title="Closing Stock" >
-                            <f:convertNumber pattern="###,###,###.####" />
-                        </p:outputLabel>
-
-                    </p:panelGrid>
-                    <p:commandButton value="#{bundle.Close}" onclick="JvViewDialog.hide()"/>
-                </h:panelGroup>
-            </h:form>
-        </p:dialog>
-
+                        </div>
+                        <div class="modal-footer">
+                            <h:commandButton   value="#{bundle.Close}" pt:data-dismiss="modal" class="btn btn-sm"/>                           
+                        </div>
+                    </h:form>
+                </div>
+            </div>
+        </div> 
     </ui:composition>
 </html>

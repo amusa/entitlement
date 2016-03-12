@@ -13,8 +13,8 @@
         <ui:define name="title">
             <h:outputText value="Joint Venture List"/>
         </ui:define>
-        
-         <ui:define name="breadcrum">
+
+        <ui:define name="breadcrum">
             <p:breadCrumb style="border: 0;">
                 <p:menuitem value="#{bundle.Home}" url="/faces/index.xhtml" icon="ui-icon-home"/>
                 <p:menuitem value="Joint Venture" url="/faces/jv/prod/forecast.xhtml" />
@@ -23,228 +23,233 @@
         </ui:define>
 
         <ui:define name="body">
-            <div class="row">   
+            <div class="ui-fluid">   
 
                 <h:form id="jvProdListForm">                   
                     <p:growl id="msgs" showDetail="false" />
-                    <p:panelGrid id="ActualParamPanel" columns="2">
-                        <h:outputText value="Year"/>
-                        <p:selectOneMenu id="periodYear" value="#{jvTermProdController.periodYear}" class="select" >                                              
-                            <f:selectItems value="#{generalController.yearsAvailableSelectOne}" var="year" itemValue="#{year.value}"/>   
-                            <p:ajax listener="#{generalController.yearChanged}" event="change" update="periodMonth"/>     
-                        </p:selectOneMenu>
+                    <p:row>
+                        <p:column colspan="7">
+                            <p:panelGrid id="ActualParamPanel" columns="2">
+                                <h:outputText value="Year"/>
+                                <p:selectOneMenu id="periodYear" value="#{jvTermProdController.periodYear}" class="select" >                                              
+                                    <f:selectItems value="#{generalController.yearsAvailableSelectOne}" var="year" itemValue="#{year.value}"/>   
+                                    <p:ajax listener="#{generalController.yearChanged}" event="change" update="periodMonth"/>     
+                                </p:selectOneMenu>
 
-                        <h:outputText value="Month"/>
-                        <p:selectOneMenu id="periodMonth" value="#{jvTermProdController.periodMonth}" class="select">                                              
-                            <f:selectItem itemValue="#{null}" itemLabel="--select--" />
-                            <f:selectItems value="#{generalController.months}" var="mth" itemValue="#{mth.month}" itemLabel="#{mth.monthStr}" />   
-                            <p:ajax />     
-                        </p:selectOneMenu>
+                                <h:outputText value="Month"/>
+                                <p:selectOneMenu id="periodMonth" value="#{jvTermProdController.periodMonth}" class="select">                                              
+                                    <f:selectItem itemValue="#{null}" itemLabel="--select--" />
+                                    <f:selectItems value="#{generalController.months}" var="mth" itemValue="#{mth.month}" itemLabel="#{mth.monthStr}" />   
+                                    <p:ajax />     
+                                </p:selectOneMenu>
 
-                        <h:outputText value="Terminal"/>
-                        <p:selectOneMenu id="contract" value="#{jvTermProdController.currentTerminal}" class="select">                                              
-                            <f:selectItems value="#{terminalController.itemsAvailableSelectOne}" />   
-                            <p:ajax />     
-                        </p:selectOneMenu>                                             
+                                <h:outputText value="Terminal"/>
+                                <p:selectOneMenu id="contract" value="#{jvTermProdController.currentTerminal}" class="select">                                              
+                                    <f:selectItems value="#{terminalController.itemsAvailableSelectOne}" />   
+                                    <p:ajax />     
+                                </p:selectOneMenu>                                             
 
-                        <p:commandButton  value="Terminal Blend"  class="btn" >
-                            <p:ajax listener="#{jvTermProdController.loadProductions}" event="click"
-                                    process="ActualParamPanel periodYear periodMonth contract"
-                                    update="forecast_panel prodTable msgs"/>
+                                <p:commandButton  value="Terminal Blend"  class="btn" >
+                                    <p:ajax listener="#{jvTermProdController.loadProductions}" event="click"
+                                            process="ActualParamPanel periodYear periodMonth contract"
+                                            update="forecast_panel prodTable msgs"/>
 
-                        </p:commandButton>
-                    </p:panelGrid>
+                                </p:commandButton>
+                            </p:panelGrid>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column colspan="12" >
+                            <h:panelGroup id="forecast_panel">
 
-                    
-                    <h:panelGroup id="forecast_panel">
+                                <p:dataTable id="prodTable" var="prod" value="#{jvTermProdController.dataModel}" 
+                                             selectionMode="single" selection="#{jvTermProdController.currentProduction}"
+                                             paginator="true"
+                                             rowKey="#{prod.id}"
+                                             rows="10"
+                                             rowsPerPageTemplate="10,20,30,40,50"
+                                             class="table table-bordered table-hover tile"
+                                             sortBy="#{prod.periodYear}"> 
+                                    <f:facet name="header">
+                                        Terminal Blend
 
-                        <p:dataTable id="prodTable" var="prod" value="#{jvTermProdController.dataModel}" 
-                                     selectionMode="single" selection="#{jvTermProdController.currentProduction}"
-                                     paginator="true"
-                                     rowKey="#{prod.id}"
-                                     rows="10"
-                                     rowsPerPageTemplate="10,20,30,40,50"
-                                     class="table table-bordered table-hover tile"
-                                     sortBy="#{prod.periodYear}"> 
-                            <f:facet name="header">
-                                Terminal Blend
+                                    </f:facet>
+                                    <p:columnGroup type="header">
+                                        <p:row>
+                                            <p:column rowspan="2" headerText="Year" sortBy="#{prod.periodYear}"/>
+                                            <p:column rowspan="2" headerText="Month" />
+                                            <p:column colspan="2" headerText="Asset" />
+                                            <p:column colspan="2" headerText="Production" />
+                                            <p:column colspan="2" headerText="Entitlement" />
+                                            <p:column rowspan="2" headerText="Opening Stock" />
+                                            <p:column rowspan="2" headerText="Avalilability" />
+                                            <p:column colspan="2" headerText="Lifting" />
+                                            <p:column rowspan="2" headerText="Closing Stock" />
+                                        </p:row>                               
+                                        <p:row>
+                                            <p:column headerText="Contract" />
+                                            <p:column headerText="Crude Type"/>
+                                            <p:column headerText="Daily" />
+                                            <p:column headerText="Gross" />
+                                            <p:column headerText="Own" />
+                                            <p:column headerText="Partner" />
+                                            <p:column headerText="Volume (Nom)" />
+                                            <p:column headerText="Cargos" />
+                                        </p:row>
+                                    </p:columnGroup>
 
-                            </f:facet>
-                            <p:columnGroup type="header">
-                                <p:row>
-                                    <p:column rowspan="2" headerText="Year" sortBy="#{prod.periodYear}"/>
-                                    <p:column rowspan="2" headerText="Month" />
-                                    <p:column colspan="2" headerText="Asset" />
-                                    <p:column colspan="2" headerText="Production" />
-                                    <p:column colspan="2" headerText="Entitlement" />
-                                    <p:column rowspan="2" headerText="Opening Stock" />
-                                    <p:column rowspan="2" headerText="Avalilability" />
-                                    <p:column colspan="2" headerText="Lifting" />
-                                    <p:column rowspan="2" headerText="Closing Stock" />
-                                </p:row>                               
-                                <p:row>
-                                    <p:column headerText="Contract" />
-                                    <p:column headerText="Crude Type"/>
-                                    <p:column headerText="Daily" />
-                                    <p:column headerText="Gross" />
-                                    <p:column headerText="Own" />
-                                    <p:column headerText="Partner" />
-                                    <p:column headerText="Volume (Nom)" />
-                                    <p:column headerText="Cargos" />
-                                </p:row>
-                            </p:columnGroup>
+                                    <p:column >                                                        
+                                        <f:facet name="header">
+                                            <h:outputText value="Year" />   
+                                        </f:facet>
+                                        <h:outputText value="#{prod.periodYear}" />
+                                    </p:column>
+                                    <p:column>                                                        
+                                        <f:facet name="header">
+                                            <h:outputText value="Month"/>
+                                        </f:facet>
+                                        <h:outputText value="#{prod.periodMonth}"/>                                                        
+                                    </p:column> 
+                                    <p:column>                                                        
+                                        <f:facet name="header">
+                                            <h:outputText value="Fiscal Arrg"/>
+                                        </f:facet>
+                                        <h:outputText value="#{prod.contractStream.fiscalArrangement.title}"/>                                                        
+                                    </p:column> 
+                                    <p:column>                                                        
+                                        <f:facet name="header">
+                                            <h:outputText value="Crude Type"/>
+                                        </f:facet>
+                                        <h:outputText value="#{prod.contractStream.crudeType.code}"/>                                                        
+                                    </p:column>                            
+                                    <p:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Daily Prod (bpd)" />
+                                        </f:facet>                                                            
+                                        <h:outputText value="#{prod.productionVolume}">
+                                            <f:convertNumber maxFractionDigits="2" groupingUsed="true" />
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Gross Prod" />
+                                        </f:facet>                                                            
+                                        <h:outputText value="#{prod.grossProduction}">
+                                            <f:convertNumber pattern="###,###,###.####" />
+                                        </h:outputText>
+                                    </p:column>                            
+                                    <p:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Own Entitlement" />
+                                        </f:facet>                                                            
+                                        <h:outputText value="#{prod.ownShareEntitlement}" >
+                                            <f:convertNumber maxFractionDigits="2" groupingUsed="true" />
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Partner Entitlement" />
+                                        </f:facet>                                                            
+                                        <h:outputText value="#{prod.partnerShareEntitlement}">
+                                            <f:convertNumber pattern="###,###,###.####" />
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Opening Stock" />
+                                        </f:facet>                                                            
+                                        <h:outputText value="#{prod.openingStock}">
+                                            <f:convertNumber pattern="###,###,###.####" />
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column headerText="Availability">                                                                                          
+                                        <h:outputText value="#{prod.availability}">
+                                            <f:convertNumber pattern="###,###,###.####" />
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Lifting (Nom)" />
+                                        </f:facet>                                                            
+                                        <h:outputText value="#{prod.lifting}">
+                                            <f:convertNumber pattern="###,###,###.####" />
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Lifting Cargoes" />
+                                        </f:facet>                                                            
+                                        <h:outputText value="#{prod.cargos}">
+                                            <f:convertNumber pattern="###,###,###.####" />
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Closing Stock" />
+                                        </f:facet>                                                            
+                                        <h:outputText value="#{prod.closingStock}">
+                                            <f:convertNumber pattern="###,###,###.####" />
+                                        </h:outputText>
+                                    </p:column>
 
-                            <p:column >                                                        
-                                <f:facet name="header">
-                                    <h:outputText value="Year" />   
-                                </f:facet>
-                                <h:outputText value="#{prod.periodYear}" />
-                            </p:column>
-                            <p:column>                                                        
-                                <f:facet name="header">
-                                    <h:outputText value="Month"/>
-                                </f:facet>
-                                <h:outputText value="#{prod.periodMonth}"/>                                                        
-                            </p:column> 
-                            <p:column>                                                        
-                                <f:facet name="header">
-                                    <h:outputText value="Fiscal Arrg"/>
-                                </f:facet>
-                                <h:outputText value="#{prod.contractStream.fiscalArrangement.title}"/>                                                        
-                            </p:column> 
-                            <p:column>                                                        
-                                <f:facet name="header">
-                                    <h:outputText value="Crude Type"/>
-                                </f:facet>
-                                <h:outputText value="#{prod.contractStream.crudeType.code}"/>                                                        
-                            </p:column>                            
-                            <p:column>
-                                <f:facet name="header">
-                                    <h:outputText value="Daily Prod (bpd)" />
-                                </f:facet>                                                            
-                                <h:outputText value="#{prod.productionVolume}">
-                                    <f:convertNumber maxFractionDigits="2" groupingUsed="true" />
-                                </h:outputText>
-                            </p:column>
-                            <p:column>
-                                <f:facet name="header">
-                                    <h:outputText value="Gross Prod" />
-                                </f:facet>                                                            
-                                <h:outputText value="#{prod.grossProduction}">
-                                    <f:convertNumber pattern="###,###,###.####" />
-                                </h:outputText>
-                            </p:column>                            
-                            <p:column>
-                                <f:facet name="header">
-                                    <h:outputText value="Own Entitlement" />
-                                </f:facet>                                                            
-                                <h:outputText value="#{prod.ownShareEntitlement}" >
-                                    <f:convertNumber maxFractionDigits="2" groupingUsed="true" />
-                                </h:outputText>
-                            </p:column>
-                            <p:column>
-                                <f:facet name="header">
-                                    <h:outputText value="Partner Entitlement" />
-                                </f:facet>                                                            
-                                <h:outputText value="#{prod.partnerShareEntitlement}">
-                                    <f:convertNumber pattern="###,###,###.####" />
-                                </h:outputText>
-                            </p:column>
-                            <p:column>
-                                <f:facet name="header">
-                                    <h:outputText value="Opening Stock" />
-                                </f:facet>                                                            
-                                <h:outputText value="#{prod.openingStock}">
-                                    <f:convertNumber pattern="###,###,###.####" />
-                                </h:outputText>
-                            </p:column>
-                            <p:column headerText="Availability">                                                                                          
-                                <h:outputText value="#{prod.availability}">
-                                    <f:convertNumber pattern="###,###,###.####" />
-                                </h:outputText>
-                            </p:column>
-                            <p:column>
-                                <f:facet name="header">
-                                    <h:outputText value="Lifting (Nom)" />
-                                </f:facet>                                                            
-                                <h:outputText value="#{prod.lifting}">
-                                    <f:convertNumber pattern="###,###,###.####" />
-                                </h:outputText>
-                            </p:column>
-                            <p:column>
-                                <f:facet name="header">
-                                    <h:outputText value="Lifting Cargoes" />
-                                </f:facet>                                                            
-                                <h:outputText value="#{prod.cargos}">
-                                    <f:convertNumber pattern="###,###,###.####" />
-                                </h:outputText>
-                            </p:column>
-                            <p:column>
-                                <f:facet name="header">
-                                    <h:outputText value="Closing Stock" />
-                                </f:facet>                                                            
-                                <h:outputText value="#{prod.closingStock}">
-                                    <f:convertNumber pattern="###,###,###.####" />
-                                </h:outputText>
-                            </p:column>
+                                    <p:summaryRow>
+                                        <p:column colspan="4" style="text-align:right">
+                                            TOTAL
+                                        </p:column>
 
-                            <p:summaryRow>
-                                <p:column colspan="4" style="text-align:right">
-                                    TOTAL
-                                </p:column>
-                                
 
-                                <p:column>                                  
-                                    <h:outputText value="#{jvTermProdController.dailySum}" >
-                                        <f:convertNumber pattern="###,###,###.####" />
-                                    </h:outputText>
-                                </p:column>
-                                <p:column>                                  
-                                    <h:outputText value="#{jvTermProdController.grossSum}" >
-                                        <f:convertNumber pattern="###,###,###.####" />
-                                    </h:outputText>
-                                </p:column>
-                                <p:column>                                  
-                                    <h:outputText value="#{jvTermProdController.ownEntitlementSum}" >
-                                        <f:convertNumber pattern="###,###,###.####" />
-                                    </h:outputText>
-                                </p:column>
-                                <p:column>                                  
-                                    <h:outputText value="#{jvTermProdController.partnerEntitlementSum}" >
-                                        <f:convertNumber pattern="###,###,###.####" />
-                                    </h:outputText>
-                                </p:column>
-                                <p:column>                                  
-                                    <h:outputText value="#{jvTermProdController.openingStockSum}" >
-                                        <f:convertNumber pattern="###,###,###.####" />
-                                    </h:outputText>
-                                </p:column>
-                                <p:column>                                  
-                                    <h:outputText value="#{jvTermProdController.availabilitySum}" >
-                                        <f:convertNumber pattern="###,###,###.####" />
-                                    </h:outputText>
-                                </p:column>
-                                <p:column>                                  
-                                    <h:outputText value="#{jvTermProdController.nomLiftingSum}" >
-                                        <f:convertNumber pattern="###,###,###.####" />
-                                    </h:outputText>
-                                </p:column>
-                                <p:column>                                  
-                                    <h:outputText value="#{jvTermProdController.cargoesSum}" />
-                                </p:column>
-                                <p:column>                                  
-                                    <h:outputText value="#{jvTermProdController.closingStockSum}" >
-                                        <f:convertNumber pattern="###,###,###.####" />
-                                    </h:outputText>
-                                </p:column>
-                            </p:summaryRow>
+                                        <p:column>                                  
+                                            <h:outputText value="#{jvTermProdController.dailySum}" >
+                                                <f:convertNumber pattern="###,###,###.####" />
+                                            </h:outputText>
+                                        </p:column>
+                                        <p:column>                                  
+                                            <h:outputText value="#{jvTermProdController.grossSum}" >
+                                                <f:convertNumber pattern="###,###,###.####" />
+                                            </h:outputText>
+                                        </p:column>
+                                        <p:column>                                  
+                                            <h:outputText value="#{jvTermProdController.ownEntitlementSum}" >
+                                                <f:convertNumber pattern="###,###,###.####" />
+                                            </h:outputText>
+                                        </p:column>
+                                        <p:column>                                  
+                                            <h:outputText value="#{jvTermProdController.partnerEntitlementSum}" >
+                                                <f:convertNumber pattern="###,###,###.####" />
+                                            </h:outputText>
+                                        </p:column>
+                                        <p:column>                                  
+                                            <h:outputText value="#{jvTermProdController.openingStockSum}" >
+                                                <f:convertNumber pattern="###,###,###.####" />
+                                            </h:outputText>
+                                        </p:column>
+                                        <p:column>                                  
+                                            <h:outputText value="#{jvTermProdController.availabilitySum}" >
+                                                <f:convertNumber pattern="###,###,###.####" />
+                                            </h:outputText>
+                                        </p:column>
+                                        <p:column>                                  
+                                            <h:outputText value="#{jvTermProdController.nomLiftingSum}" >
+                                                <f:convertNumber pattern="###,###,###.####" />
+                                            </h:outputText>
+                                        </p:column>
+                                        <p:column>                                  
+                                            <h:outputText value="#{jvTermProdController.cargoesSum}" />
+                                        </p:column>
+                                        <p:column>                                  
+                                            <h:outputText value="#{jvTermProdController.closingStockSum}" >
+                                                <f:convertNumber pattern="###,###,###.####" />
+                                            </h:outputText>
+                                        </p:column>
+                                    </p:summaryRow>
 
-                            <f:facet name="footer">
-                            </f:facet>
-                        </p:dataTable>
+                                    <f:facet name="footer">
+                                    </f:facet>
+                                </p:dataTable>
 
-                    </h:panelGroup>
-
+                            </h:panelGroup>
+                        </p:column>
+                    </p:row>
                 </h:form>
             </div>            
         </ui:define>

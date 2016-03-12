@@ -52,7 +52,7 @@
                                         <h:outputLabel value="Daily Prod (bpd)" for="productionVolume" />
                                         <h:inputText id="productionVolume" value="#{jvProdController.currentProduction.productionVolume}" title="Daily Production Volume" class="form-control input-sm" >
                                             <f:ajax event="change" listener="#{jvProdController.productionVolumeChange}"                                     
-                                                    render="grossVolume openingStock closingStock ownShareEntitlement partnerShareEntitlement" />
+                                                    render="grossVolume openingStock closingStock ownShareEntitlement partnerShareEntitlement availability lifting cargoes" />
                                         </h:inputText>
                                     </div>
                                     <div class="col-md-6 m-b-15">
@@ -124,7 +124,7 @@
 
                         </div>
                         <div class="modal-footer">
-                            <h:commandButton  value="#{bundle.save}" pt:data-dismiss="modal" class="btn btn-sm">
+                            <h:commandButton  value="#{bundle.Save}" pt:data-dismiss="modal" class="btn btn-sm">
                                 <f:ajax listener="#{jvProdController.update}" render=":jvProdListForm:prodTable,:growl"/>
                             </h:commandButton>
 

@@ -12,64 +12,175 @@
 
         <p:dialog id="JvViewDlg" widgetVar="JvViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewJvForecastTitle}">
             <h:form id="JvViewForm">
-                <h:panelGroup id="display">
-                    <p:panelGrid columns="2" rendered="#{jvProdController.currentProduction != null}">
-                        <p:outputLabel value="Year" for="periodYear"/>
-                        <p:outputLabel id="periodYear" value="#{jvProdController.currentProduction.periodYear}" 
-                                       class="form-control input-sm m-b-10" pt:placeholder="Year"/>
-                        <p:outputLabel value="Month" for="periodMonth"/>
-                        <p:outputLabel id="periodMonth" value = "#{jvProdController.currentProduction.periodMonth}" 
-                                       class="form-control input-sm m-b-10" pt:placeholder="Month"
-                                       />
-                        <p:outputLabel value="Asset Stream/Crude Type" for="csOptions"/>
-                        <p:outputLabel id="csOptions" value="#{jvProdController.currentProduction.contractStream.fiscalArrangement.title}/#{jvProdController.currentProduction.contractStream.crudeType.code}" />
-
-                        <p:outputLabel value="Daily Prod (bpd)" for="dailyProd" />
-                        <p:outputLabel id="dailyProd" value = "#{jvProdController.currentProduction.productionVolume}"  class="form-control input-sm m-b-10" pt:placeholder="Gross Production">
-                            <f:convertNumber pattern="###,###,###.####" />
-                        </p:outputLabel>
-
-                        <p:outputLabel value="Gross Prod " for="grossProd" />
-                        <p:outputLabel id="grossProd" value = "#{jvProdController.currentProduction.grossProduction}"  class="form-control input-sm m-b-10" pt:placeholder="Gross Production">
-                            <f:convertNumber pattern="###,###,###.####" />
-                        </p:outputLabel>
-
-                        <p:outputLabel value="Own Entitlement" for="ownShareEntitlement" />
-                        <p:outputLabel id="ownShareEntitlement" value="#{jvProdController.currentProduction.ownShareEntitlement}" title="Own Entitlement" >
-                            <f:convertNumber pattern="###,###,###.####" />
-                        </p:outputLabel>
-
-                        <p:outputLabel value="Partner Entitlement" for="partnerShareEntitlement" />
-                        <p:outputLabel id="partnerShareEntitlement" value="#{jvProdController.currentProduction.partnerShareEntitlement}" title="Partner Entitlement" >
-                            <f:convertNumber pattern="###,###,###.####" />
-                        </p:outputLabel>
-
-                        <p:outputLabel value="Opening Stock" for="openingStock" />
-                        <p:outputLabel id="openingStock" value="#{jvProdController.currentProduction.openingStock}" title="Opening Stock" >
-                            <f:convertNumber pattern="###,###,###.####" />
-                        </p:outputLabel>
-
-                        <p:outputLabel value="Availability" for="availability" />
-                        <p:outputLabel id="availability" value="#{jvProdController.currentProduction.availability}" title="Availability" >
-                            <f:convertNumber pattern="###,###,###.####" />
-                        </p:outputLabel>
-
-                        <p:outputLabel value="Lifting (Nom)" for="lifting" />
-                        <p:outputLabel id="lifting" value="#{jvProdController.currentProduction.lifting}" title="Lifting (Nom)" >
-                            <f:convertNumber pattern="###,###,###.####" />
-                        </p:outputLabel>
-
-                        <p:outputLabel value="Lifting Cargoes" for="cargoes" />
-                        <p:outputLabel id="cargoes" value="#{jvProdController.currentProduction.cargos}" title="Lifting Cargoes" />
-
-                        <p:outputLabel value="Closing Stock" for="closingStock" />
-                        <p:outputLabel id="closingStock" value="#{jvProdController.currentProduction.closingStock}" title="Closing Stock" >
-                            <f:convertNumber pattern="###,###,###.####" />
-                        </p:outputLabel>
-
+                <p:panelGrid id="display" rendered="#{jvProdController.currentProduction != null}" style="border: 0">
+                    <p:panelGrid style="border: 0">
+                        <p:row style="border: 0">
+                            <p:column colspan="2" style="border: 0">
+                                <p:outputLabel value="Year" for="periodYear"/>
+                            </p:column>
+                            <p:column colspan="4" style="border: 0">
+                                <p:outputLabel id="periodYear" value="#{jvProdController.currentProduction.periodYear}" class="select"/>  
+                            </p:column>
+                            <p:column colspan="2" style="border: 0">
+                                <p:outputLabel value="Month" for="periodMonth"/>                                
+                            </p:column>
+                            <p:column colspan="4" style="border: 0">
+                                <p:outputLabel id="periodMonth" value="#{jvProdController.currentProduction.periodMonth}" class="select"/>  
+                            </p:column>
+                        </p:row>
+                        <p:row style="border: 0">
+                            <p:column colspan="2" style="border: 0">
+                                <p:outputLabel value="Contract"/>
+                            </p:column>
+                            <p:column colspan="4" style="border: 0">
+                                <p:outputLabel id="contract" value="#{jvProdController.currentFiscalArrangement}" class="select"/>
+                            </p:column>
+                            <p:column colspan="2" style="border: 0">
+                                <p:outputLabel value="Crude Type" for="csOptions"/>                                                      
+                            </p:column>
+                            <p:column colspan="4" style="border: 0">
+                                <p:outputLabel id="csOptions" value="#{jvProdController.currentProduction.contractStream}" class="select" />                                                                 
+                            </p:column>
+                        </p:row>
+                        <p:row style="border: 0">
+                            <p:column colspan="2" style="border: 0">
+                                <p:outputLabel value="Daily Prod (bpd)" for="dailyProd"/>                            
+                            </p:column>
+                            <p:column colspan="4" style="border: 0">
+                                <p:outputLabel id="dailyProd" value = "#{jvProdController.currentProduction.productionVolume}"  class="form-control input-sm m-b-10" pt:placeholder="Daily Production">
+                                    <f:convertNumber pattern="###,###,###.####" />
+                                </p:outputLabel>                                                                                 
+                            </p:column>
+                            <p:column colspan="2" style="border: 0">
+                                <p:outputLabel value="Gross Prod" for="grossProd"/>
+                            </p:column>
+                            <p:column colspan="4" style="border: 0">
+                                <p:outputLabel id="grossProd" value = "#{jvProdController.currentProduction.grossProduction}"  class="form-control input-sm m-b-10" pt:placeholder="Gross Production">
+                                    <f:convertNumber pattern="###,###,###.####" />
+                                </p:outputLabel>
+                            </p:column>
+                        </p:row>
                     </p:panelGrid>
-                    <p:commandButton value="#{bundle.Close}" onclick="JvViewDialog.hide()"/>
-                </h:panelGroup>
+
+                    <br/>
+                    <p:fieldset legend="NNPC Entitlement">
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-3">
+                                <p:outputLabel value="Entitlement" for="ownShareEntitlement" />
+                            </div>
+                            <div class="ui-grid-col-3">
+                                <p:outputLabel id="ownShareEntitlement" value="#{jvProdController.currentProduction.ownShareEntitlement}" title="Own Entitlement" >
+                                    <f:convertNumber maxFractionDigits="2" groupingUsed="true" />
+                                </p:outputLabel>
+                            </div>
+
+                            <div class="ui-grid-col-3">
+                                <p:outputLabel value="Opening Stock" for="openingStock" />
+                            </div>
+                            <div class="ui-grid-col-3">
+                                <p:outputLabel id="openingStock" value="#{jvProdController.currentProduction.openingStock}" title="Opening Stock" >
+                                    <f:convertNumber pattern="###,###,###.####" />
+                                </p:outputLabel>
+                            </div>
+                        </div>                                    
+
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-3">
+                                <p:outputLabel value="Availability" for="availability" />
+                            </div>
+                            <div class="ui-grid-col-3">
+                                <p:outputLabel id="availability" value="#{jvProdController.currentProduction.availability}" title="Availability">
+                                    <f:convertNumber pattern="###,###,###.####" />
+                                </p:outputLabel>  
+                            </div>                                    
+                            <div class="ui-grid-col-3">
+                                <p:outputLabel value="Lifting (Nom)" for="lifting" />                                           
+                            </div>
+                            <div class="ui-grid-col-3">                                            
+                                <p:outputLabel id="lifting" value="#{jvProdController.currentProduction.lifting}" title="Lifting (Nom)">
+                                    <f:convertNumber pattern="###,###,###.####" />
+                                </p:outputLabel>
+                            </div>
+                        </div>
+
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-3">
+                                <p:outputLabel value="Cargoes" for="cargoes" />                    
+                            </div>
+                            <div class="ui-grid-col-3">
+                                <p:outputLabel id="cargoes" value="#{jvProdController.currentProduction.cargos}" title="Lifting Cargoes" />
+                            </div>                                    
+                            <div class="ui-grid-col-3">
+                                <p:outputLabel value="Closing Stock" for="closingStock" />                                                        
+                            </div>
+                            <div class="ui-grid-col-3">                                            
+                                <p:outputLabel id="closingStock" value="#{jvProdController.currentProduction.closingStock}" title="Closing Stock">
+                                    <f:convertNumber pattern="###,###,###.####" />
+                                </p:outputLabel>                                            
+                            </div>
+                        </div>
+                    </p:fieldset> 
+                    <br/>
+                    <p:fieldset legend="Partner Entitlement">
+
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-3">
+                                <p:outputLabel value="Entitlement" for="ptnrShareEntitlement" />
+                            </div>
+                            <div class="ui-grid-col-3">
+                                <p:outputLabel id="ptnrShareEntitlement" value="#{jvProdController.currentProduction.partnerShareEntitlement}" title="Partner Entitlement" >
+                                    <f:convertNumber pattern="###,###,###.####" />
+                                </p:outputLabel>
+                            </div>
+
+                            <div class="ui-grid-col-3">
+                                <p:outputLabel value="Opening Stock" for="ptnrOpeningStock" />
+                            </div>
+                            <div class="ui-grid-col-3">
+                                <p:outputLabel id="ptnrOpeningStock" value="#{jvProdController.currentProduction.partnerOpeningStock}" title="Opening Stock" >
+                                    <f:convertNumber pattern="###,###,###.####" />
+                                </p:outputLabel>
+                            </div>
+                        </div>
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-3">
+                                <p:outputLabel value="Availability" for="ptnrAvailability" />
+                            </div>
+                            <div class="ui-grid-col-3">
+                                <p:outputLabel id="ptnrAvailability" value="#{jvProdController.currentProduction.partnerAvailability}" title="Availability">
+                                    <f:convertNumber pattern="###,###,###.####" />
+                                </p:outputLabel>  
+                            </div>                                    
+                            <div class="ui-grid-col-3">
+                                <p:outputLabel value="Lifting (Nom)" for="ptnrLifting" />
+                            </div>
+                            <div class="ui-grid-col-3">                                            
+                                <p:outputLabel id="ptnrLifting" value="#{jvProdController.currentProduction.partnerLifting}" title="Lifting (Nom)">
+                                    <f:convertNumber pattern="###,###,###.####" />
+                                </p:outputLabel>
+                            </div>
+                        </div>
+
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-3">
+                                <p:outputLabel value="Cargoes" for="ptnrCargoes" />
+                            </div>
+                            <div class="ui-grid-col-3">
+                                <p:outputLabel id="ptnrCargoes" value="#{jvProdController.currentProduction.partnerCargos}" title="Lifting Cargoes" />
+                            </div>                                    
+                            <div class="ui-grid-col-3">
+                                <p:outputLabel value="Closing Stock" for="ptnrClosingStock" />
+                            </div>
+                            <div class="ui-grid-col-3">                                            
+                                <p:outputLabel id="ptnrClosingStock" value="#{jvProdController.currentProduction.partnerClosingStock}" title="Closing Stock" >
+                                    <f:convertNumber pattern="###,###,###.####" />
+                                </p:outputLabel>                                           
+                            </div>
+                        </div>
+                    </p:fieldset>
+
+                </p:panelGrid>
+                <p:commandButton value="#{bundle.Close}" onclick="JvViewDialog.hide()"/>               
             </h:form>
         </p:dialog>
 

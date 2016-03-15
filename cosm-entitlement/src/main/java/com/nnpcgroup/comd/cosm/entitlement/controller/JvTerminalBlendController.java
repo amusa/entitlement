@@ -8,8 +8,10 @@ package com.nnpcgroup.comd.cosm.entitlement.controller;
 import com.nnpcgroup.comd.cosm.entitlement.controller.util.JsfUtil;
 import com.nnpcgroup.comd.cosm.entitlement.controller.util.ProductionDataModel;
 import com.nnpcgroup.comd.cosm.entitlement.ejb.JvActualProductionServices;
+import com.nnpcgroup.comd.cosm.entitlement.ejb.JvForecastProductionServices;
 import com.nnpcgroup.comd.cosm.entitlement.ejb.TerminalBlendServices;
 import com.nnpcgroup.comd.cosm.entitlement.entity.JvActualProduction;
+import com.nnpcgroup.comd.cosm.entitlement.entity.JvForecastProduction;
 import com.nnpcgroup.comd.cosm.entitlement.entity.Terminal;
 import com.nnpcgroup.comd.cosm.entitlement.entity.TerminalBlend;
 
@@ -39,14 +41,14 @@ public class JvTerminalBlendController implements Serializable {
     private TerminalBlendServices terminalBlendBean;
 
     @EJB
-    private JvActualProductionServices productionBean;
+    private JvForecastProductionServices productionBean;
 
     private TerminalBlend currentTerminalBlend;
     private List<TerminalBlend> allTerminalBlend;
 
-    private JvActualProduction currentProduction;
+    private JvForecastProduction currentProduction;
 
-    private List<JvActualProduction> productions;
+    private List<JvForecastProduction> productions;
     private ProductionDataModel dataModel;
 
     private Integer periodYear;
@@ -64,27 +66,27 @@ public class JvTerminalBlendController implements Serializable {
         return dataModel;
     }
 
-    public JvActualProduction getCurrentProduction() {
+    public JvForecastProduction getCurrentProduction() {
         return currentProduction;
     }
 
-    public void setCurrentProduction(JvActualProduction currentProduction) {
+    public void setCurrentProduction(JvForecastProduction currentProduction) {
         this.currentProduction = currentProduction;
     }
 
-    public List<JvActualProduction> getProductions() {
+    public List<JvForecastProduction> getProductions() {
         loadProductions();
         return productions;
     }
 
-    public void setProductions(List<JvActualProduction> productions) {
+    public void setProductions(List<JvForecastProduction> productions) {
         log.info("ProductionController::setProductions called...");
         this.productions = productions;
     }
 
     public void prepareCreate() {
         log.info("prepareCreate called...");
-        currentProduction = new JvActualProduction();//terminalBlendBean.createInstance();
+        currentProduction = new JvForecastProduction();//terminalBlendBean.createInstance();
         if (periodYear != null && periodMonth != null) {
             currentProduction.setPeriodYear(periodYear);
             currentProduction.setPeriodMonth(periodMonth);

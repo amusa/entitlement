@@ -12,6 +12,7 @@ import com.nnpcgroup.comd.cosm.entitlement.entity.Terminal;
 
 import javax.inject.Named;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -45,7 +46,7 @@ public class JvTerminalProductionController implements Serializable {
      * Creates a new instance of JvController
      */
     public JvTerminalProductionController() {
-        log.info("JvTerminalProductionController::constructor activated...");
+        productions = new ArrayList<>();
     }
 
     public ProductionDataModel getDataModel() {

@@ -54,13 +54,11 @@
                         <p:menu style="width: 95%;height: 100%;border: 0">
                             <p:submenu label="Entitlement">
                                 <p:menuitem value="Forecast" url="/faces/jv/prod/forecast.xhtml" />
-                                <p:menuitem value="Actualize" url="/faces/jv/prod/actualize-list.xhtml" />
+                                <p:menuitem value="Actualize" url="/faces/jv/prod/actualize.xhtml" />
                                 <p:menuitem value="Stock Adjustment" />                                
                             </p:submenu>
-                            <p:submenu label="#{bundle.Terminal}">                            
-                                <p:menuitem value="Terminal Blend (Nom)" outcome="/faces/jv/prod/terminal.xhtml"/>
-                                <p:menuitem value="Terminal Blend (Actual)" outcome="/faces/jv/prod/actual-terminal-blend.xhtml"/>
-
+                            <p:submenu label="#{bundle.Terminal}">
+                                <p:menuitem value="Terminal Blend" outcome="/faces/jv/prod/terminal-blend.xhtml"/>
                                 <p:menuitem value="Cargo Allocation" />                            
                             </p:submenu>
                             <p:submenu label="Fiscal Arrg">

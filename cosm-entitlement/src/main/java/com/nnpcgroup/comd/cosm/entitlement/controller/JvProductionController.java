@@ -105,13 +105,13 @@ public class JvProductionController implements Serializable {
         persist(JsfUtil.PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("ProductionCreated"));
         if (!JsfUtil.isValidationFailed()) {
             reset();
-            loadProductionsByContract();
+            loadProductions();
         }
     }
 
     public void cancel() {
         reset();
-        loadProductionsByContract();
+        loadProductions();
     }
 
     public void update() {
@@ -148,15 +148,11 @@ public class JvProductionController implements Serializable {
 
     public void loadProductions() {
         if (periodYear != null && periodMonth != null) {
-            productions = productionBean.findByYearAndMonth(periodYear, periodMonth);
-            refreshDataModel();
-        }
-    }
-
-    public void loadProductionsByContract() {
-        if (periodYear != null && periodMonth != null && currentFiscalArrangement != null) {
-            log.log(Level.INFO, "Loading Productions By Contract...");
-            productions = productionBean.findByContractPeriod(periodYear, periodMonth, currentFiscalArrangement);
+            if (currentFiscalArrangement == null) {
+                productions = productionBean.findByYearAndMonth(periodYear, periodMonth);
+            } else {
+                productions = productionBean.findByContractPeriod(periodYear, periodMonth, currentFiscalArrangement);
+            }
             refreshDataModel();
         }
     }

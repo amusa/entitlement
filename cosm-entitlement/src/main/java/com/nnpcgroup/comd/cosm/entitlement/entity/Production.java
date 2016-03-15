@@ -34,14 +34,19 @@ public abstract class Production implements Serializable {
     private int periodMonth;
     private ContractStream contractStream;
     private Double openingStock;
+    private Double partnerOpeningStock;
     private Double closingStock;
+    private Double partnerClosingStock;
     private Double grossProduction;
     private Double productionVolume;
     private Double ownShareEntitlement;
     private Double partnerShareEntitlement;
     private Double lifting;
+    private Double partnerLifting;
     private Integer cargos;
+    private Integer partnerCargos;
     private Double availability;
+    private Double partnerAvailability;
 
     public Production() {
     }
@@ -165,6 +170,46 @@ public abstract class Production implements Serializable {
 
     public void setAvailability(Double availability) {
         this.availability = availability;
+    }
+
+    public Double getPartnerOpeningStock() {
+        return partnerOpeningStock;
+    }
+
+    public void setPartnerOpeningStock(Double partnerOpeningStock) {
+        this.partnerOpeningStock = partnerOpeningStock;
+    }
+
+    public Double getPartnerClosingStock() {
+        return partnerClosingStock;
+    }
+
+    public void setPartnerClosingStock(Double partnerClosingStock) {
+        this.partnerClosingStock = partnerClosingStock;
+    }
+
+    public Double getPartnerAvailability() {
+        return partnerAvailability;
+    }
+
+    public void setPartnerAvailability(Double partnerAvailability) {
+        this.partnerAvailability = partnerAvailability;
+    }
+
+    public Double getPartnerLifting() {
+        return partnerLifting;
+    }
+
+    public void setPartnerLifting(Double partnerLifting) {
+        this.partnerLifting = partnerLifting;
+    }
+
+    public Integer getPartnerCargos() {
+        return partnerCargos;
+    }
+
+    public void setPartnerCargos(Integer partnerCargos) {
+        this.partnerCargos = partnerCargos;
     }
 
     

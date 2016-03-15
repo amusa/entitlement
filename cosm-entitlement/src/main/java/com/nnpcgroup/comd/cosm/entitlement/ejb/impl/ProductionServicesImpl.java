@@ -77,7 +77,7 @@ public abstract class ProductionServicesImpl<T extends Production> extends Abstr
     }
 
     @Override
-    public List<T> findByContractPeriod(int year, int month, FiscalArrangement fa){
+    public List<T> findByContractPeriod(int year, int month, FiscalArrangement fa) {
         CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
 
         List<T> productions;
@@ -103,7 +103,7 @@ public abstract class ProductionServicesImpl<T extends Production> extends Abstr
     }
 
     @Override
-    public List<T> getTerminalProduction(int year, int month, Terminal terminal){
+    public List<T> getTerminalProduction(int year, int month, Terminal terminal) {
         CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
 
         List<T> productions;
@@ -129,8 +129,6 @@ public abstract class ProductionServicesImpl<T extends Production> extends Abstr
         return productions;
     }
 
-    
-    
     @Override
     public abstract T computeEntitlement(T production);
 
@@ -142,9 +140,12 @@ public abstract class ProductionServicesImpl<T extends Production> extends Abstr
         Production prod = (Production) getPreviousMonthProduction(production);
         if (prod != null) {
             Double openingStock = prod.getClosingStock();
+            Double partnerOpeningStock = prod.getPartnerOpeningStock();
             ((Production) production).setOpeningStock(openingStock);
+            ((Production) production).setPartnerOpeningStock(partnerOpeningStock);
         } else {
             ((Production) production).setOpeningStock(0.0);
+            ((Production) production).setPartnerOpeningStock(0.0);
         }
         return production;
     }
@@ -170,12 +171,16 @@ public abstract class ProductionServicesImpl<T extends Production> extends Abstr
 
     @Override
     public T computeClosingStock(T production) {
-        Double closingStock;
+        Double closingStock, partnerClosingStock;
         Double availability = ((Production) production).getAvailability();
+        Double partnerAvailability = ((Production) production).getPartnerAvailability();
         Double lifting = ((Production) production).getLifting();
+        Double partnerLifting = ((Production) production).getPartnerLifting();
 
         closingStock = availability - lifting;
+        partnerClosingStock = partnerAvailability - partnerLifting;
         ((Production) production).setClosingStock(closingStock);
+        ((Production) production).setPartnerClosingStock(partnerClosingStock);
 
         return production;
     }
@@ -210,32 +215,38 @@ public abstract class ProductionServicesImpl<T extends Production> extends Abstr
 
     @Override
     public T computeAvailability(T production) {
-        Double availability;
+        Double availability, partnerAvailability;
         Double ownEntitlement = ((Production) production).getOwnShareEntitlement();
+        Double partnerEntitlement = ((Production) production).getPartnerShareEntitlement();
         Double openingStock = ((Production) production).getOpeningStock();
+        Double partnerOpeningStock = ((Production) production).getPartnerOpeningStock();
 
         availability = ownEntitlement + openingStock;
+        partnerAvailability = partnerEntitlement + partnerOpeningStock;
 
         ((Production) production).setAvailability(availability);
-        log.log(Level.INFO, "Availability {0}...", availability);
+        ((Production) production).setPartnerAvailability(partnerAvailability);
 
         return production;
     }
 
     @Override
     public T computeLifting(T production) {
-        Double liftableVolume;
-        Integer cargoes;
+        Double liftableVolume, partnerLiftableVolume;
+        Integer cargoes, partnerCargoes;
         Double availability = ((Production) production).getAvailability();
+        Double partnerAvailability = ((Production) production).getPartnerAvailability();
 
         cargoes = (int) (availability / 950000.0);
+        partnerCargoes = (int) (partnerAvailability / 950000.0);
         liftableVolume = cargoes * 950000.0;
-
+        partnerLiftableVolume = partnerCargoes * 950000.0;
+        
         ((Production) production).setCargos(cargoes);
         ((Production) production).setLifting(liftableVolume);
-        log.log(Level.INFO, "liftable volume={0}, cargos={1}, availability={2}...",
-                new Object[]{liftableVolume, cargoes, availability});
-
+        ((Production) production).setPartnerCargos(partnerCargoes);
+        ((Production) production).setPartnerLifting(partnerLiftableVolume);
+        
         return production;
     }
 }

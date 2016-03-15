@@ -77,34 +77,33 @@
                                     <p:ajax event="rowUnselect" update="actualizeButton createButton viewButton editButton deleteButton"/>
 
                                     <p:columnGroup type="header">
-                                        <p:row>
-                                            <p:column rowspan="2" headerText="Year" />
-                                            <p:column rowspan="2" headerText="Month" />
+                                        <p:row>                                            
                                             <p:column colspan="2" headerText="Asset" />
                                             <p:column colspan="2" headerText="Production" />
-                                            <p:column colspan="2" headerText="Entitlement" />
-                                            <p:column rowspan="2" headerText="Opening Stock" />
-                                            <p:column rowspan="2" headerText="Avalilability" />
-                                            <p:column colspan="2" headerText="Lifting" />
-                                            <p:column rowspan="2" headerText="Closing Stock" />
+                                            <p:column colspan="6" headerText="NNPC" />
+                                            <p:column colspan="6" headerText="Partner" />                                                                                        
                                         </p:row>                               
                                         <p:row>
                                             <p:column headerText="Contract" />
                                             <p:column headerText="Crude Type"/>
                                             <p:column headerText="Daily" />
                                             <p:column headerText="Gross" />
-                                            <p:column headerText="Own" />
-                                            <p:column headerText="Partner" />
-                                            <p:column headerText="Volume (Nom)" />
-                                            <p:column headerText="Cargos" />
+                                            
+                                            <p:column headerText="Entitlement" />
+                                            <p:column headerText="Opening Stock" />
+                                            <p:column headerText="Avalilability" />
+                                            <p:column headerText="Liftable Volume" />
+                                            <p:column headerText="Cargo" />
+                                            <p:column headerText="Closing Stock" />
+                                            
+                                            <p:column headerText="Entitlement" />
+                                            <p:column headerText="Opening Stock" />
+                                            <p:column headerText="Avalilability" />
+                                            <p:column headerText="Liftable Volume" />
+                                            <p:column headerText="Cargo" />
+                                            <p:column headerText="Closing Stock" />
                                         </p:row>
-                                    </p:columnGroup>
-                                    <p:column > 
-                                        <h:outputText value="#{prod.periodYear}" />
-                                    </p:column>
-                                    <p:column>
-                                        <h:outputText value="#{prod.periodMonth}"/>                                                        
-                                    </p:column> 
+                                    </p:columnGroup>                                    
                                     <p:column>
                                         <h:outputText value="#{prod.contractStream.fiscalArrangement.title}"/>                                                        
                                     </p:column> 
@@ -125,27 +124,22 @@
                                         <h:outputText value="#{prod.ownShareEntitlement}" >
                                             <f:convertNumber maxFractionDigits="2" groupingUsed="true" />
                                         </h:outputText>
-                                    </p:column>
-                                    <p:column>                                                                                          
-                                        <h:outputText value="#{prod.partnerShareEntitlement}">
-                                            <f:convertNumber pattern="###,###,###.####" />
-                                        </h:outputText>
-                                    </p:column>
+                                    </p:column>                                    
                                     <p:column>                                                                                          
                                         <h:outputText value="#{prod.openingStock}">
                                             <f:convertNumber pattern="###,###,###.####" />
                                         </h:outputText>
-                                    </p:column>
+                                    </p:column>                                    
                                     <p:column>                                                                                           
                                         <h:outputText value="#{prod.availability}">
                                             <f:convertNumber pattern="###,###,###.####" />
                                         </h:outputText>
-                                    </p:column>
+                                    </p:column>                                    
                                     <p:column>                                                                                        
                                         <h:outputText value="#{prod.lifting}">
                                             <f:convertNumber pattern="###,###,###.####" />
                                         </h:outputText>
-                                    </p:column>
+                                    </p:column>                                    
                                     <p:column>                                                                                           
                                         <h:outputText value="#{prod.cargos}">
                                             <f:convertNumber pattern="###,###,###.####" />
@@ -153,6 +147,36 @@
                                     </p:column>
                                     <p:column>                                                                                          
                                         <h:outputText value="#{prod.closingStock}">
+                                            <f:convertNumber pattern="###,###,###.####" />
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column>                                                                                          
+                                        <h:outputText value="#{prod.partnerShareEntitlement}">
+                                            <f:convertNumber pattern="###,###,###.####" />
+                                        </h:outputText>
+                                    </p:column>                                    
+                                    <p:column>                                                                                          
+                                        <h:outputText value="#{prod.partnerOpeningStock}">
+                                            <f:convertNumber pattern="###,###,###.####" />
+                                        </h:outputText>
+                                    </p:column>                                    
+                                    <p:column>                                                                                           
+                                        <h:outputText value="#{prod.partnerAvailability}">
+                                            <f:convertNumber pattern="###,###,###.####" />
+                                        </h:outputText>
+                                    </p:column>                                    
+                                    <p:column>                                                                                        
+                                        <h:outputText value="#{prod.partnerLifting}">
+                                            <f:convertNumber pattern="###,###,###.####" />
+                                        </h:outputText>
+                                    </p:column>                                    
+                                    <p:column>                                                                                           
+                                        <h:outputText value="#{prod.partnerCargos}">
+                                            <f:convertNumber pattern="###,###,###.####" />
+                                        </h:outputText>
+                                    </p:column>                                    
+                                    <p:column>                                                                                          
+                                        <h:outputText value="#{prod.partnerClosingStock}">
                                             <f:convertNumber pattern="###,###,###.####" />
                                         </h:outputText>
                                     </p:column>

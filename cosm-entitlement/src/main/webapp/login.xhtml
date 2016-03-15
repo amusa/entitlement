@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:jsf="http://xmlns.jcp.org/jsf">
 <!--[if IE 9 ]><html class="ie9"><![endif]-->
     <h:head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
@@ -42,8 +43,7 @@
                         Remember Me
                     </label>
                 </div>
-                <button class="btn btn-sm m-r-5">Sign In</button>
-                
+                <button class="btn btn-sm m-r-5" jsf:outcome="index">Sign In</button>                
                 <small>
                     <a class="box-switcher" data-switch="box-register" href="">Don't have an Account?</a> or
                     <a class="box-switcher" data-switch="box-reset" href="">Forgot Password?</a>

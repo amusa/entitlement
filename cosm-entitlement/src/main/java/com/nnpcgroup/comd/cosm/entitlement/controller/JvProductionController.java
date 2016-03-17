@@ -64,6 +64,7 @@ public class JvProductionController implements Serializable {
     public void setCurrentProduction(JvForecastProduction currentProduction) {
         log.info("ProductionController::setProduction called...");
         this.currentProduction = currentProduction;
+        this.currentFiscalArrangement = currentProduction.getContractStream().getFiscalArrangement();
     }
 
     public List<JvForecastProduction> getProductions() {

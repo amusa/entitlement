@@ -57,6 +57,7 @@ public class JvActualProductionController implements Serializable {
     public void setCurrentProduction(JvActualProduction currentProduction) {
         log.info("JvActualProductionController::setProduction called...");
         this.currentProduction = currentProduction;
+        this.currentFiscalArrangement = currentProduction.getContractStream().getFiscalArrangement();
     }
 
     public List<JvActualProduction> getProductions() {
@@ -79,7 +80,7 @@ public class JvActualProductionController implements Serializable {
 
         }
     }
-    
+
     public void productionVolumeChanged() {
         productionBean.enrich(currentProduction);
         log.log(Level.INFO,
@@ -90,16 +91,22 @@ public class JvActualProductionController implements Serializable {
 
     }
 
+    public void liftingChanged() {
+        log.log(Level.INFO, "LIfting changed...");
+        productionBean.liftingChanged(currentProduction);
+
+    }
+
     public void openingStockChanged() {
         log.log(Level.INFO, "Opening Stock changed...");
         productionBean.openingStockChanged(currentProduction);
     }
-    
+
     public void resetDefaults() {
         log.log(Level.INFO, "Resetting to default...");
         productionBean.enrich(currentProduction);
     }
-    
+
     private void reset() {
         currentProduction = null;
         productions = null;
@@ -158,7 +165,7 @@ public class JvActualProductionController implements Serializable {
             // productionBean.enrich(currentProduction);
         }
     }
-    
+
     public void destroy() {
         persist(JsfUtil.PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("ProductionDeleted"));
         if (!JsfUtil.isValidationFailed()) {

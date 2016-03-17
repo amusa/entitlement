@@ -90,15 +90,7 @@
                                     <h:outputText value="Asset Stream/Crude Type"/>
                                 </f:facet>
                                 <h:outputText value="#{prod.contractStream.fiscalArrangement.title}/#{prod.contractStream.crudeType.code}"/>                                                        
-                            </p:column>                            
-                            <p:column>
-                                <f:facet name="header">
-                                    <h:outputText value="Daily Prod (bpd)" />
-                                </f:facet>                                                            
-                                <h:outputText value="#{prod.productionVolume}">
-                                    <f:convertNumber pattern="###,###,###.####" />
-                                </h:outputText>
-                            </p:column>
+                            </p:column> 
                             <p:column>
                                 <f:facet name="header">
                                     <h:outputText value="Gross Prod" />

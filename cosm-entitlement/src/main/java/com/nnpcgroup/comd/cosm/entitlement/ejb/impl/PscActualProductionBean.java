@@ -70,4 +70,9 @@ public class PscActualProductionBean extends PscProductionServicesImpl<PscActual
         return production;
     }
 
+    @Override
+    public PscActualProduction computeAvailability(PscActualProduction production) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }

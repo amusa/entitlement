@@ -10,6 +10,7 @@ import com.nnpcgroup.comd.cosm.entitlement.entity.EquityType;
 import com.nnpcgroup.comd.cosm.entitlement.entity.FiscalArrangement;
 import com.nnpcgroup.comd.cosm.entitlement.entity.JvForecastProduction;
 import com.nnpcgroup.comd.cosm.entitlement.entity.JointVenture;
+import com.nnpcgroup.comd.cosm.entitlement.entity.Production;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -72,16 +73,64 @@ public class JvForecastProductionBean extends JvProductionServicesImpl<JvForecas
 
         ownEntitlement = (grossProd
                 * et.getOwnEquity() * 0.01);
-        log.log(Level.INFO, "Own Entitlement=>{0} * {1} * 0.01 = {2}", new Object[]{grossProd,et.getOwnEquity(),ownEntitlement});
-        
+        log.log(Level.INFO, "Own Entitlement=>{0} * {1} * 0.01 = {2}", new Object[]{grossProd, et.getOwnEquity(), ownEntitlement});
+
         partnerEntitlement = (grossProd
                 * et.getPartnerEquity() * 0.01);
-        log.log(Level.INFO, "Partner Entitlement=>{0} * {1} * 0.01 = {2}", new Object[]{grossProd,et.getPartnerEquity(),partnerEntitlement});
-        
+        log.log(Level.INFO, "Partner Entitlement=>{0} * {1} * 0.01 = {2}", new Object[]{grossProd, et.getPartnerEquity(), partnerEntitlement});
+
         production.setOwnShareEntitlement(ownEntitlement);
         production.setPartnerShareEntitlement(partnerEntitlement);
 
         return production;
     }
 
+    @Override
+    public JvForecastProduction enrich(JvForecastProduction production) {
+        log.log(Level.INFO, "Enriching production {0}...", production);
+        return computeClosingStock(
+                computeLifting(
+                        computeAvailability(
+                                computeEntitlement(
+                                        computeGrossProduction(
+                                                computeOpeningStock(production)
+                                        )
+                                )
+                        )
+                )
+        );
+    }
+
+    @Override
+    public JvForecastProduction computeAvailability(JvForecastProduction production) {
+        Double availability, partnerAvailability;
+        Double ownEntitlement = production.getOwnShareEntitlement();
+        Double partnerEntitlement = production.getPartnerShareEntitlement();
+        Double openingStock = production.getOpeningStock();
+        Double partnerOpeningStock = production.getPartnerOpeningStock();
+
+        availability = ownEntitlement + openingStock;
+        partnerAvailability = partnerEntitlement + partnerOpeningStock;
+
+        production.setAvailability(availability);
+        production.setPartnerAvailability(partnerAvailability);
+
+        return production;
+    }
+
+    @Override
+    public JvForecastProduction computeClosingStock(JvForecastProduction production) {
+        Double closingStock, partnerClosingStock;
+        Double availability = production.getAvailability();
+        Double partnerAvailability = production.getPartnerAvailability();
+        Double lifting = production.getLifting();
+        Double partnerLifting = production.getPartnerLifting();
+
+        closingStock = availability - lifting;
+        partnerClosingStock = partnerAvailability - partnerLifting;
+        production.setClosingStock(closingStock);
+        production.setPartnerClosingStock(partnerClosingStock);
+
+        return production;
+    }
 }

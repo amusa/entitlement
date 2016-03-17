@@ -12,5 +12,6 @@ import com.nnpcgroup.comd.cosm.entitlement.entity.JvForecastProduction;
  * @author 18359
  */
 public interface JvForecastProductionServices extends JvProductionServices<JvForecastProduction> {
+    public JvForecastProduction enrich(JvForecastProduction production);
     
 }

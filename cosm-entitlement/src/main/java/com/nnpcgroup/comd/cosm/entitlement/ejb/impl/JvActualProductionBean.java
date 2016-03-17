@@ -10,6 +10,7 @@ import com.nnpcgroup.comd.cosm.entitlement.entity.JvActualProduction;
 import com.nnpcgroup.comd.cosm.entitlement.entity.EquityType;
 import com.nnpcgroup.comd.cosm.entitlement.entity.FiscalArrangement;
 import com.nnpcgroup.comd.cosm.entitlement.entity.JointVenture;
+import com.nnpcgroup.comd.cosm.entitlement.entity.Production;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -112,4 +113,66 @@ public class JvActualProductionBean extends JvProductionServicesImpl<JvActualPro
         return computeClosingStock(production);
     }
 
+    @Override
+    public JvActualProduction grossProductionChanged(JvActualProduction production) {
+        log.log(Level.INFO, "Gross production changed");
+        return computeClosingStock(
+                computeLifting(
+                        computeAvailability(
+                                computeEntitlement(
+                                        computeOpeningStock(production)
+                                )
+                        )
+                )
+        );
+    }
+
+    @Override
+    public JvActualProduction computeAvailability(JvActualProduction production) {
+        Double availability, partnerAvailability;
+        Double ownEntitlement = production.getOwnShareEntitlement();
+        Double partnerEntitlement = production.getPartnerShareEntitlement();
+        Double openingStock = production.getOpeningStock();
+        Double partnerOpeningStock = production.getPartnerOpeningStock();
+        Double stockAdjustment = production.getStockAdjustment() != null ? production.getStockAdjustment() : 0.0;
+        Double partnerStockAdjustment = production.getStockAdjustment() != null ? production.getPartnerStockAdjustment() : 0.0;
+
+        availability = ownEntitlement + openingStock + stockAdjustment;
+        partnerAvailability = partnerEntitlement + partnerOpeningStock + partnerStockAdjustment;
+
+        production.setAvailability(availability);
+        production.setPartnerAvailability(partnerAvailability);
+
+        return production;
+    }
+
+    @Override
+    public JvActualProduction computeClosingStock(JvActualProduction production) {
+        Double closingStock, partnerClosingStock;
+        Double availability = production.getAvailability();
+        Double partnerAvailability = production.getPartnerAvailability();
+        Double lifting = production.getLifting();
+        Double partnerLifting = production.getPartnerLifting();
+
+        closingStock = availability - lifting;
+
+        if (closingStock >= 0) {
+            production.setClosingStock(closingStock);
+        } else {
+            production.setClosingStock(0.0);
+            production.setStockAdjustment(-1 * closingStock);
+            production.setPartnerStockAdjustment(closingStock);
+        }
+
+        partnerClosingStock = partnerAvailability - partnerLifting;
+        if (partnerClosingStock >= 0) {
+            production.setPartnerClosingStock(partnerClosingStock);
+        } else {
+            production.setPartnerClosingStock(0.0);
+            production.setPartnerStockAdjustment(-1 * partnerClosingStock);
+            production.setStockAdjustment(partnerClosingStock);
+        }
+
+        return computeAvailability(production);
+    }
 }

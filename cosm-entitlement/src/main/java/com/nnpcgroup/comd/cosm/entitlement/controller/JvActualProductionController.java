@@ -49,7 +49,7 @@ public class JvActualProductionController implements Serializable {
         // log.log(Level.INFO, "Entitlement calculated: {0}", entitlement.calculateEntitlement());
     }
 
-    public Production getCurrentProduction() {
+    public JvActualProduction getCurrentProduction() {
         log.info("JvActualProductionController::getProduction called...");
         return currentProduction;
     }
@@ -57,7 +57,8 @@ public class JvActualProductionController implements Serializable {
     public void setCurrentProduction(JvActualProduction currentProduction) {
         log.info("JvActualProductionController::setProduction called...");
         this.currentProduction = currentProduction;
-        this.currentFiscalArrangement = currentProduction.getContractStream().getFiscalArrangement();
+        this.currentFiscalArrangement = (currentProduction != null)
+                ? currentProduction.getContractStream().getFiscalArrangement() : null;
     }
 
     public List<JvActualProduction> getProductions() {
@@ -81,17 +82,17 @@ public class JvActualProductionController implements Serializable {
         }
     }
 
-    public void productionVolumeChanged() {
-        productionBean.enrich(currentProduction);
+    public void grossProductionChanged() {
+        productionBean.grossProductionChanged(currentProduction);
         log.log(Level.INFO,
-                "Production Enriched::Own entmt={0},Partner entmt={1}, Stock Adj={2}...",
+                "Own entmt={0},Partner entmt={1}, Stock Adj={2}...",
                 new Object[]{currentProduction.getOwnShareEntitlement(),
                     currentProduction.getPartnerShareEntitlement(),
                     currentProduction.getStockAdjustment()});
 
     }
-    
-    public void liftingChanged() {        
+
+    public void liftingChanged() {
         log.log(Level.INFO, "LIfting changed...");
         productionBean.liftingChanged(currentProduction);
 
@@ -104,7 +105,7 @@ public class JvActualProductionController implements Serializable {
 
     public void resetDefaults() {
         log.log(Level.INFO, "Resetting to default...");
-        productionBean.enrich(currentProduction);
+        productionBean.grossProductionChanged(currentProduction);
     }
 
     private void reset() {

@@ -19,6 +19,7 @@ public class JvActualProduction extends JvProduction {
     private static final long serialVersionUID = 4881837273578907336L;
 
     private Double stockAdjustment;
+    private Double partnerStockAdjustment;
 
     public JvActualProduction() {
     }
@@ -31,4 +32,12 @@ public class JvActualProduction extends JvProduction {
         this.stockAdjustment = stockAdjustment;
     }
 
+    public Double getPartnerStockAdjustment() {
+        return partnerStockAdjustment;
+    }
+
+    public void setPartnerStockAdjustment(Double partnerStockAdjustment) {
+        this.partnerStockAdjustment = partnerStockAdjustment;
+    }
+    
 }

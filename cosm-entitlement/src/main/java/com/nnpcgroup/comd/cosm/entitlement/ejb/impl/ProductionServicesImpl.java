@@ -170,22 +170,6 @@ public abstract class ProductionServicesImpl<T extends Production> extends Abstr
     }
 
     @Override
-    public T computeClosingStock(T production) {
-        Double closingStock, partnerClosingStock;
-        Double availability = ((Production) production).getAvailability();
-        Double partnerAvailability = ((Production) production).getPartnerAvailability();
-        Double lifting = ((Production) production).getLifting();
-        Double partnerLifting = ((Production) production).getPartnerLifting();
-
-        closingStock = availability - lifting;
-        partnerClosingStock = partnerAvailability - partnerLifting;
-        ((Production) production).setClosingStock(closingStock);
-        ((Production) production).setPartnerClosingStock(partnerClosingStock);
-
-        return production;
-    }
-
-    @Override
     public T computeGrossProduction(T production) {
         Double prodVolume = ((Production) production).getProductionVolume();
         int days = genController.daysOfMonth(production.getPeriodYear(), production.getPeriodMonth());
@@ -196,23 +180,7 @@ public abstract class ProductionServicesImpl<T extends Production> extends Abstr
         ((Production) production).setGrossProduction(grossProd);
         return production;
     }
-
-    @Override
-    public T enrich(T production) {
-        log.log(Level.INFO, "Enriching production {0}...", production);
-        return computeClosingStock(
-                computeLifting(
-                        computeAvailability(
-                                computeEntitlement(
-                                        computeGrossProduction(
-                                                computeOpeningStock(production)
-                                        )
-                                )
-                        )
-                )
-        );
-    }
-
+    
     @Override
     public T openingStockChanged(T production){
          log.log(Level.INFO, "Opening Stock changed {0}...", production);
@@ -222,24 +190,7 @@ public abstract class ProductionServicesImpl<T extends Production> extends Abstr
                 )
         );
     }
-
-    @Override
-    public T computeAvailability(T production) {
-        Double availability, partnerAvailability;
-        Double ownEntitlement = ((Production) production).getOwnShareEntitlement();
-        Double partnerEntitlement = ((Production) production).getPartnerShareEntitlement();
-        Double openingStock = ((Production) production).getOpeningStock();
-        Double partnerOpeningStock = ((Production) production).getPartnerOpeningStock();
-
-        availability = ownEntitlement + openingStock;
-        partnerAvailability = partnerEntitlement + partnerOpeningStock;
-
-        ((Production) production).setAvailability(availability);
-        ((Production) production).setPartnerAvailability(partnerAvailability);
-
-        return production;
-    }
-
+    
     @Override
     public T computeLifting(T production) {
         Double liftableVolume, partnerLiftableVolume;

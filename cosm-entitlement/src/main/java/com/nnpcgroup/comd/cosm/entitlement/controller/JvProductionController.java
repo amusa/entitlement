@@ -64,7 +64,8 @@ public class JvProductionController implements Serializable {
     public void setCurrentProduction(JvForecastProduction currentProduction) {
         log.info("ProductionController::setProduction called...");
         this.currentProduction = currentProduction;
-        this.currentFiscalArrangement = currentProduction.getContractStream().getFiscalArrangement();
+        this.currentFiscalArrangement = (currentProduction != null)
+                ? currentProduction.getContractStream().getFiscalArrangement() : null;
     }
 
     public List<JvForecastProduction> getProductions() {
@@ -178,13 +179,13 @@ public class JvProductionController implements Serializable {
         log.log(Level.INFO, "Opening Stock changed...");
         productionBean.openingStockChanged(currentProduction);
     }
-    
+
     public void resetDefaults() {
         log.log(Level.INFO, "Resetting to default...");
         productionBean.enrich(currentProduction);
     }
-    
-    private void reset() {        
+
+    private void reset() {
         currentProduction = null;
     }
 

@@ -26,7 +26,7 @@ import javax.persistence.criteria.Root;
  */
 @Stateless
 @Local(JvActualProductionServices.class)
-public class JvActualProductionBean extends JvProductionServicesImpl<JvActualProduction> implements JvActualProductionServices{
+public class JvActualProductionBean extends JvProductionServicesImpl<JvActualProduction> implements JvActualProductionServices {
 
     private static final Logger log = Logger.getLogger(JvActualProductionBean.class.getName());
 
@@ -96,6 +96,12 @@ public class JvActualProductionBean extends JvProductionServicesImpl<JvActualPro
         List<JvActualProduction> productions = query.getResultList();
 
         return productions;
+    }
+
+    @Override
+    public JvActualProduction liftingChanged(JvActualProduction production) {
+        log.log(Level.INFO, "Lifting changed {0}...", production);
+        return computeClosingStock(production);
     }
 
 }

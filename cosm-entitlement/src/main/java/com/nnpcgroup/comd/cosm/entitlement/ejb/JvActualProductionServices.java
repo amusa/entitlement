@@ -13,5 +13,6 @@ import com.nnpcgroup.comd.cosm.entitlement.entity.JvActualProduction;
 
  */
 public interface JvActualProductionServices extends JvProductionServices<JvActualProduction> {
+    public JvActualProduction liftingChanged(JvActualProduction production);
     
 }

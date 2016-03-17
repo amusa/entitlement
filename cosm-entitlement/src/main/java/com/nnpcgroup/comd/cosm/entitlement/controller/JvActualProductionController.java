@@ -89,6 +89,12 @@ public class JvActualProductionController implements Serializable {
                     currentProduction.getStockAdjustment()});
 
     }
+    
+    public void liftingChanged() {        
+        log.log(Level.INFO, "LIfting changed...");
+        productionBean.liftingChanged(currentProduction);
+
+    }
 
     public void openingStockChanged() {
         log.log(Level.INFO, "Opening Stock changed...");

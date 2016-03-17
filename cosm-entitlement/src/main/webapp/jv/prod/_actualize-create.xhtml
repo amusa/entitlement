@@ -61,7 +61,7 @@
                             <p:column colspan="4" style="border: 0">
                                 <p:inputText id="dailyProd" value = "#{jvActualController.currentProduction.productionVolume}"  class="form-control input-sm m-b-10" pt:placeholder="Gross Production"
                                              >
-                                    <p:ajax event="change" listener="#{jvActualController.productionVolumeChange}"  
+                                    <p:ajax event="change" listener="#{jvActualController.productionVolumeChanged}"  
                                             update="grossProd openingStock ownShareEntitlement  closingStock lifting cargoes availability ptnrOpeningStock ptnrShareEntitlement ptnrClosingStock ptnrLifting ptnrCargoes ptnrAvailability"
                                             />
                                 </p:inputText>
@@ -95,6 +95,9 @@
                             <div class="ui-grid-col-4">
                                 <p:inputText id="openingStock" value="#{jvActualController.currentProduction.openingStock}" title="Opening Stock" >
                                     <f:convertNumber pattern="###,###,###.####" />
+                                    <p:ajax event="change" listener="#{jvActualController.openingStockChanged}"  
+                                            update="ownShareEntitlement  closingStock lifting cargoes availability ptnrOpeningStock ptnrShareEntitlement ptnrClosingStock ptnrLifting ptnrCargoes ptnrAvailability"
+                                            />
                                 </p:inputText>
                             </div>
                         </div>                                    
@@ -154,6 +157,9 @@
                             <div class="ui-grid-col-4">
                                 <p:inputText id="ptnrOpeningStock" value="#{jvActualController.currentProduction.partnerOpeningStock}" title="Opening Stock" >
                                     <f:convertNumber pattern="###,###,###.####" />
+                                    <p:ajax event="change" listener="#{jvActualController.openingStockChanged}"  
+                                            update="ownShareEntitlement  closingStock lifting cargoes availability ptnrOpeningStock ptnrShareEntitlement ptnrClosingStock ptnrLifting ptnrCargoes ptnrAvailability"
+                                            />
                                 </p:inputText>
                             </div>
                         </div>
@@ -198,7 +204,11 @@
 
                 <p:commandButton actionListener="#{jvActualController.create}" value="#{bundle.Save}" update="display,:jvProdListForm:prodTable,:growl" oncomplete="handleSubmit(args,'JvActualizeCreateDlg');"/>
                 <p:commandButton actionListener="#{jvActualController.cancel}"  value="#{bundle.Cancel}" onclick="JvActualizeCreateDlg.hide()" immediate="true"/>
-
+                <p:commandButton value="Reset">                    
+                    <p:ajax event="click" listener="#{jvActualController.resetDefaults}"  
+                            update="grossProd openingStock ownShareEntitlement  closingStock lifting cargoes availability ptnrOpeningStock ptnrShareEntitlement ptnrClosingStock ptnrLifting ptnrCargoes ptnrAvailability"
+                            />
+                </p:commandButton>
             </h:form>
         </p:dialog>
 

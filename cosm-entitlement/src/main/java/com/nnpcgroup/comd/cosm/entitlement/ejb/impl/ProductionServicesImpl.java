@@ -214,6 +214,16 @@ public abstract class ProductionServicesImpl<T extends Production> extends Abstr
     }
 
     @Override
+    public T openingStockChanged(T production){
+         log.log(Level.INFO, "Opening Stock changed {0}...", production);
+        return computeClosingStock(
+                computeLifting(
+                        computeAvailability(production)
+                )
+        );
+    }
+
+    @Override
     public T computeAvailability(T production) {
         Double availability, partnerAvailability;
         Double ownEntitlement = ((Production) production).getOwnShareEntitlement();

@@ -162,7 +162,7 @@ public class JvProductionController implements Serializable {
         dataModel = new ProductionDataModel(productions);
     }
 
-    public void productionVolumeChange() {
+    public void productionVolumeChanged() {
         log.log(Level.INFO, "Production Volume changed...");
         productionBean.enrich(currentProduction);
         log.log(Level.INFO,
@@ -173,8 +173,17 @@ public class JvProductionController implements Serializable {
 
     }
 
-    private void reset() {
-        //productions = null;
+    public void openingStockChanged() {
+        log.log(Level.INFO, "Opening Stock changed...");
+        productionBean.openingStockChanged(currentProduction);
+    }
+    
+    public void resetDefaults() {
+        log.log(Level.INFO, "Resetting to default...");
+        productionBean.enrich(currentProduction);
+    }
+    
+    private void reset() {        
         currentProduction = null;
     }
 

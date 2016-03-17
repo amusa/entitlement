@@ -79,7 +79,27 @@ public class JvActualProductionController implements Serializable {
 
         }
     }
+    
+    public void productionVolumeChanged() {
+        productionBean.enrich(currentProduction);
+        log.log(Level.INFO,
+                "Production Enriched::Own entmt={0},Partner entmt={1}, Stock Adj={2}...",
+                new Object[]{currentProduction.getOwnShareEntitlement(),
+                    currentProduction.getPartnerShareEntitlement(),
+                    currentProduction.getStockAdjustment()});
 
+    }
+
+    public void openingStockChanged() {
+        log.log(Level.INFO, "Opening Stock changed...");
+        productionBean.openingStockChanged(currentProduction);
+    }
+    
+    public void resetDefaults() {
+        log.log(Level.INFO, "Resetting to default...");
+        productionBean.enrich(currentProduction);
+    }
+    
     private void reset() {
         currentProduction = null;
         productions = null;
@@ -138,17 +158,7 @@ public class JvActualProductionController implements Serializable {
             // productionBean.enrich(currentProduction);
         }
     }
-
-    public void productionVolumeChange() {
-        productionBean.enrich(currentProduction);
-        log.log(Level.INFO,
-                "Production Enriched::Own entmt={0},Partner entmt={1}, Stock Adj={2}...",
-                new Object[]{currentProduction.getOwnShareEntitlement(),
-                    currentProduction.getPartnerShareEntitlement(),
-                    currentProduction.getStockAdjustment()});
-
-    }
-
+    
     public void destroy() {
         persist(JsfUtil.PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("ProductionDeleted"));
         if (!JsfUtil.isValidationFailed()) {

@@ -39,6 +39,8 @@ public interface ProductionServices<T extends Production> extends AbstractCrudSe
     public T computeGrossProduction(T production);
 
     public T enrich(T production);
+    
+    public T openingStockChanged(T production);
 
     public T computeAvailability(T production);
 

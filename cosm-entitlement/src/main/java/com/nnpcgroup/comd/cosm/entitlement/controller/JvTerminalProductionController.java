@@ -178,6 +178,7 @@ public class JvTerminalProductionController implements Serializable {
     }
 
     public Double getDailySum() {
+        log.log (Level.INFO,"Productions: {0}",productions);
         Double dailySum = productions.stream()
                 .mapToDouble(p -> p.getProductionVolume())
                 .sum();
@@ -188,7 +189,7 @@ public class JvTerminalProductionController implements Serializable {
         Double grossProd = productions.stream()
                 .mapToDouble(p -> p.getGrossProduction())
                 .sum();
-        return grossProd;
+        return grossProd!=null?grossProd:null;
     }
 
     public Double getOwnEntitlementSum() {

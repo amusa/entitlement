@@ -179,6 +179,7 @@ public class JvTerminalProductionController implements Serializable {
 
     public Double getDailySum() {
         log.log (Level.INFO,"Productions: {0}",productions);
+        if (productions.isEmpty())return null;
         Double dailySum = productions.stream()
                 .mapToDouble(p -> p.getProductionVolume())
                 .sum();
@@ -186,13 +187,16 @@ public class JvTerminalProductionController implements Serializable {
     }
 
     public Double getGrossSum() {
+        if (productions.isEmpty())return null;
+        log.log(Level.INFO,"productions is not empty {0}",productions);
         Double grossProd = productions.stream()
                 .mapToDouble(p -> p.getGrossProduction())
                 .sum();
-        return grossProd!=null?grossProd:null;
+        return grossProd;
     }
 
     public Double getOwnEntitlementSum() {
+        if (productions.isEmpty())return null;
         Double ownEntitlement = productions.stream()
                 .mapToDouble(p -> p.getOwnShareEntitlement())
                 .sum();
@@ -200,6 +204,7 @@ public class JvTerminalProductionController implements Serializable {
     }
 
     public Double getPartnerEntitlementSum() {
+        if (productions.isEmpty())return null;
         Double partnerEntitlement = productions.stream()
                 .mapToDouble(p -> p.getPartnerShareEntitlement())
                 .sum();
@@ -207,6 +212,7 @@ public class JvTerminalProductionController implements Serializable {
     }
 
     public Double getOpeningStockSum() {
+        if (productions.isEmpty())return null;
         Double openingStockSum = productions.stream()
                 .mapToDouble(p -> p.getOpeningStock())
                 .sum();
@@ -214,6 +220,7 @@ public class JvTerminalProductionController implements Serializable {
     }
 
     public Double getAvailabilitySum() {
+        if (productions.isEmpty())return null;
         Double availabilitySum = productions.stream()
                 .mapToDouble(p -> p.getAvailability())
                 .sum();
@@ -222,18 +229,22 @@ public class JvTerminalProductionController implements Serializable {
     }
 
     public Double getNomLiftingSum() {
-        Double nomLiftingSum = getCargoesSum() * 950000.0;
+        Integer cargoesSum = getCargoesSum();
+        if(cargoesSum==null)return null;
+        Double nomLiftingSum = cargoesSum * 950000.0;
         return nomLiftingSum;
     }
 
     public Integer getCargoesSum() {
         Double availabilitySum = getAvailabilitySum();
+        if (availabilitySum==null)return null;
         Integer cargoesSum = (int) (availabilitySum / 950000.0);
         return cargoesSum;
     }
   
     public Double getClosingStockSum() {
         Double availabilitySum = getAvailabilitySum();
+        if (availabilitySum==null)return null;
         return availabilitySum % 950000.0;
     }
 

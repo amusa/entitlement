@@ -76,7 +76,7 @@
                                 <p:outputLabel value="Entitlement" for="ownShareEntitlement" />
                             </div>
                             <div class="ui-grid-col-4">
-                                <p:inputText id="ownShareEntitlement" value="#{jvActualController.currentProduction.ownShareEntitlement}" title="Own Entitlement" >
+                                <p:inputText id="ownShareEntitlement" value="#{jvActualController.currentProduction.ownShareEntitlement}" title="Own Entitlement" disabled="true">
                                     <f:convertNumber maxFractionDigits="2" groupingUsed="true" />
                                 </p:inputText>
                             </div>                            
@@ -98,7 +98,7 @@
                                 <p:outputLabel value="Stock Adjustment" for="stockAdjustment" />
                             </div>
                             <div class="ui-grid-col-4">
-                                <p:inputText id="stockAdjustment" value="#{jvActualController.currentProduction.stockAdjustment}" title="Stock Adjustment" >
+                                <p:inputText id="stockAdjustment" value="#{jvActualController.currentProduction.stockAdjustment}" title="Stock Adjustment" disabled="true">
                                     <f:convertNumber pattern="###,###,###.####" />                                    
                                 </p:inputText>
                             </div>
@@ -109,7 +109,7 @@
                                 <p:outputLabel value="Availability" for="availability" />
                             </div>
                             <div class="ui-grid-col-4">
-                                <p:inputText id="availability" value="#{jvActualController.currentProduction.availability}" title="Availability">
+                                <p:inputText id="availability" value="#{jvActualController.currentProduction.availability}" title="Availability" disabled="true">
                                     <f:convertNumber pattern="###,###,###.####" />
                                 </p:inputText>  
                             </div>  
@@ -120,11 +120,13 @@
                                 <p:outputLabel value="Lifting (Actual)" for="lifting" />                                           
                             </div>
                             <div class="ui-grid-col-4">                                            
-                                <p:inputText id="lifting" value="#{jvActualController.currentProduction.lifting}" title="Lifting (Actual)">
+                                <p:inputText id="lifting" value="#{jvActualController.currentProduction.lifting}" title="Lifting (Actual)"
+                                             validator="#{jvActualController.validateStockLifting}">
                                     <f:convertNumber pattern="###,###,###.####" />
                                     <p:ajax event="change" listener="#{jvActualController.liftingChanged}"  
                                             update="openingStock closingStock cargoes stockAdjustment availability ptnrOpeningStock ptnrClosingStock ptnrStockAdj ptnrCargoes ptnrAvailability"
                                             />
+<!--                                    <f:validator validatorId="liftingValidator" />-->
                                 </p:inputText>
                             </div>
                             <div class="ui-grid-col-2">
@@ -154,7 +156,7 @@
                                 <p:outputLabel value="Entitlement" for="ptnrShareEntitlement" />
                             </div>
                             <div class="ui-grid-col-4">
-                                <p:inputText id="ptnrShareEntitlement" value="#{jvActualController.currentProduction.partnerShareEntitlement}" title="Partner Entitlement" >
+                                <p:inputText id="ptnrShareEntitlement" value="#{jvActualController.currentProduction.partnerShareEntitlement}" title="Partner Entitlement" disabled="true" >
                                     <f:convertNumber pattern="###,###,###.####" />
                                 </p:inputText>
                             </div>                            
@@ -175,7 +177,7 @@
                                 <p:outputLabel value="Stock Adjustment" for="ptnrStockAdj" />
                             </div>
                             <div class="ui-grid-col-4">
-                                <p:inputText id="ptnrStockAdj" value="#{jvActualController.currentProduction.partnerStockAdjustment}" title="Partner Stock Adjustment" >
+                                <p:inputText id="ptnrStockAdj" value="#{jvActualController.currentProduction.partnerStockAdjustment}" title="Partner Stock Adjustment" disabled="true">
                                     <f:convertNumber pattern="###,###,###.####" />                                    
                                 </p:inputText>
                             </div>                            
@@ -185,7 +187,7 @@
                                 <p:outputLabel value="Availability" for="ptnrAvailability" />
                             </div>
                             <div class="ui-grid-col-4">
-                                <p:inputText id="ptnrAvailability" value="#{jvActualController.currentProduction.partnerAvailability}" title="Availability">
+                                <p:inputText id="ptnrAvailability" value="#{jvActualController.currentProduction.partnerAvailability}" title="Availability" disabled="true">
                                     <f:convertNumber pattern="###,###,###.####" />
                                 </p:inputText>  
                             </div> 
@@ -196,11 +198,13 @@
                                 <p:outputLabel value="Lifting (Actual)" for="ptnrLifting" />
                             </div>
                             <div class="ui-grid-col-4">                                            
-                                <p:inputText id="ptnrLifting" value="#{jvActualController.currentProduction.partnerLifting}" title="Lifting (Actual)">
+                                <p:inputText id="ptnrLifting" value="#{jvActualController.currentProduction.partnerLifting}" title="Lifting (Actual)"
+                                             validator="#{jvActualController.validateStockLifting}">
                                     <f:convertNumber pattern="###,###,###.####" />
                                     <p:ajax event="change" listener="#{jvActualController.liftingChanged}"  
                                             update="openingStock closingStock cargoes availability stockAdjustment ptnrOpeningStock ptnrStockAdj ptnrClosingStock ptnrCargoes ptnrAvailability"
                                             />
+<!--                                    <f:validator validatorId="liftingValidator" />-->
                                 </p:inputText>
                             </div>
                             <div class="ui-grid-col-2">

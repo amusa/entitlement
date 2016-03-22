@@ -110,11 +110,13 @@ public class JvActualProductionBean extends JvProductionServicesImpl<JvActualPro
     @Override
     public JvActualProduction liftingChanged(JvActualProduction production) {
         log.log(Level.INFO, "Lifting changed {0}...", production);
-        return computeAvailability(
-                computeStockAdjustment(
-                        computeClosingStock(
-                                computeAvailability(
-                                        stockAdjustmentReset(production)
+        return computeClosingStock(
+                computeAvailability(
+                        computeStockAdjustment(
+                                computeClosingStock(
+                                        computeAvailability(
+                                                stockAdjustmentReset(production)
+                                        )
                                 )
                         )
                 )

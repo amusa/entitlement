@@ -19,7 +19,11 @@ import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
+import javax.faces.validator.ValidatorException;
 
 /**
  *
@@ -95,6 +99,25 @@ public class JvActualProductionController implements Serializable {
     public void liftingChanged() {
         log.log(Level.INFO, "LIfting changed...");
         productionBean.liftingChanged(currentProduction);
+
+        Double openingStock = currentProduction.getOpeningStock();
+        Double entitlement = currentProduction.getOwnShareEntitlement();
+        Double lifting = currentProduction.getLifting();
+
+        Double partnerOpeningStock = currentProduction.getPartnerOpeningStock();
+        Double partnerEntitlement = currentProduction.getPartnerShareEntitlement();
+        Double partnerLifting = currentProduction.getPartnerLifting();
+
+        Double bucket = openingStock + entitlement + partnerOpeningStock + partnerEntitlement;
+
+        if (bucket - lifting - partnerLifting < 0) {
+            FacesMessage msg
+                    = new FacesMessage("Stock Lifting validation failed!",
+                            "Please check your availability and lifting volume");
+            msg.setSeverity(FacesMessage.SEVERITY_ERROR);
+
+            throw new ValidatorException(msg);
+        }
 
     }
 
@@ -225,6 +248,27 @@ public class JvActualProductionController implements Serializable {
                 Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
                 JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
             }
+        }
+    }
+
+    public void validateStockLifting(FacesContext facesContext, UIComponent component, Object value) throws ValidatorException {
+        Double openingStock = currentProduction.getOpeningStock();
+        Double entitlement = currentProduction.getOwnShareEntitlement();
+        Double lifting = currentProduction.getLifting();
+
+        Double partnerOpeningStock = currentProduction.getPartnerOpeningStock();
+        Double partnerEntitlement = currentProduction.getPartnerShareEntitlement();
+        Double partnerLifting = currentProduction.getPartnerLifting();
+
+        Double bucket = openingStock + entitlement + partnerOpeningStock + partnerEntitlement;
+
+        if (bucket - lifting - partnerLifting < 0) {
+            FacesMessage msg
+                    = new FacesMessage("Stock Lifting validation failed!",
+                            "Please check your availability and lifting volume");
+            msg.setSeverity(FacesMessage.SEVERITY_ERROR);
+
+            throw new ValidatorException(msg);
         }
     }
 

@@ -7,10 +7,8 @@ package com.nnpcgroup.comd.cosm.entitlement.controller;
 
 import com.nnpcgroup.comd.cosm.entitlement.controller.util.JsfUtil;
 import com.nnpcgroup.comd.cosm.entitlement.controller.util.ProductionDataModel;
-import com.nnpcgroup.comd.cosm.entitlement.ejb.JvActualProductionServices;
 import com.nnpcgroup.comd.cosm.entitlement.ejb.JvForecastProductionServices;
 import com.nnpcgroup.comd.cosm.entitlement.ejb.TerminalBlendServices;
-import com.nnpcgroup.comd.cosm.entitlement.entity.JvActualProduction;
 import com.nnpcgroup.comd.cosm.entitlement.entity.JvForecastProduction;
 import com.nnpcgroup.comd.cosm.entitlement.entity.Terminal;
 import com.nnpcgroup.comd.cosm.entitlement.entity.TerminalBlend;

@@ -10,7 +10,6 @@ import com.nnpcgroup.comd.cosm.entitlement.controller.util.ProductionDataModel;
 import com.nnpcgroup.comd.cosm.entitlement.ejb.JvForecastProductionServices;
 import com.nnpcgroup.comd.cosm.entitlement.entity.FiscalArrangement;
 import com.nnpcgroup.comd.cosm.entitlement.entity.JvForecastProduction;
-import com.nnpcgroup.comd.cosm.entitlement.entity.Production;
 
 import javax.inject.Named;
 import java.io.Serializable;

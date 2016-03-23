@@ -41,7 +41,7 @@ public class JvTerminalProductionController implements Serializable {
     private Integer periodYear;
     private Integer periodMonth;
     private Terminal currentTerminal;
-    
+
     /**
      * Creates a new instance of JvController
      */
@@ -178,7 +178,7 @@ public class JvTerminalProductionController implements Serializable {
     }
 
     public Double getDailySum() {
-        log.log (Level.INFO,"Productions: {0}",productions);
+        log.log(Level.INFO, "Productions: {0}", productions);
         Double dailySum = productions.stream()
                 .mapToDouble(p -> p.getProductionVolume())
                 .sum();
@@ -189,7 +189,7 @@ public class JvTerminalProductionController implements Serializable {
         Double grossProd = productions.stream()
                 .mapToDouble(p -> p.getGrossProduction())
                 .sum();
-        return grossProd!=null?grossProd:null;
+        return grossProd != null ? grossProd : null;
     }
 
     public Double getOwnEntitlementSum() {
@@ -217,7 +217,7 @@ public class JvTerminalProductionController implements Serializable {
         Double availabilitySum = productions.stream()
                 .mapToDouble(p -> p.getAvailability())
                 .sum();
-        
+
         return availabilitySum;
     }
 
@@ -231,7 +231,7 @@ public class JvTerminalProductionController implements Serializable {
         Integer cargoesSum = (int) (availabilitySum / 950000.0);
         return cargoesSum;
     }
-  
+
     public Double getClosingStockSum() {
         Double availabilitySum = getAvailabilitySum();
         return availabilitySum % 950000.0;

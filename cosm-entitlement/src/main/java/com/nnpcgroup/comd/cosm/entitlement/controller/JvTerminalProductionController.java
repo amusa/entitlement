@@ -179,21 +179,24 @@ public class JvTerminalProductionController implements Serializable {
 
     public Double getDailySum() {
         log.log(Level.INFO, "Productions: {0}", productions);
+        if (productions.isEmpty()) {
+            return null;
+        }
         Double dailySum = productions.stream()
                 .mapToDouble(p -> p.getProductionVolume())
                 .sum();
         return dailySum;
     }
 
-    public Double getGrossSum() {
+    public Double getGrossSum() {        
+        log.log(Level.INFO, "productions is not empty {0}", productions);
         if (productions.isEmpty()) {
             return null;
         }
-        log.log(Level.INFO, "productions is not empty {0}", productions);
         Double grossProd = productions.stream()
                 .mapToDouble(p -> p.getGrossProduction())
                 .sum();
-        return grossProd != null ? grossProd : null;
+        return grossProd;
     }
 
     public Double getOwnEntitlementSum() {

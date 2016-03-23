@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:jsf="http://xmlns.jcp.org/jsf">
+
+
+    <ui:composition template="/cosm-template.xhtml">
+
+        <ui:define name="title">
+            <h:outputText value="Joint Venture List"></h:outputText>
+        </ui:define>
+
+        <ui:define name="page-title">
+            <h:outputText value="ENTITLEMENT"></h:outputText>
+        </ui:define>
+
+        <ui:define name="content-area">  
+            <h:messages id="growl" />
+            <div class="row">   
+
+                <h:form id="jvProdListForm">                   
+                    <h:messages id="msgs" showDetail="false" />
+                    <div class="row">
+                        <div class="col-md-3 m-b-15">
+                            <label>Year</label>
+                            <h:selectOneMenu id="periodYear" value="#{jvProdController.periodYear}" class="form-control input-sm m-b-10" >                                              
+                                <f:selectItems value="#{generalController.yearsAvailableSelectOne}" var="year" itemValue="#{year.value}"/>   
+                                <f:ajax listener="#{generalController.yearChanged}" event="change" render="periodMonth"/>     
+                            </h:selectOneMenu>
+                        </div>
+                        <div class="col-md-3 m-b-15">
+                            <label>Month</label>
+                            <h:selectOneMenu id="periodMonth" value="#{jvProdController.periodMonth}" class="form-control input-sm m-b-10">                                              
+                                <f:selectItem itemValue="#{null}" itemLabel="--select--" />
+                                <f:selectItems value="#{generalController.months}" var="mth" itemValue="#{mth.month}" itemLabel="#{mth.monthStr}" />   
+                                <f:ajax />     
+                            </h:selectOneMenu>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 m-b-15">
+                            <label>Contract</label>
+                            <h:selectOneMenu id="contract" value="#{jvProdController.currentFiscalArrangement}" class="form-control input-sm m-b-10">                                              
+                                <f:selectItems value="#{fiscalController.fiscalSelectOptions}" />   
+                                <f:ajax />     
+                            </h:selectOneMenu>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="block-area" id="button-tags">                       
+                            <h:commandButton  value="Get Forecast From SAP"  class="btn m-r-5" disabled="true" >
+                                <f:ajax event="click" render="prodTable msgs"  />
+                            </h:commandButton>
+
+                            <h:commandButton  value="Get Forecast"  class="btn m-r-5" >
+                                <f:ajax listener="#{jvProdController.loadProductions}" event="click"
+                                        execute="periodYear periodMonth"
+                                        render="forecast_panel prodTable msgs"/>
+
+                            </h:commandButton>
+                        </div>
+                    </div>
+
+
+                    <hr class="whiter m-t-20" />
+                    <!-- Multi Column -->
+                    <h:panelGroup id="forecast_panel">
+
+                        <h:dataTable id="prodTable" var="prod" value="#{jvProdController.dataModel}" 
+
+                                     class="table table-bordered table-hover tile"> 
+
+                            <h:column >                                                        
+                                <f:facet name="header">
+                                    <h:outputText value="Year" />   
+                                </f:facet>
+                                <h:outputText value="#{prod.periodYear}" />
+                            </h:column>
+                            <h:column>                                                        
+                                <f:facet name="header">
+                                    <h:outputText value="Month"/>
+                                </f:facet>
+                                <h:outputText value="#{prod.periodMonth}"/>                                                        
+                            </h:column>                            
+                            <h:column>                                                        
+                                <f:facet name="header">
+                                    <h:outputText value="Asset Stream/Crude Type"/>
+                                </f:facet>
+                                <h:outputText value="#{prod.contractStream.fiscalArrangement.title}/#{prod.contractStream.crudeType.code}"/>                                                        
+                            </h:column>                            
+                            <h:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Daily Prod (bpd)" />
+                                </f:facet>                                                            
+                                <h:outputText value="#{prod.productionVolume}">
+                                    <f:convertNumber maxFractionDigits="2" groupingUsed="true" />
+                                </h:outputText>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Gross Prod" />
+                                </f:facet>                                                            
+                                <h:outputText value="#{prod.grossProduction}">
+                                    <f:convertNumber pattern="###,###,###.####" />
+                                </h:outputText>
+                            </h:column>                            
+                            <h:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Own Entitlement" />
+                                </f:facet>                                                            
+                                <h:outputText value="#{prod.ownShareEntitlement}" >
+                                    <f:convertNumber maxFractionDigits="2" groupingUsed="true" />
+                                </h:outputText>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Partner Entitlement" />
+                                </f:facet>                                                            
+                                <h:outputText value="#{prod.partnerShareEntitlement}">
+                                    <f:convertNumber pattern="###,###,###.####" />
+                                </h:outputText>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Opening Stock" />
+                                </f:facet>                                                            
+                                <h:outputText value="#{prod.openingStock}">
+                                    <f:convertNumber pattern="###,###,###.####" />
+                                </h:outputText>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Availability" />
+                                </f:facet>                                                            
+                                <h:outputText value="#{prod.availability}">
+                                    <f:convertNumber pattern="###,###,###.####" />
+                                </h:outputText>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Lifting (Nom)" />
+                                </f:facet>                                                            
+                                <h:outputText value="#{prod.lifting}">
+                                    <f:convertNumber pattern="###,###,###.####" />
+                                </h:outputText>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Lifting Cargoes" />
+                                </f:facet>                                                            
+                                <h:outputText value="#{prod.cargos}">
+                                    <f:convertNumber pattern="###,###,###.####" />
+                                </h:outputText>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Closing Stock" />
+                                </f:facet>                                                            
+                                <h:outputText value="#{prod.closingStock}">
+                                    <f:convertNumber pattern="###,###,###.####" />
+                                </h:outputText>
+                            </h:column>
+                            <h:column>
+                                <div class="btn-group">
+                                    <button jsf:id="action" type="button" class="btn btn-sm dropdown-toggle" data-toggle="dropdown">
+                                        Action <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" jsf:id="btnList">
+                                        <li>
+                                            <h:commandLink  pt:data-target="#JvActualCreateDlg" pt:look="warning" pt:data-toggle="modal" >
+                                                <span class="icon">&#61845;</span>
+                                                #{bundle.Actualize}
+                                                <f:ajax event="click" render="JvActualCreateForm" listener="#{jvActualController.actualize(prod)}"/>
+                                            </h:commandLink>
+                                        </li>
+                                        <li class="divider"></li>
+                                        <li>
+                                            <h:commandLink  pt:data-target="#JvCreateDlg" pt:look="warning" pt:data-toggle="modal" >
+                                                <span class="icon">&#61943;</span>
+                                                #{bundle.Create}
+                                                <f:ajax event="click" render="JvCreateForm" listener="#{jvProdController.prepareCreate}" />
+                                            </h:commandLink>                                       
+                                        </li>
+
+                                        <li>
+                                            <h:commandLink pt:data-target="#JvViewDlg" pt:look="warning" pt:data-toggle="modal">
+                                                <span class="icon">&#61698;</span>
+                                                #{bundle.View}
+                                                <f:ajax event="click" render="JvViewForm" listener="#{jvProdController.setCurrentProduction(prod)}"/>
+                                            </h:commandLink>
+                                        </li>
+                                        <li><h:commandLink pt:data-target="#JvEditDlg" pt:look="warning" pt:data-toggle="modal">
+                                                <span class="icon">&#61952;</span>
+                                                #{bundle.Edit}
+                                                <f:ajax event="click" render="JvEditForm" listener="#{jvProdController.setCurrentProduction(prod)}"/>
+                                            </h:commandLink>
+                                        </li>  
+                                        <li>
+                                            <h:commandLink>
+                                                <span class="icon">&#61918;</span>
+                                                #{bundle.Delete}
+                                                <f:ajax render="prodTable" listener="#{jvProdController.destroy(prod)}"/>
+                                            </h:commandLink>
+                                        </li> 
+                                    </ul>
+                                </div>
+                            </h:column>
+
+                            <f:facet name="footer">                                                                
+                                <button jsf:id="actualizeButton" class="btn m-r-5" jsf:disabled="#{empty jvProdController.currentProduction}" >
+                                    <span class="icon">&#61845;</span>
+                                    #{bundle.Actualize}
+                                    <f:ajax event="click" render="JvActualizeCreateForm" listener="#{jvActualController.actualize(jvProdController.currentProduction)}"/>
+                                </button>
+
+                                <button jsf:id="createButton" look="warning" data-target="#JvCreateDlg" data-toggle="modal" class="btn m-r-5">
+                                    <span class="icon">&#61943;</span>
+                                    #{bundle.Create}
+                                    <f:ajax event="click" render="JvCreateForm" listener="#{jvProdController.prepareCreate}" />                                    
+                                </button>
+
+                                <button jsf:id="viewButton" look="warning" data-target="#JvViewDlg" data-toggle="modal" class="btn m-r-5">
+                                    <span class="icon">&#61698;</span>
+                                    #{bundle.View}
+                                    <f:ajax event="click" render="JvViewForm" />
+                                </button>
+                                <button jsf:id="editButton" look="warning" data-target="#JvEditDlg" data-toggle="modal" class="btn m-r-5">
+                                    <span class="icon">&#61952;</span>                                    
+                                    #{bundle.Edit}
+                                    <f:ajax event="click" render="JvEditForm" />
+                                </button>
+
+                                <button jsf:id="deleteButton" class="btn m-r-5" jsf:disabled="#{empty jvProdController.currentProduction}">
+                                    <span class="icon">&#61918;</span>
+                                    #{bundle.Delete}
+                                    <f:ajax render="prodTable" listener="#{jvProdController.destroy}"/>
+                                </button>
+
+                            </f:facet>
+                        </h:dataTable>
+
+                    </h:panelGroup>
+
+                </h:form>
+            </div>
+            <ui:include src="_actualize-create.xhtml"/>
+            <ui:include src="_forecast-create.xhtml"/>
+            <ui:include src="_forecast-edit.xhtml"/>
+            <ui:include src="_forecast-view.xhtml"/>
+        </ui:define>
+
+    </ui:composition>
+
+
+
+</html>

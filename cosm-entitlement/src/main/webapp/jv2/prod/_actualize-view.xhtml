@@ -5,78 +5,109 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
 
     <ui:composition>
+        <div class="modal fade" id="JvViewDlg" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">View JV Actual</h4>
+                    </div>
+                    <h:form id="JvViewForm">
+                        <div class="modal-body">
+                            <h:panelGroup id="JvViewPanel" rendered="#{jvActualController.currentProduction != null}">
+                                <div class="row">
+                                    <div class="col-md-6 m-b-15">
+                                        <h:outputLabel value="Year" for="periodYear"/>
+                                        <h:outputLabel id="periodYear" value="#{jvActualController.currentProduction.periodYear}" class="form-control input-sm m-b-10"/>   
+                                    </div>
 
-        <p:dialog id="JvActualizeViewDlg" widgetVar="JvActualizeViewDlg" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewJvActualProductionTitle}">
-            <h:form id="JvActualizeViewForm">
-                <h:panelGroup id="display">
+                                    <div class="col-md-6 m-b-15">
+                                        <h:outputLabel value="Month" for="periodMonth"/>
+                                        <h:outputLabel id="periodMonth" value="#{jvActualController.currentProduction.periodMonth}" class="form-control input-sm m-b-10"/>   
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 m-b-15">
+                                        <h:outputLabel value="Asset/Crude Type" for="contractStream" />
+                                        <h:outputLabel id="contractStream" value="#{jvActualController.currentProduction.contractStream}" class="form-control input-sm m-b-10"/>
+                                    </div>
+                                </div>
+                                <div class="row">  
+                                    <div class="col-md-6 m-b-15">
+                                        <h:outputLabel value="Gross Prod" for="grossVolume" />
+                                        <h:outputLabel id="grossVolume" value="#{jvActualController.currentProduction.grossProduction}" title="Gross Prod Volume" class="form-control input-sm" >
+                                            <f:convertNumber pattern="###,###,###.####" />
+                                        </h:outputLabel>
+                                    </div>
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="col-md-6 m-b-15">
+                                        <h:outputLabel value="Own Entitlement:" for="ownShareEntitlement" />
+                                        <h:outputLabel id="ownShareEntitlement" value="#{jvActualController.currentProduction.ownShareEntitlement}" title="Own Entitlement" class="form-control input-sm">
+                                            <f:convertNumber pattern="###,###,###.####" />
+                                        </h:outputLabel>
+                                    </div>
 
-                    <p:panelGrid id="ActualizePanel"  columns="2" rendered="#{jvActualController.currentActualProduction != null}">
-                        <p:outputLabel value="Year:" for="periodYear" />
-                        <p:outputLabel id="periodYear" value="#{jvActualController.currentActualProduction.periodYear}" title="PeriodYear" />
+                                    <div class="col-md-6 m-b-15">
+                                        <h:outputLabel value="Partner Entitlement:" for="partnerShareEntitlement" />
+                                        <h:outputLabel id="partnerShareEntitlement" value="#{jvActualController.currentProduction.partnerShareEntitlement}" title="Partner Entitlement" class="form-control input-sm">
+                                            <f:convertNumber pattern="###,###,###.####" />
+                                        </h:outputLabel>
+                                    </div>
+                                </div>
 
-                        <p:outputLabel value="Month:" for="periodMonth" />
-                        <p:outputLabel id="periodMonth" value="#{jvActualController.currentActualProduction.periodMonth}" title="PeriodMonth" />
+                                <div class="row">
+                                    <div class="col-md-6 m-b-15">
+                                        <h:outputLabel value="Opening Stock:" for="openingStock" />
+                                        <h:outputLabel id="openingStock" value="#{jvActualController.currentProduction.openingStock}" title="Opening Stock" class="form-control input-sm">                                          
+                                            <f:convertNumber pattern="###,###,###.####" />
+                                        </h:outputLabel>
+                                    </div>
 
-                        <p:outputLabel value="Asset/Crude Type" for="contractStream" />                        
-                        <p:outputLabel id="contractStream" value="#{jvActualController.currentActualProduction.contractStream.fiscalArrangement.title}/#{jvActualController.currentActualProduction.contractStream.crudeType.code}" />
+                                    <div class="col-md-6 m-b-15">
+                                        <h:outputLabel value="Availability" for="availability" />
+                                        <h:outputLabel id="availability" value="#{jvActualController.currentProduction.availability}" title="Availability" class="form-control input-sm">
+                                            <f:convertNumber pattern="###,###,###.####" />
+                                        </h:outputLabel>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 m-b-15">
+                                        <h:outputLabel value="Lifting (Actual)" for="lifting" />
+                                        <h:outputLabel id="lifting" value="#{jvActualController.currentProduction.lifting}" title="Lifting (Nom)" class="form-control input-sm">
+                                            <f:convertNumber pattern="###,###,###.####" />
+                                        </h:outputLabel>
+                                    </div>
 
-                        <p:outputLabel value="Daily Prod (bpd)" for="productionVolume" />
-                        <p:outputLabel id="productionVolume" value="#{jvActualController.currentActualProduction.productionVolume}" title="Daily Production" >
-                            <f:convertNumber pattern="###,###,###.####" />
-                        </p:outputLabel>
+                                    <div class="col-md-6 m-b-15">
+                                        <h:outputLabel value="Lifting Cargoes" for="cargoes" />
+                                        <h:outputLabel id="cargoes" value="#{jvActualController.currentProduction.cargos}" title="Lifting Cargoes" class="form-control input-sm"/>
+                                    </div>
+                                </div>
 
-                        <p:outputLabel value="Gross Prod" for="grossVolume" />
-                        <p:outputLabel id="grossVolume" value="#{jvActualController.currentActualProduction.grossProduction}" title="Gross Production" >
-                            <f:convertNumber pattern="###,###,###.####" />
-                        </p:outputLabel>
-                        
-                        <p:outputLabel value="Stock Adjustment:" for="stockAdjustment" />
-                        <p:outputLabel id="stockAdjustment" value="#{jvActualController.currentActualProduction.stockAdjustment}" title="Stock Adjustment" >
-                            <f:convertNumber pattern="###,###,###.####" />
-                        </p:outputLabel>
+                                <div class="row">
+                                    <div class="col-md-6 m-b-15">
+                                        <h:outputLabel value="Closing Stock:" for="closingStock" />
+                                        <h:outputLabel id="closingStock" value="#{jvActualController.currentProduction.closingStock}" title="Closing Stock" class="form-control input-sm">
+                                            <f:convertNumber pattern="###,###,###.####" />
+                                        </h:outputLabel>
+                                    </div>
 
-                        <p:outputLabel value="Own Entitlement:" for="ownShareEntitlement" />
-                        <p:outputLabel id="ownShareEntitlement" value="#{jvActualController.currentActualProduction.ownShareEntitlement}" title="Own Entitlement" >
-                            <f:convertNumber pattern="###,###,###.####" />
-                        </p:outputLabel>
+                                </div>
+                            </h:panelGroup>
 
-                        <p:outputLabel value="Partner Entitlement:" for="partnerShareEntitlement" />
-                        <p:outputLabel id="partnerShareEntitlement" value="#{jvActualController.currentActualProduction.partnerShareEntitlement}" title="Partner Entitlement" >
-                            <f:convertNumber pattern="###,###,###.####" />
-                        </p:outputLabel>
-
-                        <p:outputLabel value="Opening Stock:" for="openingStock" />
-                        <p:outputLabel id="openingStock" value="#{jvActualController.currentActualProduction.openingStock}" title="Opening Stock" >
-                            <f:convertNumber pattern="###,###,###.####" />
-                        </p:outputLabel>
-
-                        <p:outputLabel value="Availability" for="availability" />
-                        <p:outputLabel id="availability" value="#{jvActualController.currentProduction.availability}" title="Availability" >
-                            <f:convertNumber pattern="###,###,###.####" />
-                        </p:outputLabel>
-
-                        <p:outputLabel value="Lifting (Actual)" for="lifting" />
-                        <p:outputLabel id="lifting" value="#{jvActualController.currentProduction.lifting}" title="Lifting (Actual)" >
-                            <f:convertNumber pattern="###,###,###.####" />
-                        </p:outputLabel>
-
-                        <p:outputLabel value="Lifting Cargoes" for="cargoes" />
-                        <p:outputLabel id="cargoes" value="#{jvActualController.currentProduction.cargos}" title="Lifting Cargoes" />
-
-                        <p:outputLabel value="Closing Stock:" for="closingStock" />
-                        <p:outputLabel id="closingStock" value="#{jvActualController.currentActualProduction.closingStock}" title="Closing Stock" >
-                            <f:convertNumber pattern="###,###,###.####" />
-                        </p:outputLabel>
-
-                    </p:panelGrid>
-                    <p:commandButton value="#{bundle.Close}" onclick="JvActualizeViewDlg.hide()"/>
-
-                </h:panelGroup>
-            </h:form>
-        </p:dialog>
-
+                        </div>
+                        <div class="modal-footer">
+                            <h:commandButton   value="#{bundle.Close}" pt:data-dismiss="modal" class="btn btn-sm"/>                           
+                        </div>
+                    </h:form>
+                </div>
+            </div>
+        </div> 
     </ui:composition>
 </html>

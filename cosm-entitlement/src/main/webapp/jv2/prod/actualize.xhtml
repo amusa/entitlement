@@ -11,7 +11,7 @@
     <ui:composition template="/cosm-template.xhtml">
 
         <ui:define name="title">
-            <h:outputText value="Joint Venture List"></h:outputText>
+           <h:outputText value="JV Actualization"></h:outputText>
         </ui:define>
 
         <ui:define name="page-title">
@@ -24,47 +24,54 @@
 
                 <h:form id="jvProdListForm">                   
                     <h:messages id="msgs" showDetail="false" />
-                    <h:panelGroup class="col-md-3 m-b-15">
-                        <label>Year</label>
-                        <h:selectOneMenu id="periodYear" value="#{jvProdController.periodYear}" class="form-control input-sm m-b-10" >                                              
-                            <f:selectItems value="#{generalController.yearsAvailableSelectOne}" var="year" itemValue="#{year.value}"/>   
-                            <f:ajax listener="#{generalController.yearChanged}" event="change" render="periodMonth"/>     
-                        </h:selectOneMenu>
-                    </h:panelGroup>
-                    <h:panelGroup class="col-md-3 m-b-15">
-                        <label>Month</label>
-                        <h:selectOneMenu id="periodMonth" value="#{jvProdController.periodMonth}" class="form-control input-sm m-b-10">                                              
-                            <f:selectItem itemValue="#{null}" itemLabel="--select--" />
-                            <f:selectItems value="#{generalController.months}" var="mth" itemValue="#{mth.month}" itemLabel="#{mth.monthStr}" />   
-                            <f:ajax />     
-                        </h:selectOneMenu>
-                    </h:panelGroup>
-
-                    <div class="block-area" id="button-tags">                       
-
-                        <h:commandButton  value="Get Forecast From SAP"  class="btn m-r-5" disabled="true" >
-                            <f:ajax event="click" render="prodTable msgs"  />
-                        </h:commandButton>
-
-                        <h:commandButton  value="Get Forecast"  class="btn m-r-5" >
-                            <f:ajax listener="#{jvProdController.loadProductions}" event="click"
-                                    execute="ActualParamPanel periodYear periodMonth"
-                                    render="forecast_panel prodTable msgs"/>
-
-                        </h:commandButton>
+                    <div class="row">
+                        <div class="col-md-3 m-b-15">
+                            <label>Year</label>
+                            <h:selectOneMenu id="periodYear" value="#{jvActualController.periodYear}" class="form-control input-sm m-b-10" >                                              
+                                <f:selectItems value="#{generalController.yearsAvailableSelectOne}" var="year" itemValue="#{year.value}"/>   
+                                <f:ajax listener="#{generalController.yearChanged}" event="change" render="periodMonth"/>     
+                            </h:selectOneMenu>
+                        </div>
+                        <div class="col-md-3 m-b-15">
+                            <label>Month</label>
+                            <h:selectOneMenu id="periodMonth" value="#{jvActualController.periodMonth}" class="form-control input-sm m-b-10">                                              
+                                <f:selectItem itemValue="#{null}" itemLabel="--select--" />
+                                <f:selectItems value="#{generalController.months}" var="mth" itemValue="#{mth.month}" itemLabel="#{mth.monthStr}" />   
+                                <f:ajax />     
+                            </h:selectOneMenu>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 m-b-15">
+                            <label>Contract</label>
+                            <h:selectOneMenu id="contract" value="#{jvActualController.currentFiscalArrangement}" class="form-control input-sm m-b-10">                                              
+                                <f:selectItems value="#{fiscalController.fiscalSelectOptions}" />   
+                                <f:ajax />     
+                            </h:selectOneMenu>
+                        </div>
                     </div>
 
+                    <div class="row">
+                        <div class="block-area" id="button-tags">                       
+                            <h:commandButton  value="Get Actuals From SAP"  class="btn m-r-5" disabled="true" >
+                                <f:ajax event="click" render="prodTable msgs"  />
+                            </h:commandButton>
 
+                            <h:commandButton  value="Get Actuals"  class="btn m-r-5" >
+                                <f:ajax listener="#{jvActualController.loadProductions}" event="click"
+                                        execute="periodYear periodMonth"
+                                        render="actual_panel prodTable msgs"/>
 
+                            </h:commandButton>
+                        </div>
+                    </div>
 
                     <hr class="whiter m-t-20" />
                     <!-- Multi Column -->
-                    <h:panelGroup id="forecast_panel">
+                    <h:panelGroup id="actual_panel">
 
-                        <h:dataTable id="prodTable" var="prod" value="#{jvProdController.dataModel}" 
-
+                        <h:dataTable id="prodTable" var="prod" value="#{jvActualController.productions}" 
                                      class="table table-bordered table-hover tile"> 
-
                             <h:column >                                                        
                                 <f:facet name="header">
                                     <h:outputText value="Year" />   
@@ -83,14 +90,6 @@
                                 </f:facet>
                                 <h:outputText value="#{prod.contractStream.fiscalArrangement.title}/#{prod.contractStream.crudeType.code}"/>                                                        
                             </h:column>                            
-                            <h:column>
-                                <f:facet name="header">
-                                    <h:outputText value="Daily Prod (bpd)" />
-                                </f:facet>                                                            
-                                <h:outputText value="#{prod.productionVolume}">
-                                    <f:convertNumber maxFractionDigits="2" groupingUsed="true" />
-                                </h:outputText>
-                            </h:column>
                             <h:column>
                                 <f:facet name="header">
                                     <h:outputText value="Gross Prod" />
@@ -160,41 +159,35 @@
                                     <button jsf:id="action" type="button" class="btn btn-sm dropdown-toggle" data-toggle="dropdown">
                                         Action <span class="caret"></span>
                                     </button>
-                                    <ul class="dropdown-menu" jsf:id="btnList">
+                                    <ul class="dropdown-menu" jsf:id="btnList"> 
                                         <li>
-                                            <h:commandLink  pt:data-target="#JvActualizeCreateDlg" pt:look="warning" pt:data-toggle="modal" >
-                                                <span class="icon">&#61845;</span>
-                                                #{bundle.Actualize}
-                                                <f:ajax event="click" render="JvActualizeCreateForm" listener="#{jvActualController.actualize(prod)}"/>
-                                            </h:commandLink>
-                                        </li>
-                                        <li class="divider"></li>
-                                        <li>
-                                            <h:commandLink  pt:data-target="#JvCreateDlg" pt:look="warning" pt:data-toggle="modal" >
+                                            <h:commandLink  pt:data-target="#JvActualCreateDlg" pt:look="warning" pt:data-toggle="modal" >
                                                 <span class="icon">&#61943;</span>
                                                 #{bundle.Create}
-                                                <f:ajax event="click" render="JvCreateForm" listener="#{jvProdController.prepareCreate}" />
+                                                <f:ajax event="click" render="JvActualCreateForm" listener="#{jvActualController.prepareCreate}" />
                                             </h:commandLink>                                       
                                         </li>
-                                        
+
                                         <li>
                                             <h:commandLink pt:data-target="#JvViewDlg" pt:look="warning" pt:data-toggle="modal">
                                                 <span class="icon">&#61698;</span>
                                                 #{bundle.View}
-                                                <f:ajax event="click" render="JvViewForm" listener="#{jvProdController.setCurrentProduction(prod)}"/>
+                                                <f:ajax event="click" render="JvViewForm" listener="#{jvActualController.setCurrentProduction(prod)}"/>
                                             </h:commandLink>
                                         </li>
-                                        <li><h:commandLink pt:data-target="#JvEditDlg" pt:look="warning" pt:data-toggle="modal">
+                                        <li>
+                                            <h:commandLink pt:data-target="#JvEditDlg" pt:look="warning" pt:data-toggle="modal">
                                                 <span class="icon">&#61952;</span>
                                                 #{bundle.Edit}
-                                                <f:ajax event="click" render="JvEditForm" listener="#{jvProdController.setCurrentProduction(prod)}"/>
+                                                <f:ajax event="click" render="JvEditForm" listener="#{jvActualController.setCurrentProduction(prod)}"/>
                                             </h:commandLink>
-                                        </li>  
+                                        </li> 
+                                        <li class="divider"></li>
                                         <li>
                                             <h:commandLink>
                                                 <span class="icon">&#61918;</span>
                                                 #{bundle.Delete}
-                                                <f:ajax render="prodTable" listener="#{jvProdController.destroy(prod)}"/>
+                                                <f:ajax render="prodTable" listener="#{jvActualController.destroy(prod)}"/>
                                             </h:commandLink>
                                         </li> 
                                     </ul>
@@ -202,16 +195,10 @@
                             </h:column>
 
                             <f:facet name="footer">                                                                
-                                <button jsf:id="actualizeButton" class="btn m-r-5" jsf:disabled="#{empty jvProdController.currentProduction}" >
-                                    <span class="icon">&#61845;</span>
-                                    #{bundle.Actualize}
-                                    <f:ajax event="click" render="JvActualizeCreateForm" listener="#{jvActualController.actualize(jvProdController.currentProduction)}"/>
-                                </button>
-
-                                <button jsf:id="createButton" look="warning" data-target="#JvCreateDlg" data-toggle="modal" class="btn m-r-5">
+                                <button jsf:id="createButton" look="warning" data-target="#JvActualCreateDlg" data-toggle="modal" class="btn m-r-5">
                                     <span class="icon">&#61943;</span>
                                     #{bundle.Create}
-                                    <f:ajax event="click" render="JvCreateForm" listener="#{jvProdController.prepareCreate}" />                                    
+                                    <f:ajax event="click" render="JvActualCreateForm" listener="#{jvActualController.prepareCreate}" />                                    
                                 </button>
 
                                 <button jsf:id="viewButton" look="warning" data-target="#JvViewDlg" data-toggle="modal" class="btn m-r-5">
@@ -225,23 +212,22 @@
                                     <f:ajax event="click" render="JvEditForm" />
                                 </button>
 
-                                <button jsf:id="deleteButton" class="btn m-r-5" jsf:disabled="#{empty jvProdController.currentProduction}">
+                                <button jsf:id="deleteButton" class="btn m-r-5" jsf:disabled="#{empty jvActualController.currentProduction}">
                                     <span class="icon">&#61918;</span>
                                     #{bundle.Delete}
-                                    <f:ajax render="prodTable" listener="#{jvProdController.destroy}"/>
+                                    <f:ajax render="prodTable" listener="#{jvActualController.destroy}"/>
                                 </button>
 
                             </f:facet>
                         </h:dataTable>
 
                     </h:panelGroup>
-                   
+
                 </h:form>
             </div>
-            <ui:include src="_actualize-create.xhtml"/>
-            <ui:include src="_forecast-create.xhtml"/>
-            <ui:include src="_forecast-edit.xhtml"/>
-            <ui:include src="_forecast-view.xhtml"/>
+            <ui:include src="_actualize-create.xhtml"/>            
+            <ui:include src="_actualize-edit.xhtml"/>
+            <ui:include src="_actualize-view.xhtml"/>
         </ui:define>
 
     </ui:composition>

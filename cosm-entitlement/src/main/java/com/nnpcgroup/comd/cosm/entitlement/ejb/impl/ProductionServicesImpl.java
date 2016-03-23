@@ -101,34 +101,7 @@ public abstract class ProductionServicesImpl<T extends Production> extends Abstr
         return productions;
 
     }
-
-    @Override
-    public List<T> getTerminalProduction(int year, int month, Terminal terminal) {
-        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
-
-        List<T> productions;
-
-        CriteriaQuery cq = cb.createQuery();
-        Root e = cq.from(entityClass);
-        try {
-            cq.where(
-                    cb.and(cb.equal(e.get("periodYear"), year),
-                            cb.equal(e.get("periodMonth"), month),
-                            cb.equal(e.get("contractStream")
-                                    .get("crudeType")
-                                    .get("terminal"), terminal)
-                    ));
-
-            Query query = getEntityManager().createQuery(cq);
-
-            productions = query.getResultList();
-        } catch (NoResultException nre) {
-            return null;
-        }
-
-        return productions;
-    }
-
+    
     @Override
     public abstract T computeEntitlement(T production);
 

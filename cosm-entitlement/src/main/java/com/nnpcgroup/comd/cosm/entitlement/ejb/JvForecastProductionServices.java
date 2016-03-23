@@ -6,6 +6,8 @@
 package com.nnpcgroup.comd.cosm.entitlement.ejb;
 
 import com.nnpcgroup.comd.cosm.entitlement.entity.JvForecastProduction;
+import com.nnpcgroup.comd.cosm.entitlement.entity.Terminal;
+import java.util.List;
 
 /**
  *
@@ -13,5 +15,6 @@ import com.nnpcgroup.comd.cosm.entitlement.entity.JvForecastProduction;
  */
 public interface JvForecastProductionServices extends JvProductionServices<JvForecastProduction> {
     public JvForecastProduction enrich(JvForecastProduction production);
+    public List<JvForecastProduction> getTerminalProduction(int year, int month, Terminal terminal);
     
 }

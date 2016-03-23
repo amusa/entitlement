@@ -223,4 +223,63 @@ public class JvProductionController implements Serializable {
         return JsfUtil.getSelectItems(currentFiscalArrangement.getContractStreams(), true);
     }
 
+    public Double getDailySum() {
+        Double dailySum = productions.stream()
+                .mapToDouble(p -> p.getProductionVolume())
+                .sum();
+        return dailySum;
+    }
+
+    public Double getGrossSum() {
+        Double grossProd = productions.stream()
+                .mapToDouble(p -> p.getGrossProduction())
+                .sum();
+        return grossProd;
+    }
+
+    public Double getOwnEntitlementSum() {
+        Double ownEntitlement = productions.stream()
+                .mapToDouble(p -> p.getOwnShareEntitlement())
+                .sum();
+        return ownEntitlement;
+    }
+
+    public Double getPartnerEntitlementSum() {
+        Double partnerEntitlement = productions.stream()
+                .mapToDouble(p -> p.getPartnerShareEntitlement())
+                .sum();
+        return partnerEntitlement;
+    }
+
+    public Double getOpeningStockSum() {
+        Double openingStockSum = productions.stream()
+                .mapToDouble(p -> p.getOpeningStock())
+                .sum();
+        return openingStockSum;
+    }
+
+    public Double getAvailabilitySum() {
+        Double availabilitySum = productions.stream()
+                .mapToDouble(p -> p.getAvailability())
+                .sum();
+
+        return availabilitySum;
+    }
+
+    public Double getNomLiftingSum() {
+        Double nomLiftingSum = getCargoesSum() * 950000.0;
+        return nomLiftingSum;
+    }
+
+    public Integer getCargoesSum() {
+        Double availabilitySum = getAvailabilitySum();
+        Integer cargoesSum = (int) (availabilitySum / 950000.0);
+        return cargoesSum;
+    }
+
+    public Double getClosingStockSum() {
+        Double availabilitySum = getAvailabilitySum();
+        return availabilitySum % 950000.0;
+    }
+
 }

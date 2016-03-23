@@ -75,7 +75,7 @@
 
                                      class="table table-bordered table-hover tile"> 
 
-                            <h:column >                                                        
+<!--                            <h:column >                                                        
                                 <f:facet name="header">
                                     <h:outputText value="Year" />   
                                 </f:facet>
@@ -86,7 +86,7 @@
                                     <h:outputText value="Month"/>
                                 </f:facet>
                                 <h:outputText value="#{prod.periodMonth}"/>                                                        
-                            </h:column>                            
+                            </h:column>                            -->
                             <h:column>                                                        
                                 <f:facet name="header">
                                     <h:outputText value="Asset Stream/Crude Type"/>
@@ -252,6 +252,10 @@
             <ui:include src="_forecast-create.xhtml"/>
             <ui:include src="_forecast-edit.xhtml"/>
             <ui:include src="_forecast-view.xhtml"/>
+        </ui:define>
+        
+        <ui:define name="page-stat"> 
+            <ui:include src="_forecast-stat.xhtml"/>
         </ui:define>
 
     </ui:composition>

@@ -32,26 +32,26 @@
                             <p:column colspan="4" style="border: 0">
                                 <p:panelGrid columns="2" >
                                     <h:outputText value="Year"/>
-                                    <p:selectOneMenu id="periodYear" value="#{jvTermProdController.periodYear}" class="select" >                                              
+                                    <p:selectOneMenu id="periodYear" value="#{jvTermBlendController.periodYear}" class="select" >                                              
                                         <f:selectItems value="#{generalController.yearsAvailableSelectOne}" var="year" itemValue="#{year.value}"/>   
                                         <p:ajax listener="#{generalController.yearChanged}" event="change" update="periodMonth"/>     
                                     </p:selectOneMenu>
 
                                     <h:outputText value="Month"/>
-                                    <p:selectOneMenu id="periodMonth" value="#{jvTermProdController.periodMonth}" class="select">                                              
+                                    <p:selectOneMenu id="periodMonth" value="#{jvTermBlendController.periodMonth}" class="select">                                              
                                         <f:selectItem itemValue="#{null}" itemLabel="--select--" />
                                         <f:selectItems value="#{generalController.months}" var="mth" itemValue="#{mth.month}" itemLabel="#{mth.monthStr}" />   
                                         <p:ajax />     
                                     </p:selectOneMenu>
 
                                     <h:outputText value="Terminal"/>
-                                    <p:selectOneMenu id="contract" value="#{jvTermProdController.currentTerminal}" class="select">                                              
+                                    <p:selectOneMenu id="contract" value="#{jvTermBlendController.currentTerminal}" class="select">                                              
                                         <f:selectItems value="#{terminalController.itemsAvailableSelectOne}" />   
                                         <p:ajax />     
                                     </p:selectOneMenu>                                             
 
                                     <p:commandButton  value="Terminal Blend"  class="btn" >
-                                        <p:ajax listener="#{jvTermProdController.loadProductions}" event="click"
+                                        <p:ajax listener="#{jvTermBlendController.loadProductions}" event="click"
                                                 process="ActualParamPanel periodYear periodMonth contract"
                                                 update="forecast_panel prodTable msgs termSummary"/>
 
@@ -66,7 +66,7 @@
                                                 <h:outputLabel value="Gross Production"/>
                                             </div>
                                             <div class="ui-grid-col-4">
-                                                <h:outputLabel value="#{jvTermProdController.grossSum}">
+                                                <h:outputLabel value="#{jvTermBlendController.grossSum}">
                                                     <f:convertNumber pattern="###,###,###.####" />
                                                 </h:outputLabel>
                                             </div>
@@ -76,7 +76,7 @@
                                                 <h:outputLabel value="Entitlement"/>
                                             </div>
                                             <div class="ui-grid-col-4">
-                                                <h:outputLabel value="#{jvTermProdController.ownEntitlementSum}">
+                                                <h:outputLabel value="#{jvTermBlendController.ownEntitlementSum}">
                                                     <f:convertNumber pattern="###,###,###.####" />
                                                 </h:outputLabel>
                                             </div>
@@ -86,7 +86,7 @@
                                                 <h:outputLabel value="Opening Stock"/>
                                             </div>
                                             <div class="ui-grid-col-4">
-                                                <h:outputLabel value="#{jvTermProdController.openingStockSum}">
+                                                <h:outputLabel value="#{jvTermBlendController.openingStockSum}">
                                                     <f:convertNumber pattern="###,###,###.####" />
                                                 </h:outputLabel>
                                             </div>
@@ -96,7 +96,7 @@
                                                 <h:outputLabel value="Availability"/>
                                             </div>
                                             <div class="ui-grid-col-4">
-                                                <h:outputLabel value="#{jvTermProdController.availabilitySum}">
+                                                <h:outputLabel value="#{jvTermBlendController.availabilitySum}">
                                                     <f:convertNumber pattern="###,###,###.####" />
                                                 </h:outputLabel>
                                             </div>
@@ -106,7 +106,7 @@
                                                 <h:outputLabel value="Lifting (Nom)"/>
                                             </div>
                                             <div class="ui-grid-col-4">
-                                                <h:outputLabel value="#{jvTermProdController.nomLiftingSum}">
+                                                <h:outputLabel value="#{jvTermBlendController.nomLiftingSum}">
                                                     <f:convertNumber pattern="###,###,###.####" />
                                                 </h:outputLabel>
                                             </div>
@@ -116,7 +116,7 @@
                                                 <h:outputText value="Closing Stock"/>
                                             </div>
                                             <div class="ui-grid-col-4">
-                                                <h:outputLabel value="#{jvTermProdController.closingStockSum}">
+                                                <h:outputLabel value="#{jvTermBlendController.closingStockSum}">
                                                     <f:convertNumber pattern="###,###,###.####" />
                                                 </h:outputLabel>
                                             </div>
@@ -135,8 +135,8 @@
                             <p:column colspan="12">
                                 <h:panelGroup id="forecast_panel" style="border: 0">
 
-                                    <p:dataTable id="prodTable" var="prod" value="#{jvTermProdController.dataModel}" 
-                                                 selectionMode="single" selection="#{jvTermProdController.currentProduction}"
+                                    <p:dataTable id="prodTable" var="prod" value="#{jvTermBlendController.dataModel}" 
+                                                 selectionMode="single" selection="#{jvTermBlendController.currentProduction}"
                                                  paginator="true"
                                                  rowKey="#{prod.id}"
                                                  rows="10"
@@ -272,45 +272,45 @@
 
 
                                             <p:column>                                  
-                                                <h:outputText value="#{jvTermProdController.dailySum}" >
+                                                <h:outputText value="#{jvTermBlendController.dailySum}" >
                                                     <f:convertNumber pattern="###,###,###.####" />
                                                 </h:outputText>
                                             </p:column>
                                             <p:column>                                  
-                                                <h:outputText value="#{jvTermProdController.grossSum}" >
+                                                <h:outputText value="#{jvTermBlendController.grossSum}" >
                                                     <f:convertNumber pattern="###,###,###.####" />
                                                 </h:outputText>
                                             </p:column>
                                             <p:column>                                  
-                                                <h:outputText value="#{jvTermProdController.ownEntitlementSum}" >
+                                                <h:outputText value="#{jvTermBlendController.ownEntitlementSum}" >
                                                     <f:convertNumber pattern="###,###,###.####" />
                                                 </h:outputText>
                                             </p:column>
                                             <p:column>                                  
-                                                <h:outputText value="#{jvTermProdController.partnerEntitlementSum}" >
+                                                <h:outputText value="#{jvTermBlendController.partnerEntitlementSum}" >
                                                     <f:convertNumber pattern="###,###,###.####" />
                                                 </h:outputText>
                                             </p:column>
                                             <p:column>                                  
-                                                <h:outputText value="#{jvTermProdController.openingStockSum}" >
+                                                <h:outputText value="#{jvTermBlendController.openingStockSum}" >
                                                     <f:convertNumber pattern="###,###,###.####" />
                                                 </h:outputText>
                                             </p:column>
                                             <p:column>                                  
-                                                <h:outputText value="#{jvTermProdController.availabilitySum}" >
+                                                <h:outputText value="#{jvTermBlendController.availabilitySum}" >
                                                     <f:convertNumber pattern="###,###,###.####" />
                                                 </h:outputText>
                                             </p:column>
                                             <p:column>                                  
-                                                <h:outputText value="#{jvTermProdController.nomLiftingSum}" >
+                                                <h:outputText value="#{jvTermBlendController.nomLiftingSum}" >
                                                     <f:convertNumber pattern="###,###,###.####" />
                                                 </h:outputText>
                                             </p:column>
                                             <p:column>                                  
-                                                <h:outputText value="#{jvTermProdController.cargoesSum}" />
+                                                <h:outputText value="#{jvTermBlendController.cargoesSum}" />
                                             </p:column>
                                             <p:column>                                  
-                                                <h:outputText value="#{jvTermProdController.closingStockSum}" >
+                                                <h:outputText value="#{jvTermBlendController.closingStockSum}" >
                                                     <f:convertNumber pattern="###,###,###.####" />
                                                 </h:outputText>
                                             </p:column>

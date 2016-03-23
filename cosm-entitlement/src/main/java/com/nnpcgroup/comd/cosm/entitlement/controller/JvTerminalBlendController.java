@@ -5,44 +5,33 @@
  */
 package com.nnpcgroup.comd.cosm.entitlement.controller;
 
-import com.nnpcgroup.comd.cosm.entitlement.controller.util.JsfUtil;
 import com.nnpcgroup.comd.cosm.entitlement.controller.util.ProductionDataModel;
 import com.nnpcgroup.comd.cosm.entitlement.ejb.JvForecastProductionServices;
-import com.nnpcgroup.comd.cosm.entitlement.ejb.TerminalBlendServices;
 import com.nnpcgroup.comd.cosm.entitlement.entity.JvForecastProduction;
 import com.nnpcgroup.comd.cosm.entitlement.entity.Terminal;
-import com.nnpcgroup.comd.cosm.entitlement.entity.TerminalBlend;
 
 import javax.inject.Named;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
-import javax.ejb.EJBException;
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.SessionScoped;
 
 /**
  *
  * @author 18359
  */
 @Named(value = "jvTermBlendController")
-@RequestScoped
+@SessionScoped
 public class JvTerminalBlendController implements Serializable {
 
     private static final long serialVersionUID = -7596150432081506756L;
     private static final Logger log = Logger.getLogger(JvTerminalBlendController.class.getName());
 
     @EJB
-    private TerminalBlendServices terminalBlendBean;
-
-    @EJB
     private JvForecastProductionServices productionBean;
-
-    private TerminalBlend currentTerminalBlend;
-    private List<TerminalBlend> allTerminalBlend;
 
     private JvForecastProduction currentProduction;
 
@@ -69,10 +58,12 @@ public class JvTerminalBlendController implements Serializable {
     }
 
     public void setCurrentProduction(JvForecastProduction currentProduction) {
+        log.info("ProductionController::setProduction called...");
         this.currentProduction = currentProduction;
     }
 
     public List<JvForecastProduction> getProductions() {
+        log.info("ProductionController::getProductions called...");
         loadProductions();
         return productions;
     }
@@ -82,69 +73,66 @@ public class JvTerminalBlendController implements Serializable {
         this.productions = productions;
     }
 
-    public void prepareCreate() {
-        log.info("prepareCreate called...");
-        currentProduction = new JvForecastProduction();//terminalBlendBean.createInstance();
-        if (periodYear != null && periodMonth != null) {
-            currentProduction.setPeriodYear(periodYear);
-            currentProduction.setPeriodMonth(periodMonth);
-        }
-    }
-
-    public void destroy() {
-        log.log(Level.INFO, "Deleting {0}...", currentProduction);
-        persist(JsfUtil.PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("ProductionDeleted"));
-        if (!JsfUtil.isValidationFailed()) {
-            dataModel.removeItem(currentProduction);
-            currentProduction = null;
-        }
-    }
-
-    public void create() {
-        persist(JsfUtil.PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("ProductionCreated"));
-        if (!JsfUtil.isValidationFailed()) {
-            reset();
-            loadProductions();
-        }
-    }
-
-    public void cancel() {
-        reset();
-        loadProductions();
-    }
-
-    public void update() {
-        persist(JsfUtil.PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("ProductionUpdated"));
-    }
-
-    private void persist(JsfUtil.PersistAction persistAction, String successMessage) {
-        if (allTerminalBlend != null && !allTerminalBlend.isEmpty()) {
-            //setEmbeddableKeys();
-            try {
-                if (persistAction != JsfUtil.PersistAction.DELETE) {
-                    terminalBlendBean.edit(allTerminalBlend);//TODO:Check!
-                } else {
-                    terminalBlendBean.remove(currentTerminalBlend);//TODO:Check!
-                }
-                JsfUtil.addSuccessMessage(successMessage);
-            } catch (EJBException ex) {
-                String msg = "";
-                Throwable cause = ex.getCause();
-                if (cause != null) {
-                    msg = cause.getLocalizedMessage();
-                }
-                if (msg.length() > 0) {
-                    JsfUtil.addErrorMessage(msg);
-                } else {
-                    JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
-                }
-            } catch (Exception ex) {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-                JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
-            }
-        }
-    }
-
+//    public void prepareCreate() {
+//        log.info("prepareCreate called...");
+//        currentProduction = productionBean.createInstance();
+//        if (periodYear != null && periodMonth != null) {
+//            currentProduction.setPeriodYear(periodYear);
+//            currentProduction.setPeriodMonth(periodMonth);
+//        }
+//        //return currentProduction;
+//    }
+//    public void destroy() {
+//        log.log(Level.INFO, "Deleting {0}...", currentProduction);
+//        persist(JsfUtil.PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("ProductionDeleted"));
+//        if (!JsfUtil.isValidationFailed()) {
+//            dataModel.removeItem(currentProduction);
+//            currentProduction = null;
+//        }
+//    }
+//    public void create() {
+//        persist(JsfUtil.PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("ProductionCreated"));
+//        if (!JsfUtil.isValidationFailed()) {
+//            reset();
+//            loadProductions();
+//        }
+//    }
+//    public void cancel() {
+//        reset();
+//        loadProductions();
+//    }
+//
+//    public void update() {
+//        persist(JsfUtil.PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("ProductionUpdated"));
+//    }
+//
+//    private void persist(JsfUtil.PersistAction persistAction, String successMessage) {
+//        if (currentProduction != null) {
+//            //setEmbeddableKeys();
+//            try {
+//                if (persistAction != JsfUtil.PersistAction.DELETE) {
+//                    productionBean.edit(currentProduction);
+//                } else {
+//                    productionBean.remove(currentProduction);
+//                }
+//                JsfUtil.addSuccessMessage(successMessage);
+//            } catch (EJBException ex) {
+//                String msg = "";
+//                Throwable cause = ex.getCause();
+//                if (cause != null) {
+//                    msg = cause.getLocalizedMessage();
+//                }
+//                if (msg.length() > 0) {
+//                    JsfUtil.addErrorMessage(msg);
+//                } else {
+//                    JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
+//                }
+//            } catch (Exception ex) {
+//                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+//                JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
+//            }
+//        }
+//    }
     public void loadProductions() {
         if (periodYear != null && periodMonth != null && currentTerminal != null) {
             productions = productionBean.getTerminalProduction(periodYear, periodMonth, currentTerminal);
@@ -190,13 +178,21 @@ public class JvTerminalBlendController implements Serializable {
     }
 
     public Double getDailySum() {
+        log.log(Level.INFO, "Productions: {0}", productions);
+        if (productions.isEmpty()) {
+            return null;
+        }
         Double dailySum = productions.stream()
                 .mapToDouble(p -> p.getProductionVolume())
                 .sum();
         return dailySum;
     }
 
-    public Double getGrossSum() {
+    public Double getGrossSum() {        
+        log.log(Level.INFO, "productions is not empty {0}", productions);
+        if (productions.isEmpty()) {
+            return null;
+        }
         Double grossProd = productions.stream()
                 .mapToDouble(p -> p.getGrossProduction())
                 .sum();
@@ -204,6 +200,9 @@ public class JvTerminalBlendController implements Serializable {
     }
 
     public Double getOwnEntitlementSum() {
+        if (productions.isEmpty()) {
+            return null;
+        }
         Double ownEntitlement = productions.stream()
                 .mapToDouble(p -> p.getOwnShareEntitlement())
                 .sum();
@@ -211,6 +210,9 @@ public class JvTerminalBlendController implements Serializable {
     }
 
     public Double getPartnerEntitlementSum() {
+        if (productions.isEmpty()) {
+            return null;
+        }
         Double partnerEntitlement = productions.stream()
                 .mapToDouble(p -> p.getPartnerShareEntitlement())
                 .sum();
@@ -218,6 +220,9 @@ public class JvTerminalBlendController implements Serializable {
     }
 
     public Double getOpeningStockSum() {
+        if (productions.isEmpty()) {
+            return null;
+        }
         Double openingStockSum = productions.stream()
                 .mapToDouble(p -> p.getOpeningStock())
                 .sum();
@@ -225,6 +230,9 @@ public class JvTerminalBlendController implements Serializable {
     }
 
     public Double getAvailabilitySum() {
+        if (productions.isEmpty()) {
+            return null;
+        }
         Double availabilitySum = productions.stream()
                 .mapToDouble(p -> p.getAvailability())
                 .sum();
@@ -233,18 +241,28 @@ public class JvTerminalBlendController implements Serializable {
     }
 
     public Double getNomLiftingSum() {
-        Double nomLiftingSum = getCargoesSum() * 950000.0;
+        Integer cargoesSum = getCargoesSum();
+        if (cargoesSum == null) {
+            return null;
+        }
+        Double nomLiftingSum = cargoesSum * 950000.0;
         return nomLiftingSum;
     }
 
     public Integer getCargoesSum() {
         Double availabilitySum = getAvailabilitySum();
+        if (availabilitySum == null) {
+            return null;
+        }
         Integer cargoesSum = (int) (availabilitySum / 950000.0);
         return cargoesSum;
     }
 
     public Double getClosingStockSum() {
         Double availabilitySum = getAvailabilitySum();
+        if (availabilitySum == null) {
+            return null;
+        }
         return availabilitySum % 950000.0;
     }
 

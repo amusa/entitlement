@@ -23,9 +23,7 @@ public interface ProductionServices<T extends Production> extends AbstractCrudSe
     public T findByContractPeriod(int year, int month, ContractStream cs);
 
     public List<T> findByContractPeriod(int year, int month, FiscalArrangement fa);
-    
-    public List<T> getTerminalProduction(int year, int month, Terminal terminal);
-
+        
     public abstract T computeEntitlement(T production);
 
     public abstract T createInstance();

@@ -11,11 +11,17 @@ import com.nnpcgroup.comd.cosm.entitlement.entity.FiscalArrangement;
 import com.nnpcgroup.comd.cosm.entitlement.entity.JvForecastProduction;
 import com.nnpcgroup.comd.cosm.entitlement.entity.JointVenture;
 import com.nnpcgroup.comd.cosm.entitlement.entity.Production;
+import com.nnpcgroup.comd.cosm.entitlement.entity.Terminal;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Local;
 import javax.ejb.Stateless;
+import javax.persistence.NoResultException;
+import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 /**
  *
@@ -133,4 +139,32 @@ public class JvForecastProductionBean extends JvProductionServicesImpl<JvForecas
 
         return production;
     }
+    
+    @Override
+    public List<JvForecastProduction> getTerminalProduction(int year, int month, Terminal terminal) {
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+
+        List<JvForecastProduction> productions;
+
+        CriteriaQuery cq = cb.createQuery();
+        Root e = cq.from(entityClass);
+        try {
+            cq.where(
+                    cb.and(cb.equal(e.get("periodYear"), year),
+                            cb.equal(e.get("periodMonth"), month),
+                            cb.equal(e.get("contractStream")
+                                    .get("crudeType")
+                                    .get("terminal"), terminal)
+                    ));
+
+            Query query = getEntityManager().createQuery(cq);
+
+            productions = query.getResultList();
+        } catch (NoResultException nre) {
+            return null;
+        }
+
+        return productions;
+    }
+
 }

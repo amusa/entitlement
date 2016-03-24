@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:jsf="http://xmlns.jcp.org/jsf">
+
+    <ui:composition>        
+        <ul class="list-unstyled side-menu">
+            <li>
+                <a class="sa-side-home" href="/cosm-entitlement/faces/index.xhtml">
+                    <span class="menu-item">Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a class="sa-side-typography" href="jv-dashboard.xhtml">
+                    <span class="menu-item">Joint Venture Dashboard</span>
+                </a>
+            </li>            
+            <li class="dropdown">
+                <a class="sa-side-form" href="">
+                    <span class="menu-item">Entitlement</span>
+                </a>
+                <ul class="list-unstyled menu-item">
+                    <li><a href="prod/forecast.xhtml">Forecast</a></li>
+                    <li><a href="prod/actualize.xhtml">Actualize</a></li>
+                    <li><a href="#">Stock Adjustment</a></li>                   
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a class="sa-side-ui" href="">
+                    <span class="menu-item">Terminal</span>
+                </a>
+                <ul class="list-unstyled menu-item">
+                    <li><a href="prod/terminal-blend.xhtml">Terminal Blend</a></li>
+                    <li><a href="#">Cargo Allocation</a></li>                    
+                </ul>
+            </li>            
+            
+        </ul>
+    </ui:composition>
+</html>

@@ -17,6 +17,10 @@
         <ui:define name="page-title">
             <h:outputText value="ENTITLEMENT"></h:outputText>
         </ui:define>
+        
+        <ui:define name="side-menu">
+             <ui:include src="_jv-prod-menu.xhtml"/>
+        </ui:define>
 
         <ui:define name="content-area">  
             <h:messages id="growl" />
@@ -56,7 +60,7 @@
                             <h:commandButton  value="Terminal Blend"  class="btn m-r-5" >
                                 <f:ajax listener="#{jvTermBlendController.loadProductions}" event="click"
                                         execute="periodYear periodMonth"
-                                        render="forecast_panel prodTable msgs"/>
+                                        render="forecast_panel prodTable msgs terminal-stat"/>
 
                             </h:commandButton>
                         </div>

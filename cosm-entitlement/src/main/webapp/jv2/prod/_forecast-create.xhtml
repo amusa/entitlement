@@ -50,7 +50,7 @@
                                     <div class="col-md-6 m-b-15">
                                         <h:outputLabel value="Daily Prod (bpd)" for="productionVolume" />
                                         <h:inputText id="productionVolume" value="#{jvProdController.currentProduction.productionVolume}" title="Daily Production Volume" class="form-control input-sm" >
-                                            <f:ajax event="change" listener="#{jvProdController.productionVolumeChange}"                                     
+                                            <f:ajax event="change" listener="#{jvProdController.productionVolumeChanged}"                                     
                                                     render="grossVolume openingStock closingStock ownShareEntitlement partnerShareEntitlement availability lifting cargoes" />
                                         </h:inputText>
                                     </div>

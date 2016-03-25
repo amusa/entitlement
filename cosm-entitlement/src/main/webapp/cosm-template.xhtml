@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
     <!--[if IE 9 ]><html class="ie9"><![endif]-->
     <h:head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
@@ -28,7 +29,7 @@
     <h:body id="skin-blur-kiwi">
         <header id="header" class="media">
             <a href="" id="menu-toggle"></a> 
-            <a class="logo pull-left" href="index.xhtml">SUPER ADMIN 1.0</a>
+            <a class="logo pull-left" href="index.xhtml">ENTITLEMENT 1.0</a>
 
             <div class="media-body">
                 <div class="media" id="top-menu">
@@ -76,7 +77,9 @@
                     <!-- Profile Menu -->
                     <div class="text-center s-widget m-b-25 dropdown" id="profile-menu">
                         <a href="" data-toggle="dropdown">
-                            <img class="profile-pic animated" src="img/profile-pic.jpg" alt=""/>
+                            <!--                            <img class="profile-pic animated" src="img/profile-pic.jpg" alt=""/>-->
+                            <h:graphicImage class="profile-pic animated" url="/resources/img/nnpc-logo.png" alt="NNPC Logo" />
+
                         </a>
                         <ul class="dropdown-menu profile-menu">
                             <li><a href="">My Profile</a> <i class="icon left">&#61903;</i><i class="icon right">&#61815;</i></li>
@@ -84,8 +87,9 @@
                             <li><a href="">Settings</a> <i class="icon left">&#61903;</i><i class="icon right">&#61815;</i></li>
                             <li><a href="">Sign Out</a> <i class="icon left">&#61903;</i><i class="icon right">&#61815;</i></li>
                         </ul>
-                        <!--                        <h4 class="m-0">Malinda Hollaway</h4>
-                                                @malinda-h-->
+                        <h4 class="m-0">Crude Oil Stock Management</h4>
+                        Entitlement Determination
+                        
                     </div>
 
                     <!-- Calendar -->
@@ -271,20 +275,24 @@
                     </div>
                 </div>
 
-                <!-- Breadcrumb -->
-                <ol class="breadcrumb hidden-xs">
-                    <li><a href="#">Home</a></li>
-                    <li><a href="#">Library</a></li>
-                    <li class="active">Data</li>
-                </ol>
+                <!-- Breadcrumb -->                
+                <ui:insert name="breadcrumb">
+                    <ol class="breadcrumb hidden-xs">
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">Library</a></li>
+                        <li class="active">Data</li>
+                    </ol>
+                </ui:insert>
 
+                <!-- Page Title -->
                 <h4 class="page-title"><ui:insert name="page-title">Page Title</ui:insert></h4>
 
                 <div class="block-area">
                     <div class="row">
                         <div class="col-md-10">
                             <h:messages id="msgs" showDetail="false" class="alert alert-info alert-dismissable fade in"/>
-
+                            <!--                            <p:growl id="msgs" life="3000" />-->
+                            <!-- Content Area -->
                             <ui:insert name="content-area">
 
                             </ui:insert>

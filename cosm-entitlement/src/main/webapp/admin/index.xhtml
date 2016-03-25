@@ -3,39 +3,42 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"      
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
       xmlns:jsf="http://xmlns.jcp.org/jsf">
 
+
     <ui:composition template="/cosm-template.xhtml">
 
-
         <ui:define name="title">
-            <h:outputText value="Use Template"></h:outputText>
+            <h:outputText value="Entitlement Admin"></h:outputText>
         </ui:define>
         
-        <ui:define name="breadcrumb">
+         <ui:define name="breadcrumb">
             <ol class="breadcrumb hidden-xs">
-                <li><a href="#">Home</a></li>
-                <li><a href="#">Previous</a></li>
-                <li class="active">Current</li>
+                <li><a href="#">Home</a></li>               
+                <li class="active">Admin</li>
             </ol>
         </ui:define>
 
         <ui:define name="page-title">
-            <h:outputText value="ENTITLEMENT"></h:outputText>
+            <h:outputText value="Entitlement Admin"></h:outputText>
         </ui:define>
-                
+        
         <ui:define name="side-menu">
-            <ui:include src="_jv-prod-menu.xhtml"/>
+             <ui:include src="_admin-menu.xhtml"/>
         </ui:define>
 
         <ui:define name="content-area">  
             
-            
-            
+        </ui:define>
+        
+        <ui:define name="page-stat"> 
+            <ui:include src="_admin-stat.xhtml"/>
         </ui:define>
 
     </ui:composition>
+
+
 
 </html>

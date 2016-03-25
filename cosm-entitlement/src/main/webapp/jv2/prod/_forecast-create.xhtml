@@ -39,9 +39,16 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6 m-b-15">
+                                        <label>Contract</label>
+                                        <h:selectOneMenu id="contract" value="#{jvProdController.currentFiscalArrangement}" class="form-control input-sm m-b-10">                                              
+                                            <f:selectItems value="#{fiscalController.fiscalSelectOptions}" />   
+                                            <f:ajax event="change" render="csOptions"/>        
+                                        </h:selectOneMenu>
+                                    </div>
+                                    <div class="col-md-6 m-b-15">
                                         <h:outputLabel value="Asset/Crude Type" for="contractStream" />
-                                        <h:selectOneMenu id="contractStream" value="#{jvProdController.currentProduction.contractStream}" class="form-control input-sm m-b-10">
-                                            <f:selectItems value="#{contractStreamController.itemsAvailableSelectOne}"/>
+                                        <h:selectOneMenu id="csOptions" value="#{jvProdController.currentProduction.contractStream}" class="form-control input-sm m-b-10">
+                                            <f:selectItems value="#{jvProdController.contractStreamSelectOne}"/>
                                             <f:ajax/>
                                         </h:selectOneMenu>
                                     </div>
@@ -116,7 +123,7 @@
                                             <f:convertNumber pattern="###,###,###.####" />
                                         </h:outputLabel>
                                     </div>
-                                    
+
                                 </div>
                             </h:panelGroup>
 
@@ -124,11 +131,11 @@
                         </div>
                         <div class="modal-footer">
                             <h:commandButton  value="#{bundle.Save}" pt:data-dismiss="modal" class="btn btn-sm">
-                                <f:ajax listener="#{jvProdController.create}" render="jvProdListForm forecast_panel prodTable growl"/>
+                                <f:ajax listener="#{jvProdController.create}" render="jvProdListForm forecast_panel prodTable msgs"/>
                             </h:commandButton>
-                            
+
                             <h:commandButton   value="#{bundle.Cancel}" pt:data-dismiss="modal" immediate="true" class="btn btn-sm">
-                                <f:ajax event="click" listener="#{jvProdController.cancel}" render=":jvProdListForm:prodTable,:growl"/>
+                                <f:ajax event="click" listener="#{jvProdController.cancel}" render=":jvProdListForm:prodTable,:msgs"/>
                             </h:commandButton>                            
                         </div>
                     </h:form>

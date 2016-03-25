@@ -125,11 +125,11 @@
                         </div>
                         <div class="modal-footer">
                             <h:commandButton  value="#{bundle.Save}" pt:data-dismiss="modal" class="btn btn-sm">
-                                <f:ajax listener="#{jvProdController.update}" render=":jvProdListForm:prodTable,:growl"/>
+                                <f:ajax listener="#{jvProdController.update}" render=":jvProdListForm:prodTable,:msgs"/>
                             </h:commandButton>
 
                             <h:commandButton   value="#{bundle.Cancel}" pt:data-dismiss="modal" immediate="true" class="btn btn-sm">
-                                <f:ajax event="click" listener="#{jvProdController.cancel}" render=":jvProdListForm:prodTable,:growl"/>
+                                <f:ajax event="click" listener="#{jvProdController.cancel}" render=":jvProdListForm:prodTable,:msgs"/>
                             </h:commandButton>   
 
                         </div>

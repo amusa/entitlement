@@ -48,7 +48,7 @@
                                     <div class="col-md-4 m-b-15">
                                         <label>Crude Type"</label>
                                         <h:selectOneMenu id="csOptions" value="#{jvActualController.currentProduction.contractStream}" class="form-control input-sm m-b-10">
-                                            <f:selectItems value="#{contractStreamController.itemsAvailableSelectOne}"/>
+                                            <f:selectItems value="#{jvActualController.contractStreamSelectOne}"/>
                                             <f:ajax/>
                                         </h:selectOneMenu>
                                     </div>                               
@@ -191,7 +191,7 @@
 
                         <div class="modal-footer">
                             <h:commandButton value="#{bundle.Save}" class="btn btn-sm" pt:data-dismiss="modal" >
-                                <f:ajax event="click" listener="#{jvActualController.create}" render="jvProdListForm prodTable growl"/>
+                                <f:ajax event="click" listener="#{jvActualController.create}" render="jvProdListForm prodTable msgs"/>
                             </h:commandButton>
                             <h:commandButton   value="#{bundle.Cancel}" pt:data-dismiss="modal" immediate="true" class="btn btn-sm">
                                 <f:ajax event="click" listener="#{jvActualController.cancel}"/>

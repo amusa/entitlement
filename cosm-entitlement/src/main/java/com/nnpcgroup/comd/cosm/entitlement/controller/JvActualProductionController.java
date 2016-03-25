@@ -9,6 +9,7 @@ import com.nnpcgroup.comd.cosm.entitlement.controller.util.JsfUtil;
 import com.nnpcgroup.comd.cosm.entitlement.ejb.JvActualProductionServices;
 import com.nnpcgroup.comd.cosm.entitlement.entity.FiscalArrangement;
 import com.nnpcgroup.comd.cosm.entitlement.entity.JvActualProduction;
+import com.nnpcgroup.comd.cosm.entitlement.entity.JvForecastProduction;
 import com.nnpcgroup.comd.cosm.entitlement.entity.Production;
 import javax.inject.Named;
 import java.io.Serializable;
@@ -196,6 +197,11 @@ public class JvActualProductionController implements Serializable {
             reset();
             loadProductions();
         }
+    }
+    
+    public void destroy(JvActualProduction prod) {
+        setCurrentProduction(prod);
+        destroy();
     }
 
     public JvActualProduction prepareCreate() {

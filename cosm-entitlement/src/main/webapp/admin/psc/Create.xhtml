@@ -11,19 +11,19 @@
         <p:dialog id="ProductionSharingContractCreateDlg" widgetVar="ProductionSharingContractCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateProductionSharingContractTitle}">
             <h:form id="ProductionSharingContractCreateForm">
                 <h:panelGroup id="display">
-                    <p:panelGrid columns="2" rendered="#{productionSharingContractController.selected != null}">
+                    <p:panelGrid columns="2" rendered="#{pscController.selected != null}">
                         <p:outputLabel value="#{bundle.CreateProductionSharingContractLabel_id}" for="id" />
-                        <p:inputText id="id" value="#{productionSharingContractController.selected.id}" title="#{bundle.CreateProductionSharingContractTitle_id}" />
+                        <p:inputText id="id" value="#{pscController.selected.id}" title="#{bundle.CreateProductionSharingContractTitle_id}" />
                         <p:outputLabel value="#{bundle.CreateProductionSharingContractLabel_title}" for="title" />
-                        <p:inputText id="title" value="#{productionSharingContractController.selected.title}" title="#{bundle.CreateProductionSharingContractTitle_title}" />
+                        <p:inputText id="title" value="#{pscController.selected.title}" title="#{bundle.CreateProductionSharingContractTitle_title}" />
                         <p:outputLabel value="#{bundle.CreateProductionSharingContractLabel_operator}" for="operator" />
-                        <p:selectOneMenu id="operator" value="#{productionSharingContractController.selected.operator}" >
+                        <p:selectOneMenu id="operator" value="#{pscController.selected.operator}" >
                             <f:selectItems value="#{companyController.itemsAvailableSelectOne}"
                                            var="operatorItem"
                                            itemValue="#{operatorItem}"/>
                         </p:selectOneMenu>
                     </p:panelGrid>
-                    <p:commandButton actionListener="#{productionSharingContractController.create}" value="#{bundle.Save}" update="display,:ProductionSharingContractListForm:datalist,:growl" oncomplete="handleSubmit(args,'ProductionSharingContractCreateDialog');"/>
+                    <p:commandButton actionListener="#{pscController.create}" value="#{bundle.Save}" update="display,:ProductionSharingContractListForm:datalist,:growl" oncomplete="handleSubmit(args,'ProductionSharingContractCreateDialog');"/>
                     <p:commandButton value="#{bundle.Cancel}" onclick="ProductionSharingContractCreateDialog.hide()"/>
                 </h:panelGroup>
             </h:form>

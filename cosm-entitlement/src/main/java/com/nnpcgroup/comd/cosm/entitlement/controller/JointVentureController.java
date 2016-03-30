@@ -12,7 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.SessionScoped;
 
 import javax.inject.Named;
 import javax.faces.component.UIComponent;
@@ -21,10 +21,11 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
 @Named("jvController")
-@RequestScoped
+@SessionScoped
 public class JointVentureController implements Serializable {
 
     private static final long serialVersionUID = 2953220859300701424L;
+    private static final Logger LOG = Logger.getLogger(JointVentureController.class.getName());
 
     @EJB
     private JointVentureBean jvBean;
@@ -55,10 +56,17 @@ public class JointVentureController implements Serializable {
     public JointVenture prepareCreate() {
         selected = new JointVenture();
         initializeEmbeddableKey();
+         LOG.log(Level.INFO,"Creating new JV Object...{0}",selected);
         return selected;
     }
 
+    public void cancel() {
+        LOG.log(Level.INFO,"Cancelling operation...{0}",selected);
+        jvItems = null;
+    }
+
     public void create() {
+        LOG.log(Level.INFO,"Creating JV Contract...{0}",selected);
         persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("JointVentureCreated"));
         if (!JsfUtil.isValidationFailed()) {
             jvItems = null;    // Invalidate list of items to trigger re-query.
@@ -66,10 +74,18 @@ public class JointVentureController implements Serializable {
     }
 
     public void update() {
+        LOG.log(Level.INFO,"Updating JV Contract...{0}",selected);
         persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("JointVentureUpdated"));
     }
+    
+    public void destroy(JointVenture jv) {
+        setSelected(jv);
+        destroy();
+    }
+    
 
     public void destroy() {
+        LOG.log(Level.INFO,"Deleting JV Contract...{0}",selected);
         persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("JointVentureDeleted"));
         if (!JsfUtil.isValidationFailed()) {
             selected = null; // Remove selection
@@ -85,7 +101,9 @@ public class JointVentureController implements Serializable {
     }
 
     private void persist(PersistAction persistAction, String successMessage) {
+        LOG.log(Level.INFO,"persist called...{0}",selected);
         if (selected != null) {
+            LOG.log(Level.INFO,"JV is not null. Persisting...{0}",selected);
             setEmbeddableKeys();
             try {
                 if (persistAction != PersistAction.DELETE) {

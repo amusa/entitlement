@@ -78,9 +78,7 @@ public class ContractStreamController implements Serializable {
     }
 
     public List<ContractStream> getItems() {
-        if (items == null) {
-            items = getFacade().findAll();
-        }
+        items = getFacade().findAll();
         return items;
     }
 

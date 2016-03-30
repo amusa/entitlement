@@ -11,13 +11,13 @@
         <p:dialog id="ProductionSharingContractViewDlg" widgetVar="ProductionSharingContractViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewProductionSharingContractTitle}">
             <h:form id="ProductionSharingContractViewForm">
                 <h:panelGroup id="display">
-                    <p:panelGrid columns="2" rendered="#{productionSharingContractController.selected != null}">
+                    <p:panelGrid columns="2" rendered="#{pscController.selected != null}">
                         <h:outputText value="#{bundle.ViewProductionSharingContractLabel_id}"/>
-                        <h:outputText value="#{productionSharingContractController.selected.id}" title="#{bundle.ViewProductionSharingContractTitle_id}"/>
+                        <h:outputText value="#{pscController.selected.id}" title="#{bundle.ViewProductionSharingContractTitle_id}"/>
                         <h:outputText value="#{bundle.ViewProductionSharingContractLabel_title}"/>
-                        <h:outputText value="#{productionSharingContractController.selected.title}" title="#{bundle.ViewProductionSharingContractTitle_title}"/>
+                        <h:outputText value="#{pscController.selected.title}" title="#{bundle.ViewProductionSharingContractTitle_title}"/>
                         <h:outputText value="#{bundle.ViewProductionSharingContractLabel_operator}"/>
-                        <h:outputText value="#{productionSharingContractController.selected.operator}" title="#{bundle.ViewProductionSharingContractTitle_operator}"/>
+                        <h:outputText value="#{pscController.selected.operator}" title="#{bundle.ViewProductionSharingContractTitle_operator}"/>
                     </p:panelGrid>
                     <p:commandButton value="#{bundle.Close}" onclick="ProductionSharingContractViewDialog.hide()"/>
                 </h:panelGroup>

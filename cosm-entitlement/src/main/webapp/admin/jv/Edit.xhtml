@@ -11,27 +11,25 @@
         <p:dialog id="JointVentureEditDlg" widgetVar="JointVentureEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.EditJointVentureTitle}">
             <h:form id="JointVentureEditForm">
                 <h:panelGroup id="display">
-                    <p:panelGrid columns="2" rendered="#{jointVentureController.selected != null}">
-                        <p:outputLabel value="#{bundle.EditJointVentureLabel_equityType}" for="equityType" />
-                        <p:selectOneMenu id="equityType" value="#{jointVentureController.selected.equityType}" >
+                    <p:panelGrid columns="2" rendered="#{jvController.selected != null}">
+                        <p:outputLabel value="Equity Type" for="equityType" />
+                        <p:selectOneMenu id="equityType" value="#{jvController.selected.equityType}" >
                             <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
                             <f:selectItems value="#{equityTypeController.itemsAvailableSelectOne}"
                                            var="equityTypeItem"
                                            itemValue="#{equityTypeItem}"/>
                         </p:selectOneMenu>
-                        <p:outputLabel value="#{bundle.EditJointVentureLabel_id}" for="id" />
-                        <p:inputText id="id" value="#{jointVentureController.selected.id}" title="#{bundle.EditJointVentureTitle_id}" />
-                        <p:outputLabel value="#{bundle.EditJointVentureLabel_title}" for="title" />
-                        <p:inputText id="title" value="#{jointVentureController.selected.title}" title="#{bundle.EditJointVentureTitle_title}" />
-                        <p:outputLabel value="#{bundle.EditJointVentureLabel_operator}" for="operator" />
-                        <p:selectOneMenu id="operator" value="#{jointVentureController.selected.operator}" >
+                        <p:outputLabel value="Title" for="title" />
+                        <p:inputText id="title" value="#{jvController.selected.title}" title="#{bundle.EditJointVentureTitle_title}" />
+                        <p:outputLabel value="Operator" for="operator" />
+                        <p:selectOneMenu id="operator" value="#{jvController.selected.operator}" >
                             <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
                             <f:selectItems value="#{companyController.itemsAvailableSelectOne}"
                                            var="operatorItem"
                                            itemValue="#{operatorItem}"/>
                         </p:selectOneMenu>
                     </p:panelGrid>
-                    <p:commandButton actionListener="#{jointVentureController.update}" value="#{bundle.Save}" update="display,:JointVentureListForm:datalist,:growl" oncomplete="handleSubmit(args, 'JointVentureEditDialog');"/>
+                    <p:commandButton actionListener="#{jvController.update}" value="#{bundle.Save}" update="display,:JointVentureListForm:datalist,:growl" oncomplete="handleSubmit(args, 'JointVentureEditDialog');"/>
                     <p:commandButton value="#{bundle.Cancel}" onclick="JointVentureEditDialog.hide()"/>
                 </h:panelGroup>
             </h:form>

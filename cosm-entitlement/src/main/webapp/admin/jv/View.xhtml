@@ -11,15 +11,13 @@
         <p:dialog id="JointVentureViewDlg" widgetVar="JointVentureViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewJointVentureTitle}">
             <h:form id="JointVentureViewForm">
                 <h:panelGroup id="display">
-                    <p:panelGrid columns="2" rendered="#{jointVentureController.selected != null}">
+                    <p:panelGrid columns="2" rendered="#{jvController.selected != null}">
                         <h:outputText value="#{bundle.ViewJointVentureLabel_equityType}"/>
-                        <h:outputText value="#{jointVentureController.selected.equityType}" title="#{bundle.ViewJointVentureTitle_equityType}"/>
-                        <h:outputText value="#{bundle.ViewJointVentureLabel_id}"/>
-                        <h:outputText value="#{jointVentureController.selected.id}" title="#{bundle.ViewJointVentureTitle_id}"/>
+                        <h:outputText value="#{jvController.selected.equityType}" title="#{bundle.ViewJointVentureTitle_equityType}"/>
                         <h:outputText value="#{bundle.ViewJointVentureLabel_title}"/>
-                        <h:outputText value="#{jointVentureController.selected.title}" title="#{bundle.ViewJointVentureTitle_title}"/>
+                        <h:outputText value="#{jvController.selected.title}" title="#{bundle.ViewJointVentureTitle_title}"/>
                         <h:outputText value="#{bundle.ViewJointVentureLabel_operator}"/>
-                        <h:outputText value="#{jointVentureController.selected.operator}" title="#{bundle.ViewJointVentureTitle_operator}"/>
+                        <h:outputText value="#{jvController.selected.operator}" title="#{bundle.ViewJointVentureTitle_operator}"/>
                     </p:panelGrid>
                     <p:commandButton value="#{bundle.Close}" onclick="JointVentureViewDialog.hide()"/>
                 </h:panelGroup>

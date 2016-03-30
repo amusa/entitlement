@@ -16,8 +16,8 @@
         <ui:define name="body">
             <h:form id="ProductionSharingContractListForm">
                 <p:panel header="#{bundle.PSCListHeader}">
-                    <p:dataTable id="datalist" value="#{productionSharingContractController.items}" var="item"
-                                 selectionMode="single" selection="#{productionSharingContractController.selected}"
+                    <p:dataTable id="datalist" value="#{pscController.pscItems}" var="item"
+                                 selectionMode="single" selection="#{pscController.selected}"
                                  paginator="true"
                                  rowKey="#{item.id}"
                                  rows="10"
@@ -40,10 +40,10 @@
                             <h:outputText value="#{item.operator.name}"/>
                         </p:column>
                         <f:facet name="footer">
-                            <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{productionSharingContractController.prepareCreate}" update=":ProductionSharingContractCreateForm" oncomplete="PF('ProductionSharingContractCreateDialog').show()"/>
-                            <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{bundle.View}" update=":ProductionSharingContractViewForm" oncomplete="PF('ProductionSharingContractViewDialog').show()" disabled="#{empty productionSharingContractController.selected}"/>
-                            <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{bundle.Edit}" update=":ProductionSharingContractEditForm" oncomplete="PF('ProductionSharingContractEditDialog').show()" disabled="#{empty productionSharingContractController.selected}"/>
-                            <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{bundle.Delete}" actionListener="#{productionSharingContractController.destroy}" update=":growl,datalist" disabled="#{empty productionSharingContractController.selected}"/>
+                            <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{pscController.prepareCreate}" update=":ProductionSharingContractCreateForm" oncomplete="PF('ProductionSharingContractCreateDialog').show()"/>
+                            <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{bundle.View}" update=":ProductionSharingContractViewForm" oncomplete="PF('ProductionSharingContractViewDialog').show()" disabled="#{empty pscController.selected}"/>
+                            <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{bundle.Edit}" update=":ProductionSharingContractEditForm" oncomplete="PF('ProductionSharingContractEditDialog').show()" disabled="#{empty pscController.selected}"/>
+                            <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{bundle.Delete}" actionListener="#{pscController.destroy}" update=":growl,datalist" disabled="#{empty pscController.selected}"/>
                         </f:facet>
                     </p:dataTable>
                 </p:panel>

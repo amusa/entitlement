@@ -19,7 +19,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
-@Named("productionSharingContractController")
+@Named("pscController")
 @SessionScoped
 public class ProductionSharingContractController implements Serializable {
 
@@ -27,7 +27,7 @@ public class ProductionSharingContractController implements Serializable {
 
     @EJB
     private com.nnpcgroup.comd.cosm.entitlement.ejb.ProductionSharingContractBean ejbFacade;
-    private List<ProductionSharingContract> items = null;
+    private List<ProductionSharingContract> pscItems = null;
     private ProductionSharingContract selected;
 
     public ProductionSharingContractController() {
@@ -60,7 +60,7 @@ public class ProductionSharingContractController implements Serializable {
     public void create() {
         persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("ProductionSharingContractCreated"));
         if (!JsfUtil.isValidationFailed()) {
-            items = null;    // Invalidate list of items to trigger re-query.
+            pscItems = null;    // Invalidate list of pscItems to trigger re-query.
         }
     }
 
@@ -68,19 +68,28 @@ public class ProductionSharingContractController implements Serializable {
         persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("ProductionSharingContractUpdated"));
     }
 
+    public void destroy(ProductionSharingContract psc) {
+        setSelected(psc);
+        destroy();
+    }
+
     public void destroy() {
         persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("ProductionSharingContractDeleted"));
         if (!JsfUtil.isValidationFailed()) {
             selected = null; // Remove selection
-            items = null;    // Invalidate list of items to trigger re-query.
+            pscItems = null;    // Invalidate list of pscItems to trigger re-query.
         }
     }
 
-    public List<ProductionSharingContract> getItems() {
-        if (items == null) {
-            items = getFacade().findAll();
+    public void cancel() {
+        pscItems = null;
+    }
+
+    public List<ProductionSharingContract> getPscItems() {
+        if (pscItems == null) {
+            pscItems = getFacade().findAll();
         }
-        return items;
+        return pscItems;
     }
 
     private void persist(PersistAction persistAction, String successMessage) {

@@ -12,19 +12,17 @@
             <h:form id="ContractStreamEditForm">
                 <h:panelGroup id="display">
                     <p:panelGrid columns="2" rendered="#{contractStreamController.selected != null}">
-                        <p:outputLabel value="#{bundle.EditContractStreamLabel_id}" for="id" />
-                        <p:inputText id="id" value="#{contractStreamController.selected.id}" title="#{bundle.EditContractStreamTitle_id}" />
-                        <p:outputLabel value="#{bundle.EditContractStreamLabel_crudeType}" for="crudeType" />
+                        <p:outputLabel value="Crude Type" for="crudeType" />
                         <p:selectOneMenu id="crudeType" value="#{contractStreamController.selected.crudeType}" >
                             <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
                             <f:selectItems value="#{crudeTypeController.itemsAvailableSelectOne}"
                                            var="crudeTypeItem"
                                            itemValue="#{crudeTypeItem}"/>
                         </p:selectOneMenu>
-                        <p:outputLabel value="#{bundle.EditContractStreamLabel_fiscalArrangement}" for="fiscalArrangement" />
+                        <p:outputLabel value="Fiscal Arrg" for="fiscalArrangement" />
                         <p:selectOneMenu id="fiscalArrangement" value="#{contractStreamController.selected.fiscalArrangement}" >
                             <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
-                            <f:selectItems value="#{fiscalArrangementController.itemsAvailableSelectOne}"
+                            <f:selectItems value="#{fiscalController.fiscalSelectOptions}"
                                            var="fiscalArrangementItem"
                                            itemValue="#{fiscalArrangementItem}"/>
                         </p:selectOneMenu>

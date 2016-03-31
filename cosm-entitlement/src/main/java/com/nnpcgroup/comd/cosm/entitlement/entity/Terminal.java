@@ -75,10 +75,6 @@ public class Terminal implements Serializable {
     }
     
     
-    
-    
-    
-
     @Override
     public int hashCode() {
         int hash = 0;

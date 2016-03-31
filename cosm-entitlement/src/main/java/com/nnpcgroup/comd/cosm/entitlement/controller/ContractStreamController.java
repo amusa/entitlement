@@ -69,6 +69,20 @@ public class ContractStreamController implements Serializable {
         persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("ContractStreamUpdated"));
     }
 
+    public void cancel() {
+        reset();
+    }
+
+    public void reset() {
+        selected = null;
+        items = null;
+    }
+
+    public void destroy(ContractStream cs) {
+        setSelected(cs);
+        destroy();
+    }
+
     public void destroy() {
         persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("ContractStreamDeleted"));
         if (!JsfUtil.isValidationFailed()) {

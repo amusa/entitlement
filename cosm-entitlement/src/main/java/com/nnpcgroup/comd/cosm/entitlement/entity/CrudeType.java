@@ -47,11 +47,9 @@ public class CrudeType implements Serializable {
     public void setCrudeType(String crudeType) {
         this.crudeType = crudeType;
     }
-
   
-    @NotNull    
-    @OneToOne
-    public Terminal getTerminal() {
+    @OneToOne(mappedBy = "crudeType")
+     public Terminal getTerminal() {
         return terminal;
     }
 
@@ -99,7 +97,7 @@ public class CrudeType implements Serializable {
 
     @Override
     public String toString() {
-        return getCode();
+        return String.format("%s (%s)", getCrudeType(),getCode());                
     }
     
     

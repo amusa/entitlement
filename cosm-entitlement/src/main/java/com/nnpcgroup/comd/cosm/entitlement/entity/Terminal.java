@@ -20,14 +20,13 @@ import javax.validation.constraints.NotNull;
 @Table(name = "TERMINAL")
 public class Terminal implements Serializable {
 
-    private CrudeType crudeType;
-
-    private static final long serialVersionUID = 1L;
+   private static final long serialVersionUID = 1L;
     
     private String code;
     private String name;
     private Double lineFillVolume;
     private Double deadStockVolume;
+    private CrudeType crudeType;
     
 
     @Id
@@ -47,8 +46,7 @@ public class Terminal implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
-
-    @NotNull
+    
     public Double getLineFillVolume() {
         return lineFillVolume;
     }
@@ -56,8 +54,7 @@ public class Terminal implements Serializable {
     public void setLineFillVolume(Double lineFillVolume) {
         this.lineFillVolume = lineFillVolume;
     }
-
-    @NotNull
+    
     public Double getDeadStockVolume() {
         return deadStockVolume;
     }
@@ -65,8 +62,10 @@ public class Terminal implements Serializable {
     public void setDeadStockVolume(Double deadStockVolume) {
         this.deadStockVolume = deadStockVolume;
     }
+    
 
-    @OneToOne(mappedBy = "terminal")
+    @OneToOne
+    @NotNull
     public CrudeType getCrudeType() {
         return crudeType;
     }

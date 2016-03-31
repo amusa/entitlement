@@ -37,10 +37,10 @@
                         </div>
                         <div class="modal-footer">
                             <h:commandButton value="#{bundle.Save}" pt:data-dismiss="modal" class="btn btn-sm">
-                                <f:ajax listener="#{pscController.update}" render="pscListForm pscTable msgs" />
+                                <f:ajax listener="#{pscController.update}" execute="title operator equityType" render="pscListForm pscTable msgs" />
                             </h:commandButton>
                             <h:commandButton value="#{bundle.Cancel}" immediate="true" pt:data-dismiss="modal" class="btn btn-sm">
-                                <f:ajax listener="#{pscController.cancel}" execute="title operator equityType" render="pscListForm pscTable msgs"/>
+                                <f:ajax listener="#{pscController.cancel}" render="pscListForm pscTable msgs"/>
                             </h:commandButton>
                         </div>
                     </h:form>

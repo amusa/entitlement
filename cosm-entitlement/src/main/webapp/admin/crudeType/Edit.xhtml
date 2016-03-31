@@ -16,13 +16,6 @@
                         <p:inputText id="code" value="#{crudeTypeController.selected.code}" title="#{bundle.EditCrudeTypeTitle_code}" />
                         <p:outputLabel value="#{bundle.CrudeType}" for="crudeType" />
                         <p:inputText id="crudeType" value="#{crudeTypeController.selected.crudeType}" title="#{bundle.EditCrudeTypeTitle_crudeType}" />
-                        <p:outputLabel value="#{bundle.Terminal}" for="terminal" />
-                        <p:selectOneMenu id="terminal" value="#{crudeTypeController.selected.terminal}" >
-                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
-                            <f:selectItems value="#{terminalController.itemsAvailableSelectOne}"
-                                           var="terminalItem"
-                                           itemValue="#{terminalItem}"/>
-                        </p:selectOneMenu>
                     </p:panelGrid>
                     <p:commandButton actionListener="#{crudeTypeController.update}" value="#{bundle.Save}" update="display,:CrudeTypeListForm:datalist,:growl" oncomplete="handleSubmit(args, 'CrudeTypeEditDialog');"/>
                     <p:commandButton value="#{bundle.Cancel}" onclick="CrudeTypeEditDialog.hide()"/>

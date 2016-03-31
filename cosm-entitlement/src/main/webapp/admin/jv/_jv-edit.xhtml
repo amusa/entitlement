@@ -48,10 +48,10 @@
                         </div>
                         <div class="modal-footer">
                             <h:commandButton value="#{bundle.Save}" pt:data-dismiss="modal" class="btn btn-sm">
-                                <f:ajax listener="#{jvController.update}" render="jvListForm jvTable msgs" />
+                                <f:ajax listener="#{jvController.update}" execute="title operator equityType" render="jvListForm jvTable msgs" />
                             </h:commandButton>
                             <h:commandButton value="#{bundle.Cancel}" immediate="true" pt:data-dismiss="modal" class="btn btn-sm">
-                                <f:ajax listener="#{jvController.cancel}" execute="title operator equityType" render="jvListForm jvTable msgs"/>
+                                <f:ajax listener="#{jvController.cancel}" render="jvListForm jvTable msgs"/>
                             </h:commandButton>
                         </div>
                     </h:form>

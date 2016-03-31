@@ -12,8 +12,6 @@
             <h:form id="CompanyCreateForm">
                 <h:panelGroup id="display">
                     <p:panelGrid columns="2" rendered="#{companyController.selected != null}">
-                        <p:outputLabel value="#{bundle.CreateCompanyLabel_id}" for="id" />
-                        <p:inputText id="id" value="#{companyController.selected.id}" title="#{bundle.CreateCompanyTitle_id}" />
                         <p:outputLabel value="#{bundle.CreateCompanyLabel_name}" for="name" />
                         <p:inputText id="name" value="#{companyController.selected.name}" title="#{bundle.CreateCompanyTitle_name}" />
                     </p:panelGrid>

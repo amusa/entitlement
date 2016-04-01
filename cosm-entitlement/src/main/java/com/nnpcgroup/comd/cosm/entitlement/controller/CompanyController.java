@@ -57,6 +57,11 @@ public class CompanyController implements Serializable {
         return selected;
     }
 
+    public void cancel() {
+        items = null;
+        selected = null;
+    }
+
     public void create() {
         persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("CompanyCreated"));
         if (!JsfUtil.isValidationFailed()) {
@@ -68,6 +73,11 @@ public class CompanyController implements Serializable {
         persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("CompanyUpdated"));
     }
 
+    public void destroy(Company ioc){
+        setSelected(ioc);
+        destroy();
+    }
+    
     public void destroy() {
         persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("CompanyDeleted"));
         if (!JsfUtil.isValidationFailed()) {

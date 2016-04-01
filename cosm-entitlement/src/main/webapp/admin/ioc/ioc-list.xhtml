@@ -11,49 +11,37 @@
     <ui:composition template="/cosm-template.xhtml">
 
         <ui:define name="title">
-            <h:outputText value="Joint Venture List"></h:outputText>
+            <h:outputText value="IOCs"></h:outputText>
         </ui:define>
 
         <ui:define name="breadcrumb">
             <ol class="breadcrumb hidden-xs">
                 <li><a href="../../index.xhtml">Home</a></li>  
                 <li><a href="../index.xhtml">Admin</a></li>
-                <li class="active">Joint Venture</li>
+                <li class="active">IOC</li>
             </ol>
         </ui:define>
 
         <ui:define name="page-title">
-            <h:outputText value="JOINT VENTURE"></h:outputText>
+            <h:outputText value="IOC"></h:outputText>
         </ui:define>
 
         <ui:define name="side-menu">
-            <ui:include src="_jv-menu.xhtml"/>
+            <ui:include src="_ioc-menu.xhtml"/>
         </ui:define>
 
         <ui:define name="content-area">  
-            <h:form id="jvListForm"> 
+            <h:form id="iocListForm"> 
                 <!-- Multi Column -->
-                <div jsf:id="jvPanel" class="row">
+                <div jsf:id="iocPanel" class="row">
                     <div class="col-md-9 m-b-9">
-                        <h:dataTable id="jvTable" var="jv" value="#{jvController.jvItems}" 
+                        <h:dataTable id="iocTable" var="ioc" value="#{companyController.items}" 
                                      class="table table-bordered table-hover tile">
                             <h:column>
                                 <f:facet name="header">
-                                    <h:outputText value="#{bundle.JointVentureListTitle}"/>
+                                    <h:outputText value="#{bundle.ListCompanyTitle_name}"/>
                                 </f:facet>
-                                <h:outputText value="#{jv.title}"/>
-                            </h:column>
-                            <h:column>
-                                <f:facet name="header">
-                                    <h:outputText value="#{bundle.Operator}"/>
-                                </f:facet>
-                                <h:outputText value="#{jv.operator.name}"/>
-                            </h:column>
-                            <h:column>
-                                <f:facet name="header">
-                                    <h:outputText value="#{bundle.EquityType}"/>
-                                </f:facet>
-                                <h:outputText value="#{jv.equityType.description}"/>
+                                <h:outputText value="#{ioc.name}"/>
                             </h:column>
                             <h:column>
                                 <div class="btn-group">
@@ -62,31 +50,31 @@
                                     </button>
                                     <ul class="dropdown-menu" jsf:id="btnList">
                                         <li>
-                                            <h:commandLink  pt:data-target="#JvCreateDlg" pt:look="warning" pt:data-toggle="modal" >
+                                            <h:commandLink  pt:data-target="#IocCreateDlg" pt:look="warning" pt:data-toggle="modal" >
                                                 <span class="icon">&#61943;</span>
                                                 #{bundle.Create}
-                                                <f:ajax event="click" render="JvCreateForm" listener="#{jvController.prepareCreate}" />
+                                                <f:ajax event="click" render="IocCreateForm" listener="#{companyController.prepareCreate}" />
                                             </h:commandLink>                                       
                                         </li>
 
                                         <li>
-                                            <h:commandLink pt:data-target="#JvViewDlg" pt:look="warning" pt:data-toggle="modal">
+                                            <h:commandLink pt:data-target="#IocViewDlg" pt:look="warning" pt:data-toggle="modal">
                                                 <span class="icon">&#61698;</span>
                                                 #{bundle.View}
-                                                <f:ajax event="click" render="JvViewForm" listener="#{jvController.setSelected(jv)}"/>
+                                                <f:ajax event="click" render="IocViewForm" listener="#{companyController.setSelected(ioc)}"/>
                                             </h:commandLink>
                                         </li>
-                                        <li><h:commandLink pt:data-target="#JvEditDlg" pt:look="warning" pt:data-toggle="modal">
+                                        <li><h:commandLink pt:data-target="#IocEditDlg" pt:look="warning" pt:data-toggle="modal">
                                                 <span class="icon">&#61952;</span>
                                                 #{bundle.Edit}
-                                                <f:ajax event="click" render="JvEditForm" listener="#{jvController.setSelected(jv)}"/>
+                                                <f:ajax event="click" render="IocEditForm" listener="#{companyController.setSelected(ioc)}"/>
                                             </h:commandLink>
                                         </li>  
                                         <li>
                                             <h:commandLink>
                                                 <span class="icon">&#61918;</span>
                                                 #{bundle.Delete}
-                                                <f:ajax render="jvListForm jvTable msgs" listener="#{jvController.destroy(jv)}"/>
+                                                <f:ajax render="iocListForm iocTable msgs" listener="#{companyController.destroy(ioc)}"/>
                                             </h:commandLink>
                                         </li> 
                                     </ul>
@@ -94,27 +82,27 @@
                             </h:column>
 
                             <f:facet name="footer">                                                                
-                                <button jsf:id="createButton" look="warning" data-target="#JvCreateDlg" data-toggle="modal" class="btn m-r-5">
+                                <button jsf:id="createButton" look="warning" data-target="#IocCreateDlg" data-toggle="modal" class="btn m-r-5">
                                     <span class="icon">&#61943;</span>
                                     #{bundle.Create}
-                                    <f:ajax event="click" render="JvCreateForm" listener="#{jvController.prepareCreate}" />                                    
+                                    <f:ajax event="click" render="IocCreateForm" listener="#{companyController.prepareCreate}" />                                    
                                 </button>
 
-                                <button jsf:id="viewButton" look="warning" data-target="#JvViewDlg" data-toggle="modal" class="btn m-r-5">
+                                <button jsf:id="viewButton" look="warning" data-target="#IocViewDlg" data-toggle="modal" class="btn m-r-5">
                                     <span class="icon">&#61698;</span>
                                     #{bundle.View}
-                                    <f:ajax event="click" render="JvViewForm" />
+                                    <f:ajax event="click" render="IocViewForm" />
                                 </button>
-                                <button jsf:id="editButton" look="warning" data-target="#JvEditDlg" data-toggle="modal" class="btn m-r-5">
+                                <button jsf:id="editButton" look="warning" data-target="#IocEditDlg" data-toggle="modal" class="btn m-r-5">
                                     <span class="icon">&#61952;</span>                                    
                                     #{bundle.Edit}
-                                    <f:ajax event="click" render="JvEditForm" />
+                                    <f:ajax event="click" render="IocEditForm" />
                                 </button>
 
-                                <button jsf:id="deleteButton" class="btn m-r-5" jsf:disabled="#{empty jvController.selected}">
+                                <button jsf:id="deleteButton" class="btn m-r-5" jsf:disabled="#{empty companyController.selected}">
                                     <span class="icon">&#61918;</span>
                                     #{bundle.Delete}
-                                    <f:ajax render="jvTable" listener="#{jvController.destroy}"/>
+                                    <f:ajax render="iocTable" listener="#{companyController.destroy}"/>
                                 </button>
 
                             </f:facet>
@@ -122,14 +110,14 @@
                     </div>
                 </div>
             </h:form>
-            <ui:include src="_jv-create.xhtml"/>           
-            <ui:include src="_jv-edit.xhtml"/>
-            <ui:include src="_jv-view.xhtml"/>
+            <ui:include src="_ioc-create.xhtml"/>           
+            <ui:include src="_ioc-edit.xhtml"/>
+            <ui:include src="_ioc-view.xhtml"/>
         </ui:define>
 
-<!--        <ui:define name="page-stat"> 
-            <ui:include src="_jv-stat.xhtml"/>
-        </ui:define>-->
+        <!--        <ui:define name="page-stat"> 
+                    <ui:include src="_asset-stat.xhtml"/>
+                </ui:define>-->
 
     </ui:composition>
 

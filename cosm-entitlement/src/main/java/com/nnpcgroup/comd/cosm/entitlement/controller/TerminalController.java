@@ -69,6 +69,16 @@ public class TerminalController implements Serializable {
         persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("TerminalUpdated"));
     }
 
+    public void cancel() {
+        items = null;
+        selected = null;
+    }
+    
+    public void destroy(Terminal terminal){
+        setSelected(terminal);
+        destroy();
+    }
+
     public void destroy() {
         persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("TerminalDeleted"));
         if (!JsfUtil.isValidationFailed()) {
@@ -116,8 +126,8 @@ public class TerminalController implements Serializable {
         return getFacade().find(id);
     }
 
-    public SelectItem[] getItemsAvailableSelectMany() {        
-        return JsfUtil.getSelectItems(getFacade().findAll(), false);        
+    public SelectItem[] getItemsAvailableSelectMany() {
+        return JsfUtil.getSelectItems(getFacade().findAll(), false);
     }
 
     public SelectItem[] getItemsAvailableSelectOne() {

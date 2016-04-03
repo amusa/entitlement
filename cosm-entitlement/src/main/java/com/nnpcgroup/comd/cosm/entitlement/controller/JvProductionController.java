@@ -64,7 +64,7 @@ public class JvProductionController implements Serializable {
         log.info("ProductionController::setProduction called...");
         this.currentProduction = currentProduction;
         this.currentFiscalArrangement = (currentProduction != null)
-                ? currentProduction.getContractStream().getFiscalArrangement() : null;
+                ? currentProduction.getContract().getFiscalArrangement() : null;
     }
 
     public List<JvForecastProduction> getProductions() {
@@ -220,7 +220,7 @@ public class JvProductionController implements Serializable {
         if (currentFiscalArrangement == null) {
             return null;
         }
-        return JsfUtil.getSelectItems(currentFiscalArrangement.getContractStreams(), true);
+        return JsfUtil.getSelectItems(currentFiscalArrangement.getContracts(), true);
     }
 
     public Double getDailySum() {

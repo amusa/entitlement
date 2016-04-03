@@ -6,7 +6,7 @@
 package com.nnpcgroup.comd.cosm.entitlement.ejb.impl;
 
 import com.nnpcgroup.comd.cosm.entitlement.ejb.PscActualProductionServices;
-import com.nnpcgroup.comd.cosm.entitlement.entity.ContractStream;
+import com.nnpcgroup.comd.cosm.entitlement.entity.Contract;
 import com.nnpcgroup.comd.cosm.entitlement.entity.PscActualProduction;
 import java.util.List;
 import java.util.logging.Logger;
@@ -53,7 +53,7 @@ public class PscActualProductionBean extends PscProductionServicesImpl<PscActual
     }
 
     @Override
-    public PscActualProduction findByContractPeriod(int year, int month, ContractStream cs) {
+    public PscActualProduction findByContractPeriod(int year, int month, Contract cs) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

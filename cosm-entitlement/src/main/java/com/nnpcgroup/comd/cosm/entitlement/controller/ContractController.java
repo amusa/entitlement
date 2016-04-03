@@ -1,9 +1,13 @@
 package com.nnpcgroup.comd.cosm.entitlement.controller;
 
-import com.nnpcgroup.comd.cosm.entitlement.entity.ContractStream;
+import com.nnpcgroup.comd.cosm.entitlement.entity.Contract;
 import com.nnpcgroup.comd.cosm.entitlement.controller.util.JsfUtil;
 import com.nnpcgroup.comd.cosm.entitlement.controller.util.JsfUtil.PersistAction;
-import com.nnpcgroup.comd.cosm.entitlement.ejb.ContractStreamBean;
+import com.nnpcgroup.comd.cosm.entitlement.ejb.ContractBean;
+import com.nnpcgroup.comd.cosm.entitlement.entity.CarryContract;
+import com.nnpcgroup.comd.cosm.entitlement.entity.FiscalArrangement;
+import com.nnpcgroup.comd.cosm.entitlement.entity.ModifiedCarryContract;
+import com.nnpcgroup.comd.cosm.entitlement.entity.RegularContract;
 
 import java.io.Serializable;
 import java.util.List;
@@ -18,27 +22,49 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
+import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.model.SelectItem;
 
-@Named("contractStreamController")
+@Named("contractController")
 @SessionScoped
-public class ContractStreamController implements Serializable {
+public class ContractController implements Serializable {
+
+    private static final Logger LOG = Logger.getLogger(ContractController.class.getName());
 
     private static final long serialVersionUID = 3411266588734031876L;
 
     @EJB
-    private ContractStreamBean ejbFacade;
-    private List<ContractStream> items = null;
-    private ContractStream selected;
+    private ContractBean ejbFacade;
+    private List<Contract> items = null;
+    private Contract selected;
+    private String contractType;
+    private FiscalArrangement fiscalArrangement;
 
-    public ContractStreamController() {
+    public ContractController() {
     }
 
-    public ContractStream getSelected() {
+    public String getContractType() {
+        return contractType;
+    }
+
+    public void setContractType(String contractType) {
+        this.contractType = contractType;
+    }
+
+    public FiscalArrangement getFiscalArrangement() {
+        return fiscalArrangement;
+    }
+
+    public void setFiscalArrangement(FiscalArrangement fiscalArrangement) {
+        this.fiscalArrangement = fiscalArrangement;
+    }
+
+    
+    public Contract getSelected() {
         return selected;
     }
 
-    public void setSelected(ContractStream selected) {
+    public void setSelected(Contract selected) {
         this.selected = selected;
     }
 
@@ -48,12 +74,12 @@ public class ContractStreamController implements Serializable {
     protected void initializeEmbeddableKey() {
     }
 
-    private ContractStreamBean getFacade() {
+    private ContractBean getFacade() {
         return ejbFacade;
     }
 
-    public ContractStream prepareCreate() {
-        selected = new ContractStream();
+    public Contract prepareCreate() {
+        selected = new RegularContract(); //TODO:evaluate type of contract first
         initializeEmbeddableKey();
         return selected;
     }
@@ -78,7 +104,7 @@ public class ContractStreamController implements Serializable {
         items = null;
     }
 
-    public void destroy(ContractStream cs) {
+    public void destroy(Contract cs) {
         setSelected(cs);
         destroy();
     }
@@ -91,7 +117,7 @@ public class ContractStreamController implements Serializable {
         }
     }
 
-    public List<ContractStream> getItems() {
+    public List<Contract> getItems() {
         items = getFacade().findAll();
         return items;
     }
@@ -124,11 +150,11 @@ public class ContractStreamController implements Serializable {
         }
     }
 
-    public ContractStream getContractStream(java.lang.Integer id) {
+    public Contract getContractStream(java.lang.Integer id) {
         return getFacade().find(id);
     }
 
-    public List<ContractStream> getItemsAvailableSelectMany() {
+    public List<Contract> getItemsAvailableSelectMany() {
         return getFacade().findAll();
     }
 
@@ -136,16 +162,40 @@ public class ContractStreamController implements Serializable {
         return JsfUtil.getSelectItems(getFacade().findAll(), true);
     }
 
-    @FacesConverter(forClass = ContractStream.class)
-    public static class ContractStreamControllerConverter implements Converter {
+    public void contractTypeSelected(AjaxBehaviorEvent event) {
+        LOG.log(Level.INFO, "Contract Type Selected...{0}", contractType);
+        if (null != contractType) {
+            switch (contractType) {
+                case "RG":
+                    selected = new RegularContract();
+                    break;
+                case "MCA":
+                    selected = new ModifiedCarryContract();
+                    break;
+                case "CA":
+                    selected = new CarryContract();
+                    break;
+                default:
+                    break;
+            }
+            selected.setFiscalArrangement(fiscalArrangement);
+        }
+    }
+    
+    public void addContract(FiscalArrangement fa){
+        setFiscalArrangement(fa);
+    }
+      
+    @FacesConverter(forClass = Contract.class)
+    public static class ContractControllerConverter implements Converter {
 
         @Override
         public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
             if (value == null || value.length() == 0) {
                 return null;
             }
-            ContractStreamController controller = (ContractStreamController) facesContext.getApplication().getELResolver().
-                    getValue(facesContext.getELContext(), null, "contractStreamController");
+            ContractController controller = (ContractController) facesContext.getApplication().getELResolver().
+                    getValue(facesContext.getELContext(), null, "contractController");
             return controller.getContractStream(getKey(value));
         }
 
@@ -166,11 +216,11 @@ public class ContractStreamController implements Serializable {
             if (object == null) {
                 return null;
             }
-            if (object instanceof ContractStream) {
-                ContractStream o = (ContractStream) object;
+            if (object instanceof Contract) {
+                Contract o = (Contract) object;
                 return getStringKey(o.getId());
             } else {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), ContractStream.class.getName()});
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), Contract.class.getName()});
                 return null;
             }
         }

@@ -11,19 +11,19 @@
     <ui:composition template="/cosm-template.xhtml">
 
         <ui:define name="title">
-            <h:outputText value="Fiscal Arrangement Assets"></h:outputText>
+            <h:outputText value="JV Contracts"></h:outputText>
         </ui:define>
 
         <ui:define name="breadcrumb">
             <ol class="breadcrumb hidden-xs">
                 <li><a href="../../index.xhtml">Home</a></li>  
                 <li><a href="../index.xhtml">Admin</a></li>
-                <li class="active">JV Assets</li>
+                <li class="active">JV Contracts</li>
             </ol>
         </ui:define>
 
         <ui:define name="page-title">
-            <h:outputText value="JV ASSETS"></h:outputText>
+            <h:outputText value="JV CONTRACTS"></h:outputText>
         </ui:define>
 
         <ui:define name="side-menu">
@@ -35,7 +35,7 @@
                 <!-- Multi Column -->
                 <div jsf:id="assetPanel" class="row">
                     <div class="col-md-9 m-b-9">
-                        <h:dataTable id="assetTable" var="asset" value="#{contractStreamController.items}" 
+                        <h:dataTable id="assetTable" var="asset" value="#{contractController.items}" 
                                      class="table table-bordered table-hover tile">
                             <h:column>
                                 <f:facet name="header">
@@ -61,7 +61,7 @@
                                             <h:commandLink  pt:data-target="#AssetCreateDlg" pt:look="warning" pt:data-toggle="modal" >
                                                 <span class="icon">&#61943;</span>
                                                 #{bundle.Create}
-                                                <f:ajax event="click" render="AssetCreateForm" listener="#{contractStreamController.prepareCreate}" />
+                                                <f:ajax event="click" render="AssetCreateForm" listener="#{contractController.prepareCreate}" />
                                             </h:commandLink>                                       
                                         </li>
 
@@ -69,20 +69,20 @@
                                             <h:commandLink pt:data-target="#AssetViewDlg" pt:look="warning" pt:data-toggle="modal">
                                                 <span class="icon">&#61698;</span>
                                                 #{bundle.View}
-                                                <f:ajax event="click" render="AssetViewForm" listener="#{contractStreamController.setSelected(asset)}"/>
+                                                <f:ajax event="click" render="AssetViewForm" listener="#{contractController.setSelected(asset)}"/>
                                             </h:commandLink>
                                         </li>
                                         <li><h:commandLink pt:data-target="#AssetEditDlg" pt:look="warning" pt:data-toggle="modal">
                                                 <span class="icon">&#61952;</span>
                                                 #{bundle.Edit}
-                                                <f:ajax event="click" render="AssetEditForm" listener="#{contractStreamController.setSelected(asset)}"/>
+                                                <f:ajax event="click" render="AssetEditForm" listener="#{contractController.setSelected(asset)}"/>
                                             </h:commandLink>
                                         </li>  
                                         <li>
                                             <h:commandLink>
                                                 <span class="icon">&#61918;</span>
                                                 #{bundle.Delete}
-                                                <f:ajax render="assetListForm assetTable msgs" listener="#{contractStreamController.destroy(asset)}"/>
+                                                <f:ajax render="assetListForm assetTable msgs" listener="#{contractController.destroy(asset)}"/>
                                             </h:commandLink>
                                         </li> 
                                     </ul>
@@ -93,7 +93,7 @@
                                 <button jsf:id="createButton" look="warning" data-target="#AssetCreateDlg" data-toggle="modal" class="btn m-r-5">
                                     <span class="icon">&#61943;</span>
                                     #{bundle.Create}
-                                    <f:ajax event="click" render="AssetCreateForm" listener="#{contractStreamController.prepareCreate}" />                                    
+                                    <f:ajax event="click" render="AssetCreateForm" listener="#{contractController.prepareCreate}" />                                    
                                 </button>
 
                                 <button jsf:id="viewButton" look="warning" data-target="#AssetViewDlg" data-toggle="modal" class="btn m-r-5">
@@ -107,10 +107,10 @@
                                     <f:ajax event="click" render="AssetEditForm" />
                                 </button>
 
-                                <button jsf:id="deleteButton" class="btn m-r-5" jsf:disabled="#{empty contractStreamController.selected}">
+                                <button jsf:id="deleteButton" class="btn m-r-5" jsf:disabled="#{empty contractController.selected}">
                                     <span class="icon">&#61918;</span>
                                     #{bundle.Delete}
-                                    <f:ajax render="assetTable" listener="#{contractStreamController.destroy}"/>
+                                    <f:ajax render="assetTable" listener="#{contractController.destroy}"/>
                                 </button>
 
                             </f:facet>

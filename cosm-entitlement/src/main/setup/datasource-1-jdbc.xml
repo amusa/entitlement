@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jdbc-data-source xmlns="http://xmlns.oracle.com/weblogic/jdbc-data-source">
+  <name>jdbc/entitlement_dev_DS</name>
+  <jdbc-driver-params>
+    <url>jdbc:mysql://localhost:3306/entitlement_dev</url>
+    <driver-name>com.mysql.jdbc.Driver</driver-name>
+    <properties>
+      <property>
+        <name>user</name>
+        <value>root</value>
+      </property>
+      <property>
+        <name>password</name>
+        <value>Myr00t</value>
+      </property>
+    </properties>
+  </jdbc-driver-params>
+  <jdbc-data-source-params>
+    <jndi-name>jdbc/entitlement_dev_DS</jndi-name>
+  </jdbc-data-source-params>
+</jdbc-data-source>

@@ -6,7 +6,7 @@
 package com.nnpcgroup.comd.cosm.entitlement.ejb;
 
 import com.nnpcgroup.comd.cosm.entitlement.ejb.impl.AbstractCrudServicesImpl;
-import com.nnpcgroup.comd.cosm.entitlement.entity.ContractStream;
+import com.nnpcgroup.comd.cosm.entitlement.entity.RegularContract;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -16,7 +16,7 @@ import javax.persistence.PersistenceContext;
  * @author 18359
  */
 @Stateless
-public class ContractStreamBean extends AbstractCrudServicesImpl<ContractStream> {
+public class RegularContractBean extends AbstractCrudServicesImpl<RegularContract> {
 
     @PersistenceContext(unitName = "entitlementPU")
     private EntityManager em;
@@ -26,8 +26,8 @@ public class ContractStreamBean extends AbstractCrudServicesImpl<ContractStream>
         return em;
     }
 
-    public ContractStreamBean() {
-        super(ContractStream.class);
+    public RegularContractBean() {
+        super(RegularContract.class);
     }
     
 }

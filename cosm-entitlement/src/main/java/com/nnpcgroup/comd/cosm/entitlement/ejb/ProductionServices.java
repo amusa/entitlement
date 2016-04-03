@@ -5,7 +5,7 @@
  */
 package com.nnpcgroup.comd.cosm.entitlement.ejb;
 
-import com.nnpcgroup.comd.cosm.entitlement.entity.ContractStream;
+import com.nnpcgroup.comd.cosm.entitlement.entity.Contract;
 import com.nnpcgroup.comd.cosm.entitlement.entity.FiscalArrangement;
 import com.nnpcgroup.comd.cosm.entitlement.entity.Production;
 import com.nnpcgroup.comd.cosm.entitlement.entity.Terminal;
@@ -20,7 +20,7 @@ public interface ProductionServices<T extends Production> extends AbstractCrudSe
 
     public abstract List<T> findByYearAndMonth(int year, int month);
 
-    public T findByContractPeriod(int year, int month, ContractStream cs);
+    public T findByContractPeriod(int year, int month, Contract cs);
 
     public List<T> findByContractPeriod(int year, int month, FiscalArrangement fa);
         

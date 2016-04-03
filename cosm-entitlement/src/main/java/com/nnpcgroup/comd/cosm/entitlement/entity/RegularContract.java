@@ -13,9 +13,9 @@ import javax.persistence.Entity;
  * @author 18359
  */
 @Entity
-@DiscriminatorValue("CA")
-public class CarryContract extends AlternativeFundingContract {
-    
-    private static final long serialVersionUID = 7743736261443373185L;
+@DiscriminatorValue("REG")
+public class RegularContract extends Contract{
+
+    private static final long serialVersionUID = -6307338449430627486L;
     
 }

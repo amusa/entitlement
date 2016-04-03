@@ -32,7 +32,7 @@ public abstract class Production implements Serializable {
     private Long id;
     private int periodYear;
     private int periodMonth;
-    private ContractStream contractStream;
+    private Contract contract;
     private Double openingStock;
     private Double partnerOpeningStock;
     private Double closingStock;
@@ -51,10 +51,10 @@ public abstract class Production implements Serializable {
     public Production() {
     }
 
-    public Production(int periodYear, int periodMonth, ContractStream contractStream, Double openingStock, Double productionVolume) {
+    public Production(int periodYear, int periodMonth, Contract contract, Double openingStock, Double productionVolume) {
         this.periodYear = periodYear;
         this.periodMonth = periodMonth;
-        this.contractStream = contractStream;
+        this.contract = contract;
         this.openingStock = openingStock;
         this.productionVolume = productionVolume;
     }
@@ -89,12 +89,12 @@ public abstract class Production implements Serializable {
 
     @ManyToOne
     @NotNull
-    public ContractStream getContractStream() {
-        return contractStream;
+    public Contract getContract() {
+        return contract;
     }
 
-    public void setContractStream(ContractStream contractStream) {
-        this.contractStream = contractStream;
+    public void setContract(Contract contract) {
+        this.contract = contract;
     }
 
     @NotNull

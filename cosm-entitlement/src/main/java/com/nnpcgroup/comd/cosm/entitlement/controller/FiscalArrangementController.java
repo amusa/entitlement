@@ -2,7 +2,7 @@ package com.nnpcgroup.comd.cosm.entitlement.controller;
 
 import com.nnpcgroup.comd.cosm.entitlement.controller.util.JsfUtil;
 import com.nnpcgroup.comd.cosm.entitlement.ejb.FiscalArrangementBean;
-import com.nnpcgroup.comd.cosm.entitlement.entity.ContractStream;
+import com.nnpcgroup.comd.cosm.entitlement.entity.Contract;
 import com.nnpcgroup.comd.cosm.entitlement.entity.FiscalArrangement;
 import com.nnpcgroup.comd.cosm.entitlement.entity.JointVenture;
 import java.io.Serializable;
@@ -12,7 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.inject.Named;
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
@@ -21,7 +21,7 @@ import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.model.SelectItem;
 
 @Named("fiscalController")
-@RequestScoped
+@SessionScoped
 public class FiscalArrangementController implements Serializable {
 
     private static final long serialVersionUID = 2912957338932205000L;
@@ -84,10 +84,10 @@ public class FiscalArrangementController implements Serializable {
         return fiscalBean.findAll();
     }
     
-    public List<ContractStream> getContractStreamList() {
+    public List<Contract> getContractStreamList() {
         LOG.log(Level.INFO, "getting currentFiscal = {0}...", currentFiscal);
         if (null != currentFiscal) {
-            return currentFiscal.getContractStreams();
+            return currentFiscal.getContracts();
         }
         return null;
     }
@@ -95,7 +95,7 @@ public class FiscalArrangementController implements Serializable {
     public SelectItem[] getContractStreamSelectOptions() {
         LOG.log(Level.INFO, "getting currentFiscal = {0}...", currentFiscal);
         if (null != currentFiscal) {
-            return JsfUtil.getSelectItems(currentFiscal.getContractStreams(), true);
+            return JsfUtil.getSelectItems(currentFiscal.getContracts(), true);
         }
         return null;
     }

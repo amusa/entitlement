@@ -49,7 +49,7 @@ public class JvActualProductionBean extends JvProductionServicesImpl<JvActualPro
         FiscalArrangement fa;
         JointVenture jv;
 
-        fa = production.getContractStream().getFiscalArrangement();
+        fa = production.getContract().getFiscalArrangement();
 
         assert (fa instanceof JointVenture);
 

@@ -16,8 +16,8 @@
         <ui:define name="body">
             <h:form id="ContractStreamListForm">
                 <p:panel header="#{bundle.ContractStreamListTitle}">
-                    <p:dataTable id="datalist" value="#{contractStreamController.items}" var="item"
-                                 selectionMode="single" selection="#{contractStreamController.selected}"
+                    <p:dataTable id="datalist" value="#{contractController.items}" var="item"
+                                 selectionMode="single" selection="#{contractController.selected}"
                                  paginator="true"
                                  rowKey="#{item.id}"
                                  rows="10"
@@ -42,10 +42,10 @@
                         </p:column>
                         
                         <f:facet name="footer">
-                            <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{contractStreamController.prepareCreate}" update=":ContractStreamCreateForm" oncomplete="PF('ContractStreamCreateDialog').show()"/>
-                            <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{bundle.View}" update=":ContractStreamViewForm" oncomplete="PF('ContractStreamViewDialog').show()" disabled="#{empty contractStreamController.selected}"/>
-                            <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{bundle.Edit}" update=":ContractStreamEditForm" oncomplete="PF('ContractStreamEditDialog').show()" disabled="#{empty contractStreamController.selected}"/>
-                            <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{bundle.Delete}" actionListener="#{contractStreamController.destroy}" update=":growl,datalist" disabled="#{empty contractStreamController.selected}"/>
+                            <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{contractController.prepareCreate}" update=":ContractStreamCreateForm" oncomplete="PF('ContractStreamCreateDialog').show()"/>
+                            <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{bundle.View}" update=":ContractStreamViewForm" oncomplete="PF('ContractStreamViewDialog').show()" disabled="#{empty contractController.selected}"/>
+                            <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{bundle.Edit}" update=":ContractStreamEditForm" oncomplete="PF('ContractStreamEditDialog').show()" disabled="#{empty contractController.selected}"/>
+                            <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{bundle.Delete}" actionListener="#{contractController.destroy}" update=":growl,datalist" disabled="#{empty contractController.selected}"/>
                         </f:facet>
                     </p:dataTable>
                 </p:panel>

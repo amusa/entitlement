@@ -12,15 +12,15 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title">View JV Assets</h4>
+                        <h4 class="modal-title">View JV Contracts</h4>
                     </div>
                     <h:form id="AssetViewForm">
                         <div class="modal-body">
-                            <h:panelGroup id="AssetViewPanel" rendered="#{contractStreamController.selected != null}">
+                            <h:panelGroup id="AssetViewPanel" rendered="#{contractController.selected != null}">
                                 <div class="row">
                                     <div class="col-md-6 m-b-15">
                                         <h:outputLabel value="Fiscal Arrg" for="fiscalArrangement" />
-                                        <h:selectOneMenu id="fiscalArrangement" value="#{contractStreamController.selected.fiscalArrangement}" class="form-control input-sm m-b-10">
+                                        <h:selectOneMenu id="fiscalArrangement" value="#{contractController.selected.fiscalArrangement}" class="form-control input-sm m-b-10">
                                             <f:selectItems value="#{fiscalController.fiscalSelectOptions}"
                                                            var="fiscalArrangementItem"
                                                            itemValue="#{fiscalArrangementItem}"/>
@@ -28,7 +28,7 @@
                                         </h:selectOneMenu> 
 
                                         <h:outputLabel value="Crude Type" for="crudeType" />
-                                        <h:selectOneMenu id="crudeType" value="#{contractStreamController.selected.crudeType}" class="form-control input-sm m-b-10">
+                                        <h:selectOneMenu id="crudeType" value="#{contractController.selected.crudeType}" class="form-control input-sm m-b-10">
                                             <f:selectItems value="#{crudeTypeController.itemsAvailableSelectOne}"
                                                            var="crudeTypeItem"
                                                            itemValue="#{crudeTypeItem}"/>

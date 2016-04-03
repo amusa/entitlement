@@ -13,9 +13,13 @@ import javax.persistence.Entity;
  * @author 18359
  */
 @Entity
-@DiscriminatorValue("MCA")
-public class ModifiedCarryContract extends AlternativeFundingContract{
+@DiscriminatorValue("JV_AF_FORECAST")
+public class JvAfForecastProduction extends JvForecastProduction {
+
+    private static final long serialVersionUID = 2917192116735019964L;
     
-    private static final long serialVersionUID = -308376402305136004L;
-    
+    public JvAfForecastProduction() {
+    }
+        
+   
 }

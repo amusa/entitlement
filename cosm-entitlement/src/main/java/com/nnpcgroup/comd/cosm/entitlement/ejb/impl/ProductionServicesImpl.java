@@ -7,10 +7,9 @@ package com.nnpcgroup.comd.cosm.entitlement.ejb.impl;
 
 import com.nnpcgroup.comd.cosm.entitlement.controller.GeneralController;
 import com.nnpcgroup.comd.cosm.entitlement.ejb.ProductionServices;
-import com.nnpcgroup.comd.cosm.entitlement.entity.ContractStream;
+import com.nnpcgroup.comd.cosm.entitlement.entity.Contract;
 import com.nnpcgroup.comd.cosm.entitlement.entity.FiscalArrangement;
 import com.nnpcgroup.comd.cosm.entitlement.entity.Production;
-import com.nnpcgroup.comd.cosm.entitlement.entity.Terminal;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -52,7 +51,7 @@ public abstract class ProductionServicesImpl<T extends Production> extends Abstr
     public abstract List<T> findByYearAndMonth(int year, int month);
 
     @Override
-    public T findByContractPeriod(int year, int month, ContractStream cs) {
+    public T findByContractPeriod(int year, int month, Contract cs) {
         CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
 
         T production;
@@ -127,7 +126,7 @@ public abstract class ProductionServicesImpl<T extends Production> extends Abstr
     public T getPreviousMonthProduction(T production) {
         int month = ((Production) production).getPeriodMonth();
         int year = ((Production) production).getPeriodYear();
-        ContractStream cs = ((Production) production).getContractStream();
+        Contract cs = ((Production) production).getContract();
 
         if (month > 1) {
             --month;

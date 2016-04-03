@@ -162,7 +162,7 @@ public class JvActualProductionController implements Serializable {
         this.currentFiscalArrangement = currentFiscalArrangement;
     }
 
-    public SelectItem[] getContractStreamSelectOne() {
+    public SelectItem[] getContractSelectOne() {
         if (currentFiscalArrangement == null) {
             return null;
         }

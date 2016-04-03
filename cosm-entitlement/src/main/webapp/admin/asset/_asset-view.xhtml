@@ -4,7 +4,8 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:jsf="http://xmlns.jcp.org/jsf">
 
     <ui:composition>
         <div class="modal fade" id="AssetViewDlg" tabindex="-1" role="dialog" aria-hidden="true">
@@ -19,6 +20,14 @@
                             <h:panelGroup id="AssetViewPanel" rendered="#{contractController.selected != null}">
                                 <div class="row">
                                     <div class="col-md-6 m-b-15">
+                                        <h:outputLabel value="Contract Type" for="contractType" />
+                                        <h:selectOneMenu id="contractType" value="#{contractController.contractType}" class="form-control input-sm m-b-10">
+                                            <f:selectItem  itemLabel="Regular" itemValue="RG"/>
+                                            <f:selectItem  itemLabel="Carry Agreement" itemValue="CA"/>
+                                            <f:selectItem  itemLabel="Modified Carry Agreement" itemValue="MCA"/>
+                                        </h:selectOneMenu> 
+                                    </div>
+                                    <div class="col-md-6 m-b-15">
                                         <h:outputLabel value="Fiscal Arrg" for="fiscalArrangement" />
                                         <h:selectOneMenu id="fiscalArrangement" value="#{contractController.selected.fiscalArrangement}" class="form-control input-sm m-b-10">
                                             <f:selectItems value="#{fiscalController.fiscalSelectOptions}"
@@ -26,7 +35,8 @@
                                                            itemValue="#{fiscalArrangementItem}"/>
                                             <f:ajax />
                                         </h:selectOneMenu> 
-
+                                    </div>
+                                    <div class="col-md-6 m-b-15">
                                         <h:outputLabel value="Crude Type" for="crudeType" />
                                         <h:selectOneMenu id="crudeType" value="#{contractController.selected.crudeType}" class="form-control input-sm m-b-10">
                                             <f:selectItems value="#{crudeTypeController.itemsAvailableSelectOne}"
@@ -34,6 +44,15 @@
                                                            itemValue="#{crudeTypeItem}"/>
                                             <f:ajax />
                                         </h:selectOneMenu>                                                                                                                  
+                                    </div>
+                                    <div class="row" jsf:id="contractExtra" jsf:rendered="#{contractController.contractType!='REG'}">
+                                        <div class="col-md-6 m-b-15">
+                                            <h:outputLabel value="Shared Oil Ratio" for="sharedOilRatio" />
+                                            <h:inputText id="sharedOilRatio" value="#{contractController.carrySelected.sharedOilRatio}" class="form-control input-sm m-b-10">
+
+                                                <f:ajax />
+                                            </h:inputText>                                                                                                                  
+                                        </div>
                                     </div>
                                 </div>
                             </h:panelGroup>

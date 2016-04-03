@@ -40,9 +40,9 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6 m-b-15">
-                                        <h:outputLabel value="Asset/Crude Type" for="contractStream" />
-                                        <h:selectOneMenu id="contractStream" value="#{jvProdController.currentProduction.contractStream}" class="form-control input-sm m-b-10">
-                                            <f:selectItems value="#{contractStreamController.itemsAvailableSelectOne}"/>
+                                        <h:outputLabel value="Asset/Crude Type" for="contract" />
+                                        <h:selectOneMenu id="contract" value="#{jvProdController.currentProduction.contract}" class="form-control input-sm m-b-10">
+                                            <f:selectItems value="#{contractController.itemsAvailableSelectOne}"/>
                                             <f:ajax/>
                                         </h:selectOneMenu>
                                     </div>

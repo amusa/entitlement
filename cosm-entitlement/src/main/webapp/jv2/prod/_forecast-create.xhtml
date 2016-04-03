@@ -46,9 +46,9 @@
                                         </h:selectOneMenu>
                                     </div>
                                     <div class="col-md-6 m-b-15">
-                                        <h:outputLabel value="Asset/Crude Type" for="contractStream" />
-                                        <h:selectOneMenu id="csOptions" value="#{jvProdController.currentProduction.contractStream}" class="form-control input-sm m-b-10">
-                                            <f:selectItems value="#{jvProdController.contractStreamSelectOne}"/>
+                                        <h:outputLabel value="Asset/Crude Type" for="csOptions" />
+                                        <h:selectOneMenu id="csOptions" value="#{jvProdController.currentProduction.contract}" class="form-control input-sm m-b-10">
+                                            <f:selectItems value="#{jvProdController.contractSelectOne}"/>
                                             <f:ajax/>
                                         </h:selectOneMenu>
                                     </div>

@@ -7,16 +7,16 @@
       xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
 
     <ui:composition>
-        <div class="modal fade" id="AssetEditDlg" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal fade" id="CaContractEditDlg" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title">Edit JV Contracts</h4>
+                        <h4 class="modal-title">Edit JV Carry Contract</h4>
                     </div>
-                    <h:form id="AssetEditForm">
+                    <h:form id="CaContractEditForm">
                         <div class="modal-body">
-                            <h:panelGroup id="AssetEditPanel" rendered="#{contractController.selected != null}">
+                            <h:panelGroup id="CaContractEditPanel" rendered="#{contractController.selected != null}">
                                 <div class="row">
                                     <div class="col-md-6 m-b-15">
                                         <h:outputLabel value="Fiscal Arrg" for="fiscalArrangement" />

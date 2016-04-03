@@ -32,91 +32,27 @@
 
         <ui:define name="content-area">  
             <h:form id="assetListForm"> 
-                <!-- Multi Column -->
-                <div jsf:id="assetPanel" class="row">
-                    <div class="col-md-9 m-b-9">
-                        <h:dataTable id="assetTable" var="asset" value="#{contractController.items}" 
-                                     class="table table-bordered table-hover tile">
-                            <h:column>
-                                <f:facet name="header">
-                                    <h:outputText value="#{bundle.FiscalArrangement}"/>
-                                </f:facet>
-                                <h:outputText value="#{asset.fiscalArrangement.title}"/>
-                            </h:column>
+                <h:panelGroup id="AssetViewPanel" rendered="#{contractController.selected != null}">
+                    <div class="row">
+                        <div class="col-md-6 m-b-15">
+                            <h:outputLabel value="Fiscal Arrg" for="fiscalArrangement" />
+                            <h:selectOneMenu id="fiscalArrangement" value="#{contractController.selected.fiscalArrangement}" class="form-control input-sm m-b-10">
+                                <f:selectItems value="#{fiscalController.fiscalSelectOptions}"
+                                               var="fiscalArrangementItem"
+                                               itemValue="#{fiscalArrangementItem}"/>
+                                <f:ajax />
+                            </h:selectOneMenu> 
 
-                            <h:column>
-                                <f:facet name="header">
-                                    <h:outputText value="#{bundle.CrudeType}"/>
-                                </f:facet>
-                                <h:outputText value="#{asset.crudeType.crudeType}(#{asset.crudeType.code})"/>
-                            </h:column>
-
-                            <h:column>
-                                <div class="btn-group">
-                                    <button jsf:id="action" type="button" class="btn btn-sm dropdown-toggle" data-toggle="dropdown">
-                                        Action <span class="caret"></span>
-                                    </button>
-                                    <ul class="dropdown-menu" jsf:id="btnList">
-                                        <li>
-                                            <h:commandLink  pt:data-target="#AssetCreateDlg" pt:look="warning" pt:data-toggle="modal" >
-                                                <span class="icon">&#61943;</span>
-                                                #{bundle.Create}
-                                                <f:ajax event="click" render="AssetCreateForm" listener="#{contractController.prepareCreate}" />
-                                            </h:commandLink>                                       
-                                        </li>
-
-                                        <li>
-                                            <h:commandLink pt:data-target="#AssetViewDlg" pt:look="warning" pt:data-toggle="modal">
-                                                <span class="icon">&#61698;</span>
-                                                #{bundle.View}
-                                                <f:ajax event="click" render="AssetViewForm" listener="#{contractController.setSelected(asset)}"/>
-                                            </h:commandLink>
-                                        </li>
-                                        <li><h:commandLink pt:data-target="#AssetEditDlg" pt:look="warning" pt:data-toggle="modal">
-                                                <span class="icon">&#61952;</span>
-                                                #{bundle.Edit}
-                                                <f:ajax event="click" render="AssetEditForm" listener="#{contractController.setSelected(asset)}"/>
-                                            </h:commandLink>
-                                        </li>  
-                                        <li>
-                                            <h:commandLink>
-                                                <span class="icon">&#61918;</span>
-                                                #{bundle.Delete}
-                                                <f:ajax render="assetListForm assetTable msgs" listener="#{contractController.destroy(asset)}"/>
-                                            </h:commandLink>
-                                        </li> 
-                                    </ul>
-                                </div>
-                            </h:column>
-
-                            <f:facet name="footer">                                                                
-                                <button jsf:id="createButton" look="warning" data-target="#AssetCreateDlg" data-toggle="modal" class="btn m-r-5">
-                                    <span class="icon">&#61943;</span>
-                                    #{bundle.Create}
-                                    <f:ajax event="click" render="AssetCreateForm" listener="#{contractController.prepareCreate}" />                                    
-                                </button>
-
-                                <button jsf:id="viewButton" look="warning" data-target="#AssetViewDlg" data-toggle="modal" class="btn m-r-5">
-                                    <span class="icon">&#61698;</span>
-                                    #{bundle.View}
-                                    <f:ajax event="click" render="AssetViewForm" />
-                                </button>
-                                <button jsf:id="editButton" look="warning" data-target="#AssetEditDlg" data-toggle="modal" class="btn m-r-5">
-                                    <span class="icon">&#61952;</span>                                    
-                                    #{bundle.Edit}
-                                    <f:ajax event="click" render="AssetEditForm" />
-                                </button>
-
-                                <button jsf:id="deleteButton" class="btn m-r-5" jsf:disabled="#{empty contractController.selected}">
-                                    <span class="icon">&#61918;</span>
-                                    #{bundle.Delete}
-                                    <f:ajax render="assetTable" listener="#{contractController.destroy}"/>
-                                </button>
-
-                            </f:facet>
-                        </h:dataTable>
+                            <h:outputLabel value="Crude Type" for="crudeType" />
+                            <h:selectOneMenu id="crudeType" value="#{contractController.selected.crudeType}" class="form-control input-sm m-b-10">
+                                <f:selectItems value="#{crudeTypeController.itemsAvailableSelectOne}"
+                                               var="crudeTypeItem"
+                                               itemValue="#{crudeTypeItem}"/>
+                                <f:ajax />
+                            </h:selectOneMenu>                                                                                                                  
+                        </div>
                     </div>
-                </div>
+                </h:panelGroup>
             </h:form>
             <ui:include src="_asset-create.xhtml"/>           
             <ui:include src="_asset-edit.xhtml"/>

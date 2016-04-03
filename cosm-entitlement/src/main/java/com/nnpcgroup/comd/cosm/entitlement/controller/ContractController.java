@@ -4,7 +4,6 @@ import com.nnpcgroup.comd.cosm.entitlement.entity.Contract;
 import com.nnpcgroup.comd.cosm.entitlement.controller.util.JsfUtil;
 import com.nnpcgroup.comd.cosm.entitlement.controller.util.JsfUtil.PersistAction;
 import com.nnpcgroup.comd.cosm.entitlement.ejb.ContractServices;
-import com.nnpcgroup.comd.cosm.entitlement.ejb.impl.ContractBean;
 import com.nnpcgroup.comd.cosm.entitlement.entity.CarryContract;
 import com.nnpcgroup.comd.cosm.entitlement.entity.FiscalArrangement;
 import com.nnpcgroup.comd.cosm.entitlement.entity.ModifiedCarryContract;
@@ -54,10 +53,12 @@ public class ContractController implements Serializable {
     }
 
     public FiscalArrangement getFiscalArrangement() {
+        LOG.log(Level.INFO, "Returning fiscal arrangement {0}...", fiscalArrangement);
         return fiscalArrangement;
     }
 
     public void setFiscalArrangement(FiscalArrangement fiscalArrangement) {
+         LOG.log(Level.INFO, "Setting fiscal arrangement {0}...", fiscalArrangement);
         this.fiscalArrangement = fiscalArrangement;
     }
 
@@ -67,6 +68,13 @@ public class ContractController implements Serializable {
 
     public void setSelected(Contract selected) {
         this.selected = selected;
+        if (selected instanceof RegularContract) {
+            contractType = "REG";
+        } else if (selected instanceof CarryContract) {
+            contractType = "CA";
+        } else if (selected instanceof ModifiedCarryContract) {
+            contractType = "MCA";
+        }
     }
 
     public CarryContract getCarrySelected() {
@@ -164,7 +172,7 @@ public class ContractController implements Serializable {
         }
     }
 
-    public Contract getContractStream(java.lang.Integer id) {
+    public Contract getContract(java.lang.Integer id) {
         return getFacade().find(id);
     }
 
@@ -180,7 +188,7 @@ public class ContractController implements Serializable {
         LOG.log(Level.INFO, "Contract Type Selected...{0}", contractType);
         if (null != contractType) {
             switch (contractType) {
-                case "RG":
+                case "REG":
                     selected = new RegularContract();
                     break;
                 case "MCA":
@@ -197,6 +205,8 @@ public class ContractController implements Serializable {
     }
 
     public void addContractFiscalArrangement(FiscalArrangement fa) {
+        LOG.log(Level.INFO, "Adding Contract for fiscal arrangement {0}...", fa);
+        setSelected(new RegularContract()); //Default contract
         setFiscalArrangement(fa);
     }
 
@@ -210,7 +220,7 @@ public class ContractController implements Serializable {
             }
             ContractController controller = (ContractController) facesContext.getApplication().getELResolver().
                     getValue(facesContext.getELContext(), null, "contractController");
-            return controller.getContractStream(getKey(value));
+            return controller.getContract(getKey(value));
         }
 
         java.lang.Integer getKey(String value) {

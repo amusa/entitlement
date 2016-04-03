@@ -13,28 +13,25 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title">Create JV Assets</h4>
+                        <h4 jsf:id="createFiscalTitle" class="modal-title">Create Contract for JV Fiscal Arrangement: #{fiscalController.currentFiscal.title}</h4>
                     </div>
                     <h:form id="AssetCreateForm">
                         <div class="modal-body">
                             <h:panelGroup id="AssetCreatePanel">
-                                <div class="row">
+                                <div class="row">                                    
                                     <div class="col-md-6 m-b-15">
                                         <h:outputLabel value="Contract Type" for="contractType" />
                                         <h:selectOneMenu id="contractType" value="#{contractController.contractType}" class="form-control input-sm m-b-10">
-                                            <f:selectItem  itemLabel="Regular" itemValue="RG"/>
+                                            <f:selectItem  itemLabel="Regular" itemValue="REG"/>
                                             <f:selectItem  itemLabel="Carry Agreement" itemValue="CA"/>
                                             <f:selectItem  itemLabel="Modified Carry Agreement" itemValue="MCA"/>
-                                            <f:ajax event="change" render="AssetCreateForm contractHeader contractExtra" listener="#{contractController.contractTypeSelected}"/>
+                                            <f:ajax event="change" render="AssetCreateForm carryContractInfo" listener="#{contractController.contractTypeSelected}"/>
                                         </h:selectOneMenu> 
                                     </div>
                                 </div>
 
-                                <div class="row" jsf:id="contractHeader" jsf:rendered="#{contractController.contractType!=null}">
-                                    <div class="col-md-6 m-b-15">
-                                        <h:outputLabel value="Fiscal Arrg" for="fiscalArrangement" />
-                                        <h:outputText id="fiscalArrangement" value="#{contractController.selected.fiscalArrangement.title}" class="form-control input-sm m-b-10"/>
-                                       
+                                <div class="row">
+                                    <div class="col-md-6 m-b-15">                                        
                                         <h:outputLabel value="Crude Type" for="crudeType" />
                                         <h:selectOneMenu id="crudeType" value="#{contractController.selected.crudeType}" class="form-control input-sm m-b-10">
                                             <f:selectItems value="#{crudeTypeController.itemsAvailableSelectOne}"
@@ -44,7 +41,8 @@
                                         </h:selectOneMenu>                                                                                                                  
                                     </div>
                                 </div>
-                                <div class="row" jsf:id="contractExtra" jsf:rendered="#{contractController.contractType!='RG'}">
+                                
+                                <div class="row" jsf:id="carryContractInfo" jsf:rendered="#{contractController.contractType!='REG'}">
                                     <div class="col-md-6 m-b-15">
                                         <h:outputLabel value="Shared Oil Ratio" for="sharedOilRatio" />
                                         <h:inputText id="sharedOilRatio" value="#{contractController.carrySelected.sharedOilRatio}" class="form-control input-sm m-b-10">

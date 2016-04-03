@@ -6,7 +6,6 @@
 package com.nnpcgroup.comd.cosm.entitlement.entity;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.Entity;
@@ -30,7 +29,7 @@ public abstract class FiscalArrangement implements Serializable {
     protected Long id;
     protected String title;
     protected Company operator;
-    protected List<ContractStream> contractStreams;
+    protected List<Contract> contracts;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -62,12 +61,12 @@ public abstract class FiscalArrangement implements Serializable {
     }
 
     @OneToMany(mappedBy = "fiscalArrangement")
-    public List<ContractStream> getContractStreams() {
-        return contractStreams;
+    public List<Contract> getContracts() {
+        return contracts;
     }
 
-    public void setContractStreams(List<ContractStream> contractStreams) {
-        this.contractStreams = contractStreams;
+    public void setContracts(List<Contract> contracts) {
+        this.contracts = contracts;
     }
 
     @Override

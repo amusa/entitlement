@@ -1,9 +1,11 @@
 package com.nnpcgroup.comd.cosm.entitlement.controller;
 
-import com.nnpcgroup.comd.cosm.entitlement.entity.ContractStream;
+import com.nnpcgroup.comd.cosm.entitlement.entity.Contract;
 import com.nnpcgroup.comd.cosm.entitlement.controller.util.JsfUtil;
 import com.nnpcgroup.comd.cosm.entitlement.controller.util.JsfUtil.PersistAction;
-import com.nnpcgroup.comd.cosm.entitlement.ejb.ContractStreamBean;
+import com.nnpcgroup.comd.cosm.entitlement.ejb.CarryContractBean;
+import com.nnpcgroup.comd.cosm.entitlement.entity.CarryContract;
+import com.nnpcgroup.comd.cosm.entitlement.entity.FiscalArrangement;
 
 import java.io.Serializable;
 import java.util.List;
@@ -20,25 +22,47 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 import javax.faces.model.SelectItem;
 
-@Named("contractStreamController")
+@Named("carryController")
 @SessionScoped
-public class ContractStreamController implements Serializable {
+public class CarryContractController implements Serializable {
+
+    private static final Logger LOG = Logger.getLogger(CarryContractController.class.getName());
 
     private static final long serialVersionUID = 3411266588734031876L;
 
     @EJB
-    private ContractStreamBean ejbFacade;
-    private List<ContractStream> items = null;
-    private ContractStream selected;
+    private CarryContractBean ejbFacade;
+    private List<CarryContract> items;
+    private CarryContract selected;
+    private String contractType;
+    private FiscalArrangement fiscalArrangement;
 
-    public ContractStreamController() {
+    public CarryContractController() {
+        this.items = null;
     }
 
-    public ContractStream getSelected() {
+    public String getContractType() {
+        return contractType;
+    }
+
+    public void setContractType(String contractType) {
+        this.contractType = contractType;
+    }
+
+    public FiscalArrangement getFiscalArrangement() {
+        return fiscalArrangement;
+    }
+
+    public void setFiscalArrangement(FiscalArrangement fiscalArrangement) {
+        this.fiscalArrangement = fiscalArrangement;
+    }
+
+    
+    public CarryContract getSelected() {
         return selected;
     }
 
-    public void setSelected(ContractStream selected) {
+    public void setSelected(CarryContract selected) {
         this.selected = selected;
     }
 
@@ -48,12 +72,12 @@ public class ContractStreamController implements Serializable {
     protected void initializeEmbeddableKey() {
     }
 
-    private ContractStreamBean getFacade() {
+    private CarryContractBean getFacade() {
         return ejbFacade;
     }
 
-    public ContractStream prepareCreate() {
-        selected = new ContractStream();
+    public CarryContract prepareCreate() {
+        selected = new CarryContract();
         initializeEmbeddableKey();
         return selected;
     }
@@ -78,8 +102,8 @@ public class ContractStreamController implements Serializable {
         items = null;
     }
 
-    public void destroy(ContractStream cs) {
-        setSelected(cs);
+    public void destroy(CarryContract contract) {
+        setSelected(contract);
         destroy();
     }
 
@@ -91,7 +115,7 @@ public class ContractStreamController implements Serializable {
         }
     }
 
-    public List<ContractStream> getItems() {
+    public List<CarryContract> getItems() {
         items = getFacade().findAll();
         return items;
     }
@@ -124,29 +148,33 @@ public class ContractStreamController implements Serializable {
         }
     }
 
-    public ContractStream getContractStream(java.lang.Integer id) {
+    public CarryContract getCarryContract(java.lang.Integer id) {
         return getFacade().find(id);
     }
 
-    public List<ContractStream> getItemsAvailableSelectMany() {
+    public List<CarryContract> getItemsAvailableSelectMany() {
         return getFacade().findAll();
     }
 
     public SelectItem[] getItemsAvailableSelectOne() {
         return JsfUtil.getSelectItems(getFacade().findAll(), true);
     }
-
-    @FacesConverter(forClass = ContractStream.class)
-    public static class ContractStreamControllerConverter implements Converter {
+        
+    public void addContractFiscalArrangement(FiscalArrangement fa){
+        setFiscalArrangement(fa);
+    }
+      
+    @FacesConverter(forClass = CarryContract.class)
+    public static class CarryContractControllerConverter implements Converter {
 
         @Override
         public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
             if (value == null || value.length() == 0) {
                 return null;
             }
-            ContractStreamController controller = (ContractStreamController) facesContext.getApplication().getELResolver().
-                    getValue(facesContext.getELContext(), null, "contractStreamController");
-            return controller.getContractStream(getKey(value));
+            CarryContractController controller = (CarryContractController) facesContext.getApplication().getELResolver().
+                    getValue(facesContext.getELContext(), null, "carryController");
+            return controller.getCarryContract(getKey(value));
         }
 
         java.lang.Integer getKey(String value) {
@@ -166,11 +194,11 @@ public class ContractStreamController implements Serializable {
             if (object == null) {
                 return null;
             }
-            if (object instanceof ContractStream) {
-                ContractStream o = (ContractStream) object;
+            if (object instanceof Contract) {
+                Contract o = (Contract) object;
                 return getStringKey(o.getId());
             } else {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), ContractStream.class.getName()});
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), Contract.class.getName()});
                 return null;
             }
         }

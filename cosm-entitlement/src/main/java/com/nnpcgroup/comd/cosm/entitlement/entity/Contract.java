@@ -20,8 +20,8 @@ import javax.validation.constraints.NotNull;
  * @author 18359
  */
 @Entity
-@Table(name = "CONTRACT_STREAM")
-public class ContractStream implements Serializable {
+@Table(name = "CONTRACT")
+public abstract class Contract implements Serializable {
 
     private static final long serialVersionUID = 243024160781750391L;
     private Integer id;
@@ -76,7 +76,7 @@ public class ContractStream implements Serializable {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final ContractStream other = (ContractStream) obj;
+        final Contract other = (Contract) obj;
         if (!Objects.equals(this.id, other.id)) {
             return false;
         }

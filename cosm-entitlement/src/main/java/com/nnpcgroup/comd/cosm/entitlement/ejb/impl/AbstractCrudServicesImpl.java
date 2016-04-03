@@ -72,17 +72,17 @@ public abstract class AbstractCrudServicesImpl<T> implements AbstractCrudService
 
     @Override
     public void create(List<T> entityList) {
-        for (T e : entityList) {
+        entityList.stream().forEach((e) -> {
             getEntityManager().persist(e);
-        }
+        });
 
     }
     
     @Override
     public void edit(List<T> entityList) {
-        for (T e : entityList) {
+        entityList.stream().forEach((e) -> {
             getEntityManager().merge(e);
-        }
+        });
 
     }
 

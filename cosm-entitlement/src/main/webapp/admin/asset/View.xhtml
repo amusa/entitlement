@@ -11,13 +11,13 @@
         <p:dialog id="ContractStreamViewDlg" widgetVar="ContractStreamViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewContractStreamTitle}">
             <h:form id="ContractStreamViewForm">
                 <h:panelGroup id="display">
-                    <p:panelGrid columns="2" rendered="#{contractStreamController.selected != null}">
+                    <p:panelGrid columns="2" rendered="#{contractController.selected != null}">
                         <h:outputText value="#{bundle.ViewContractStreamLabel_id}"/>
-                        <h:outputText value="#{contractStreamController.selected.id}" title="#{bundle.ViewContractStreamTitle_id}"/>
+                        <h:outputText value="#{contractController.selected.id}" title="#{bundle.ViewContractStreamTitle_id}"/>
                         <h:outputText value="#{bundle.ViewContractStreamLabel_crudeType}"/>
-                        <h:outputText value="#{contractStreamController.selected.crudeType}" title="#{bundle.ViewContractStreamTitle_crudeType}"/>
+                        <h:outputText value="#{contractController.selected.crudeType}" title="#{bundle.ViewContractStreamTitle_crudeType}"/>
                         <h:outputText value="#{bundle.ViewContractStreamLabel_fiscalArrangement}"/>
-                        <h:outputText value="#{contractStreamController.selected.fiscalArrangement}" title="#{bundle.ViewContractStreamTitle_fiscalArrangement}"/>
+                        <h:outputText value="#{contractController.selected.fiscalArrangement}" title="#{bundle.ViewContractStreamTitle_fiscalArrangement}"/>
                     </p:panelGrid>
                     <p:commandButton value="#{bundle.Close}" onclick="ContractStreamViewDialog.hide()"/>
                 </h:panelGroup>

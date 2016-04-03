@@ -5,6 +5,7 @@
  */
 package com.nnpcgroup.comd.cosm.entitlement.entity;
 
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
 /**
@@ -12,8 +13,21 @@ import javax.persistence.Entity;
  * @author 18359
  */
 @Entity
-public class AlternativeFundingJv extends JointVenture{
+@DiscriminatorValue("AF")
+public abstract class AlternativeFundingContract extends Contract{
     
     private static final long serialVersionUID = 8684470740659960243L;
+    
+    private Double sharedOilRatio;
+
+    public Double getSharedOilRatio() {
+        return sharedOilRatio;
+    }
+
+    public void setSharedOilRatio(Double sharedOilRatio) {
+        this.sharedOilRatio = sharedOilRatio;
+    }
+    
+    
     
 }

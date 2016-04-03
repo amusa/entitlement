@@ -27,6 +27,10 @@ public class Terminal implements Serializable {
     private Double lineFillVolume;
     private Double deadStockVolume;
     private CrudeType crudeType;
+    private Double openingBalance;
+    private Double stockVolume;
+    private Double capacity;
+    private Company operator;
     
 
     @Id
@@ -62,8 +66,31 @@ public class Terminal implements Serializable {
     public void setDeadStockVolume(Double deadStockVolume) {
         this.deadStockVolume = deadStockVolume;
     }
-    
 
+    public Double getOpeningBalance() {
+        return openingBalance;
+    }
+
+    public void setOpeningBalance(Double openingBalance) {
+        this.openingBalance = openingBalance;
+    }
+
+    public Double getStockVolume() {
+        return stockVolume;
+    }
+
+    public void setStockVolume(Double stockVolume) {
+        this.stockVolume = stockVolume;
+    }
+
+    public Double getCapacity() {
+        return capacity;
+    }
+
+    public void setCapacity(Double capacity) {
+        this.capacity = capacity;
+    }
+        
     @OneToOne
     @NotNull
     public CrudeType getCrudeType() {
@@ -73,6 +100,17 @@ public class Terminal implements Serializable {
     public void setCrudeType(CrudeType crudeType) {
         this.crudeType = crudeType;
     }
+
+    
+    @OneToOne
+    public Company getOperator() {
+        return operator;
+    }
+
+    public void setOperator(Company operator) {
+        this.operator = operator;
+    }
+    
     
     
     @Override

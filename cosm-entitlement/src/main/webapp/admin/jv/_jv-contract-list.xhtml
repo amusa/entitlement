@@ -4,52 +4,33 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:jsf="http://xmlns.jcp.org/jsf">
 
     <ui:composition>
-        <div class="modal fade" id="JvViewDlg" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal fade" id="AssetListDlg" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title">View JV Contract</h4>
+                        <h4 class="modal-title">#{fiscalController.currentFiscal.title} Contracts</h4>
                     </div>
-                    <h:form id="JvViewForm">
+                    <h:form id="AssetListForm">
                         <div class="modal-body">
-                            <h:panelGroup id="JvViewPanel" rendered="#{jvController.selected != null}">
-                                <div class="row">
-                                    <div class="col-md-6 m-b-15">
-                                        <h:outputLabel value="Equity Type" for="equityType" />
-                                        <h:selectOneMenu id="equityType" value="#{jvController.selected.equityType}" class="form-control input-sm m-b-10">
-                                            <f:selectItems value="#{equityTypeController.itemsAvailableSelectOne}"
-                                                           var="equityTypeItem"
-                                                           itemValue="#{equityTypeItem}"/>
-                                        </h:selectOneMenu>                                                                              
-                                    </div>
-
-                                    <div class="col-md-6 m-b-15">
-                                        <h:outputLabel value="Title" for="title" />
-                                        <h:inputText id="title" value="#{jvController.selected.title}" title="#{bundle.CreateJointVentureTitle_title}" class="form-control input-sm m-b-10"/>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6 m-b-15">
-                                        <h:outputLabel value="Operator" for="operator" />
-                                        <h:selectOneMenu id="operator" value="#{jvController.selected.operator}" class="form-control input-sm m-b-10">
-                                            <f:selectItems value="#{companyController.itemsAvailableSelectOne}"
-                                                           var="operatorItem"
-                                                           itemValue="#{operatorItem}"/>
-                                        </h:selectOneMenu>                                        
-                                    </div>                                    
-                                </div>
-
+                            <h:panelGroup id="AssetListPanel">
+                                <h:dataTable id="assetTable" var="asset" value="#{fiscalController.contracts}" 
+                                             class="table table-bordered table-hover tile">
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="#{bundle.CrudeType}"/>
+                                        </f:facet>
+                                        <h:outputText value="#{asset.crudeType.crudeType}(#{asset.crudeType.code})"/>
+                                    </h:column>
+                                </h:dataTable>
                             </h:panelGroup>
-
                         </div>
-                        <div class="modal-footer">                            
-                            <h:commandButton value="#{bundle.Close}" immediate="true" pt:data-dismiss="modal" class="btn btn-sm">
-                                <f:ajax listener="#{jvController.cancel}" render="jvListForm jvTable msgs"/>
-                            </h:commandButton>
+                        <div class="modal-footer">
+                            <h:commandButton value="#{bundle.Close}" pt:data-dismiss="modal" class="btn btn-sm"/>                              
                         </div>
                     </h:form>
                 </div>

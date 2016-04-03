@@ -7,7 +7,7 @@ package com.nnpcgroup.comd.cosm.entitlement.ejb.impl;
 
 import com.nnpcgroup.comd.cosm.entitlement.ejb.PscActualProductionServices;
 import com.nnpcgroup.comd.cosm.entitlement.ejb.TerminalBlendServices;
-import com.nnpcgroup.comd.cosm.entitlement.entity.ContractStream;
+import com.nnpcgroup.comd.cosm.entitlement.entity.Contract;
 import com.nnpcgroup.comd.cosm.entitlement.entity.PscActualProduction;
 import com.nnpcgroup.comd.cosm.entitlement.entity.TerminalBlend;
 import java.util.List;

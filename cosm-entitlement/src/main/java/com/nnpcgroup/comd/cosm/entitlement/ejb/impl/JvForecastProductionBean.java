@@ -64,7 +64,7 @@ public class JvForecastProductionBean extends JvProductionServicesImpl<JvForecas
         FiscalArrangement fa;
         JointVenture jv;
 
-        fa = production.getContractStream().getFiscalArrangement();
+        fa = production.getContract().getFiscalArrangement();
 
         assert (fa instanceof JointVenture);
 

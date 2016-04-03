@@ -11,23 +11,23 @@
         <p:dialog id="ContractStreamEditDlg" widgetVar="ContractStreamEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.EditContractStreamTitle}">
             <h:form id="ContractStreamEditForm">
                 <h:panelGroup id="display">
-                    <p:panelGrid columns="2" rendered="#{contractStreamController.selected != null}">
+                    <p:panelGrid columns="2" rendered="#{contractController.selected != null}">
                         <p:outputLabel value="Crude Type" for="crudeType" />
-                        <p:selectOneMenu id="crudeType" value="#{contractStreamController.selected.crudeType}" >
+                        <p:selectOneMenu id="crudeType" value="#{contractController.selected.crudeType}" >
                             <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
                             <f:selectItems value="#{crudeTypeController.itemsAvailableSelectOne}"
                                            var="crudeTypeItem"
                                            itemValue="#{crudeTypeItem}"/>
                         </p:selectOneMenu>
                         <p:outputLabel value="Fiscal Arrg" for="fiscalArrangement" />
-                        <p:selectOneMenu id="fiscalArrangement" value="#{contractStreamController.selected.fiscalArrangement}" >
+                        <p:selectOneMenu id="fiscalArrangement" value="#{contractController.selected.fiscalArrangement}" >
                             <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
                             <f:selectItems value="#{fiscalController.fiscalSelectOptions}"
                                            var="fiscalArrangementItem"
                                            itemValue="#{fiscalArrangementItem}"/>
                         </p:selectOneMenu>
                     </p:panelGrid>
-                    <p:commandButton actionListener="#{contractStreamController.update}" value="#{bundle.Save}" update="display,:ContractStreamListForm:datalist,:growl" oncomplete="handleSubmit(args, 'ContractStreamEditDialog');"/>
+                    <p:commandButton actionListener="#{contractController.update}" value="#{bundle.Save}" update="display,:ContractStreamListForm:datalist,:growl" oncomplete="handleSubmit(args, 'ContractStreamEditDialog');"/>
                     <p:commandButton value="#{bundle.Cancel}" onclick="ContractStreamEditDialog.hide()"/>
                 </h:panelGroup>
             </h:form>

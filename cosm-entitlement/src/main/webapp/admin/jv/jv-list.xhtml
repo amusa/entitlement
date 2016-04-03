@@ -89,6 +89,20 @@
                                                 <f:ajax render="jvListForm jvTable msgs" listener="#{jvController.destroy(jv)}"/>
                                             </h:commandLink>
                                         </li> 
+                                         <li>
+                                            <h:commandLink pt:data-target="#AssetCreateDlg" pt:look="warning" pt:data-toggle="modal">
+                                                <span class="icon">&#61918;</span>
+                                                Add Contract                                                
+                                                <f:ajax listener="#{contractController.addContractFiscalArrangement(jv)}" render="AssetCreateForm" />
+                                            </h:commandLink>
+                                        </li> 
+                                        <li>
+                                            <h:commandLink pt:data-target="#AssetListDlg" pt:look="warning" pt:data-toggle="modal">
+                                                <span class="icon">&#61918;</span>
+                                                View Contracts                                                
+                                                <f:ajax listener="#{fiscalController.setCurrentFiscal(jv)}" render="AssetListDlg AssetListForm" />
+                                            </h:commandLink>
+                                        </li> 
                                     </ul>
                                 </div>
                             </h:column>
@@ -125,11 +139,13 @@
             <ui:include src="_jv-create.xhtml"/>           
             <ui:include src="_jv-edit.xhtml"/>
             <ui:include src="_jv-view.xhtml"/>
+            <ui:include src="_jv-contract-create.xhtml"/>
+            <ui:include src="_jv-contract-list.xhtml"/>
         </ui:define>
 
-<!--        <ui:define name="page-stat"> 
-            <ui:include src="_jv-stat.xhtml"/>
-        </ui:define>-->
+        <!--        <ui:define name="page-stat"> 
+                    <ui:include src="_jv-stat.xhtml"/>
+                </ui:define>-->
 
     </ui:composition>
 

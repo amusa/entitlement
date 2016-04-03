@@ -9,7 +9,6 @@ import com.nnpcgroup.comd.cosm.entitlement.controller.util.JsfUtil;
 import com.nnpcgroup.comd.cosm.entitlement.ejb.JvActualProductionServices;
 import com.nnpcgroup.comd.cosm.entitlement.entity.FiscalArrangement;
 import com.nnpcgroup.comd.cosm.entitlement.entity.JvActualProduction;
-import com.nnpcgroup.comd.cosm.entitlement.entity.JvForecastProduction;
 import com.nnpcgroup.comd.cosm.entitlement.entity.Production;
 import javax.inject.Named;
 import java.io.Serializable;
@@ -34,7 +33,7 @@ import javax.faces.validator.ValidatorException;
 @SessionScoped
 public class JvActualProductionController implements Serializable {
 
-    private static final Logger log = Logger.getLogger(JvActualProductionController.class.getName());
+    private static final Logger LOG = Logger.getLogger(JvActualProductionController.class.getName());
     private static final long serialVersionUID = -5506490644508725206L;
 
     @EJB
@@ -50,29 +49,29 @@ public class JvActualProductionController implements Serializable {
      * Creates a new instance of JvController
      */
     public JvActualProductionController() {
-        log.info("JvActualProductionController::constructor activated...");
-        // log.log(Level.INFO, "Entitlement calculated: {0}", entitlement.calculateEntitlement());
+        LOG.info("JvActualProductionController::constructor activated...");
+        // LOG.log(Level.INFO, "Entitlement calculated: {0}", entitlement.calculateEntitlement());
     }
 
     public JvActualProduction getCurrentProduction() {
-        log.info("JvActualProductionController::getProduction called...");
+        LOG.info("JvActualProductionController::getProduction called...");
         return currentProduction;
     }
 
     public void setCurrentProduction(JvActualProduction currentProduction) {
-        log.info("JvActualProductionController::setProduction called...");
+        LOG.info("JvActualProductionController::setProduction called...");
         this.currentProduction = currentProduction;
         this.currentFiscalArrangement = (currentProduction != null)
-                ? currentProduction.getContractStream().getFiscalArrangement() : null;
+                ? currentProduction.getContract().getFiscalArrangement() : null;
     }
 
     public List<JvActualProduction> getProductions() {
-        log.info("JvActualProductionController::getProductions called...");
+        LOG.info("JvActualProductionController::getProductions called...");
         return productions;
     }
 
     public void setProductions(List<JvActualProduction> productions) {
-        log.info("JvActualProductionController::setProductions called...");
+        LOG.info("JvActualProductionController::setProductions called...");
         this.productions = productions;
     }
 
@@ -89,7 +88,7 @@ public class JvActualProductionController implements Serializable {
 
     public void grossProductionChanged() {
         productionBean.grossProductionChanged(currentProduction);
-        log.log(Level.INFO,
+        LOG.log(Level.INFO,
                 "Own entmt={0},Partner entmt={1}, Stock Adj={2}...",
                 new Object[]{currentProduction.getOwnShareEntitlement(),
                     currentProduction.getPartnerShareEntitlement(),
@@ -98,7 +97,7 @@ public class JvActualProductionController implements Serializable {
     }
 
     public void liftingChanged() {
-        log.log(Level.INFO, "LIfting changed...");
+        LOG.log(Level.INFO, "LIfting changed...");
         productionBean.liftingChanged(currentProduction);
 
         Double openingStock = currentProduction.getOpeningStock();
@@ -123,12 +122,12 @@ public class JvActualProductionController implements Serializable {
     }
 
     public void openingStockChanged() {
-        log.log(Level.INFO, "Opening Stock changed...");
+        LOG.log(Level.INFO, "Opening Stock changed...");
         productionBean.openingStockChanged(currentProduction);
     }
 
     public void resetDefaults() {
-        log.log(Level.INFO, "Resetting to default...");
+        LOG.log(Level.INFO, "Resetting to default...");
         productionBean.grossProductionChanged(currentProduction);
     }
 
@@ -142,7 +141,7 @@ public class JvActualProductionController implements Serializable {
     }
 
     public void setPeriodYear(Integer periodYear) {
-        log.log(Level.INFO, "************JvActualProductionController::setPeriodYear called with value {0}", periodYear);
+        LOG.log(Level.INFO, "************JvActualProductionController::setPeriodYear called with value {0}", periodYear);
         this.periodYear = periodYear;
     }
 
@@ -151,7 +150,7 @@ public class JvActualProductionController implements Serializable {
     }
 
     public void setPeriodMonth(Integer periodMonth) {
-        log.log(Level.INFO, "************JvActualProductionController::setPeriodMonth called with value {0}", periodMonth);
+        LOG.log(Level.INFO, "************JvActualProductionController::setPeriodMonth called with value {0}", periodMonth);
         this.periodMonth = periodMonth;
     }
 
@@ -167,25 +166,25 @@ public class JvActualProductionController implements Serializable {
         if (currentFiscalArrangement == null) {
             return null;
         }
-        return JsfUtil.getSelectItems(currentFiscalArrangement.getContractStreams(), true);
+        return JsfUtil.getSelectItems(currentFiscalArrangement.getContracts(), true);
     }
 
     public void actualize(Production production) {
-        log.log(Level.INFO, "************JvActualProductionController::actualizing {0}...", production);
+        LOG.log(Level.INFO, "************JvActualProductionController::actualizing {0}...", production);
 
         currentProduction = productionBean.findByContractPeriod(
                 production.getPeriodYear(),
                 production.getPeriodMonth(),
-                production.getContractStream());
-        log.log(Level.INFO, "************JvActualProductionController::findByContractStreamPeriod returning {0}...", currentProduction);
+                production.getContract());
+        LOG.log(Level.INFO, "************JvActualProductionController::findByContractStreamPeriod returning {0}...", currentProduction);
 
         if (currentProduction == null) {
-            log.log(Level.INFO, "************JvActualProductionController::actualizing returning new JV Production instance...");
+            LOG.log(Level.INFO, "************JvActualProductionController::actualizing returning new JV Production instance...");
             currentProduction = productionBean.createInstance();
-            log.log(Level.INFO, "************JvActualProductionController::productionBean.createInstance() returning {0}...", currentProduction);
+            LOG.log(Level.INFO, "************JvActualProductionController::productionBean.createInstance() returning {0}...", currentProduction);
             currentProduction.setPeriodYear(production.getPeriodYear());
             currentProduction.setPeriodMonth(production.getPeriodMonth());
-            currentProduction.setContractStream(production.getContractStream());
+            currentProduction.setContract(production.getContract());
 
             // productionBean.enrich(currentProduction);
         }
@@ -205,7 +204,7 @@ public class JvActualProductionController implements Serializable {
     }
 
     public JvActualProduction prepareCreate() {
-        log.log(Level.INFO, "Preparing new instance of JvActualProduction for create...");
+        LOG.log(Level.INFO, "Preparing new instance of JvActualProduction for create...");
         currentProduction = productionBean.createInstance();
         currentProduction.setPeriodYear(periodYear);
         currentProduction.setPeriodMonth(periodMonth);

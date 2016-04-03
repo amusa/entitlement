@@ -11,21 +11,21 @@
         <p:dialog id="ContractStreamCreateDlg" widgetVar="ContractStreamCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateContractStreamTitle}">
             <h:form id="ContractStreamCreateForm">
                 <h:panelGroup id="display">
-                    <p:panelGrid columns="2" rendered="#{contractStreamController.selected != null}">
+                    <p:panelGrid columns="2" rendered="#{contractController.selected != null}">
                         <p:outputLabel value="Crude Type" for="crudeType" />
-                        <p:selectOneMenu id="crudeType" value="#{contractStreamController.selected.crudeType}" >
+                        <p:selectOneMenu id="crudeType" value="#{contractController.selected.crudeType}" >
                             <f:selectItems value="#{crudeTypeController.itemsAvailableSelectOne}"
                                            var="crudeTypeItem"
                                            itemValue="#{crudeTypeItem}"/>
                         </p:selectOneMenu>
                         <p:outputLabel value="Fiscal Arrg" for="fiscalArrangement" />
-                        <p:selectOneMenu id="fiscalArrangement" value="#{contractStreamController.selected.fiscalArrangement}" >
+                        <p:selectOneMenu id="fiscalArrangement" value="#{contractController.selected.fiscalArrangement}" >
                             <f:selectItems value="#{fiscalController.fiscalSelectOptions}"
                                            var="fiscalArrangementItem"
                                            itemValue="#{fiscalArrangementItem}"/>
                         </p:selectOneMenu>
                     </p:panelGrid>
-                    <p:commandButton actionListener="#{contractStreamController.create}" value="#{bundle.Save}" update="display,:ContractStreamListForm:datalist,:growl" oncomplete="handleSubmit(args,'ContractStreamCreateDialog');"/>
+                    <p:commandButton actionListener="#{contractController.create}" value="#{bundle.Save}" update="display,:ContractStreamListForm:datalist,:growl" oncomplete="handleSubmit(args,'ContractStreamCreateDialog');"/>
                     <p:commandButton value="#{bundle.Cancel}" onclick="ContractStreamCreateDialog.hide()"/>
                 </h:panelGroup>
             </h:form>

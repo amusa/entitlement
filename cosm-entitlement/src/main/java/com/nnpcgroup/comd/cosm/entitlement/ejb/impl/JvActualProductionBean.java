@@ -10,7 +10,6 @@ import com.nnpcgroup.comd.cosm.entitlement.entity.JvActualProduction;
 import com.nnpcgroup.comd.cosm.entitlement.entity.EquityType;
 import com.nnpcgroup.comd.cosm.entitlement.entity.FiscalArrangement;
 import com.nnpcgroup.comd.cosm.entitlement.entity.JointVenture;
-import com.nnpcgroup.comd.cosm.entitlement.entity.Production;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -49,7 +48,7 @@ public class JvActualProductionBean extends JvProductionServicesImpl<JvActualPro
         FiscalArrangement fa;
         JointVenture jv;
 
-        fa = production.getContractStream().getFiscalArrangement();
+        fa = production.getContract().getFiscalArrangement();
 
         assert (fa instanceof JointVenture);
 

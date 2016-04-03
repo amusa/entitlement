@@ -7,6 +7,8 @@ package com.nnpcgroup.comd.cosm.entitlement.controller;
 
 import com.nnpcgroup.comd.cosm.entitlement.controller.util.JsfUtil;
 import com.nnpcgroup.comd.cosm.entitlement.controller.util.ProductionDataModel;
+import com.nnpcgroup.comd.cosm.entitlement.ejb.ContractServices;
+import com.nnpcgroup.comd.cosm.entitlement.ejb.FiscalArrangementBean;
 import com.nnpcgroup.comd.cosm.entitlement.ejb.JvForecastProductionServices;
 import com.nnpcgroup.comd.cosm.entitlement.entity.CarryContract;
 import com.nnpcgroup.comd.cosm.entitlement.entity.Contract;
@@ -44,6 +46,9 @@ public class JvProductionController implements Serializable {
 
     @EJB
     private JvForecastProductionServices productionBean;
+
+    @EJB
+    private ContractServices contractBean;
 
     private JvForecastProduction currentProduction;
 
@@ -244,10 +249,14 @@ public class JvProductionController implements Serializable {
     }
 
     public SelectItem[] getContractSelectOne() {
-        if (currentFiscalArrangement == null) {
-            return null;
+        List<Contract> contracts = null;
+
+        if (currentFiscalArrangement != null) {
+            contracts = contractBean.findFiscalArrangementContracts(currentFiscalArrangement);
         }
-        return JsfUtil.getSelectItems(currentFiscalArrangement.getContracts(), true);
+
+        return JsfUtil.getSelectItems(contracts, true);
+
     }
 
     public Double getDailySum() {

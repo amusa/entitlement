@@ -28,17 +28,15 @@ public class FiscalArrangementController implements Serializable {
     private static final Logger LOG = Logger.getLogger(FiscalArrangementController.class.getName());
 
     private FiscalArrangement currentFiscal;
-    //private JointVenture current;
     private List<FiscalArrangement> fiscalArrangements;
 
     @EJB
     private FiscalArrangementBean fiscalBean;
-    
+
     @EJB
     private ContractServices contractBean;
 
     public FiscalArrangementController() {
-        //this.current = null;
         this.currentFiscal = null;
     }
 

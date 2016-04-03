@@ -151,7 +151,7 @@ public class AlternativeFundingContractController implements Serializable {
         }
     }
 
-    public Contract getContractStream(java.lang.Integer id) {
+    public Contract getContract(java.lang.Integer id) {
         return getFacade().find(id);
     }
 
@@ -196,8 +196,8 @@ public class AlternativeFundingContractController implements Serializable {
                 return null;
             }
             AlternativeFundingContractController controller = (AlternativeFundingContractController) facesContext.getApplication().getELResolver().
-                    getValue(facesContext.getELContext(), null, "regContractController");
-            return controller.getContractStream(getKey(value));
+                    getValue(facesContext.getELContext(), null, "afContractController");
+            return controller.getContract(getKey(value));
         }
 
         java.lang.Integer getKey(String value) {

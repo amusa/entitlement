@@ -18,26 +18,26 @@ public class JvAfActualProduction extends JvActualProduction {
 
     private static final long serialVersionUID = 4881837273578907336L;
 
-    private Double stockAdjustment;
-    private Double partnerStockAdjustment;
+    private Double tangibleCost;
+    private Double intangibleCost;
 
     public JvAfActualProduction() {
     }
 
-    public Double getStockAdjustment() {
-        return stockAdjustment;
+    public Double getTangibleCost() {
+        return tangibleCost;
     }
 
-    public void setStockAdjustment(Double stockAdjustment) {
-        this.stockAdjustment = stockAdjustment;
+    public void setTangibleCost(Double tangibleCost) {
+        this.tangibleCost = tangibleCost;
     }
 
-    public Double getPartnerStockAdjustment() {
-        return partnerStockAdjustment;
+    public Double getIntangibleCost() {
+        return intangibleCost;
     }
 
-    public void setPartnerStockAdjustment(Double partnerStockAdjustment) {
-        this.partnerStockAdjustment = partnerStockAdjustment;
+    public void setIntangibleCost(Double intangibleCost) {
+        this.intangibleCost = intangibleCost;
     }
-    
+
 }

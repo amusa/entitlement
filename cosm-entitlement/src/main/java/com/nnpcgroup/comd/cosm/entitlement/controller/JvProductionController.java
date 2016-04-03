@@ -8,8 +8,15 @@ package com.nnpcgroup.comd.cosm.entitlement.controller;
 import com.nnpcgroup.comd.cosm.entitlement.controller.util.JsfUtil;
 import com.nnpcgroup.comd.cosm.entitlement.controller.util.ProductionDataModel;
 import com.nnpcgroup.comd.cosm.entitlement.ejb.JvForecastProductionServices;
+import com.nnpcgroup.comd.cosm.entitlement.entity.CarryContract;
+import com.nnpcgroup.comd.cosm.entitlement.entity.Contract;
 import com.nnpcgroup.comd.cosm.entitlement.entity.FiscalArrangement;
+import com.nnpcgroup.comd.cosm.entitlement.entity.JvAfForecastProduction;
+import com.nnpcgroup.comd.cosm.entitlement.entity.JvCaForecastProduction;
 import com.nnpcgroup.comd.cosm.entitlement.entity.JvForecastProduction;
+import com.nnpcgroup.comd.cosm.entitlement.entity.JvMcaForecastProduction;
+import com.nnpcgroup.comd.cosm.entitlement.entity.ModifiedCarryContract;
+import com.nnpcgroup.comd.cosm.entitlement.entity.RegularContract;
 
 import javax.inject.Named;
 import java.io.Serializable;
@@ -20,6 +27,8 @@ import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.component.html.HtmlSelectOneMenu;
+import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.model.SelectItem;
 
 /**
@@ -44,6 +53,7 @@ public class JvProductionController implements Serializable {
     private Integer periodYear;
     private Integer periodMonth;
     private FiscalArrangement currentFiscalArrangement;
+    private Contract currentContract;
 
     /**
      * Creates a new instance of JvController
@@ -67,6 +77,19 @@ public class JvProductionController implements Serializable {
                 ? currentProduction.getContract().getFiscalArrangement() : null;
     }
 
+    public JvAfForecastProduction getCurrentAfProduction() {
+        if (currentProduction instanceof JvAfForecastProduction) {
+            return (JvAfForecastProduction) currentProduction;
+        }
+        return null;
+    }
+
+    public void setCurrentAfProduction(JvAfForecastProduction afProduction) {
+        if (afProduction != null) {
+            this.currentProduction = afProduction;
+        }
+    }
+
     public List<JvForecastProduction> getProductions() {
         log.info("ProductionController::getProductions called...");
         loadProductions();
@@ -80,12 +103,8 @@ public class JvProductionController implements Serializable {
 
     public void prepareCreate() {
         log.info("prepareCreate called...");
-        currentProduction = productionBean.createInstance();
-        if (periodYear != null && periodMonth != null) {
-            currentProduction.setPeriodYear(periodYear);
-            currentProduction.setPeriodMonth(periodMonth);
-        }
-        //return currentProduction;
+        currentProduction = null;
+        currentContract = null;
     }
 
     public void destroy() {
@@ -216,6 +235,14 @@ public class JvProductionController implements Serializable {
         this.currentFiscalArrangement = currentFiscalArrangement;
     }
 
+    public Contract getCurrentContract() {
+        return currentContract;
+    }
+
+    public void setCurrentContract(Contract currentContract) {
+        this.currentContract = currentContract;
+    }
+
     public SelectItem[] getContractSelectOne() {
         if (currentFiscalArrangement == null) {
             return null;
@@ -280,6 +307,30 @@ public class JvProductionController implements Serializable {
     public Double getClosingStockSum() {
         Double availabilitySum = getAvailabilitySum();
         return availabilitySum % 950000.0;
+    }
+
+    public boolean isFiscalArrangementAfContract() {
+        return (getCurrentProduction() instanceof JvAfForecastProduction);
+    }
+
+    public void currentContractChanged(AjaxBehaviorEvent event) {
+        log.log(Level.INFO, "Contract Selected...{0}", currentContract);
+        if (currentContract instanceof RegularContract) {
+            currentProduction = new JvForecastProduction();
+        } else if (currentContract instanceof CarryContract) {
+            currentProduction = new JvCaForecastProduction();
+        } else if (currentContract instanceof ModifiedCarryContract) {
+            currentProduction = new JvMcaForecastProduction();
+        } else {
+            return;
+        }
+
+        currentProduction.setContract(currentContract);
+
+        if (periodYear != null && periodMonth != null) {
+            currentProduction.setPeriodYear(periodYear);
+            currentProduction.setPeriodMonth(periodMonth);
+        }
     }
 
 }

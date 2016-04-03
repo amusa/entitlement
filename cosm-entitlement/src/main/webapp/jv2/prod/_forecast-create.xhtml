@@ -5,7 +5,8 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:jsf="http://xmlns.jcp.org/jsf">
 
     <ui:composition>
         <div class="modal fade" id="JvCreateDlg" tabindex="-1" role="dialog" aria-hidden="true">
@@ -18,11 +19,11 @@
                     <h:form id="JvCreateForm">
                         <div class="modal-body">
 
-                            <h:panelGroup id="JvCreatePanel" rendered="#{jvProdController.currentProduction != null}">
+                            <h:panelGroup id="JvCreatePanel">
                                 <div class="row">
                                     <div class="col-md-6 m-b-15">
                                         <h:outputLabel value="Year" for="periodYear"/>
-                                        <h:selectOneMenu id="periodYear" value="#{jvProdController.currentProduction.periodYear}" class="form-control input-sm m-b-10" >                                              
+                                        <h:selectOneMenu id="periodYear" value="#{jvProdController.periodYear}" class="form-control input-sm m-b-10" >                                              
                                             <f:selectItems value="#{generalController.yearsAvailableSelectOne}" var="year" itemValue="#{year.value}"/>   
                                             <f:ajax listener="#{generalController.yearChanged}" event="change" render="periodMonth"/>     
                                         </h:selectOneMenu>                                        
@@ -30,7 +31,7 @@
 
                                     <div class="col-md-6 m-b-15">
                                         <h:outputLabel value="Month" for="periodMonth"/>
-                                        <h:selectOneMenu id="periodMonth" value="#{jvProdController.currentProduction.periodMonth}" class="form-control input-sm m-b-10">                                              
+                                        <h:selectOneMenu id="periodMonth" value="#{jvProdController.periodMonth}" class="form-control input-sm m-b-10">                                              
                                             <f:selectItem itemValue="#{null}" itemLabel="--select--" />
                                             <f:selectItems value="#{generalController.months}" var="mth" itemValue="#{mth.month}" itemLabel="#{mth.monthStr}" />   
                                             <f:ajax />     
@@ -39,18 +40,32 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6 m-b-15">
-                                        <label>Contract</label>
-                                        <h:selectOneMenu id="contract" value="#{jvProdController.currentFiscalArrangement}" class="form-control input-sm m-b-10">                                              
+                                        <label>Fiscal Arrangement</label>
+                                        <h:selectOneMenu id="fiscalArrangement" value="#{jvProdController.currentFiscalArrangement}" class="form-control input-sm m-b-10">                                              
                                             <f:selectItems value="#{fiscalController.fiscalSelectOptions}" />   
-                                            <f:ajax event="change" render="csOptions"/>        
+                                            <f:ajax event="change" render="contracts"/>        
                                         </h:selectOneMenu>
                                     </div>
                                     <div class="col-md-6 m-b-15">
-                                        <h:outputLabel value="Asset/Crude Type" for="csOptions" />
-                                        <h:selectOneMenu id="csOptions" value="#{jvProdController.currentProduction.contract}" class="form-control input-sm m-b-10">
+                                        <h:outputLabel value="Contract" for="contracts" />
+                                        <h:selectOneMenu id="contracts" value="#{jvProdController.currentContract}" class="form-control input-sm m-b-10">
                                             <f:selectItems value="#{jvProdController.contractSelectOne}"/>
-                                            <f:ajax/>
+                                            <f:ajax event="change" listener="#{jvProdController.currentContractChanged}" render="JvCreateForm carryContractInfo"/>
                                         </h:selectOneMenu>
+                                    </div>
+                                </div>
+                                <div class="row" jsf:id="carryContractInfo" jsf:rendered="#{jvProdController.fiscalArrangementAfContract}">
+                                    <div class="col-md-6 m-b-15">
+                                        <h:outputLabel value="Tangible Cost" for="tangible" />
+                                        <h:inputText id="tangible" value="#{jvProdController.currentAfProduction.tangibleCost}" class="form-control input-sm m-b-10">
+                                            <f:ajax />
+                                        </h:inputText>                                                                                                                  
+                                    </div>
+                                    <div class="col-md-6 m-b-15">
+                                        <h:outputLabel value="Intangible Cost" for="intangible" />
+                                        <h:inputText id="intangible" value="#{jvProdController.currentAfProduction.intangibleCost}" class="form-control input-sm m-b-10">
+                                            <f:ajax />
+                                        </h:inputText>                                                                                                                  
                                     </div>
                                 </div>
                                 <div class="row">                                    
@@ -58,7 +73,8 @@
                                         <h:outputLabel value="Daily Prod (bpd)" for="productionVolume" />
                                         <h:inputText id="productionVolume" value="#{jvProdController.currentProduction.productionVolume}" title="Daily Production Volume" class="form-control input-sm" >
                                             <f:ajax event="change" listener="#{jvProdController.productionVolumeChanged}"                                     
-                                                    render="grossVolume openingStock closingStock ownShareEntitlement partnerShareEntitlement availability lifting cargoes" />
+                                                    render="grossVolume openingStock closingStock ownShareEntitlement partnerShareEntitlement availability lifting cargoes" 
+                                                    execute="contract"/>
                                         </h:inputText>
                                     </div>
                                     <div class="col-md-6 m-b-15">

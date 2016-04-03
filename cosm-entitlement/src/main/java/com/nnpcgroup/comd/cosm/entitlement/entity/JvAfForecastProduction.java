@@ -17,9 +17,27 @@ import javax.persistence.Entity;
 public class JvAfForecastProduction extends JvForecastProduction {
 
     private static final long serialVersionUID = 2917192116735019964L;
-    
+
+    private Double tangibleCost;
+    private Double intangibleCost;
+
     public JvAfForecastProduction() {
     }
-        
-   
+
+    public Double getTangibleCost() {
+        return tangibleCost;
+    }
+
+    public void setTangibleCost(Double tangibleCost) {
+        this.tangibleCost = tangibleCost;
+    }
+
+    public Double getIntangibleCost() {
+        return intangibleCost;
+    }
+
+    public void setIntangibleCost(Double intangibleCost) {
+        this.intangibleCost = intangibleCost;
+    }
+
 }

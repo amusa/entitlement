@@ -173,10 +173,9 @@
                                             <h:commandLink  pt:data-target="#JvCreateDlg" pt:look="warning" pt:data-toggle="modal" >
                                                 <span class="icon">&#61943;</span>
                                                 #{bundle.Create}
-                                                <f:ajax event="click" render="JvCreateForm" listener="#{jvProdController.prepareCreate}" />
+                                                <f:ajax event="click" render="JvCreateForm" listener="#{jvProdController.prepareCreate}"/>
                                             </h:commandLink>                                       
                                         </li>
-
                                         <li>
                                             <h:commandLink pt:data-target="#JvViewDlg" pt:look="warning" pt:data-toggle="modal">
                                                 <span class="icon">&#61698;</span>
@@ -211,7 +210,7 @@
                                 <button jsf:id="createButton" look="warning" data-target="#JvCreateDlg" data-toggle="modal" class="btn m-r-5">
                                     <span class="icon">&#61943;</span>
                                     #{bundle.Create}
-                                    <f:ajax event="click" render="JvCreateForm" listener="#{jvProdController.prepareCreate}" />                                    
+                                    <f:ajax event="click" render="JvCreateForm"  listener="#{jvProdController.prepareCreate}"/>                                    
                                 </button>
 
                                 <button jsf:id="viewButton" look="warning" data-target="#JvViewDlg" data-toggle="modal" class="btn m-r-5">

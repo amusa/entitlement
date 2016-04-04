@@ -6,14 +6,14 @@
 package com.nnpcgroup.cosm.ejb.forecast.jv;
 
 import com.nnpcgroup.cosm.ejb.*;
+import com.nnpcgroup.cosm.entity.forecast.jv.RegularForecast;
 
 /**
  *
  * @author 18359
- * @param <T>
  */
-public interface JvForecastServices<T> extends ProductionServices<T> {
+public interface JvRegularForecastServices extends JvForecastServices<RegularForecast> {
 
-    public T computeGrossProduction(T production);
+    
    
 }

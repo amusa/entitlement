@@ -5,14 +5,15 @@
  */
 package com.nnpcgroup.cosm.ejb.forecast.jv;
 
-import com.nnpcgroup.cosm.entity.forecast.jv.RegularForecast;
+import com.nnpcgroup.cosm.entity.forecast.jv.AlternativeFundingForecast;
 
 /**
  *
  * @author 18359
+ * @param <T>
  */
-public interface JvRegularForecastServices extends JvForecastServices<RegularForecast> {
+public interface JvAlternativeFundingForecastServices<T extends AlternativeFundingForecast> extends JvForecastServices<T> {
 
-    
+   
    
 }

@@ -12,6 +12,6 @@ import com.nnpcgroup.cosm.entity.production.jv.RegularProduction;
  * @author 18359
 
  */
-public interface RegularProductionServices extends JvProductionServices<RegularProduction> {
+public interface RegularProductionServices extends JvProductionServices<RegularProduction>{
     
 }

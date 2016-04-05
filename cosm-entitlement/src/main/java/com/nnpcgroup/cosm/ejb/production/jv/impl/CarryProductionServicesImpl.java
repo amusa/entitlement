@@ -17,9 +17,9 @@ public abstract class CarryProductionServicesImpl extends AlternativeFundingProd
 
     private static final Logger LOG = Logger.getLogger(CarryProductionServicesImpl.class.getName());
 
-    public CarryProductionServicesImpl(Class<CarryProduction> entityClass) {
-        super(entityClass);
+    public CarryProductionServicesImpl() {
+        super(CarryProduction.class);
     }
 
-    
+       
 }

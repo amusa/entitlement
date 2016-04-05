@@ -5,13 +5,14 @@
  */
 package com.nnpcgroup.cosm.ejb.production.jv;
 
+import com.nnpcgroup.cosm.entity.production.jv.AlternativeFundingProduction;
+
 /**
  *
  * @author 18359
  * @param <T>
-
  */
-public interface AlternativeFundingProductionServices<T> extends JvProductionServices<T> {
+public interface AlternativeFundingProductionServices<T extends AlternativeFundingProduction> extends JvProductionServices<T>{
     
     
 }

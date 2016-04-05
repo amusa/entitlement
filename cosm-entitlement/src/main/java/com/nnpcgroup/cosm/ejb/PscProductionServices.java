@@ -12,6 +12,6 @@ import com.nnpcgroup.cosm.entity.PscProduction;
  * @author 18359
  * @param <T>
  */
-public interface PscProductionServices<T extends PscProduction> extends ProductionServices<T> {
+public interface PscProductionServices<T extends PscProduction> extends CommonServices<T> {
     
 }

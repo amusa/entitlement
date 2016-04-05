@@ -15,7 +15,7 @@ import java.util.List;
  * @author 18359
  * @param <T>
  */
-public interface ProductionServices<T> extends AbstractCrudServices<T> {
+public interface CommonServices<T> extends AbstractCrudServices<T> {
 
     public List<T> findByYearAndMonth(int year, int month);
 

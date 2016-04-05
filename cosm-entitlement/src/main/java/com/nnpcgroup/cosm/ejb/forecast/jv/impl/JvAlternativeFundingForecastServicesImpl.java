@@ -6,9 +6,9 @@
 package com.nnpcgroup.cosm.ejb.forecast.jv.impl;
 
 import com.nnpcgroup.cosm.controller.GeneralController;
-import com.nnpcgroup.cosm.ejb.forecast.jv.JvForecastServices;
-import com.nnpcgroup.cosm.ejb.impl.CommonServicesImpl;
+import com.nnpcgroup.cosm.ejb.forecast.jv.JvAlternativeFundingForecastServices;
 import com.nnpcgroup.cosm.entity.Contract;
+import com.nnpcgroup.cosm.entity.forecast.jv.AlternativeFundingForecast;
 import com.nnpcgroup.cosm.entity.forecast.jv.Forecast;
 import java.util.List;
 import java.util.logging.Level;
@@ -22,9 +22,9 @@ import javax.persistence.PersistenceContext;
  * @author 18359
  * @param <T>
  */
-public abstract class JvForecastServicesImpl<T extends Forecast> extends CommonServicesImpl<T> implements JvForecastServices<T> {
+public abstract class JvAlternativeFundingForecastServicesImpl<T extends AlternativeFundingForecast> extends JvForecastServicesImpl<T> implements JvAlternativeFundingForecastServices<T>{
 
-    private static final Logger log = Logger.getLogger(JvForecastServicesImpl.class.getName());
+    private static final Logger log = Logger.getLogger(JvAlternativeFundingForecastServicesImpl.class.getName());
 
     @PersistenceContext(unitName = "entitlementPU")
     private EntityManager em;
@@ -32,7 +32,7 @@ public abstract class JvForecastServicesImpl<T extends Forecast> extends CommonS
     @Inject
     GeneralController genController;
 
-    public JvForecastServicesImpl(Class<T> entityClass) {
+    public JvAlternativeFundingForecastServicesImpl(Class<T> entityClass) {
         super(entityClass);
     }
 

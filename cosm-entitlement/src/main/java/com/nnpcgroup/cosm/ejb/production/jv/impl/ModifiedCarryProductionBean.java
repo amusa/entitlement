@@ -17,18 +17,52 @@ import javax.ejb.Stateless;
  */
 @Stateless
 @Local(ModifiedCarryProductionServices.class)
-public class ModifiedCarryProductionBean extends ModifiedCarryProductionServicesImpl implements ModifiedCarryProductionServices{
+public class ModifiedCarryProductionBean extends ModifiedCarryProductionServicesImpl implements ModifiedCarryProductionServices {
 
     private static final Logger LOG = Logger.getLogger(ModifiedCarryProductionBean.class.getName());
 
     public ModifiedCarryProductionBean() {
         super(ModifiedCarryProduction.class);
-        LOG.info("ProductionBean::constructor activated...");
-
     }
 
-   
-   
-   
-    
+    @Override
+    public ModifiedCarryProduction computeEntitlement(ModifiedCarryProduction production) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public ModifiedCarryProduction createInstance() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public ModifiedCarryProduction computeClosingStock(ModifiedCarryProduction production) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public ModifiedCarryProduction computeAvailability(ModifiedCarryProduction production) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public ModifiedCarryProduction liftingChanged(ModifiedCarryProduction production) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public ModifiedCarryProduction grossProductionChanged(ModifiedCarryProduction production) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public ModifiedCarryProduction computeStockAdjustment(ModifiedCarryProduction production) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public ModifiedCarryProduction enrich(ModifiedCarryProduction production) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }

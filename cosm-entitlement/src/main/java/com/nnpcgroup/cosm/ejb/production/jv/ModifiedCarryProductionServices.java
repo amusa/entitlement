@@ -11,6 +11,6 @@ import com.nnpcgroup.cosm.entity.production.jv.ModifiedCarryProduction;
  *
  * @author 18359
  */
-public interface ModifiedCarryProductionServices extends AlternativeFundingProductionServices<ModifiedCarryProduction> {
+public interface ModifiedCarryProductionServices extends AlternativeFundingProductionServices<ModifiedCarryProduction>{
     
 }

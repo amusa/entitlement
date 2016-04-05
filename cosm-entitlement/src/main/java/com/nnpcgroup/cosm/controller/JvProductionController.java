@@ -24,7 +24,6 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.faces.validator.ValidatorException;
-import javax.inject.Inject;
 
 /**
  *
@@ -173,7 +172,7 @@ public class JvProductionController implements Serializable {
     public void actualize(Production production) {
         LOG.log(Level.INFO, "************JvActualProductionController::actualizing {0}...", production);
 
-        currentProduction = productionBean.findByContractPeriod(
+        currentProduction = (Production)productionBean.findByContractPeriod(
                 production.getPeriodYear(),
                 production.getPeriodMonth(),
                 production.getContract());

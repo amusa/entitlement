@@ -10,6 +10,7 @@ import com.nnpcgroup.cosm.entity.production.jv.RegularProduction;
 import com.nnpcgroup.cosm.entity.EquityType;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
 import com.nnpcgroup.cosm.entity.JointVenture;
+import com.nnpcgroup.cosm.entity.production.jv.Production;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,7 +27,7 @@ import javax.persistence.criteria.Root;
  */
 @Stateless
 @Local(RegularProductionServices.class)
-public class RegularProductionBean extends JvProductionServicesImpl<RegularProduction> implements RegularProductionServices {
+public class RegularProductionBean extends RegularProductionServicesImpl implements RegularProductionServices{
 
     private static final Logger log = Logger.getLogger(RegularProductionBean.class.getName());
 
@@ -201,6 +202,12 @@ public class RegularProductionBean extends JvProductionServicesImpl<RegularProdu
         return production;
 
     }
-   
+
+    @Override
+    public RegularProduction enrich(RegularProduction production) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    
     
 }

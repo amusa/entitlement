@@ -6,7 +6,6 @@
 package com.nnpcgroup.cosm.ejb.impl;
 
 import com.nnpcgroup.cosm.controller.GeneralController;
-import com.nnpcgroup.cosm.ejb.ProductionServices;
 import com.nnpcgroup.cosm.entity.Contract;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
 import com.nnpcgroup.cosm.entity.Terminal;
@@ -22,15 +21,16 @@ import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import com.nnpcgroup.cosm.ejb.CommonServices;
 
 /**
  *
  * @author 18359
  * @param <T>
  */
-public abstract class ProductionServicesImpl<T> extends AbstractCrudServicesImpl<T> implements ProductionServices<T> {
+public abstract class CommonServicesImpl<T> extends AbstractCrudServicesImpl<T> implements CommonServices<T> {
 
-    private static final Logger log = Logger.getLogger(ProductionServicesImpl.class.getName());
+    private static final Logger log = Logger.getLogger(CommonServicesImpl.class.getName());
 
     @PersistenceContext(unitName = "entitlementPU")
     private EntityManager em;
@@ -38,7 +38,7 @@ public abstract class ProductionServicesImpl<T> extends AbstractCrudServicesImpl
     @Inject
     GeneralController genController;
 
-    public ProductionServicesImpl(Class<T> entityClass) {
+    public CommonServicesImpl(Class<T> entityClass) {
         super(entityClass);
     }
 

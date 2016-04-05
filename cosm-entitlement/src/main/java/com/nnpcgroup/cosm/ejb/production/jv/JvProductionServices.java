@@ -6,13 +6,14 @@
 package com.nnpcgroup.cosm.ejb.production.jv;
 
 import com.nnpcgroup.cosm.ejb.*;
+import com.nnpcgroup.cosm.entity.production.jv.Production;
 
 /**
  *
  * @author 18359
  * @param <T>
  */
-public interface JvProductionServices<T> extends ProductionServices<T> {
+public interface JvProductionServices<T extends Production> extends CommonServices<T>{
 
    
 }

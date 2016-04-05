@@ -6,7 +6,7 @@
 package com.nnpcgroup.cosm.controller;
 
 import com.nnpcgroup.cosm.controller.util.ProductionDataModel;
-import com.nnpcgroup.cosm.ejb.forecast.jv.JvForecastServices;
+import com.nnpcgroup.cosm.ejb.forecast.jv.JvForecast;
 import com.nnpcgroup.cosm.entity.Terminal;
 import com.nnpcgroup.cosm.entity.forecast.jv.Forecast;
 
@@ -31,7 +31,7 @@ public class JvTerminalBlendController implements Serializable {
     private static final Logger log = Logger.getLogger(JvTerminalBlendController.class.getName());
 
     @EJB
-    private JvForecastServices productionBean;
+    private JvForecast productionBean;
 
     private Forecast currentProduction;
 

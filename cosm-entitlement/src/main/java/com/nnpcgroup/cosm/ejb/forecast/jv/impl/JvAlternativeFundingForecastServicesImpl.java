@@ -43,16 +43,6 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
     }
 
     @Override
-    public abstract List<T> findByYearAndMonth(int year, int month);
-
-        
-    @Override
-    public abstract T computeEntitlement(T forecast);
-
-    @Override
-    public abstract T createInstance();
-
-    @Override
     public T computeOpeningStock(T forecast) {
         Forecast prod = (Forecast) getPreviousMonthProduction(forecast);
         if (prod != null) {

@@ -20,6 +20,8 @@ public abstract class JvCarryForecastServicesImpl extends JvAlternativeFundingFo
     public JvCarryForecastServicesImpl(Class<CarryForecast> entityClass) {
         super(entityClass);
     }
-  
+
+   
+    
     
 }

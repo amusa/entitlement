@@ -9,8 +9,10 @@ import com.nnpcgroup.cosm.controller.GeneralController;
 import com.nnpcgroup.cosm.ejb.forecast.jv.JvForecastServices;
 import com.nnpcgroup.cosm.ejb.impl.CommonServicesImpl;
 import com.nnpcgroup.cosm.entity.Contract;
+import com.nnpcgroup.cosm.entity.EquityType;
+import com.nnpcgroup.cosm.entity.FiscalArrangement;
+import com.nnpcgroup.cosm.entity.JointVenture;
 import com.nnpcgroup.cosm.entity.forecast.jv.Forecast;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.inject.Inject;
@@ -41,17 +43,7 @@ public abstract class JvForecastServicesImpl<T extends Forecast> extends CommonS
         log.info("ForecastBean::setEntityManager() called...");
         return em;
     }
-
-    @Override
-    public abstract List<T> findByYearAndMonth(int year, int month);
-
-        
-    @Override
-    public abstract T computeEntitlement(T forecast);
-
-    @Override
-    public abstract T createInstance();
-
+    
     @Override
     public T computeOpeningStock(T forecast) {
         Forecast prod = (Forecast) getPreviousMonthProduction(forecast);
@@ -145,4 +137,71 @@ public abstract class JvForecastServicesImpl<T extends Forecast> extends CommonS
                 )
         );
     }
+    
+    @Override
+    public T computeEntitlement(T production) {
+        log.info("computing Entitlement...");
+        FiscalArrangement fa;
+        JointVenture jv;
+
+        fa = production.getContract().getFiscalArrangement();
+
+        assert (fa instanceof JointVenture);
+
+        jv = (JointVenture) fa;
+        EquityType et = jv.getEquityType();
+
+        Double ownEntitlement;
+        Double partnerEntitlement;
+        Double grossProd = production.getGrossProduction();
+
+        grossProd = grossProd == null ? 0 : grossProd;
+
+        ownEntitlement = (grossProd
+                * et.getOwnEquity() * 0.01);
+        log.log(Level.INFO, "Own Entitlement=>{0} * {1} * 0.01 = {2}", new Object[]{grossProd, et.getOwnEquity(), ownEntitlement});
+
+        partnerEntitlement = (grossProd
+                * et.getPartnerEquity() * 0.01);
+        log.log(Level.INFO, "Partner Entitlement=>{0} * {1} * 0.01 = {2}", new Object[]{grossProd, et.getPartnerEquity(), partnerEntitlement});
+
+        production.setOwnShareEntitlement(ownEntitlement);
+        production.setPartnerShareEntitlement(partnerEntitlement);
+
+        return production;
+    }
+
+    @Override
+    public T computeAvailability(T production) {
+        Double availability, partnerAvailability;
+        Double ownEntitlement = production.getOwnShareEntitlement();
+        Double partnerEntitlement = production.getPartnerShareEntitlement();
+        Double openingStock = production.getOpeningStock();
+        Double partnerOpeningStock = production.getPartnerOpeningStock();
+
+        availability = ownEntitlement + openingStock;
+        partnerAvailability = partnerEntitlement + partnerOpeningStock;
+
+        production.setAvailability(availability);
+        production.setPartnerAvailability(partnerAvailability);
+
+        return production;
+    }
+
+    @Override
+    public T computeClosingStock(T production) {
+        Double closingStock, partnerClosingStock;
+        Double availability = production.getAvailability();
+        Double partnerAvailability = production.getPartnerAvailability();
+        Double lifting = production.getLifting();
+        Double partnerLifting = production.getPartnerLifting();
+
+        closingStock = availability - lifting;
+        partnerClosingStock = partnerAvailability - partnerLifting;
+        production.setClosingStock(closingStock);
+        production.setPartnerClosingStock(partnerClosingStock);
+
+        return production;
+    }
+
 }

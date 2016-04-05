@@ -111,7 +111,7 @@ public abstract class JvProductionServicesImpl<T extends Production> extends Com
 
         return productions;
     }
-
+    
     @Override
     public T computeEntitlement(T production) {
         LOG.info("computing Entitlement...");
@@ -177,5 +177,66 @@ public abstract class JvProductionServicesImpl<T extends Production> extends Com
 
         return production;
     }
+    
+    @Override
+    public T liftingChanged(T production) {
+        LOG.log(Level.INFO, "Lifting changed {0}...", production);
+        return computeClosingStock(
+                computeAvailability(
+                        computeStockAdjustment(
+                                computeClosingStock(
+                                        computeAvailability(
+                                                stockAdjustmentReset(production)
+                                        )
+                                )
+                        )
+                )
+        );
+    }
+    
+    @Override
+    public T computeStockAdjustment(T production) {
+        Double closingStock = production.getClosingStock();
+
+        if (closingStock < 0) {
+            production.setClosingStock(0.0);
+            production.setStockAdjustment(-1 * closingStock);
+            production.setPartnerStockAdjustment(closingStock);
+        }
+
+        Double partnerClosingStock = production.getPartnerClosingStock();
+
+        if (partnerClosingStock < 0) {
+            production.setPartnerClosingStock(0.0);
+            production.setPartnerStockAdjustment(-1 * partnerClosingStock);
+            production.setStockAdjustment(partnerClosingStock);
+        }
+
+        return production;
+
+    }
+    
+    @Override
+    public T grossProductionChanged(T production) {
+        LOG.log(Level.INFO, "Gross production changed");
+        return computeClosingStock(
+                computeLifting(
+                        computeAvailability(
+                                computeEntitlement(
+                                        computeOpeningStock(
+                                                stockAdjustmentReset(production)
+                                        )
+                                )
+                        )
+                )
+        );
+    }
+    
+    public T stockAdjustmentReset(T production) {
+        production.setStockAdjustment(null);
+        production.setPartnerStockAdjustment(null);
+        return production;
+    }
+
 
 }

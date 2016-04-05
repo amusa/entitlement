@@ -8,7 +8,7 @@ package com.nnpcgroup.cosm.controller;
 import com.nnpcgroup.cosm.controller.util.JsfUtil;
 import com.nnpcgroup.cosm.controller.util.ProductionDataModel;
 import com.nnpcgroup.cosm.ejb.contract.ContractServices;
-import com.nnpcgroup.cosm.ejb.forecast.jv.JvForecastServices;
+import com.nnpcgroup.cosm.ejb.forecast.jv.JvForecast;
 import com.nnpcgroup.cosm.entity.CarryContract;
 import com.nnpcgroup.cosm.entity.Contract;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
@@ -44,7 +44,7 @@ public class JvForecastController implements Serializable {
     private static final Logger log = Logger.getLogger(JvForecastController.class.getName());
 
     @EJB
-    private JvForecastServices productionBean;
+    private JvForecast productionBean;
 
     @EJB
     private ContractServices contractBean;

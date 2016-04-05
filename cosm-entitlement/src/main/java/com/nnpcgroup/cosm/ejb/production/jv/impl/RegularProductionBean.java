@@ -10,7 +10,6 @@ import com.nnpcgroup.cosm.entity.production.jv.RegularProduction;
 import com.nnpcgroup.cosm.entity.EquityType;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
 import com.nnpcgroup.cosm.entity.JointVenture;
-import com.nnpcgroup.cosm.entity.production.jv.Production;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -106,45 +105,7 @@ public class RegularProductionBean extends RegularProductionServicesImpl impleme
                 computeAvailability(production)
         );
     }
-
-    @Override
-    public RegularProduction liftingChanged(RegularProduction production) {
-        log.log(Level.INFO, "Lifting changed {0}...", production);
-        return computeClosingStock(
-                computeAvailability(
-                        computeStockAdjustment(
-                                computeClosingStock(
-                                        computeAvailability(
-                                                stockAdjustmentReset(production)
-                                        )
-                                )
-                        )
-                )
-        );
-    }
-
-    public RegularProduction stockAdjustmentReset(RegularProduction production) {
-        production.setStockAdjustment(null);
-        production.setPartnerStockAdjustment(null);
-        return production;
-    }
-
-    @Override
-    public RegularProduction grossProductionChanged(RegularProduction production) {
-        log.log(Level.INFO, "Gross production changed");
-        return computeClosingStock(
-                computeLifting(
-                        computeAvailability(
-                                computeEntitlement(
-                                        computeOpeningStock(
-                                                stockAdjustmentReset(production)
-                                        )
-                                )
-                        )
-                )
-        );
-    }
-
+    
     @Override
     public RegularProduction computeAvailability(RegularProduction production) {
         Double availability, partnerAvailability;
@@ -181,33 +142,5 @@ public class RegularProductionBean extends RegularProductionServicesImpl impleme
         return production;
     }
 
-    @Override
-    public RegularProduction computeStockAdjustment(RegularProduction production) {
-        Double closingStock = production.getClosingStock();
-
-        if (closingStock < 0) {
-            production.setClosingStock(0.0);
-            production.setStockAdjustment(-1 * closingStock);
-            production.setPartnerStockAdjustment(closingStock);
-        }
-
-        Double partnerClosingStock = production.getPartnerClosingStock();
-
-        if (partnerClosingStock < 0) {
-            production.setPartnerClosingStock(0.0);
-            production.setPartnerStockAdjustment(-1 * partnerClosingStock);
-            production.setStockAdjustment(partnerClosingStock);
-        }
-
-        return production;
-
-    }
-
-    @Override
-    public RegularProduction enrich(RegularProduction production) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    
-    
+       
 }

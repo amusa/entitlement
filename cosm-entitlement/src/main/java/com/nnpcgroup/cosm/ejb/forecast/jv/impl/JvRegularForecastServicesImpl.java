@@ -16,7 +16,7 @@ import javax.persistence.PersistenceContext;
  *
  * @author 18359
  */
-public class JvRegularForecastServicesImpl extends JvForecastServicesImpl<RegularForecast> implements JvRegularForecastServices {
+public abstract class JvRegularForecastServicesImpl extends JvForecastServicesImpl<RegularForecast> implements JvRegularForecastServices {
 
     private static final Logger LOG = Logger.getLogger(JvRegularForecastServicesImpl.class.getName());
 
@@ -33,44 +33,5 @@ public class JvRegularForecastServicesImpl extends JvForecastServicesImpl<Regula
         return em;
     }
 
-    @Override
-    public List<RegularForecast> findByYearAndMonth(int year, int month) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public RegularForecast computeEntitlement(RegularForecast forecast) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public RegularForecast createInstance() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public RegularForecast computeClosingStock(RegularForecast production) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public RegularForecast computeAvailability(RegularForecast production) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public RegularForecast liftingChanged(RegularForecast production) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public RegularForecast grossProductionChanged(RegularForecast production) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public RegularForecast computeStockAdjustment(RegularForecast production) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
+    
 }

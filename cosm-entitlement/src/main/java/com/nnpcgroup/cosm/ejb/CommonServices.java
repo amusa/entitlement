@@ -39,12 +39,6 @@ public interface CommonServices<T> extends AbstractCrudServices<T> {
 
     public T computeLifting(T production);
     
-    public T liftingChanged(T production);
-    
-    public T grossProductionChanged(T production);
-    
-    public T computeStockAdjustment(T production);
-    
     public T enrich(T production);
     
     public List<T> getTerminalProduction(int year, int month, Terminal terminal);

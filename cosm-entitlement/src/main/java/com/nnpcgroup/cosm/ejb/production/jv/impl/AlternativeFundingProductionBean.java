@@ -29,46 +29,9 @@ public class AlternativeFundingProductionBean extends AlternativeFundingProducti
         super(entityClass);
     }
 
-    
-    @Override
-    public AlternativeFundingProduction computeEntitlement(AlternativeFundingProduction production) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
     @Override
     public AlternativeFundingProduction createInstance() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new AlternativeFundingProduction();
     }
 
-    @Override
-    public AlternativeFundingProduction computeClosingStock(AlternativeFundingProduction production) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public AlternativeFundingProduction computeAvailability(AlternativeFundingProduction production) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public AlternativeFundingProduction liftingChanged(AlternativeFundingProduction production) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public AlternativeFundingProduction grossProductionChanged(AlternativeFundingProduction production) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public AlternativeFundingProduction computeStockAdjustment(AlternativeFundingProduction production) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public AlternativeFundingProduction enrich(AlternativeFundingProduction production) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-   
-    
 }

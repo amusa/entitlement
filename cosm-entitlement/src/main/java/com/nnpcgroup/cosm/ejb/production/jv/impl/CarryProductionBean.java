@@ -17,48 +17,13 @@ import javax.ejb.Stateless;
  */
 @Stateless
 @Local(CarryProductionServices.class)
-public class CarryProductionBean extends CarryProductionServicesImpl implements CarryProductionServices{
+public class CarryProductionBean extends CarryProductionServicesImpl implements CarryProductionServices {
 
     private static final Logger LOG = Logger.getLogger(CarryProductionBean.class.getName());
 
     @Override
-    public CarryProduction computeEntitlement(CarryProduction production) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
     public CarryProduction createInstance() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public CarryProduction computeClosingStock(CarryProduction production) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public CarryProduction computeAvailability(CarryProduction production) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public CarryProduction liftingChanged(CarryProduction production) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public CarryProduction grossProductionChanged(CarryProduction production) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public CarryProduction computeStockAdjustment(CarryProduction production) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public CarryProduction enrich(CarryProduction production) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new CarryProduction();
     }
 
     

@@ -6,8 +6,14 @@
 package com.nnpcgroup.cosm.controller;
 
 import com.nnpcgroup.cosm.controller.util.JsfUtil;
-import com.nnpcgroup.cosm.ejb.production.jv.JvProductionServices;
+import com.nnpcgroup.cosm.ejb.production.jv.JvProduction;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
+import com.nnpcgroup.cosm.entity.forecast.jv.CarryForecast;
+import com.nnpcgroup.cosm.entity.forecast.jv.Forecast;
+import com.nnpcgroup.cosm.entity.forecast.jv.ModifiedCarryForecast;
+import com.nnpcgroup.cosm.entity.forecast.jv.RegularForecast;
+import com.nnpcgroup.cosm.entity.production.jv.CarryProduction;
+import com.nnpcgroup.cosm.entity.production.jv.ModifiedCarryProduction;
 import com.nnpcgroup.cosm.entity.production.jv.RegularProduction;
 import com.nnpcgroup.cosm.entity.production.jv.Production;
 import javax.inject.Named;
@@ -37,7 +43,7 @@ public class JvProductionController implements Serializable {
     private static final long serialVersionUID = -5506490644508725206L;
 
     @EJB
-    private JvProductionServices productionBean;
+    private JvProduction productionBean;
 
     private Production currentProduction;
     private List<Production> productions;
@@ -169,22 +175,34 @@ public class JvProductionController implements Serializable {
         return JsfUtil.getSelectItems(currentFiscalArrangement.getContracts(), true);
     }
 
-    public void actualize(Production production) {
-        LOG.log(Level.INFO, "************JvActualProductionController::actualizing {0}...", production);
+    public void actualize(Forecast forecast) {
+        LOG.log(Level.INFO, "************actualizing {0}...", forecast);
 
-        currentProduction = (Production)productionBean.findByContractPeriod(
-                production.getPeriodYear(),
-                production.getPeriodMonth(),
-                production.getContract());
-        LOG.log(Level.INFO, "************JvActualProductionController::findByContractStreamPeriod returning {0}...", currentProduction);
+        currentProduction = productionBean.findByContractPeriod(
+                forecast.getPeriodYear(),
+                forecast.getPeriodMonth(),
+                forecast.getContract());
+        LOG.log(Level.INFO, "************findByContractStreamPeriod returning {0}...", currentProduction);
 
         if (currentProduction == null) {
-            LOG.log(Level.INFO, "************JvActualProductionController::actualizing returning new JV Production instance...");
-            currentProduction = new RegularProduction();//productionBean.createInstance(); TODO:evaluate
-            LOG.log(Level.INFO, "************JvActualProductionController::productionBean.createInstance() returning {0}...", currentProduction);
-            currentProduction.setPeriodYear(production.getPeriodYear());
-            currentProduction.setPeriodMonth(production.getPeriodMonth());
-            currentProduction.setContract(production.getContract());
+            LOG.log(Level.INFO, "************actualizing returning new JV Production instance...");
+
+//TODO:find better way to evaluate datatype
+            if (forecast instanceof ModifiedCarryForecast) {
+                currentProduction = new ModifiedCarryProduction();
+            } else if (forecast instanceof CarryForecast) {
+                currentProduction = new CarryProduction();
+            } else if (forecast instanceof RegularForecast) {
+                currentProduction = new RegularProduction();
+            }else{
+                //something is wrong
+                 LOG.log(Level.INFO, "Something is wrong! Forecast type not determined {0}...", forecast);
+            }
+
+            LOG.log(Level.INFO, "************productionBean.createInstance() returning {0}...", currentProduction);
+            currentProduction.setPeriodYear(forecast.getPeriodYear());
+            currentProduction.setPeriodMonth(forecast.getPeriodMonth());
+            currentProduction.setContract(forecast.getContract());
 
             // productionBean.enrich(currentProduction);
         }

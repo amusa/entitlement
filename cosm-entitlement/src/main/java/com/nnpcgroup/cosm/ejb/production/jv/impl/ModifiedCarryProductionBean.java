@@ -26,43 +26,8 @@ public class ModifiedCarryProductionBean extends ModifiedCarryProductionServices
     }
 
     @Override
-    public ModifiedCarryProduction computeEntitlement(ModifiedCarryProduction production) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
     public ModifiedCarryProduction createInstance() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public ModifiedCarryProduction computeClosingStock(ModifiedCarryProduction production) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public ModifiedCarryProduction computeAvailability(ModifiedCarryProduction production) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public ModifiedCarryProduction liftingChanged(ModifiedCarryProduction production) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public ModifiedCarryProduction grossProductionChanged(ModifiedCarryProduction production) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public ModifiedCarryProduction computeStockAdjustment(ModifiedCarryProduction production) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public ModifiedCarryProduction enrich(ModifiedCarryProduction production) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new ModifiedCarryProduction();
     }
 
 }

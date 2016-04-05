@@ -34,7 +34,6 @@ public class RegularForecastBean extends JvRegularForecastServicesImpl implement
     }
 
     
-
     
-    
+   
 }

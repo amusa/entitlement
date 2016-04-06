@@ -7,17 +7,20 @@ package com.nnpcgroup.cosm.ejb.forecast.jv.impl;
 
 import com.nnpcgroup.cosm.ejb.forecast.jv.JvRegularForecastServices;
 import com.nnpcgroup.cosm.entity.forecast.jv.RegularForecast;
+import java.io.Serializable;
 import java.util.logging.Logger;
 import javax.ejb.Local;
 import javax.ejb.Stateless;
+import javax.enterprise.context.Dependent;
 
 /**
  *
  * @author 18359
  */
+@Dependent
 @Stateless
 @Local(JvRegularForecastServices.class)
-public class RegularForecastBean extends JvRegularForecastServicesImpl implements JvRegularForecastServices {
+public class RegularForecastBean extends JvRegularForecastServicesImpl implements JvRegularForecastServices, Serializable {
 
     private static final Logger LOG = Logger.getLogger(RegularForecastBean.class.getName());
 

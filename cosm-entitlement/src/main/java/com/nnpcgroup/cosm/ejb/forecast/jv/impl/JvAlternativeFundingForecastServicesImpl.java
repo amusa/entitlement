@@ -13,6 +13,7 @@ import com.nnpcgroup.cosm.entity.forecast.jv.AlternativeFundingForecast;
 import com.nnpcgroup.cosm.entity.forecast.jv.Forecast;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -22,9 +23,10 @@ import javax.persistence.PersistenceContext;
  * @author 18359
  * @param <T>
  */
+@Dependent
 public abstract class JvAlternativeFundingForecastServicesImpl<T extends AlternativeFundingForecast> extends JvForecastServicesImpl<T> implements JvAlternativeFundingForecastServices<T> {
 
-    private static final Logger log = Logger.getLogger(JvAlternativeFundingForecastServicesImpl.class.getName());
+    private static final Logger LOG = Logger.getLogger(JvAlternativeFundingForecastServicesImpl.class.getName());
 
     @PersistenceContext(unitName = "entitlementPU")
     private EntityManager em;
@@ -38,7 +40,7 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
 
     @Override
     protected EntityManager getEntityManager() {
-        log.info("ForecastBean::setEntityManager() called...");
+        LOG.info("ForecastBean::setEntityManager() called...");
         return em;
     }
 
@@ -84,7 +86,7 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
         int days = genController.daysOfMonth(periodYear, periodMonth);
         Double grossProd = prodVolume * days;
 
-        log.log(Level.INFO, "Gross Forecast=>{0} * {1} = {2}", new Object[]{grossProd, days, grossProd});
+        LOG.log(Level.INFO, "Gross Forecast=>{0} * {1} = {2}", new Object[]{grossProd, days, grossProd});
 
         ((Forecast) forecast).setGrossProduction(grossProd);
         return forecast;
@@ -92,7 +94,7 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
 
     @Override
     public T openingStockChanged(T forecast) {
-        log.log(Level.INFO, "Opening Stock changed {0}...", forecast);
+        LOG.log(Level.INFO, "Opening Stock changed {0}...", forecast);
         return computeClosingStock(
                 computeLifting(
                         computeAvailability(forecast)
@@ -122,7 +124,7 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
 
     @Override
     public T enrich(T production) {
-        log.log(Level.INFO, "Enriching forecast {0}...", production);
+        LOG.log(Level.INFO, "Enriching forecast {0}...", production);
         return computeClosingStock(
                 computeLifting(
                         computeAvailability(

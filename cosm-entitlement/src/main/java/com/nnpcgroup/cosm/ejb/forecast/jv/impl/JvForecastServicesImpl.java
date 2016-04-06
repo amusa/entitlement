@@ -13,8 +13,10 @@ import com.nnpcgroup.cosm.entity.EquityType;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
 import com.nnpcgroup.cosm.entity.JointVenture;
 import com.nnpcgroup.cosm.entity.forecast.jv.Forecast;
+import java.io.Serializable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -24,9 +26,10 @@ import javax.persistence.PersistenceContext;
  * @author 18359
  * @param <T>
  */
-public abstract class JvForecastServicesImpl<T extends Forecast> extends CommonServicesImpl<T> implements JvForecastServices<T> {
+@Dependent
+public abstract class JvForecastServicesImpl<T extends Forecast> extends CommonServicesImpl<T> implements JvForecastServices<T>, Serializable {
 
-    private static final Logger log = Logger.getLogger(JvForecastServicesImpl.class.getName());
+    private static final Logger LOG = Logger.getLogger(JvForecastServicesImpl.class.getName());
 
     @PersistenceContext(unitName = "entitlementPU")
     private EntityManager em;
@@ -40,7 +43,7 @@ public abstract class JvForecastServicesImpl<T extends Forecast> extends CommonS
 
     @Override
     protected EntityManager getEntityManager() {
-        log.info("ForecastBean::setEntityManager() called...");
+        LOG.info("ForecastBean::setEntityManager() called...");
         return em;
     }
     
@@ -86,7 +89,7 @@ public abstract class JvForecastServicesImpl<T extends Forecast> extends CommonS
         int days = genController.daysOfMonth(periodYear, periodMonth);
         Double grossProd = prodVolume * days;
 
-        log.log(Level.INFO, "Gross Forecast=>{0} * {1} = {2}", new Object[]{grossProd, days, grossProd});
+        LOG.log(Level.INFO, "Gross Forecast=>{0} * {1} = {2}", new Object[]{grossProd, days, grossProd});
 
         ((Forecast) forecast).setGrossProduction(grossProd);
         return forecast;
@@ -94,7 +97,7 @@ public abstract class JvForecastServicesImpl<T extends Forecast> extends CommonS
     
     @Override
     public T openingStockChanged(T forecast){
-         log.log(Level.INFO, "Opening Stock changed {0}...", forecast);
+         LOG.log(Level.INFO, "Opening Stock changed {0}...", forecast);
         return computeClosingStock(
                 computeLifting(
                         computeAvailability(forecast)
@@ -124,7 +127,7 @@ public abstract class JvForecastServicesImpl<T extends Forecast> extends CommonS
     
     @Override
     public T enrich(T production) {
-        log.log(Level.INFO, "Enriching production {0}...", production);
+        LOG.log(Level.INFO, "Enriching production {0}...", production);
         return computeClosingStock(
                 computeLifting(
                         computeAvailability(
@@ -140,7 +143,7 @@ public abstract class JvForecastServicesImpl<T extends Forecast> extends CommonS
     
     @Override
     public T computeEntitlement(T production) {
-        log.info("computing Entitlement...");
+        LOG.info("computing Entitlement...");
         FiscalArrangement fa;
         JointVenture jv;
 
@@ -159,11 +162,11 @@ public abstract class JvForecastServicesImpl<T extends Forecast> extends CommonS
 
         ownEntitlement = (grossProd
                 * et.getOwnEquity() * 0.01);
-        log.log(Level.INFO, "Own Entitlement=>{0} * {1} * 0.01 = {2}", new Object[]{grossProd, et.getOwnEquity(), ownEntitlement});
+        LOG.log(Level.INFO, "Own Entitlement=>{0} * {1} * 0.01 = {2}", new Object[]{grossProd, et.getOwnEquity(), ownEntitlement});
 
         partnerEntitlement = (grossProd
                 * et.getPartnerEquity() * 0.01);
-        log.log(Level.INFO, "Partner Entitlement=>{0} * {1} * 0.01 = {2}", new Object[]{grossProd, et.getPartnerEquity(), partnerEntitlement});
+        LOG.log(Level.INFO, "Partner Entitlement=>{0} * {1} * 0.01 = {2}", new Object[]{grossProd, et.getPartnerEquity(), partnerEntitlement});
 
         production.setOwnShareEntitlement(ownEntitlement);
         production.setPartnerShareEntitlement(partnerEntitlement);

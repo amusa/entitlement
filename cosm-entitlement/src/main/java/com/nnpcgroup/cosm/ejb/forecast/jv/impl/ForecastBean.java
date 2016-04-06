@@ -8,10 +8,11 @@ package com.nnpcgroup.cosm.ejb.forecast.jv.impl;
 import com.nnpcgroup.cosm.ejb.forecast.jv.JvForecast;
 import com.nnpcgroup.cosm.entity.forecast.jv.Forecast;
 import com.nnpcgroup.cosm.entity.forecast.jv.RegularForecast;
-import java.util.List;
+import java.io.Serializable;
 import java.util.logging.Logger;
 import javax.ejb.Local;
 import javax.ejb.Stateless;
+import javax.enterprise.context.Dependent;
 
 /**
  *
@@ -19,26 +20,21 @@ import javax.ejb.Stateless;
  */
 @Stateless
 @Local(JvForecast.class)
-public class ForecastBean extends JvForecastServicesImpl<Forecast> implements JvForecast{
+@Dependent
+public class ForecastBean extends JvForecastServicesImpl<Forecast> implements JvForecast, Serializable{
 
-    private static final Logger log = Logger.getLogger(ForecastBean.class.getName());
+    private static final Logger LOG = Logger.getLogger(ForecastBean.class.getName());
 
     public ForecastBean() {
         super(Forecast.class);
-        log.info("Constructor activated...");
+        LOG.info("Constructor activated...");
 
     }
 
     @Override
     public Forecast createInstance() {
-        log.info("Creating new RegularForecast Instance...");
+        LOG.info("Creating new RegularForecast Instance...");
         return new RegularForecast();
     }
-
-    @Override
-    public List<Forecast> findByYearAndMonth(int year, int month) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-  
-   
+    
 }

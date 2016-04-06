@@ -8,7 +8,11 @@ package com.nnpcgroup.cosm.controller;
 import com.nnpcgroup.cosm.controller.util.JsfUtil;
 import com.nnpcgroup.cosm.controller.util.ProductionDataModel;
 import com.nnpcgroup.cosm.ejb.contract.ContractServices;
+import com.nnpcgroup.cosm.ejb.forecast.jv.JvModifiedCarryForecastServices;
+import com.nnpcgroup.cosm.ejb.forecast.jv.JvCarryForecastServices;
 import com.nnpcgroup.cosm.ejb.forecast.jv.JvForecast;
+import com.nnpcgroup.cosm.ejb.forecast.jv.JvForecastServices;
+import com.nnpcgroup.cosm.ejb.forecast.jv.JvRegularForecastServices;
 import com.nnpcgroup.cosm.entity.contract.CarryContract;
 import com.nnpcgroup.cosm.entity.contract.Contract;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
@@ -29,8 +33,9 @@ import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.enterprise.context.SessionScoped;
-import javax.faces.event.AjaxBehaviorEvent;
+import javax.enterprise.inject.Produces;
 import javax.faces.model.SelectItem;
+import javax.inject.Inject;
 
 /**
  *
@@ -41,10 +46,21 @@ import javax.faces.model.SelectItem;
 public class JvForecastController implements Serializable {
 
     private static final long serialVersionUID = -7596150432081506756L;
-    private static final Logger log = Logger.getLogger(JvForecastController.class.getName());
+    private static final Logger LOG = Logger.getLogger(JvForecastController.class.getName());
+
+    @Inject
+    private JvForecastServices forecastBean;
+
+//    @EJB
+//    private JvForecast defaultForecastBean;
+    @EJB
+    private JvRegularForecastServices regForecastBean;
 
     @EJB
-    private JvForecast productionBean;
+    private JvCarryForecastServices caForecastBean;
+//
+//    @EJB
+//    private JvModifiedCarryForecastServices mcaForecastBean;
 
     @EJB
     private ContractServices contractBean;
@@ -63,7 +79,28 @@ public class JvForecastController implements Serializable {
      * Creates a new instance of JvController
      */
     public JvForecastController() {
-        log.info("ProductionController::constructor activated...");
+        LOG.info("ProductionController::constructor activated...");
+    }
+
+    @Produces
+    public JvForecastServices produceForecastBean() throws Exception {
+        if (currentContract instanceof RegularContract) {
+            LOG.log(Level.INFO, "Returning RegularForecast bean...{0}", regForecastBean);
+            return regForecastBean;
+        } else if (currentContract instanceof CarryContract) {
+            LOG.log(Level.INFO, "Returning CarryForecast bean...{0}", caForecastBean);
+            return caForecastBean;
+        }
+//        else if (currentContract instanceof ModifiedCarryContract) {
+//            LOG.log(Level.INFO, "Returning ModifiedCarryForecast bean...{0}", mcaForecastBean);
+//            return mcaForecastBean;
+//        } else {
+//            //throw new Exception("Unknown Contract encountered!");
+//            LOG.log(Level.INFO, "Returning default Forecast bean...{0}", defaultForecastBean);
+//            return defaultForecastBean;
+//        }
+        LOG.log(Level.INFO, "Returning Default bean...{0}", regForecastBean);
+        return regForecastBean;
     }
 
     public ProductionDataModel getDataModel() {
@@ -75,7 +112,7 @@ public class JvForecastController implements Serializable {
     }
 
     public void setCurrentProduction(Forecast currentProduction) {
-        log.info("ProductionController::setProduction called...");
+        LOG.info("ProductionController::setProduction called...");
         this.currentProduction = currentProduction;
         this.currentFiscalArrangement = (currentProduction != null)
                 ? currentProduction.getContract().getFiscalArrangement() : null;
@@ -95,24 +132,24 @@ public class JvForecastController implements Serializable {
     }
 
     public List<Forecast> getProductions() {
-        log.info("ProductionController::getProductions called...");
+        LOG.info("ProductionController::getProductions called...");
         loadProductions();
         return productions;
     }
 
     public void setProductions(List<Forecast> productions) {
-        log.info("ProductionController::setProductions called...");
+        LOG.info("ProductionController::setProductions called...");
         this.productions = productions;
     }
 
     public void prepareCreate() {
-        log.info("prepareCreate called...");
+        LOG.info("prepareCreate called...");
         currentProduction = null;
         currentContract = null;
     }
 
     public void destroy() {
-        log.log(Level.INFO, "Deleting {0}...", currentProduction);
+        LOG.log(Level.INFO, "Deleting {0}...", currentProduction);
         persist(JsfUtil.PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("ProductionDeleted"));
         if (!JsfUtil.isValidationFailed()) {
             dataModel.removeItem(currentProduction);
@@ -147,9 +184,9 @@ public class JvForecastController implements Serializable {
             //setEmbeddableKeys();
             try {
                 if (persistAction != JsfUtil.PersistAction.DELETE) {
-                    productionBean.edit(currentProduction);
+                    forecastBean.edit(currentProduction);
                 } else {
-                    productionBean.remove(currentProduction);
+                    forecastBean.remove(currentProduction);
                 }
                 JsfUtil.addSuccessMessage(successMessage);
             } catch (EJBException ex) {
@@ -173,23 +210,23 @@ public class JvForecastController implements Serializable {
     public void loadProductions() {
         if (periodYear != null && periodMonth != null) {
             if (currentFiscalArrangement == null) {
-                productions = productionBean.findByYearAndMonth(periodYear, periodMonth);
+                productions = forecastBean.findByYearAndMonth(periodYear, periodMonth);
             } else {
-                productions = productionBean.findByContractPeriod(periodYear, periodMonth, currentFiscalArrangement);
+                productions = forecastBean.findByContractPeriod(periodYear, periodMonth, currentFiscalArrangement);
             }
             refreshDataModel();
         }
     }
 
     public void refreshDataModel() {
-        log.log(Level.INFO, "Refreshing DataModel...");
+        LOG.log(Level.INFO, "Refreshing DataModel...");
         dataModel = new ProductionDataModel(productions);
     }
 
     public void productionVolumeChanged() {
-        log.log(Level.INFO, "Production Volume changed...");
-        productionBean.enrich(currentProduction);
-        log.log(Level.INFO,
+        LOG.log(Level.INFO, "Production Volume changed...");
+        forecastBean.enrich(currentProduction);
+        LOG.log(Level.INFO,
                 "Production Enriched::Own entmt={0},Partner entmt={1}",
                 new Object[]{currentProduction.getOwnShareEntitlement(),
                     currentProduction.getPartnerShareEntitlement()
@@ -198,13 +235,13 @@ public class JvForecastController implements Serializable {
     }
 
     public void openingStockChanged() {
-        log.log(Level.INFO, "Opening Stock changed...");
-        productionBean.openingStockChanged(currentProduction);
+        LOG.log(Level.INFO, "Opening Stock changed...");
+        forecastBean.openingStockChanged(currentProduction);
     }
 
     public void resetDefaults() {
-        log.log(Level.INFO, "Resetting to default...");
-        productionBean.enrich(currentProduction);
+        LOG.log(Level.INFO, "Resetting to default...");
+        forecastBean.enrich(currentProduction);
     }
 
     private void reset() {
@@ -216,18 +253,18 @@ public class JvForecastController implements Serializable {
     }
 
     public void setPeriodYear(Integer periodYear) {
-        log.log(Level.INFO, "************JvProductionController::setPeriodYear called with value {0}", periodYear);
+        LOG.log(Level.INFO, "************JvProductionController::setPeriodYear called with value {0}", periodYear);
         this.periodYear = periodYear;
     }
 
     public Integer getPeriodMonth() {
-        log.log(Level.INFO, "************JvProductionController::getPeriodMonth called. returning {0}...", periodMonth);
+        LOG.log(Level.INFO, "************JvProductionController::getPeriodMonth called. returning {0}...", periodMonth);
 
         return periodMonth;
     }
 
     public void setPeriodMonth(Integer periodMonth) {
-        log.log(Level.INFO, "************JvProductionController::setPeriodMonth called with value {0}", periodMonth);
+        LOG.log(Level.INFO, "************JvProductionController::setPeriodMonth called with value {0}", periodMonth);
         this.periodMonth = periodMonth;
     }
 
@@ -322,16 +359,18 @@ public class JvForecastController implements Serializable {
     }
 
     public void currentContractChanged(/*AjaxBehaviorEvent event*/) throws Exception {
-        log.log(Level.INFO, "Contract Selected...{0}", currentContract);
+        LOG.log(Level.INFO, "Contract Selected...{0}", currentContract);
         if (currentContract instanceof RegularContract) {
             currentProduction = new RegularForecast();
+            forecastBean = regForecastBean;
         } else if (currentContract instanceof CarryContract) {
             currentProduction = new CarryForecast();
+            forecastBean = caForecastBean;
         } else if (currentContract instanceof ModifiedCarryContract) {
             currentProduction = new ModifiedCarryForecast();
         } else {
-            log.log(Level.INFO, "Undefined contract selection...{0}", currentContract);
-            throw new Exception("Undefined contract type");            
+            LOG.log(Level.INFO, "Undefined contract selection...{0}", currentContract);
+            throw new Exception("Undefined contract type");
         }
 
         currentProduction.setContract(currentContract);

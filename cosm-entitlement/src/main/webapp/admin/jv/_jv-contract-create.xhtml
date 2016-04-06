@@ -13,7 +13,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 jsf:id="createFiscalTitle" class="modal-title">Create Contract for JV Fiscal Arrangement: #{fiscalController.currentFiscal.title}</h4>
+                        <h4 class="modal-title"><h:outputLabel id="contractCreateFiscalTitle" value ="Create Contract for JV Fiscal Arrangement: #{fiscalController.currentFiscal.title}"/></h4>
                     </div>
                     <h:form id="AssetCreateForm">
                         <div class="modal-body">
@@ -45,7 +45,7 @@
                                 <div class="row" jsf:id="carryContractInfo" jsf:rendered="#{contractController.contractType!='REG'}">
                                     <div class="col-md-6 m-b-15">
                                         <h:outputLabel value="Shared Oil Ratio" for="sharedOilRatio" />
-                                        <h:inputText id="sharedOilRatio" value="#{contractController.carrySelected.sharedOilRatio}" class="form-control input-sm m-b-10">
+                                        <h:inputText id="sharedOilRatio" rendered="#{contractController.carrySelected!=null}" value="#{contractController.carrySelected.sharedOilRatio}" class="form-control input-sm m-b-10">
 
                                             <f:ajax />
                                         </h:inputText>                                                                                                                  

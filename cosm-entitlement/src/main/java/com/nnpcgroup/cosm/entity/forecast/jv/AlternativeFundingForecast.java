@@ -14,12 +14,14 @@ import javax.persistence.Entity;
  */
 @Entity
 @DiscriminatorValue("AF")
-public class AlternativeFundingForecast extends Forecast{
+public abstract class AlternativeFundingForecast extends Forecast {
 
     private static final long serialVersionUID = 2917192116735019964L;
 
     private Double tangibleCost;
     private Double intangibleCost;
+    protected Double carryOil;
+    protected Double sharedOil;
 
     public AlternativeFundingForecast() {
     }
@@ -38,6 +40,22 @@ public class AlternativeFundingForecast extends Forecast{
 
     public void setIntangibleCost(Double intangibleCost) {
         this.intangibleCost = intangibleCost;
+    }
+
+    public Double getCarryOil() {
+        return carryOil;
+    }
+
+    public void setCarryOil(Double carryOil) {
+        this.carryOil = carryOil;
+    }
+
+    public Double getSharedOil() {
+        return sharedOil;
+    }
+
+    public void setSharedOil(Double sharedOil) {
+        this.sharedOil = sharedOil;
     }
 
 }

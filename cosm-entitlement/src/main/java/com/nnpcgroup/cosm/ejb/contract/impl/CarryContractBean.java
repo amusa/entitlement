@@ -6,7 +6,7 @@
 package com.nnpcgroup.cosm.ejb.contract.impl;
 
 import com.nnpcgroup.cosm.ejb.impl.AbstractCrudServicesImpl;
-import com.nnpcgroup.cosm.entity.CarryContract;
+import com.nnpcgroup.cosm.entity.contract.CarryContract;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;

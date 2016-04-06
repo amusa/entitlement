@@ -14,6 +14,8 @@ import com.nnpcgroup.cosm.entity.forecast.jv.AlternativeFundingForecast;
  */
 public interface JvAlternativeFundingForecastServices<T extends AlternativeFundingForecast> extends JvForecastServices<T> {
 
-   
-   
+    public T computeCarryOil(T forecast);
+
+    public T computeSharedOil(T forecast);
+
 }

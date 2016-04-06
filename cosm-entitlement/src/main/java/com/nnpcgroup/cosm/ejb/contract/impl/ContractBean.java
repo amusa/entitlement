@@ -6,7 +6,7 @@
 package com.nnpcgroup.cosm.ejb.contract.impl;
 
 import com.nnpcgroup.cosm.ejb.contract.ContractServices;
-import com.nnpcgroup.cosm.entity.Contract;
+import com.nnpcgroup.cosm.entity.contract.Contract;
 import javax.ejb.Local;
 import javax.ejb.Stateless;
 

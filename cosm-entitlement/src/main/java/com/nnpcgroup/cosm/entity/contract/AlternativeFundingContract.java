@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.nnpcgroup.cosm.entity;
+package com.nnpcgroup.cosm.entity.contract;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;

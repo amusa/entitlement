@@ -177,7 +177,6 @@ public class JvProductionController implements Serializable {
 
     public void actualize(Forecast forecast) {
         LOG.log(Level.INFO, "************actualizing {0}...", forecast);
-
         currentProduction = productionBean.findByContractPeriod(
                 forecast.getPeriodYear(),
                 forecast.getPeriodMonth(),

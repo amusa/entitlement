@@ -15,6 +15,6 @@ import com.nnpcgroup.cosm.entity.forecast.jv.Forecast;
  */
 public interface JvForecastServices<T extends Forecast> extends CommonServices<T> {
 
-    public T computeGrossProduction(T production);
+    public T computeGrossProduction(T forecast);    
    
 }

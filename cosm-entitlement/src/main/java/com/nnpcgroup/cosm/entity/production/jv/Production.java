@@ -5,7 +5,7 @@
  */
 package com.nnpcgroup.cosm.entity.production.jv;
 
-import com.nnpcgroup.cosm.entity.Contract;
+import com.nnpcgroup.cosm.entity.contract.Contract;
 import java.io.Serializable;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;

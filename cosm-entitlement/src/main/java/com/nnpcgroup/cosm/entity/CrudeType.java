@@ -5,6 +5,7 @@
  */
 package com.nnpcgroup.cosm.entity;
 
+import com.nnpcgroup.cosm.entity.contract.Contract;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Objects;

@@ -1,11 +1,11 @@
 package com.nnpcgroup.cosm.controller;
 
-import com.nnpcgroup.cosm.entity.Contract;
+import com.nnpcgroup.cosm.entity.contract.Contract;
 import com.nnpcgroup.cosm.controller.util.JsfUtil;
 import com.nnpcgroup.cosm.controller.util.JsfUtil.PersistAction;
 import com.nnpcgroup.cosm.ejb.contract.impl.RegularContractBean;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
-import com.nnpcgroup.cosm.entity.RegularContract;
+import com.nnpcgroup.cosm.entity.contract.RegularContract;
 
 import java.io.Serializable;
 import java.util.List;

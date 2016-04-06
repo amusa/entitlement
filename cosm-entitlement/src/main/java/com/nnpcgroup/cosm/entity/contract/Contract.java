@@ -3,8 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.nnpcgroup.cosm.entity;
+package com.nnpcgroup.cosm.entity.contract;
 
+import com.nnpcgroup.cosm.entity.CrudeType;
+import com.nnpcgroup.cosm.entity.FiscalArrangement;
 import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Entity;
@@ -88,7 +90,7 @@ public abstract class Contract implements Serializable {
 
     @Override
     public String toString() {
-        return fiscalArrangement.title + "/" + crudeType.getCode();
+        return fiscalArrangement.getTitle() + "/" + crudeType.getCode();
     }
 
 }

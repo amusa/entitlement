@@ -7,7 +7,7 @@ package com.nnpcgroup.cosm.ejb.contract.impl;
 
 import com.nnpcgroup.cosm.ejb.contract.ContractServices;
 import com.nnpcgroup.cosm.ejb.impl.AbstractCrudServicesImpl;
-import com.nnpcgroup.cosm.entity.Contract;
+import com.nnpcgroup.cosm.entity.contract.Contract;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
 import java.util.List;
 import java.util.logging.Logger;

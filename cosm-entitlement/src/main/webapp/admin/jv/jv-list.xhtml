@@ -93,14 +93,14 @@
                                             <h:commandLink pt:data-target="#AssetCreateDlg" pt:look="warning" pt:data-toggle="modal">
                                                 <span class="icon">&#61918;</span>
                                                 Add Contract                                                
-                                                <f:ajax listener="#{contractController.addContractFiscalArrangement(jv)}" render="AssetCreateDlg AssetCreateForm" />
+                                                <f:ajax listener="#{contractController.addContractFiscalArrangement(jv)}" render="AssetCreateDlg AssetCreateForm contractCreateFiscalTitle" />
                                             </h:commandLink>
                                         </li> 
                                         <li>
                                             <h:commandLink pt:data-target="#AssetListDlg" pt:look="warning" pt:data-toggle="modal">
                                                 <span class="icon">&#61918;</span>
                                                 View Contracts                                                
-                                                <f:ajax listener="#{fiscalController.setCurrentFiscal(jv)}" render="AssetListDlg AssetListForm" />
+                                                <f:ajax listener="#{fiscalController.setCurrentFiscal(jv)}" render="AssetListDlg AssetListForm contractListFiscalTitle" />
                                             </h:commandLink>
                                         </li> 
                                     </ul>

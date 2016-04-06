@@ -8,7 +8,7 @@ package com.nnpcgroup.cosm.ejb.forecast.jv.impl;
 import com.nnpcgroup.cosm.controller.GeneralController;
 import com.nnpcgroup.cosm.ejb.forecast.jv.JvForecastServices;
 import com.nnpcgroup.cosm.ejb.impl.CommonServicesImpl;
-import com.nnpcgroup.cosm.entity.Contract;
+import com.nnpcgroup.cosm.entity.contract.Contract;
 import com.nnpcgroup.cosm.entity.EquityType;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
 import com.nnpcgroup.cosm.entity.JointVenture;
@@ -178,7 +178,7 @@ public abstract class JvForecastServicesImpl<T extends Forecast> extends CommonS
         Double partnerEntitlement = production.getPartnerShareEntitlement();
         Double openingStock = production.getOpeningStock();
         Double partnerOpeningStock = production.getPartnerOpeningStock();
-
+       
         availability = ownEntitlement + openingStock;
         partnerAvailability = partnerEntitlement + partnerOpeningStock;
 

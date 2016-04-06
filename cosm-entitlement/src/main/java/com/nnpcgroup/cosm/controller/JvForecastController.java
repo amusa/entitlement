@@ -9,11 +9,11 @@ import com.nnpcgroup.cosm.controller.util.JsfUtil;
 import com.nnpcgroup.cosm.controller.util.ProductionDataModel;
 import com.nnpcgroup.cosm.ejb.contract.ContractServices;
 import com.nnpcgroup.cosm.ejb.forecast.jv.JvForecast;
-import com.nnpcgroup.cosm.entity.CarryContract;
-import com.nnpcgroup.cosm.entity.Contract;
+import com.nnpcgroup.cosm.entity.contract.CarryContract;
+import com.nnpcgroup.cosm.entity.contract.Contract;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
-import com.nnpcgroup.cosm.entity.ModifiedCarryContract;
-import com.nnpcgroup.cosm.entity.RegularContract;
+import com.nnpcgroup.cosm.entity.contract.ModifiedCarryContract;
+import com.nnpcgroup.cosm.entity.contract.RegularContract;
 import com.nnpcgroup.cosm.entity.forecast.jv.AlternativeFundingForecast;
 import com.nnpcgroup.cosm.entity.forecast.jv.CarryForecast;
 import com.nnpcgroup.cosm.entity.forecast.jv.Forecast;
@@ -321,7 +321,7 @@ public class JvForecastController implements Serializable {
         return (getCurrentProduction() instanceof AlternativeFundingForecast);
     }
 
-    public void currentContractChanged(AjaxBehaviorEvent event) {
+    public void currentContractChanged(/*AjaxBehaviorEvent event*/) throws Exception {
         log.log(Level.INFO, "Contract Selected...{0}", currentContract);
         if (currentContract instanceof RegularContract) {
             currentProduction = new RegularForecast();
@@ -330,7 +330,8 @@ public class JvForecastController implements Serializable {
         } else if (currentContract instanceof ModifiedCarryContract) {
             currentProduction = new ModifiedCarryForecast();
         } else {
-            return;
+            log.log(Level.INFO, "Undefined contract selection...{0}", currentContract);
+            throw new Exception("Undefined contract type");            
         }
 
         currentProduction.setContract(currentContract);

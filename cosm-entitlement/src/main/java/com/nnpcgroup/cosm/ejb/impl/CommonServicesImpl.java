@@ -6,7 +6,7 @@
 package com.nnpcgroup.cosm.ejb.impl;
 
 import com.nnpcgroup.cosm.controller.GeneralController;
-import com.nnpcgroup.cosm.entity.Contract;
+import com.nnpcgroup.cosm.entity.contract.Contract;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
 import com.nnpcgroup.cosm.entity.Terminal;
 import com.nnpcgroup.cosm.entity.production.jv.Production;

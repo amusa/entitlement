@@ -75,7 +75,7 @@
                 <!-- Multi Column -->
                 <div jsf:id="forecast_panel" class="row">
                     <div class="col-md-12 m-b-12">
-                        <h:dataTable id="prodTable" var="prod" value="#{jvProdController.dataModel}" 
+                        <h:dataTable id="prodTable" var="prod" value="#{jvProdController.productions}" 
                                      class="table table-bordered table-hover tile">                            
                             <h:column>                                                        
                                 <f:facet name="header">
@@ -165,7 +165,7 @@
                                             <h:commandLink  pt:data-target="#JvActualCreateDlg" pt:look="warning" pt:data-toggle="modal" >
                                                 <span class="icon">&#61845;</span>
                                                 #{bundle.Actualize}
-                                                <f:ajax event="click" render="JvActualCreateForm" listener="#{jvActualController.actualize(prod)}"/>
+                                                <f:ajax event="click" render="JvActualCreateForm ActualizePanel" listener="#{jvActualController.actualize(prod)}"/>
                                             </h:commandLink>
                                         </li>
                                         <li class="divider"></li>

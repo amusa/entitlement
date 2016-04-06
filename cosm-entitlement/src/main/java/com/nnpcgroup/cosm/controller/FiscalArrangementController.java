@@ -3,7 +3,7 @@ package com.nnpcgroup.cosm.controller;
 import com.nnpcgroup.cosm.controller.util.JsfUtil;
 import com.nnpcgroup.cosm.ejb.contract.ContractServices;
 import com.nnpcgroup.cosm.ejb.FiscalArrangementBean;
-import com.nnpcgroup.cosm.entity.Contract;
+import com.nnpcgroup.cosm.entity.contract.Contract;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
 import java.io.Serializable;
 import java.util.List;
@@ -89,9 +89,10 @@ public class FiscalArrangementController implements Serializable {
 
         if (null != currentFiscal) {
             contracts = contractBean.findFiscalArrangementContracts(currentFiscal);
+            LOG.log(Level.INFO, "getting contracts for {0}. {1}...", new Object[]{currentFiscal, contracts});
+        } else {
+            LOG.log(Level.INFO, "Fiscal Arrangement is null {0}...", currentFiscal);
         }
-
-        LOG.log(Level.INFO, "getting contracts for {0}. {1}...", new Object[]{currentFiscal, contracts});
 
         return contracts;
     }

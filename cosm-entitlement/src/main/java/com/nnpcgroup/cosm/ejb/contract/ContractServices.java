@@ -5,8 +5,8 @@
  */
 package com.nnpcgroup.cosm.ejb.contract;
 
+import com.nnpcgroup.cosm.entity.contract.Contract;
 import com.nnpcgroup.cosm.ejb.AbstractCrudServices;
-import com.nnpcgroup.cosm.entity.Contract;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
 import java.util.List;
 

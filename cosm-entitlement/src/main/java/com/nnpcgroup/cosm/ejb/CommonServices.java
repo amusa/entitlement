@@ -5,7 +5,7 @@
  */
 package com.nnpcgroup.cosm.ejb;
 
-import com.nnpcgroup.cosm.entity.Contract;
+import com.nnpcgroup.cosm.entity.contract.Contract;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
 import com.nnpcgroup.cosm.entity.Terminal;
 import java.util.List;

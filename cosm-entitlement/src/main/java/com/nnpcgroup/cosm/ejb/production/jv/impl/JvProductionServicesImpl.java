@@ -7,7 +7,7 @@ package com.nnpcgroup.cosm.ejb.production.jv.impl;
 
 import com.nnpcgroup.cosm.ejb.impl.CommonServicesImpl;
 import com.nnpcgroup.cosm.ejb.production.jv.JvProductionServices;
-import com.nnpcgroup.cosm.entity.Contract;
+import com.nnpcgroup.cosm.entity.contract.Contract;
 import com.nnpcgroup.cosm.entity.EquityType;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
 import com.nnpcgroup.cosm.entity.JointVenture;

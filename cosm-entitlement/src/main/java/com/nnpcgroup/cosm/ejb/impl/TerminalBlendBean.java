@@ -7,7 +7,7 @@ package com.nnpcgroup.cosm.ejb.impl;
 
 import com.nnpcgroup.cosm.ejb.PscActualProductionServices;
 import com.nnpcgroup.cosm.ejb.TerminalBlendServices;
-import com.nnpcgroup.cosm.entity.Contract;
+import com.nnpcgroup.cosm.entity.contract.Contract;
 import com.nnpcgroup.cosm.entity.PscActualProduction;
 import com.nnpcgroup.cosm.entity.TerminalBlend;
 import java.util.List;

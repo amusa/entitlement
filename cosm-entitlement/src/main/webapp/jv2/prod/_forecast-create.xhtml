@@ -85,11 +85,15 @@
                                 <div class="row" jsf:id="carryContractInfo2" jsf:rendered="#{jvProdController.fiscalArrangementAfContract}">
                                     <div class="col-md-4 m-b-15">
                                         <h:outputLabel value="Carry Oil" for="carryOil" />
-                                        <h:outputLabel id="carryOil" value="#{jvProdController.currentAfProduction.carryOil}" class="form-control input-sm m-b-10"/>
+                                        <h:outputLabel id="carryOil" value="#{jvProdController.currentAfProduction.carryOil}" class="form-control input-sm m-b-10">
+                                            <f:convertNumber pattern="###,###,###.####" />
+                                        </h:outputLabel>
                                     </div>
                                     <div class="col-md-4 m-b-15">
                                         <h:outputLabel value="Shared Oil" for="sharedOil" />
-                                        <h:outputLabel id="sharedOil" value="#{jvProdController.currentAfProduction.carryOil}" class="form-control input-sm m-b-10"/>
+                                        <h:outputLabel id="sharedOil" value="#{jvProdController.currentAfProduction.sharedOil}" class="form-control input-sm m-b-10">
+                                            <f:convertNumber pattern="###,###,###.####" />
+                                        </h:outputLabel>
                                     </div>
                                 </div>
                                 <!--****************************************************************** -->

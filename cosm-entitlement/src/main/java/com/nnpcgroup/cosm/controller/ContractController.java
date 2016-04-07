@@ -6,6 +6,7 @@ import com.nnpcgroup.cosm.controller.util.JsfUtil.PersistAction;
 import com.nnpcgroup.cosm.ejb.contract.ContractServices;
 import com.nnpcgroup.cosm.entity.contract.CarryContract;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
+import com.nnpcgroup.cosm.entity.contract.AlternativeFundingContract;
 import com.nnpcgroup.cosm.entity.contract.ModifiedCarryContract;
 import com.nnpcgroup.cosm.entity.contract.RegularContract;
 
@@ -68,25 +69,26 @@ public class ContractController implements Serializable {
 
     public void setSelected(Contract selected) {
         this.selected = selected;
-        if (selected instanceof RegularContract) {
-            contractType = "REG";
-        } else if (selected instanceof CarryContract) {
-            contractType = "CA";
-        } else if (selected instanceof ModifiedCarryContract) {
-            contractType = "MCA";
-        }
+//        if (selected instanceof RegularContract) {
+//            contractType = "REG";
+//        } else if (selected instanceof CarryContract) {
+//            contractType = "CA";
+//        } else if (selected instanceof ModifiedCarryContract) {
+//            contractType = "MCA";
+//        }
+//        selected.setFiscalArrangement(fiscalArrangement);
     }
 
-    public CarryContract getCarrySelected() {
-        if (selected instanceof CarryContract) {
-            return (CarryContract) selected;
-        }
+    public AlternativeFundingContract getAfSelected() {
+        if (selected instanceof AlternativeFundingContract) {
+            return (AlternativeFundingContract) selected;
+        } 
         return null;
     }
 
-    public void setCarrySelected(CarryContract carrySelected) {
-        if (carrySelected != null) {
-            this.selected = carrySelected;
+    public void setCarrySelected(AlternativeFundingContract afSelected) {
+        if (afSelected != null) {
+            this.selected = afSelected;
         }
     }
 
@@ -208,6 +210,7 @@ public class ContractController implements Serializable {
         LOG.log(Level.INFO, "Adding Contract for fiscal arrangement {0}...", fa);
         setSelected(new RegularContract()); //Default contract
         setFiscalArrangement(fa);
+        selected.setFiscalArrangement(fiscalArrangement);
     }
 
     @FacesConverter(forClass = Contract.class)

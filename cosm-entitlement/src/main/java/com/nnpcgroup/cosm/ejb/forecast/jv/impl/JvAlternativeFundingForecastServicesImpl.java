@@ -128,9 +128,9 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
         return computeClosingStock(
                 computeLifting(
                         computeAvailability(
-                                computeEntitlement(
+                                computeSharedOil(
                                         computeCarryOil(
-                                                computeSharedOil(
+                                                computeEntitlement(
                                                         computeGrossProduction(
                                                                 computeOpeningStock(production)
                                                         )

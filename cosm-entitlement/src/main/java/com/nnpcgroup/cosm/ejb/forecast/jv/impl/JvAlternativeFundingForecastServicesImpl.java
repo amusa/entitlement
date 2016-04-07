@@ -40,22 +40,25 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
 
     @Override
     protected EntityManager getEntityManager() {
-        LOG.info("ForecastBean::setEntityManager() called...");
+        LOG.info("returning entityManager...");
         return em;
     }
 
     @Override
     public T computeOpeningStock(T forecast) {
         Forecast prod = (Forecast) getPreviousMonthProduction(forecast);
+        Double openingStock = null;
+        Double partnerOpeningStock = null;
         if (prod != null) {
-            Double openingStock = prod.getClosingStock();
-            Double partnerOpeningStock = prod.getPartnerOpeningStock();
+            openingStock = prod.getClosingStock();
+            partnerOpeningStock = prod.getPartnerOpeningStock();
             ((Forecast) forecast).setOpeningStock(openingStock);
             ((Forecast) forecast).setPartnerOpeningStock(partnerOpeningStock);
         } else {
             ((Forecast) forecast).setOpeningStock(0.0);
             ((Forecast) forecast).setPartnerOpeningStock(0.0);
         }
+        LOG.log(Level.INFO, "Own Opening Stock=>{0} Partner Opening Stock=>{1} ", new Object[]{openingStock, partnerOpeningStock});
         return forecast;
     }
 
@@ -119,6 +122,8 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
         ((Forecast) forecast).setPartnerCargos(partnerCargoes);
         ((Forecast) forecast).setPartnerLifting(partnerLiftableVolume);
 
+        LOG.log(Level.INFO, "Own Liftable Vol=>{0}, Own Cargoes=>{1} : Partner Liftable Vol=>{2}, Partner Cargoes=>{3}", new Object[]{liftableVolume, cargoes, partnerLiftableVolume, partnerCargoes});
+
         return forecast;
     }
 
@@ -159,6 +164,8 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
         production.setAvailability(availability);
         production.setPartnerAvailability(partnerAvailability);
 
+        LOG.log(Level.INFO, "Own Availability=>{0} : Partner Availability=>{1}", new Object[]{availability, partnerAvailability});
+
         return production;
     }
 
@@ -175,6 +182,9 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
 
         sharedOil = (ownEquity - carryOil) * sharedOilRatio;
         forecast.setSharedOil(sharedOil);
+
+        LOG.log(Level.INFO, "Shared Oil=>{0}", sharedOil);
+
         return forecast;
     }
 
@@ -186,11 +196,18 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
         carryOil = residualCarryOil / guaranteedNationalMargin;
 
         forecast.setCarryOil(carryOil);
+
+        LOG.log(Level.INFO, "Carry Oil=>{0}", carryOil);
+
         return forecast;
     }
 
     private Double computeGuaranteedNationalMargin(T forecast) {
-        return 10.0; //TODO:temporary placeholder
+        Double gnm = 10.0; //TODO:temporary placeholder
+
+        LOG.log(Level.INFO, "Guaranteed National Margin (GNM)=>{0}", gnm);
+
+        return gnm;
     }
 
     private Double computeResidualCarryOil(T forecast) {
@@ -199,6 +216,9 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
         double taxRelief = computeTaxRelief(forecast);
 
         residualOil = ccca - taxRelief;
+
+        LOG.log(Level.INFO, "Residual Oil => {0} - {1}", new Object[]{ccca, taxRelief});
+
         return residualOil;
     }
 
@@ -206,6 +226,9 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
         double taxRelief;
         double carryTaxExpenditure = computeCarryTaxExpenditure(forecast);
         taxRelief = carryTaxExpenditure * 0.85;
+
+        LOG.log(Level.INFO, "Tax Relief => {0} * 85%", new Object[]{carryTaxExpenditure});
+
         return taxRelief;
     }
 
@@ -214,22 +237,46 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
         double ccc = computeCarryCapitalCost(forecast);
         ccca = ccc * 0.20;
 
+        LOG.log(Level.INFO, "Capital Carry Cost Armotized (CCCA) => {0} * 20%", new Object[]{ccc});
+
         return ccca;
     }
 
     private Double computeCarryTaxExpenditure(T forecast) {
-        return computeCapitalCarryCostArmotized(forecast) + computePetroleumInvestmentAllowance(forecast);
+        Double ccca;
+        Double pia;
+
+        ccca = computeCapitalCarryCostArmotized(forecast);
+        pia = computePetroleumInvestmentAllowance(forecast);
+
+        LOG.log(Level.INFO, "Carry Tax Expenditure (CTE) => {0} + {1}", new Object[]{ccca, pia});
+
+        return ccca + pia;
     }
 
     private Double computePetroleumInvestmentAllowance(T forecast) {
-        return computeTangibleCost(forecast) * 0.10;
+        Double tangibleCost = computeTangibleCost(forecast) * 0.10;
+
+        LOG.log(Level.INFO, "Tangible Cost => {0}", new Object[]{tangibleCost});
+
+        return tangibleCost;
     }
 
     private double computeCarryCapitalCost(T forecast) {
-        return forecast.getTangibleCost() + forecast.getIntangibleCost();
+        Double tangibleCost = forecast.getTangibleCost();
+        Double intangibleCost = forecast.getIntangibleCost();
+
+        Double ccca = tangibleCost + intangibleCost;
+
+        LOG.log(Level.INFO, "Carry Tax Expenditure (CTE) => {0} + {1}", new Object[]{ccca});
+
+        return ccca;
     }
 
     private double computeTangibleCost(T forecast) {
+
+        LOG.log(Level.INFO, "Tangible Cost => {0}", new Object[]{forecast.getTangibleCost()});
+
         return forecast.getTangibleCost();
     }
 

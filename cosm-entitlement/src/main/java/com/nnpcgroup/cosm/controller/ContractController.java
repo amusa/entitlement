@@ -69,14 +69,14 @@ public class ContractController implements Serializable {
 
     public void setSelected(Contract selected) {
         this.selected = selected;
-//        if (selected instanceof RegularContract) {
-//            contractType = "REG";
-//        } else if (selected instanceof CarryContract) {
-//            contractType = "CA";
-//        } else if (selected instanceof ModifiedCarryContract) {
-//            contractType = "MCA";
-//        }
-//        selected.setFiscalArrangement(fiscalArrangement);
+        if (selected instanceof RegularContract) {
+            contractType = "REG";
+        } else if (selected instanceof CarryContract) {
+            contractType = "CA";
+        } else if (selected instanceof ModifiedCarryContract) {
+            contractType = "MCA";
+        }
+        //this.selected.setFiscalArrangement(fiscalArrangement);
     }
 
     public AlternativeFundingContract getAfSelected() {
@@ -86,7 +86,7 @@ public class ContractController implements Serializable {
         return null;
     }
 
-    public void setCarrySelected(AlternativeFundingContract afSelected) {
+    public void setAfSelected(AlternativeFundingContract afSelected) {
         if (afSelected != null) {
             this.selected = afSelected;
         }

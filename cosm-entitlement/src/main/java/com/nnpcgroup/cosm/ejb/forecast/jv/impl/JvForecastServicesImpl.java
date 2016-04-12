@@ -89,7 +89,7 @@ public abstract class JvForecastServicesImpl<T extends Forecast> extends CommonS
         int days = genController.daysOfMonth(periodYear, periodMonth);
         Double grossProd = prodVolume * days;
 
-        LOG.log(Level.INFO, "Gross Forecast=>{0} * {1} = {2}", new Object[]{grossProd, days, grossProd});
+        LOG.log(Level.INFO, "Gross Forecast = DailyProd * Days => {0} * {1} = {2}", new Object[]{prodVolume, days, grossProd});
 
         ((Forecast) forecast).setGrossProduction(grossProd);
         return forecast;

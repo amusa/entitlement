@@ -207,7 +207,7 @@
                                     <f:ajax event="click" render="JvActualizeCreateForm" listener="#{jvActualController.actualize(jvProdController.currentProduction)}"/>
                                 </button>
 
-                                <button jsf:id="createButton" look="warning" data-target="#JvCreateDlg" data-toggle="modal" class="btn m-r-5">
+                                <button jsf:id="createButton" jsf:outcome="forecast-create" class="btn m-r-5">
                                     <span class="icon">&#61943;</span>
                                     #{bundle.Create}
                                     <f:ajax event="click" render="JvCreateForm"  listener="#{jvProdController.prepareCreate}"/>                                    

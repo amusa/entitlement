@@ -145,8 +145,7 @@ public class JvForecastController implements Serializable {
 
     public void prepareCreate() {
         LOG.info("prepareCreate called...");
-        currentProduction = null;
-        currentContract = null;
+        reset();
     }
 
     public void destroy() {
@@ -247,6 +246,7 @@ public class JvForecastController implements Serializable {
 
     private void reset() {
         currentProduction = null;
+        currentContract = null;
     }
 
     public Integer getPeriodYear() {
@@ -359,7 +359,7 @@ public class JvForecastController implements Serializable {
         return (getCurrentProduction() instanceof AlternativeFundingForecast);
     }
 
-    public void currentContractChanged(/*AjaxBehaviorEvent event*/) throws Exception {
+    public void currentContractChanged(){
         LOG.log(Level.INFO, "Contract Selected...{0}", currentContract);
         if (currentContract instanceof RegularContract) {
             currentProduction = new RegularForecast();

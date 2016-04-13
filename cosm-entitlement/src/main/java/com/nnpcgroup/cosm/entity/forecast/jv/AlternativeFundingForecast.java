@@ -20,8 +20,13 @@ public abstract class AlternativeFundingForecast extends Forecast {
 
     private Double tangibleCost;
     private Double intangibleCost;
-    protected Double carryOil;
-    protected Double sharedOil;
+    private Double carryOil;
+    private Double sharedOil;
+    private Double carryTaxExpenditure;
+    private Double carryTaxRelief;
+    private Double residualCarryExpenditure;
+    private Double guaranteedNotionalMargin;
+    private Double capitalCarryCostAmortized;
 
     public AlternativeFundingForecast() {
     }
@@ -58,4 +63,45 @@ public abstract class AlternativeFundingForecast extends Forecast {
         this.sharedOil = sharedOil;
     }
 
+    public Double getCarryTaxExpenditure() {
+        return carryTaxExpenditure;
+    }
+
+    public void setCarryTaxExpenditure(Double carryTaxExpenditure) {
+        this.carryTaxExpenditure = carryTaxExpenditure;
+    }
+
+    public Double getCarryTaxRelief() {
+        return carryTaxRelief;
+    }
+
+    public void setCarryTaxRelief(Double carryTaxRelief) {
+        this.carryTaxRelief = carryTaxRelief;
+    }
+
+    public Double getResidualCarryExpenditure() {
+        return residualCarryExpenditure;
+    }
+
+    public void setResidualCarryExpenditure(Double residualCarryExpenditure) {
+        this.residualCarryExpenditure = residualCarryExpenditure;
+    }
+
+    public Double getGuaranteedNotionalMargin() {
+        return guaranteedNotionalMargin;
+    }
+
+    public void setGuaranteedNotionalMargin(Double guaranteedNotionalMargin) {
+        this.guaranteedNotionalMargin = guaranteedNotionalMargin;
+    }
+
+    public Double getCapitalCarryCostAmortized() {
+        return capitalCarryCostAmortized;
+    }
+
+    public void setCapitalCarryCostAmortized(Double capitalCarryCostAmortized) {
+        this.capitalCarryCostAmortized = capitalCarryCostAmortized;
+    }
+
+    
 }

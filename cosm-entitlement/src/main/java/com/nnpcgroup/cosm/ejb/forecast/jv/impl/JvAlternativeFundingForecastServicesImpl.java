@@ -118,12 +118,26 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
         return computeClosingStock(
                 computeLifting(
                         computeAvailability(
-                                computeSharedOil(
-                                        computeCarryOil(
-                                                computeEntitlement(
-                                                        computeGrossProduction(
-                                                                computeOpeningStock(production)
-                                                        )
+                                computeAlternativeFunding(
+                                        computeEntitlement(
+                                                computeGrossProduction(
+                                                        computeOpeningStock(production)
+                                                )
+                                        )
+                                )
+                        )
+                )
+        );
+    }
+
+    public T computeAlternativeFunding(T production) {
+        return computeSharedOil(
+                computeCarryOil(
+                        computeGuaranteedNotionalMargin(
+                                computeResidualCarryExpenditure(
+                                        computeCarryTaxRelief(
+                                                computeCarryTaxExpenditure(
+                                                        computeCapitalCarryCostAmortized(production)
                                                 )
                                         )
                                 )
@@ -176,8 +190,8 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
     @Override
     public T computeCarryOil(T forecast) {
         double carryOil;
-        double RCE = computeResidualCarryExpenditure(forecast);
-        double IGNM = computeGuaranteedNotionalMargin(forecast);
+        double RCE = forecast.getResidualCarryExpenditure();
+        double IGNM = forecast.getGuaranteedNotionalMargin();
 
         carryOil = RCE / IGNM;
 
@@ -188,62 +202,65 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
         return forecast;
     }
 
-    private Double computeGuaranteedNotionalMargin(T forecast) {
+    private T computeGuaranteedNotionalMargin(T forecast) {
         Double GNM = 4.1465; //TODO:temporary placeholder
-
+        forecast.setGuaranteedNotionalMargin(GNM);
         LOG.log(Level.INFO, "Guaranteed National Margin (GNM)=>{0}", GNM);
 
-        return GNM;
+        return forecast;
     }
 
-    private Double computeResidualCarryExpenditure(T forecast) {
+    private T computeResidualCarryExpenditure(T forecast) {
         double RCE;
-        double CTE = computeCarryTaxExpenditure(forecast);
-        double CTR = computeCarryTaxRelief(forecast);
+        double CTE = forecast.getCarryTaxExpenditure();
+        double CTR = forecast.getCarryTaxRelief();
 
         RCE = CTE - CTR;
+        forecast.setResidualCarryExpenditure(RCE);
 
         LOG.log(Level.INFO, "RCE = CTE - CTR => {0} - {1} = {2}", new Object[]{CTE, CTR, RCE});
 
-        return RCE;
+        return forecast;
     }
 
-    private Double computeCarryTaxRelief(T forecast) {
+    private T computeCarryTaxRelief(T forecast) {
         double CTR;
-        double CTE = computeCarryTaxExpenditure(forecast);
+        double CTE = forecast.getCarryTaxExpenditure();
         CTR = CTE * 0.85;
-
+        forecast.setCarryTaxRelief(CTR);
         LOG.log(Level.INFO, "CTR = CTE * 85% => {0} * 0.85 = {1}", new Object[]{CTE, CTR});
 
-        return CTR;
+        return forecast;
     }
 
-    private Double computeCapitalCarryCostArmotized(T forecast) {
+    private T computeCapitalCarryCostAmortized(T forecast) {
         double CCCA;
         double tangible = computeTangibleCost(forecast);
         double intangible = computeIntangibleCost(forecast);
         CCCA = (tangible * 0.20) + intangible;
+        forecast.setCapitalCarryCostAmortized(CCCA);
 
         LOG.log(Level.INFO, "Capital Carry Cost Armotized (CCCA) = Tangible * 20% + Intangible => {0} * 0.20 + {1} = {2}", new Object[]{tangible, intangible, CCCA});
 
-        return CCCA;
+        return forecast;
     }
 
-    private Double computeCarryTaxExpenditure(T forecast) {
+    private T computeCarryTaxExpenditure(T forecast) {
         Double CCCA;
         Double PIA;
 
-        CCCA = computeCapitalCarryCostArmotized(forecast);
+        CCCA = forecast.getCapitalCarryCostAmortized();
         PIA = computePetroleumInvestmentAllowance(forecast);
 
         Double CTE = CCCA + PIA;
+        forecast.setCarryTaxExpenditure(CTE);
 
         LOG.log(Level.INFO, "Carry Tax Expenditure (CTE) = CCCA + PIA => {0} + {1} = {2}", new Object[]{CCCA, PIA, CTE});
 
-        return CTE;
+        return forecast;
     }
 
-    private Double computePetroleumInvestmentAllowance(T forecast) {
+    private double computePetroleumInvestmentAllowance(T forecast) {
         Double tangibleCost = computeTangibleCost(forecast);
         Double PIA = tangibleCost * 0.10;
 

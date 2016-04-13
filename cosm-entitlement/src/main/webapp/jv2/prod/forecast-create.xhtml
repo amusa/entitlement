@@ -71,12 +71,12 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="panel panel-default tile">
+                        <div jsf:id="carryContractInfo" jsf:rendered="#{jvProdController.fiscalArrangementAfContract}" class="panel panel-default tile">
                             <div class="panel-heading">
                                 <h3 class="panel-title">Cost</h3>
                             </div>
                             <div class="panel-body">
-                                <div class="row" jsf:id="carryContractInfo" jsf:rendered="#{jvProdController.fiscalArrangementAfContract}">
+                                <div class="row">
                                     <div class="col-md-4 m-b-15">
                                         <h:outputLabel value="Tangible Cost" for="tangible" />
                                         <h:inputText id="tangible" value="#{jvProdController.currentAfProduction.tangibleCost}" class="form-control input-sm m-b-10">
@@ -94,6 +94,12 @@
                                     <div class="col-md-4 m-b-15">
                                         <h:outputLabel value="Carry Capital Cost (CCC)" for="ccc" />
                                         <h:outputLabel id="ccc" value="#{jvProdController.currentAfProduction.intangibleCost + jvProdController.currentAfProduction.tangibleCost}" class="form-control input-sm m-b-10">
+                                            <f:convertNumber pattern="###,###,###.####" />
+                                        </h:outputLabel>
+                                    </div>
+                                    <div class="col-md-4 m-b-15">
+                                        <h:outputLabel value="Carry Capital Cost Amortized (CCCA)" for="ccca" />
+                                        <h:outputLabel id="ccca" value="#{jvProdController.currentAfProduction.capitalCarryCostAmortized}" class="form-control input-sm m-b-10">
                                             <f:convertNumber pattern="###,###,###.####" />
                                         </h:outputLabel>
                                     </div>
@@ -117,7 +123,7 @@
                                         <h:outputLabel value="Daily Prod (bpd)" for="productionVolume" />
                                         <h:inputText id="productionVolume" value="#{jvProdController.currentProduction.productionVolume}" title="Daily Production Volume" class="form-control input-sm" >
                                             <f:ajax event="change" listener="#{jvProdController.productionVolumeChanged}"
-                                                    render="grossVolume carryOil sharedOil openingStock ownShareEntitlement closingStock lifting cargoes availability ptnrOpeningStock ptnrEntitlement ptnrClosingStock ptnrLifting ptnrCargoes ptnrAvailability"/>
+                                                    render="grossVolume carryOil sharedOil openingStock ownShareEntitlement closingStock lifting cargoes availability ptnrOpeningStock ptnrEntitlement ptnrClosingStock ptnrLifting ptnrCargoes ptnrAvailability ccc ccca cte ctr rce ignm"/>
                                             execute="contract"/>
                                         </h:inputText>
                                     </div>

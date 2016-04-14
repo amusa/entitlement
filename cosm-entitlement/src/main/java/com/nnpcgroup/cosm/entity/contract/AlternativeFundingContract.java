@@ -19,6 +19,8 @@ public abstract class AlternativeFundingContract extends Contract{
     private static final long serialVersionUID = 8684470740659960243L;
     
     private Double sharedOilRatio;
+    private Double terminalPeriod;
+    private Double terminalSharedOil;
 
     public Double getSharedOilRatio() {
         return sharedOilRatio;
@@ -27,7 +29,21 @@ public abstract class AlternativeFundingContract extends Contract{
     public void setSharedOilRatio(Double sharedOilRatio) {
         this.sharedOilRatio = sharedOilRatio;
     }
-    
-    
+
+    public Double getTerminalPeriod() {
+        return terminalPeriod;
+    }
+
+    public void setTerminalPeriod(Double terminalPeriod) {
+        this.terminalPeriod = terminalPeriod;
+    }
+
+    public Double getTerminalSharedOil() {
+        return terminalSharedOil;
+    }
+
+    public void setTerminalSharedOil(Double terminalSharedOil) {
+        this.terminalSharedOil = terminalSharedOil;
+    }
     
 }

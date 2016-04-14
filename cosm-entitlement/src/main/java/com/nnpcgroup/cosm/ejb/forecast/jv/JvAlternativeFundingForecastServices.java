@@ -29,16 +29,16 @@ public interface JvAlternativeFundingForecastServices<T extends AlternativeFundi
 
     public T computeCapitalCarryCostAmortized(T forecast);
 
-    public double computeCarryOilCum(Contract cs);
+    public Double computeCarryOilCum(Contract cs);
 
-    public double computeSharedOilCum(Contract cs);
+    public Double computeSharedOilCum(Contract cs);
 
-    public double computeResidualCarryExpenditureCum(Contract cs);
+    public Double computeResidualCarryExpenditureCum(Contract cs);
 
-    public double computeCarryTaxReliefCum(Contract cs);
+    public Double computeCarryTaxReliefCum(Contract cs);
 
-    public double computeCarryTaxExpenditureCum(Contract cs);
+    public Double computeCarryTaxExpenditureCum(Contract cs);
 
-    public double computeCapitalCarryCostAmortizedCum(Contract cs);
+    public Double computeCapitalCarryCostAmortizedCum(Contract cs);
 
 }

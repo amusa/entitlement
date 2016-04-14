@@ -122,12 +122,12 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
 
     private T computeCummulative(T forecast) {
         T prev = getPreviousMonthProduction(forecast);
-        double sharedOilCum = forecast.getSharedOil();
-        double carryOilCum = forecast.getCarryOil();
-        double CTECum = forecast.getCarryTaxExpenditure();
-        double CTRCum = forecast.getCarryTaxRelief();
-        double RCECum = forecast.getResidualCarryExpenditure();
-        double CCCACum = forecast.getCapitalCarryCostAmortized();
+        Double sharedOilCum = forecast.getSharedOil();
+        Double carryOilCum = forecast.getCarryOil();
+        Double CTECum = forecast.getCarryTaxExpenditure();
+        Double CTRCum = forecast.getCarryTaxRelief();
+        Double RCECum = forecast.getResidualCarryExpenditure();
+        Double CCCACum = forecast.getCapitalCarryCostAmortized();
 
         if (prev != null) {
             sharedOilCum += prev.getSharedOilCum();
@@ -144,7 +144,7 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
         forecast.setCarryTaxReliefCum(CTRCum);
         forecast.setResidualCarryExpenditureCum(RCECum);
         forecast.setCapitalCarryCostAmortizedCum(CCCACum);
-        
+
         return forecast;
     }
 
@@ -186,16 +186,57 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
         return production;
     }
 
-    @Override
-    public T computeSharedOil(T forecast) {
-        double sharedOil;
-        double ownEquity = forecast.getOwnShareEntitlement();
-        double carryOil = forecast.getCarryOil();
+    private boolean isSharedOilPeriodDue(T forecast) {
+        Contract contract = forecast.getContract();
+        assert (contract instanceof AlternativeFundingContract);
+        AlternativeFundingContract afContract = (AlternativeFundingContract) contract;
+
+        Double terminalPeriod = afContract.getTerminalPeriod();
+        Long sharedOilPeriod = getSharedOilPeriod(forecast.getContract());
+
+        return sharedOilPeriod < terminalPeriod;
+    }
+
+    private boolean isSharedOilValueDue(T forecast) {
+        T prev = getPreviousMonthProduction(forecast);
+        Double sharedOilCum = null;
+
+        if (prev != null) {
+            sharedOilCum = prev.getSharedOilCum();
+        }
 
         Contract contract = forecast.getContract();
         assert (contract instanceof AlternativeFundingContract);
         AlternativeFundingContract afContract = (AlternativeFundingContract) contract;
-        double sharedOilRatio = afContract.getSharedOilRatio();
+
+        Double terminalSharedOil = afContract.getTerminalSharedOil();
+
+        if (terminalSharedOil == null) {
+            return false;
+        }
+
+        return sharedOilCum < terminalSharedOil;
+    }
+
+    private boolean isShareOilDue(T forecast) {
+        return isSharedOilPeriodDue(forecast) || isSharedOilValueDue(forecast);
+    }
+
+    @Override
+    public T computeSharedOil(T forecast) {
+        if (!isShareOilDue(forecast)) {
+            LOG.log(Level.INFO, "Bypassing Shared Oil computation. Terminal condition reached.");
+            return forecast;
+        }
+
+        Double sharedOil;
+        Double ownEquity = forecast.getOwnShareEntitlement();
+        Double carryOil = forecast.getCarryOil();
+
+        Contract contract = forecast.getContract();
+        assert (contract instanceof AlternativeFundingContract);
+        AlternativeFundingContract afContract = (AlternativeFundingContract) contract;
+        Double sharedOilRatio = afContract.getSharedOilRatio();
 
         sharedOil = (ownEquity - carryOil) * sharedOilRatio * 0.01;
         forecast.setSharedOil(sharedOil);
@@ -203,13 +244,14 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
         LOG.log(Level.INFO, "Shared Oil = ( NNPC Equity - Carry Oil ) * Shared Oil Ratio => ( {0} - {1} ) * {2} * 0.01 = {3}", new Object[]{ownEquity, carryOil, sharedOilRatio, sharedOil});
 
         return forecast;
+
     }
 
     @Override
     public T computeCarryOil(T forecast) {
-        double carryOil;
-        double RCE = forecast.getResidualCarryExpenditure();
-        double IGNM = forecast.getGuaranteedNotionalMargin();
+        Double carryOil;
+        Double RCE = forecast.getResidualCarryExpenditure();
+        Double IGNM = forecast.getGuaranteedNotionalMargin();
 
         carryOil = RCE / IGNM;
 
@@ -231,9 +273,9 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
 
     @Override
     public T computeResidualCarryExpenditure(T forecast) {
-        double RCE;
-        double CTE = forecast.getCarryTaxExpenditure();
-        double CTR = forecast.getCarryTaxRelief();
+        Double RCE;
+        Double CTE = forecast.getCarryTaxExpenditure();
+        Double CTR = forecast.getCarryTaxRelief();
 
         RCE = CTE - CTR;
         forecast.setResidualCarryExpenditure(RCE);
@@ -245,8 +287,8 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
 
     @Override
     public T computeCarryTaxRelief(T forecast) {
-        double CTR;
-        double CTE = forecast.getCarryTaxExpenditure();
+        Double CTR;
+        Double CTE = forecast.getCarryTaxExpenditure();
         CTR = CTE * 0.85;
         forecast.setCarryTaxRelief(CTR);
         LOG.log(Level.INFO, "CTR = CTE * 85% => {0} * 0.85 = {1}", new Object[]{CTE, CTR});
@@ -256,9 +298,9 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
 
     @Override
     public T computeCapitalCarryCostAmortized(T forecast) {
-        double CCCA;
-        double tangible = computeTangibleCost(forecast);
-        double intangible = computeIntangibleCost(forecast);
+        Double CCCA;
+        Double tangible = computeTangibleCost(forecast);
+        Double intangible = computeIntangibleCost(forecast);
         CCCA = (tangible * 0.20) + intangible;
         forecast.setCapitalCarryCostAmortized(CCCA);
 
@@ -283,7 +325,7 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
         return forecast;
     }
 
-    public double computePetroleumInvestmentAllowance(T forecast) {
+    public Double computePetroleumInvestmentAllowance(T forecast) {
         Double tangibleCost = computeTangibleCost(forecast);
         Double PIA = tangibleCost * 0.10;
 
@@ -292,7 +334,7 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
         return PIA;
     }
 
-    public double computeCarryCapitalCost(T forecast) {
+    public Double computeCarryCapitalCost(T forecast) {
         Double tangibleCost = forecast.getTangibleCost();
         Double intangibleCost = forecast.getIntangibleCost();
 
@@ -303,18 +345,18 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
         return CCC;
     }
 
-    private double computeTangibleCost(T forecast) {
+    private Double computeTangibleCost(T forecast) {
 
         LOG.log(Level.INFO, "Tangible Cost => {0}", new Object[]{forecast.getTangibleCost()});
 
-        return forecast.getTangibleCost();
+        return forecast.getTangibleCost() != null ? forecast.getTangibleCost() : new Double(0);
     }
 
-    private double computeIntangibleCost(T forecast) {
+    private Double computeIntangibleCost(T forecast) {
 
         LOG.log(Level.INFO, "Intangible Cost => {0}", new Object[]{forecast.getIntangibleCost()});
 
-        return forecast.getIntangibleCost();
+        return forecast.getIntangibleCost() != null ? forecast.getIntangibleCost() : new Double(0);
     }
 
     @Override
@@ -343,7 +385,7 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
     }
 
     @Override
-    public double computeCarryOilCum(Contract cs) {
+    public Double computeCarryOilCum(Contract cs) {
 
         CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
         CriteriaQuery<Double> q = cb.createQuery(Double.class);
@@ -361,7 +403,7 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
     }
 
     @Override
-    public double computeSharedOilCum(Contract cs) {
+    public Double computeSharedOilCum(Contract cs) {
         CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
         CriteriaQuery<Double> q = cb.createQuery(Double.class);
         Root<T> t = q.from(entityClass);
@@ -376,7 +418,7 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
     }
 
     @Override
-    public double computeResidualCarryExpenditureCum(Contract cs) {
+    public Double computeResidualCarryExpenditureCum(Contract cs) {
         CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
         CriteriaQuery<Double> q = cb.createQuery(Double.class);
         Root<T> t = q.from(entityClass);
@@ -391,7 +433,7 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
     }
 
     @Override
-    public double computeCarryTaxReliefCum(Contract cs) {
+    public Double computeCarryTaxReliefCum(Contract cs) {
         CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
         CriteriaQuery<Double> q = cb.createQuery(Double.class);
         Root<T> t = q.from(entityClass);
@@ -406,7 +448,7 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
     }
 
     @Override
-    public double computeCarryTaxExpenditureCum(Contract cs) {
+    public Double computeCarryTaxExpenditureCum(Contract cs) {
         CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
         CriteriaQuery<Double> q = cb.createQuery(Double.class);
         Root<T> t = q.from(entityClass);
@@ -421,7 +463,7 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
     }
 
     @Override
-    public double computeCapitalCarryCostAmortizedCum(Contract cs) {
+    public Double computeCapitalCarryCostAmortizedCum(Contract cs) {
         CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
         CriteriaQuery<Double> q = cb.createQuery(Double.class);
         Root<T> t = q.from(entityClass);
@@ -433,5 +475,25 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
                 );
 
         return getEntityManager().createQuery(q).getSingleResult();
+    }
+
+    //@Override
+    public Long getSharedOilPeriod(Contract cs) {
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery<Long> q = cb.createQuery(Long.class);
+        Root<T> t = q.from(entityClass);
+
+        q.select(cb.count(q.from(entityClass)));
+        q.where(
+                cb.and(
+                        cb.equal(t.get("contract"), cs),
+                        cb.notEqual(t.get("sharedOil"), null))
+        );
+
+        Long sharedOilPeriod = getEntityManager().createQuery(q).getSingleResult();
+
+        LOG.log(Level.INFO, "Shared Oil Received for {0} months...", sharedOilPeriod);
+
+        return sharedOilPeriod;
     }
 }

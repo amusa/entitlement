@@ -46,7 +46,18 @@
                                     <div class="col-md-6 m-b-15">
                                         <h:outputLabel value="Shared Oil Ratio" for="sharedOilRatio" />
                                         <h:inputText id="sharedOilRatio"  value="#{contractController.afSelected.sharedOilRatio}" class="form-control input-sm m-b-10">
-
+                                            <f:ajax />
+                                        </h:inputText>                                                                                                                  
+                                    </div>
+                                    <div class="col-md-6 m-b-15">
+                                        <h:outputLabel value="Terminal Period" for="terminalPeriod" />
+                                        <h:inputText id="terminalPeriod"  value="#{contractController.afSelected.terminalPeriod}" class="form-control input-sm m-b-10">
+                                            <f:ajax />
+                                        </h:inputText>                                                                                                                  
+                                    </div>
+                                    <div class="col-md-6 m-b-15">
+                                        <h:outputLabel value="Terminal Shared Oil" for="terminalSharedOil" />
+                                        <h:inputText id="terminalSharedOil"  value="#{contractController.afSelected.terminalSharedOil}" class="form-control input-sm m-b-10">
                                             <f:ajax />
                                         </h:inputText>                                                                                                                  
                                     </div>

@@ -196,6 +196,61 @@
                                 </div>
                             </div>
                         </div>
+                        
+                        <div jsf:id="carryContractInfoYTD" jsf:rendered="#{jvProdController.fiscalArrangementAfContract}" class="panel panel-default tile">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">AF Calculations YTD</h3>
+
+                            </div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-4 m-b-15">
+                                        <h:outputLabel value="Carry Tax Expenditure (CTE)" for="cteCum" />
+                                        <h:outputLabel id="cteCum" value="#{jvProdController.currentAfProduction.carryTaxExpenditureCum}" class="form-control input-sm m-b-10">
+                                            <f:convertNumber pattern="###,###,###.####" />
+                                        </h:outputLabel>
+                                    </div>
+                                    <div class="col-md-4 m-b-15">
+                                        <h:outputLabel value="Carry Tax Relief (CTR)" for="ctrCum" />
+                                        <h:outputLabel id="ctrCum" value="#{jvProdController.currentAfProduction.carryTaxReliefCum}" class="form-control input-sm m-b-10">
+                                            <f:convertNumber pattern="###,###,###.####" />
+                                        </h:outputLabel>
+                                    </div>
+                                    <div class="col-md-4 m-b-15">
+                                        <h:outputLabel value="Residual Carry Expenditure (RCE)" for="rceCum" />
+                                        <h:outputLabel id="rceCum" value="#{jvProdController.currentAfProduction.residualCarryExpenditureCum}" class="form-control input-sm m-b-10">
+                                            <f:convertNumber pattern="###,###,###.####" />
+                                        </h:outputLabel>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4 m-b-15">
+                                        <h:outputLabel value="Inc. Margin (IGNM)" for="ignmCum" />
+                                        <h:outputLabel id="ignmCum" value="#{jvProdController.currentAfProduction.guaranteedNotionalMargin}" class="form-control input-sm m-b-10">
+                                            <f:convertNumber pattern="###,###,###.####" />
+                                        </h:outputLabel>
+                                    </div>
+                                    <div class="col-md-4 m-b-15">
+                                        <h:outputLabel value="Carry Oil" for="carryOilCum" />
+                                        <h:outputLabel id="carryOilCum" value="#{jvProdController.currentAfProduction.carryOilCum}" class="form-control input-sm m-b-10">
+                                            <f:convertNumber pattern="###,###,###.####" />
+                                        </h:outputLabel>
+                                    </div>
+                                    <div class="col-md-4 m-b-15">
+                                        <h:outputLabel value="Shared Oil" for="sharedOilCum" />
+                                        <h:outputLabel id="sharedOilCum" value="#{jvProdController.currentAfProduction.sharedOilCum}" class="form-control input-sm m-b-10">
+                                            <f:convertNumber pattern="###,###,###.####" />
+                                        </h:outputLabel>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="panel-footer">
+                                <div class="form-group">
+
+                                </div>
+                            </div>
+                        </div>
 
                         <!--NNPC Entitlement -->
                         <div class="panel panel-default tile">

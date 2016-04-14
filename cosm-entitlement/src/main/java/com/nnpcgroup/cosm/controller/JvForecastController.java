@@ -224,14 +224,13 @@ public class JvForecastController implements Serializable {
     }
 
     public void productionVolumeChanged() {
-        LOG.log(Level.INFO, "Production Volume changed...");
         getForecastBean().enrich(currentProduction);
         LOG.log(Level.INFO,
                 "Production Enriched::Own entmt={0},Partner entmt={1}",
                 new Object[]{currentProduction.getOwnShareEntitlement(),
                     currentProduction.getPartnerShareEntitlement()
                 });
-
+        
     }
 
     public void openingStockChanged() {

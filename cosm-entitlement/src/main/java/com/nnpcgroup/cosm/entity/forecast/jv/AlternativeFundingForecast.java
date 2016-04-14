@@ -27,6 +27,12 @@ public abstract class AlternativeFundingForecast extends Forecast {
     private Double residualCarryExpenditure;
     private Double guaranteedNotionalMargin;
     private Double capitalCarryCostAmortized;
+    private Double carryOilCum;
+    private Double sharedOilCum;
+    private Double carryTaxExpenditureCum;
+    private Double carryTaxReliefCum;
+    private Double residualCarryExpenditureCum;
+    private Double capitalCarryCostAmortizedCum;
 
     public AlternativeFundingForecast() {
     }
@@ -101,6 +107,54 @@ public abstract class AlternativeFundingForecast extends Forecast {
 
     public void setCapitalCarryCostAmortized(Double capitalCarryCostAmortized) {
         this.capitalCarryCostAmortized = capitalCarryCostAmortized;
+    }
+
+    public Double getCarryOilCum() {
+        return carryOilCum;
+    }
+
+    public void setCarryOilCum(Double carryOilCum) {
+        this.carryOilCum = carryOilCum;
+    }
+
+    public Double getSharedOilCum() {
+        return sharedOilCum;
+    }
+
+    public void setSharedOilCum(Double sharedOilCum) {
+        this.sharedOilCum = sharedOilCum;
+    }
+
+    public Double getCarryTaxExpenditureCum() {
+        return carryTaxExpenditureCum;
+    }
+
+    public void setCarryTaxExpenditureCum(Double carryTaxExpenditureCum) {
+        this.carryTaxExpenditureCum = carryTaxExpenditureCum;
+    }
+
+    public Double getCarryTaxReliefCum() {
+        return carryTaxReliefCum;
+    }
+
+    public void setCarryTaxReliefCum(Double carryTaxReliefCum) {
+        this.carryTaxReliefCum = carryTaxReliefCum;
+    }
+
+    public Double getResidualCarryExpenditureCum() {
+        return residualCarryExpenditureCum;
+    }
+
+    public void setResidualCarryExpenditureCum(Double residualCarryExpenditureCum) {
+        this.residualCarryExpenditureCum = residualCarryExpenditureCum;
+    }
+
+    public Double getCapitalCarryCostAmortizedCum() {
+        return capitalCarryCostAmortizedCum;
+    }
+
+    public void setCapitalCarryCostAmortizedCum(Double capitalCarryCostAmortizedCum) {
+        this.capitalCarryCostAmortizedCum = capitalCarryCostAmortizedCum;
     }
 
     

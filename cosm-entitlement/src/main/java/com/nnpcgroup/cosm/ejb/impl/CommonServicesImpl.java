@@ -22,6 +22,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import com.nnpcgroup.cosm.ejb.CommonServices;
+import com.nnpcgroup.cosm.entity.FiscalPeriod;
 
 /**
  *
@@ -127,7 +128,7 @@ public abstract class CommonServicesImpl<T> extends AbstractCrudServicesImpl<T> 
 
     @Override
     public abstract T computeEntitlement(T production);
-    
+
     @Override
     public abstract T createInstance();
 
@@ -152,6 +153,24 @@ public abstract class CommonServicesImpl<T> extends AbstractCrudServicesImpl<T> 
         int year = ((Production) production).getPeriodYear();
         Contract cs = ((Production) production).getContract();
 
+        FiscalPeriod prevFp = getPreviousFiscalPeriod(year, month);
+        
+        T prod = findByContractPeriod(prevFp.getYear(), prevFp.getMonth(), cs);
+
+        return prod;
+
+    }
+
+    @Override
+    public FiscalPeriod getPreviousFiscalPeriod(FiscalPeriod fp) {
+        int month = fp.getMonth();
+        int year = fp.getYear();
+
+        return getPreviousFiscalPeriod(year, month);
+    }
+
+    @Override
+    public FiscalPeriod getPreviousFiscalPeriod(int year, int month) {
         if (month > 1) {
             --month;
         } else {
@@ -159,10 +178,7 @@ public abstract class CommonServicesImpl<T> extends AbstractCrudServicesImpl<T> 
             --year;
         }
 
-        T prod = findByContractPeriod(year, month, cs);
-
-        return prod;
-
+        return new FiscalPeriod(year, month);
     }
 
     @Override

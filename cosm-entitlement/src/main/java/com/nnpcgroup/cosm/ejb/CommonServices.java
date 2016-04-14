@@ -7,6 +7,7 @@ package com.nnpcgroup.cosm.ejb;
 
 import com.nnpcgroup.cosm.entity.contract.Contract;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
+import com.nnpcgroup.cosm.entity.FiscalPeriod;
 import com.nnpcgroup.cosm.entity.Terminal;
 import java.util.List;
 
@@ -30,6 +31,10 @@ public interface CommonServices<T> extends AbstractCrudServices<T> {
     public T computeOpeningStock(T production);
 
     public T getPreviousMonthProduction(T production);
+    
+    public FiscalPeriod getPreviousFiscalPeriod(FiscalPeriod fp);
+    
+    public FiscalPeriod getPreviousFiscalPeriod(int year, int month);
 
     public T computeClosingStock(T production);
         

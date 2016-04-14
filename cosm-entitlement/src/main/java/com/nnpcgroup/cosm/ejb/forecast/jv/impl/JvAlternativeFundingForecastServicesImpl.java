@@ -6,6 +6,7 @@
 package com.nnpcgroup.cosm.ejb.forecast.jv.impl;
 
 import com.nnpcgroup.cosm.ejb.forecast.jv.JvAlternativeFundingForecastServices;
+import com.nnpcgroup.cosm.entity.FiscalPeriod;
 import com.nnpcgroup.cosm.entity.contract.AlternativeFundingContract;
 import com.nnpcgroup.cosm.entity.contract.Contract;
 import com.nnpcgroup.cosm.entity.forecast.jv.AlternativeFundingForecast;
@@ -14,7 +15,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.enterprise.context.Dependent;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Root;
 
 /**
  *
@@ -62,25 +69,6 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
     }
 
     @Override
-    public T getPreviousMonthProduction(T forecast) {
-        int month = ((Forecast) forecast).getPeriodMonth();
-        int year = ((Forecast) forecast).getPeriodYear();
-        Contract cs = ((Forecast) forecast).getContract();
-
-        if (month > 1) {
-            --month;
-        } else {
-            month = 12;
-            --year;
-        }
-
-        T prod = findByContractPeriod(year, month, cs);
-
-        return prod;
-
-    }
-
-    @Override
     public T openingStockChanged(T forecast) {
         LOG.log(Level.INFO, "Opening Stock changed {0}...", forecast);
         return computeClosingStock(
@@ -115,19 +103,49 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
     @Override
     public T enrich(T production) {
         LOG.log(Level.INFO, "Enriching forecast {0}...", production);
-        return computeClosingStock(
-                computeLifting(
-                        computeAvailability(
-                                computeAlternativeFunding(
-                                        computeEntitlement(
-                                                computeGrossProduction(
-                                                        computeOpeningStock(production)
+        return computeCummulative(
+                computeClosingStock(
+                        computeLifting(
+                                computeAvailability(
+                                        computeAlternativeFunding(
+                                                computeEntitlement(
+                                                        computeGrossProduction(
+                                                                computeOpeningStock(production)
+                                                        )
                                                 )
                                         )
                                 )
                         )
                 )
         );
+    }
+
+    private T computeCummulative(T forecast) {
+        T prev = getPreviousMonthProduction(forecast);
+        double sharedOilCum = forecast.getSharedOil();
+        double carryOilCum = forecast.getCarryOil();
+        double CTECum = forecast.getCarryTaxExpenditure();
+        double CTRCum = forecast.getCarryTaxRelief();
+        double RCECum = forecast.getResidualCarryExpenditure();
+        double CCCACum = forecast.getCapitalCarryCostAmortized();
+
+        if (prev != null) {
+            sharedOilCum += prev.getSharedOilCum();
+            carryOilCum += prev.getCarryOilCum();
+            CTECum += prev.getCarryTaxExpenditureCum();
+            CTRCum += prev.getCarryTaxReliefCum();
+            RCECum += prev.getResidualCarryExpenditureCum();
+            CCCACum += prev.getCapitalCarryCostAmortizedCum();
+        }
+
+        forecast.setSharedOilCum(sharedOilCum);
+        forecast.setCarryOilCum(carryOilCum);
+        forecast.setCarryTaxExpenditureCum(CTECum);
+        forecast.setCarryTaxReliefCum(CTRCum);
+        forecast.setResidualCarryExpenditureCum(RCECum);
+        forecast.setCapitalCarryCostAmortizedCum(CCCACum);
+        
+        return forecast;
     }
 
     public T computeAlternativeFunding(T production) {
@@ -202,7 +220,8 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
         return forecast;
     }
 
-    private T computeGuaranteedNotionalMargin(T forecast) {
+    @Override
+    public T computeGuaranteedNotionalMargin(T forecast) {
         Double GNM = 4.1465; //TODO:temporary placeholder
         forecast.setGuaranteedNotionalMargin(GNM);
         LOG.log(Level.INFO, "Guaranteed National Margin (GNM)=>{0}", GNM);
@@ -210,7 +229,8 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
         return forecast;
     }
 
-    private T computeResidualCarryExpenditure(T forecast) {
+    @Override
+    public T computeResidualCarryExpenditure(T forecast) {
         double RCE;
         double CTE = forecast.getCarryTaxExpenditure();
         double CTR = forecast.getCarryTaxRelief();
@@ -223,7 +243,8 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
         return forecast;
     }
 
-    private T computeCarryTaxRelief(T forecast) {
+    @Override
+    public T computeCarryTaxRelief(T forecast) {
         double CTR;
         double CTE = forecast.getCarryTaxExpenditure();
         CTR = CTE * 0.85;
@@ -233,7 +254,8 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
         return forecast;
     }
 
-    private T computeCapitalCarryCostAmortized(T forecast) {
+    @Override
+    public T computeCapitalCarryCostAmortized(T forecast) {
         double CCCA;
         double tangible = computeTangibleCost(forecast);
         double intangible = computeIntangibleCost(forecast);
@@ -245,7 +267,8 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
         return forecast;
     }
 
-    private T computeCarryTaxExpenditure(T forecast) {
+    @Override
+    public T computeCarryTaxExpenditure(T forecast) {
         Double CCCA;
         Double PIA;
 
@@ -260,7 +283,7 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
         return forecast;
     }
 
-    private double computePetroleumInvestmentAllowance(T forecast) {
+    public double computePetroleumInvestmentAllowance(T forecast) {
         Double tangibleCost = computeTangibleCost(forecast);
         Double PIA = tangibleCost * 0.10;
 
@@ -269,7 +292,7 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
         return PIA;
     }
 
-    private double computeCarryCapitalCost(T forecast) {
+    public double computeCarryCapitalCost(T forecast) {
         Double tangibleCost = forecast.getTangibleCost();
         Double intangibleCost = forecast.getIntangibleCost();
 
@@ -292,5 +315,123 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
         LOG.log(Level.INFO, "Intangible Cost => {0}", new Object[]{forecast.getIntangibleCost()});
 
         return forecast.getIntangibleCost();
+    }
+
+    @Override
+    public T findByContractPeriod(int year, int month, Contract cs) {
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+
+        T production;
+
+        CriteriaQuery cq = cb.createQuery();
+        Root e = cq.from(entityClass);
+        try {
+            cq.where(
+                    cb.and(cb.equal(e.get("periodYear"), year),
+                            cb.equal(e.get("periodMonth"), month),
+                            cb.equal(e.get("contract"), cs)
+                    ));
+
+            Query query = getEntityManager().createQuery(cq);
+
+            production = (T) query.getSingleResult();
+        } catch (NoResultException nre) {
+            return null;
+        }
+
+        return production;
+    }
+
+    @Override
+    public double computeCarryOilCum(Contract cs) {
+
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery<Double> q = cb.createQuery(Double.class);
+        Root<T> t = q.from(entityClass);
+
+        Expression<Double> sum = cb.sum(t.<Double>get("carryOil"));
+        q.select(sum.alias("carryOil"))
+                .where(
+                        cb.equal(t.get("contract"), cs)
+                );
+
+        // OR q.select(cb.sum(t.<Double>get("carryOil")).alias("D"));
+        return getEntityManager().createQuery(q).getSingleResult();
+
+    }
+
+    @Override
+    public double computeSharedOilCum(Contract cs) {
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery<Double> q = cb.createQuery(Double.class);
+        Root<T> t = q.from(entityClass);
+
+        Expression<Double> sum = cb.sum(t.<Double>get("sharedOil"));
+        q.select(sum.alias("sharedOil"))
+                .where(
+                        cb.equal(t.get("contract"), cs)
+                );
+
+        return getEntityManager().createQuery(q).getSingleResult();
+    }
+
+    @Override
+    public double computeResidualCarryExpenditureCum(Contract cs) {
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery<Double> q = cb.createQuery(Double.class);
+        Root<T> t = q.from(entityClass);
+
+        Expression<Double> sum = cb.sum(t.<Double>get("residualCarryExpenditure"));
+        q.select(sum.alias("residualCarryExpenditure"))
+                .where(
+                        cb.equal(t.get("contract"), cs)
+                );
+
+        return getEntityManager().createQuery(q).getSingleResult();
+    }
+
+    @Override
+    public double computeCarryTaxReliefCum(Contract cs) {
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery<Double> q = cb.createQuery(Double.class);
+        Root<T> t = q.from(entityClass);
+
+        Expression<Double> sum = cb.sum(t.<Double>get("carryTaxRelief"));
+        q.select(sum.alias("carryTaxRelief"))
+                .where(
+                        cb.equal(t.get("contract"), cs)
+                );
+
+        return getEntityManager().createQuery(q).getSingleResult();
+    }
+
+    @Override
+    public double computeCarryTaxExpenditureCum(Contract cs) {
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery<Double> q = cb.createQuery(Double.class);
+        Root<T> t = q.from(entityClass);
+
+        Expression<Double> sum = cb.sum(t.<Double>get("carryTaxExpenditure"));
+        q.select(sum.alias("carryTaxExpenditure"))
+                .where(
+                        cb.equal(t.get("contract"), cs)
+                );
+
+        return getEntityManager().createQuery(q).getSingleResult();
+    }
+
+    @Override
+    public double computeCapitalCarryCostAmortizedCum(Contract cs) {
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery<Double> q = cb.createQuery(Double.class);
+        Root<T> t = q.from(entityClass);
+
+        Expression<Double> sum = cb.sum(t.<Double>get("capitalCarryCostAmortized"));
+        q.select(sum.alias("capitalCarryCostAmortized"))
+                .where(
+                        cb.equal(t.get("contract"), cs)
+                );
+
+        return getEntityManager().createQuery(q).getSingleResult();
     }
 }

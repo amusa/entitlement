@@ -5,6 +5,7 @@
  */
 package com.nnpcgroup.cosm.ejb.forecast.jv;
 
+import com.nnpcgroup.cosm.entity.contract.Contract;
 import com.nnpcgroup.cosm.entity.forecast.jv.AlternativeFundingForecast;
 
 /**
@@ -17,5 +18,27 @@ public interface JvAlternativeFundingForecastServices<T extends AlternativeFundi
     public T computeCarryOil(T forecast);
 
     public T computeSharedOil(T forecast);
+
+    public T computeGuaranteedNotionalMargin(T forecast);
+
+    public T computeResidualCarryExpenditure(T forecast);
+
+    public T computeCarryTaxRelief(T forecast);
+
+    public T computeCarryTaxExpenditure(T forecast);
+
+    public T computeCapitalCarryCostAmortized(T forecast);
+
+    public double computeCarryOilCum(Contract cs);
+
+    public double computeSharedOilCum(Contract cs);
+
+    public double computeResidualCarryExpenditureCum(Contract cs);
+
+    public double computeCarryTaxReliefCum(Contract cs);
+
+    public double computeCarryTaxExpenditureCum(Contract cs);
+
+    public double computeCapitalCarryCostAmortizedCum(Contract cs);
 
 }

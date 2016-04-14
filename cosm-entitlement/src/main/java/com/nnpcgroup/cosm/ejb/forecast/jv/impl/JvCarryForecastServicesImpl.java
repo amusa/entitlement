@@ -14,7 +14,7 @@ import javax.enterprise.context.Dependent;
  *
  * @author 18359
  */
-
+@Dependent
 public abstract class JvCarryForecastServicesImpl extends JvAlternativeFundingForecastServicesImpl<CarryForecast> implements JvCarryForecastServices{
 
     private static final Logger LOG = Logger.getLogger(JvCarryForecastServicesImpl.class.getName());

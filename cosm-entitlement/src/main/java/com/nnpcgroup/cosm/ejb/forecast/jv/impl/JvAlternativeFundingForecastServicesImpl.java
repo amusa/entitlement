@@ -18,6 +18,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Expression;
@@ -122,7 +123,7 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
 
     private T computeCummulative(T forecast) {
         T prev = getPreviousMonthProduction(forecast);
-        Double sharedOilCum = forecast.getSharedOil();
+        Double sharedOilCum = forecast.getSharedOil() != null ? forecast.getSharedOil() : new Double(0);
         Double carryOilCum = forecast.getCarryOil();
         Double CTECum = forecast.getCarryTaxExpenditure();
         Double CTRCum = forecast.getCarryTaxRelief();
@@ -130,6 +131,8 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
         Double CCCACum = forecast.getCapitalCarryCostAmortized();
 
         if (prev != null) {
+            LOG.log(Level.INFO, "SharedOilCum = {0}, Previous Forecast = {1}, prev.getSharedOilCum() = {2}", new Object[]{sharedOilCum, prev, prev.getSharedOilCum()});
+
             sharedOilCum += prev.getSharedOilCum();
             carryOilCum += prev.getCarryOilCum();
             CTECum += prev.getCarryTaxExpenditureCum();
@@ -171,8 +174,8 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
         Double partnerEntitlement = production.getPartnerShareEntitlement();
         Double openingStock = production.getOpeningStock();
         Double partnerOpeningStock = production.getPartnerOpeningStock();
-        Double sharedOil = production.getSharedOil();
-        Double carryOil = production.getCarryOil();
+        Double sharedOil = production.getSharedOil() != null ? production.getSharedOil() : new Double(0);
+        Double carryOil = production.getCarryOil() != null ? production.getCarryOil() : new Double(0);
         Double carrySharedOil = sharedOil + carryOil;
 
         availability = ownEntitlement + openingStock - carrySharedOil;
@@ -192,14 +195,21 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
         AlternativeFundingContract afContract = (AlternativeFundingContract) contract;
 
         Double terminalPeriod = afContract.getTerminalPeriod();
-        Long sharedOilPeriod = getSharedOilPeriod(forecast.getContract());
+
+        if (terminalPeriod == null) {
+            return false;
+        }
+
+        Long sharedOilPeriod = getSharedOilPeriod(afContract);
+
+        LOG.log(Level.INFO, "Shared Oil Received for {0} of {1} months...", new Object[]{sharedOilPeriod, terminalPeriod});
 
         return sharedOilPeriod < terminalPeriod;
     }
 
     private boolean isSharedOilValueDue(T forecast) {
         T prev = getPreviousMonthProduction(forecast);
-        Double sharedOilCum = null;
+        Double sharedOilCum = new Double(0);
 
         if (prev != null) {
             sharedOilCum = prev.getSharedOilCum();
@@ -214,7 +224,7 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
         if (terminalSharedOil == null) {
             return false;
         }
-
+        LOG.log(Level.INFO, "Shared Oil value to date: {0} out of {1}", new Object[]{sharedOilCum, terminalSharedOil});
         return sharedOilCum < terminalSharedOil;
     }
 
@@ -478,22 +488,36 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
     }
 
     //@Override
-    public Long getSharedOilPeriod(Contract cs) {
-        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
-        CriteriaQuery<Long> q = cb.createQuery(Long.class);
-        Root<T> t = q.from(entityClass);
+    public Long getSharedOilPeriod(AlternativeFundingContract contract) {
+//        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+//        CriteriaQuery<Long> q = cb.createQuery(Long.class);
+//        Root<T> t = q.from(entityClass);
+//
+//        q.select(cb.count(q.from(entityClass)));
+////        q.where(
+////                cb.and(
+////                        cb.equal(t.get("contract"), contract),
+////                        cb.notEqual(t.get("sharedOil"), "")
+////                )
+////        );
+//        q.where(
+//                cb.equal(t.get("contract"), contract)
+//        );
+//
+//        Long sharedOilPeriod = getEntityManager().createQuery(q).getSingleResult();
 
-        q.select(cb.count(q.from(entityClass)));
-        q.where(
-                cb.and(
-                        cb.equal(t.get("contract"), cs),
-                        cb.notEqual(t.get("sharedOil"), null))
-        );
+        LOG.log(Level.INFO, "Entity type is {0}...", entityClass);
 
-        Long sharedOilPeriod = getEntityManager().createQuery(q).getSingleResult();
+        TypedQuery<Long> query = getEntityManager().createQuery(
+                "SELECT COUNT(f) "
+                + "FROM AlternativeFundingForecast f  WHERE f.contract = :contract AND f.sharedOil != null", Long.class);
+        query.setParameter("contract", contract);
+
+        long sharedOilPeriod = query.getSingleResult();
 
         LOG.log(Level.INFO, "Shared Oil Received for {0} months...", sharedOilPeriod);
 
         return sharedOilPeriod;
+
     }
 }

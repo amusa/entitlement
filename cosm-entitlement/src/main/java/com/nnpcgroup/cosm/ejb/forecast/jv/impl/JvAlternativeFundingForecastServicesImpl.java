@@ -6,7 +6,6 @@
 package com.nnpcgroup.cosm.ejb.forecast.jv.impl;
 
 import com.nnpcgroup.cosm.ejb.forecast.jv.JvAlternativeFundingForecastServices;
-import com.nnpcgroup.cosm.entity.FiscalPeriod;
 import com.nnpcgroup.cosm.entity.contract.AlternativeFundingContract;
 import com.nnpcgroup.cosm.entity.contract.Contract;
 import com.nnpcgroup.cosm.entity.forecast.jv.AlternativeFundingForecast;
@@ -189,7 +188,7 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
         return production;
     }
 
-    private boolean isSharedOilPeriodDue(T forecast) {
+    private boolean isSharedOilTerminalPeriodDue(T forecast) {
         Contract contract = forecast.getContract();
         assert (contract instanceof AlternativeFundingContract);
         AlternativeFundingContract afContract = (AlternativeFundingContract) contract;
@@ -204,10 +203,10 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
 
         LOG.log(Level.INFO, "Shared Oil Received for {0} of {1} months...", new Object[]{sharedOilPeriod, terminalPeriod});
 
-        return sharedOilPeriod < terminalPeriod;
+        return sharedOilPeriod >= terminalPeriod;
     }
 
-    private boolean isSharedOilValueDue(T forecast) {
+    private boolean isSharedOilTerminalValueDue(T forecast) {
         T prev = getPreviousMonthProduction(forecast);
         Double sharedOilCum = new Double(0);
 
@@ -225,18 +224,18 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
             return false;
         }
         LOG.log(Level.INFO, "Shared Oil value to date: {0} out of {1}", new Object[]{sharedOilCum, terminalSharedOil});
-        return sharedOilCum < terminalSharedOil;
+        return sharedOilCum >= terminalSharedOil;
     }
 
-    private boolean isShareOilDue(T forecast) {
-        return isSharedOilPeriodDue(forecast) || isSharedOilValueDue(forecast);
+    private boolean isShareOilTerminate(T forecast) {
+        return isSharedOilTerminalPeriodDue(forecast) || isSharedOilTerminalValueDue(forecast);
     }
 
     @Override
     public T computeSharedOil(T forecast) {
-        if (!isShareOilDue(forecast)) {
+        if (isShareOilTerminate(forecast)) {
             LOG.log(Level.INFO, "Bypassing Shared Oil computation. Terminal condition reached.");
-            return forecast;
+            return forecast;        
         }
 
         Double sharedOil;

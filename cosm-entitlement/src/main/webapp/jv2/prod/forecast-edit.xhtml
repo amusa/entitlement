@@ -23,7 +23,7 @@
         </ui:define>
 
         <ui:define name="page-title">
-            <h:outputText value="Create JV FORECAST"></h:outputText>
+            <h:outputText value="Edit JV FORECAST"></h:outputText>
         </ui:define>
 
         <ui:define name="side-menu">
@@ -31,22 +31,22 @@
         </ui:define>
 
         <ui:define name="content-area">
-            <h:form id="JvCreateForm">
+            <h:form id="JvEditForm">
                 <div class="modal-body">
-                    <h:panelGroup id="JvCreatePanel">
+                    <h:panelGroup id="JvEditPanel">
                         <div class="well tile">
                             <div class="row">
                                 <div class="row">
                                     <div class="col-md-4 m-b-15">
                                         <h:outputLabel value="Year" for="periodYear"/>
-                                        <h:selectOneMenu id="periodYear" value="#{jvProdController.periodYear}" class="form-control input-sm m-b-10" >
+                                        <h:selectOneMenu id="periodYear" value="#{jvProdController.currentProduction.periodYear}" class="form-control input-sm m-b-10" >
                                             <f:selectItems value="#{generalController.yearsAvailableSelectOne}" var="year" itemValue="#{year.value}"/>
                                             <f:ajax listener="#{generalController.yearChanged}" event="change" render="periodMonth"/>
                                         </h:selectOneMenu>
                                     </div>
                                     <div class="col-md-4 m-b-15">
                                         <h:outputLabel value="Month" for="periodMonth"/>
-                                        <h:selectOneMenu id="periodMonth" value="#{jvProdController.periodMonth}" class="form-control input-sm m-b-10">
+                                        <h:selectOneMenu id="periodMonth" value="#{jvProdController.currentProduction.periodMonth}" class="form-control input-sm m-b-10">
                                             <f:selectItem itemValue="#{null}" itemLabel="--select--" />
                                             <f:selectItems value="#{generalController.months}" var="mth" itemValue="#{mth.month}" itemLabel="#{mth.monthStr}" />
                                             <f:ajax />
@@ -63,9 +63,9 @@
                                 <div class="row">
                                     <div class="col-md-4 m-b-15">
                                         <h:outputLabel value="Contract" for="contracts" />
-                                        <h:selectOneMenu id="contracts" value="#{jvProdController.currentContract}" class="form-control input-sm m-b-10">
+                                        <h:selectOneMenu id="contracts" value="#{jvProdController.currentProduction.contract}" class="form-control input-sm m-b-10">
                                             <f:selectItems value="#{jvProdController.contractSelectOne}"/>
-                                            <f:ajax event="change" listener="#{jvProdController.currentContractChanged}" render="JvCreateForm carryContractInfo"/>
+                                            <f:ajax event="change" listener="#{jvProdController.currentContractChanged}" render="JvEditForm carryContractInfo"/>
                                         </h:selectOneMenu>
                                     </div>
                                 </div>
@@ -371,7 +371,7 @@
                     <h:commandButton  value="#{bundle.Back}" action="forecast" immediate="true" class="btn btn-sm"/>
                     
                     <h:commandButton  value="#{bundle.Save}"  class="btn btn-sm">
-                        <f:ajax listener="#{jvProdController.create}" render="@form msgs"/>
+                        <f:ajax listener="#{jvProdController.update}" render="@form msgs"/>
                     </h:commandButton>
 
                     <h:commandButton   value="#{bundle.Cancel}" action="forecast" immediate="true" class="btn btn-sm">

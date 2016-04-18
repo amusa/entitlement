@@ -143,9 +143,10 @@ public class JvForecastController implements Serializable {
         this.productions = productions;
     }
 
-    public void prepareCreate() {
+    public String prepareCreate() {
         LOG.info("prepareCreate called...");
         reset();
+        return "forecast-create";
     }
 
     public void destroy() {

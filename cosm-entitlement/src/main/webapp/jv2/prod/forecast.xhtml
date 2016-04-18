@@ -49,7 +49,7 @@
                         </h:selectOneMenu>
                     </div>
                     <div class="col-md-3 m-b-10">
-                        <label>Contract</label>
+                        <label>Fiscal Arrangement</label>
                         <h:selectOneMenu id="contract" value="#{jvProdController.currentFiscalArrangement}" class="form-control input-sm m-b-10">                                              
                             <f:selectItems value="#{fiscalController.fiscalSelectOptions}" />   
                             <f:ajax />     
@@ -173,7 +173,7 @@
                                             <h:commandLink  pt:data-target="#JvCreateDlg" pt:look="warning" pt:data-toggle="modal" >
                                                 <span class="icon">&#61943;</span>
                                                 #{bundle.Create}
-                                                <f:ajax event="click" render="JvCreateForm" listener="#{jvProdController.prepareCreate}"/>
+
                                             </h:commandLink>                                       
                                         </li>
                                         <li>
@@ -183,10 +183,9 @@
                                                 <f:ajax event="click" render="JvViewForm" listener="#{jvProdController.setCurrentProduction(prod)}"/>
                                             </h:commandLink>
                                         </li>
-                                        <li><h:commandLink pt:data-target="#JvEditDlg" pt:look="warning" pt:data-toggle="modal">
+                                        <li><h:commandLink action="forecast-edit" actionListener="#{jvProdController.setCurrentProduction(prod)}">
                                                 <span class="icon">&#61952;</span>
-                                                #{bundle.Edit}
-                                                <f:ajax event="click" render="JvEditForm" listener="#{jvProdController.setCurrentProduction(prod)}"/>
+                                                #{bundle.Edit}                                               
                                             </h:commandLink>
                                         </li>  
                                         <li>
@@ -209,8 +208,8 @@
 
                                 <button jsf:id="createButton" jsf:outcome="forecast-create" class="btn m-r-5">
                                     <span class="icon">&#61943;</span>
-                                    #{bundle.Create}
-                                    <f:ajax event="click" render="JvCreateForm"  listener="#{jvProdController.prepareCreate}"/>                                    
+                                    #{bundle.Create}  
+                                    <f:ajax event="click" listener="#{jvProdController.prepareCreate}"/> 
                                 </button>
 
                                 <button jsf:id="viewButton" look="warning" data-target="#JvViewDlg" data-toggle="modal" class="btn m-r-5">

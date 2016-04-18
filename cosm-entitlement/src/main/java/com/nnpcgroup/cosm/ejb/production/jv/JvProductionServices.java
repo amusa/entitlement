@@ -8,13 +8,14 @@ package com.nnpcgroup.cosm.ejb.production.jv;
 import com.nnpcgroup.cosm.ejb.*;
 import com.nnpcgroup.cosm.entity.contract.Contract;
 import com.nnpcgroup.cosm.entity.production.jv.Production;
+import java.io.Serializable;
 
 /**
  *
  * @author 18359
  * @param <T>
  */
-public interface JvProductionServices<T extends Production, E extends Contract> extends CommonServices<T> {
+public interface JvProductionServices<T extends Production, E extends Contract> extends CommonServices<T>, Serializable {
 
     public T grossProductionChanged(T production);
 

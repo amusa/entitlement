@@ -9,12 +9,14 @@ import com.nnpcgroup.cosm.ejb.production.jv.RegularProductionServices;
 import com.nnpcgroup.cosm.entity.contract.RegularContract;
 import com.nnpcgroup.cosm.entity.production.jv.RegularProduction;
 import java.util.logging.Logger;
+import javax.enterprise.context.Dependent;
 
 /**
  *
  * @author 18359
  */
-public abstract class RegularProductionServicesImpl extends JvProductionServicesImpl<RegularProduction, RegularContract> implements RegularProductionServices{
+@Dependent
+public  class RegularProductionServicesImpl extends JvProductionServicesImpl<RegularProduction, RegularContract> implements RegularProductionServices{
 
     private static final Logger LOG = Logger.getLogger(RegularProductionServicesImpl.class.getName());
 
@@ -169,4 +171,9 @@ public abstract class RegularProductionServicesImpl extends JvProductionServices
 //    }
 //    
 //    
+
+    @Override
+    public RegularProduction createInstance() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

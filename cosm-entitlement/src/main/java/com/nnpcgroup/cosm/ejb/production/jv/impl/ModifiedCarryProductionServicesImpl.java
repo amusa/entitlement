@@ -6,6 +6,7 @@
 package com.nnpcgroup.cosm.ejb.production.jv.impl;
 
 import com.nnpcgroup.cosm.ejb.production.jv.ModifiedCarryProductionServices;
+import com.nnpcgroup.cosm.entity.contract.ModifiedCarryContract;
 import com.nnpcgroup.cosm.entity.production.jv.ModifiedCarryProduction;
 import java.util.logging.Logger;
 
@@ -13,7 +14,7 @@ import java.util.logging.Logger;
  *
  * @author 18359
  */
-public abstract class ModifiedCarryProductionServicesImpl extends AlternativeFundingProductionServicesImpl<ModifiedCarryProduction> implements ModifiedCarryProductionServices{
+public abstract class ModifiedCarryProductionServicesImpl extends AlternativeFundingProductionServicesImpl<ModifiedCarryProduction, ModifiedCarryContract> implements ModifiedCarryProductionServices{
 
     private static final Logger LOG = Logger.getLogger(ModifiedCarryProductionServicesImpl.class.getName());
 

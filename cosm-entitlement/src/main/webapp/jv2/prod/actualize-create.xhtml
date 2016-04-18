@@ -103,14 +103,19 @@
                                         <h3 class="panel-title">Production</h3>
                                     </div>
                                     <div class="panel-body">
-                                        <div class="row">                                            
+                                        <div class="row">
+                                            <div class="col-md-4 m-b-15">
+                                                <h:outputLabel value="Daily Prod (bpd)" for="productionVolume" />
+                                                <h:inputText id="productionVolume" value="#{jvActualController.currentProduction.productionVolume}" title="Daily Production Volume" class="form-control input-sm" >
+                                                    <f:ajax event="change" listener="#{jvActualController.productionVolumeChanged}"
+                                                            render="grossVolume carryOil carryOilCum sharedOil sharedOilCum openingStock ownShareEntitlement closingStock lifting cargoes availability ptnrOpeningStock ptnrEntitlement ptnrClosingStock ptnrLifting ptnrCargoes ptnrAvailability ccc ccca cte ctr rce ignm cccaCum cteCum ctrCum rceCum ignmCum"/>
+                                                    execute="contract"/>
+                                                </h:inputText>
+                                            </div>
                                             <div class="col-md-4 m-b-15">
                                                 <h:outputLabel value="Gross Prod" for="grossVolume" />
                                                 <h:inputText id="grossVolume" value="#{jvActualController.currentProduction.grossProduction}" title="Gross Prod Volume" class="form-control input-sm" >
                                                     <f:convertNumber pattern="###,###,###.####" />
-                                                    <f:ajax event="change" listener="#{jvActualController.grossProductionChanged}"
-                                                            render="carryOil carryOilCum sharedOil sharedOilCum openingStock ownShareEntitlement closingStock lifting cargoes availability ptnrOpeningStock ptnrEntitlement ptnrClosingStock ptnrLifting ptnrCargoes ptnrAvailability ccc ccca cte ctr rce ignm cccaCum cteCum ctrCum rceCum ignmCum"/>
-                                                    execute="contract"/>
                                                 </h:inputText>
                                             </div>
                                         </div>
@@ -357,5 +362,6 @@
                 </div>
             </div>
         </div> 
+
     </ui:composition>
 </html>

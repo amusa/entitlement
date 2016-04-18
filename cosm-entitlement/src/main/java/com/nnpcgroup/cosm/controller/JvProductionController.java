@@ -6,12 +6,18 @@
 package com.nnpcgroup.cosm.controller;
 
 import com.nnpcgroup.cosm.controller.util.JsfUtil;
+import com.nnpcgroup.cosm.ejb.contract.ContractServices;
 import com.nnpcgroup.cosm.ejb.production.jv.JvProduction;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
+import com.nnpcgroup.cosm.entity.contract.CarryContract;
+import com.nnpcgroup.cosm.entity.contract.Contract;
+import com.nnpcgroup.cosm.entity.contract.ModifiedCarryContract;
+import com.nnpcgroup.cosm.entity.contract.RegularContract;
 import com.nnpcgroup.cosm.entity.forecast.jv.CarryForecast;
 import com.nnpcgroup.cosm.entity.forecast.jv.Forecast;
 import com.nnpcgroup.cosm.entity.forecast.jv.ModifiedCarryForecast;
 import com.nnpcgroup.cosm.entity.forecast.jv.RegularForecast;
+import com.nnpcgroup.cosm.entity.production.jv.AlternativeFundingProduction;
 import com.nnpcgroup.cosm.entity.production.jv.CarryProduction;
 import com.nnpcgroup.cosm.entity.production.jv.ModifiedCarryProduction;
 import com.nnpcgroup.cosm.entity.production.jv.RegularProduction;
@@ -45,11 +51,15 @@ public class JvProductionController implements Serializable {
     @EJB
     private JvProduction productionBean;
 
+    @EJB
+    private ContractServices contractBean;
+
     private Production currentProduction;
     private List<Production> productions;
     private Integer periodYear;
     private Integer periodMonth;
     private FiscalArrangement currentFiscalArrangement;
+    private Contract currentContract;
 
     /**
      * Creates a new instance of JvController
@@ -69,6 +79,46 @@ public class JvProductionController implements Serializable {
         this.currentProduction = currentProduction;
         this.currentFiscalArrangement = (currentProduction != null)
                 ? currentProduction.getContract().getFiscalArrangement() : null;
+    }
+
+     public AlternativeFundingProduction getCurrentAfProduction() {
+        if (currentProduction instanceof AlternativeFundingProduction) {
+            return (AlternativeFundingProduction) currentProduction;
+        }
+        return null;
+    }
+
+    public void setCurrentAfProduction(AlternativeFundingProduction afProduction) {
+        if (afProduction != null) {
+            this.currentProduction = afProduction;
+        }
+    }
+    
+     public boolean isFiscalArrangementAfContract() {
+        return (getCurrentProduction() instanceof AlternativeFundingProduction);
+    }
+
+    public void currentContractChanged(){
+        LOG.log(Level.INFO, "Contract Selected...{0}", currentContract);
+        if (currentContract instanceof RegularContract) {
+            currentProduction = new RegularProduction();
+        } else if (currentContract instanceof CarryContract) {
+            currentProduction = new CarryProduction();
+        } else if (currentContract instanceof ModifiedCarryContract) {
+            currentProduction = new ModifiedCarryProduction();
+        } else {
+            LOG.log(Level.INFO, "Undefined contract selection...{0}", currentContract);
+            //throw new Exception("Undefined contract type");
+        }
+
+        if (currentProduction != null) {
+            currentProduction.setContract(currentContract);
+
+            if (periodYear != null && periodMonth != null) {
+                currentProduction.setPeriodYear(periodYear);
+                currentProduction.setPeriodMonth(periodMonth);
+            }
+        }
     }
 
     public List<Production> getProductions() {
@@ -169,10 +219,22 @@ public class JvProductionController implements Serializable {
     }
 
     public SelectItem[] getContractSelectOne() {
-        if (currentFiscalArrangement == null) {
-            return null;
+
+        List<Contract> contracts = null;
+
+        if (currentFiscalArrangement != null) {
+            contracts = contractBean.findFiscalArrangementContracts(currentFiscalArrangement);
         }
-        return JsfUtil.getSelectItems(currentFiscalArrangement.getContracts(), true);
+
+        return JsfUtil.getSelectItems(contracts, true);
+    }
+
+    public Contract getCurrentContract() {
+        return currentContract;
+    }
+
+    public void setCurrentContract(Contract currentContract) {
+        this.currentContract = currentContract;
     }
 
     public void actualize(Forecast forecast) {
@@ -193,9 +255,9 @@ public class JvProductionController implements Serializable {
                 currentProduction = new CarryProduction();
             } else if (forecast instanceof RegularForecast) {
                 currentProduction = new RegularProduction();
-            }else{
+            } else {
                 //something is wrong
-                 LOG.log(Level.INFO, "Something is wrong! Forecast type not determined {0}...", forecast);
+                LOG.log(Level.INFO, "Something is wrong! Forecast type not determined {0}...", forecast);
             }
 
             LOG.log(Level.INFO, "************productionBean.createInstance() returning {0}...", currentProduction);

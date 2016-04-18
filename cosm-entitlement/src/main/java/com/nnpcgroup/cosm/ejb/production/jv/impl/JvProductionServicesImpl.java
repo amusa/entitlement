@@ -25,8 +25,9 @@ import javax.persistence.criteria.Root;
  *
  * @author 18359
  * @param <T>
+ * @param <E>
  */
-public abstract class JvProductionServicesImpl<T extends Production> extends CommonServicesImpl<T> implements JvProductionServices<T> {
+public abstract class JvProductionServicesImpl<T extends Production, E extends Contract> extends CommonServicesImpl<T> implements JvProductionServices<T, E> {
 
     private static final Logger LOG = Logger.getLogger(JvProductionServicesImpl.class.getName());
 

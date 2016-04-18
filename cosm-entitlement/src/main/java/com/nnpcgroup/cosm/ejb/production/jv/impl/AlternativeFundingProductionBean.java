@@ -6,6 +6,7 @@
 package com.nnpcgroup.cosm.ejb.production.jv.impl;
 
 import com.nnpcgroup.cosm.ejb.production.jv.AlternativeFundingProductionServices;
+import com.nnpcgroup.cosm.entity.contract.AlternativeFundingContract;
 import com.nnpcgroup.cosm.entity.production.jv.AlternativeFundingProduction;
 import java.util.logging.Logger;
 import javax.ejb.Local;
@@ -17,7 +18,7 @@ import javax.ejb.Stateless;
  */
 @Stateless
 @Local(AlternativeFundingProductionServices.class)
-public class AlternativeFundingProductionBean extends AlternativeFundingProductionServicesImpl<AlternativeFundingProduction> implements AlternativeFundingProductionServices<AlternativeFundingProduction> {
+public class AlternativeFundingProductionBean extends AlternativeFundingProductionServicesImpl<AlternativeFundingProduction, AlternativeFundingContract> implements AlternativeFundingProductionServices<AlternativeFundingProduction, AlternativeFundingContract> {
 
     private static final Logger LOG = Logger.getLogger(AlternativeFundingProductionBean.class.getName());
 

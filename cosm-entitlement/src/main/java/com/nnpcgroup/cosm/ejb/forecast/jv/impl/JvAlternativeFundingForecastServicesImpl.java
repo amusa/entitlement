@@ -245,7 +245,7 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
         }
 
         Double sharedOil;
-        Double ownEquity = forecast.getOwnShareEntitlement();
+        Double ownEquity = forecast.getOwnShareEntitlement() != null ? forecast.getOwnShareEntitlement() : new Double(0);
         Double carryOil = forecast.getCarryOil() != null ? forecast.getCarryOil() : 0.0;
 
         Contract contract = forecast.getContract();

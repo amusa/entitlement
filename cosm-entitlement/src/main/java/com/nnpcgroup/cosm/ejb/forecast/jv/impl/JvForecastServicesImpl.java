@@ -53,7 +53,7 @@ public abstract class JvForecastServicesImpl<T extends Forecast> extends CommonS
         Forecast prod = getPreviousMonthProduction(forecast);
         if (prod != null) {
             Double openingStock = prod.getClosingStock();
-            Double partnerOpeningStock = prod.getPartnerOpeningStock();
+            Double partnerOpeningStock = prod.getPartnerClosingStock();
             forecast.setOpeningStock(openingStock);
             forecast.setPartnerOpeningStock(partnerOpeningStock);
         } else {

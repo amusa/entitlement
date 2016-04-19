@@ -50,20 +50,21 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
 
     @Override
     public T computeOpeningStock(T forecast) {
-        Forecast prod = (Forecast) getPreviousMonthProduction(forecast);
-        Double openingStock = null;
-        Double partnerOpeningStock = null;
-        if (prod != null) {
-            openingStock = prod.getClosingStock();
-            partnerOpeningStock = prod.getPartnerOpeningStock();
-            ((Forecast) forecast).setOpeningStock(openingStock);
-            ((Forecast) forecast).setPartnerOpeningStock(partnerOpeningStock);
+        T prev = getPreviousMonthProduction(forecast);
+        Double prevClosingStock = null;
+        Double partnerPrevClosingStock = null;
+        if (prev != null) {
+            prevClosingStock = prev.getClosingStock();
+            partnerPrevClosingStock = prev.getPartnerClosingStock();
+            forecast.setOpeningStock(prevClosingStock);
+            forecast.setPartnerOpeningStock(partnerPrevClosingStock);
         } else {
-            ((Forecast) forecast).setOpeningStock(0.0);
-            ((Forecast) forecast).setPartnerOpeningStock(0.0);
+            LOG.log(Level.INFO, "Previous forecast {0}.", new Object[]{prev});
+            forecast.setOpeningStock(0.0);
+            forecast.setPartnerOpeningStock(0.0);
         }
 
-        LOG.log(Level.INFO, "Own Opening Stock=>{0} Partner Opening Stock=>{1} ", new Object[]{openingStock, partnerOpeningStock});
+        LOG.log(Level.INFO, "Own Opening Stock=>{0} Partner Opening Stock=>{1} ", new Object[]{prevClosingStock, partnerPrevClosingStock});
 
         return forecast;
     }
@@ -235,7 +236,7 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
     public T computeSharedOil(T forecast) {
         if (isShareOilTerminate(forecast)) {
             LOG.log(Level.INFO, "Bypassing Shared Oil computation. Terminal condition reached.");
-            return forecast;        
+            return forecast;
         }
 
         Double sharedOil;

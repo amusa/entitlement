@@ -48,7 +48,7 @@
                                         <div class="row">
                                             <div class="col-md-4 m-b-15">
                                                 <h:outputLabel value="Contract" for="contracts" />
-                                                <h:selectOneMenu id="contracts" value="#{jvActualController.currentProduction.contract}" class="form-control input-sm m-b-10">
+                                                <h:selectOneMenu id="contracts" value="#{jvActualController.currentContract}" class="form-control input-sm m-b-10">
                                                     <f:selectItems value="#{jvActualController.contractSelectOne}"/>
                                                     <f:ajax event="change" listener="#{jvActualController.currentContractChanged}" render="@form carryContractInfo carryContractInfo2 carryContractInfoYTD"/>
                                                 </h:selectOneMenu>

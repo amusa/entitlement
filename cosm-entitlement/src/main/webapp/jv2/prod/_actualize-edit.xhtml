@@ -9,14 +9,14 @@
       xmlns:jsf="http://xmlns.jcp.org/jsf">
 
     <ui:composition>
-        <div class="modal fade" id="JvActualEditDlg" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal fade" id="JvEditDlg" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                         <h4 class="modal-title">Edit JV Actual Production</h4>
                     </div>
-                    <h:form id="JvActualEditForm">
+                    <h:form id="JvEditForm">
                         <div class="modal-body">
                             <h:panelGroup id="ActualizePanel" >
                                 <div class="well tile">
@@ -48,7 +48,7 @@
                                         <div class="row">
                                             <div class="col-md-4 m-b-15">
                                                 <h:outputLabel value="Contract" for="contracts" />
-                                                <h:selectOneMenu id="contracts" value="#{jvActualController.currentProduction.contract}" class="form-control input-sm m-b-10">
+                                                <h:selectOneMenu id="contracts" value="#{jvActualController.currentContract}" class="form-control input-sm m-b-10">
                                                     <f:selectItems value="#{jvActualController.contractSelectOne}"/>
                                                     <f:ajax event="change" listener="#{jvActualController.currentContractChanged}" render="JvCreateForm carryContractInfo"/>
                                                 </h:selectOneMenu>
@@ -124,7 +124,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    
+
                                 </div>
 
                                 <div jsf:id="carryContractInfo2" jsf:rendered="#{jvActualController.fiscalArrangementAfContract}" class="panel panel-default tile">
@@ -172,6 +172,14 @@
                                                     <f:convertNumber pattern="###,###,###.####" />
                                                 </h:outputLabel>
                                             </div>
+                                        </div>
+                                        <div class="row">                                   
+                                            <div class="col-md-4 m-b-15">
+                                                <h:outputLabel value="Carry Oil Received (COR)" for="cor" />
+                                                <h:outputLabel id="cor" value="#{jvActualController.currentAfProduction.carryOilReceived}" class="form-control input-sm m-b-10">
+                                                    <f:convertNumber pattern="###,###,###.####" />
+                                                </h:outputLabel>
+                                            </div>                                    
                                         </div>
                                     </div>
 
@@ -228,6 +236,14 @@
                                                 </h:outputLabel>
                                             </div>
                                         </div>
+                                        <div class="row">                                   
+                                            <div class="col-md-4 m-b-15">
+                                                <h:outputLabel value="Carry Oil Received (COR)" for="corCum" />
+                                                <h:outputLabel id="corCum" value="#{jvActualController.currentAfProduction.carryOilReceivedCum}" class="form-control input-sm m-b-10">
+                                                    <f:convertNumber pattern="###,###,###.####" />
+                                                </h:outputLabel>
+                                            </div>                                    
+                                        </div>
                                     </div>
 
                                     <div class="panel-footer">
@@ -278,7 +294,7 @@
                                             <div class="col-md-4 m-b-15">
                                                 <h:outputLabel value="Liftable Vol (Actual)" for="lifting" />
                                                 <h:inputText id="lifting" value="#{jvActualController.currentProduction.lifting}" title="Lifting (Actual)"
-                                                               class="form-control input-sm">
+                                                             class="form-control input-sm">
                                                     <f:convertNumber pattern="###,###,###.####" />
                                                     <f:ajax event="change" listener="#{jvActualController.liftingChanged}" render="@form"/>
                                                 </h:inputText>
@@ -342,7 +358,7 @@
                                                              class="form-control input-sm">
                                                     <f:convertNumber pattern="###,###,###.####" />
                                                     <f:ajax event="change" listener="#{jvActualController.liftingChanged}" render="@form"/>
-                                                 </h:inputText>
+                                                </h:inputText>
                                             </div>
                                             <div class="col-md-4 m-b-15">
                                                 <h:outputLabel value="Lifting Cargoes" for="ptnrCargoes" />

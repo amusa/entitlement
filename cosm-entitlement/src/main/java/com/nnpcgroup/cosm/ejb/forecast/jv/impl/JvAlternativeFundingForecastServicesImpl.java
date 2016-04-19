@@ -9,7 +9,6 @@ import com.nnpcgroup.cosm.ejb.forecast.jv.JvAlternativeFundingForecastServices;
 import com.nnpcgroup.cosm.entity.contract.AlternativeFundingContract;
 import com.nnpcgroup.cosm.entity.contract.Contract;
 import com.nnpcgroup.cosm.entity.forecast.jv.AlternativeFundingForecast;
-import com.nnpcgroup.cosm.entity.forecast.jv.Forecast;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.enterprise.context.Dependent;
@@ -246,7 +245,7 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
         }
 
         Double sharedOil;
-        Double ownEquity = forecast.getOwnShareEntitlement() != null ? forecast.getOwnShareEntitlement() : 0.0;
+        Double ownEquity = forecast.getOwnShareEntitlement();
         Double carryOil = forecast.getCarryOil() != null ? forecast.getCarryOil() : 0.0;
 
         Contract contract = forecast.getContract();
@@ -267,7 +266,7 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
     public T computeCarryOil(T forecast) {
         Double carryOil;
         Double RCE = forecast.getResidualCarryExpenditure() != null ? forecast.getResidualCarryExpenditure() : 0.0;
-        Double nnpcEquity = forecast.getOwnShareEntitlement() != null ? forecast.getOwnShareEntitlement() : 0.0;
+        Double nnpcEquity = forecast.getOwnShareEntitlement();
 
         carryOil = Math.min(RCE, nnpcEquity);
 

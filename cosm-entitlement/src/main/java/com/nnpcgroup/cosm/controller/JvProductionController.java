@@ -52,28 +52,28 @@ import javax.inject.Inject;
 @Named(value = "jvActualController")
 @SessionScoped
 public class JvProductionController implements Serializable {
-    
+
     private static final Logger LOG = Logger.getLogger(JvProductionController.class.getName());
     private static final long serialVersionUID = -5506490644508725206L;
-    
+
     @Inject
     private JvProductionServices productionBean;
-    
+
     @EJB
     private JvProduction defaultProductionBean;
-    
+
     @EJB
     private RegularProductionServices regProductionBean;
-    
+
     @EJB
     private CarryProductionServices caProductionBean;
-    
+
     @EJB
     private ModifiedCarryProductionServices mcaProductionBean;
-    
+
     @EJB
     private ContractServices contractBean;
-    
+
     private Production currentProduction;
     private List<Production> productions;
     private Integer periodYear;
@@ -88,7 +88,7 @@ public class JvProductionController implements Serializable {
         LOG.info("JvActualProductionController::constructor activated...");
         // LOG.log(Level.INFO, "Entitlement calculated: {0}", entitlement.calculateEntitlement());
     }
-    
+
     public JvProductionServices getProductionBean() {
         if (currentContract instanceof RegularContract) {
             LOG.log(Level.INFO, "Returning RegularProduction bean...{0}", regProductionBean);
@@ -104,46 +104,48 @@ public class JvProductionController implements Serializable {
             return productionBean;
         }
     }
-    
+
     @Produces
     public JvProductionServices produceProductionBean() {
         return defaultProductionBean;
     }
-    
+
     public Production getCurrentProduction() {
         LOG.info("JvActualProductionController::getProduction called...");
         return currentProduction;
     }
-    
+
     public void setCurrentProduction(Production currentProduction) {
         LOG.info("JvActualProductionController::setProduction called...");
         this.currentProduction = currentProduction;
         this.currentFiscalArrangement = (currentProduction != null)
                 ? currentProduction.getContract().getFiscalArrangement() : null;
+        this.currentContract = (currentProduction != null)
+                ? currentProduction.getContract() : null;
     }
-    
+
     public AlternativeFundingProduction getCurrentAfProduction() {
         if (currentProduction instanceof AlternativeFundingProduction) {
             return (AlternativeFundingProduction) currentProduction;
         }
         return null;
     }
-    
+
     public void setCurrentAfProduction(AlternativeFundingProduction afProduction) {
         if (afProduction != null) {
             this.currentProduction = afProduction;
         }
     }
-    
+
     public boolean isFiscalArrangementAfContract() {
         return (getCurrentProduction() instanceof AlternativeFundingProduction);
     }
-    
+
     public void alternativeFundingCostListener() {
-        AlternativeFundingProductionServices afBean=(AlternativeFundingProductionServices)getProductionBean();
-        afBean.computeAlternativeFunding(getCurrentAfProduction());        
+        AlternativeFundingProductionServices afBean = (AlternativeFundingProductionServices) getProductionBean();
+        afBean.computeAlternativeFunding(getCurrentAfProduction());
     }
-    
+
     public void currentContractChanged() {
         LOG.log(Level.INFO, "Contract Selected...{0}", currentContract);
         if (currentContract instanceof RegularContract) {
@@ -156,27 +158,27 @@ public class JvProductionController implements Serializable {
             LOG.log(Level.INFO, "Undefined contract selection...{0}", currentContract);
             //throw new Exception("Undefined contract type");
         }
-        
+
         if (currentProduction != null) {
             currentProduction.setContract(currentContract);
-            
+
             if (periodYear != null && periodMonth != null) {
                 currentProduction.setPeriodYear(periodYear);
                 currentProduction.setPeriodMonth(periodMonth);
             }
         }
     }
-    
+
     public List<Production> getProductions() {
         LOG.info("JvActualProductionController::getProductions called...");
         return productions;
     }
-    
+
     public void setProductions(List<Production> productions) {
         LOG.info("JvActualProductionController::setProductions called...");
         this.productions = productions;
     }
-    
+
     public void loadProductions() {
         if (periodYear != null && periodMonth != null) {
             if (currentFiscalArrangement == null) {
@@ -184,10 +186,10 @@ public class JvProductionController implements Serializable {
             } else {
                 productions = getProductionBean().findByContractPeriod(periodYear, periodMonth, currentFiscalArrangement);
             }
-            
+
         }
     }
-    
+
     public void grossProductionChanged() {
         getProductionBean().grossProductionChanged(currentProduction);
         LOG.log(Level.INFO,
@@ -195,9 +197,9 @@ public class JvProductionController implements Serializable {
                 new Object[]{currentProduction.getOwnShareEntitlement(),
                     currentProduction.getPartnerShareEntitlement(),
                     currentProduction.getStockAdjustment()});
-        
+
     }
-    
+
     public void stockAdjustmentChanged() {
         getProductionBean().grossProductionChanged(currentProduction);
         LOG.log(Level.INFO,
@@ -205,94 +207,94 @@ public class JvProductionController implements Serializable {
                 new Object[]{currentProduction.getOwnShareEntitlement(),
                     currentProduction.getPartnerShareEntitlement(),
                     currentProduction.getStockAdjustment()});
-        
+
     }
-    
+
     public void liftingChanged() {
         LOG.log(Level.INFO, "LIfting changed...");
         getProductionBean().liftingChanged(currentProduction);
-        
+
         Double openingStock = currentProduction.getOpeningStock();
         Double entitlement = currentProduction.getOwnShareEntitlement();
         Double lifting = currentProduction.getLifting();
-        
+
         Double partnerOpeningStock = currentProduction.getPartnerOpeningStock();
         Double partnerEntitlement = currentProduction.getPartnerShareEntitlement();
         Double partnerLifting = currentProduction.getPartnerLifting();
-        
+
         Double bucket = openingStock + entitlement + partnerOpeningStock + partnerEntitlement;
-        
+
         if (bucket - lifting - partnerLifting < 0) {
             FacesMessage msg
                     = new FacesMessage("Stock Lifting validation failed!",
                             "Please check your availability and lifting volume");
             msg.setSeverity(FacesMessage.SEVERITY_ERROR);
-            
+
             throw new ValidatorException(msg);
         }
-        
+
     }
-    
+
     public void openingStockChanged() {
         LOG.log(Level.INFO, "Opening Stock changed...");
         getProductionBean().openingStockChanged(currentProduction);
     }
-    
+
     public void resetDefaults() {
         LOG.log(Level.INFO, "Resetting to default...");
         getProductionBean().grossProductionChanged(currentProduction);
     }
-    
+
     private void reset() {
         currentProduction = null;
         productions = null;
     }
-    
+
     public Integer getPeriodYear() {
         return periodYear;
     }
-    
+
     public void setPeriodYear(Integer periodYear) {
         LOG.log(Level.INFO, "************JvActualProductionController::setPeriodYear called with value {0}", periodYear);
         this.periodYear = periodYear;
     }
-    
+
     public Integer getPeriodMonth() {
         return periodMonth;
     }
-    
+
     public void setPeriodMonth(Integer periodMonth) {
         LOG.log(Level.INFO, "************JvActualProductionController::setPeriodMonth called with value {0}", periodMonth);
         this.periodMonth = periodMonth;
     }
-    
+
     public FiscalArrangement getCurrentFiscalArrangement() {
         return currentFiscalArrangement;
     }
-    
+
     public void setCurrentFiscalArrangement(FiscalArrangement currentFiscalArrangement) {
         this.currentFiscalArrangement = currentFiscalArrangement;
     }
-    
+
     public SelectItem[] getContractSelectOne() {
-        
+
         List<Contract> contracts = null;
-        
+
         if (currentFiscalArrangement != null) {
             contracts = contractBean.findFiscalArrangementContracts(currentFiscalArrangement);
         }
-        
+
         return JsfUtil.getSelectItems(contracts, true);
     }
-    
+
     public Contract getCurrentContract() {
         return currentContract;
     }
-    
+
     public void setCurrentContract(Contract currentContract) {
         this.currentContract = currentContract;
     }
-    
+
     public void actualize(Forecast forecast) {
         LOG.log(Level.INFO, "************actualizing {0}...", forecast);
         Production production = null;
@@ -301,7 +303,7 @@ public class JvProductionController implements Serializable {
                 forecast.getPeriodMonth(),
                 forecast.getContract());
         LOG.log(Level.INFO, "************findByContractStreamPeriod returning {0}...", currentProduction);
-        
+
         if (production == null) {
             LOG.log(Level.INFO, "************actualizing returning new JV Production instance...");
 
@@ -316,17 +318,19 @@ public class JvProductionController implements Serializable {
                 //something is wrong
                 LOG.log(Level.INFO, "Something is wrong! Forecast type not determined {0}...", forecast);
             }
-            
+
             LOG.log(Level.INFO, "************getProductionBean().createInstance() returning {0}...", currentProduction);
             production.setPeriodYear(forecast.getPeriodYear());
             production.setPeriodMonth(forecast.getPeriodMonth());
             production.setContract(forecast.getContract());
 
+            setCurrentContract(forecast.getContract());
+
             // getProductionBean().enrich(currentProduction);
         }
         setCurrentProduction(production);
     }
-    
+
     public void destroy() {
         persist(JsfUtil.PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("ProductionDeleted"));
         if (!JsfUtil.isValidationFailed()) {
@@ -334,12 +338,12 @@ public class JvProductionController implements Serializable {
             loadProductions();
         }
     }
-    
+
     public void destroy(RegularProduction prod) {
         setCurrentProduction(prod);
         destroy();
     }
-    
+
     public Production prepareCreate() {
         LOG.log(Level.INFO, "Preparing new instance of JvActualProduction for create...");
         currentProduction = new RegularProduction();//getProductionBean().createInstance(); TODO:evaluate
@@ -347,7 +351,7 @@ public class JvProductionController implements Serializable {
         currentProduction.setPeriodMonth(periodMonth);
         return currentProduction;
     }
-    
+
     public void create() {
         persist(JsfUtil.PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("ProductionCreated"));
         if (!JsfUtil.isValidationFailed()) {
@@ -355,16 +359,16 @@ public class JvProductionController implements Serializable {
             loadProductions();
         }
     }
-    
+
     public void cancel() {
         reset();
         loadProductions();
     }
-    
+
     public void update() {
         persist(JsfUtil.PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("ProductionUpdated"));
     }
-    
+
     private void persist(JsfUtil.PersistAction persistAction, String successMessage) {
         if (currentProduction != null) {
             //setEmbeddableKeys();
@@ -392,26 +396,26 @@ public class JvProductionController implements Serializable {
             }
         }
     }
-    
+
     public void validateStockLifting(FacesContext facesContext, UIComponent component, Object value) throws ValidatorException {
         Double openingStock = currentProduction.getOpeningStock();
         Double entitlement = currentProduction.getOwnShareEntitlement();
         Double lifting = currentProduction.getLifting();
-        
+
         Double partnerOpeningStock = currentProduction.getPartnerOpeningStock();
         Double partnerEntitlement = currentProduction.getPartnerShareEntitlement();
         Double partnerLifting = currentProduction.getPartnerLifting();
-        
+
         Double bucket = openingStock + entitlement + partnerOpeningStock + partnerEntitlement;
-        
+
         if (bucket - lifting - partnerLifting < 0) {
             FacesMessage msg
                     = new FacesMessage("Stock Lifting validation failed!",
                             "Please check your availability and lifting volume");
             msg.setSeverity(FacesMessage.SEVERITY_ERROR);
-            
+
             throw new ValidatorException(msg);
         }
     }
-    
+
 }

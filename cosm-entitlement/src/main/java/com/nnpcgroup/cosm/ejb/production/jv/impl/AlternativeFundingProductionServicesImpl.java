@@ -205,12 +205,10 @@ public abstract class AlternativeFundingProductionServicesImpl<T extends Alterna
         }
 
         Double sharedOil;
-        Double ownEquity = production.getOwnShareEntitlement();
-        Double carryOil = production.getCarryOil();
+        Double ownEquity = production.getOwnShareEntitlement() != null ? production.getOwnShareEntitlement() : new Double(0);
+        Double carryOil = production.getCarryOil() != null ? production.getCarryOil() : new Double(0);
 
         E afContract = (E) production.getContract();
-//        assert (contract instanceof AlternativeFundingContract);
-//        AlternativeFundingContract afContract = (AlternativeFundingContract) contract;
         Double sharedOilRatio = afContract.getSharedOilRatio();
 
         sharedOil = (ownEquity - carryOil) * sharedOilRatio * 0.01;
@@ -225,14 +223,14 @@ public abstract class AlternativeFundingProductionServicesImpl<T extends Alterna
     @Override
     public T computeCarryOil(T production) {
         Double carryOil;
-        Double RCE = production.getResidualCarryExpenditure();
-        Double IGNM = production.getGuaranteedNotionalMargin();
+        Double RCE = production.getResidualCarryExpenditure() != null ? production.getResidualCarryExpenditure() : 0.0;
+        Double nnpcEquity = production.getOwnShareEntitlement() != null ? production.getOwnShareEntitlement() : new Double(0);
 
-        carryOil = RCE / IGNM;
+        carryOil = Math.min(RCE, nnpcEquity);
 
         production.setCarryOil(carryOil);
 
-        LOG.log(Level.INFO, "Carry Oil = RCE / IGNM => {0} / {1} = {2}", new Object[]{RCE, IGNM, carryOil});
+        LOG.log(Level.INFO, "Carry Oil = MIN(RCE, NNPC EQUITY) => MIN({0}, {1}) = {2}", new Object[]{RCE, nnpcEquity, carryOil});
 
         return production;
     }
@@ -249,13 +247,15 @@ public abstract class AlternativeFundingProductionServicesImpl<T extends Alterna
     @Override
     public T computeResidualCarryExpenditure(T production) {
         Double RCE;
-        Double CTE = production.getCarryTaxExpenditure();
-        Double CTR = production.getCarryTaxRelief();
+        Double CCCA = production.getCapitalCarryCostAmortized() != null ? production.getCapitalCarryCostAmortized() : 0.0;
+        Double CTR = production.getCarryTaxRelief() != null ? production.getCarryTaxRelief() : 0.0;
+        Double COR = production.getCarryOilReceived() != null ? production.getCarryOilReceived() : 0.0;
+        Double IGNM = production.getGuaranteedNotionalMargin() != null ? production.getGuaranteedNotionalMargin() : 0.0;
 
-        RCE = CTE - CTR;
+        RCE = (Math.max(0, (CCCA - CTR - COR))) / IGNM;
         production.setResidualCarryExpenditure(RCE);
 
-        LOG.log(Level.INFO, "RCE = CTE - CTR => {0} - {1} = {2}", new Object[]{CTE, CTR, RCE});
+        LOG.log(Level.INFO, "RCE = MAX(0, CCCA - CTR - COR)/IGNM => MAX(0, ({0} - {1} - {2}))/{3} = {4}", new Object[]{CCCA, CTR, COR, IGNM, RCE});
 
         return production;
     }

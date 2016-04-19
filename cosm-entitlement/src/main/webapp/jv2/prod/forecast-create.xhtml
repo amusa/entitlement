@@ -81,14 +81,16 @@
                                         <h:outputLabel value="Tangible Cost" for="tangible" />
                                         <h:inputText id="tangible" value="#{jvProdController.currentAfProduction.tangibleCost}" class="form-control input-sm m-b-10">
                                             <f:convertNumber pattern="###,###,###.####" />
-                                            <f:ajax event="change" render="ccc"/>
+                                            <f:ajax event="change" listener="#{jvProdController.alternativeFundingCostListener}"
+                                                    render="carryOil carryOilCum sharedOil sharedOilCum ccc ccca cte ctr rce ignm cccaCum cteCum ctrCum rceCum ignmCum"/>
                                         </h:inputText>
                                     </div>
                                     <div class="col-md-4 m-b-15">
                                         <h:outputLabel value="Intangible Cost" for="intangible" />
                                         <h:inputText id="intangible" value="#{jvProdController.currentAfProduction.intangibleCost}" class="form-control input-sm m-b-10">
                                             <f:convertNumber pattern="###,###,###.####" />
-                                            <f:ajax event="change" render="ccc"/>
+                                            <f:ajax event="change" listener="#{jvProdController.alternativeFundingCostListener}"
+                                                    render="carryOil carryOilCum sharedOil sharedOilCum ccc ccca cte ctr rce ignm cccaCum cteCum ctrCum rceCum ignmCum"/>
                                         </h:inputText>
                                     </div>
                                     <div class="col-md-4 m-b-15">
@@ -124,7 +126,7 @@
                                         <h:inputText id="productionVolume" value="#{jvProdController.currentProduction.productionVolume}" title="Daily Production Volume" class="form-control input-sm" >
                                             <f:ajax event="change" listener="#{jvProdController.productionVolumeChanged}"
                                                     render="grossVolume carryOil carryOilCum sharedOil sharedOilCum openingStock ownShareEntitlement closingStock lifting cargoes availability ptnrOpeningStock ptnrEntitlement ptnrClosingStock ptnrLifting ptnrCargoes ptnrAvailability ccc ccca cte ctr rce ignm cccaCum cteCum ctrCum rceCum ignmCum"/>
-                                            execute="contract"/>
+
                                         </h:inputText>
                                     </div>
                                     <div class="col-md-4 m-b-15">
@@ -196,7 +198,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div jsf:id="carryContractInfoYTD" jsf:rendered="#{jvProdController.fiscalArrangementAfContract}" class="panel panel-default tile">
                             <div class="panel-heading">
                                 <h3 class="panel-title">AF Calculations YTD</h3>
@@ -369,7 +371,7 @@
                 </div>
                 <div class="modal-footer">
                     <h:commandButton  value="#{bundle.Back}" action="forecast" immediate="true" class="btn btn-sm"/>
-                    
+
                     <h:commandButton  value="#{bundle.Save}"  class="btn btn-sm">
                         <f:ajax listener="#{jvProdController.create}" render="@form msgs"/>
                     </h:commandButton>

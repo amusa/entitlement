@@ -35,10 +35,10 @@ public class MonthGeneratorImpl implements MonthGenerator,Serializable {
         int months = 0;
         if (year < thisYear) {
             months = 12;
-        } else if (year == thisYear && month + 2 <= 12) {
-            months = month + 2;
+        } else if (year == thisYear && month + 3 <= 12) {
+            months = month + 3;
         } else if (year == thisYear + 1) {
-            months = month + 2 % 12;
+            months = month + 3 % 12;
         }
         
         DateFormatSymbols dfs = new DateFormatSymbols();

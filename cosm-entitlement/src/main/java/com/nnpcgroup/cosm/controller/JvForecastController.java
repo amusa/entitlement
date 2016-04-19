@@ -8,6 +8,7 @@ package com.nnpcgroup.cosm.controller;
 import com.nnpcgroup.cosm.controller.util.JsfUtil;
 import com.nnpcgroup.cosm.controller.util.ProductionDataModel;
 import com.nnpcgroup.cosm.ejb.contract.ContractServices;
+import com.nnpcgroup.cosm.ejb.forecast.jv.JvAlternativeFundingForecastServices;
 import com.nnpcgroup.cosm.ejb.forecast.jv.JvModifiedCarryForecastServices;
 import com.nnpcgroup.cosm.ejb.forecast.jv.JvCarryForecastServices;
 import com.nnpcgroup.cosm.ejb.forecast.jv.JvForecast;
@@ -232,6 +233,11 @@ public class JvForecastController implements Serializable {
                     currentProduction.getPartnerShareEntitlement()
                 });
         
+    }
+    
+    public void alternativeFundingCostListener() {
+        JvAlternativeFundingForecastServices afBean=(JvAlternativeFundingForecastServices)getForecastBean();
+        afBean.computeAlternativeFunding(getCurrentAfProduction());        
     }
 
     public void openingStockChanged() {

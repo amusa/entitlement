@@ -83,18 +83,18 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
     public T computeLifting(T forecast) {
         Double liftableVolume, partnerLiftableVolume;
         Integer cargoes, partnerCargoes;
-        Double availability = ((Forecast) forecast).getAvailability();
-        Double partnerAvailability = ((Forecast) forecast).getPartnerAvailability();
+        Double availability = forecast.getAvailability();
+        Double partnerAvailability = forecast.getPartnerAvailability();
 
         cargoes = (int) (availability / 950000.0);
         partnerCargoes = (int) (partnerAvailability / 950000.0);
         liftableVolume = cargoes * 950000.0;
         partnerLiftableVolume = partnerCargoes * 950000.0;
 
-        ((Forecast) forecast).setCargos(cargoes);
-        ((Forecast) forecast).setLifting(liftableVolume);
-        ((Forecast) forecast).setPartnerCargos(partnerCargoes);
-        ((Forecast) forecast).setPartnerLifting(partnerLiftableVolume);
+        forecast.setCargos(cargoes);
+        forecast.setLifting(liftableVolume);
+        forecast.setPartnerCargos(partnerCargoes);
+        forecast.setPartnerLifting(partnerLiftableVolume);
 
         LOG.log(Level.INFO, "Own Liftable Vol=>{0}, Own Cargoes=>{1} : Partner Liftable Vol=>{2}, Partner Cargoes=>{3}", new Object[]{liftableVolume, cargoes, partnerLiftableVolume, partnerCargoes});
 
@@ -108,12 +108,14 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
                 computeClosingStock(
                         computeLifting(
                                 computeAvailability(
-                                        computeAlternativeFunding(
+                                        computeSharedOil(
+                                                // computeAlternativeFunding(
                                                 computeEntitlement(
                                                         computeGrossProduction(
                                                                 computeOpeningStock(production)
                                                         )
                                                 )
+                                        // )
                                         )
                                 )
                         )
@@ -151,8 +153,9 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
         return forecast;
     }
 
+    @Override
     public T computeAlternativeFunding(T production) {
-        return computeSharedOil(
+        return //computeSharedOil(
                 computeCarryOil(
                         computeGuaranteedNotionalMargin(
                                 computeResidualCarryExpenditure(
@@ -163,8 +166,8 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
                                         )
                                 )
                         )
-                )
-        );
+                // )
+                );
     }
 
     @Override

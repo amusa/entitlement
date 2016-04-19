@@ -376,6 +376,7 @@ public class JvForecastController implements Serializable {
         } else {
             LOG.log(Level.INFO, "Undefined contract selection...{0}", currentContract);
             //throw new Exception("Undefined contract type");
+            currentProduction = new RegularForecast();
         }
 
         if (currentProduction != null) {

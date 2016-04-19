@@ -39,14 +39,14 @@
                                 <div class="row">
                                     <div class="col-md-4 m-b-15">
                                         <h:outputLabel value="Year" for="periodYear"/>
-                                        <h:selectOneMenu id="periodYear" value="#{jvProdController.currentProduction.periodYear}" class="form-control input-sm m-b-10" >
+                                        <h:selectOneMenu id="periodYear" value="#{jvProdController.periodYear}" class="form-control input-sm m-b-10" >
                                             <f:selectItems value="#{generalController.yearsAvailableSelectOne}" var="year" itemValue="#{year.value}"/>
                                             <f:ajax listener="#{generalController.yearChanged}" event="change" render="periodMonth"/>
                                         </h:selectOneMenu>
                                     </div>
                                     <div class="col-md-4 m-b-15">
                                         <h:outputLabel value="Month" for="periodMonth"/>
-                                        <h:selectOneMenu id="periodMonth" value="#{jvProdController.currentProduction.periodMonth}" class="form-control input-sm m-b-10">
+                                        <h:selectOneMenu id="periodMonth" value="#{jvProdController.periodMonth}" class="form-control input-sm m-b-10">
                                             <f:selectItem itemValue="#{null}" itemLabel="--select--" />
                                             <f:selectItems value="#{generalController.months}" var="mth" itemValue="#{mth.month}" itemLabel="#{mth.monthStr}" />
                                             <f:ajax />
@@ -65,7 +65,7 @@
                                         <h:outputLabel value="Contract" for="contracts" />
                                         <h:selectOneMenu id="contracts" value="#{jvProdController.currentProduction.contract}" class="form-control input-sm m-b-10">
                                             <f:selectItems value="#{jvProdController.contractSelectOne}"/>
-                                            <f:ajax event="change" listener="#{jvProdController.currentContractChanged}" render="JvEditForm carryContractInfo"/>
+                                            <f:ajax event="change" listener="#{jvProdController.currentContractChanged}" render="JvCreateForm carryContractInfo"/>
                                         </h:selectOneMenu>
                                     </div>
                                 </div>
@@ -81,14 +81,16 @@
                                         <h:outputLabel value="Tangible Cost" for="tangible" />
                                         <h:inputText id="tangible" value="#{jvProdController.currentAfProduction.tangibleCost}" class="form-control input-sm m-b-10">
                                             <f:convertNumber pattern="###,###,###.####" />
-                                            <f:ajax event="change" render="ccc"/>
+                                            <f:ajax event="change" listener="#{jvProdController.alternativeFundingCostListener}"
+                                                    render="carryOil carryOilCum sharedOil sharedOilCum cor ccc ccca cte ctr rce ignm cccaCum cteCum ctrCum rceCum ignmCum corCum"/>
                                         </h:inputText>
                                     </div>
                                     <div class="col-md-4 m-b-15">
                                         <h:outputLabel value="Intangible Cost" for="intangible" />
                                         <h:inputText id="intangible" value="#{jvProdController.currentAfProduction.intangibleCost}" class="form-control input-sm m-b-10">
                                             <f:convertNumber pattern="###,###,###.####" />
-                                            <f:ajax event="change" render="ccc"/>
+                                            <f:ajax event="change" listener="#{jvProdController.alternativeFundingCostListener}"
+                                                    render="carryOil carryOilCum sharedOil sharedOilCum cor ccc ccca cte ctr rce ignm cccaCum cteCum ctrCum rceCum ignmCum corCum"/>
                                         </h:inputText>
                                     </div>
                                     <div class="col-md-4 m-b-15">
@@ -105,12 +107,6 @@
                                     </div>
                                 </div>
                             </div>
-
-                            <!--                            <div class="panel-footer">
-                                                            <div class="form-group">
-                            
-                                                            </div>
-                                                        </div>-->
                         </div>
 
                         <div class="panel panel-default tile">
@@ -123,8 +119,8 @@
                                         <h:outputLabel value="Daily Prod (bpd)" for="productionVolume" />
                                         <h:inputText id="productionVolume" value="#{jvProdController.currentProduction.productionVolume}" title="Daily Production Volume" class="form-control input-sm" >
                                             <f:ajax event="change" listener="#{jvProdController.productionVolumeChanged}"
-                                                    render="grossVolume carryOil carryOilCum sharedOil sharedOilCum openingStock ownShareEntitlement closingStock lifting cargoes availability ptnrOpeningStock ptnrEntitlement ptnrClosingStock ptnrLifting ptnrCargoes ptnrAvailability ccc ccca cte ctr rce ignm cccaCum cteCum ctrCum rceCum ignmCum"/>
-                                            execute="contract"/>
+                                                    render="grossVolume carryOil carryOilCum sharedOil sharedOilCum openingStock ownShareEntitlement closingStock lifting cargoes availability ptnrOpeningStock ptnrEntitlement ptnrClosingStock ptnrLifting ptnrCargoes ptnrAvailability ccc ccca cte ctr rce cor ignm cccaCum cteCum ctrCum rceCum ignmCum corCum"/>
+
                                         </h:inputText>
                                     </div>
                                     <div class="col-md-4 m-b-15">
@@ -135,11 +131,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <!--                            <div class="panel-footer">
-                                                            <div class="form-group">
                             
-                                                            </div>
-                                                        </div>-->
                         </div>
 
                         <div jsf:id="carryContractInfo2" jsf:rendered="#{jvProdController.fiscalArrangementAfContract}" class="panel panel-default tile">
@@ -188,6 +180,14 @@
                                         </h:outputLabel>
                                     </div>
                                 </div>
+                                <div class="row">                                   
+                                    <div class="col-md-4 m-b-15">
+                                        <h:outputLabel value="Carry Oil Received (COR)" for="cor" />
+                                        <h:outputLabel id="cor" value="#{jvProdController.currentAfProduction.carryOilReceived}" class="form-control input-sm m-b-10">
+                                            <f:convertNumber pattern="###,###,###.####" />
+                                        </h:outputLabel>
+                                    </div>                                    
+                                </div>
                             </div>
 
                             <div class="panel-footer">
@@ -196,7 +196,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div jsf:id="carryContractInfoYTD" jsf:rendered="#{jvProdController.fiscalArrangementAfContract}" class="panel panel-default tile">
                             <div class="panel-heading">
                                 <h3 class="panel-title">AF Calculations YTD</h3>
@@ -242,6 +242,14 @@
                                             <f:convertNumber pattern="###,###,###.####" />
                                         </h:outputLabel>
                                     </div>
+                                </div>
+                                <div class="row">                                   
+                                    <div class="col-md-4 m-b-15">
+                                        <h:outputLabel value="Carry Oil Received (COR)" for="corCum" />
+                                        <h:outputLabel id="corCum" value="#{jvProdController.currentAfProduction.carryOilReceivedCum}" class="form-control input-sm m-b-10">
+                                            <f:convertNumber pattern="###,###,###.####" />
+                                        </h:outputLabel>
+                                    </div>                                    
                                 </div>
                             </div>
 
@@ -362,7 +370,6 @@
                                 </div>
                             </div>
                         </div>
-
                     </h:panelGroup>
 
 

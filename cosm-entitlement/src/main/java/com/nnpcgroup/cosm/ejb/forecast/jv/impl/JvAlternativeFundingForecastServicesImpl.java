@@ -298,7 +298,7 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
         RCE = (Math.max(0, (CCCA - CTR - COR))) / IGNM;
         forecast.setResidualCarryExpenditure(RCE);
 
-        LOG.log(Level.INFO, "RCE = MAX(0, CCCA - CTR - COR)/IGNM => MAX({0} - {1} - {2})/{3} = {4}", new Object[]{CCCA, CTR, COR, IGNM, RCE});
+        LOG.log(Level.INFO, "RCE = MAX(0, CCCA - CTR - COR)/IGNM => MAX(0, ({0} - {1} - {2}))/{3} = {4}", new Object[]{CCCA, CTR, COR, IGNM, RCE});
 
         return forecast;
     }

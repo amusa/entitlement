@@ -53,13 +53,29 @@ public abstract class AlternativeFundingProductionServicesImpl<T extends Alterna
     @Override
     public T enrich(T production) {
         LOG.log(Level.INFO, "Enriching production {0}...", production);
-        return computeCummulative(
-                computeClosingStock(
-                        computeLifting(
-                                computeAvailability(
-                                        computeAlternativeFunding(
-                                                computeEntitlement(
-                                                        computeOpeningStock(production)
+        return computeClosingStock(
+                computeLifting(
+                        computeAvailability(
+                                computeAlternativeFunding(
+                                        computeEntitlement(
+                                                computeOpeningStock(production)
+                                        )
+                                )
+                        )
+                )
+        );
+    }
+
+    @Override
+    public T grossProductionChanged(T production) {
+        LOG.log(Level.INFO, "Gross production changed");
+        return computeClosingStock(
+                computeLifting(
+                        computeAvailability(
+                                computeAlternativeFunding(
+                                        computeEntitlement(
+                                                computeOpeningStock(
+                                                        overLiftReset(production)
                                                 )
                                         )
                                 )
@@ -76,6 +92,7 @@ public abstract class AlternativeFundingProductionServicesImpl<T extends Alterna
         Double CTRCum = production.getCarryTaxRelief();
         Double RCECum = production.getResidualCarryExpenditure();
         Double CCCACum = production.getCapitalCarryCostAmortized();
+        Double CORCum = production.getCarryOilReceived();
 
         if (prev != null) {
             LOG.log(Level.INFO, "SharedOilCum = {0}, Previous Production = {1}, prev.getSharedOilCum() = {2}", new Object[]{sharedOilCum, prev, prev.getSharedOilCum()});
@@ -86,6 +103,7 @@ public abstract class AlternativeFundingProductionServicesImpl<T extends Alterna
             CTRCum += prev.getCarryTaxReliefCum();
             RCECum += prev.getResidualCarryExpenditureCum();
             CCCACum += prev.getCapitalCarryCostAmortizedCum();
+            CORCum += prev.getCarryOilReceivedCum();
         }
 
         production.setSharedOilCum(sharedOilCum);
@@ -94,18 +112,24 @@ public abstract class AlternativeFundingProductionServicesImpl<T extends Alterna
         production.setCarryTaxReliefCum(CTRCum);
         production.setResidualCarryExpenditureCum(RCECum);
         production.setCapitalCarryCostAmortizedCum(CCCACum);
+        production.setCarryOilReceivedCum(CORCum);
 
         return production;
     }
 
+    @Override
     public T computeAlternativeFunding(T production) {
-        return computeSharedOil(
-                computeCarryOil(
-                        computeGuaranteedNotionalMargin(
-                                computeResidualCarryExpenditure(
-                                        computeCarryTaxRelief(
-                                                computeCarryTaxExpenditure(
-                                                        computeCapitalCarryCostAmortized(production)
+        return computeCummulative(
+                computeSharedOil(
+                        computeCarryOilReceived(
+                                computeCarryOil(
+                                        computeResidualCarryExpenditure(
+                                                computeGuaranteedNotionalMargin(
+                                                        computeCarryTaxRelief(
+                                                                computeCarryTaxExpenditure(
+                                                                        computeCapitalCarryCostAmortized(production)
+                                                                )
+                                                        )
                                                 )
                                         )
                                 )
@@ -138,9 +162,6 @@ public abstract class AlternativeFundingProductionServicesImpl<T extends Alterna
 
     private boolean isSharedOilTerminalPeriodDue(T production) {
         E afContract = (E) production.getContract();
-//        assert (contract instanceof AlternativeFundingContract);
-//        AlternativeFundingContract afContract = (AlternativeFundingContract) contract;
-
         Double terminalPeriod = afContract.getTerminalPeriod();
 
         if (terminalPeriod == null) {
@@ -163,9 +184,6 @@ public abstract class AlternativeFundingProductionServicesImpl<T extends Alterna
         }
 
         E afContract = (E) production.getContract();
-//        assert (contract instanceof AlternativeFundingContract);
-//        AlternativeFundingContract afContract = (AlternativeFundingContract) contract;
-
         Double terminalSharedOil = afContract.getTerminalSharedOil();
 
         if (terminalSharedOil == null) {
@@ -239,6 +257,22 @@ public abstract class AlternativeFundingProductionServicesImpl<T extends Alterna
 
         LOG.log(Level.INFO, "RCE = CTE - CTR => {0} - {1} = {2}", new Object[]{CTE, CTR, RCE});
 
+        return production;
+    }
+
+    public T computeCarryOilReceived(T production) {
+        T prev = getPreviousMonthProduction(production);
+        Double COR;
+        Double carryOil = 0.0;
+        Double margin;
+
+        if (prev != null) {
+            carryOil = prev.getCarryOil() != null ? prev.getCarryOil() : 0.0;
+        }
+        margin = production.getGuaranteedNotionalMargin() != null ? production.getGuaranteedNotionalMargin() : 0.0;
+
+        COR = carryOil * margin;
+        production.setCarryOilReceived(COR);
         return production;
     }
 

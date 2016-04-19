@@ -39,14 +39,14 @@
                                 <div class="row">
                                     <div class="col-md-4 m-b-15">
                                         <h:outputLabel value="Year" for="periodYear"/>
-                                        <h:selectOneMenu id="periodYear" value="#{jvProdController.periodYear}" class="form-control input-sm m-b-10" >
+                                        <h:selectOneMenu id="periodYear" value="#{jvProdController.periodYear}" class="form-control input-sm m-b-10" required="true">
                                             <f:selectItems value="#{generalController.yearsAvailableSelectOne}" var="year" itemValue="#{year.value}"/>
                                             <f:ajax listener="#{generalController.yearChanged}" event="change" render="periodMonth"/>
                                         </h:selectOneMenu>
                                     </div>
                                     <div class="col-md-4 m-b-15">
                                         <h:outputLabel value="Month" for="periodMonth"/>
-                                        <h:selectOneMenu id="periodMonth" value="#{jvProdController.periodMonth}" class="form-control input-sm m-b-10">
+                                        <h:selectOneMenu id="periodMonth" value="#{jvProdController.periodMonth}" class="form-control input-sm m-b-10" required="true">
                                             <f:selectItem itemValue="#{null}" itemLabel="--select--" />
                                             <f:selectItems value="#{generalController.months}" var="mth" itemValue="#{mth.month}" itemLabel="#{mth.monthStr}" />
                                             <f:ajax />
@@ -54,7 +54,7 @@
                                     </div>
                                     <div class="col-md-4 m-b-15">
                                         <label>Fiscal Arrangement</label>
-                                        <h:selectOneMenu id="fiscalArrangement" value="#{jvProdController.currentFiscalArrangement}" class="form-control input-sm m-b-10">
+                                        <h:selectOneMenu id="fiscalArrangement" value="#{jvProdController.currentFiscalArrangement}" class="form-control input-sm m-b-10" required="true">
                                             <f:selectItems value="#{fiscalController.fiscalSelectOptions}" />
                                             <f:ajax event="change" render="contracts"/>
                                         </h:selectOneMenu>
@@ -63,9 +63,9 @@
                                 <div class="row">
                                     <div class="col-md-4 m-b-15">
                                         <h:outputLabel value="Contract" for="contracts" />
-                                        <h:selectOneMenu id="contracts" value="#{jvProdController.currentContract}" class="form-control input-sm m-b-10">
+                                        <h:selectOneMenu id="contracts" value="#{jvProdController.currentContract}" class="form-control input-sm m-b-10" required="true">
                                             <f:selectItems value="#{jvProdController.contractSelectOne}"/>
-                                            <f:ajax event="change" listener="#{jvProdController.currentContractChanged}" render="JvCreateForm carryContractInfo"/>
+                                            <f:ajax event="change" listener="#{jvProdController.currentContractChanged}" render="JvCreateForm carryContractInfo carryContractInfo2 carryContractInfoYTD"/>
                                         </h:selectOneMenu>
                                     </div>
                                 </div>
@@ -107,12 +107,6 @@
                                     </div>
                                 </div>
                             </div>
-
-                            <!--                            <div class="panel-footer">
-                                                            <div class="form-group">
-                            
-                                                            </div>
-                                                        </div>-->
                         </div>
 
                         <div class="panel panel-default tile">
@@ -137,11 +131,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <!--                            <div class="panel-footer">
-                                                            <div class="form-group">
-                            
-                                                            </div>
-                                                        </div>-->
+
                         </div>
 
                         <div jsf:id="carryContractInfo2" jsf:rendered="#{jvProdController.fiscalArrangementAfContract}" class="panel panel-default tile">
@@ -189,15 +179,15 @@
                                             <f:convertNumber pattern="###,###,###.####" />
                                         </h:outputLabel>
                                     </div>
-                                </div>
-                                <div class="row">                                   
-                                    <div class="col-md-4 m-b-15">
-                                        <h:outputLabel value="Carry Oil Received (COR)" for="cor" />
-                                        <h:outputLabel id="cor" value="#{jvProdController.currentAfProduction.carryOilReceived}" class="form-control input-sm m-b-10">
-                                            <f:convertNumber pattern="###,###,###.####" />
-                                        </h:outputLabel>
-                                    </div>                                    
-                                </div>
+                                </div>                               
+                            </div>
+                            <div class="row">                                   
+                                <div class="col-md-4 m-b-15">
+                                    <h:outputLabel value="Carry Oil Received (COR)" for="cor" />
+                                    <h:outputLabel id="cor" value="#{jvProdController.currentAfProduction.carryOilReceived}" class="form-control input-sm m-b-10">
+                                        <f:convertNumber pattern="###,###,###.####" />
+                                    </h:outputLabel>
+                                </div>                                    
                             </div>
 
                             <div class="panel-footer">
@@ -252,17 +242,16 @@
                                             <f:convertNumber pattern="###,###,###.####" />
                                         </h:outputLabel>
                                     </div>
-                                </div>
-                                <div class="row">                                   
-                                    <div class="col-md-4 m-b-15">
-                                        <h:outputLabel value="Carry Oil Received (COR)" for="corCum" />
-                                        <h:outputLabel id="corCum" value="#{jvProdController.currentAfProduction.carryOilReceivedCum}" class="form-control input-sm m-b-10">
-                                            <f:convertNumber pattern="###,###,###.####" />
-                                        </h:outputLabel>
-                                    </div>                                    
-                                </div>
+                                </div>                                
                             </div>
-
+                            <div class="row">                                   
+                                <div class="col-md-4 m-b-15">
+                                    <h:outputLabel value="Carry Oil Received (COR)" for="corCum" />
+                                    <h:outputLabel id="corCum" value="#{jvProdController.currentAfProduction.carryOilReceivedCum}" class="form-control input-sm m-b-10">
+                                        <f:convertNumber pattern="###,###,###.####" />
+                                    </h:outputLabel>
+                                </div>                                    
+                            </div>
                             <div class="panel-footer">
                                 <div class="form-group">
 

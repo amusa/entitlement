@@ -14,7 +14,8 @@ import com.nnpcgroup.cosm.entity.production.jv.AlternativeFundingProduction;
  * @param <T>
  * @param <E>
  */
-public interface AlternativeFundingProductionServices<T extends AlternativeFundingProduction, E extends AlternativeFundingContract> extends JvProductionServices<T, E>{
+public interface AlternativeFundingProductionServices<T extends AlternativeFundingProduction, E extends AlternativeFundingContract> extends JvProductionServices<T, E> {
+
     public T computeCarryOil(T production);
 
     public T computeSharedOil(T production);
@@ -29,6 +30,8 @@ public interface AlternativeFundingProductionServices<T extends AlternativeFundi
 
     public T computeCapitalCarryCostAmortized(T production);
 
+    public T computeAlternativeFunding(T production);
+
     public Double computeCarryOilCum(E cs);
 
     public Double computeSharedOilCum(E cs);
@@ -41,5 +44,4 @@ public interface AlternativeFundingProductionServices<T extends AlternativeFundi
 
     public Double computeCapitalCarryCostAmortizedCum(E cs);
 
-    
 }

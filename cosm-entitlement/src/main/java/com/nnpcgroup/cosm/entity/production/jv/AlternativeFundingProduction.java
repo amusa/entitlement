@@ -21,6 +21,7 @@ public class AlternativeFundingProduction extends Production {
     private Double tangibleCost;
     private Double intangibleCost;
     private Double carryOil;
+    private Double carryOilReceived;
     private Double sharedOil;
     private Double carryTaxExpenditure;
     private Double carryTaxRelief;
@@ -33,6 +34,7 @@ public class AlternativeFundingProduction extends Production {
     private Double carryTaxReliefCum;
     private Double residualCarryExpenditureCum;
     private Double capitalCarryCostAmortizedCum;
+    private Double carryOilReceivedCum;
 
     public AlternativeFundingProduction() {
     }
@@ -155,6 +157,22 @@ public class AlternativeFundingProduction extends Production {
 
     public void setCapitalCarryCostAmortizedCum(Double capitalCarryCostAmortizedCum) {
         this.capitalCarryCostAmortizedCum = capitalCarryCostAmortizedCum;
+    }
+
+    public Double getCarryOilReceived() {
+        return carryOilReceived;
+    }
+
+    public void setCarryOilReceived(Double carryOilReceived) {
+        this.carryOilReceived = carryOilReceived;
+    }
+
+    public Double getCarryOilReceivedCum() {
+        return carryOilReceivedCum;
+    }
+
+    public void setCarryOilReceivedCum(Double carryOilReceivedCum) {
+        this.carryOilReceivedCum = carryOilReceivedCum;
     }
 
     

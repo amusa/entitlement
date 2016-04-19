@@ -50,7 +50,7 @@
                                                 <h:outputLabel value="Contract" for="contracts" />
                                                 <h:selectOneMenu id="contracts" value="#{jvActualController.currentProduction.contract}" class="form-control input-sm m-b-10">
                                                     <f:selectItems value="#{jvActualController.contractSelectOne}"/>
-                                                    <f:ajax event="change" listener="#{jvActualController.currentContractChanged}" render="JvCreateForm carryContractInfo"/>
+                                                    <f:ajax event="change" listener="#{jvActualController.currentContractChanged}" render="@form carryContractInfo carryContractInfo2 carryContractInfoYTD"/>
                                                 </h:selectOneMenu>
                                             </div>
                                         </div>
@@ -265,23 +265,23 @@
                                                 <h:outputLabel id="overlift" value="#{jvActualController.currentProduction.overlift}" title="Overlift" class="form-control input-sm">
                                                     <f:convertNumber pattern="###,###,###.####" />
                                                 </h:outputLabel>
-                                            </div>
+                                            </div>                                            
+                                        </div>
+
+                                        <div class="row">
                                             <div class="col-md-4 m-b-15">
                                                 <h:outputLabel value="Availability" for="availability" />
                                                 <h:outputLabel id="availability" value="#{jvActualController.currentProduction.availability}" title="Availability" class="form-control input-sm">
                                                     <f:convertNumber pattern="###,###,###.####" />
                                                 </h:outputLabel>
                                             </div>
-                                        </div>
-
-                                        <div class="row">
                                             <div class="col-md-4 m-b-15">
                                                 <h:outputLabel value="Liftable Vol (Actual)" for="lifting" />
-                                                <h:outputLabel id="lifting" value="#{jvActualController.currentProduction.lifting}" title="Lifting (Actual)"
+                                                <h:inputText id="lifting" value="#{jvActualController.currentProduction.lifting}" title="Lifting (Actual)"
                                                                class="form-control input-sm">
                                                     <f:convertNumber pattern="###,###,###.####" />
                                                     <f:ajax event="change" listener="#{jvActualController.liftingChanged}" render="@form"/>
-                                                </h:outputLabel>
+                                                </h:inputText>
                                             </div>
                                             <div class="col-md-4 m-b-15">
                                                 <h:outputLabel value="Lifting Cargoes" for="cargoes" />
@@ -327,15 +327,15 @@
                                                 <h:inputText id="ptnrOverlift" value="#{jvActualController.currentProduction.partnerOverlift}" title="Partner Overlift" class="form-control input-sm">
                                                     <f:convertNumber pattern="###,###,###.####" />
                                                 </h:inputText>
-                                            </div>
+                                            </div>                                            
+                                        </div>
+                                        <div class="row">
                                             <div class="col-md-4 m-b-15">
                                                 <h:outputLabel value="Availability" for="ptnrAvailability" />
                                                 <h:outputLabel id="ptnrAvailability" value="#{jvActualController.currentProduction.partnerAvailability}" title="Availability" class="form-control input-sm">
                                                     <f:convertNumber pattern="###,###,###.####" />
                                                 </h:outputLabel>
                                             </div>
-                                        </div>
-                                        <div class="row">
                                             <div class="col-md-4 m-b-15">
                                                 <h:outputLabel value="Liftable Vol (Actual)" for="ptnrLifting" />
                                                 <h:inputText id="ptnrLifting" value="#{jvActualController.currentProduction.partnerLifting}" title="Lifting (Actual)"

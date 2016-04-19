@@ -104,18 +104,14 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
     @Override
     public T enrich(T production) {
         LOG.log(Level.INFO, "Enriching forecast {0}...", production);
-        return computeCummulative(
-                computeClosingStock(
-                        computeLifting(
-                                computeAvailability(
-                                        computeSharedOil(
-                                                // computeAlternativeFunding(
-                                                computeEntitlement(
-                                                        computeGrossProduction(
-                                                                computeOpeningStock(production)
-                                                        )
+        return computeClosingStock(
+                computeLifting(
+                        computeAvailability(
+                                computeAlternativeFunding(
+                                        computeEntitlement(
+                                                computeGrossProduction(
+                                                        computeOpeningStock(production)
                                                 )
-                                        // )
                                         )
                                 )
                         )
@@ -131,6 +127,7 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
         Double CTRCum = forecast.getCarryTaxRelief();
         Double RCECum = forecast.getResidualCarryExpenditure();
         Double CCCACum = forecast.getCapitalCarryCostAmortized();
+        Double CORCum = forecast.getCarryOilReceived();
 
         if (prev != null) {
             LOG.log(Level.INFO, "SharedOilCum = {0}, Previous Forecast = {1}, prev.getSharedOilCum() = {2}", new Object[]{sharedOilCum, prev, prev.getSharedOilCum()});
@@ -141,6 +138,7 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
             CTRCum += prev.getCarryTaxReliefCum();
             RCECum += prev.getResidualCarryExpenditureCum();
             CCCACum += prev.getCapitalCarryCostAmortizedCum();
+            CORCum += prev.getCarryOilReceivedCum();
         }
 
         forecast.setSharedOilCum(sharedOilCum);
@@ -149,25 +147,30 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
         forecast.setCarryTaxReliefCum(CTRCum);
         forecast.setResidualCarryExpenditureCum(RCECum);
         forecast.setCapitalCarryCostAmortizedCum(CCCACum);
+        forecast.setCarryOilReceivedCum(CORCum);
 
         return forecast;
     }
 
     @Override
     public T computeAlternativeFunding(T production) {
-        return //computeSharedOil(
-                computeCarryOil(
-                        computeGuaranteedNotionalMargin(
-                                computeResidualCarryExpenditure(
-                                        computeCarryTaxRelief(
-                                                computeCarryTaxExpenditure(
-                                                        computeCapitalCarryCostAmortized(production)
+        return computeCummulative(
+                computeSharedOil(
+                        computeCarryOilReceived(
+                                computeCarryOil(
+                                        computeResidualCarryExpenditure(
+                                                computeGuaranteedNotionalMargin(
+                                                        computeCarryTaxRelief(
+                                                                computeCarryTaxExpenditure(
+                                                                        computeCapitalCarryCostAmortized(production)
+                                                                )
+                                                        )
                                                 )
                                         )
                                 )
                         )
-                // )
-                );
+                )
+        );
     }
 
     @Override
@@ -243,13 +246,13 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
         }
 
         Double sharedOil;
-        Double ownEquity = forecast.getOwnShareEntitlement();
-        Double carryOil = forecast.getCarryOil();
+        Double ownEquity = forecast.getOwnShareEntitlement() != null ? forecast.getOwnShareEntitlement() : 0.0;
+        Double carryOil = forecast.getCarryOil() != null ? forecast.getCarryOil() : 0.0;
 
         Contract contract = forecast.getContract();
         assert (contract instanceof AlternativeFundingContract);
         AlternativeFundingContract afContract = (AlternativeFundingContract) contract;
-        Double sharedOilRatio = afContract.getSharedOilRatio();
+        Double sharedOilRatio = afContract.getSharedOilRatio() != null ? afContract.getSharedOilRatio() : 0.0;
 
         sharedOil = (ownEquity - carryOil) * sharedOilRatio * 0.01;
         forecast.setSharedOil(sharedOil);
@@ -263,14 +266,14 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
     @Override
     public T computeCarryOil(T forecast) {
         Double carryOil;
-        Double RCE = forecast.getResidualCarryExpenditure();
-        Double IGNM = forecast.getGuaranteedNotionalMargin();
+        Double RCE = forecast.getResidualCarryExpenditure() != null ? forecast.getResidualCarryExpenditure() : 0.0;
+        Double nnpcEquity = forecast.getOwnShareEntitlement() != null ? forecast.getOwnShareEntitlement() : 0.0;
 
-        carryOil = RCE / IGNM;
+        carryOil = Math.min(RCE, nnpcEquity);
 
         forecast.setCarryOil(carryOil);
 
-        LOG.log(Level.INFO, "Carry Oil = RCE / IGNM => {0} / {1} = {2}", new Object[]{RCE, IGNM, carryOil});
+        LOG.log(Level.INFO, "Carry Oil = MIN(RCE, NNPC EQUITY) => MIN({0}, {1}) = {2}", new Object[]{RCE, nnpcEquity, carryOil});
 
         return forecast;
     }
@@ -287,21 +290,39 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
     @Override
     public T computeResidualCarryExpenditure(T forecast) {
         Double RCE;
-        Double CTE = forecast.getCarryTaxExpenditure();
-        Double CTR = forecast.getCarryTaxRelief();
+        Double CCCA = forecast.getCapitalCarryCostAmortized() != null ? forecast.getCapitalCarryCostAmortized() : 0.0;
+        Double CTR = forecast.getCarryTaxRelief() != null ? forecast.getCarryTaxRelief() : 0.0;
+        Double COR = forecast.getCarryOilReceived() != null ? forecast.getCarryOilReceived() : 0.0;
+        Double IGNM = forecast.getGuaranteedNotionalMargin() != null ? forecast.getGuaranteedNotionalMargin() : 0.0;
 
-        RCE = CTE - CTR;
+        RCE = (Math.max(0, (CCCA - CTR - COR))) / IGNM;
         forecast.setResidualCarryExpenditure(RCE);
 
-        LOG.log(Level.INFO, "RCE = CTE - CTR => {0} - {1} = {2}", new Object[]{CTE, CTR, RCE});
+        LOG.log(Level.INFO, "RCE = MAX(0, CCCA - CTR - COR)/IGNM => MAX({0} - {1} - {2})/{3} = {4}", new Object[]{CCCA, CTR, COR, IGNM, RCE});
 
+        return forecast;
+    }
+
+    public T computeCarryOilReceived(T forecast) {
+        T prev = getPreviousMonthProduction(forecast);
+        Double COR;
+        Double carryOil = 0.0;
+        Double margin;
+
+        if (prev != null) {
+            carryOil = prev.getCarryOil() != null ? prev.getCarryOil() : 0.0;
+        }
+        margin = forecast.getGuaranteedNotionalMargin() != null ? forecast.getGuaranteedNotionalMargin() : 0.0;
+
+        COR = carryOil * margin;
+        forecast.setCarryOilReceived(COR);
         return forecast;
     }
 
     @Override
     public T computeCarryTaxRelief(T forecast) {
         Double CTR;
-        Double CTE = forecast.getCarryTaxExpenditure();
+        Double CTE = forecast.getCarryTaxExpenditure() != null ? forecast.getCarryTaxExpenditure() : 0.0;
         CTR = CTE * 0.85;
         forecast.setCarryTaxRelief(CTR);
         LOG.log(Level.INFO, "CTR = CTE * 85% => {0} * 0.85 = {1}", new Object[]{CTE, CTR});

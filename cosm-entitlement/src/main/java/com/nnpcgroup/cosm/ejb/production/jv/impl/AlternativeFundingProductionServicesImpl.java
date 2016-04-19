@@ -7,12 +7,9 @@ package com.nnpcgroup.cosm.ejb.production.jv.impl;
 
 import com.nnpcgroup.cosm.ejb.production.jv.AlternativeFundingProductionServices;
 import com.nnpcgroup.cosm.entity.contract.AlternativeFundingContract;
-import com.nnpcgroup.cosm.entity.contract.Contract;
 import com.nnpcgroup.cosm.entity.production.jv.AlternativeFundingProduction;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.persistence.NoResultException;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -49,38 +46,6 @@ public abstract class AlternativeFundingProductionServicesImpl<T extends Alterna
         }
 
         LOG.log(Level.INFO, "Own Opening Stock=>{0} Partner Opening Stock=>{1} ", new Object[]{openingStock, partnerOpeningStock});
-
-        return production;
-    }
-
-    @Override
-    public T openingStockChanged(T production) {
-        LOG.log(Level.INFO, "Opening Stock changed {0}...", production);
-        return computeClosingStock(
-                computeLifting(
-                        computeAvailability(production)
-                )
-        );
-    }
-
-    @Override
-    public T computeLifting(T production) {
-        Double liftableVolume, partnerLiftableVolume;
-        Integer cargoes, partnerCargoes;
-        Double availability = production.getAvailability();
-        Double partnerAvailability = production.getPartnerAvailability();
-
-        cargoes = (int) (availability / 950000.0);
-        partnerCargoes = (int) (partnerAvailability / 950000.0);
-        liftableVolume = cargoes * 950000.0;
-        partnerLiftableVolume = partnerCargoes * 950000.0;
-
-        production.setCargos(cargoes);
-        production.setLifting(liftableVolume);
-        production.setPartnerCargos(partnerCargoes);
-        production.setPartnerLifting(partnerLiftableVolume);
-
-        LOG.log(Level.INFO, "Own Liftable Vol=>{0}, Own Cargoes=>{1} : Partner Liftable Vol=>{2}, Partner Cargoes=>{3}", new Object[]{liftableVolume, cargoes, partnerLiftableVolume, partnerCargoes});
 
         return production;
     }
@@ -349,31 +314,6 @@ public abstract class AlternativeFundingProductionServicesImpl<T extends Alterna
         LOG.log(Level.INFO, "Intangible Cost => {0}", new Object[]{production.getIntangibleCost()});
 
         return production.getIntangibleCost() != null ? production.getIntangibleCost() : new Double(0);
-    }
-
-    @Override
-    public T findByContractPeriod(int year, int month, Contract cs) {
-        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
-
-        T production;
-
-        CriteriaQuery cq = cb.createQuery();
-        Root e = cq.from(entityClass);
-        try {
-            cq.where(
-                    cb.and(cb.equal(e.get("periodYear"), year),
-                            cb.equal(e.get("periodMonth"), month),
-                            cb.equal(e.get("contract"), cs)
-                    ));
-
-            Query query = getEntityManager().createQuery(cq);
-
-            production = (T) query.getSingleResult();
-        } catch (NoResultException nre) {
-            return null;
-        }
-
-        return production;
     }
 
     @Override

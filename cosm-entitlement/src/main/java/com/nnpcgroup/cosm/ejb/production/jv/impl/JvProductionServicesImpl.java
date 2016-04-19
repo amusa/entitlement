@@ -10,16 +10,11 @@ import com.nnpcgroup.cosm.ejb.production.jv.JvProductionServices;
 import com.nnpcgroup.cosm.entity.contract.Contract;
 import com.nnpcgroup.cosm.entity.EquityType;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
+import com.nnpcgroup.cosm.entity.FiscalPeriod;
 import com.nnpcgroup.cosm.entity.JointVenture;
 import com.nnpcgroup.cosm.entity.production.jv.Production;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.persistence.NoResultException;
-import javax.persistence.Query;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 
 /**
  *
@@ -50,70 +45,6 @@ public abstract class JvProductionServicesImpl<T extends Production, E extends C
     }
 
     @Override
-    public T findByContractPeriod(int year, int month, Contract cs) {
-        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
-
-        T production;
-
-        CriteriaQuery cq = cb.createQuery();
-        Root e = cq.from(entityClass);
-        try {
-            cq.where(
-                    cb.and(cb.equal(e.get("periodYear"), year),
-                            cb.equal(e.get("periodMonth"), month),
-                            cb.equal(e.get("contract"), cs)
-                    ));
-
-            Query query = getEntityManager().createQuery(cq);
-
-            production = (T) query.getSingleResult();
-        } catch (NoResultException nre) {
-            return null;
-        }
-
-        return production;
-    }
-
-    @Override
-    public List<T> findByContractPeriod(int year, int month, FiscalArrangement fa) {
-        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
-
-        List<T> productions;
-
-        CriteriaQuery cq = cb.createQuery();
-        Root e = cq.from(entityClass);
-        try {
-            cq.where(
-                    cb.and(cb.equal(e.get("periodYear"), year),
-                            cb.equal(e.get("periodMonth"), month),
-                            cb.equal(e.get("contract").get("fiscalArrangement"), fa)
-                    ));
-
-            Query query = getEntityManager().createQuery(cq);
-
-            productions = query.getResultList();
-        } catch (NoResultException nre) {
-            return null;
-        }
-
-        return productions;
-
-    }
-
-    @Override
-    public List<T> findByYearAndMonth(int year, int month) {
-        LOG.log(Level.INFO, "Parameters: year={0}, month={1}", new Object[]{year, month});
-
-        List<T> productions = getEntityManager().createQuery(
-                "SELECT p FROM Production p WHERE p.periodYear = :year and p.periodMonth = :month and TYPE(p) = JvForecastProduction")
-                .setParameter("year", year)
-                .setParameter("month", month)
-                .getResultList();
-
-        return productions;
-    }
-    
-    @Override
     public T computeEntitlement(T production) {
         LOG.info("computing Entitlement...");
         FiscalArrangement fa;
@@ -129,14 +60,15 @@ public abstract class JvProductionServicesImpl<T extends Production, E extends C
         Double ownEntitlement;
         Double partnerEntitlement;
         Double grossProd = production.getGrossProduction();
+        Double stockAdjustment = production.getStockAdjustment() != null ? production.getStockAdjustment() : 0;
 
         grossProd = grossProd == null ? 0 : grossProd;
 
-        ownEntitlement = (grossProd
+        ownEntitlement = ((grossProd + stockAdjustment)
                 * et.getOwnEquity() * 0.01);
         LOG.log(Level.INFO, "Own Entitlement=>{0} * {1} * 0.01 = {2}", new Object[]{grossProd, et.getOwnEquity(), ownEntitlement});
 
-        partnerEntitlement = (grossProd
+        partnerEntitlement = ((grossProd + stockAdjustment)
                 * et.getPartnerEquity() * 0.01);
         LOG.log(Level.INFO, "Partner Entitlement=>{0} * {1} * 0.01 = {2}", new Object[]{grossProd, et.getPartnerEquity(), partnerEntitlement});
 
@@ -153,9 +85,11 @@ public abstract class JvProductionServicesImpl<T extends Production, E extends C
         Double partnerEntitlement = production.getPartnerShareEntitlement();
         Double openingStock = production.getOpeningStock();
         Double partnerOpeningStock = production.getPartnerOpeningStock();
+        Double overlift = production.getOverlift() != null ? production.getOverlift() : 0.0;
+        Double partnerOverlift = production.getPartnerOverlift() != null ? production.getPartnerOverlift() : 0.0;
 
-        availability = ownEntitlement + openingStock;
-        partnerAvailability = partnerEntitlement + partnerOpeningStock;
+        availability = ownEntitlement + openingStock + overlift;
+        partnerAvailability = partnerEntitlement + partnerOpeningStock + partnerOverlift;
 
         production.setAvailability(availability);
         production.setPartnerAvailability(partnerAvailability);
@@ -178,45 +112,44 @@ public abstract class JvProductionServicesImpl<T extends Production, E extends C
 
         return production;
     }
-    
+
     @Override
     public T liftingChanged(T production) {
         LOG.log(Level.INFO, "Lifting changed {0}...", production);
         return computeClosingStock(
                 computeAvailability(
-                        computeStockAdjustment(
+                        computeOverlift(
                                 computeClosingStock(
                                         computeAvailability(
-                                                stockAdjustmentReset(production)
+                                                overLiftReset(production)
                                         )
                                 )
                         )
                 )
         );
     }
-    
+
     @Override
-    public T computeStockAdjustment(T production) {
+    public T computeOverlift(T production) {
         Double closingStock = production.getClosingStock();
 
         if (closingStock < 0) {
             production.setClosingStock(0.0);
-            production.setStockAdjustment(-1 * closingStock);
-            production.setPartnerStockAdjustment(closingStock);
+            production.setOverlift(-1 * closingStock);
+            production.setPartnerOverlift(closingStock);
         }
 
         Double partnerClosingStock = production.getPartnerClosingStock();
 
         if (partnerClosingStock < 0) {
             production.setPartnerClosingStock(0.0);
-            production.setPartnerStockAdjustment(-1 * partnerClosingStock);
-            production.setStockAdjustment(partnerClosingStock);
+            production.setPartnerOverlift(-1 * partnerClosingStock);
+            production.setOverlift(partnerClosingStock);
         }
 
         return production;
-
     }
-    
+
     @Override
     public T grossProductionChanged(T production) {
         LOG.log(Level.INFO, "Gross production changed");
@@ -225,19 +158,66 @@ public abstract class JvProductionServicesImpl<T extends Production, E extends C
                         computeAvailability(
                                 computeEntitlement(
                                         computeOpeningStock(
-                                                stockAdjustmentReset(production)
+                                                overLiftReset(production)
                                         )
                                 )
                         )
                 )
         );
     }
-    
-    public T stockAdjustmentReset(T production) {
-        production.setStockAdjustment(null);
-        production.setPartnerStockAdjustment(null);
+
+    public T overLiftReset(T production) {
+        production.setOverlift(null);
+        production.setPartnerOverlift(null);
         return production;
     }
 
+    @Override
+    public T computeLifting(T production) {
+        Double liftableVolume, partnerLiftableVolume;
+        Integer cargoes, partnerCargoes;
+        Double availability = production.getAvailability();
+        Double partnerAvailability = production.getPartnerAvailability();
 
+        cargoes = (int) (availability / 950000.0);
+        partnerCargoes = (int) (partnerAvailability / 950000.0);
+        liftableVolume = cargoes * 950000.0;
+        partnerLiftableVolume = partnerCargoes * 950000.0;
+
+        production.setCargos(cargoes);
+        production.setLifting(liftableVolume);
+        production.setPartnerCargos(partnerCargoes);
+        production.setPartnerLifting(partnerLiftableVolume);
+
+        return production;
+    }
+
+    @Override
+    public T getPreviousMonthProduction(T production) {
+        int month = production.getPeriodMonth();
+        int year = production.getPeriodYear();
+        Contract cs = production.getContract();
+
+        FiscalPeriod prevFp = getPreviousFiscalPeriod(year, month);
+
+        T prod = findByContractPeriod(prevFp.getYear(), prevFp.getMonth(), cs);
+
+        return prod;
+
+    }
+
+    @Override
+    public T computeOpeningStock(T production) {
+        Production prod = getPreviousMonthProduction(production);
+        if (prod != null) {
+            Double openingStock = prod.getClosingStock();
+            Double partnerOpeningStock = prod.getPartnerOpeningStock();
+            production.setOpeningStock(openingStock);
+            production.setPartnerOpeningStock(partnerOpeningStock);
+        } else {
+            production.setOpeningStock(0.0);
+            production.setPartnerOpeningStock(0.0);
+        }
+        return production;
+    }
 }

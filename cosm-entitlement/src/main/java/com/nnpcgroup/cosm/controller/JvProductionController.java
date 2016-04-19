@@ -192,6 +192,16 @@ public class JvProductionController implements Serializable {
         
     }
     
+    public void stockAdjustmentChanged() {
+        getProductionBean().grossProductionChanged(currentProduction);
+        LOG.log(Level.INFO,
+                "Own entmt={0},Partner entmt={1}, Stock Adj={2}...",
+                new Object[]{currentProduction.getOwnShareEntitlement(),
+                    currentProduction.getPartnerShareEntitlement(),
+                    currentProduction.getStockAdjustment()});
+        
+    }
+    
     public void liftingChanged() {
         LOG.log(Level.INFO, "LIfting changed...");
         getProductionBean().liftingChanged(currentProduction);

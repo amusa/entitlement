@@ -133,33 +133,7 @@ public abstract class CommonServicesImpl<T> extends AbstractCrudServicesImpl<T> 
     public abstract T createInstance();
 
     @Override
-    public T computeOpeningStock(T production) {
-        Production prod = (Production) getPreviousMonthProduction(production);
-        if (prod != null) {
-            Double openingStock = prod.getClosingStock();
-            Double partnerOpeningStock = prod.getPartnerOpeningStock();
-            ((Production) production).setOpeningStock(openingStock);
-            ((Production) production).setPartnerOpeningStock(partnerOpeningStock);
-        } else {
-            ((Production) production).setOpeningStock(0.0);
-            ((Production) production).setPartnerOpeningStock(0.0);
-        }
-        return production;
-    }
-
-    @Override
-    public T getPreviousMonthProduction(T production) {
-        int month = ((Production) production).getPeriodMonth();
-        int year = ((Production) production).getPeriodYear();
-        Contract cs = ((Production) production).getContract();
-
-        FiscalPeriod prevFp = getPreviousFiscalPeriod(year, month);
-        
-        T prod = findByContractPeriod(prevFp.getYear(), prevFp.getMonth(), cs);
-
-        return prod;
-
-    }
+    public abstract T computeOpeningStock(T production);
 
     @Override
     public FiscalPeriod getPreviousFiscalPeriod(FiscalPeriod fp) {
@@ -189,26 +163,6 @@ public abstract class CommonServicesImpl<T> extends AbstractCrudServicesImpl<T> 
                         computeAvailability(production)
                 )
         );
-    }
-
-    @Override
-    public T computeLifting(T production) {
-        Double liftableVolume, partnerLiftableVolume;
-        Integer cargoes, partnerCargoes;
-        Double availability = ((Production) production).getAvailability();
-        Double partnerAvailability = ((Production) production).getPartnerAvailability();
-
-        cargoes = (int) (availability / 950000.0);
-        partnerCargoes = (int) (partnerAvailability / 950000.0);
-        liftableVolume = cargoes * 950000.0;
-        partnerLiftableVolume = partnerCargoes * 950000.0;
-
-        ((Production) production).setCargos(cargoes);
-        ((Production) production).setLifting(liftableVolume);
-        ((Production) production).setPartnerCargos(partnerCargoes);
-        ((Production) production).setPartnerLifting(partnerLiftableVolume);
-
-        return production;
     }
 
     @Override

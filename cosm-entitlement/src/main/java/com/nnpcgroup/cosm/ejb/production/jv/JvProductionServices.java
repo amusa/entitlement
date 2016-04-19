@@ -20,6 +20,6 @@ public interface JvProductionServices<T extends Production, E extends Contract> 
     public T grossProductionChanged(T production);
 
     public T liftingChanged(T production);
-
-    public T computeStockAdjustment(T production);
+       
+    public T computeOverlift(T production);
 }

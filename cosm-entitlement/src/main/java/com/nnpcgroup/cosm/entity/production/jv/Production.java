@@ -47,8 +47,9 @@ public abstract class Production implements Serializable {
     private Integer partnerCargos;
     private Double availability;
     private Double partnerAvailability;
-    private Double stockAdjustment;
-    private Double partnerStockAdjustment;
+    private Double stockAdjustment;    
+    private Double overlift;
+    private Double partnerOverlift;
 
     public Production() {
     }
@@ -212,12 +213,22 @@ public abstract class Production implements Serializable {
         this.stockAdjustment = stockAdjustment;
     }
 
-    public Double getPartnerStockAdjustment() {
-        return partnerStockAdjustment;
+    public Double getOverlift() {
+        return overlift;
     }
 
-    public void setPartnerStockAdjustment(Double partnerStockAdjustment) {
-        this.partnerStockAdjustment = partnerStockAdjustment;
+    public void setOverlift(Double overlift) {
+        this.overlift = overlift;
     }
+
+    public Double getPartnerOverlift() {
+        return partnerOverlift;
+    }
+
+    public void setPartnerOverlift(Double partnerOverlift) {
+        this.partnerOverlift = partnerOverlift;
+    }
+
+   
 
 }

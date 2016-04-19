@@ -106,7 +106,7 @@ public abstract class JvForecastServicesImpl<T extends Forecast> extends CommonS
 
         return forecast;
     }
-
+    
     @Override
     public T enrich(T production) {
         LOG.log(Level.INFO, "Enriching production {0}...", production);

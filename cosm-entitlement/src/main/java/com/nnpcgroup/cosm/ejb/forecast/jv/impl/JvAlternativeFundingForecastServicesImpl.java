@@ -265,8 +265,8 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
     @Override
     public T computeCarryOil(T forecast) {
         Double carryOil;
-        Double RCE = forecast.getResidualCarryExpenditure() != null ? forecast.getResidualCarryExpenditure() : 0.0;
-        Double nnpcEquity = forecast.getOwnShareEntitlement();
+        Double RCE = forecast.getResidualCarryExpenditure() != null ? forecast.getResidualCarryExpenditure() : new Double(0);
+        Double nnpcEquity = forecast.getOwnShareEntitlement() != null ? forecast.getOwnShareEntitlement() : new Double(0);
 
         carryOil = Math.min(RCE, nnpcEquity);
 

@@ -8,7 +8,7 @@
         <param-name>primefaces.THEME</param-name>
         <param-value>bootstrap</param-value>
     </context-param>
-<!--    <context-param>
+    <!--    <context-param>
         <param-name>BootsFaces_USETHEME</param-name>
         <param-value>default</param-value>
     </context-param>
@@ -36,5 +36,5 @@
     </session-config>
     <welcome-file-list>
         <welcome-file>faces/login.xhtml</welcome-file>
-    </welcome-file-list>
+    </welcome-file-list>    
 </web-app>

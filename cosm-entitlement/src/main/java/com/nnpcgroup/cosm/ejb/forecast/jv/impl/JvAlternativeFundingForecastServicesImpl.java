@@ -5,12 +5,16 @@
  */
 package com.nnpcgroup.cosm.ejb.forecast.jv.impl;
 
+import com.nnpcgroup.cosm.ejb.PriceBean;
 import com.nnpcgroup.cosm.ejb.forecast.jv.JvAlternativeFundingForecastServices;
+import com.nnpcgroup.cosm.entity.Price;
+import com.nnpcgroup.cosm.entity.PricePK;
 import com.nnpcgroup.cosm.entity.contract.AlternativeFundingContract;
 import com.nnpcgroup.cosm.entity.contract.Contract;
 import com.nnpcgroup.cosm.entity.forecast.jv.AlternativeFundingForecast;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.ejb.EJB;
 import javax.enterprise.context.Dependent;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -32,6 +36,9 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
 
     private static final Logger LOG = Logger.getLogger(JvAlternativeFundingForecastServicesImpl.class.getName());
     private static final long serialVersionUID = -5826414842990437262L;
+
+    @EJB
+    PriceBean priceBean;
 
     @PersistenceContext(unitName = "entitlementPU")
     private EntityManager em;
@@ -279,7 +286,20 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
 
     @Override
     public T computeGuaranteedNotionalMargin(T forecast) {
-        Double GNM = 4.1465; //TODO:temporary placeholder
+        PricePK pricePK = new PricePK();
+        pricePK.setPeriodMonth(forecast.getPeriodMonth());
+        pricePK.setPeriodYear(forecast.getPeriodYear());
+
+        Double GNM = null;// = 4.1465; //TODO:temporary placeholder
+
+        Price price = priceBean.find(pricePK);
+        if (price != null) {
+            LOG.log(Level.INFO, "Realizable Price found {0}", price.getRealizablePrice());
+            GNM = price.getRealizablePrice() * 0.12225;
+        } else {
+            LOG.log(Level.INFO, "Realizable Price NOT found {0}");
+        }
+
         forecast.setGuaranteedNotionalMargin(GNM);
         LOG.log(Level.INFO, "Guaranteed National Margin (GNM)=>{0}", GNM);
 

@@ -3,7 +3,8 @@ package com.nnpcgroup.cosm.controller;
 import com.nnpcgroup.cosm.entity.Company;
 import com.nnpcgroup.cosm.controller.util.JsfUtil;
 import com.nnpcgroup.cosm.controller.util.JsfUtil.PersistAction;
-import com.nnpcgroup.cosm.ejb.CompanyBean;
+import com.nnpcgroup.cosm.ejb.PriceBean;
+import com.nnpcgroup.cosm.entity.Price;
 
 import java.io.Serializable;
 import java.util.List;
@@ -19,25 +20,26 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
-@Named("companyController")
+@Named("priceController")
 @SessionScoped
-public class CompanyController implements Serializable {
+public class PriceController implements Serializable {
 
     private static final long serialVersionUID = -6982105129966859253L;
 
     @EJB
-    private CompanyBean ejbFacade;
-    private List<Company> items = null;
-    private Company selected;
+    private PriceBean ejbFacade;
+    
+    private List<Price> items = null;
+    private Price selected;
 
-    public CompanyController() {
+    public PriceController() {
     }
 
-    public Company getSelected() {
+    public Price getSelected() {
         return selected;
     }
 
-    public void setSelected(Company selected) {
+    public void setSelected(Price selected) {
         this.selected = selected;
     }
 
@@ -47,12 +49,12 @@ public class CompanyController implements Serializable {
     protected void initializeEmbeddableKey() {
     }
 
-    private CompanyBean getFacade() {
+    private PriceBean getFacade() {
         return ejbFacade;
     }
 
-    public Company prepareCreate() {
-        selected = new Company();
+    public Price prepareCreate() {
+        selected = new Price();
         initializeEmbeddableKey();
         return selected;
     }
@@ -63,30 +65,30 @@ public class CompanyController implements Serializable {
     }
 
     public void create() {
-        persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("CompanyCreated"));
+        persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("PriceCreated"));
         if (!JsfUtil.isValidationFailed()) {
             items = null;    // Invalidate list of items to trigger re-query.
         }
     }
 
     public void update() {
-        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("CompanyUpdated"));
+        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("PriceUpdated"));
     }
 
-    public void destroy(Company ioc){
-        setSelected(ioc);
+    public void destroy(Price price){
+        setSelected(price);
         destroy();
     }
     
     public void destroy() {
-        persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("CompanyDeleted"));
+        persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("PriceDeleted"));
         if (!JsfUtil.isValidationFailed()) {
             selected = null; // Remove selection
             items = null;    // Invalidate list of items to trigger re-query.
         }
     }
 
-    public List<Company> getItems() {
+    public List<Price> getItems() {
         if (items == null) {
             items = getFacade().findAll();
         }
@@ -121,29 +123,29 @@ public class CompanyController implements Serializable {
         }
     }
 
-    public Company getCompany(int id) {
+    public Price getPrice(int id) {
         return getFacade().find(id);
     }
 
-    public List<Company> getItemsAvailableSelectMany() {
+    public List<Price> getItemsAvailableSelectMany() {
         return getFacade().findAll();
     }
 
-    public List<Company> getItemsAvailableSelectOne() {
+    public List<Price> getItemsAvailableSelectOne() {
         return getFacade().findAll();
     }
 
-    @FacesConverter(forClass = Company.class)
-    public static class CompanyControllerConverter implements Converter {
+    @FacesConverter(forClass = Price.class)
+    public static class PriceControllerConverter implements Converter {
 
         @Override
         public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
             if (value == null || value.length() == 0) {
                 return null;
             }
-            CompanyController controller = (CompanyController) facesContext.getApplication().getELResolver().
-                    getValue(facesContext.getELContext(), null, "companyController");
-            return controller.getCompany(getKey(value));
+            PriceController controller = (PriceController) facesContext.getApplication().getELResolver().
+                    getValue(facesContext.getELContext(), null, "priceController");
+            return controller.getPrice(getKey(value));
         }
 
         int getKey(String value) {
@@ -163,9 +165,9 @@ public class CompanyController implements Serializable {
             if (object == null) {
                 return null;
             }
-            if (object instanceof Company) {
-                Company o = (Company) object;
-                return getStringKey(o.getId());
+            if (object instanceof Price) {
+                Price o = (Price) object;
+                return getStringKey(o.getPricePK().hashCode());
             } else {
                 Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), Company.class.getName()});
                 return null;

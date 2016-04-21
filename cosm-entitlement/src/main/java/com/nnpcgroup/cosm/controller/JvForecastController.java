@@ -17,11 +17,13 @@ import com.nnpcgroup.cosm.ejb.forecast.jv.JvRegularForecastServices;
 import com.nnpcgroup.cosm.entity.contract.CarryContract;
 import com.nnpcgroup.cosm.entity.contract.Contract;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
+import com.nnpcgroup.cosm.entity.contract.ContractPK;
 import com.nnpcgroup.cosm.entity.contract.ModifiedCarryContract;
 import com.nnpcgroup.cosm.entity.contract.RegularContract;
 import com.nnpcgroup.cosm.entity.forecast.jv.AlternativeFundingForecast;
 import com.nnpcgroup.cosm.entity.forecast.jv.CarryForecast;
 import com.nnpcgroup.cosm.entity.forecast.jv.Forecast;
+import com.nnpcgroup.cosm.entity.forecast.jv.ForecastPK;
 import com.nnpcgroup.cosm.entity.forecast.jv.ModifiedCarryForecast;
 import com.nnpcgroup.cosm.entity.forecast.jv.RegularForecast;
 
@@ -35,6 +37,10 @@ import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.enterprise.context.SessionScoped;
 import javax.enterprise.inject.Produces;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.convert.Converter;
+import javax.faces.convert.FacesConverter;
 import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 
@@ -70,7 +76,7 @@ public class JvForecastController implements Serializable {
     private Forecast currentProduction;
 
     private List<Forecast> productions;
-    private ProductionDataModel dataModel;
+    //private ProductionDataModel dataModel;
 
     private Integer periodYear;
     private Integer periodMonth;
@@ -105,9 +111,9 @@ public class JvForecastController implements Serializable {
         return defaultForecastBean;
     }
 
-    public ProductionDataModel getDataModel() {
-        return dataModel;
-    }
+//    public ProductionDataModel getDataModel() {
+//        return dataModel;
+//    }
 
     public Forecast getCurrentProduction() {
         return currentProduction;
@@ -154,7 +160,7 @@ public class JvForecastController implements Serializable {
         LOG.log(Level.INFO, "Deleting {0}...", currentProduction);
         persist(JsfUtil.PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("ProductionDeleted"));
         if (!JsfUtil.isValidationFailed()) {
-            dataModel.removeItem(currentProduction);
+            //dataModel.removeItem(currentProduction);
             currentProduction = null;
         }
     }
@@ -212,18 +218,18 @@ public class JvForecastController implements Serializable {
     public void loadProductions() {
         if (periodYear != null && periodMonth != null) {
             if (currentFiscalArrangement == null) {
-                productions = getForecastBean().findByYearAndMonth(periodYear, periodMonth);
+              //  productions = getForecastBean().findByYearAndMonth(periodYear, periodMonth);
             } else {
                 productions = getForecastBean().findByContractPeriod(periodYear, periodMonth, currentFiscalArrangement);
             }
-            refreshDataModel();
+            //refreshDataModel();
         }
     }
 
-    public void refreshDataModel() {
-        LOG.log(Level.INFO, "Refreshing DataModel...");
-        dataModel = new ProductionDataModel(productions);
-    }
+//    public void refreshDataModel() {
+//        LOG.log(Level.INFO, "Refreshing DataModel...");
+//       // dataModel = new ProductionDataModel(productions);
+//    }
 
     public void productionVolumeChanged() {
         getForecastBean().enrich(currentProduction);
@@ -232,12 +238,12 @@ public class JvForecastController implements Serializable {
                 new Object[]{currentProduction.getOwnShareEntitlement(),
                     currentProduction.getPartnerShareEntitlement()
                 });
-        
+
     }
-    
+
     public void alternativeFundingCostListener() {
-        JvAlternativeFundingForecastServices afBean=(JvAlternativeFundingForecastServices)getForecastBean();
-        afBean.computeAlternativeFunding(getCurrentAfProduction());        
+        JvAlternativeFundingForecastServices afBean = (JvAlternativeFundingForecastServices) getForecastBean();
+        afBean.computeAlternativeFunding(getCurrentAfProduction());
     }
 
     public void openingStockChanged() {
@@ -365,7 +371,7 @@ public class JvForecastController implements Serializable {
         return (getCurrentProduction() instanceof AlternativeFundingForecast);
     }
 
-    public void currentContractChanged(){
+    public void currentContractChanged() {
         LOG.log(Level.INFO, "Contract Selected...{0}", currentContract);
         if (currentContract instanceof RegularContract) {
             currentProduction = new RegularForecast();
@@ -381,12 +387,83 @@ public class JvForecastController implements Serializable {
 
         if (currentProduction != null) {
             currentProduction.setContract(currentContract);
+            
 
             if (periodYear != null && periodMonth != null) {
-                currentProduction.setPeriodYear(periodYear);
-                currentProduction.setPeriodMonth(periodMonth);
+//                currentProduction.setPeriodYear(periodYear);
+//                currentProduction.setPeriodMonth(periodMonth);
             }
         }
+    }
+
+    public Forecast getContract(ForecastPK fPK) {
+        return (Forecast) getForecastBean().find(fPK);
+    }
+
+    @FacesConverter(forClass = Forecast.class)
+    public static class ForecastControllerConverter implements Converter {
+
+        private static final String SEPARATOR = "#";
+        private static final String SEPARATOR_ESCAPED = "\\#";
+
+        @Override
+        public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
+            if (value == null || value.length() == 0) {
+                return null;
+            }
+            JvForecastController controller = (JvForecastController) facesContext.getApplication().getELResolver().
+                    getValue(facesContext.getELContext(), null, "jvProdController");
+            return controller.getContract(getKey(value));
+        }
+        
+        ForecastPK getKey(String value) {
+            ForecastPK key;
+            String values[] = value.split(SEPARATOR_ESCAPED);
+            key = new ForecastPK();
+            key.setPeriodYear(Integer.parseInt(values[0]));
+            key.setPeriodMonth(Integer.parseInt(values[1]));
+            key.setContractPK(getContractPK(values[2]));
+            return key;
+        }
+
+        ContractPK getContractPK(String value) {
+            String values[] = value.split(SEPARATOR_ESCAPED);
+            ContractPK key = new ContractPK();
+            key.setFiscalArrangementId(Long.parseLong(values[0]));
+            key.setCrudeTypeCode(values[1]);
+
+            return key;
+
+        }
+
+        String getStringKey(ForecastPK value) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(value.getPeriodYear());
+            sb.append(SEPARATOR);
+            sb.append(value.getPeriodMonth());
+            sb.append(SEPARATOR);
+            sb.append(
+                    sb.append(value.getContractPK().getFiscalArrangementId())
+                    .append(SEPARATOR)
+                    .append(value.getContractPK().getCrudeTypeCode())
+            );
+            return sb.toString();
+        }
+
+        @Override
+        public String getAsString(FacesContext facesContext, UIComponent component, Object object) {
+            if (object == null) {
+                return null;
+            }
+            if (object instanceof Forecast) {
+                Forecast o = (Forecast) object;
+                return getStringKey(o.getForecastPK());
+            } else {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), Forecast.class.getName()});
+                return null;
+            }
+        }
+
     }
 
 }

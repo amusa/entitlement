@@ -18,7 +18,7 @@ import java.util.List;
  */
 public interface CommonServices<T> extends AbstractCrudServices<T> {
 
-    public List<T> findByYearAndMonth(int year, int month);
+   // public List<T> findByYearAndMonth(int year, int month);
 
     public T findByContractPeriod(int year, int month, Contract cs);
 

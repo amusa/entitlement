@@ -6,6 +6,7 @@ import com.nnpcgroup.cosm.controller.util.JsfUtil.PersistAction;
 import com.nnpcgroup.cosm.ejb.contract.impl.CarryContractBean;
 import com.nnpcgroup.cosm.entity.contract.CarryContract;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
+import com.nnpcgroup.cosm.entity.contract.ContractPK;
 
 import java.io.Serializable;
 import java.util.List;
@@ -57,7 +58,6 @@ public class ModifiedCarryContractController implements Serializable {
         this.fiscalArrangement = fiscalArrangement;
     }
 
-    
     public CarryContract getSelected() {
         return selected;
     }
@@ -148,8 +148,8 @@ public class ModifiedCarryContractController implements Serializable {
         }
     }
 
-    public CarryContract getCarryContract(java.lang.Integer id) {
-        return getFacade().find(id);
+    public CarryContract getCarryContract(ContractPK cPK) {
+        return getFacade().find(cPK);
     }
 
     public List<CarryContract> getItemsAvailableSelectMany() {
@@ -159,13 +159,16 @@ public class ModifiedCarryContractController implements Serializable {
     public SelectItem[] getItemsAvailableSelectOne() {
         return JsfUtil.getSelectItems(getFacade().findAll(), true);
     }
-        
-    public void addContractFiscalArrangement(FiscalArrangement fa){
+
+    public void addContractFiscalArrangement(FiscalArrangement fa) {
         setFiscalArrangement(fa);
     }
-      
+
     @FacesConverter(forClass = Contract.class)
     public static class ModifiedCarryContractControllerConverter implements Converter {
+
+        private static final String SEPARATOR = "#";
+        private static final String SEPARATOR_ESCAPED = "\\#";
 
         @Override
         public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
@@ -177,18 +180,34 @@ public class ModifiedCarryContractController implements Serializable {
             return controller.getCarryContract(getKey(value));
         }
 
-        java.lang.Integer getKey(String value) {
-            java.lang.Integer key;
-            key = Integer.valueOf(value);
+        ContractPK getKey(String value) {
+            ContractPK key;
+            String values[] = value.split(SEPARATOR_ESCAPED);
+            key = new ContractPK();
+            key.setFiscalArrangementId(Long.valueOf(values[0]));
+            key.setCrudeTypeCode(values[1]);
             return key;
         }
 
-        String getStringKey(java.lang.Integer value) {
+        String getStringKey(ContractPK value) {
             StringBuilder sb = new StringBuilder();
-            sb.append(value);
+            sb.append(value.getFiscalArrangementId());
+            sb.append(SEPARATOR);
+            sb.append(value.getCrudeTypeCode());
             return sb.toString();
         }
 
+//        java.lang.Integer getKey(String value) {
+//            java.lang.Integer key;
+//            key = Integer.valueOf(value);
+//            return key;
+//        }
+//
+//        String getStringKey(java.lang.Integer value) {
+//            StringBuilder sb = new StringBuilder();
+//            sb.append(value);
+//            return sb.toString();
+//        }
         @Override
         public String getAsString(FacesContext facesContext, UIComponent component, Object object) {
             if (object == null) {
@@ -196,7 +215,7 @@ public class ModifiedCarryContractController implements Serializable {
             }
             if (object instanceof Contract) {
                 Contract o = (Contract) object;
-                return getStringKey(o.hashCode());
+                return getStringKey(o.getContractPK());
             } else {
                 Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), Contract.class.getName()});
                 return null;

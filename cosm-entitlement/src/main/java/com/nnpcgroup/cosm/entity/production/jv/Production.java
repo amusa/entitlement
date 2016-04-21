@@ -8,13 +8,12 @@ package com.nnpcgroup.cosm.entity.production.jv;
 import com.nnpcgroup.cosm.entity.contract.Contract;
 import java.io.Serializable;
 import javax.persistence.DiscriminatorColumn;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
+import javax.persistence.MapsId;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -30,7 +29,7 @@ public abstract class Production implements Serializable {
 
     private static final long serialVersionUID = -795843614381155072L;
 
-    private Long id;
+    private ProductionPK productionPK;
     private int periodYear;
     private int periodMonth;
     private Contract contract;
@@ -47,28 +46,26 @@ public abstract class Production implements Serializable {
     private Integer partnerCargos;
     private Double availability;
     private Double partnerAvailability;
-    private Double stockAdjustment;    
+    private Double stockAdjustment;
     private Double overlift;
     private Double partnerOverlift;
 
     public Production() {
     }
 
-    public Production(int periodYear, int periodMonth, Contract contract, Double openingStock, Double productionVolume) {
+    public Production(int periodYear, int periodMonth, Contract contract) {
         this.periodYear = periodYear;
         this.periodMonth = periodMonth;
-        this.contract = contract;
-        this.openingStock = openingStock;
+        this.contract = contract;       
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Long getId() {
-        return id;
+    @EmbeddedId
+    public ProductionPK getProductionPK() {
+        return productionPK;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setProductionPK(ProductionPK productionPK) {
+        this.productionPK = productionPK;
     }
 
     @NotNull
@@ -91,6 +88,7 @@ public abstract class Production implements Serializable {
 
     @ManyToOne
     @NotNull
+    @MapsId("contractPK")
     public Contract getContract() {
         return contract;
     }
@@ -228,7 +226,5 @@ public abstract class Production implements Serializable {
     public void setPartnerOverlift(Double partnerOverlift) {
         this.partnerOverlift = partnerOverlift;
     }
-
-   
 
 }

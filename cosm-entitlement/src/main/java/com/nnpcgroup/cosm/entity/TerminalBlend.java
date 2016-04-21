@@ -5,12 +5,17 @@
  */
 package com.nnpcgroup.cosm.entity;
 
+import com.nnpcgroup.cosm.entity.contract.Contract;
 import com.nnpcgroup.cosm.entity.production.jv.Production;
+import com.nnpcgroup.cosm.entity.production.jv.ProductionPK;
 import java.io.Serializable;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.MapsId;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -24,59 +29,24 @@ public class TerminalBlend implements Serializable {
 
     private static final long serialVersionUID = -8220877789250153033L;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    @NotNull
-    private int periodYear;
-    @NotNull
-    private int periodMonth;
-    @NotNull
-    private Production production;
-    @NotNull
+    private TerminalBlendPK terminalBlendPK;
+    private Contract contract;
+
     private Double volume;
-    
 
     public TerminalBlend() {
     }
 
-    
-
-    
-    public Long getId() {
-        return id;
+    @EmbeddedId
+    public TerminalBlendPK getTerminalBlendPK() {
+        return terminalBlendPK;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setTerminalBlendPK(TerminalBlendPK terminalBlendPK) {
+        this.terminalBlendPK = terminalBlendPK;
     }
 
-    
-    public int getPeriodYear() {
-        return periodYear;
-    }
-
-    public void setPeriodYear(int periodYear) {
-        this.periodYear = periodYear;
-    }
-
-    
-    public int getPeriodMonth() {
-        return periodMonth;
-    }
-
-    public void setPeriodMonth(int periodMonth) {
-        this.periodMonth = periodMonth;
-    }
-
-    public Production getProduction() {
-        return production;
-    }
-
-    public void setProduction(Production production) {
-        this.production = production;
-    }
-
+    @NotNull
     public Double getVolume() {
         return volume;
     }
@@ -85,6 +55,14 @@ public class TerminalBlend implements Serializable {
         this.volume = volume;
     }
 
-    
+    @ManyToOne
+    @NotNull
+    @MapsId("contractPK")
+    public Contract getContract() {
+        return contract;
+    }
 
+    public void setContract(Contract contract) {
+        this.contract = contract;
+    }
 }

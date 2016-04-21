@@ -23,7 +23,7 @@ public class ProductionDataModel<T extends Forecast> extends ListDataModel<T> im
 
     @Override
     public Object getRowKey(Forecast prod) {
-        return prod.getId();
+        return prod.getForecastPK();
     }
 
     @Override
@@ -31,7 +31,7 @@ public class ProductionDataModel<T extends Forecast> extends ListDataModel<T> im
         List<Forecast> prodList = (List<Forecast>) getWrappedData();
 
         T prod = (T)prodList.stream()
-                .filter(p -> p.getId()
+                .filter(p -> p.getForecastPK()
                         .equals(new Long(rowKey)))
                 .findFirst()
                 .get();

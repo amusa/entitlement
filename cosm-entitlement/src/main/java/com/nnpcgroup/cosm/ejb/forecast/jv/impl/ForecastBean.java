@@ -24,6 +24,7 @@ import javax.enterprise.context.Dependent;
 public class ForecastBean extends JvForecastServicesImpl<Forecast> implements JvForecast, Serializable{
 
     private static final Logger LOG = Logger.getLogger(ForecastBean.class.getName());
+    private static final long serialVersionUID = 8993596753945847377L;
 
     public ForecastBean() {
         super(Forecast.class);

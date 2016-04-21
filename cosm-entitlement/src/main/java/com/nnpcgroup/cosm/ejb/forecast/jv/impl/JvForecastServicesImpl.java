@@ -13,7 +13,9 @@ import com.nnpcgroup.cosm.entity.EquityType;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
 import com.nnpcgroup.cosm.entity.FiscalPeriod;
 import com.nnpcgroup.cosm.entity.JointVenture;
+import com.nnpcgroup.cosm.entity.contract.ContractPK;
 import com.nnpcgroup.cosm.entity.forecast.jv.Forecast;
+import com.nnpcgroup.cosm.entity.forecast.jv.ForecastPK;
 import java.io.Serializable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -66,8 +68,10 @@ public abstract class JvForecastServicesImpl<T extends Forecast> extends CommonS
     @Override
     public T computeGrossProduction(T forecast) {
         Double prodVolume = forecast.getProductionVolume();
-        int periodYear = forecast.getPeriodYear();
-        int periodMonth = forecast.getPeriodMonth();
+//        int periodYear = forecast.getPeriodYear();
+//        int periodMonth = forecast.getPeriodMonth();
+        int periodYear = forecast.getForecastPK().getPeriodYear();
+        int periodMonth = forecast.getForecastPK().getPeriodMonth();
         int days = genController.daysOfMonth(periodYear, periodMonth);
         Double grossProd = prodVolume * days;
 
@@ -106,7 +110,7 @@ public abstract class JvForecastServicesImpl<T extends Forecast> extends CommonS
 
         return forecast;
     }
-    
+
     @Override
     public T enrich(T production) {
         LOG.log(Level.INFO, "Enriching production {0}...", production);
@@ -191,13 +195,15 @@ public abstract class JvForecastServicesImpl<T extends Forecast> extends CommonS
 
     @Override
     public T getPreviousMonthProduction(T forecast) {
-        int month = forecast.getPeriodMonth();
-        int year = forecast.getPeriodYear();
+        int month = forecast.getForecastPK().getPeriodMonth(); //getPeriodMonth();
+        int year = forecast.getForecastPK().getPeriodYear();//getPeriodYear();
         Contract cs = forecast.getContract();
+        ContractPK cPK = forecast.getContract().getContractPK();
 
         FiscalPeriod prevFp = getPreviousFiscalPeriod(year, month);
 
-        T f = findByContractPeriod(prevFp.getYear(), prevFp.getMonth(), cs);
+        //T f = findByContractPeriod(prevFp.getYear(), prevFp.getMonth(), cs);
+        T f = find(new ForecastPK(prevFp.getYear(), prevFp.getMonth(), cPK));
 
         return f;
 

@@ -8,13 +8,12 @@ package com.nnpcgroup.cosm.entity.forecast.jv;
 import com.nnpcgroup.cosm.entity.contract.Contract;
 import java.io.Serializable;
 import javax.persistence.DiscriminatorColumn;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
+import javax.persistence.MapsId;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -30,9 +29,9 @@ public abstract class Forecast implements Serializable {
 
     private static final long serialVersionUID = -795843614381155072L;
 
-    private Long id;
-    private int periodYear;
-    private int periodMonth;
+    private ForecastPK forecastPK;
+//    private int periodYear;
+//    private int periodMonth;
     private Contract contract;
     private Double openingStock;
     private Double partnerOpeningStock;
@@ -52,44 +51,42 @@ public abstract class Forecast implements Serializable {
     public Forecast() {
     }
 
-    public Forecast(int periodYear, int periodMonth, Contract contract, Double openingStock, Double productionVolume) {
-        this.periodYear = periodYear;
-        this.periodMonth = periodMonth;
-        this.contract = contract;
-        this.openingStock = openingStock;
-        this.productionVolume = productionVolume;
+//    public Forecast(int periodYear, int periodMonth, Contract contract) {
+//        this.periodYear = periodYear;
+//        this.periodMonth = periodMonth;
+//        this.contract = contract;
+//    }
+
+    @EmbeddedId
+    public ForecastPK getForecastPK() {
+        return forecastPK;
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Long getId() {
-        return id;
+    public void setForecastPK(ForecastPK forecastPK) {
+        this.forecastPK = forecastPK;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    @NotNull
-    public int getPeriodYear() {
-        return periodYear;
-    }
-
-    public void setPeriodYear(int periodYear) {
-        this.periodYear = periodYear;
-    }
-
-    @NotNull
-    public int getPeriodMonth() {
-        return periodMonth;
-    }
-
-    public void setPeriodMonth(int periodMonth) {
-        this.periodMonth = periodMonth;
-    }
+//    @NotNull
+//    public int getPeriodYear() {
+//        return periodYear;
+//    }
+//
+//    public void setPeriodYear(int periodYear) {
+//        this.periodYear = periodYear;
+//    }
+//
+//    @NotNull
+//    public int getPeriodMonth() {
+//        return periodMonth;
+//    }
+//
+//    public void setPeriodMonth(int periodMonth) {
+//        this.periodMonth = periodMonth;
+//    }
 
     @ManyToOne
     @NotNull
+    @MapsId("contractPK")
     public Contract getContract() {
         return contract;
     }
@@ -213,5 +210,4 @@ public abstract class Forecast implements Serializable {
         this.partnerCargos = partnerCargos;
     }
 
-    
 }

@@ -287,8 +287,8 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
     @Override
     public T computeGuaranteedNotionalMargin(T forecast) {
         PricePK pricePK = new PricePK();
-        pricePK.setPeriodMonth(forecast.getPeriodMonth());
-        pricePK.setPeriodYear(forecast.getPeriodYear());
+        pricePK.setPeriodMonth(forecast.getForecastPK().getPeriodMonth());
+        pricePK.setPeriodYear(forecast.getForecastPK().getPeriodYear());
 
         Double GNM = null;// = 4.1465; //TODO:temporary placeholder
 

@@ -182,7 +182,7 @@ public class JvProductionController implements Serializable {
     public void loadProductions() {
         if (periodYear != null && periodMonth != null) {
             if (currentFiscalArrangement == null) {
-                productions = getProductionBean().findByYearAndMonth(periodYear, periodMonth);
+               // productions = getProductionBean().findByYearAndMonth(periodYear, periodMonth);
             } else {
                 productions = getProductionBean().findByContractPeriod(periodYear, periodMonth, currentFiscalArrangement);
             }
@@ -299,8 +299,8 @@ public class JvProductionController implements Serializable {
         LOG.log(Level.INFO, "************actualizing {0}...", forecast);
         Production production = null;
         production = (Production) getProductionBean().findByContractPeriod(
-                forecast.getPeriodYear(),
-                forecast.getPeriodMonth(),
+                forecast.getForecastPK().getPeriodYear(),
+                forecast.getForecastPK().getPeriodMonth(),
                 forecast.getContract());
         LOG.log(Level.INFO, "************findByContractStreamPeriod returning {0}...", currentProduction);
 
@@ -320,8 +320,8 @@ public class JvProductionController implements Serializable {
             }
 
             LOG.log(Level.INFO, "************getProductionBean().createInstance() returning {0}...", currentProduction);
-            production.setPeriodYear(forecast.getPeriodYear());
-            production.setPeriodMonth(forecast.getPeriodMonth());
+            production.setPeriodYear(forecast.getForecastPK().getPeriodYear());
+            production.setPeriodMonth(forecast.getForecastPK().getPeriodMonth());
             production.setContract(forecast.getContract());
 
             setCurrentContract(forecast.getContract());

@@ -7,6 +7,7 @@ import com.nnpcgroup.cosm.ejb.contract.ContractServices;
 import com.nnpcgroup.cosm.entity.contract.CarryContract;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
 import com.nnpcgroup.cosm.entity.contract.AlternativeFundingContract;
+import com.nnpcgroup.cosm.entity.contract.ContractPK;
 import com.nnpcgroup.cosm.entity.contract.ModifiedCarryContract;
 import com.nnpcgroup.cosm.entity.contract.RegularContract;
 
@@ -59,7 +60,7 @@ public class ContractController implements Serializable {
     }
 
     public void setFiscalArrangement(FiscalArrangement fiscalArrangement) {
-         LOG.log(Level.INFO, "Setting fiscal arrangement {0}...", fiscalArrangement);
+        LOG.log(Level.INFO, "Setting fiscal arrangement {0}...", fiscalArrangement);
         this.fiscalArrangement = fiscalArrangement;
     }
 
@@ -82,7 +83,7 @@ public class ContractController implements Serializable {
     public AlternativeFundingContract getAfSelected() {
         if (selected instanceof AlternativeFundingContract) {
             return (AlternativeFundingContract) selected;
-        } 
+        }
         return null;
     }
 
@@ -202,7 +203,10 @@ public class ContractController implements Serializable {
                 default:
                     break;
             }
-            selected.setFiscalArrangement(fiscalArrangement);
+            ContractPK contractPK = new ContractPK();
+            //contractPK.setCrudeType();
+            contractPK.setFiscalArrangementId(fiscalArrangement.getId());
+            selected.setContractPK(contractPK);
         }
     }
 
@@ -210,7 +214,10 @@ public class ContractController implements Serializable {
         LOG.log(Level.INFO, "Adding Contract for fiscal arrangement {0}...", fa);
         setSelected(new RegularContract()); //Default contract
         setFiscalArrangement(fa);
-        selected.setFiscalArrangement(fiscalArrangement);
+        ContractPK contractPK = new ContractPK();
+        //contractPK.setCrudeType();
+        contractPK.setFiscalArrangementId(fiscalArrangement.getId());
+        selected.setContractPK(contractPK);        
     }
 
     @FacesConverter(forClass = Contract.class)
@@ -245,7 +252,7 @@ public class ContractController implements Serializable {
             }
             if (object instanceof Contract) {
                 Contract o = (Contract) object;
-                return getStringKey(o.getId());
+                return getStringKey(o.hashCode());
             } else {
                 Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), Contract.class.getName()});
                 return null;

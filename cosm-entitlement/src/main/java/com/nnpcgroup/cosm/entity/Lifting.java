@@ -41,8 +41,8 @@ public class Lifting implements Serializable {
     @ManyToOne
     private Terminal terminal;
    
-    @ManyToOne
-    private CrudeType crudeType;
+//    @ManyToOne
+//    private CrudeType crudeType;
     
     private Double quantity;
 
@@ -97,13 +97,13 @@ public class Lifting implements Serializable {
         this.terminal = terminal;
     }
 
-    public CrudeType getCrudeType() {
-        return crudeType;
-    }
-
-    public void setCrudeType(CrudeType crudeType) {
-        this.crudeType = crudeType;
-    }
+//    public CrudeType getCrudeType() {
+//        return crudeType;
+//    }
+//
+//    public void setCrudeType(CrudeType crudeType) {
+//        this.crudeType = crudeType;
+//    }
 
     public Double getQuantity() {
         return quantity;

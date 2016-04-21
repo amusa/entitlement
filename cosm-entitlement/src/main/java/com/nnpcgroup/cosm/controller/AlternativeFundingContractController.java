@@ -7,6 +7,7 @@ import com.nnpcgroup.cosm.ejb.contract.ContractServices;
 import com.nnpcgroup.cosm.ejb.contract.impl.ContractBean;
 import com.nnpcgroup.cosm.entity.contract.CarryContract;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
+import com.nnpcgroup.cosm.entity.contract.ContractPK;
 import com.nnpcgroup.cosm.entity.contract.ModifiedCarryContract;
 import com.nnpcgroup.cosm.entity.contract.RegularContract;
 
@@ -60,7 +61,6 @@ public class AlternativeFundingContractController implements Serializable {
         this.fiscalArrangement = fiscalArrangement;
     }
 
-    
     public Contract getSelected() {
         return selected;
     }
@@ -179,14 +179,17 @@ public class AlternativeFundingContractController implements Serializable {
                 default:
                     break;
             }
-            selected.setFiscalArrangement(fiscalArrangement);
+            ContractPK contractPK = new ContractPK();
+           // contractPK.setCrudeType();
+            contractPK.setFiscalArrangementId(fiscalArrangement.getId());
+            selected.setContractPK(contractPK);
         }
     }
-    
-    public void addContract(FiscalArrangement fa){
+
+    public void addContract(FiscalArrangement fa) {
         setFiscalArrangement(fa);
     }
-      
+
     @FacesConverter(forClass = Contract.class)
     public static class ContractStreamControllerConverter implements Converter {
 
@@ -219,7 +222,7 @@ public class AlternativeFundingContractController implements Serializable {
             }
             if (object instanceof Contract) {
                 Contract o = (Contract) object;
-                return getStringKey(o.getId());
+                return getStringKey(o.hashCode());
             } else {
                 Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), Contract.class.getName()});
                 return null;

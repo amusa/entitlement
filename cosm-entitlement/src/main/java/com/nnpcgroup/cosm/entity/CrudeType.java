@@ -10,7 +10,9 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Objects;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -25,11 +27,11 @@ import javax.validation.constraints.NotNull;
 public class CrudeType implements Serializable {
 
     private static final long serialVersionUID = -5758793863890338020L;
-    
+
     private String code;
     private String crudeType;
     private Terminal terminal;
-    private Collection<Contract> contractStreams;
+    private Collection<Contract> contracts;
 
     @Id
     public String getCode() {
@@ -48,23 +50,25 @@ public class CrudeType implements Serializable {
     public void setCrudeType(String crudeType) {
         this.crudeType = crudeType;
     }
-  
+
     @OneToOne(mappedBy = "crudeType")
-     public Terminal getTerminal() {
+    public Terminal getTerminal() {
         return terminal;
     }
 
     public void setTerminal(Terminal terminal) {
         this.terminal = terminal;
     }
-        
+
     @OneToMany(mappedBy = "crudeType")
-    public Collection<Contract> getContractStreams() {
-        return contractStreams;
+    //@OneToMany(mappedBy = "crudeType", fetch = FetchType.LAZY)
+    //@JoinColumn(name = "crudeTypeCode", insertable = false, updatable = false)
+    public Collection<Contract> getContracts() {
+        return contracts;
     }
 
-    public void setContractStreams(Collection<Contract> contractStreams) {
-        this.contractStreams = contractStreams;
+    public void setContracts(Collection<Contract> contracts) {
+        this.contracts = contracts;
     }
 
     @Override
@@ -98,9 +102,7 @@ public class CrudeType implements Serializable {
 
     @Override
     public String toString() {
-        return String.format("%s (%s)", getCrudeType(),getCode());                
+        return String.format("%s (%s)", getCrudeType(), getCode());
     }
-    
-    
-    
+
 }

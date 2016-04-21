@@ -8,14 +8,15 @@ package com.nnpcgroup.cosm.entity.contract;
 import com.nnpcgroup.cosm.entity.CrudeType;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
 import java.io.Serializable;
-import java.util.Objects;
+import javax.persistence.Embedded;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.MapsId;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -23,25 +24,26 @@ import javax.validation.constraints.NotNull;
  */
 @Entity
 @Table(name = "CONTRACT")
-public abstract class Contract implements Serializable {
+public  class Contract implements Serializable {
 
-    private static final long serialVersionUID = 243024160781750391L;
-    private Integer id;
-    private CrudeType crudeType;
-    private FiscalArrangement fiscalArrangement;
+    private static final long serialVersionUID = 4374185291370537475L;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
+    @EmbeddedId
+    ContractPK contractPK;
 
     @ManyToOne
-    @NotNull
+    @MapsId("crudeTypeCode")
+    //@JoinColumn(name="crudeTypeCode")
+    private CrudeType crudeType;
+
+    @ManyToOne
+    @MapsId("fiscalArrangementId")
+    //@JoinColumn(name="fiscalArrangementId")
+    private FiscalArrangement fiscalArrangement;
+
+    public Contract() {
+    }
+
     public CrudeType getCrudeType() {
         return crudeType;
     }
@@ -50,7 +52,6 @@ public abstract class Contract implements Serializable {
         this.crudeType = crudeType;
     }
 
-    @ManyToOne
     public FiscalArrangement getFiscalArrangement() {
         return fiscalArrangement;
     }
@@ -59,33 +60,12 @@ public abstract class Contract implements Serializable {
         this.fiscalArrangement = fiscalArrangement;
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 7;
-        hash = 67 * hash + Objects.hashCode(this.id);
-        hash = 67 * hash + Objects.hashCode(this.crudeType);
-        return hash;
+    public ContractPK getContractPK() {
+        return contractPK;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Contract other = (Contract) obj;
-        if (!Objects.equals(this.id, other.id)) {
-            return false;
-        }
-        if (!Objects.equals(this.crudeType, other.crudeType)) {
-            return false;
-        }
-        return true;
+    public void setContractPK(ContractPK contractPK) {
+        this.contractPK = contractPK;
     }
 
     @Override

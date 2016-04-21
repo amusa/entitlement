@@ -7,6 +7,7 @@ package com.nnpcgroup.cosm.entity.forecast.jv;
 
 import com.nnpcgroup.cosm.entity.contract.ContractPK;
 import java.io.Serializable;
+import java.util.Objects;
 import javax.persistence.Embeddable;
 
 /**
@@ -52,6 +53,39 @@ public class ForecastPK implements Serializable {
 
     public void setContractPK(ContractPK contractPK) {
         this.contractPK = contractPK;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 11 * hash + this.periodYear;
+        hash = 11 * hash + this.periodMonth;
+        hash = 11 * hash + Objects.hashCode(this.contractPK);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final ForecastPK other = (ForecastPK) obj;
+        if (this.periodYear != other.periodYear) {
+            return false;
+        }
+        if (this.periodMonth != other.periodMonth) {
+            return false;
+        }
+        if (!Objects.equals(this.contractPK, other.contractPK)) {
+            return false;
+        }
+        return true;
     }
 
     

@@ -202,22 +202,16 @@ public class ContractController implements Serializable {
                     break;
                 default:
                     break;
-            }
-            ContractPK contractPK = new ContractPK();
-            //contractPK.setCrudeType();
-            contractPK.setFiscalArrangementId(fiscalArrangement.getId());
-            selected.setContractPK(contractPK);
+            }            
+            selected.setFiscalArrangement(fiscalArrangement);
         }
     }
 
     public void addContractFiscalArrangement(FiscalArrangement fa) {
         LOG.log(Level.INFO, "Adding Contract for fiscal arrangement {0}...", fa);
         setSelected(new RegularContract()); //Default contract
-        setFiscalArrangement(fa);
-        ContractPK contractPK = new ContractPK();
-        //contractPK.setCrudeType();
-        contractPK.setFiscalArrangementId(fiscalArrangement.getId());
-        selected.setContractPK(contractPK);        
+        setFiscalArrangement(fa);        
+        selected.setFiscalArrangement(fiscalArrangement);
     }
 
     @FacesConverter(forClass = Contract.class)

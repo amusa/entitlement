@@ -5,11 +5,15 @@
  */
 package com.nnpcgroup.cosm.ejb.production.jv.impl;
 
+import com.nnpcgroup.cosm.ejb.PriceBean;
 import com.nnpcgroup.cosm.ejb.production.jv.AlternativeFundingProductionServices;
+import com.nnpcgroup.cosm.entity.Price;
+import com.nnpcgroup.cosm.entity.PricePK;
 import com.nnpcgroup.cosm.entity.contract.AlternativeFundingContract;
 import com.nnpcgroup.cosm.entity.production.jv.AlternativeFundingProduction;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.ejb.EJB;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -25,6 +29,9 @@ import javax.persistence.criteria.Root;
 public abstract class AlternativeFundingProductionServicesImpl<T extends AlternativeFundingProduction, E extends AlternativeFundingContract> extends JvProductionServicesImpl<T, E> implements AlternativeFundingProductionServices<T, E> {
 
     private static final Logger LOG = Logger.getLogger(AlternativeFundingProductionServicesImpl.class.getName());
+
+    @EJB
+    PriceBean priceBean;
 
     public AlternativeFundingProductionServicesImpl(Class<T> entityClass) {
         super(entityClass);
@@ -237,7 +244,20 @@ public abstract class AlternativeFundingProductionServicesImpl<T extends Alterna
 
     @Override
     public T computeGuaranteedNotionalMargin(T production) {
-        Double GNM = 4.1465; //TODO:temporary placeholder
+        PricePK pricePK = new PricePK();
+        pricePK.setPeriodMonth(production.getPeriodMonth());
+        pricePK.setPeriodYear(production.getPeriodYear());
+
+        Double GNM = null;// = 4.1465; //TODO:temporary placeholder
+
+        Price price = priceBean.find(pricePK);
+        if (price != null) {
+            LOG.log(Level.INFO, "Realizable Price found {0}", price.getRealizablePrice());
+            GNM = price.getRealizablePrice() * 0.12225;
+        } else {
+            LOG.log(Level.INFO, "Realizable Price NOT found {0}");
+        }
+
         production.setGuaranteedNotionalMargin(GNM);
         LOG.log(Level.INFO, "Guaranteed National Margin (GNM)=>{0}", GNM);
 

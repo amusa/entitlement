@@ -5,6 +5,7 @@ import com.nnpcgroup.cosm.controller.util.JsfUtil;
 import com.nnpcgroup.cosm.controller.util.JsfUtil.PersistAction;
 import com.nnpcgroup.cosm.ejb.PriceBean;
 import com.nnpcgroup.cosm.entity.Price;
+import com.nnpcgroup.cosm.entity.PricePK;
 
 import java.io.Serializable;
 import java.util.List;
@@ -23,59 +24,61 @@ import javax.faces.convert.FacesConverter;
 @Named("priceController")
 @SessionScoped
 public class PriceController implements Serializable {
-
+    
     private static final long serialVersionUID = -6982105129966859253L;
-
+    
     @EJB
     private PriceBean ejbFacade;
     
     private List<Price> items = null;
     private Price selected;
-
+    
     public PriceController() {
     }
-
+    
     public Price getSelected() {
         return selected;
     }
-
+    
     public void setSelected(Price selected) {
         this.selected = selected;
     }
-
+    
     protected void setEmbeddableKeys() {
     }
-
+    
     protected void initializeEmbeddableKey() {
+        PricePK pricePK = new PricePK();
+        selected.setPricePK(pricePK);
     }
-
+    
     private PriceBean getFacade() {
         return ejbFacade;
     }
-
+    
     public Price prepareCreate() {
         selected = new Price();
         initializeEmbeddableKey();
         return selected;
     }
-
+    
     public void cancel() {
         items = null;
         selected = null;
     }
-
+    
     public void create() {
         persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("PriceCreated"));
         if (!JsfUtil.isValidationFailed()) {
             items = null;    // Invalidate list of items to trigger re-query.
         }
     }
-
+    
     public void update() {
         persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("PriceUpdated"));
     }
-
-    public void destroy(Price price){
+    
+    public void destroy(Price price) {
         setSelected(price);
         destroy();
     }
@@ -87,14 +90,14 @@ public class PriceController implements Serializable {
             items = null;    // Invalidate list of items to trigger re-query.
         }
     }
-
+    
     public List<Price> getItems() {
         if (items == null) {
             items = getFacade().findAll();
         }
         return items;
     }
-
+    
     private void persist(PersistAction persistAction, String successMessage) {
         if (selected != null) {
             setEmbeddableKeys();
@@ -122,22 +125,22 @@ public class PriceController implements Serializable {
             }
         }
     }
-
+    
     public Price getPrice(int id) {
         return getFacade().find(id);
     }
-
+    
     public List<Price> getItemsAvailableSelectMany() {
         return getFacade().findAll();
     }
-
+    
     public List<Price> getItemsAvailableSelectOne() {
         return getFacade().findAll();
     }
-
+    
     @FacesConverter(forClass = Price.class)
     public static class PriceControllerConverter implements Converter {
-
+        
         @Override
         public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
             if (value == null || value.length() == 0) {
@@ -147,19 +150,19 @@ public class PriceController implements Serializable {
                     getValue(facesContext.getELContext(), null, "priceController");
             return controller.getPrice(getKey(value));
         }
-
+        
         int getKey(String value) {
             int key;
             key = Integer.parseInt(value);
             return key;
         }
-
+        
         String getStringKey(int value) {
             StringBuilder sb = new StringBuilder();
             sb.append(value);
             return sb.toString();
         }
-
+        
         @Override
         public String getAsString(FacesContext facesContext, UIComponent component, Object object) {
             if (object == null) {
@@ -173,7 +176,7 @@ public class PriceController implements Serializable {
                 return null;
             }
         }
-
+        
     }
-
+    
 }

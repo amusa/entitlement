@@ -114,7 +114,6 @@ public class JvForecastController implements Serializable {
 //    public ProductionDataModel getDataModel() {
 //        return dataModel;
 //    }
-
     public Forecast getCurrentProduction() {
         return currentProduction;
     }
@@ -190,6 +189,11 @@ public class JvForecastController implements Serializable {
     private void persist(JsfUtil.PersistAction persistAction, String successMessage) {
         if (currentProduction != null) {
             //setEmbeddableKeys();
+            LOG.log(Level.INFO, "Persisting Forecast Year={0}, Month={1}, FiscalArr={2}, CrudeType={3}",
+                    new Object[]{currentProduction.getForecastPK().getPeriodYear(),
+                        currentProduction.getForecastPK().getPeriodMonth(),
+                        currentProduction.getForecastPK().getContractPK().getFiscalArrangementId(),
+                        currentProduction.getForecastPK().getContractPK().getCrudeTypeCode()});
             try {
                 if (persistAction != JsfUtil.PersistAction.DELETE) {
                     getForecastBean().edit(currentProduction);
@@ -218,7 +222,7 @@ public class JvForecastController implements Serializable {
     public void loadProductions() {
         if (periodYear != null && periodMonth != null) {
             if (currentFiscalArrangement == null) {
-              //  productions = getForecastBean().findByYearAndMonth(periodYear, periodMonth);
+                //  productions = getForecastBean().findByYearAndMonth(periodYear, periodMonth);
             } else {
                 productions = getForecastBean().findByContractPeriod(periodYear, periodMonth, currentFiscalArrangement);
             }
@@ -230,7 +234,6 @@ public class JvForecastController implements Serializable {
 //        LOG.log(Level.INFO, "Refreshing DataModel...");
 //       // dataModel = new ProductionDataModel(productions);
 //    }
-
     public void productionVolumeChanged() {
         getForecastBean().enrich(currentProduction);
         LOG.log(Level.INFO,
@@ -387,9 +390,9 @@ public class JvForecastController implements Serializable {
 
         if (currentProduction != null) {
             currentProduction.setContract(currentContract);
-            
 
             if (periodYear != null && periodMonth != null) {
+                setEmbeddableKeys();
 //                currentProduction.setPeriodYear(periodYear);
 //                currentProduction.setPeriodMonth(periodMonth);
             }
@@ -398,6 +401,14 @@ public class JvForecastController implements Serializable {
 
     public Forecast getContract(ForecastPK fPK) {
         return (Forecast) getForecastBean().find(fPK);
+    }
+
+    private void setEmbeddableKeys() {
+        ForecastPK fPK = new ForecastPK();
+        fPK.setContractPK(currentContract.getContractPK());
+        fPK.setPeriodYear(periodYear);
+        fPK.setPeriodMonth(periodMonth);
+        currentProduction.setForecastPK(fPK);
     }
 
     @FacesConverter(forClass = Forecast.class)
@@ -415,7 +426,7 @@ public class JvForecastController implements Serializable {
                     getValue(facesContext.getELContext(), null, "jvProdController");
             return controller.getContract(getKey(value));
         }
-        
+
         ForecastPK getKey(String value) {
             ForecastPK key;
             String values[] = value.split(SEPARATOR_ESCAPED);

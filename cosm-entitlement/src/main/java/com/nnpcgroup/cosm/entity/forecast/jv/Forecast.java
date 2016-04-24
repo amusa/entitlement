@@ -7,6 +7,7 @@ package com.nnpcgroup.cosm.entity.forecast.jv;
 
 import com.nnpcgroup.cosm.entity.contract.Contract;
 import java.io.Serializable;
+import java.util.Objects;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -210,4 +211,30 @@ public abstract class Forecast implements Serializable {
         this.partnerCargos = partnerCargos;
     }
 
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 97 * hash + Objects.hashCode(this.forecastPK);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Forecast other = (Forecast) obj;
+        if (!Objects.equals(this.forecastPK, other.forecastPK)) {
+            return false;
+        }
+        return true;
+    }
+
+    
 }

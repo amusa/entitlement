@@ -21,16 +21,24 @@ public class ContractPK implements Serializable {
     private Long fiscalArrangementId;
     private String crudeTypeCode;
 
+    public ContractPK() {
+    }
+
+    public ContractPK(Long fiscalArrangementId, String crudeTypeCode) {
+        this.fiscalArrangementId = fiscalArrangementId;
+        this.crudeTypeCode = crudeTypeCode;
+    }
+
     public Long getFiscalArrangementId() {
         return fiscalArrangementId;
     }
 
-    public void setFiscalArrangementId(Long fiscalArrangementId) {
-        this.fiscalArrangementId = fiscalArrangementId;
-    }
-
     public String getCrudeTypeCode() {
         return crudeTypeCode;
+    }
+
+    public void setFiscalArrangementId(Long fiscalArrangementId) {
+        this.fiscalArrangementId = fiscalArrangementId;
     }
 
     public void setCrudeTypeCode(String crudeTypeCode) {

@@ -8,6 +8,8 @@ package com.nnpcgroup.cosm.entity.forecast.jv;
 import com.nnpcgroup.cosm.entity.contract.Contract;
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -57,7 +59,6 @@ public abstract class Forecast implements Serializable {
 //        this.periodMonth = periodMonth;
 //        this.contract = contract;
 //    }
-
     @EmbeddedId
     public ForecastPK getForecastPK() {
         return forecastPK;
@@ -84,7 +85,6 @@ public abstract class Forecast implements Serializable {
 //    public void setPeriodMonth(int periodMonth) {
 //        this.periodMonth = periodMonth;
 //    }
-
     @ManyToOne
     @NotNull
     @MapsId("contractPK")
@@ -227,14 +227,17 @@ public abstract class Forecast implements Serializable {
             return false;
         }
         if (getClass() != obj.getClass()) {
+            LOG.log(Level.INFO, "{0} != {1}", new Object[]{getClass(), obj.getClass()});
             return false;
         }
         final Forecast other = (Forecast) obj;
         if (!Objects.equals(this.forecastPK, other.forecastPK)) {
+            LOG.log(Level.INFO, "{0} != {1}", new Object[]{this.forecastPK, other.forecastPK});
             return false;
         }
+        LOG.log(Level.INFO, "{0} = {1}", new Object[]{this.forecastPK, other.forecastPK});
         return true;
     }
+    private static final Logger LOG = Logger.getLogger(Forecast.class.getName());
 
-    
 }

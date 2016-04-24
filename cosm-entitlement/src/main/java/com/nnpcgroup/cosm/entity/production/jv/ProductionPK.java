@@ -18,24 +18,24 @@ import javax.persistence.Embeddable;
 public class ProductionPK implements Serializable {
 
     private static final long serialVersionUID = 2983325339937581443L;
-    
-    private int periodYear;
-    private int periodMonth;    
+
+    private Integer periodYear;
+    private Integer periodMonth;
     private ContractPK contractPK;
 
-    public int getPeriodYear() {
+    public Integer getPeriodYear() {
         return periodYear;
     }
 
-    public void setPeriodYear(int periodYear) {
+    public void setPeriodYear(Integer periodYear) {
         this.periodYear = periodYear;
     }
 
-    public int getPeriodMonth() {
+    public Integer getPeriodMonth() {
         return periodMonth;
     }
 
-    public void setPeriodMonth(int periodMonth) {
+    public void setPeriodMonth(Integer periodMonth) {
         this.periodMonth = periodMonth;
     }
 
@@ -50,9 +50,9 @@ public class ProductionPK implements Serializable {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 29 * hash + this.periodYear;
-        hash = 29 * hash + this.periodMonth;
-        hash = 29 * hash + Objects.hashCode(this.contractPK);
+        hash = 17 * hash + Objects.hashCode(this.periodYear);
+        hash = 17 * hash + Objects.hashCode(this.periodMonth);
+        hash = 17 * hash + Objects.hashCode(this.contractPK);
         return hash;
     }
 
@@ -68,10 +68,10 @@ public class ProductionPK implements Serializable {
             return false;
         }
         final ProductionPK other = (ProductionPK) obj;
-        if (this.periodYear != other.periodYear) {
+        if (!Objects.equals(this.periodYear, other.periodYear)) {
             return false;
         }
-        if (this.periodMonth != other.periodMonth) {
+        if (!Objects.equals(this.periodMonth, other.periodMonth)) {
             return false;
         }
         if (!Objects.equals(this.contractPK, other.contractPK)) {
@@ -80,5 +80,4 @@ public class ProductionPK implements Serializable {
         return true;
     }
 
-    
 }

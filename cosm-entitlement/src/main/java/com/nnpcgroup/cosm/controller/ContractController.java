@@ -202,7 +202,7 @@ public class ContractController implements Serializable {
                     break;
                 default:
                     break;
-            }            
+            }
             selected.setFiscalArrangement(fiscalArrangement);
         }
     }
@@ -210,12 +210,13 @@ public class ContractController implements Serializable {
     public void addContractFiscalArrangement(FiscalArrangement fa) {
         LOG.log(Level.INFO, "Adding Contract for fiscal arrangement {0}...", fa);
         setSelected(new RegularContract()); //Default contract
-        setFiscalArrangement(fa);        
+        setFiscalArrangement(fa);
         selected.setFiscalArrangement(fiscalArrangement);
     }
 
     @FacesConverter(forClass = Contract.class)
     public static class ContractControllerConverter implements Converter {
+
         private static final String SEPARATOR = "#";
         private static final String SEPARATOR_ESCAPED = "\\#";
 
@@ -228,13 +229,11 @@ public class ContractController implements Serializable {
                     getValue(facesContext.getELContext(), null, "contractController");
             return controller.getContract(getKey(value));
         }
-        
+
         ContractPK getKey(String value) {
             ContractPK key;
             String values[] = value.split(SEPARATOR_ESCAPED);
-            key = new ContractPK();
-            key.setFiscalArrangementId(Long.valueOf(values[0]));
-            key.setCrudeTypeCode(values[1]);
+            key = new ContractPK(Long.valueOf(values[0]), values[1]);
             return key;
         }
 
@@ -245,18 +244,6 @@ public class ContractController implements Serializable {
             sb.append(value.getCrudeTypeCode());
             return sb.toString();
         }
-
-//        java.lang.Integer getKey(String value) {
-//            java.lang.Integer key;
-//            key = Integer.valueOf(value);
-//            return key;
-//        }
-//
-//        String getStringKey(java.lang.Integer value) {
-//            StringBuilder sb = new StringBuilder();
-//            sb.append(value);
-//            return sb.toString();
-//        }
 
         @Override
         public String getAsString(FacesContext facesContext, UIComponent component, Object object) {

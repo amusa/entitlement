@@ -6,7 +6,6 @@
 package com.nnpcgroup.cosm.controller;
 
 import com.nnpcgroup.cosm.controller.util.JsfUtil;
-import com.nnpcgroup.cosm.controller.util.ProductionDataModel;
 import com.nnpcgroup.cosm.ejb.contract.ContractServices;
 import com.nnpcgroup.cosm.ejb.forecast.jv.JvAlternativeFundingForecastServices;
 import com.nnpcgroup.cosm.ejb.forecast.jv.JvModifiedCarryForecastServices;
@@ -404,10 +403,7 @@ public class JvForecastController implements Serializable {
     }
 
     private void setEmbeddableKeys() {
-        ForecastPK fPK = new ForecastPK();
-        fPK.setContractPK(currentContract.getContractPK());
-        fPK.setPeriodYear(periodYear);
-        fPK.setPeriodMonth(periodMonth);
+        ForecastPK fPK = new ForecastPK(periodYear, periodMonth, currentContract.getContractPK());
         currentProduction.setForecastPK(fPK);
     }
 
@@ -430,21 +426,14 @@ public class JvForecastController implements Serializable {
         ForecastPK getKey(String value) {
             ForecastPK key;
             String values[] = value.split(SEPARATOR_ESCAPED);
-            key = new ForecastPK();
-            key.setPeriodYear(Integer.parseInt(values[0]));
-            key.setPeriodMonth(Integer.parseInt(values[1]));
-            key.setContractPK(getContractPK(values[2]));
+            key = new ForecastPK(Integer.parseInt(values[0]), Integer.parseInt(values[1]), getContractPK(values[2]));
             return key;
         }
 
         ContractPK getContractPK(String value) {
             String values[] = value.split(SEPARATOR_ESCAPED);
-            ContractPK key = new ContractPK();
-            key.setFiscalArrangementId(Long.parseLong(values[0]));
-            key.setCrudeTypeCode(values[1]);
-
+            ContractPK key = new ContractPK(Long.parseLong(values[0]), values[1]);
             return key;
-
         }
 
         String getStringKey(ForecastPK value) {

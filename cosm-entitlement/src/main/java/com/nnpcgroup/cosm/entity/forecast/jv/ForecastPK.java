@@ -8,6 +8,8 @@ package com.nnpcgroup.cosm.entity.forecast.jv;
 import com.nnpcgroup.cosm.entity.contract.ContractPK;
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.Embeddable;
 
 /**
@@ -18,37 +20,37 @@ import javax.persistence.Embeddable;
 public class ForecastPK implements Serializable {
 
     private static final long serialVersionUID = -5632726719147425922L;
-    private int periodYear;
-    private int periodMonth;    
+    private Integer periodYear;
+    private Integer periodMonth;
     private ContractPK contractPK;
 
     public ForecastPK() {
     }
 
-    public ForecastPK(int periodYear, int periodMonth, ContractPK contractPK) {
+    public ForecastPK(Integer periodYear, Integer periodMonth, ContractPK contractPK) {
         this.periodYear = periodYear;
         this.periodMonth = periodMonth;
         this.contractPK = contractPK;
     }
-       
-    public int getPeriodYear() {
+
+    public Integer getPeriodYear() {
         return periodYear;
     }
 
-    public void setPeriodYear(int periodYear) {
-        this.periodYear = periodYear;
-    }
-
-    public int getPeriodMonth() {
+    public Integer getPeriodMonth() {
         return periodMonth;
-    }
-
-    public void setPeriodMonth(int periodMonth) {
-        this.periodMonth = periodMonth;
     }
 
     public ContractPK getContractPK() {
         return contractPK;
+    }
+
+    public void setPeriodYear(Integer periodYear) {
+        this.periodYear = periodYear;
+    }
+
+    public void setPeriodMonth(Integer periodMonth) {
+        this.periodMonth = periodMonth;
     }
 
     public void setContractPK(ContractPK contractPK) {
@@ -58,9 +60,9 @@ public class ForecastPK implements Serializable {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 11 * hash + this.periodYear;
-        hash = 11 * hash + this.periodMonth;
-        hash = 11 * hash + Objects.hashCode(this.contractPK);
+        hash = 79 * hash + Objects.hashCode(this.periodYear);
+        hash = 79 * hash + Objects.hashCode(this.periodMonth);
+        hash = 79 * hash + Objects.hashCode(this.contractPK);
         return hash;
     }
 
@@ -73,20 +75,25 @@ public class ForecastPK implements Serializable {
             return false;
         }
         if (getClass() != obj.getClass()) {
+            LOG.log(Level.INFO, "{0} != {1}", new Object[]{getClass(), obj.getClass()});
+
             return false;
         }
         final ForecastPK other = (ForecastPK) obj;
-        if (this.periodYear != other.periodYear) {
+        if (!Objects.equals(this.periodYear, other.periodYear)) {
+            LOG.log(Level.INFO, "{0} != {1}", new Object[]{this.periodYear, other.periodYear});
             return false;
         }
-        if (this.periodMonth != other.periodMonth) {
+        if (!Objects.equals(this.periodMonth, other.periodMonth)) {
             return false;
         }
         if (!Objects.equals(this.contractPK, other.contractPK)) {
+            LOG.log(Level.INFO, "{0} != {1}", new Object[]{this.contractPK, other.contractPK});
             return false;
         }
+        LOG.log(Level.INFO, "{0} != {1}", new Object[]{this.contractPK, other.contractPK});
         return true;
     }
+    private static final Logger LOG = Logger.getLogger(ForecastPK.class.getName());
 
-    
 }

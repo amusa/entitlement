@@ -12,7 +12,9 @@ import com.nnpcgroup.cosm.entity.EquityType;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
 import com.nnpcgroup.cosm.entity.FiscalPeriod;
 import com.nnpcgroup.cosm.entity.JointVenture;
+import com.nnpcgroup.cosm.entity.contract.ContractPK;
 import com.nnpcgroup.cosm.entity.production.jv.Production;
+import com.nnpcgroup.cosm.entity.production.jv.ProductionPK;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -194,13 +196,15 @@ public abstract class JvProductionServicesImpl<T extends Production, E extends C
 
     @Override
     public T getPreviousMonthProduction(T production) {
-        int month = production.getPeriodMonth();
-        int year = production.getPeriodYear();
+        int month = production.getProductionPK().getPeriodMonth();
+        int year = production.getProductionPK().getPeriodYear();
         Contract cs = production.getContract();
+        ContractPK cPK = production.getProductionPK().getContractPK();
 
         FiscalPeriod prevFp = getPreviousFiscalPeriod(year, month);
 
-        T prod = findByContractPeriod(prevFp.getYear(), prevFp.getMonth(), cs);
+        //T prod = findByContractPeriod(prevFp.getYear(), prevFp.getMonth(), cs);
+        T prod = find(new ProductionPK(prevFp.getYear(), prevFp.getMonth(), cPK));
 
         return prod;
 

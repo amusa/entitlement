@@ -33,8 +33,6 @@ public abstract class Forecast implements Serializable {
     private static final long serialVersionUID = -795843614381155072L;
 
     private ForecastPK forecastPK;
-//    private int periodYear;
-//    private int periodMonth;
     private Contract contract;
     private Double openingStock;
     private Double partnerOpeningStock;
@@ -54,12 +52,7 @@ public abstract class Forecast implements Serializable {
     public Forecast() {
     }
 
-//    public Forecast(int periodYear, int periodMonth, Contract contract) {
-//        this.periodYear = periodYear;
-//        this.periodMonth = periodMonth;
-//        this.contract = contract;
-//    }
-    @EmbeddedId
+   @EmbeddedId
     public ForecastPK getForecastPK() {
         return forecastPK;
     }
@@ -68,23 +61,6 @@ public abstract class Forecast implements Serializable {
         this.forecastPK = forecastPK;
     }
 
-//    @NotNull
-//    public int getPeriodYear() {
-//        return periodYear;
-//    }
-//
-//    public void setPeriodYear(int periodYear) {
-//        this.periodYear = periodYear;
-//    }
-//
-//    @NotNull
-//    public int getPeriodMonth() {
-//        return periodMonth;
-//    }
-//
-//    public void setPeriodMonth(int periodMonth) {
-//        this.periodMonth = periodMonth;
-//    }
     @ManyToOne
     @NotNull
     @MapsId("contractPK")

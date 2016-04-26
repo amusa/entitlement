@@ -392,9 +392,7 @@ public class JvForecastController implements Serializable {
 
             if (periodYear != null && periodMonth != null) {
                 setEmbeddableKeys();
-//                currentProduction.setPeriodYear(periodYear);
-//                currentProduction.setPeriodMonth(periodMonth);
-            }
+           }
         }
     }
 

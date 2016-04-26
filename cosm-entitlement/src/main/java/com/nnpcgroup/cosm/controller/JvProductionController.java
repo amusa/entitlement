@@ -21,6 +21,7 @@ import com.nnpcgroup.cosm.entity.contract.ModifiedCarryContract;
 import com.nnpcgroup.cosm.entity.contract.RegularContract;
 import com.nnpcgroup.cosm.entity.forecast.jv.CarryForecast;
 import com.nnpcgroup.cosm.entity.forecast.jv.Forecast;
+import com.nnpcgroup.cosm.entity.forecast.jv.ForecastPK;
 import com.nnpcgroup.cosm.entity.forecast.jv.ModifiedCarryForecast;
 import com.nnpcgroup.cosm.entity.forecast.jv.RegularForecast;
 import com.nnpcgroup.cosm.entity.production.jv.AlternativeFundingProduction;
@@ -28,6 +29,7 @@ import com.nnpcgroup.cosm.entity.production.jv.CarryProduction;
 import com.nnpcgroup.cosm.entity.production.jv.ModifiedCarryProduction;
 import com.nnpcgroup.cosm.entity.production.jv.RegularProduction;
 import com.nnpcgroup.cosm.entity.production.jv.Production;
+import com.nnpcgroup.cosm.entity.production.jv.ProductionPK;
 import javax.inject.Named;
 import java.io.Serializable;
 import java.util.List;
@@ -163,10 +165,15 @@ public class JvProductionController implements Serializable {
             currentProduction.setContract(currentContract);
 
             if (periodYear != null && periodMonth != null) {
-                currentProduction.setPeriodYear(periodYear);
-                currentProduction.setPeriodMonth(periodMonth);
+                setEmbeddableKeys();
+
             }
         }
+    }
+
+    private void setEmbeddableKeys() {
+        ProductionPK fPK = new ProductionPK(periodYear, periodMonth, currentContract.getContractPK());
+        currentProduction.setProductionPK(fPK);
     }
 
     public List<Production> getProductions() {
@@ -182,7 +189,7 @@ public class JvProductionController implements Serializable {
     public void loadProductions() {
         if (periodYear != null && periodMonth != null) {
             if (currentFiscalArrangement == null) {
-               // productions = getProductionBean().findByYearAndMonth(periodYear, periodMonth);
+                // productions = getProductionBean().findByYearAndMonth(periodYear, periodMonth);
             } else {
                 productions = getProductionBean().findByContractPeriod(periodYear, periodMonth, currentFiscalArrangement);
             }
@@ -320,10 +327,17 @@ public class JvProductionController implements Serializable {
             }
 
             LOG.log(Level.INFO, "************getProductionBean().createInstance() returning {0}...", currentProduction);
-            production.setPeriodYear(forecast.getForecastPK().getPeriodYear());
-            production.setPeriodMonth(forecast.getForecastPK().getPeriodMonth());
-            production.setContract(forecast.getContract());
+            ProductionPK fPK = new ProductionPK(
+                    forecast.getForecastPK().getPeriodYear(),
+                    forecast.getForecastPK().getPeriodMonth(),
+                    //currentContract.getContractPK()
+                    forecast.getForecastPK().getContractPK()
+            );
+            currentProduction.setProductionPK(fPK);
 
+//            production.setPeriodYear(forecast.getForecastPK().getPeriodYear());
+//            production.setPeriodMonth(forecast.getForecastPK().getPeriodMonth());
+//            production.setContract(forecast.getContract());
             setCurrentContract(forecast.getContract());
 
             // getProductionBean().enrich(currentProduction);
@@ -347,8 +361,9 @@ public class JvProductionController implements Serializable {
     public Production prepareCreate() {
         LOG.log(Level.INFO, "Preparing new instance of JvActualProduction for create...");
         currentProduction = new RegularProduction();//getProductionBean().createInstance(); TODO:evaluate
-        currentProduction.setPeriodYear(periodYear);
-        currentProduction.setPeriodMonth(periodMonth);
+//        currentProduction.setPeriodYear(periodYear);
+//        currentProduction.setPeriodMonth(periodMonth);
+        setEmbeddableKeys();
         return currentProduction;
     }
 

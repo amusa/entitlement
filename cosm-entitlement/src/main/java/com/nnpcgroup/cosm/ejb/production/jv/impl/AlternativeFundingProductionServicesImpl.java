@@ -245,8 +245,8 @@ public abstract class AlternativeFundingProductionServicesImpl<T extends Alterna
     @Override
     public T computeGuaranteedNotionalMargin(T production) {
         PricePK pricePK = new PricePK();
-        pricePK.setPeriodMonth(production.getPeriodMonth());
-        pricePK.setPeriodYear(production.getPeriodYear());
+        pricePK.setPeriodMonth(production.getProductionPK().getPeriodMonth());
+        pricePK.setPeriodYear(production.getProductionPK().getPeriodYear());
 
         Double GNM = null;// = 4.1465; //TODO:temporary placeholder
 

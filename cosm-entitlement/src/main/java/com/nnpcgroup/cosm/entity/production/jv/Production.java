@@ -7,6 +7,7 @@ package com.nnpcgroup.cosm.entity.production.jv;
 
 import com.nnpcgroup.cosm.entity.contract.Contract;
 import java.io.Serializable;
+import java.util.Objects;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -30,8 +31,8 @@ public abstract class Production implements Serializable {
     private static final long serialVersionUID = -795843614381155072L;
 
     private ProductionPK productionPK;
-    private int periodYear;
-    private int periodMonth;
+//    private int periodYear;
+//    private int periodMonth;
     private Contract contract;
     private Double openingStock;
     private Double partnerOpeningStock;
@@ -53,11 +54,11 @@ public abstract class Production implements Serializable {
     public Production() {
     }
 
-    public Production(int periodYear, int periodMonth, Contract contract) {
-        this.periodYear = periodYear;
-        this.periodMonth = periodMonth;
-        this.contract = contract;       
-    }
+//    public Production(int periodYear, int periodMonth, Contract contract) {
+//        this.periodYear = periodYear;
+//        this.periodMonth = periodMonth;
+//        this.contract = contract;       
+//    }
 
     @EmbeddedId
     public ProductionPK getProductionPK() {
@@ -68,23 +69,23 @@ public abstract class Production implements Serializable {
         this.productionPK = productionPK;
     }
 
-    @NotNull
-    public int getPeriodYear() {
-        return periodYear;
-    }
-
-    public void setPeriodYear(int periodYear) {
-        this.periodYear = periodYear;
-    }
-
-    @NotNull
-    public int getPeriodMonth() {
-        return periodMonth;
-    }
-
-    public void setPeriodMonth(int periodMonth) {
-        this.periodMonth = periodMonth;
-    }
+//    @NotNull
+//    public int getPeriodYear() {
+//        return periodYear;
+//    }
+//
+//    public void setPeriodYear(int periodYear) {
+//        this.periodYear = periodYear;
+//    }
+//
+//    @NotNull
+//    public int getPeriodMonth() {
+//        return periodMonth;
+//    }
+//
+//    public void setPeriodMonth(int periodMonth) {
+//        this.periodMonth = periodMonth;
+//    }
 
     @ManyToOne
     @NotNull
@@ -225,6 +226,31 @@ public abstract class Production implements Serializable {
 
     public void setPartnerOverlift(Double partnerOverlift) {
         this.partnerOverlift = partnerOverlift;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 41 * hash + Objects.hashCode(this.productionPK);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Production other = (Production) obj;
+        if (!Objects.equals(this.productionPK, other.productionPK)) {
+            return false;
+        }
+        return true;
     }
 
 }

@@ -23,6 +23,15 @@ public class ProductionPK implements Serializable {
     private Integer periodMonth;
     private ContractPK contractPK;
 
+    public ProductionPK() {
+    }
+
+    public ProductionPK(Integer periodYear, Integer periodMonth, ContractPK contractPK) {
+        this.periodYear = periodYear;
+        this.periodMonth = periodMonth;
+        this.contractPK = contractPK;
+    }
+
     public Integer getPeriodYear() {
         return periodYear;
     }

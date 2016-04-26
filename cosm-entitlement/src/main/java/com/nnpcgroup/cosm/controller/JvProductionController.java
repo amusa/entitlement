@@ -255,6 +255,7 @@ public class JvProductionController implements Serializable {
     private void reset() {
         currentProduction = null;
         productions = null;
+        currentContract = null;
     }
 
     public Integer getPeriodYear() {
@@ -358,13 +359,14 @@ public class JvProductionController implements Serializable {
         destroy();
     }
 
-    public Production prepareCreate() {
+    public void prepareCreate() {
         LOG.log(Level.INFO, "Preparing new instance of JvActualProduction for create...");
-        currentProduction = new RegularProduction();//getProductionBean().createInstance(); TODO:evaluate
+       // currentProduction = new RegularProduction();//getProductionBean().createInstance(); TODO:evaluate
 //        currentProduction.setPeriodYear(periodYear);
 //        currentProduction.setPeriodMonth(periodMonth);
-        setEmbeddableKeys();
-        return currentProduction;
+       // setEmbeddableKeys();
+        //return currentProduction;
+        reset();
     }
 
     public void create() {

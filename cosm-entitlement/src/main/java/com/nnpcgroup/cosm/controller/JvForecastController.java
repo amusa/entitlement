@@ -390,8 +390,7 @@ public class JvForecastController implements Serializable {
         }
 
         if (currentProduction != null) {
-            currentProduction.setContract(currentContract);
-
+            
             if (periodYear != null && periodMonth != null) {
                 setEmbeddableKeys();
             }
@@ -405,6 +404,9 @@ public class JvForecastController implements Serializable {
     private void setEmbeddableKeys() {
         ForecastPK fPK = new ForecastPK(periodYear, periodMonth, currentContract.getContractPK());
         currentProduction.setForecastPK(fPK);
+        currentProduction.setPeriodYear(periodYear);
+        currentProduction.setPeriodMonth(periodMonth);
+        currentProduction.setContract(currentContract);
     }
 
     @FacesConverter(forClass = Forecast.class)

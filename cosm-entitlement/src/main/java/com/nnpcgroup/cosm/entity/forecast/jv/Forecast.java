@@ -5,6 +5,8 @@
  */
 package com.nnpcgroup.cosm.entity.forecast.jv;
 
+import com.nnpcgroup.cosm.entity.CrudeType;
+import com.nnpcgroup.cosm.entity.FiscalArrangement;
 import com.nnpcgroup.cosm.entity.contract.Contract;
 import java.io.Serializable;
 import java.util.Objects;
@@ -16,6 +18,8 @@ import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.Table;
@@ -32,6 +36,8 @@ import javax.validation.constraints.NotNull;
 public abstract class Forecast implements Serializable {
 
     private static final long serialVersionUID = -795843614381155072L;
+
+    private static final Logger LOG = Logger.getLogger(Forecast.class.getName());
 
     private ForecastPK forecastPK;
     private Integer periodYear;
@@ -87,6 +93,10 @@ public abstract class Forecast implements Serializable {
     @ManyToOne
     @NotNull
     @MapsId("contractPK")
+    @JoinColumns({
+        @JoinColumn(name = "FISCALARRANGEMENT_ID", referencedColumnName = "FISCALARRANGEMENT_ID"),
+        @JoinColumn(name = "CRUDETYPE_CODE", referencedColumnName = "CRUDETYPE_CODE")
+    })
     public Contract getContract() {
         return contract;
     }
@@ -213,7 +223,9 @@ public abstract class Forecast implements Serializable {
     @Override
     public int hashCode() {
         int hash = 3;
-        hash = 97 * hash + Objects.hashCode(this.forecastPK);
+        hash = 17 * hash + Objects.hashCode(this.periodYear);
+        hash = 17 * hash + Objects.hashCode(this.periodMonth);
+        hash = 17 * hash + Objects.hashCode(this.contract);
         return hash;
     }
 
@@ -226,17 +238,20 @@ public abstract class Forecast implements Serializable {
             return false;
         }
         if (getClass() != obj.getClass()) {
-            LOG.log(Level.INFO, "{0} != {1}", new Object[]{getClass(), obj.getClass()});
             return false;
         }
         final Forecast other = (Forecast) obj;
-        if (!Objects.equals(this.forecastPK, other.forecastPK)) {
-            LOG.log(Level.INFO, "{0} != {1}", new Object[]{this.forecastPK, other.forecastPK});
+        if (!Objects.equals(this.periodYear, other.periodYear)) {
             return false;
         }
-        LOG.log(Level.INFO, "{0} = {1}", new Object[]{this.forecastPK, other.forecastPK});
+        if (!Objects.equals(this.periodMonth, other.periodMonth)) {
+            return false;
+        }
+        if (!Objects.equals(this.contract, other.contract)) {
+            return false;
+        }
         return true;
     }
-    private static final Logger LOG = Logger.getLogger(Forecast.class.getName());
 
+    
 }

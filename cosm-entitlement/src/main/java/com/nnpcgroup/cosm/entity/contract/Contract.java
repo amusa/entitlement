@@ -69,7 +69,8 @@ public class Contract implements Serializable {
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = 67 * hash + Objects.hashCode(this.contractPK);
+        hash = 71 * hash + Objects.hashCode(this.crudeType);
+        hash = 71 * hash + Objects.hashCode(this.fiscalArrangement);
         return hash;
     }
 
@@ -85,11 +86,16 @@ public class Contract implements Serializable {
             return false;
         }
         final Contract other = (Contract) obj;
-        if (!Objects.equals(this.contractPK, other.contractPK)) {
+        if (!Objects.equals(this.crudeType, other.crudeType)) {
+            return false;
+        }
+        if (!Objects.equals(this.fiscalArrangement, other.fiscalArrangement)) {
             return false;
         }
         return true;
     }
+
+    
     
     
 

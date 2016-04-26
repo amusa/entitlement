@@ -219,6 +219,7 @@ public class JvForecastController implements Serializable {
     }
 
     public void loadProductions() {
+        reset();
         if (periodYear != null && periodMonth != null) {
             if (currentFiscalArrangement == null) {
                 //  productions = getForecastBean().findByYearAndMonth(periodYear, periodMonth);
@@ -260,6 +261,7 @@ public class JvForecastController implements Serializable {
 
     private void reset() {
         currentProduction = null;
+        productions = null;
         currentContract = null;
     }
 
@@ -392,7 +394,7 @@ public class JvForecastController implements Serializable {
 
             if (periodYear != null && periodMonth != null) {
                 setEmbeddableKeys();
-           }
+            }
         }
     }
 

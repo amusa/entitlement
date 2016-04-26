@@ -174,6 +174,7 @@ public class JvProductionController implements Serializable {
     private void setEmbeddableKeys() {
         ProductionPK fPK = new ProductionPK(periodYear, periodMonth, currentContract.getContractPK());
         currentProduction.setProductionPK(fPK);
+        currentProduction.setContract(currentContract);
     }
 
     public List<Production> getProductions() {
@@ -187,6 +188,7 @@ public class JvProductionController implements Serializable {
     }
 
     public void loadProductions() {
+        reset();
         if (periodYear != null && periodMonth != null) {
             if (currentFiscalArrangement == null) {
                 // productions = getProductionBean().findByYearAndMonth(periodYear, periodMonth);
@@ -305,6 +307,8 @@ public class JvProductionController implements Serializable {
 
     public void actualize(Forecast forecast) {
         LOG.log(Level.INFO, "************actualizing {0}...", forecast);
+        reset();
+        setCurrentContract(forecast.getContract());
         Production production = null;
         ProductionPK pPK = new ProductionPK(
                 forecast.getForecastPK().getPeriodYear(),
@@ -334,22 +338,14 @@ public class JvProductionController implements Serializable {
             }
 
             LOG.log(Level.INFO, "************getProductionBean().createInstance() returning {0}...", currentProduction);
-            ProductionPK fPK = new ProductionPK(
-                    forecast.getForecastPK().getPeriodYear(),
-                    forecast.getForecastPK().getPeriodMonth(),
-                    //currentContract.getContractPK()
-                    forecast.getForecastPK().getContractPK()
-            );
-            currentProduction.setProductionPK(fPK);
-
-//            production.setPeriodYear(forecast.getForecastPK().getPeriodYear());
-//            production.setPeriodMonth(forecast.getForecastPK().getPeriodMonth());
-//            production.setContract(forecast.getContract());
-            setCurrentContract(forecast.getContract());
+            production.setProductionPK(pPK);
+            production.setContract(forecast.getContract());
 
             // getProductionBean().enrich(currentProduction);
         }
         setCurrentProduction(production);
+        setPeriodYear(forecast.getForecastPK().getPeriodYear());
+        setPeriodMonth(forecast.getForecastPK().getPeriodMonth());
     }
 
     public void destroy() {

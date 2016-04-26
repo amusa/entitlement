@@ -306,10 +306,16 @@ public class JvProductionController implements Serializable {
     public void actualize(Forecast forecast) {
         LOG.log(Level.INFO, "************actualizing {0}...", forecast);
         Production production = null;
-        production = (Production) getProductionBean().findByContractPeriod(
+        ProductionPK pPK = new ProductionPK(
                 forecast.getForecastPK().getPeriodYear(),
                 forecast.getForecastPK().getPeriodMonth(),
-                forecast.getContract());
+                forecast.getForecastPK().getContractPK()
+        );
+//        production = (Production) getProductionBean().findByContractPeriod(
+//                forecast.getForecastPK().getPeriodYear(),
+//                forecast.getForecastPK().getPeriodMonth(),
+//                forecast.getContract());
+        production = (Production) getProductionBean().find(pPK);
         LOG.log(Level.INFO, "************findByContractStreamPeriod returning {0}...", currentProduction);
 
         if (production == null) {
@@ -361,10 +367,10 @@ public class JvProductionController implements Serializable {
 
     public void prepareCreate() {
         LOG.log(Level.INFO, "Preparing new instance of JvActualProduction for create...");
-       // currentProduction = new RegularProduction();//getProductionBean().createInstance(); TODO:evaluate
+        // currentProduction = new RegularProduction();//getProductionBean().createInstance(); TODO:evaluate
 //        currentProduction.setPeriodYear(periodYear);
 //        currentProduction.setPeriodMonth(periodMonth);
-       // setEmbeddableKeys();
+        // setEmbeddableKeys();
         //return currentProduction;
         reset();
     }

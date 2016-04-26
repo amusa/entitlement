@@ -8,6 +8,7 @@ package com.nnpcgroup.cosm.entity.production.jv;
 import com.nnpcgroup.cosm.entity.contract.Contract;
 import java.io.Serializable;
 import java.util.Objects;
+import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -31,8 +32,8 @@ public abstract class Production implements Serializable {
     private static final long serialVersionUID = -795843614381155072L;
 
     private ProductionPK productionPK;
-//    private int periodYear;
-//    private int periodMonth;
+    private Integer periodYear;
+    private Integer periodMonth;
     private Contract contract;
     private Double openingStock;
     private Double partnerOpeningStock;
@@ -59,7 +60,6 @@ public abstract class Production implements Serializable {
 //        this.periodMonth = periodMonth;
 //        this.contract = contract;       
 //    }
-
     @EmbeddedId
     public ProductionPK getProductionPK() {
         return productionPK;
@@ -69,23 +69,25 @@ public abstract class Production implements Serializable {
         this.productionPK = productionPK;
     }
 
-//    @NotNull
-//    public int getPeriodYear() {
-//        return periodYear;
-//    }
-//
-//    public void setPeriodYear(int periodYear) {
-//        this.periodYear = periodYear;
-//    }
-//
-//    @NotNull
-//    public int getPeriodMonth() {
-//        return periodMonth;
-//    }
-//
-//    public void setPeriodMonth(int periodMonth) {
-//        this.periodMonth = periodMonth;
-//    }
+    @NotNull
+    @Column(insertable = false, updatable = false)
+    public Integer getPeriodYear() {
+        return periodYear;
+    }
+
+    public void setPeriodYear(Integer periodYear) {
+        this.periodYear = periodYear;
+    }
+
+    @NotNull
+    @Column(insertable = false, updatable = false)
+    public Integer getPeriodMonth() {
+        return periodMonth;
+    }
+
+    public void setPeriodMonth(Integer periodMonth) {
+        this.periodMonth = periodMonth;
+    }
 
     @ManyToOne
     @NotNull

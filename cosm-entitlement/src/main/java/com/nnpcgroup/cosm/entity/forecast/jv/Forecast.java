@@ -10,6 +10,7 @@ import java.io.Serializable;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -33,6 +34,8 @@ public abstract class Forecast implements Serializable {
     private static final long serialVersionUID = -795843614381155072L;
 
     private ForecastPK forecastPK;
+    private Integer periodYear;
+    private Integer periodMonth;
     private Contract contract;
     private Double openingStock;
     private Double partnerOpeningStock;
@@ -52,13 +55,33 @@ public abstract class Forecast implements Serializable {
     public Forecast() {
     }
 
-   @EmbeddedId
+    @EmbeddedId
     public ForecastPK getForecastPK() {
         return forecastPK;
     }
 
     public void setForecastPK(ForecastPK forecastPK) {
         this.forecastPK = forecastPK;
+    }
+
+    @NotNull
+    @Column(insertable = false, updatable = false)
+    public Integer getPeriodYear() {
+        return periodYear;
+    }
+
+    public void setPeriodYear(Integer periodYear) {
+        this.periodYear = periodYear;
+    }
+
+    @NotNull
+    @Column(insertable = false, updatable = false)
+    public Integer getPeriodMonth() {
+        return periodMonth;
+    }
+
+    public void setPeriodMonth(Integer periodMonth) {
+        this.periodMonth = periodMonth;
     }
 
     @ManyToOne

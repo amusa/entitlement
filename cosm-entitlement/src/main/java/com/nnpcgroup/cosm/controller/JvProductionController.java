@@ -356,7 +356,7 @@ public class JvProductionController implements Serializable {
         }
     }
 
-    public void destroy(RegularProduction prod) {
+    public void destroy(Production prod) {
         setCurrentProduction(prod);
         destroy();
     }

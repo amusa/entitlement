@@ -38,7 +38,7 @@
         <welcome-file>faces/index.xhtml</welcome-file>
     </welcome-file-list>
     <error-page>
-        <error-code>403</error-code> 
+        <error-code>403</error-code>
         <location>/faces/login-error.xhtml</location>
     </error-page>
     <security-constraint>
@@ -58,7 +58,7 @@
         <web-resource-collection>
             <web-resource-name>User</web-resource-name>
             <description/>
-            <url-pattern>/faces/jv2/*</url-pattern>
+            <url-pattern>/faces/jv2/*.xhtml, /faces/jv2/prod/*.xhtml, /faces/jv/*</url-pattern>
         </web-resource-collection>
         <auth-constraint>
             <description/>

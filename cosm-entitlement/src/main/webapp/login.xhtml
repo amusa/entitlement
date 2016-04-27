@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:jsf="http://xmlns.jcp.org/jsf">
-<!--[if IE 9 ]><html class="ie9"><![endif]-->
+      xmlns:jsf="http://xmlns.jcp.org/jsf"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <!--[if IE 9 ]><html class="ie9"><![endif]-->
     <h:head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
         <meta name="format-detection" content="telephone=no"/>
@@ -12,7 +13,7 @@
         <meta name="keywords" content="Super Admin, Admin, Template, Bootstrap"/>
 
         <title>COSM:Entitlement Login</title>
-            
+
         <!-- CSS -->
         <h:outputStylesheet name="css/bootstrap.min.css"/>
         <h:outputStylesheet name="css/animate.css"/>
@@ -29,29 +30,33 @@
                 <h1>ENTITLEMENT LOGIN</h1>
                 <p>Please login to Entitlement.</p>
             </header>
-        
+            <h:messages id="msgs" showDetail="false" class="alert alert-info alert-dismissable fade in"/>
+
             <div class="clearfix"></div>
-            
+
             <!-- Login -->
-            <form class="box tile animated active" id="box-login">
+            <h:form class="box tile animated active" id="box-login">
                 <h2 class="m-t-0 m-b-15">Login</h2>
-                <input type="text" class="login-control m-b-10" placeholder="Username or Email Address"/>
-                <input type="password" class="login-control" placeholder="Password"/>
+                <input jsf:id="username" jsf:value="#{userAuth.username}" type="text" class="login-control m-b-10" placeholder="Username"/>
+                <input jsf:id="password" jsf:value="#{userAuth.password}" type="password" class="login-control" placeholder="Password"/>
                 <div class="checkbox m-b-20">
                     <label>
                         <input type="checkbox"/>
                         Remember Me
                     </label>
                 </div>
-                <button class="btn btn-sm m-r-5" jsf:outcome="index">Sign In</button>                
+                <button class="btn btn-sm m-r-5" jsf:outcome="index">Sign In</button>
+                <h:commandButton value="Sign In" class="btn btn-sm m-r-5">
+                    <f:ajax event="click" listener="#{userAuth.login}" execute="username password" render="msg" />
+                </h:commandButton>                
                 <small>
                     <a class="box-switcher" data-switch="box-register" href="">Don't have an Account?</a> or
                     <a class="box-switcher" data-switch="box-reset" href="">Forgot Password?</a>
                 </small>
-            </form>
-            
+            </h:form>
+
             <!-- Register -->
-            <form class="box animated tile" id="box-register">
+            <h:form class="box animated tile" id="box-register">
                 <h2 class="m-t-0 m-b-15">Register</h2>
                 <input type="text" class="login-control m-b-10" placeholder="Full Name"/>
                 <input type="text" class="login-control m-b-10" placeholder="Username"/>
@@ -62,10 +67,10 @@
                 <button class="btn btn-sm m-r-5">Register</button>
 
                 <small><a class="box-switcher" data-switch="box-login" href="">Already have an Account?</a></small>
-            </form>
-            
+            </h:form>
+
             <!-- Forgot Password -->
-            <form class="box animated tile" id="box-reset">
+            <h:form class="box animated tile" id="box-reset">
                 <h2 class="m-t-0 m-b-15">Reset Password</h2>
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla eu risus. Curabitur commodo lorem fringilla enim feugiat commodo sed ac lacus.</p>
                 <input type="email" class="login-control m-b-20" placeholder="Email Address"/>    
@@ -73,22 +78,22 @@
                 <button class="btn btn-sm m-r-5">Reset Password</button>
 
                 <small><a class="box-switcher" data-switch="box-login" href="">Already have an Account?</a></small>
-            </form>
+            </h:form>
         </section>                      
-        
+
         <!-- Javascript Libraries -->
         <!-- jQuery -->
         <!-- jQuery Library -->
         <h:outputScript name="js/jquery.min.js" />
-        
+
         <!-- Bootstrap -->
         <h:outputScript name="js/bootstrap.min.js" />
-        
-        
+
+
         <!--  Form Related -->
         <!-- Custom Checkbox + Radio -->
         <h:outputScript name="js/icheck.js" />
-        
+
         <!-- All JS functions -->
         <h:outputScript name="js/functions.js" />
     </h:body>

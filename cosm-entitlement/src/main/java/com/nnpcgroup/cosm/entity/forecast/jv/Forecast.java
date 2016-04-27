@@ -253,5 +253,4 @@ public abstract class Forecast implements Serializable {
         return true;
     }
 
-    
 }

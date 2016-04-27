@@ -122,6 +122,8 @@ public class JvForecastController implements Serializable {
         this.currentProduction = currentProduction;
         this.currentFiscalArrangement = (currentProduction != null)
                 ? currentProduction.getContract().getFiscalArrangement() : null;
+        this.currentContract = (currentProduction != null)
+                ? currentProduction.getContract() : null;
     }
 
     public AlternativeFundingForecast getCurrentAfProduction() {
@@ -390,7 +392,7 @@ public class JvForecastController implements Serializable {
         }
 
         if (currentProduction != null) {
-            
+
             if (periodYear != null && periodMonth != null) {
                 setEmbeddableKeys();
             }

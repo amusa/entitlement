@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jdbc-data-source xmlns="http://xmlns.oracle.com/weblogic/jdbc-data-source">
-  <name>jdbc/entitlement_dev_DS</name>
+  <name>EntitlementDS</name>
   <jdbc-driver-params>
-    <url>jdbc:mysql://localhost:3306/entitlement_dev</url>
+    <url>jdbc:mysql://localhost:3306/entitlement</url>
     <driver-name>com.mysql.jdbc.Driver</driver-name>
     <properties>
       <property>
@@ -16,6 +16,6 @@
     </properties>
   </jdbc-driver-params>
   <jdbc-data-source-params>
-    <jndi-name>jdbc/entitlement_dev_DS</jndi-name>
+    <jndi-name>jdbc/entitlementDS</jndi-name>
   </jdbc-data-source-params>
 </jdbc-data-source>

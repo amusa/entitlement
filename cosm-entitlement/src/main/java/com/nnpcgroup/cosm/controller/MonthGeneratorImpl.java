@@ -19,15 +19,15 @@ import javax.enterprise.context.Dependent;
  * @author 18359
  */
 @Dependent
-public class MonthGeneratorImpl implements MonthGenerator,Serializable {
-    
+public class MonthGeneratorImpl implements MonthGenerator, Serializable {
+
     private static final Logger log = Logger.getLogger(MonthGeneratorImpl.class.getName());
     private static final long serialVersionUID = -789804447093907772L;
-    
+
     @Override
     public List<PeriodMonth> generateMonths(int year) {
         log.log(Level.INFO, "generateMonths with year {0}", year);
-        
+
         List<PeriodMonth> periodMonths = new ArrayList<>();
         Calendar c = Calendar.getInstance();
         int thisYear = c.get(Calendar.YEAR);
@@ -40,10 +40,10 @@ public class MonthGeneratorImpl implements MonthGenerator,Serializable {
         } else if (year == thisYear + 1) {
             months = month + 3 % 12;
         }
-        
+
         DateFormatSymbols dfs = new DateFormatSymbols();
         String[] monthSymbols = dfs.getMonths();
-        
+
         for (int i = 1; i <= months; i++) {
             PeriodMonth m = new PeriodMonth();
             m.setMonth(i);
@@ -53,14 +53,14 @@ public class MonthGeneratorImpl implements MonthGenerator,Serializable {
         log.log(Level.INFO, "returning months {0}", periodMonths);
         return periodMonths;
     }
-    
-    public PeriodMonth find(Integer m){
+
+    public PeriodMonth find(Integer m) {
         DateFormatSymbols dfs = new DateFormatSymbols();
         String[] monthSymbols = dfs.getMonths();
-        PeriodMonth pm=new PeriodMonth();
+        PeriodMonth pm = new PeriodMonth();
         pm.setMonth(m);
-        pm.setMonthStr(monthSymbols[m-1]);
+        pm.setMonthStr(monthSymbols[m - 1]);
         return pm;
     }
-    
+
 }

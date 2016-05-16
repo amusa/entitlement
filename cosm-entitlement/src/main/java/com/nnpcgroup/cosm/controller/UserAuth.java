@@ -7,7 +7,7 @@ package com.nnpcgroup.cosm.controller;
 
 import java.io.IOException;
 import javax.inject.Named;
-import javax.enterprise.context.SessionScoped;
+import javax.enterprise.context.ConversationScoped;
 import java.io.Serializable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,7 +24,7 @@ import javax.servlet.http.HttpServletRequest;
  * @author 18359
  */
 @Named(value = "userAuth")
-@SessionScoped
+@ConversationScoped
 public class UserAuth implements Serializable {
 
     private static final long serialVersionUID = 4727908159539105845L;
@@ -38,10 +38,6 @@ public class UserAuth implements Serializable {
      * Creates a new instance of UserAuth
      */
     public UserAuth() {
-    }
-
-    @PostConstruct
-    public void init() {
         ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
         originalURL = (String) externalContext.getRequestMap().get(RequestDispatcher.FORWARD_REQUEST_URI);
 
@@ -56,11 +52,39 @@ public class UserAuth implements Serializable {
         }
     }
 
+//    @PostConstruct
+//    public void init() {
+//        ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+//        HttpServletRequest request = (HttpServletRequest) externalContext.getRequest();
+//        originalURL = (String) request.getAttribute("original.url");// (String) externalContext.getRequestMap().get(RequestDispatcher.FORWARD_REQUEST_URI);
+//
+//        if (originalURL == null) {
+//            originalURL = externalContext.getRequestContextPath() + "/faces/index.xhtml";
+//        } else {
+//            String originalQuery = (String) externalContext.getRequestMap().get(RequestDispatcher.FORWARD_QUERY_STRING);
+//
+//            if (originalQuery != null) {
+//                originalURL += "?" + originalQuery;
+//            }
+//        }
+//    }
     public void login() throws IOException {
         FacesContext context = FacesContext.getCurrentInstance();
         ExternalContext externalContext = context.getExternalContext();
+
         HttpServletRequest request = (HttpServletRequest) externalContext.getRequest();
 
+//        originalURL = (String) request.getAttribute("original.url");//(String) externalContext.getRequestMap().get(RequestDispatcher.FORWARD_REQUEST_URI);
+//
+//        if (originalURL == null) {
+//            originalURL = externalContext.getRequestContextPath() + "/faces/index.xhtml";
+//        } else {
+//            String originalQuery = (String) externalContext.getRequestMap().get(RequestDispatcher.FORWARD_QUERY_STRING);
+//
+//            if (originalQuery != null) {
+//                originalURL += "?" + originalQuery;
+//            }
+//        }
         try {
             request.login(username, password);
             LOG.log(Level.INFO, "Login successful {0}", username);

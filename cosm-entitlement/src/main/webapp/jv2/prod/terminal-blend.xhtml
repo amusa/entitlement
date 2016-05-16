@@ -91,7 +91,7 @@
                             <f:facet name="header">
                                 <h:outputText value="Asset Stream/Crude Type"/>
                             </f:facet>
-                            <h:outputText value="#{prod.contractStream.fiscalArrangement.title}/#{prod.contractStream.crudeType.code}"/>                                                        
+                            <h:outputText value="#{prod.contract.fiscalArrangement.title}/#{prod.contract.crudeType.code}"/>                                                        
                         </h:column>                            
                         <h:column>
                             <f:facet name="header">
@@ -170,77 +170,20 @@
                                 <button jsf:id="action" type="button" class="btn btn-sm dropdown-toggle" data-toggle="dropdown">
                                     Action <span class="caret"></span>
                                 </button>
-                                <ul class="dropdown-menu" jsf:id="btnList">
-                                    <li>
-                                        <h:commandLink  pt:data-target="#JvActualCreateDlg" pt:look="warning" pt:data-toggle="modal" >
-                                            <span class="icon">&#61845;</span>
-                                            #{bundle.Actualize}
-                                            <f:ajax event="click" render="JvActualCreateForm" listener="#{jvActualController.actualize(prod)}"/>
-                                        </h:commandLink>
-                                    </li>
-                                    <li class="divider"></li>
-                                    <li>
-                                        <h:commandLink  pt:data-target="#JvCreateDlg" pt:look="warning" pt:data-toggle="modal" >
-                                            <span class="icon">&#61943;</span>
-                                            #{bundle.Create}
-                                            <f:ajax event="click" render="JvCreateForm" listener="#{jvTermBlendController.prepareCreate}" />
-                                        </h:commandLink>                                       
-                                    </li>
-
+                                <ul class="dropdown-menu" jsf:id="btnList">                                    
                                     <li>
                                         <h:commandLink pt:data-target="#JvViewDlg" pt:look="warning" pt:data-toggle="modal">
                                             <span class="icon">&#61698;</span>
                                             #{bundle.View}
                                             <f:ajax event="click" render="JvViewForm" listener="#{jvTermBlendController.setCurrentProduction(prod)}"/>
                                         </h:commandLink>
-                                    </li>
-                                    <li><h:commandLink pt:data-target="#JvEditDlg" pt:look="warning" pt:data-toggle="modal">
-                                            <span class="icon">&#61952;</span>
-                                            #{bundle.Edit}
-                                            <f:ajax event="click" render="JvEditForm" listener="#{jvTermBlendController.setCurrentProduction(prod)}"/>
-                                        </h:commandLink>
-                                    </li>  
-                                    <li>
-                                        <h:commandLink>
-                                            <span class="icon">&#61918;</span>
-                                            #{bundle.Delete}
-                                            <f:ajax render="prodTable" listener="#{jvTermBlendController.destroy(prod)}"/>
-                                        </h:commandLink>
-                                    </li> 
+                                    </li>                                   
                                 </ul>
                             </div>
                         </h:column>
 
                         <f:facet name="footer">                                                                
-                            <button jsf:id="actualizeButton" class="btn m-r-5" jsf:disabled="#{empty jvTermBlendController.currentProduction}" >
-                                <span class="icon">&#61845;</span>
-                                #{bundle.Actualize}
-                                <f:ajax event="click" render="JvActualizeCreateForm" listener="#{jvActualController.actualize(jvTermBlendController.currentProduction)}"/>
-                            </button>
-
-                            <button jsf:id="createButton" look="warning" data-target="#JvCreateDlg" data-toggle="modal" class="btn m-r-5">
-                                <span class="icon">&#61943;</span>
-                                #{bundle.Create}
-                                <f:ajax event="click" render="JvCreateForm" listener="#{jvTermBlendController.prepareCreate}" />                                    
-                            </button>
-
-                            <button jsf:id="viewButton" look="warning" data-target="#JvViewDlg" data-toggle="modal" class="btn m-r-5">
-                                <span class="icon">&#61698;</span>
-                                #{bundle.View}
-                                <f:ajax event="click" render="JvViewForm" />
-                            </button>
-                            <button jsf:id="editButton" look="warning" data-target="#JvEditDlg" data-toggle="modal" class="btn m-r-5">
-                                <span class="icon">&#61952;</span>                                    
-                                #{bundle.Edit}
-                                <f:ajax event="click" render="JvEditForm" />
-                            </button>
-
-                            <button jsf:id="deleteButton" class="btn m-r-5" jsf:disabled="#{empty jvTermBlendController.currentProduction}">
-                                <span class="icon">&#61918;</span>
-                                #{bundle.Delete}
-                                <f:ajax render="prodTable" listener="#{jvTermBlendController.destroy}"/>
-                            </button>
-
+                            
                         </f:facet>
                     </h:dataTable>
 

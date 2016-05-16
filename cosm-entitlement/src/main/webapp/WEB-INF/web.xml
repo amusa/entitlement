@@ -37,16 +37,22 @@
     <welcome-file-list>
         <welcome-file>faces/index.xhtml</welcome-file>
     </welcome-file-list>
-    <error-page>
-        <error-code>403</error-code>
-        <location>/faces/login-error.xhtml</location>
-    </error-page>
     <security-constraint>
         <display-name>AdminConstraint</display-name>
         <web-resource-collection>
             <web-resource-name>Admin</web-resource-name>
             <description>Admin</description>
             <url-pattern>/faces/admin/*</url-pattern>
+        </web-resource-collection>
+        <web-resource-collection>
+            <web-resource-name>JV Admin</web-resource-name>
+            <description/>
+            <url-pattern>/faces/admin/jv/*</url-pattern>
+        </web-resource-collection>
+        <web-resource-collection>
+            <web-resource-name>Index</web-resource-name>
+            <description/>
+            <url-pattern>faces/index.xhtml</url-pattern>
         </web-resource-collection>
         <auth-constraint>
             <description/>
@@ -56,9 +62,24 @@
     <security-constraint>
         <display-name>UserConstraint</display-name>
         <web-resource-collection>
-            <web-resource-name>User</web-resource-name>
+            <web-resource-name>JV</web-resource-name>
             <description/>
-            <url-pattern>/faces/jv2/*.xhtml, /faces/jv2/prod/*.xhtml, /faces/jv/*</url-pattern>
+            <url-pattern>/faces/jv2/*</url-pattern>
+        </web-resource-collection>
+        <web-resource-collection>
+            <web-resource-name>Index</web-resource-name>
+            <description/>
+            <url-pattern>/faces/index.xhtml</url-pattern>
+        </web-resource-collection>
+        <web-resource-collection>
+            <web-resource-name>PSC</web-resource-name>
+            <description/>
+            <url-pattern>/faces/psc/*</url-pattern>
+        </web-resource-collection>
+        <web-resource-collection>
+            <web-resource-name>JV Prod</web-resource-name>
+            <description/>
+            <url-pattern>/faces/jv2/prod/*</url-pattern>
         </web-resource-collection>
         <auth-constraint>
             <description/>

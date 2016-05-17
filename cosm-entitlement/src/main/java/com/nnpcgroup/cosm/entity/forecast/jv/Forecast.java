@@ -9,9 +9,11 @@ import com.nnpcgroup.cosm.entity.CrudeType;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
 import com.nnpcgroup.cosm.entity.contract.Contract;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.EmbeddedId;
@@ -22,6 +24,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -57,6 +60,7 @@ public abstract class Forecast implements Serializable {
     private Integer partnerCargos;
     private Double availability;
     private Double partnerAvailability;
+    private List<ForecastEntitlement> forecastEntitlements;
 
     public Forecast() {
     }
@@ -220,6 +224,16 @@ public abstract class Forecast implements Serializable {
         this.partnerCargos = partnerCargos;
     }
 
+    
+    @OneToMany(mappedBy = "forecast", cascade = {CascadeType.PERSIST})
+    public List<ForecastEntitlement> getForecastEntitlements() {
+        return forecastEntitlements;
+    }
+
+    public void setForecastEntitlements(List<ForecastEntitlement> forecastEntitlements) {
+        this.forecastEntitlements = forecastEntitlements;
+    }
+        
     @Override
     public int hashCode() {
         int hash = 3;

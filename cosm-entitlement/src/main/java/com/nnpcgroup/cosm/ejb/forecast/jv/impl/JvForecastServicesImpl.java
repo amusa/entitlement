@@ -40,8 +40,8 @@ public abstract class JvForecastServicesImpl<T extends Forecast> extends CommonS
 
     private static final Logger LOG = Logger.getLogger(JvForecastServicesImpl.class.getName());
 
-    @PersistenceContext(unitName = "entitlementPU")
-    private EntityManager em;
+//    @PersistenceContext(unitName = "entitlementPU")
+//    private EntityManager em;
 
     @Inject
     GeneralController genController;
@@ -50,11 +50,11 @@ public abstract class JvForecastServicesImpl<T extends Forecast> extends CommonS
         super(entityClass);
     }
 
-    @Override
-    protected EntityManager getEntityManager() {
-        LOG.info("ForecastBean::setEntityManager() called...");
-        return em;
-    }
+//    @Override
+//    protected EntityManager getEntityManager() {
+//        LOG.info("ForecastBean::setEntityManager() called...");
+//        return em;
+//    }
 
     @Override
     public T computeOpeningStock(T forecast) {

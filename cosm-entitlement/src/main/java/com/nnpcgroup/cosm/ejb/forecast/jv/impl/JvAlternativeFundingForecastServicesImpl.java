@@ -40,19 +40,19 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
     @EJB
     PriceBean priceBean;
 
-    @PersistenceContext(unitName = "entitlementPU")
-    private EntityManager em;
+//    @PersistenceContext(unitName = "entitlementPU")
+//    private EntityManager em;
 
     public JvAlternativeFundingForecastServicesImpl(Class<T> entityClass) {
         super(entityClass);
     }
 
-    @Override
-    protected EntityManager getEntityManager() {
-        LOG.info("returning entityManager...");
-
-        return em;
-    }
+//    @Override
+//    protected EntityManager getEntityManager() {
+//        LOG.info("returning entityManager...");
+//
+//        return em;
+//    }
 
     @Override
     public T computeOpeningStock(T forecast) {

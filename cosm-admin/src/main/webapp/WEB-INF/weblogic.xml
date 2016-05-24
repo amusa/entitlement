@@ -4,13 +4,5 @@
     <keepgenerated>true</keepgenerated>
     <debug>true</debug>
   </jsp-descriptor>
-  <context-root>/cosm-entitlement</context-root>
-  <security-role-assignment>
-    <role-name>AdminRole</role-name>
-    <principal-name>COSMAdmin</principal-name>
-  </security-role-assignment>
-  <security-role-assignment>
-    <role-name>UserRole</role-name>
-    <principal-name>COSMUser</principal-name>
-  </security-role-assignment>
+  <context-root>/cosm-admin</context-root>
 </weblogic-web-app>

@@ -21,41 +21,41 @@ import javax.faces.context.FacesContext;
  *
  * @author 18359
  */
-@Startup
-@Singleton
+//@Startup
+//@Singleton
 public class InitBean {
 
-    private static final Logger LOG = Logger.getLogger(InitBean.class.getName());
-
-    @EJB
-    CompanyBean companyBean;
-
-    private Company company;
-
-    /**
-     * Creates a new instance of ApplicationController
-     */
-    @PostConstruct
-    public void init() {
-        String defaultCompany;
-        FacesContext ctx = FacesContext.getCurrentInstance();
-        defaultCompany
-                = ctx.getExternalContext().getInitParameter("DEFAULT_COMPANY");
-
-        LOG.log(Level.INFO, "Default company is {0}...", defaultCompany);
-
-        company = companyBean.findByCompanyName(defaultCompany);
-
-        if (company == null) {
-            company = new Company();
-            company.setName(defaultCompany);
-            companyBean.create(company);
-            LOG.log(Level.INFO, "Default company entity not created. Entity created successfully...");
-        }
-    }
-
-    public Company getDefaultCompany() {
-        return company;
-    }
+//    private static final Logger LOG = Logger.getLogger(InitBean.class.getName());
+//
+//    @EJB
+//    CompanyBean companyBean;
+//
+//    private Company company;
+//
+//    /**
+//     * Creates a new instance of ApplicationController
+//     */
+//    @PostConstruct
+//    public void init() {
+//        String defaultCompany;
+//        FacesContext ctx = FacesContext.getCurrentInstance();
+//        defaultCompany
+//                = ctx.getExternalContext().getInitParameter("DEFAULT_COMPANY");
+//
+//        LOG.log(Level.INFO, "Default company is {0}...", defaultCompany);
+//
+//        company = companyBean.findByCompanyName(defaultCompany);
+//
+//        if (company == null) {
+//            company = new Company();
+//            company.setName(defaultCompany);
+//            companyBean.create(company);
+//            LOG.log(Level.INFO, "Default company entity not created. Entity created successfully...");
+//        }
+//    }
+//
+//    public Company getDefaultCompany() {
+//        return company;
+//    }
 
 }

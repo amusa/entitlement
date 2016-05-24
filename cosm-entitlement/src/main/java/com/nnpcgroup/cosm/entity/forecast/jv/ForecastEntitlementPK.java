@@ -17,7 +17,7 @@ import javax.persistence.Embeddable;
  *
  * @author 18359
  */
-@Embeddable
+//@Embeddable
 public class ForecastEntitlementPK implements Serializable {
 
     private static final Logger LOG = Logger.getLogger(ForecastEntitlementPK.class.getName());

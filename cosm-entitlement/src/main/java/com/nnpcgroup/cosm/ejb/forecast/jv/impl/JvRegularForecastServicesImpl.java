@@ -21,18 +21,18 @@ public abstract class JvRegularForecastServicesImpl extends JvForecastServicesIm
 
     private static final Logger LOG = Logger.getLogger(JvRegularForecastServicesImpl.class.getName());
 
-    @PersistenceContext(unitName = "entitlementPU")
-    private EntityManager em;
+//    @PersistenceContext(unitName = "entitlementPU")
+//    private EntityManager em;
 
     public JvRegularForecastServicesImpl(Class<RegularForecast> entityClass) {
         super(entityClass);
     }
 
-    @Override
-    protected EntityManager getEntityManager() {
-        LOG.info("ForecastBean::setEntityManager() called...");
-        return em;
-    }
+//    @Override
+//    protected EntityManager getEntityManager() {
+//        LOG.info("ForecastBean::setEntityManager() called...");
+//        return em;
+//    }
 
     
 }

@@ -172,8 +172,10 @@ public class JvProductionController implements Serializable {
     }
 
     private void setEmbeddableKeys() {
-        ProductionPK fPK = new ProductionPK(periodYear, periodMonth, currentContract.getContractPK());
-        currentProduction.setProductionPK(fPK);
+        //ProductionPK fPK = new ProductionPK(periodYear, periodMonth, currentContract);
+        //currentProduction.setProductionPK(fPK);
+        currentProduction.setPeriodYear(periodYear);
+        currentProduction.setPeriodMonth(periodMonth);
         currentProduction.setContract(currentContract);
     }
 
@@ -311,9 +313,9 @@ public class JvProductionController implements Serializable {
         setCurrentContract(forecast.getContract());
         Production production = null;
         ProductionPK pPK = new ProductionPK(
-                forecast.getForecastPK().getPeriodYear(),
-                forecast.getForecastPK().getPeriodMonth(),
-                forecast.getForecastPK().getContractPK()
+                forecast.getPeriodYear(),
+                forecast.getPeriodMonth(),
+                forecast.getContract()
         );
 //        production = (Production) getProductionBean().findByContractPeriod(
 //                forecast.getForecastPK().getPeriodYear(),
@@ -338,14 +340,14 @@ public class JvProductionController implements Serializable {
             }
 
             LOG.log(Level.INFO, "************getProductionBean().createInstance() returning {0}...", currentProduction);
-            production.setProductionPK(pPK);
+            //production.setProductionPK(pPK);
             production.setContract(forecast.getContract());
 
             // getProductionBean().enrich(currentProduction);
         }
         setCurrentProduction(production);
-        setPeriodYear(forecast.getForecastPK().getPeriodYear());
-        setPeriodMonth(forecast.getForecastPK().getPeriodMonth());
+        setPeriodYear(forecast.getPeriodYear());
+        setPeriodMonth(forecast.getPeriodMonth());
     }
 
     public void destroy() {

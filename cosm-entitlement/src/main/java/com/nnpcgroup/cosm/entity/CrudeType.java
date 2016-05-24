@@ -33,7 +33,14 @@ public class CrudeType implements Serializable {
     private Terminal terminal;
     private Collection<Contract> contracts;
 
-    @Id
+    public CrudeType() {
+    }
+
+    public CrudeType(String code) {
+        this.code = code;
+    }
+    
+        @Id
     public String getCode() {
         return code;
     }

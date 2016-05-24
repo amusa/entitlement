@@ -34,6 +34,13 @@ public  class FiscalArrangement implements Serializable {
     protected Company operator;
     protected List<Contract> contracts;
 
+    public FiscalArrangement() {
+    }
+
+    public FiscalArrangement(Long id) {
+        this.id = id;
+    }
+        
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long getId() {

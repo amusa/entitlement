@@ -13,6 +13,7 @@ import com.nnpcgroup.cosm.ejb.forecast.jv.JvCarryForecastServices;
 import com.nnpcgroup.cosm.ejb.forecast.jv.JvForecast;
 import com.nnpcgroup.cosm.ejb.forecast.jv.JvForecastServices;
 import com.nnpcgroup.cosm.ejb.forecast.jv.JvRegularForecastServices;
+import com.nnpcgroup.cosm.entity.CrudeType;
 import com.nnpcgroup.cosm.entity.contract.CarryContract;
 import com.nnpcgroup.cosm.entity.contract.Contract;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
@@ -191,10 +192,10 @@ public class JvForecastController implements Serializable {
         if (currentProduction != null) {
             //setEmbeddableKeys();
             LOG.log(Level.INFO, "Persisting Forecast Year={0}, Month={1}, FiscalArr={2}, CrudeType={3}",
-                    new Object[]{currentProduction.getForecastPK().getPeriodYear(),
-                        currentProduction.getForecastPK().getPeriodMonth(),
-                        currentProduction.getForecastPK().getContractPK().getFiscalArrangementId(),
-                        currentProduction.getForecastPK().getContractPK().getCrudeTypeCode()});
+                    new Object[]{currentProduction.getPeriodYear(),
+                        currentProduction.getPeriodMonth(),
+                        currentProduction.getContract().getFiscalArrangement(),
+                        currentProduction.getContract().getCrudeType()});
             try {
                 if (persistAction != JsfUtil.PersistAction.DELETE) {
                     getForecastBean().edit(currentProduction);
@@ -404,8 +405,8 @@ public class JvForecastController implements Serializable {
     }
 
     private void setEmbeddableKeys() {
-        ForecastPK fPK = new ForecastPK(periodYear, periodMonth, currentContract.getContractPK());
-        currentProduction.setForecastPK(fPK);
+        ForecastPK fPK = new ForecastPK(periodYear, periodMonth, currentContract);
+        // currentProduction.setForecastPK(fPK);
         currentProduction.setPeriodYear(periodYear);
         currentProduction.setPeriodMonth(periodMonth);
         currentProduction.setContract(currentContract);
@@ -416,6 +417,8 @@ public class JvForecastController implements Serializable {
 
         private static final String SEPARATOR = "#";
         private static final String SEPARATOR_ESCAPED = "\\#";
+        private static final String SEPARATOR_NEXT = "!";
+        private static final String SEPARATOR_NEXT_ESCAPED = "\\!";
 
         @Override
         public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
@@ -430,27 +433,34 @@ public class JvForecastController implements Serializable {
         ForecastPK getKey(String value) {
             ForecastPK key;
             String values[] = value.split(SEPARATOR_ESCAPED);
-            key = new ForecastPK(Integer.parseInt(values[0]), Integer.parseInt(values[1]), getContractPK(values[2]));
+            key = new ForecastPK(Integer.parseInt(values[0]), Integer.parseInt(values[1]), getContract(values[2]));
             return key;
         }
 
-        ContractPK getContractPK(String value) {
-            String values[] = value.split(SEPARATOR_ESCAPED);
-            ContractPK key = new ContractPK(Long.parseLong(values[0]), values[1]);
+        Contract getContract(String value) {
+            String values[] = value.split(SEPARATOR_NEXT_ESCAPED);
+            FiscalArrangement fa = new FiscalArrangement(Long.valueOf(values[0]));
+            CrudeType ct = new CrudeType(values[1]);
+            Contract key = new Contract(fa, ct);
             return key;
         }
 
-        String getStringKey(ForecastPK value) {
+        String getStringKey(Forecast value) {
             StringBuilder sb = new StringBuilder();
             sb.append(value.getPeriodYear());
             sb.append(SEPARATOR);
             sb.append(value.getPeriodMonth());
             sb.append(SEPARATOR);
-            sb.append(
-                    sb.append(value.getContractPK().getFiscalArrangementId())
-                    .append(SEPARATOR)
-                    .append(value.getContractPK().getCrudeTypeCode())
+            sb.append(makeContractString(value.getContract())
             );
+            return sb.toString();
+        }
+
+        private String makeContractString(Contract value) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(value.getFiscalArrangement().getId())
+                    .append(SEPARATOR_NEXT)
+                    .append(value.getCrudeType().getCode());
             return sb.toString();
         }
 
@@ -461,7 +471,7 @@ public class JvForecastController implements Serializable {
             }
             if (object instanceof Forecast) {
                 Forecast o = (Forecast) object;
-                return getStringKey(o.getForecastPK());
+                return getStringKey(o);
             } else {
                 Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), Forecast.class.getName()});
                 return null;

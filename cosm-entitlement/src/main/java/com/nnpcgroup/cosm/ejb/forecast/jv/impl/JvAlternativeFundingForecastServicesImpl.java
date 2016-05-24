@@ -42,7 +42,6 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
 
 //    @PersistenceContext(unitName = "entitlementPU")
 //    private EntityManager em;
-
     public JvAlternativeFundingForecastServicesImpl(Class<T> entityClass) {
         super(entityClass);
     }
@@ -53,7 +52,6 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
 //
 //        return em;
 //    }
-
     @Override
     public T computeOpeningStock(T forecast) {
         T prev = getPreviousMonthProduction(forecast);
@@ -287,9 +285,9 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
     @Override
     public T computeGuaranteedNotionalMargin(T forecast) {
         PricePK pricePK = new PricePK();
-        LOG.log(Level.INFO, "*********NPE Check********* forecast={0}, ForecastPK={1}", new Object[]{forecast, forecast.getForecastPK()});
-        pricePK.setPeriodMonth(forecast.getForecastPK().getPeriodMonth());
-        pricePK.setPeriodYear(forecast.getForecastPK().getPeriodYear());
+        LOG.log(Level.INFO, "*********NPE Check********* forecast={0}", new Object[]{forecast});
+        pricePK.setPeriodMonth(forecast.getPeriodMonth());
+        pricePK.setPeriodYear(forecast.getPeriodYear());
 
         Double GNM = null;// = 4.1465; //TODO:temporary placeholder
 

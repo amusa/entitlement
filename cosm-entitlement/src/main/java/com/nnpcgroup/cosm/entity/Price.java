@@ -9,6 +9,8 @@ import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.IdClass;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -17,12 +19,12 @@ import javax.validation.constraints.NotNull;
  * @author 18359
  */
 @Entity
+@IdClass(PricePK.class)
 @Table(name = "PRICE")
 public class Price implements Serializable {
 
     private static final long serialVersionUID = -5594726430705947415L;
 
-    PricePK pricePK;
     private double realizablePrice;
     private int periodYear;
     private int periodMonth;
@@ -30,15 +32,7 @@ public class Price implements Serializable {
     public Price() {
     }
 
-    @EmbeddedId
-    public PricePK getPricePK() {
-        return pricePK;
-    }
-
-    public void setPricePK(PricePK pricePK) {
-        this.pricePK = pricePK;
-    }
-
+    
     @NotNull
     public double getRealizablePrice() {
         return realizablePrice;
@@ -48,7 +42,8 @@ public class Price implements Serializable {
         this.realizablePrice = realizablePrice;
     }
 
-    @Column(insertable = false, updatable = false)
+    @Id
+    //@Column(insertable = false, updatable = false)
     public int getPeriodYear() {
         return periodYear;
     }
@@ -57,7 +52,8 @@ public class Price implements Serializable {
         this.periodYear = periodYear;
     }
 
-    @Column(insertable = false, updatable = false)
+    //@Column(insertable = false, updatable = false)
+    @Id
     public int getPeriodMonth() {
         return periodMonth;
     }

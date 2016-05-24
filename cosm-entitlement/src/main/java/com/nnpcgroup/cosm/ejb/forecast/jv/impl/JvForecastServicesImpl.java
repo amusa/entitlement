@@ -42,7 +42,6 @@ public abstract class JvForecastServicesImpl<T extends Forecast> extends CommonS
 
 //    @PersistenceContext(unitName = "entitlementPU")
 //    private EntityManager em;
-
     @Inject
     GeneralController genController;
 
@@ -55,7 +54,6 @@ public abstract class JvForecastServicesImpl<T extends Forecast> extends CommonS
 //        LOG.info("ForecastBean::setEntityManager() called...");
 //        return em;
 //    }
-
     @Override
     public T computeOpeningStock(T forecast) {
         Forecast prod = getPreviousMonthProduction(forecast);
@@ -76,8 +74,8 @@ public abstract class JvForecastServicesImpl<T extends Forecast> extends CommonS
         Double prodVolume = forecast.getProductionVolume();
 //        int periodYear = forecast.getPeriodYear();
 //        int periodMonth = forecast.getPeriodMonth();
-        int periodYear = forecast.getForecastPK().getPeriodYear();
-        int periodMonth = forecast.getForecastPK().getPeriodMonth();
+        int periodYear = forecast.getPeriodYear();
+        int periodMonth = forecast.getPeriodMonth();
         int days = genController.daysOfMonth(periodYear, periodMonth);
         Double grossProd = prodVolume * days;
 
@@ -201,15 +199,15 @@ public abstract class JvForecastServicesImpl<T extends Forecast> extends CommonS
 
     @Override
     public T getPreviousMonthProduction(T forecast) {
-        int month = forecast.getForecastPK().getPeriodMonth(); //getPeriodMonth();
-        int year = forecast.getForecastPK().getPeriodYear();//getPeriodYear();
+        int month = forecast.getPeriodMonth(); //getPeriodMonth();
+        int year = forecast.getPeriodYear();//getPeriodYear();
         Contract cs = forecast.getContract();
-        ContractPK cPK = forecast.getContract().getContractPK();
+        //ContractPK cPK = forecast.getContract().getContractPK();
 
         FiscalPeriod prevFp = getPreviousFiscalPeriod(year, month);
 
         //T f = findByContractPeriod(prevFp.getYear(), prevFp.getMonth(), cs);
-        T f = find(new ForecastPK(prevFp.getYear(), prevFp.getMonth(), cPK));
+        T f = find(new ForecastPK(prevFp.getYear(), prevFp.getMonth(), cs));
 
         return f;
 

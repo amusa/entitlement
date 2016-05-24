@@ -5,6 +5,8 @@
  */
 package com.nnpcgroup.cosm.entity.contract;
 
+import com.nnpcgroup.cosm.entity.CrudeType;
+import com.nnpcgroup.cosm.entity.FiscalArrangement;
 import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Embeddable;
@@ -13,43 +15,43 @@ import javax.persistence.Embeddable;
  *
  * @author 18359
  */
-@Embeddable
+//@Embeddable
 public class ContractPK implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private Long fiscalArrangementId;
-    private String crudeTypeCode;
+    private FiscalArrangement fiscalArrangement;
+    private CrudeType crudeType;
 
     public ContractPK() {
     }
 
-    public ContractPK(Long fiscalArrangementId, String crudeTypeCode) {
-        this.fiscalArrangementId = fiscalArrangementId;
-        this.crudeTypeCode = crudeTypeCode;
+    public ContractPK(FiscalArrangement fiscalArrangement, CrudeType crudeType) {
+        this.fiscalArrangement = fiscalArrangement;
+        this.crudeType = crudeType;
     }
 
-    public Long getFiscalArrangementId() {
-        return fiscalArrangementId;
+    public FiscalArrangement getFiscalArrangement() {
+        return fiscalArrangement;
     }
 
-    public String getCrudeTypeCode() {
-        return crudeTypeCode;
+    public void setFiscalArrangement(FiscalArrangement fiscalArrangement) {
+        this.fiscalArrangement = fiscalArrangement;
     }
 
-    public void setFiscalArrangementId(Long fiscalArrangementId) {
-        this.fiscalArrangementId = fiscalArrangementId;
+    public CrudeType getCrudeType() {
+        return crudeType;
     }
 
-    public void setCrudeTypeCode(String crudeTypeCode) {
-        this.crudeTypeCode = crudeTypeCode;
+    public void setCrudeType(CrudeType crudeType) {
+        this.crudeType = crudeType;
     }
 
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 83 * hash + Objects.hashCode(this.fiscalArrangementId);
-        hash = 83 * hash + Objects.hashCode(this.crudeTypeCode);
+        int hash = 5;
+        hash = 83 * hash + Objects.hashCode(this.fiscalArrangement);
+        hash = 83 * hash + Objects.hashCode(this.crudeType);
         return hash;
     }
 
@@ -65,10 +67,10 @@ public class ContractPK implements Serializable {
             return false;
         }
         final ContractPK other = (ContractPK) obj;
-        if (!Objects.equals(this.crudeTypeCode, other.crudeTypeCode)) {
+        if (!Objects.equals(this.fiscalArrangement, other.fiscalArrangement)) {
             return false;
         }
-        if (!Objects.equals(this.fiscalArrangementId, other.fiscalArrangementId)) {
+        if (!Objects.equals(this.crudeType, other.crudeType)) {
             return false;
         }
         return true;

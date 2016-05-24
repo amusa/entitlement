@@ -12,6 +12,8 @@ import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.IdClass;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
@@ -24,6 +26,7 @@ import javax.validation.constraints.NotNull;
  * @author 18359
  */
 @Entity
+@IdClass(ProductionPK.class)
 @Table(name = "PRODUCTION")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "PTYPE")
@@ -31,7 +34,6 @@ public abstract class Production implements Serializable {
 
     private static final long serialVersionUID = -795843614381155072L;
 
-    private ProductionPK productionPK;
     private Integer periodYear;
     private Integer periodMonth;
     private Contract contract;
@@ -55,22 +57,13 @@ public abstract class Production implements Serializable {
     public Production() {
     }
 
-//    public Production(int periodYear, int periodMonth, Contract contract) {
-//        this.periodYear = periodYear;
-//        this.periodMonth = periodMonth;
-//        this.contract = contract;       
-//    }
-    @EmbeddedId
-    public ProductionPK getProductionPK() {
-        return productionPK;
+    public Production(int periodYear, int periodMonth, Contract contract) {
+        this.periodYear = periodYear;
+        this.periodMonth = periodMonth;
+        this.contract = contract;
     }
 
-    public void setProductionPK(ProductionPK productionPK) {
-        this.productionPK = productionPK;
-    }
-
-    @NotNull
-    @Column(insertable = false, updatable = false)
+    @Id
     public Integer getPeriodYear() {
         return periodYear;
     }
@@ -79,8 +72,7 @@ public abstract class Production implements Serializable {
         this.periodYear = periodYear;
     }
 
-    @NotNull
-    @Column(insertable = false, updatable = false)
+    @Id
     public Integer getPeriodMonth() {
         return periodMonth;
     }
@@ -89,9 +81,8 @@ public abstract class Production implements Serializable {
         this.periodMonth = periodMonth;
     }
 
+    @Id
     @ManyToOne
-    @NotNull
-    @MapsId("contractPK")
     public Contract getContract() {
         return contract;
     }
@@ -232,8 +223,10 @@ public abstract class Production implements Serializable {
 
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 41 * hash + Objects.hashCode(this.productionPK);
+        int hash = 5;
+        hash = 89 * hash + Objects.hashCode(this.periodYear);
+        hash = 89 * hash + Objects.hashCode(this.periodMonth);
+        hash = 89 * hash + Objects.hashCode(this.contract);
         return hash;
     }
 
@@ -249,7 +242,13 @@ public abstract class Production implements Serializable {
             return false;
         }
         final Production other = (Production) obj;
-        if (!Objects.equals(this.productionPK, other.productionPK)) {
+        if (!Objects.equals(this.periodYear, other.periodYear)) {
+            return false;
+        }
+        if (!Objects.equals(this.periodMonth, other.periodMonth)) {
+            return false;
+        }
+        if (!Objects.equals(this.contract, other.contract)) {
             return false;
         }
         return true;

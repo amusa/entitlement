@@ -4,6 +4,7 @@ import com.nnpcgroup.cosm.entity.contract.Contract;
 import com.nnpcgroup.cosm.controller.util.JsfUtil;
 import com.nnpcgroup.cosm.controller.util.JsfUtil.PersistAction;
 import com.nnpcgroup.cosm.ejb.contract.ContractServices;
+import com.nnpcgroup.cosm.entity.CrudeType;
 import com.nnpcgroup.cosm.entity.contract.CarryContract;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
 import com.nnpcgroup.cosm.entity.contract.AlternativeFundingContract;
@@ -233,15 +234,17 @@ public class ContractController implements Serializable {
         ContractPK getKey(String value) {
             ContractPK key;
             String values[] = value.split(SEPARATOR_ESCAPED);
-            key = new ContractPK(Long.valueOf(values[0]), values[1]);
+            FiscalArrangement fa = new FiscalArrangement(Long.valueOf(values[0]));
+            CrudeType ct = new CrudeType(values[1]);
+            key = new ContractPK(fa, ct);
             return key;
         }
 
-        String getStringKey(ContractPK value) {
+        String getStringKey(Contract value) {
             StringBuilder sb = new StringBuilder();
-            sb.append(value.getFiscalArrangementId());
+            sb.append(value.getFiscalArrangement().getId());
             sb.append(SEPARATOR);
-            sb.append(value.getCrudeTypeCode());
+            sb.append(value.getCrudeType().getCode());
             return sb.toString();
         }
 
@@ -252,7 +255,7 @@ public class ContractController implements Serializable {
             }
             if (object instanceof Contract) {
                 Contract o = (Contract) object;
-                return getStringKey(o.getContractPK());
+                return getStringKey(o);
             } else {
                 Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), Contract.class.getName()});
                 return null;

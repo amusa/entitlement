@@ -5,7 +5,6 @@
  */
 package com.nnpcgroup.cosm.controller;
 
-import com.nnpcgroup.cosm.controller.util.ProductionDataModel;
 import com.nnpcgroup.cosm.ejb.forecast.jv.JvForecast;
 import com.nnpcgroup.cosm.entity.Terminal;
 import com.nnpcgroup.cosm.entity.forecast.jv.Forecast;
@@ -36,7 +35,6 @@ public class JvTerminalBlendController implements Serializable {
     private Forecast currentProduction;
 
     private List<Forecast> productions;
-    private ProductionDataModel dataModel;
 
     private Integer periodYear;
     private Integer periodMonth;
@@ -47,10 +45,6 @@ public class JvTerminalBlendController implements Serializable {
      */
     public JvTerminalBlendController() {
         productions = new ArrayList<>();
-    }
-
-    public ProductionDataModel getDataModel() {
-        return dataModel;
     }
 
     public Forecast getCurrentProduction() {
@@ -136,13 +130,7 @@ public class JvTerminalBlendController implements Serializable {
     public void loadProductions() {
         if (periodYear != null && periodMonth != null && currentTerminal != null) {
             productions = productionBean.getTerminalProduction(periodYear, periodMonth, currentTerminal);
-            refreshDataModel();
         }
-    }
-
-    public void refreshDataModel() {
-        log.log(Level.INFO, "Refreshing DataModel...");
-        dataModel = new ProductionDataModel(productions);
     }
 
     private void reset() {
@@ -188,7 +176,7 @@ public class JvTerminalBlendController implements Serializable {
         return dailySum;
     }
 
-    public Double getGrossSum() {        
+    public Double getGrossSum() {
         log.log(Level.INFO, "productions is not empty {0}", productions);
         if (productions.isEmpty()) {
             return null;

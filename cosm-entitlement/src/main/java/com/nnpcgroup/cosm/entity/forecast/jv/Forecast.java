@@ -5,25 +5,19 @@
  */
 package com.nnpcgroup.cosm.entity.forecast.jv;
 
-import com.nnpcgroup.cosm.entity.CrudeType;
-import com.nnpcgroup.cosm.entity.FiscalArrangement;
 import com.nnpcgroup.cosm.entity.contract.Contract;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.IdClass;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
-import javax.persistence.MapsId;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -33,6 +27,7 @@ import javax.validation.constraints.NotNull;
  * @author 18359
  */
 @Entity
+@IdClass(ForecastPK.class)
 @Table(name = "FORECAST")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "FTYPE")
@@ -42,7 +37,6 @@ public abstract class Forecast implements Serializable {
 
     private static final Logger LOG = Logger.getLogger(Forecast.class.getName());
 
-    private ForecastPK forecastPK;
     private Integer periodYear;
     private Integer periodMonth;
     private Contract contract;
@@ -65,17 +59,7 @@ public abstract class Forecast implements Serializable {
     public Forecast() {
     }
 
-    @EmbeddedId
-    public ForecastPK getForecastPK() {
-        return forecastPK;
-    }
-
-    public void setForecastPK(ForecastPK forecastPK) {
-        this.forecastPK = forecastPK;
-    }
-
-    @NotNull
-    @Column(insertable = false, updatable = false)
+    @Id
     public Integer getPeriodYear() {
         return periodYear;
     }
@@ -84,8 +68,7 @@ public abstract class Forecast implements Serializable {
         this.periodYear = periodYear;
     }
 
-    @NotNull
-    @Column(insertable = false, updatable = false)
+    @Id
     public Integer getPeriodMonth() {
         return periodMonth;
     }
@@ -94,13 +77,8 @@ public abstract class Forecast implements Serializable {
         this.periodMonth = periodMonth;
     }
 
+    @Id
     @ManyToOne
-    @NotNull
-    @MapsId("contractPK")
-    @JoinColumns({
-        @JoinColumn(name = "FISCALARRANGEMENT_ID", referencedColumnName = "FISCALARRANGEMENT_ID"),
-        @JoinColumn(name = "CRUDETYPE_CODE", referencedColumnName = "CRUDETYPE_CODE")
-    })
     public Contract getContract() {
         return contract;
     }
@@ -224,7 +202,6 @@ public abstract class Forecast implements Serializable {
         this.partnerCargos = partnerCargos;
     }
 
-    
     @OneToMany(mappedBy = "forecast", cascade = {CascadeType.PERSIST})
     public List<ForecastEntitlement> getForecastEntitlements() {
         return forecastEntitlements;
@@ -233,7 +210,7 @@ public abstract class Forecast implements Serializable {
     public void setForecastEntitlements(List<ForecastEntitlement> forecastEntitlements) {
         this.forecastEntitlements = forecastEntitlements;
     }
-        
+
     @Override
     public int hashCode() {
         int hash = 3;

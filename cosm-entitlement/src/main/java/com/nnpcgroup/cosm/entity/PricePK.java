@@ -6,13 +6,11 @@
 package com.nnpcgroup.cosm.entity;
 
 import java.io.Serializable;
-import javax.persistence.Embeddable;
 
 /**
  *
  * @author 18359
  */
-//@Embeddable
 public class PricePK implements Serializable {
 
     private static final long serialVersionUID = 1L;

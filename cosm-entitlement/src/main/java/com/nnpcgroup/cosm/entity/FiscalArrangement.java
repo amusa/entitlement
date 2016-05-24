@@ -10,11 +10,9 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -26,7 +24,7 @@ import javax.validation.constraints.NotNull;
  */
 @Entity
 @Table(name = "FISCAL_ARRANGEMENT")
-public  class FiscalArrangement implements Serializable {
+public class FiscalArrangement implements Serializable {
 
     private static final long serialVersionUID = -5266137042066972524L;
     protected Long id;
@@ -40,7 +38,7 @@ public  class FiscalArrangement implements Serializable {
     public FiscalArrangement(Long id) {
         this.id = id;
     }
-        
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long getId() {
@@ -71,8 +69,6 @@ public  class FiscalArrangement implements Serializable {
     }
 
     @OneToMany(mappedBy = "fiscalArrangement")
-    //@OneToMany(mappedBy = "fiscalArrangement", fetch = FetchType.LAZY)
-    //@JoinColumn(name = "fiscalArrangementId", insertable = false, updatable = false)
     public List<Contract> getContracts() {
         return contracts;
     }

@@ -6,8 +6,6 @@
 package com.nnpcgroup.cosm.entity;
 
 import java.io.Serializable;
-import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
@@ -32,7 +30,6 @@ public class Price implements Serializable {
     public Price() {
     }
 
-    
     @NotNull
     public double getRealizablePrice() {
         return realizablePrice;
@@ -43,7 +40,6 @@ public class Price implements Serializable {
     }
 
     @Id
-    //@Column(insertable = false, updatable = false)
     public int getPeriodYear() {
         return periodYear;
     }
@@ -52,7 +48,6 @@ public class Price implements Serializable {
         this.periodYear = periodYear;
     }
 
-    //@Column(insertable = false, updatable = false)
     @Id
     public int getPeriodMonth() {
         return periodMonth;

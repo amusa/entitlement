@@ -23,8 +23,7 @@ import javax.persistence.criteria.Root;
  *
  * @author 18359
  */
-
-public class ContractServicesImpl extends AbstractCrudServicesImpl<Contract>  implements ContractServices {
+public class ContractServicesImpl extends AbstractCrudServicesImpl<Contract> implements ContractServices {
 
     private static final Logger log = Logger.getLogger(ContractServicesImpl.class.getName());
 
@@ -39,8 +38,6 @@ public class ContractServicesImpl extends AbstractCrudServicesImpl<Contract>  im
     protected EntityManager getEntityManager() {
         return em;
     }
-    
-    
 
     @Override
     public List<Contract> findFiscalArrangementContracts(FiscalArrangement fa) {
@@ -49,11 +46,12 @@ public class ContractServicesImpl extends AbstractCrudServicesImpl<Contract>  im
         List<Contract> contracts;
 
         CriteriaQuery cq = cb.createQuery();
-        Root e = cq.from(entityClass);
+        Root<Contract> e = cq.from(entityClass);
         try {
-            cq.where(
-                    cb.equal(e.get("fiscalArrangement"), fa)
-            );
+            cq.select(e).
+                    where(
+                            cb.equal(e.get("fiscalArrangement"), fa)
+                    );
 
             Query query = getEntityManager().createQuery(cq);
 
@@ -65,5 +63,4 @@ public class ContractServicesImpl extends AbstractCrudServicesImpl<Contract>  im
         return contracts;
     }
 
-    
 }

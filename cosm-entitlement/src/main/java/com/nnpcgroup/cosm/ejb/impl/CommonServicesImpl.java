@@ -106,9 +106,10 @@ public abstract class CommonServicesImpl<T> extends AbstractCrudServicesImpl<T> 
         List<T> productions;
 
         CriteriaQuery cq = cb.createQuery();
-        Root e = cq.from(entityClass);
+        Root<T> e = cq.from(entityClass);
         try {
-            cq.where(
+            
+            cq.select(e).where(
                     cb.and(cb.equal(e.get("periodYear"), year),
                             cb.equal(e.get("periodMonth"), month),
                             cb.equal(e.get("contract").get("fiscalArrangement"), fa)

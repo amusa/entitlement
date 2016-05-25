@@ -60,6 +60,7 @@
         <auth-constraint>
             <description/>
             <role-name>ADMIN</role-name>
+            <role-name>USER</role-name>
         </auth-constraint>
     </security-constraint>
     <security-constraint>

@@ -76,7 +76,6 @@ public class JvForecastController implements Serializable {
     private Forecast currentProduction;
 
     private List<Forecast> productions;
-    //private ProductionDataModel dataModel;
 
     private Integer periodYear;
     private Integer periodMonth;
@@ -111,9 +110,6 @@ public class JvForecastController implements Serializable {
         return defaultForecastBean;
     }
 
-//    public ProductionDataModel getDataModel() {
-//        return dataModel;
-//    }
     public Forecast getCurrentProduction() {
         return currentProduction;
     }
@@ -229,14 +225,9 @@ public class JvForecastController implements Serializable {
             } else {
                 productions = getForecastBean().findByContractPeriod(periodYear, periodMonth, currentFiscalArrangement);
             }
-            //refreshDataModel();
         }
     }
 
-//    public void refreshDataModel() {
-//        LOG.log(Level.INFO, "Refreshing DataModel...");
-//       // dataModel = new ProductionDataModel(productions);
-//    }
     public void productionVolumeChanged() {
         getForecastBean().enrich(currentProduction);
         LOG.log(Level.INFO,
@@ -409,6 +400,7 @@ public class JvForecastController implements Serializable {
         // currentProduction.setForecastPK(fPK);
         currentProduction.setPeriodYear(periodYear);
         currentProduction.setPeriodMonth(periodMonth);
+        contractBean.refresh(currentContract);
         currentProduction.setContract(currentContract);
     }
 

@@ -213,10 +213,10 @@ public abstract class Forecast implements Serializable {
 
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 17 * hash + Objects.hashCode(this.periodYear);
-        hash = 17 * hash + Objects.hashCode(this.periodMonth);
-        hash = 17 * hash + Objects.hashCode(this.contract);
+        int hash = 7;
+        hash = 73 * hash + Objects.hashCode(this.periodYear);
+        hash = 73 * hash + Objects.hashCode(this.periodMonth);
+        hash = 73 * hash + Objects.hashCode(this.contract);
         return hash;
     }
 

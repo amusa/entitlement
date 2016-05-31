@@ -16,9 +16,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.enterprise.context.Dependent;
-import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -40,18 +38,10 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
     @EJB
     PriceBean priceBean;
 
-//    @PersistenceContext(unitName = "entitlementPU")
-//    private EntityManager em;
     public JvAlternativeFundingForecastServicesImpl(Class<T> entityClass) {
         super(entityClass);
     }
 
-//    @Override
-//    protected EntityManager getEntityManager() {
-//        LOG.info("returning entityManager...");
-//
-//        return em;
-//    }
     @Override
     public T computeOpeningStock(T forecast) {
         T prev = getPreviousMonthProduction(forecast);
@@ -547,13 +537,14 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
 //        );
 //
 //        Long sharedOilPeriod = getEntityManager().createQuery(q).getSingleResult();
+       Contract toFind = new Contract(contract.getFiscalArrangement(), contract.getCrudeType());
 
         LOG.log(Level.INFO, "Entity type is {0}...", entityClass);
 
         TypedQuery<Long> query = getEntityManager().createQuery(
                 "SELECT COUNT(f) "
                 + "FROM AlternativeFundingForecast f  WHERE f.contract = :contract AND f.sharedOil != null", Long.class);
-        query.setParameter("contract", contract);
+        query.setParameter("contract", toFind);
 
         long sharedOilPeriod = query.getSingleResult();
 

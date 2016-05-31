@@ -31,4 +31,10 @@ public interface AbstractCrudServices<T> {
     public void create(List<T> entityList);
 
     public void edit(List<T> entityList);
+    
+    public void flush();
+    
+    public T merge (T t);
+    
+    public void refresh(T t);
 }

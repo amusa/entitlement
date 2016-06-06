@@ -293,6 +293,11 @@ public class JvForecastController implements Serializable {
 
     public void setCurrentContract(Contract currentContract) {
         this.currentContract = currentContract;
+        if (contractBean.isPersist(currentContract)) {
+            LOG.log(Level.INFO, "Yeh!, {0} is persisting...", currentContract);
+        } else {
+            LOG.log(Level.INFO, "Ooh!, {0} is not persisting...", currentContract);
+        }
     }
 
     public SelectItem[] getContractSelectOne() {
@@ -304,6 +309,16 @@ public class JvForecastController implements Serializable {
 
         return JsfUtil.getSelectItems(contracts, true);
 
+    }
+
+    public List<Contract> getContractList() {
+        List<Contract> contracts = null;
+
+        if (currentFiscalArrangement != null) {
+            contracts = contractBean.findFiscalArrangementContracts(currentFiscalArrangement);
+        }
+
+        return contracts;
     }
 
     public Double getDailySum() {
@@ -396,11 +411,17 @@ public class JvForecastController implements Serializable {
     }
 
     private void setEmbeddableKeys() {
-        ForecastPK fPK = new ForecastPK(periodYear, periodMonth, currentContract);
+        // ForecastPK fPK = new ForecastPK(periodYear, periodMonth, currentContract);
         // currentProduction.setForecastPK(fPK);
         currentProduction.setPeriodYear(periodYear);
         currentProduction.setPeriodMonth(periodMonth);
-        contractBean.refresh(currentContract);
+//        contractBean.refresh(currentContract);
+
+        if (contractBean.isPersist(currentContract)) {
+            LOG.log(Level.INFO, "Yeh!, {0} is persisting...", currentContract);
+        } else {
+            LOG.log(Level.INFO, "Ooh!, {0} is not persisting...", currentContract);
+        }
         currentProduction.setContract(currentContract);
     }
 

@@ -37,4 +37,6 @@ public interface AbstractCrudServices<T> {
     public T merge (T t);
     
     public void refresh(T t);
+    
+    public boolean isPersist(T t);
 }

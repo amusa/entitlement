@@ -101,4 +101,11 @@ public abstract class AbstractCrudServicesImpl<T> implements AbstractCrudService
         getEntityManager().refresh(t);
     }
 
+    @Override
+    public boolean isPersist(T t){
+        return getEntityManager().contains(t);
+    }
+    
+    
+
 }

@@ -70,7 +70,8 @@ public class JvForecastController implements Serializable {
     @EJB
     private JvModifiedCarryForecastServices mcaForecastBean;
 
-    @EJB
+    //@EJB
+    @Inject
     private ContractServices contractBean;
 
     private Forecast currentProduction;
@@ -297,6 +298,7 @@ public class JvForecastController implements Serializable {
             LOG.log(Level.INFO, "Yeh!, {0} is persisting...", currentContract);
         } else {
             LOG.log(Level.INFO, "Ooh!, {0} is not persisting...", currentContract);
+            contractBean.flush();
         }
     }
 
@@ -384,18 +386,22 @@ public class JvForecastController implements Serializable {
         return (getCurrentProduction() instanceof AlternativeFundingForecast);
     }
 
-    public void currentContractChanged() {
+    public void currentContractChanged() throws Exception {
         LOG.log(Level.INFO, "Contract Selected...{0}", currentContract);
+
         if (currentContract instanceof RegularContract) {
+            LOG.log(Level.INFO, "Regular Contract Selected...{0}", currentContract);
             currentProduction = new RegularForecast();
         } else if (currentContract instanceof CarryContract) {
+            LOG.log(Level.INFO, "Carry Contract Selected...{0}", currentContract);
             currentProduction = new CarryForecast();
         } else if (currentContract instanceof ModifiedCarryContract) {
+            LOG.log(Level.INFO, "Modified Carry Contract Selected...{0}", currentContract);
             currentProduction = new ModifiedCarryForecast();
         } else {
             LOG.log(Level.INFO, "Undefined contract selection...{0}", currentContract);
-            //throw new Exception("Undefined contract type");
-            currentProduction = new RegularForecast();
+            throw new Exception("Undefined contract type");
+            //currentProduction = new RegularForecast();
         }
 
         if (currentProduction != null) {
@@ -454,7 +460,24 @@ public class JvForecastController implements Serializable {
             String values[] = value.split(SEPARATOR_NEXT_ESCAPED);
             FiscalArrangement fa = new FiscalArrangement(Long.valueOf(values[0]));
             CrudeType ct = new CrudeType(values[1]);
-            Contract key = new Contract(fa, ct);
+            Contract key = null;
+            
+            LOG.log(Level.INFO,"Deconstructing Contract {0} from string {1}", new Object[]{values[2], value});
+
+            switch (values[2]) {
+                case "RegularContract":
+                    key = new RegularContract(fa, ct);
+                    break;
+                case "CarryContract":
+                    key = new CarryContract(fa, ct);
+                    break;
+                case "ModifiedCarryContract":
+                    key = new ModifiedCarryContract(fa, ct);
+                    break;
+                default:                    
+                    break;                    
+            }
+
             return key;
         }
 
@@ -473,7 +496,10 @@ public class JvForecastController implements Serializable {
             StringBuilder sb = new StringBuilder();
             sb.append(value.getFiscalArrangement().getId())
                     .append(SEPARATOR_NEXT)
-                    .append(value.getCrudeType().getCode());
+                    .append(value.getCrudeType().getCode())
+                    .append(SEPARATOR_NEXT)
+                    .append(value.getClass());
+
             return sb.toString();
         }
 

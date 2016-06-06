@@ -13,7 +13,10 @@ import com.nnpcgroup.cosm.entity.EquityType;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
 import com.nnpcgroup.cosm.entity.FiscalPeriod;
 import com.nnpcgroup.cosm.entity.JointVenture;
+import com.nnpcgroup.cosm.entity.contract.CarryContract;
 import com.nnpcgroup.cosm.entity.contract.ContractPK;
+import com.nnpcgroup.cosm.entity.contract.ModifiedCarryContract;
+import com.nnpcgroup.cosm.entity.contract.RegularContract;
 import com.nnpcgroup.cosm.entity.forecast.jv.Forecast;
 import com.nnpcgroup.cosm.entity.forecast.jv.ForecastPK;
 import java.io.Serializable;
@@ -185,7 +188,17 @@ public abstract class JvForecastServicesImpl<T extends Forecast> extends CommonS
         int month = forecast.getPeriodMonth();
         int year = forecast.getPeriodYear();
         Contract cs = forecast.getContract();
-        Contract contract = new Contract(cs.getFiscalArrangement(), cs.getCrudeType());
+        LOG.log(Level.INFO,"class of forecast Contract {0} is {1}", new Object[]{cs, cs.getClass()});
+        Contract contract = null;
+        
+        if (cs instanceof RegularContract) {
+             contract = new RegularContract(cs.getFiscalArrangement(), cs.getCrudeType());
+        } else if (cs instanceof CarryContract) {
+            contract = new CarryContract(cs.getFiscalArrangement(), cs.getCrudeType());
+        } else if (contract instanceof ModifiedCarryContract) {
+            contract = new ModifiedCarryContract(cs.getFiscalArrangement(), cs.getCrudeType());
+        }
+
         FiscalPeriod prevFp = getPreviousFiscalPeriod(year, month);
 
         T f = find(new ForecastPK(prevFp.getYear(), prevFp.getMonth(), contract));

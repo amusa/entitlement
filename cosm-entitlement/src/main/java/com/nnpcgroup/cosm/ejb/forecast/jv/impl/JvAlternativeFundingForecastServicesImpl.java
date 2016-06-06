@@ -10,7 +10,9 @@ import com.nnpcgroup.cosm.ejb.forecast.jv.JvAlternativeFundingForecastServices;
 import com.nnpcgroup.cosm.entity.Price;
 import com.nnpcgroup.cosm.entity.PricePK;
 import com.nnpcgroup.cosm.entity.contract.AlternativeFundingContract;
+import com.nnpcgroup.cosm.entity.contract.CarryContract;
 import com.nnpcgroup.cosm.entity.contract.Contract;
+import com.nnpcgroup.cosm.entity.contract.ModifiedCarryContract;
 import com.nnpcgroup.cosm.entity.forecast.jv.AlternativeFundingForecast;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -537,7 +539,12 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
 //        );
 //
 //        Long sharedOilPeriod = getEntityManager().createQuery(q).getSingleResult();
-       Contract toFind = new Contract(contract.getFiscalArrangement(), contract.getCrudeType());
+        Contract toFind = null;
+        if (contract instanceof CarryContract) {
+            toFind = new CarryContract(contract.getFiscalArrangement(), contract.getCrudeType());
+        } else if (contract instanceof ModifiedCarryContract) {
+            toFind = new ModifiedCarryContract(contract.getFiscalArrangement(), contract.getCrudeType());
+        }
 
         LOG.log(Level.INFO, "Entity type is {0}...", entityClass);
 

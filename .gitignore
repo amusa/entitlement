@@ -21,3 +21,6 @@ cosm-entitlement/target/
 cosm-admin/nb-configuration.xml
 cosm-entitlement/nb-configuration.xml
 cosm-lifting/nb-configuration.xml
+
+/.idea/
+*.iml

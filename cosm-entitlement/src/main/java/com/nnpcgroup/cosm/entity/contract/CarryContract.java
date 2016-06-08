@@ -5,6 +5,8 @@
  */
 package com.nnpcgroup.cosm.entity.contract;
 
+import com.nnpcgroup.cosm.entity.CrudeType;
+import com.nnpcgroup.cosm.entity.FiscalArrangement;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
@@ -15,7 +17,14 @@ import javax.persistence.Entity;
 @Entity
 @DiscriminatorValue("CA")
 public class CarryContract extends AlternativeFundingContract {
-    
+
     private static final long serialVersionUID = 7743736261443373185L;
-    
+
+    public CarryContract() {
+    }
+
+    public CarryContract(FiscalArrangement fiscalArrangement, CrudeType crudeType) {
+        super(fiscalArrangement, crudeType);
+    }
+
 }

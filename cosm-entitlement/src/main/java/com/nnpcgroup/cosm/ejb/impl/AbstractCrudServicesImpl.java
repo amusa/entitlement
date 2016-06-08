@@ -77,7 +77,7 @@ public abstract class AbstractCrudServicesImpl<T> implements AbstractCrudService
         });
 
     }
-    
+
     @Override
     public void edit(List<T> entityList) {
         entityList.stream().forEach((e) -> {
@@ -85,5 +85,27 @@ public abstract class AbstractCrudServicesImpl<T> implements AbstractCrudService
         });
 
     }
+
+    @Override
+    public void flush() {
+        getEntityManager().flush();
+    }
+    
+    @Override
+    public T merge (T t){
+        return getEntityManager().merge(t);
+    }
+
+    @Override
+    public void refresh(T t) {
+        getEntityManager().refresh(t);
+    }
+
+    @Override
+    public boolean isPersist(T t){
+        return getEntityManager().contains(t);
+    }
+    
+    
 
 }

@@ -6,18 +6,17 @@
 package com.nnpcgroup.cosm.entity.forecast.jv;
 
 import com.nnpcgroup.cosm.entity.contract.Contract;
-import com.nnpcgroup.cosm.entity.contract.ContractPK;
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.persistence.Embeddable;
+import javax.persistence.CascadeType;
+import org.hibernate.annotations.Cascade;
 
 /**
  *
  * @author 18359
  */
-//@Embeddable
 public class ForecastPK implements Serializable {
 
     private static final long serialVersionUID = -5632726719147425922L;

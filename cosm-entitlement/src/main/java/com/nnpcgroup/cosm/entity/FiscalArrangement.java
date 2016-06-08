@@ -76,12 +76,17 @@ public class FiscalArrangement implements Serializable {
     public void setContracts(List<Contract> contracts) {
         this.contracts = contracts;
     }
+    
+    @Override
+    public String toString() {
+        return title;
+    }
 
     @Override
     public int hashCode() {
-        int hash = 5;
-        hash = 11 * hash + Objects.hashCode(this.id);
-        hash = 11 * hash + Objects.hashCode(this.title);
+        int hash = 3;
+        hash = 29 * hash + Objects.hashCode(this.id);
+        hash = 29 * hash + Objects.hashCode(this.title);
         return hash;
     }
 
@@ -105,10 +110,7 @@ public class FiscalArrangement implements Serializable {
         }
         return true;
     }
-
-    @Override
-    public String toString() {
-        return title;
-    }
+    
+    
 
 }

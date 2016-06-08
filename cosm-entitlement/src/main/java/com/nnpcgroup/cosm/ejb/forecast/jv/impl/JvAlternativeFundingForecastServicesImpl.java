@@ -10,15 +10,15 @@ import com.nnpcgroup.cosm.ejb.forecast.jv.JvAlternativeFundingForecastServices;
 import com.nnpcgroup.cosm.entity.Price;
 import com.nnpcgroup.cosm.entity.PricePK;
 import com.nnpcgroup.cosm.entity.contract.AlternativeFundingContract;
+import com.nnpcgroup.cosm.entity.contract.CarryContract;
 import com.nnpcgroup.cosm.entity.contract.Contract;
+import com.nnpcgroup.cosm.entity.contract.ModifiedCarryContract;
 import com.nnpcgroup.cosm.entity.forecast.jv.AlternativeFundingForecast;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.enterprise.context.Dependent;
-import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -40,18 +40,10 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
     @EJB
     PriceBean priceBean;
 
-//    @PersistenceContext(unitName = "entitlementPU")
-//    private EntityManager em;
     public JvAlternativeFundingForecastServicesImpl(Class<T> entityClass) {
         super(entityClass);
     }
 
-//    @Override
-//    protected EntityManager getEntityManager() {
-//        LOG.info("returning entityManager...");
-//
-//        return em;
-//    }
     @Override
     public T computeOpeningStock(T forecast) {
         T prev = getPreviousMonthProduction(forecast);
@@ -547,13 +539,19 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
 //        );
 //
 //        Long sharedOilPeriod = getEntityManager().createQuery(q).getSingleResult();
+        Contract toFind = null;
+        if (contract instanceof CarryContract) {
+            toFind = new CarryContract(contract.getFiscalArrangement(), contract.getCrudeType());
+        } else if (contract instanceof ModifiedCarryContract) {
+            toFind = new ModifiedCarryContract(contract.getFiscalArrangement(), contract.getCrudeType());
+        }
 
         LOG.log(Level.INFO, "Entity type is {0}...", entityClass);
 
         TypedQuery<Long> query = getEntityManager().createQuery(
                 "SELECT COUNT(f) "
                 + "FROM AlternativeFundingForecast f  WHERE f.contract = :contract AND f.sharedOil != null", Long.class);
-        query.setParameter("contract", contract);
+        query.setParameter("contract", toFind);
 
         long sharedOilPeriod = query.getSingleResult();
 

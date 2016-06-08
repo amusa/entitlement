@@ -9,13 +9,11 @@ import com.nnpcgroup.cosm.entity.CrudeType;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
 import java.io.Serializable;
 import java.util.Objects;
-import javax.persistence.Embeddable;
 
 /**
  *
  * @author 18359
  */
-//@Embeddable
 public class ContractPK implements Serializable {
 
     private static final long serialVersionUID = 1L;

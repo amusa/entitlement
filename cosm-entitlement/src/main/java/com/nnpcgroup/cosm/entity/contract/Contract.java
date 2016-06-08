@@ -9,12 +9,10 @@ import com.nnpcgroup.cosm.entity.CrudeType;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
 import java.io.Serializable;
 import java.util.Objects;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.ManyToOne;
-import javax.persistence.MapsId;
 import javax.persistence.Table;
 
 /**
@@ -24,7 +22,7 @@ import javax.persistence.Table;
 @Entity
 @IdClass(ContractPK.class)
 @Table(name = "CONTRACT")
-public class Contract implements Serializable {
+public abstract class Contract implements Serializable {
 
     private static final long serialVersionUID = 4374185291370537475L;
 
@@ -34,32 +32,29 @@ public class Contract implements Serializable {
     public Contract() {
     }
 
-    public Contract(FiscalArrangement fiscalArrangement, CrudeType crudeType) {
-        this.fiscalArrangement = fiscalArrangement;
-        this.crudeType = crudeType;
-    }
-    
-    
     @Id
     @ManyToOne
-    //@MapsId("crudeTypeCode")
-    public CrudeType getCrudeType() {
-        return crudeType;
-    }
-
-    public void setCrudeType(CrudeType crudeType) {
-        this.crudeType = crudeType;
-    }
-
-    @Id
-    @ManyToOne
-    //@MapsId("fiscalArrangementId")
     public FiscalArrangement getFiscalArrangement() {
         return fiscalArrangement;
     }
 
     public void setFiscalArrangement(FiscalArrangement fiscalArrangement) {
         this.fiscalArrangement = fiscalArrangement;
+    }
+
+    public Contract(FiscalArrangement fiscalArrangement, CrudeType crudeType) {
+        this.fiscalArrangement = fiscalArrangement;
+        this.crudeType = crudeType;
+    }
+
+    @Id
+    @ManyToOne
+    public CrudeType getCrudeType() {
+        return crudeType;
+    }
+
+    public void setCrudeType(CrudeType crudeType) {
+        this.crudeType = crudeType;
     }
 
     @Override

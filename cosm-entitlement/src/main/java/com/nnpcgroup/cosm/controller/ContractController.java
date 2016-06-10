@@ -95,6 +95,10 @@ public class ContractController implements Serializable {
     }
 
     protected void setEmbeddableKeys() {
+        if(selected!=null){
+            selected.setFiscalArrangementId(selected.getFiscalArrangement().getId());
+            selected.setCrudeTypeCode(selected.getCrudeType().getCode());
+        }
     }
 
     protected void initializeEmbeddableKey() {
@@ -234,9 +238,9 @@ public class ContractController implements Serializable {
         ContractPK getKey(String value) {
             ContractPK key;
             String values[] = value.split(SEPARATOR_ESCAPED);
-            FiscalArrangement fa = new FiscalArrangement(Long.valueOf(values[0]));
-            CrudeType ct = new CrudeType(values[1]);
-            key = new ContractPK(fa, ct);
+            Long fiscalArrangementId = Long.valueOf(values[0]);
+            String crudeTypeCode = values[1];
+            key = new ContractPK(fiscalArrangementId, crudeTypeCode);
             return key;
         }
 

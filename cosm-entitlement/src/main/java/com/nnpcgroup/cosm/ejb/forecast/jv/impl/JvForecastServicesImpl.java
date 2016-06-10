@@ -8,11 +8,8 @@ package com.nnpcgroup.cosm.ejb.forecast.jv.impl;
 import com.nnpcgroup.cosm.controller.GeneralController;
 import com.nnpcgroup.cosm.ejb.forecast.jv.JvForecastServices;
 import com.nnpcgroup.cosm.ejb.impl.CommonServicesImpl;
+import com.nnpcgroup.cosm.entity.*;
 import com.nnpcgroup.cosm.entity.contract.Contract;
-import com.nnpcgroup.cosm.entity.EquityType;
-import com.nnpcgroup.cosm.entity.FiscalArrangement;
-import com.nnpcgroup.cosm.entity.FiscalPeriod;
-import com.nnpcgroup.cosm.entity.JointVenture;
 import com.nnpcgroup.cosm.entity.contract.CarryContract;
 import com.nnpcgroup.cosm.entity.contract.ContractPK;
 import com.nnpcgroup.cosm.entity.contract.ModifiedCarryContract;
@@ -188,20 +185,25 @@ public abstract class JvForecastServicesImpl<T extends Forecast> extends CommonS
         int month = forecast.getPeriodMonth();
         int year = forecast.getPeriodYear();
         Contract cs = forecast.getContract();
+        ContractPK cPK = new ContractPK();
+        cPK.setFiscalArrangementId(cs.getFiscalArrangement().getId());
+        cPK.setCrudeTypeCode(cs.getCrudeType().getCode());
         LOG.log(Level.INFO,"class of forecast Contract {0} is {1}", new Object[]{cs, cs.getClass()});
-        Contract contract = null;
+       // Contract contract = cs;
         
-        if (cs instanceof RegularContract) {
-             contract = new RegularContract(cs.getFiscalArrangement(), cs.getCrudeType());
-        } else if (cs instanceof CarryContract) {
-            contract = new CarryContract(cs.getFiscalArrangement(), cs.getCrudeType());
-        } else if (contract instanceof ModifiedCarryContract) {
-            contract = new ModifiedCarryContract(cs.getFiscalArrangement(), cs.getCrudeType());
-        }
+//        if (cs instanceof RegularContract) {
+//            FiscalArrangement fa = new FiscalArrangement(cs.getFiscalArrangement().getId());
+//            CrudeType ct = new CrudeType(cs.getCrudeType().getCode());
+//             contract = new RegularContract(fa, ct);
+//        } else if (cs instanceof CarryContract) {
+//            contract = new CarryContract(cs.getFiscalArrangement(), cs.getCrudeType());
+//        } else if (contract instanceof ModifiedCarryContract) {
+//            contract = new ModifiedCarryContract(cs.getFiscalArrangement(), cs.getCrudeType());
+//        }
 
         FiscalPeriod prevFp = getPreviousFiscalPeriod(year, month);
 
-        T f = find(new ForecastPK(prevFp.getYear(), prevFp.getMonth(), contract));
+        T f = find(new ForecastPK(prevFp.getYear(), prevFp.getMonth(), cs.getFiscalArrangement().getId(), cs.getCrudeType().getCode()));
         //T f = findByContractPeriod(prevFp.getYear(), prevFp.getMonth(), cs);
 
         return f;

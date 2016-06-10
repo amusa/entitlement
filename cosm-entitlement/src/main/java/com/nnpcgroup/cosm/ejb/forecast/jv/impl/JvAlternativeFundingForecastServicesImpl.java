@@ -541,9 +541,9 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
 //        Long sharedOilPeriod = getEntityManager().createQuery(q).getSingleResult();
         Contract toFind = null;
         if (contract instanceof CarryContract) {
-            toFind = new CarryContract(contract.getFiscalArrangement(), contract.getCrudeType());
+            toFind = new CarryContract(contract.getFiscalArrangement().getId(), contract.getCrudeType().getCode());
         } else if (contract instanceof ModifiedCarryContract) {
-            toFind = new ModifiedCarryContract(contract.getFiscalArrangement(), contract.getCrudeType());
+            toFind = new ModifiedCarryContract(contract.getFiscalArrangement().getId(), contract.getCrudeType().getCode());
         }
 
         LOG.log(Level.INFO, "Entity type is {0}...", entityClass);

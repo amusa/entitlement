@@ -6,6 +6,7 @@
 package com.nnpcgroup.cosm.ejb.forecast.jv.impl;
 
 import com.nnpcgroup.cosm.controller.GeneralController;
+import com.nnpcgroup.cosm.ejb.FiscalArrangementBean;
 import com.nnpcgroup.cosm.ejb.forecast.jv.JvForecastServices;
 import com.nnpcgroup.cosm.ejb.impl.CommonServicesImpl;
 import com.nnpcgroup.cosm.entity.*;
@@ -19,6 +20,7 @@ import com.nnpcgroup.cosm.entity.forecast.jv.ForecastPK;
 import java.io.Serializable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.ejb.EJB;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
@@ -34,6 +36,9 @@ public abstract class JvForecastServicesImpl<T extends Forecast> extends CommonS
 
     @Inject
     GeneralController genController;
+
+    @EJB
+    FiscalArrangementBean fiscalBean;
 
     public JvForecastServicesImpl(Class<T> entityClass) {
         super(entityClass);
@@ -120,7 +125,8 @@ public abstract class JvForecastServicesImpl<T extends Forecast> extends CommonS
         FiscalArrangement fa;
         JointVenture jv;
 
-        fa = production.getContract().getFiscalArrangement();
+       // fa = production.getContract().getFiscalArrangement();
+        fa = fiscalBean.find(production.getFiscalArrangementId());
 
         assert (fa instanceof JointVenture);
 
@@ -184,11 +190,11 @@ public abstract class JvForecastServicesImpl<T extends Forecast> extends CommonS
     public T getPreviousMonthProduction(T forecast) {
         int month = forecast.getPeriodMonth();
         int year = forecast.getPeriodYear();
-        Contract cs = forecast.getContract();
-        ContractPK cPK = new ContractPK();
-        cPK.setFiscalArrangementId(cs.getFiscalArrangement().getId());
-        cPK.setCrudeTypeCode(cs.getCrudeType().getCode());
-        LOG.log(Level.INFO,"class of forecast Contract {0} is {1}", new Object[]{cs, cs.getClass()});
+//        Contract cs = forecast.getContract();
+//        ContractPK cPK = new ContractPK();
+//        cPK.setFiscalArrangementId(forecast.getFiscalArrangementId());
+//        cPK.setCrudeTypeCode(forecast.getCrudeTypeCode());
+        //LOG.log(Level.INFO,"class of forecast Contract {0} is {1}", new Object[]{cs, cs.getClass()});
        // Contract contract = cs;
         
 //        if (cs instanceof RegularContract) {
@@ -203,7 +209,7 @@ public abstract class JvForecastServicesImpl<T extends Forecast> extends CommonS
 
         FiscalPeriod prevFp = getPreviousFiscalPeriod(year, month);
 
-        T f = find(new ForecastPK(prevFp.getYear(), prevFp.getMonth(), cs.getFiscalArrangement().getId(), cs.getCrudeType().getCode()));
+        T f = find(new ForecastPK(prevFp.getYear(), prevFp.getMonth(), forecast.getFiscalArrangementId(), forecast.getCrudeTypeCode()));
         //T f = findByContractPeriod(prevFp.getYear(), prevFp.getMonth(), cs);
 
         return f;

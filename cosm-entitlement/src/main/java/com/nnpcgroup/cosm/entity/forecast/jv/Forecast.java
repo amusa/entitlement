@@ -16,7 +16,6 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 /**
- *
  * @author 18359
  */
 @Entity
@@ -32,8 +31,8 @@ public abstract class Forecast implements Serializable {
 
     private Integer periodYear;
     private Integer periodMonth;
-  //  private ContractPK contractPK;
-  private Long fiscalArrangementId;
+    //  private ContractPK contractPK;
+    private Long fiscalArrangementId;
     private String crudeTypeCode;
     private Contract contract;
     private Double openingStock;
@@ -93,8 +92,8 @@ public abstract class Forecast implements Serializable {
 
     @ManyToOne
     @JoinColumns({
-            @JoinColumn(name = "FISCALARRANGEMENTID", referencedColumnName = "FISCALARRANGEMENTID", updatable = false, insertable = false),
-            @JoinColumn(name = "CRUDETYPECODE", referencedColumnName = "CRUDETYPECODE", updatable = false, insertable = false)
+            @JoinColumn(name = "FISCALARRANGEMENTID", referencedColumnName = "FISCALARRANGEMENTID", insertable = false, updatable = false),
+            @JoinColumn(name = "CRUDETYPECODE", referencedColumnName = "CRUDETYPECODE", insertable = false, updatable = false)
     })
     public Contract getContract() {
         return contract;

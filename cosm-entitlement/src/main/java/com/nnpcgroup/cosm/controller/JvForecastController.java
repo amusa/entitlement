@@ -191,8 +191,8 @@ public class JvForecastController implements Serializable {
             LOG.log(Level.INFO, "Persisting Forecast Year={0}, Month={1}, FiscalArr={2}, CrudeType={3}",
                     new Object[]{currentProduction.getPeriodYear(),
                         currentProduction.getPeriodMonth(),
-                        currentProduction.getContract().getFiscalArrangement(),
-                        currentProduction.getContract().getCrudeType()});
+                        currentProduction.getFiscalArrangementId(),
+                        currentProduction.getCrudeTypeCode()});
             try {
                 if (persistAction != JsfUtil.PersistAction.DELETE) {
                     getForecastBean().edit(currentProduction);
@@ -419,7 +419,7 @@ public class JvForecastController implements Serializable {
     private void setEmbeddableKeys() {
         currentProduction.setPeriodYear(periodYear);
         currentProduction.setPeriodMonth(periodMonth);
-        currentProduction.setContract(currentContract);
+      //  currentProduction.setContract(currentContract);
         currentProduction.setFiscalArrangementId(currentContract.getFiscalArrangementId());
         currentProduction.setCrudeTypeCode(currentContract.getCrudeTypeCode());
 

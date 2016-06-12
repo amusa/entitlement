@@ -6,18 +6,18 @@
 package com.nnpcgroup.cosm.controller;
 
 import com.nnpcgroup.cosm.controller.util.JsfUtil;
+import com.nnpcgroup.cosm.ejb.contract.ContractBaseServices;
 import com.nnpcgroup.cosm.ejb.contract.ContractServices;
+import com.nnpcgroup.cosm.ejb.contract.RegularContractServices;
 import com.nnpcgroup.cosm.ejb.forecast.jv.JvAlternativeFundingForecastServices;
 import com.nnpcgroup.cosm.ejb.forecast.jv.JvModifiedCarryForecastServices;
 import com.nnpcgroup.cosm.ejb.forecast.jv.JvCarryForecastServices;
 import com.nnpcgroup.cosm.ejb.forecast.jv.JvForecast;
 import com.nnpcgroup.cosm.ejb.forecast.jv.JvForecastServices;
 import com.nnpcgroup.cosm.ejb.forecast.jv.JvRegularForecastServices;
-import com.nnpcgroup.cosm.entity.CrudeType;
 import com.nnpcgroup.cosm.entity.contract.CarryContract;
 import com.nnpcgroup.cosm.entity.contract.Contract;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
-import com.nnpcgroup.cosm.entity.contract.ContractPK;
 import com.nnpcgroup.cosm.entity.contract.ModifiedCarryContract;
 import com.nnpcgroup.cosm.entity.contract.RegularContract;
 import com.nnpcgroup.cosm.entity.forecast.jv.AlternativeFundingForecast;
@@ -37,10 +37,6 @@ import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.enterprise.context.SessionScoped;
 import javax.enterprise.inject.Produces;
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
-import javax.faces.convert.Converter;
-import javax.faces.convert.FacesConverter;
 import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 
@@ -73,6 +69,9 @@ public class JvForecastController implements Serializable {
     //@EJB
     @Inject
     private ContractServices contractBean;
+
+    @Inject
+    RegularContractServices regularContractBean;
 
     private Forecast currentProduction;
 
@@ -428,7 +427,6 @@ public class JvForecastController implements Serializable {
         } else {
             LOG.log(Level.INFO, "Ooh!, {0} is not persisting...", currentContract);
         }
-
     }
 
 //    @FacesConverter(forClass = Forecast.class)

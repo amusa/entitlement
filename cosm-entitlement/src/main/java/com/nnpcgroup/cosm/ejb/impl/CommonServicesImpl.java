@@ -23,6 +23,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import com.nnpcgroup.cosm.ejb.CommonServices;
 import com.nnpcgroup.cosm.entity.FiscalPeriod;
+import javax.persistence.TypedQuery;
 
 /**
  *
@@ -108,7 +109,7 @@ public abstract class CommonServicesImpl<T> extends AbstractCrudServicesImpl<T> 
         CriteriaQuery cq = cb.createQuery();
         Root<T> e = cq.from(entityClass);
         try {
-            
+
             cq.select(e).where(
                     cb.and(cb.equal(e.get("periodYear"), year),
                             cb.equal(e.get("periodMonth"), month),
@@ -174,15 +175,15 @@ public abstract class CommonServicesImpl<T> extends AbstractCrudServicesImpl<T> 
 
         List<T> productions;
 
-        CriteriaQuery cq = cb.createQuery();
-        Root e = cq.from(entityClass);
+        CriteriaQuery<T> cq = cb.createQuery(entityClass);
+        Root<T> e = cq.from(entityClass);
         try {
-            cq.where(
+            cq.select(e).where(
                     cb.and(cb.equal(e.get("periodYear"), year),
                             cb.equal(e.get("periodMonth"), month),
-                            cb.equal(e.get("contract")
-                                    .get("crudeType")
-                                    .get("terminal"), terminal)
+                           // cb.equal(e.get("contract")
+                                    cb.equal(e.get("crudeTypeCode"),terminal.getCrudeType().getCode())
+                                  //  .get("terminal"), terminal)
                     ));
 
             Query query = getEntityManager().createQuery(cq);

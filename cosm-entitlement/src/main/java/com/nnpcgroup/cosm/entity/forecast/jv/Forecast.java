@@ -31,7 +31,6 @@ public abstract class Forecast implements Serializable {
 
     private Integer periodYear;
     private Integer periodMonth;
-    //  private ContractPK contractPK;
     private Long fiscalArrangementId;
     private String crudeTypeCode;
     private Contract contract;

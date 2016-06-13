@@ -7,6 +7,7 @@ package com.nnpcgroup.cosm.controller;
 
 import com.nnpcgroup.cosm.controller.util.JsfUtil;
 import com.nnpcgroup.cosm.ejb.contract.ContractBaseServices;
+import com.nnpcgroup.cosm.ejb.contract.ContractServices;
 import com.nnpcgroup.cosm.ejb.production.jv.AlternativeFundingProductionServices;
 import com.nnpcgroup.cosm.ejb.production.jv.CarryProductionServices;
 import com.nnpcgroup.cosm.ejb.production.jv.JvProduction;
@@ -72,7 +73,7 @@ public class JvProductionController implements Serializable {
     private ModifiedCarryProductionServices mcaProductionBean;
 
     @EJB
-    private ContractBaseServices contractBean;
+    private ContractServices contractBean;
 
     private Production currentProduction;
     private List<Production> productions;

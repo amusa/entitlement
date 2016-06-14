@@ -402,6 +402,7 @@ public class JvForecastController implements Serializable {
             LOG.log(Level.INFO, "Undefined contract selection...{0}", currentContract);
             throw new Exception("Undefined contract type");
             //currentProduction = new RegularForecast();
+            
         }
 
         if (currentProduction != null) {
@@ -431,92 +432,92 @@ public class JvForecastController implements Serializable {
         currentProduction.setContract(currentContract);
     }
 
-    @FacesConverter(forClass = Forecast.class)
-    public static class ForecastControllerConverter implements Converter {
-
-        private static final String SEPARATOR = "#";
-        private static final String SEPARATOR_ESCAPED = "\\#";
-        private static final String SEPARATOR_NEXT = "!";
-        private static final String SEPARATOR_NEXT_ESCAPED = "\\!";
-
-        @Override
-        public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
-            if (value == null || value.length() == 0) {
-                return null;
-            }
-            JvForecastController controller = (JvForecastController) facesContext.getApplication().getELResolver().
-                    getValue(facesContext.getELContext(), null, "jvProdController");
-            return controller.getContract(getKey(value));
-        }
-
-        ForecastPK getKey(String value) {
-            ForecastPK key;
-            String values[] = value.split(SEPARATOR_ESCAPED);
-            key = new ForecastPK(Integer.parseInt(values[0]), Integer.parseInt(values[1]), getContract(values[2]));
-            return key;
-        }
-
-        Contract getContract(String value) {
-            String values[] = value.split(SEPARATOR_NEXT_ESCAPED);
-            FiscalArrangement fa = new FiscalArrangement(Long.valueOf(values[0]));
-            CrudeType ct = new CrudeType(values[1]);
-            Contract key = null;
-            
-            LOG.log(Level.INFO,"Deconstructing Contract {0} from string {1}", new Object[]{values[2], value});
-
-            switch (values[2]) {
-                case "RegularContract":
-                    key = new RegularContract(fa, ct);
-                    break;
-                case "CarryContract":
-                    key = new CarryContract(fa, ct);
-                    break;
-                case "ModifiedCarryContract":
-                    key = new ModifiedCarryContract(fa, ct);
-                    break;
-                default:                    
-                    break;                    
-            }
-
-            return key;
-        }
-
-        String getStringKey(Forecast value) {
-            StringBuilder sb = new StringBuilder();
-            sb.append(value.getPeriodYear());
-            sb.append(SEPARATOR);
-            sb.append(value.getPeriodMonth());
-            sb.append(SEPARATOR);
-            sb.append(makeContractString(value.getContract())
-            );
-            return sb.toString();
-        }
-
-        private String makeContractString(Contract value) {
-            StringBuilder sb = new StringBuilder();
-            sb.append(value.getFiscalArrangement().getId())
-                    .append(SEPARATOR_NEXT)
-                    .append(value.getCrudeType().getCode())
-                    .append(SEPARATOR_NEXT)
-                    .append(value.getClass());
-
-            return sb.toString();
-        }
-
-        @Override
-        public String getAsString(FacesContext facesContext, UIComponent component, Object object) {
-            if (object == null) {
-                return null;
-            }
-            if (object instanceof Forecast) {
-                Forecast o = (Forecast) object;
-                return getStringKey(o);
-            } else {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), Forecast.class.getName()});
-                return null;
-            }
-        }
-
-    }
+//    @FacesConverter(forClass = Forecast.class)
+//    public static class ForecastControllerConverter implements Converter {
+//
+//        private static final String SEPARATOR = "#";
+//        private static final String SEPARATOR_ESCAPED = "\\#";
+//        private static final String SEPARATOR_NEXT = "!";
+//        private static final String SEPARATOR_NEXT_ESCAPED = "\\!";
+//
+//        @Override
+//        public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
+//            if (value == null || value.length() == 0) {
+//                return null;
+//            }
+//            JvForecastController controller = (JvForecastController) facesContext.getApplication().getELResolver().
+//                    getValue(facesContext.getELContext(), null, "jvProdController");
+//            return controller.getContract(getKey(value));
+//        }
+//
+//        ForecastPK getKey(String value) {
+//            ForecastPK key;
+//            String values[] = value.split(SEPARATOR_ESCAPED);
+//            key = new ForecastPK(Integer.parseInt(values[0]), Integer.parseInt(values[1]), getContract(values[2]));
+//            return key;
+//        }
+//
+//        Contract getContract(String value) {
+//            String values[] = value.split(SEPARATOR_NEXT_ESCAPED);
+//            FiscalArrangement fa = new FiscalArrangement(Long.valueOf(values[0]));
+//            CrudeType ct = new CrudeType(values[1]);
+//            Contract key = null;
+//            
+//            LOG.log(Level.INFO,"Deconstructing Contract {0} from string {1}", new Object[]{values[2], value});
+//
+//            switch (values[2]) {
+//                case "RegularContract":
+//                    key = new RegularContract(fa, ct);
+//                    break;
+//                case "CarryContract":
+//                    key = new CarryContract(fa, ct);
+//                    break;
+//                case "ModifiedCarryContract":
+//                    key = new ModifiedCarryContract(fa, ct);
+//                    break;
+//                default:                    
+//                    break;                    
+//            }
+//
+//            return key;
+//        }
+//
+//        String getStringKey(Forecast value) {
+//            StringBuilder sb = new StringBuilder();
+//            sb.append(value.getPeriodYear());
+//            sb.append(SEPARATOR);
+//            sb.append(value.getPeriodMonth());
+//            sb.append(SEPARATOR);
+//            sb.append(makeContractString(value.getContract())
+//            );
+//            return sb.toString();
+//        }
+//
+//        private String makeContractString(Contract value) {
+//            StringBuilder sb = new StringBuilder();
+//            sb.append(value.getFiscalArrangement().getId())
+//                    .append(SEPARATOR_NEXT)
+//                    .append(value.getCrudeType().getCode())
+//                    .append(SEPARATOR_NEXT)
+//                    .append(value.getClass());
+//
+//            return sb.toString();
+//        }
+//
+//        @Override
+//        public String getAsString(FacesContext facesContext, UIComponent component, Object object) {
+//            if (object == null) {
+//                return null;
+//            }
+//            if (object instanceof Forecast) {
+//                Forecast o = (Forecast) object;
+//                return getStringKey(o);
+//            } else {
+//                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), Forecast.class.getName()});
+//                return null;
+//            }
+//        }
+//
+//    }
 
 }

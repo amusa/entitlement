@@ -3,6 +3,7 @@ package com.nnpcgroup.cosm.controller;
 import com.nnpcgroup.cosm.entity.contract.Contract;
 import com.nnpcgroup.cosm.controller.util.JsfUtil;
 import com.nnpcgroup.cosm.controller.util.JsfUtil.PersistAction;
+import com.nnpcgroup.cosm.ejb.contract.ContractBaseServices;
 import com.nnpcgroup.cosm.ejb.contract.ContractServices;
 import com.nnpcgroup.cosm.entity.CrudeType;
 import com.nnpcgroup.cosm.entity.contract.CarryContract;
@@ -27,6 +28,7 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.model.SelectItem;
+import javax.inject.Inject;
 
 @Named("contractController")
 @SessionScoped
@@ -36,10 +38,10 @@ public class ContractController implements Serializable {
 
     private static final long serialVersionUID = 3411266588734031876L;
 
-    @EJB
+    @Inject//EJB
     private ContractServices ejbFacade;
 
-    private List<Contract> items = null;
+    private List<? extends Contract> items = null;
     private Contract selected;
     private String contractType;
     private FiscalArrangement fiscalArrangement;
@@ -100,7 +102,7 @@ public class ContractController implements Serializable {
     protected void initializeEmbeddableKey() {
     }
 
-    private ContractServices getFacade() {
+    private ContractBaseServices getFacade() {
         return ejbFacade;
     }
 
@@ -143,7 +145,7 @@ public class ContractController implements Serializable {
         }
     }
 
-    public List<Contract> getItems() {
+    public List<? extends Contract> getItems() {
         items = getFacade().findAll();
         return items;
     }
@@ -177,7 +179,7 @@ public class ContractController implements Serializable {
     }
 
     public Contract getContract(ContractPK cPK) {
-        return getFacade().find(cPK);
+        return (Contract) getFacade().find(cPK);
     }
 
     public List<Contract> getItemsAvailableSelectMany() {

@@ -188,8 +188,9 @@ public abstract class JvForecastServicesImpl<T extends Forecast> extends CommonS
         int month = forecast.getPeriodMonth();
         int year = forecast.getPeriodYear();
         Contract cs = forecast.getContract();
+       
         LOG.log(Level.INFO,"class of forecast Contract {0} is {1}", new Object[]{cs, cs.getClass()});
-        Contract contract = null;
+        Contract contract = null;//new Contract(cs.getFiscalArrangement(), cs.getCrudeType());
         
         if (cs instanceof RegularContract) {
              contract = new RegularContract(cs.getFiscalArrangement(), cs.getCrudeType());
@@ -198,10 +199,12 @@ public abstract class JvForecastServicesImpl<T extends Forecast> extends CommonS
         } else if (contract instanceof ModifiedCarryContract) {
             contract = new ModifiedCarryContract(cs.getFiscalArrangement(), cs.getCrudeType());
         }
+        
+        Contract c = (Contract)contract;
 
         FiscalPeriod prevFp = getPreviousFiscalPeriod(year, month);
 
-        T f = find(new ForecastPK(prevFp.getYear(), prevFp.getMonth(), contract));
+        T f = find(new ForecastPK(prevFp.getYear(), prevFp.getMonth(), c));
         //T f = findByContractPeriod(prevFp.getYear(), prevFp.getMonth(), cs);
 
         return f;

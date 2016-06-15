@@ -411,8 +411,7 @@ public class JvForecastController implements Serializable {
 
     private void setEmbeddableKeys() {
         currentProduction.setPeriodYear(periodYear);
-        currentProduction.setPeriodMonth(periodMonth);
-      //  currentProduction.setContract(currentContract);
+        currentProduction.setPeriodMonth(periodMonth);      
         currentProduction.setFiscalArrangementId(currentContract.getFiscalArrangementId());
         currentProduction.setCrudeTypeCode(currentContract.getCrudeTypeCode());
 

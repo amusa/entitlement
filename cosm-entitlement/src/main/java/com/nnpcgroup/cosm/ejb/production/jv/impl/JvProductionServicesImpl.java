@@ -5,6 +5,7 @@
  */
 package com.nnpcgroup.cosm.ejb.production.jv.impl;
 
+import com.nnpcgroup.cosm.ejb.FiscalArrangementBean;
 import com.nnpcgroup.cosm.ejb.impl.CommonServicesImpl;
 import com.nnpcgroup.cosm.ejb.production.jv.JvProductionServices;
 import com.nnpcgroup.cosm.entity.contract.Contract;
@@ -12,17 +13,11 @@ import com.nnpcgroup.cosm.entity.EquityType;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
 import com.nnpcgroup.cosm.entity.FiscalPeriod;
 import com.nnpcgroup.cosm.entity.JointVenture;
-import com.nnpcgroup.cosm.entity.contract.ContractPK;
 import com.nnpcgroup.cosm.entity.production.jv.Production;
 import com.nnpcgroup.cosm.entity.production.jv.ProductionPK;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.persistence.NoResultException;
-import javax.persistence.Query;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
+import javax.ejb.EJB;
 
 /**
  *
@@ -33,6 +28,9 @@ import javax.persistence.criteria.Root;
 public abstract class JvProductionServicesImpl<T extends Production, E extends Contract> extends CommonServicesImpl<T> implements JvProductionServices<T, E> {
 
     private static final Logger LOG = Logger.getLogger(JvProductionServicesImpl.class.getName());
+
+    @EJB
+    FiscalArrangementBean fiscalBean;
 
     public JvProductionServicesImpl(Class<T> entityClass) {
         super(entityClass);
@@ -58,7 +56,8 @@ public abstract class JvProductionServicesImpl<T extends Production, E extends C
         FiscalArrangement fa;
         JointVenture jv;
 
-        fa = production.getContract().getFiscalArrangement();
+//        fa = production.getContract().getFiscalArrangement();
+        fa = fiscalBean.find(production.getFiscalArrangementId());
 
         assert (fa instanceof JointVenture);
 
@@ -204,13 +203,11 @@ public abstract class JvProductionServicesImpl<T extends Production, E extends C
     public T getPreviousMonthProduction(T production) {
         int month = production.getPeriodMonth();
         int year = production.getPeriodYear();
-        Contract cs = production.getContract();
-       // ContractPK cPK = production.getProductionPK().getContractPK();
-
+        
         FiscalPeriod prevFp = getPreviousFiscalPeriod(year, month);
 
         //T prod = findByContractPeriod(prevFp.getYear(), prevFp.getMonth(), cs);
-        T prod = find(new ProductionPK(prevFp.getYear(), prevFp.getMonth(), cs));
+        T prod = find(new ProductionPK(prevFp.getYear(), prevFp.getMonth(), production.getFiscalArrangementId(), production.getCrudeTypeCode()));
 
         return prod;
 

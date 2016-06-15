@@ -6,10 +6,13 @@
 package com.nnpcgroup.cosm.ejb.production.jv.impl;
 
 import com.nnpcgroup.cosm.ejb.PriceBean;
+import com.nnpcgroup.cosm.ejb.contract.ContractServices;
 import com.nnpcgroup.cosm.ejb.production.jv.AlternativeFundingProductionServices;
 import com.nnpcgroup.cosm.entity.Price;
 import com.nnpcgroup.cosm.entity.PricePK;
 import com.nnpcgroup.cosm.entity.contract.AlternativeFundingContract;
+import com.nnpcgroup.cosm.entity.contract.Contract;
+import com.nnpcgroup.cosm.entity.contract.ContractPK;
 import com.nnpcgroup.cosm.entity.production.jv.AlternativeFundingProduction;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -32,6 +35,9 @@ public abstract class AlternativeFundingProductionServicesImpl<T extends Alterna
 
     @EJB
     PriceBean priceBean;
+
+    @EJB
+    ContractServices contractBean;
 
     public AlternativeFundingProductionServicesImpl(Class<T> entityClass) {
         super(entityClass);
@@ -168,7 +174,8 @@ public abstract class AlternativeFundingProductionServicesImpl<T extends Alterna
     }
 
     private boolean isSharedOilTerminalPeriodDue(T production) {
-        E afContract = (E) production.getContract();
+        ContractPK cPK = new ContractPK(production.getFiscalArrangementId(), production.getCrudeTypeCode());
+        E afContract = (E) contractBean.find(cPK);//production.getContract();
         Double terminalPeriod = afContract.getTerminalPeriod();
 
         if (terminalPeriod == null) {
@@ -190,7 +197,10 @@ public abstract class AlternativeFundingProductionServicesImpl<T extends Alterna
             sharedOilCum = prev.getSharedOilCum();
         }
 
-        E afContract = (E) production.getContract();
+        //E afContract = (E) production.getContract();
+        ContractPK cPK = new ContractPK(production.getFiscalArrangementId(), production.getCrudeTypeCode());
+        E afContract = (E) contractBean.find(cPK);
+        
         Double terminalSharedOil = afContract.getTerminalSharedOil();
 
         if (terminalSharedOil == null) {
@@ -215,7 +225,9 @@ public abstract class AlternativeFundingProductionServicesImpl<T extends Alterna
         Double ownEquity = production.getOwnShareEntitlement() != null ? production.getOwnShareEntitlement() : new Double(0);
         Double carryOil = production.getCarryOil() != null ? production.getCarryOil() : new Double(0);
 
-        E afContract = (E) production.getContract();
+        //E afContract = (E) production.getContract();
+        ContractPK cPK = new ContractPK(production.getFiscalArrangementId(), production.getCrudeTypeCode());
+        E afContract = (E) contractBean.find(cPK);
         Double sharedOilRatio = afContract.getSharedOilRatio();
 
         sharedOil = (ownEquity - carryOil) * sharedOilRatio * 0.01;

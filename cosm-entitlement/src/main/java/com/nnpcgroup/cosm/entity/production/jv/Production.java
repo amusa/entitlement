@@ -8,16 +8,15 @@ package com.nnpcgroup.cosm.entity.production.jv;
 import com.nnpcgroup.cosm.entity.contract.Contract;
 import java.io.Serializable;
 import java.util.Objects;
-import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
-import javax.persistence.MapsId;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -36,6 +35,8 @@ public abstract class Production implements Serializable {
 
     private Integer periodYear;
     private Integer periodMonth;
+    private Long fiscalArrangementId;
+    private String crudeTypeCode;
     private Contract contract;
     private Double openingStock;
     private Double partnerOpeningStock;
@@ -82,7 +83,28 @@ public abstract class Production implements Serializable {
     }
 
     @Id
+    public Long getFiscalArrangementId() {
+        return fiscalArrangementId;
+    }
+
+    public void setFiscalArrangementId(Long fiscalArrangementId) {
+        this.fiscalArrangementId = fiscalArrangementId;
+    }
+
+    @Id
+    public String getCrudeTypeCode() {
+        return crudeTypeCode;
+    }
+
+    public void setCrudeTypeCode(String crudeTypeCode) {
+        this.crudeTypeCode = crudeTypeCode;
+    }
+
     @ManyToOne
+    @JoinColumns({
+        @JoinColumn(name = "FISCALARRANGEMENTID", referencedColumnName = "FISCALARRANGEMENTID", insertable = false, updatable = false),
+        @JoinColumn(name = "CRUDETYPECODE", referencedColumnName = "CRUDETYPECODE", insertable = false, updatable = false)
+    })
     public Contract getContract() {
         return contract;
     }
@@ -219,6 +241,43 @@ public abstract class Production implements Serializable {
 
     public void setPartnerOverlift(Double partnerOverlift) {
         this.partnerOverlift = partnerOverlift;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 79 * hash + Objects.hashCode(this.periodYear);
+        hash = 79 * hash + Objects.hashCode(this.periodMonth);
+        hash = 79 * hash + Objects.hashCode(this.fiscalArrangementId);
+        hash = 79 * hash + Objects.hashCode(this.crudeTypeCode);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Production other = (Production) obj;
+        if (!Objects.equals(this.crudeTypeCode, other.crudeTypeCode)) {
+            return false;
+        }
+        if (!Objects.equals(this.periodYear, other.periodYear)) {
+            return false;
+        }
+        if (!Objects.equals(this.periodMonth, other.periodMonth)) {
+            return false;
+        }
+        if (!Objects.equals(this.fiscalArrangementId, other.fiscalArrangementId)) {
+            return false;
+        }
+        return true;
     }
 
 }

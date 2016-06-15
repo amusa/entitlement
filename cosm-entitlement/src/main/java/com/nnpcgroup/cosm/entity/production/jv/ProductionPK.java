@@ -5,32 +5,30 @@
  */
 package com.nnpcgroup.cosm.entity.production.jv;
 
-import com.nnpcgroup.cosm.entity.contract.Contract;
-import com.nnpcgroup.cosm.entity.contract.ContractPK;
 import java.io.Serializable;
 import java.util.Objects;
-import javax.persistence.Embeddable;
 
 /**
  *
  * @author 18359
  */
-//@Embeddable
 public class ProductionPK implements Serializable {
 
     private static final long serialVersionUID = 2983325339937581443L;
 
     private Integer periodYear;
     private Integer periodMonth;
-    private Contract contract;
+    private Long fiscalArrangementId;
+    private String crudeTypeCode;
 
     public ProductionPK() {
     }
 
-    public ProductionPK(Integer periodYear, Integer periodMonth, Contract contract) {
+    public ProductionPK(Integer periodYear, Integer periodMonth, Long fiscalArrangementId, String crudeTypeCode) {
         this.periodYear = periodYear;
         this.periodMonth = periodMonth;
-        this.contract = contract;
+        this.fiscalArrangementId = fiscalArrangementId;
+        this.crudeTypeCode = crudeTypeCode;
     }
 
     public Integer getPeriodYear() {
@@ -49,22 +47,29 @@ public class ProductionPK implements Serializable {
         this.periodMonth = periodMonth;
     }
 
-    public Contract getContract() {
-        return contract;
+    public Long getFiscalArrangementId() {
+        return fiscalArrangementId;
     }
 
-    public void setContract(Contract contract) {
-        this.contract = contract;
+    public void setFiscalArrangementId(Long fiscalArrangementId) {
+        this.fiscalArrangementId = fiscalArrangementId;
     }
 
-   
+    public String getCrudeTypeCode() {
+        return crudeTypeCode;
+    }
+
+    public void setCrudeTypeCode(String crudeTypeCode) {
+        this.crudeTypeCode = crudeTypeCode;
+    }
 
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 17 * hash + Objects.hashCode(this.periodYear);
-        hash = 17 * hash + Objects.hashCode(this.periodMonth);
-        hash = 17 * hash + Objects.hashCode(this.contract);
+        int hash = 3;
+        hash = 29 * hash + Objects.hashCode(this.periodYear);
+        hash = 29 * hash + Objects.hashCode(this.periodMonth);
+        hash = 29 * hash + Objects.hashCode(this.fiscalArrangementId);
+        hash = 29 * hash + Objects.hashCode(this.crudeTypeCode);
         return hash;
     }
 
@@ -80,13 +85,16 @@ public class ProductionPK implements Serializable {
             return false;
         }
         final ProductionPK other = (ProductionPK) obj;
+        if (!Objects.equals(this.crudeTypeCode, other.crudeTypeCode)) {
+            return false;
+        }
         if (!Objects.equals(this.periodYear, other.periodYear)) {
             return false;
         }
         if (!Objects.equals(this.periodMonth, other.periodMonth)) {
             return false;
         }
-        if (!Objects.equals(this.contract, other.contract)) {
+        if (!Objects.equals(this.fiscalArrangementId, other.fiscalArrangementId)) {
             return false;
         }
         return true;

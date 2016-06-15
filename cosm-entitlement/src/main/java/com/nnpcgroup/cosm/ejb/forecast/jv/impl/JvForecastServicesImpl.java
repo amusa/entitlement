@@ -10,11 +10,6 @@ import com.nnpcgroup.cosm.ejb.FiscalArrangementBean;
 import com.nnpcgroup.cosm.ejb.forecast.jv.JvForecastServices;
 import com.nnpcgroup.cosm.ejb.impl.CommonServicesImpl;
 import com.nnpcgroup.cosm.entity.*;
-import com.nnpcgroup.cosm.entity.contract.Contract;
-import com.nnpcgroup.cosm.entity.contract.CarryContract;
-import com.nnpcgroup.cosm.entity.contract.ContractPK;
-import com.nnpcgroup.cosm.entity.contract.ModifiedCarryContract;
-import com.nnpcgroup.cosm.entity.contract.RegularContract;
 import com.nnpcgroup.cosm.entity.forecast.jv.Forecast;
 import com.nnpcgroup.cosm.entity.forecast.jv.ForecastPK;
 import java.io.Serializable;
@@ -190,23 +185,6 @@ public abstract class JvForecastServicesImpl<T extends Forecast> extends CommonS
     public T getPreviousMonthProduction(T forecast) {
         int month = forecast.getPeriodMonth();
         int year = forecast.getPeriodYear();
-//        Contract cs = forecast.getContract();
-//        ContractPK cPK = new ContractPK();
-//        cPK.setFiscalArrangementId(forecast.getFiscalArrangementId());
-//        cPK.setCrudeTypeCode(forecast.getCrudeTypeCode());
-        //LOG.log(Level.INFO,"class of forecast Contract {0} is {1}", new Object[]{cs, cs.getClass()});
-       // Contract contract = cs;
-        
-//        if (cs instanceof RegularContract) {
-//            FiscalArrangement fa = new FiscalArrangement(cs.getFiscalArrangement().getId());
-//            CrudeType ct = new CrudeType(cs.getCrudeType().getCode());
-//             contract = new RegularContract(fa, ct);
-//        } else if (cs instanceof CarryContract) {
-//            contract = new CarryContract(cs.getFiscalArrangement(), cs.getCrudeType());
-//        } else if (contract instanceof ModifiedCarryContract) {
-//            contract = new ModifiedCarryContract(cs.getFiscalArrangement(), cs.getCrudeType());
-//        }
-
         FiscalPeriod prevFp = getPreviousFiscalPeriod(year, month);
 
         T f = find(new ForecastPK(prevFp.getYear(), prevFp.getMonth(), forecast.getFiscalArrangementId(), forecast.getCrudeTypeCode()));

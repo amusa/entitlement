@@ -5,15 +5,8 @@
  */
 package com.nnpcgroup.cosm.entity.forecast.jv;
 
-import com.nnpcgroup.cosm.entity.contract.Contract;
 import java.io.Serializable;
-import java.util.Objects;
-import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.persistence.CascadeType;
-
-import com.nnpcgroup.cosm.entity.contract.ContractPK;
-import org.hibernate.annotations.Cascade;
 
 /**
  *
@@ -26,9 +19,7 @@ public class ForecastPK implements Serializable {
     private Integer periodMonth;
     private Long fiscalArrangementId;
     private String crudeTypeCode;
-    //private ContractPK contractPK;
-
-
+    
     public ForecastPK() {
     }
 

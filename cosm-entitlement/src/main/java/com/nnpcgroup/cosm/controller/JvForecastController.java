@@ -401,6 +401,7 @@ public class JvForecastController implements Serializable {
             LOG.log(Level.INFO, "Undefined contract selection...{0}", currentContract);
             throw new Exception("Undefined contract type");
             //currentProduction = new RegularForecast();
+            
         }
 
         if (currentProduction != null) {
@@ -459,7 +460,7 @@ public class JvForecastController implements Serializable {
 //            FiscalArrangement fa = new FiscalArrangement(Long.valueOf(values[0]));
 //            CrudeType ct = new CrudeType(values[1]);
 //            Contract key = null;
-//
+//            
 //            LOG.log(Level.INFO,"Deconstructing Contract {0} from string {1}", new Object[]{values[2], value});
 //
 //            switch (values[2]) {
@@ -472,8 +473,8 @@ public class JvForecastController implements Serializable {
 //                case "ModifiedCarryContract":
 //                    key = new ModifiedCarryContract(fa, ct);
 //                    break;
-//                default:
-//                    break;
+//                default:                    
+//                    break;                    
 //            }
 //
 //            return key;

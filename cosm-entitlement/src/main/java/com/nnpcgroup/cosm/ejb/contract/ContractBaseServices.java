@@ -13,10 +13,11 @@ import java.util.List;
 /**
  *
  * @author 18359
- *  * @param <T>
+ * @param <T>
  */
 public interface ContractBaseServices<T extends Contract> extends AbstractCrudServices<T> {
     
     public List<T> findFiscalArrangementContracts(FiscalArrangement fa);
+        
    
 }

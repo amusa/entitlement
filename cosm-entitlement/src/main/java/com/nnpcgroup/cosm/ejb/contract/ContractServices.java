@@ -5,11 +5,7 @@
  */
 package com.nnpcgroup.cosm.ejb.contract;
 
-import com.nnpcgroup.cosm.ejb.AbstractCrudServices;
-import com.nnpcgroup.cosm.entity.FiscalArrangement;
 import com.nnpcgroup.cosm.entity.contract.Contract;
-
-import java.util.List;
 
 /**
  *
@@ -18,6 +14,5 @@ import java.util.List;
  */
 public interface ContractServices extends ContractBaseServices<Contract> {
     
-
-   
+     
 }

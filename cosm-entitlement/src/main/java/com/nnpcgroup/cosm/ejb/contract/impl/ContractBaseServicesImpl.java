@@ -6,11 +6,13 @@
 package com.nnpcgroup.cosm.ejb.contract.impl;
 
 import com.nnpcgroup.cosm.ejb.contract.ContractBaseServices;
+import com.nnpcgroup.cosm.ejb.contract.ContractServices;
 import com.nnpcgroup.cosm.ejb.impl.AbstractCrudServicesImpl;
 import com.nnpcgroup.cosm.entity.contract.Contract;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
 import java.util.List;
 import java.util.logging.Logger;
+import javax.enterprise.context.Dependent;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
@@ -22,10 +24,11 @@ import javax.persistence.criteria.Root;
 /**
  *
  * @author 18359
+ * @param <T>
  */
-public class ContractBaseServicesImpl<T extends Contract> extends AbstractCrudServicesImpl<T> implements ContractBaseServices<T> {
+public abstract class ContractBaseServicesImpl<T extends Contract> extends AbstractCrudServicesImpl<T> implements ContractBaseServices<T> {
 
-    private static final Logger log = Logger.getLogger(ContractBaseServicesImpl.class.getName());
+    private static final Logger LOG = Logger.getLogger(ContractBaseServicesImpl.class.getName());
 
     @PersistenceContext(unitName = "entitlementPU")
     private EntityManager em;

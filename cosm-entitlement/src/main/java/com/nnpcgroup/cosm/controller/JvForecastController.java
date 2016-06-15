@@ -6,9 +6,7 @@
 package com.nnpcgroup.cosm.controller;
 
 import com.nnpcgroup.cosm.controller.util.JsfUtil;
-import com.nnpcgroup.cosm.ejb.contract.ContractBaseServices;
 import com.nnpcgroup.cosm.ejb.contract.ContractServices;
-import com.nnpcgroup.cosm.ejb.contract.RegularContractServices;
 import com.nnpcgroup.cosm.ejb.forecast.jv.JvAlternativeFundingForecastServices;
 import com.nnpcgroup.cosm.ejb.forecast.jv.JvModifiedCarryForecastServices;
 import com.nnpcgroup.cosm.ejb.forecast.jv.JvCarryForecastServices;
@@ -70,13 +68,8 @@ public class JvForecastController implements Serializable {
     @Inject
     private ContractServices contractBean;
 
-    @Inject
-    RegularContractServices regularContractBean;
-
     private Forecast currentProduction;
-
     private List<Forecast> productions;
-
     private Integer periodYear;
     private Integer periodMonth;
     private FiscalArrangement currentFiscalArrangement;

@@ -9,71 +9,58 @@ import com.nnpcgroup.cosm.entity.CrudeType;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
 import java.io.Serializable;
 import java.util.Objects;
-import javax.persistence.Embeddable;
 
 /**
  *
  * @author 18359
  */
-//@Embeddable
 public class ContractPK implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private FiscalArrangement fiscalArrangement;
-    private CrudeType crudeType;
+    private Long fiscalArrangementId;
+    private String crudeTypeCode;
 
     public ContractPK() {
     }
 
-    public ContractPK(FiscalArrangement fiscalArrangement, CrudeType crudeType) {
-        this.fiscalArrangement = fiscalArrangement;
-        this.crudeType = crudeType;
+    public ContractPK(Long fiscalArrangementId, String crudeTypeCode) {
+        this.fiscalArrangementId = fiscalArrangementId;
+        this.crudeTypeCode = crudeTypeCode;
     }
 
-    public FiscalArrangement getFiscalArrangement() {
-        return fiscalArrangement;
+    public Long getFiscalArrangementId() {
+        return fiscalArrangementId;
     }
 
-    public void setFiscalArrangement(FiscalArrangement fiscalArrangement) {
-        this.fiscalArrangement = fiscalArrangement;
+    public void setFiscalArrangementId(Long fiscalArrangementId) {
+        this.fiscalArrangementId = fiscalArrangementId;
     }
 
-    public CrudeType getCrudeType() {
-        return crudeType;
+    public String getCrudeTypeCode() {
+        return crudeTypeCode;
     }
 
-    public void setCrudeType(CrudeType crudeType) {
-        this.crudeType = crudeType;
+    public void setCrudeTypeCode(String crudeTypeCode) {
+        this.crudeTypeCode = crudeTypeCode;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ContractPK that = (ContractPK) o;
+
+        if (!fiscalArrangementId.equals(that.fiscalArrangementId)) return false;
+        return crudeTypeCode.equals(that.crudeTypeCode);
+
     }
 
     @Override
     public int hashCode() {
-        int hash = 5;
-        hash = 83 * hash + Objects.hashCode(this.fiscalArrangement);
-        hash = 83 * hash + Objects.hashCode(this.crudeType);
-        return hash;
+        int result = fiscalArrangementId.hashCode();
+        result = 31 * result + crudeTypeCode.hashCode();
+        return result;
     }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final ContractPK other = (ContractPK) obj;
-        if (!Objects.equals(this.fiscalArrangement, other.fiscalArrangement)) {
-            return false;
-        }
-        if (!Objects.equals(this.crudeType, other.crudeType)) {
-            return false;
-        }
-        return true;
-    }
-
 }

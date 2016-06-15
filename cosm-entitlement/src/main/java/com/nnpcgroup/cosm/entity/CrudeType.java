@@ -8,6 +8,7 @@ package com.nnpcgroup.cosm.entity;
 import com.nnpcgroup.cosm.entity.contract.Contract;
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -29,7 +30,7 @@ public class CrudeType implements Serializable {
     private String code;
     private String crudeType;
     private Terminal terminal;
-    private Collection<Contract> contracts;
+    private List<Contract> contracts;
 
     public CrudeType() {
     }
@@ -68,11 +69,11 @@ public class CrudeType implements Serializable {
     @OneToMany(mappedBy = "crudeType")
     //@OneToMany(mappedBy = "crudeType", fetch = FetchType.LAZY)
     //@JoinColumn(name = "crudeTypeCode", insertable = false, updatable = false)
-    public Collection<Contract> getContracts() {
+    public List<Contract> getContracts() {
         return contracts;
     }
 
-    public void setContracts(Collection<Contract> contracts) {
+    public void setContracts(List<Contract> contracts) {
         this.contracts = contracts;
     }
 

@@ -6,29 +6,23 @@
 package com.nnpcgroup.cosm.ejb.forecast.jv.impl;
 
 import com.nnpcgroup.cosm.controller.GeneralController;
+import com.nnpcgroup.cosm.ejb.FiscalArrangementBean;
 import com.nnpcgroup.cosm.ejb.forecast.jv.JvForecastServices;
 import com.nnpcgroup.cosm.ejb.impl.CommonServicesImpl;
+import com.nnpcgroup.cosm.entity.*;
 import com.nnpcgroup.cosm.entity.contract.Contract;
-import com.nnpcgroup.cosm.entity.EquityType;
-import com.nnpcgroup.cosm.entity.FiscalArrangement;
-import com.nnpcgroup.cosm.entity.FiscalPeriod;
-import com.nnpcgroup.cosm.entity.JointVenture;
+import com.nnpcgroup.cosm.entity.contract.CarryContract;
 import com.nnpcgroup.cosm.entity.contract.ContractPK;
+import com.nnpcgroup.cosm.entity.contract.ModifiedCarryContract;
+import com.nnpcgroup.cosm.entity.contract.RegularContract;
 import com.nnpcgroup.cosm.entity.forecast.jv.Forecast;
 import com.nnpcgroup.cosm.entity.forecast.jv.ForecastPK;
 import java.io.Serializable;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.ejb.EJB;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 
 /**
  *
@@ -40,20 +34,16 @@ public abstract class JvForecastServicesImpl<T extends Forecast> extends CommonS
 
     private static final Logger LOG = Logger.getLogger(JvForecastServicesImpl.class.getName());
 
-//    @PersistenceContext(unitName = "entitlementPU")
-//    private EntityManager em;
     @Inject
     GeneralController genController;
+
+    @EJB
+    FiscalArrangementBean fiscalBean;
 
     public JvForecastServicesImpl(Class<T> entityClass) {
         super(entityClass);
     }
 
-//    @Override
-//    protected EntityManager getEntityManager() {
-//        LOG.info("ForecastBean::setEntityManager() called...");
-//        return em;
-//    }
     @Override
     public T computeOpeningStock(T forecast) {
         Forecast prod = getPreviousMonthProduction(forecast);
@@ -72,8 +62,6 @@ public abstract class JvForecastServicesImpl<T extends Forecast> extends CommonS
     @Override
     public T computeGrossProduction(T forecast) {
         Double prodVolume = forecast.getProductionVolume();
-//        int periodYear = forecast.getPeriodYear();
-//        int periodMonth = forecast.getPeriodMonth();
         int periodYear = forecast.getPeriodYear();
         int periodMonth = forecast.getPeriodMonth();
         int days = genController.daysOfMonth(periodYear, periodMonth);
@@ -137,7 +125,8 @@ public abstract class JvForecastServicesImpl<T extends Forecast> extends CommonS
         FiscalArrangement fa;
         JointVenture jv;
 
-        fa = production.getContract().getFiscalArrangement();
+       // fa = production.getContract().getFiscalArrangement();
+        fa = fiscalBean.find(production.getFiscalArrangementId());
 
         assert (fa instanceof JointVenture);
 
@@ -199,18 +188,31 @@ public abstract class JvForecastServicesImpl<T extends Forecast> extends CommonS
 
     @Override
     public T getPreviousMonthProduction(T forecast) {
-        int month = forecast.getPeriodMonth(); //getPeriodMonth();
-        int year = forecast.getPeriodYear();//getPeriodYear();
-        Contract cs = forecast.getContract();
-        //ContractPK cPK = forecast.getContract().getContractPK();
+        int month = forecast.getPeriodMonth();
+        int year = forecast.getPeriodYear();
+//        Contract cs = forecast.getContract();
+//        ContractPK cPK = new ContractPK();
+//        cPK.setFiscalArrangementId(forecast.getFiscalArrangementId());
+//        cPK.setCrudeTypeCode(forecast.getCrudeTypeCode());
+        //LOG.log(Level.INFO,"class of forecast Contract {0} is {1}", new Object[]{cs, cs.getClass()});
+       // Contract contract = cs;
+        
+//        if (cs instanceof RegularContract) {
+//            FiscalArrangement fa = new FiscalArrangement(cs.getFiscalArrangement().getId());
+//            CrudeType ct = new CrudeType(cs.getCrudeType().getCode());
+//             contract = new RegularContract(fa, ct);
+//        } else if (cs instanceof CarryContract) {
+//            contract = new CarryContract(cs.getFiscalArrangement(), cs.getCrudeType());
+//        } else if (contract instanceof ModifiedCarryContract) {
+//            contract = new ModifiedCarryContract(cs.getFiscalArrangement(), cs.getCrudeType());
+//        }
 
         FiscalPeriod prevFp = getPreviousFiscalPeriod(year, month);
 
+        T f = find(new ForecastPK(prevFp.getYear(), prevFp.getMonth(), forecast.getFiscalArrangementId(), forecast.getCrudeTypeCode()));
         //T f = findByContractPeriod(prevFp.getYear(), prevFp.getMonth(), cs);
-        T f = find(new ForecastPK(prevFp.getYear(), prevFp.getMonth(), cs));
 
         return f;
-
     }
 
 }

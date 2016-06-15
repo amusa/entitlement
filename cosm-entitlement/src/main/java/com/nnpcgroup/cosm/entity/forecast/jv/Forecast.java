@@ -6,24 +6,16 @@
 package com.nnpcgroup.cosm.entity.forecast.jv;
 
 import com.nnpcgroup.cosm.entity.contract.Contract;
+import com.nnpcgroup.cosm.entity.contract.ContractPK;
+
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 import java.util.logging.Logger;
-import javax.persistence.CascadeType;
-import javax.persistence.DiscriminatorColumn;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.IdClass;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 /**
- *
  * @author 18359
  */
 @Entity
@@ -39,6 +31,8 @@ public abstract class Forecast implements Serializable {
 
     private Integer periodYear;
     private Integer periodMonth;
+    private Long fiscalArrangementId;
+    private String crudeTypeCode;
     private Contract contract;
     private Double openingStock;
     private Double partnerOpeningStock;
@@ -78,7 +72,28 @@ public abstract class Forecast implements Serializable {
     }
 
     @Id
+    public Long getFiscalArrangementId() {
+        return fiscalArrangementId;
+    }
+
+    public void setFiscalArrangementId(Long fiscalArrangementId) {
+        this.fiscalArrangementId = fiscalArrangementId;
+    }
+
+    @Id
+    public String getCrudeTypeCode() {
+        return crudeTypeCode;
+    }
+
+    public void setCrudeTypeCode(String crudeTypeCode) {
+        this.crudeTypeCode = crudeTypeCode;
+    }
+
     @ManyToOne
+    @JoinColumns({
+            @JoinColumn(name = "FISCALARRANGEMENTID", referencedColumnName = "FISCALARRANGEMENTID", insertable = false, updatable = false),
+            @JoinColumn(name = "CRUDETYPECODE", referencedColumnName = "CRUDETYPECODE", insertable = false, updatable = false)
+    })
     public Contract getContract() {
         return contract;
     }
@@ -212,36 +227,25 @@ public abstract class Forecast implements Serializable {
     }
 
     @Override
-    public int hashCode() {
-        int hash = 3;
-        hash = 17 * hash + Objects.hashCode(this.periodYear);
-        hash = 17 * hash + Objects.hashCode(this.periodMonth);
-        hash = 17 * hash + Objects.hashCode(this.contract);
-        return hash;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Forecast forecast = (Forecast) o;
+
+        if (!periodYear.equals(forecast.periodYear)) return false;
+        if (!periodMonth.equals(forecast.periodMonth)) return false;
+        if (!fiscalArrangementId.equals(forecast.fiscalArrangementId)) return false;
+        return crudeTypeCode.equals(forecast.crudeTypeCode);
+
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Forecast other = (Forecast) obj;
-        if (!Objects.equals(this.periodYear, other.periodYear)) {
-            return false;
-        }
-        if (!Objects.equals(this.periodMonth, other.periodMonth)) {
-            return false;
-        }
-        if (!Objects.equals(this.contract, other.contract)) {
-            return false;
-        }
-        return true;
+    public int hashCode() {
+        int result = periodYear.hashCode();
+        result = 31 * result + periodMonth.hashCode();
+        result = 31 * result + fiscalArrangementId.hashCode();
+        result = 31 * result + crudeTypeCode.hashCode();
+        return result;
     }
-
 }

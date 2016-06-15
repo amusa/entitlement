@@ -5,6 +5,8 @@
  */
 package com.nnpcgroup.cosm.entity.contract;
 
+import com.nnpcgroup.cosm.entity.CrudeType;
+import com.nnpcgroup.cosm.entity.FiscalArrangement;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
@@ -14,13 +16,20 @@ import javax.persistence.Entity;
  */
 @Entity
 @DiscriminatorValue("AF")
-public  class AlternativeFundingContract extends Contract{
+public abstract class AlternativeFundingContract extends Contract{
     
     private static final long serialVersionUID = 8684470740659960243L;
     
     private Double sharedOilRatio;
     private Double terminalPeriod;
     private Double terminalSharedOil;
+
+    public AlternativeFundingContract() {
+    }
+
+    public AlternativeFundingContract(Long fiscalArrangementId, String crudeTypeCode) {
+        super(fiscalArrangementId, crudeTypeCode);
+    }
 
     public Double getSharedOilRatio() {
         return sharedOilRatio;

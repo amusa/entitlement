@@ -77,9 +77,6 @@ public class JvProductionController implements Serializable {
     @EJB
     private ContractServices contractBean;
 
-    @EJB
-    FiscalArrangementBean fiscalBean;
-
     private Production currentProduction;
     private List<Production> productions;
     private Integer periodYear;
@@ -92,7 +89,6 @@ public class JvProductionController implements Serializable {
      */
     public JvProductionController() {
         LOG.info("JvActualProductionController::constructor activated...");
-        // LOG.log(Level.INFO, "Entitlement calculated: {0}", entitlement.calculateEntitlement());
     }
 
     public JvProductionServices getProductionBean() {
@@ -133,10 +129,6 @@ public class JvProductionController implements Serializable {
         if (currentContract != null) {
             currentFiscalArrangement = currentContract.getFiscalArrangement();
         }
-//        this.currentFiscalArrangement = (currentProduction != null)
-//                ? currentProduction.getContract().getFiscalArrangement() : null;
-//        this.currentContract = (currentProduction != null)
-//                ? currentProduction.getContract() : null;
     }
 
     public AlternativeFundingProduction getCurrentAfProduction() {
@@ -327,10 +319,6 @@ public class JvProductionController implements Serializable {
                 forecast.getFiscalArrangementId(),
                 forecast.getCrudeTypeCode()
         );
-//        production = (Production) getProductionBean().findByContractPeriod(
-//                forecast.getForecastPK().getPeriodYear(),
-//                forecast.getForecastPK().getPeriodMonth(),
-//                forecast.getContract());
         production = (Production) getProductionBean().find(pPK);
         LOG.log(Level.INFO, "************findByContractStreamPeriod returning {0}...", currentProduction);
 

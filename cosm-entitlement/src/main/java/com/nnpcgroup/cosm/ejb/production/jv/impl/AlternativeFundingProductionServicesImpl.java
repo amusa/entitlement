@@ -11,7 +11,6 @@ import com.nnpcgroup.cosm.ejb.production.jv.AlternativeFundingProductionServices
 import com.nnpcgroup.cosm.entity.Price;
 import com.nnpcgroup.cosm.entity.PricePK;
 import com.nnpcgroup.cosm.entity.contract.AlternativeFundingContract;
-import com.nnpcgroup.cosm.entity.contract.Contract;
 import com.nnpcgroup.cosm.entity.contract.ContractPK;
 import com.nnpcgroup.cosm.entity.production.jv.AlternativeFundingProduction;
 import java.util.logging.Level;

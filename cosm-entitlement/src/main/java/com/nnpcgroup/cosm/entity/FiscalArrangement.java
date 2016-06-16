@@ -24,7 +24,7 @@ import javax.validation.constraints.NotNull;
  */
 @Entity
 @Table(name = "FISCAL_ARRANGEMENT")
-public class FiscalArrangement implements Serializable {
+public abstract class FiscalArrangement implements Serializable {
 
     private static final long serialVersionUID = -5266137042066972524L;
     protected Long id;

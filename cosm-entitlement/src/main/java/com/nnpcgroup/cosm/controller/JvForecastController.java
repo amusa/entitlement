@@ -6,6 +6,7 @@
 package com.nnpcgroup.cosm.controller;
 
 import com.nnpcgroup.cosm.controller.util.JsfUtil;
+import com.nnpcgroup.cosm.ejb.FiscalArrangementBean;
 import com.nnpcgroup.cosm.ejb.contract.ContractServices;
 import com.nnpcgroup.cosm.ejb.forecast.jv.JvAlternativeFundingForecastServices;
 import com.nnpcgroup.cosm.ejb.forecast.jv.JvModifiedCarryForecastServices;
@@ -39,7 +40,6 @@ import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 
 /**
- *
  * @author 18359
  */
 @Named(value = "jvProdController")
@@ -66,6 +66,9 @@ public class JvForecastController implements Serializable {
 
     @Inject
     private ContractServices contractBean;
+
+    @EJB
+    private FiscalArrangementBean fiscalBean;
 
     private Forecast currentProduction;
     private List<Forecast> productions;
@@ -109,8 +112,10 @@ public class JvForecastController implements Serializable {
     public void setCurrentProduction(Forecast currentProduction) {
         LOG.info("ProductionController::setProduction called...");
         this.currentProduction = currentProduction;
+//        this.currentFiscalArrangement = (currentProduction != null)
+//                ? currentProduction.getContract().getFiscalArrangement() : null;
         this.currentFiscalArrangement = (currentProduction != null)
-                ? currentProduction.getContract().getFiscalArrangement() : null;
+                ? fiscalBean.find(currentProduction.getContract().getFiscalArrangementId()) : null;
         this.currentContract = (currentProduction != null)
                 ? currentProduction.getContract() : null;
     }
@@ -221,7 +226,7 @@ public class JvForecastController implements Serializable {
         LOG.log(Level.INFO,
                 "Production Enriched::Own entmt={0},Partner entmt={1}",
                 new Object[]{currentProduction.getOwnShareEntitlement(),
-                    currentProduction.getPartnerShareEntitlement()
+                        currentProduction.getPartnerShareEntitlement()
                 });
 
     }
@@ -408,10 +413,5 @@ public class JvForecastController implements Serializable {
         currentProduction.setPeriodYear(periodYear);
         currentProduction.setPeriodMonth(periodMonth);
         currentProduction.setContract(currentContract);
-        if (contractBean.isPersist(currentContract)) {
-            LOG.log(Level.INFO, "Yeh!, {0} is persisting...", currentContract);
-        } else {
-            LOG.log(Level.INFO, "Ooh!, {0} is not persisting...", currentContract);
-        }
     }
 }

@@ -78,36 +78,26 @@ public abstract class Contract implements Serializable {
 
     @Override
     public String toString() {
-        return fiscalArrangement.getTitle() + "/" + crudeType.getCode();
+        //return fiscalArrangement.getTitle() + "/" + crudeType.getCode();
+        return fiscalArrangementId + "/" + crudeTypeCode;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Contract contract = (Contract) o;
+
+        if (!fiscalArrangementId.equals(contract.fiscalArrangementId)) return false;
+        return crudeTypeCode.equals(contract.crudeTypeCode);
+
     }
 
     @Override
     public int hashCode() {
-        int hash = 5;
-        hash = 71 * hash + Objects.hashCode(this.crudeType);
-        hash = 71 * hash + Objects.hashCode(this.fiscalArrangement);
-        return hash;
+        int result = fiscalArrangementId.hashCode();
+        result = 31 * result + crudeTypeCode.hashCode();
+        return result;
     }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Contract other = (Contract) obj;
-        if (!Objects.equals(this.crudeType, other.crudeType)) {
-            return false;
-        }
-        if (!Objects.equals(this.fiscalArrangement, other.fiscalArrangement)) {
-            return false;
-        }
-        return true;
-    }
-
 }

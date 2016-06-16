@@ -39,7 +39,7 @@ public class ContractController implements Serializable {
 
     private static final long serialVersionUID = 3411266588734031876L;
 
-    @Inject//EJB
+    @EJB
     private ContractServices ejbFacade;
 
     private List<? extends Contract> items = null;
@@ -99,15 +99,15 @@ public class ContractController implements Serializable {
 
     protected void setEmbeddableKeys() {
         if(selected!=null){
-            selected.setFiscalArrangementId(selected.getFiscalArrangement().getId());
-            selected.setCrudeTypeCode(selected.getCrudeType().getCode());
+            selected.setFiscalArrangementId(selected.getFiscalArrangementId());
+            selected.setCrudeTypeCode(selected.getCrudeTypeCode());
         }
     }
 
     protected void initializeEmbeddableKey() {
     }
 
-    private ContractBaseServices getFacade() {
+    private ContractServices getFacade() {
         return ejbFacade;
     }
 
@@ -211,7 +211,7 @@ public class ContractController implements Serializable {
                 default:
                     break;
             }
-            selected.setFiscalArrangement(fiscalArrangement);
+            //selected.setFiscalArrangement(fiscalArrangement);
         }
     }
 
@@ -219,7 +219,7 @@ public class ContractController implements Serializable {
         LOG.log(Level.INFO, "Adding Contract for fiscal arrangement {0}...", fa);
         setSelected(new RegularContract()); //Default contract
         setFiscalArrangement(fa);
-        selected.setFiscalArrangement(fiscalArrangement);
+        //selected.setFiscalArrangement(fiscalArrangement);
     }
 
     @FacesConverter(forClass = Contract.class)
@@ -249,9 +249,9 @@ public class ContractController implements Serializable {
 
         String getStringKey(Contract value) {
             StringBuilder sb = new StringBuilder();
-            sb.append(value.getFiscalArrangement().getId());
+            sb.append(value.getFiscalArrangementId());
             sb.append(SEPARATOR);
-            sb.append(value.getCrudeType().getCode());
+            sb.append(value.getCrudeTypeCode());
             return sb.toString();
         }
 

@@ -121,8 +121,8 @@ public abstract class JvForecastServicesImpl<T extends Forecast> extends CommonS
         FiscalArrangement fa;
         JointVenture jv;
 
-        fa = production.getContract().getFiscalArrangement();
-        //fa = fiscalBean.find(production.getFiscalArrangementId());
+        //fa = production.getContract().getFiscalArrangement();
+        fa = fiscalBean.find(production.getContract().getFiscalArrangementId());
 
         assert (fa instanceof JointVenture);
 
@@ -187,7 +187,7 @@ public abstract class JvForecastServicesImpl<T extends Forecast> extends CommonS
         int month = forecast.getPeriodMonth();
         int year = forecast.getPeriodYear();
         FiscalPeriod prevFp = getPreviousFiscalPeriod(year, month);
-        ContractPK cPK = new ContractPK(forecast.getContract().getFiscalArrangement().getId(), forecast.getContract().getCrudeType().getCode());
+        ContractPK cPK = new ContractPK(forecast.getContract().getFiscalArrangementId(), forecast.getContract().getCrudeTypeCode());
 
         T f = find(new ForecastPK(prevFp.getYear(), prevFp.getMonth(), cPK));
         //T f = findByContractPeriod(prevFp.getYear(), prevFp.getMonth(), cs);

@@ -77,6 +77,9 @@ public class JvProductionController implements Serializable {
     @EJB
     private ContractServices contractBean;
 
+    @EJB
+    private FiscalArrangementBean fiscalBean;
+
     private Production currentProduction;
     private List<Production> productions;
     private Integer periodYear;
@@ -127,8 +130,9 @@ public class JvProductionController implements Serializable {
 
         currentContract = contractBean.find(contractPK);
         if (currentContract != null) {
-            currentFiscalArrangement = currentContract.getFiscalArrangement();
+           // currentFiscalArrangement = currentContract.getFiscalArrangement();
         }
+
     }
 
     public AlternativeFundingProduction getCurrentAfProduction() {

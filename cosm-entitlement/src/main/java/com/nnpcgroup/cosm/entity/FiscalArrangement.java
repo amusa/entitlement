@@ -6,20 +6,15 @@
 package com.nnpcgroup.cosm.entity;
 
 import com.nnpcgroup.cosm.entity.contract.Contract;
+
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 /**
- *
  * @author 18359
  */
 @Entity
@@ -76,7 +71,14 @@ public abstract class FiscalArrangement implements Serializable {
     public void setContracts(List<Contract> contracts) {
         this.contracts = contracts;
     }
-    
+
+    public void addContract(Contract contract) {
+        if (contracts == null) {
+            contracts = new ArrayList<>();
+        }
+        contracts.add(contract);
+    }
+
     @Override
     public String toString() {
         return title;
@@ -110,7 +112,6 @@ public abstract class FiscalArrangement implements Serializable {
         }
         return true;
     }
-    
-    
+
 
 }

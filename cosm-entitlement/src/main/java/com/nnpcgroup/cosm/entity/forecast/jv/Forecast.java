@@ -11,7 +11,10 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+
 
 /**
  * @author 18359
@@ -70,8 +73,8 @@ public abstract class Forecast implements Serializable {
     @Id
     @ManyToOne
     @JoinColumns({
-            @JoinColumn(name = "FISCALARRANGEMENTID", referencedColumnName = "FISCALARRANGEMENTID"),
-            @JoinColumn(name = "CRUDETYPECODE", referencedColumnName = "CRUDETYPECODE")
+            @JoinColumn(name = "FISCALARRANGEMENTID", referencedColumnName = "FISCALARRANGEMENTID", insertable = false, updatable = false),
+            @JoinColumn(name = "CRUDETYPECODE", referencedColumnName = "CRUDETYPECODE", insertable = false, updatable = false)
     })
     public Contract getContract() {
         return contract;
@@ -196,7 +199,7 @@ public abstract class Forecast implements Serializable {
         this.partnerCargos = partnerCargos;
     }
 
-    @OneToMany(mappedBy = "forecast", cascade = {CascadeType.PERSIST})
+    @OneToMany(mappedBy = "forecast", cascade = {CascadeType.ALL})
     public List<ForecastEntitlement> getForecastEntitlements() {
         return forecastEntitlements;
     }

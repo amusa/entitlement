@@ -12,6 +12,7 @@ import com.nnpcgroup.cosm.entity.Price;
 import com.nnpcgroup.cosm.entity.PricePK;
 import com.nnpcgroup.cosm.entity.contract.*;
 import com.nnpcgroup.cosm.entity.forecast.jv.AlternativeFundingForecast;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
@@ -25,9 +26,8 @@ import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Root;
 
 /**
- *
- * @author 18359
  * @param <T>
+ * @author 18359
  */
 @Dependent
 public abstract class JvAlternativeFundingForecastServicesImpl<T extends AlternativeFundingForecast> extends JvForecastServicesImpl<T> implements JvAlternativeFundingForecastServices<T> {
@@ -193,8 +193,9 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
     }
 
     private boolean isSharedOilTerminalPeriodDue(T forecast) {
-        ContractPK cPK = new ContractPK(forecast.getFiscalArrangementId(),forecast.getCrudeTypeCode());
-        Contract contract = contractBean.find(cPK); //forecast.getContract();
+        Contract contract = forecast.getContract();
+//        ContractPK cPK = new ContractPK(forecast.getContract().getFiscalArrangementId(),forecast.getContract().getCrudeTypeCode());
+//        Contract contract = contractBean.find(cPK); //forecast.getContract();
         assert (contract instanceof AlternativeFundingContract);
         AlternativeFundingContract afContract = (AlternativeFundingContract) contract;
 
@@ -219,9 +220,9 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
             sharedOilCum = prev.getSharedOilCum();
         }
 
-        //Contract contract = forecast.getContract();
-        ContractPK cPK = new ContractPK(forecast.getFiscalArrangementId(),forecast.getCrudeTypeCode());
-        Contract contract = contractBean.find(cPK); //forecast.getContract();
+        Contract contract = forecast.getContract();
+//        ContractPK cPK = new ContractPK(forecast.getContract().getFiscalArrangementId(),forecast.getContract().getCrudeTypeCode());
+//        Contract contract = contractBean.find(cPK); //forecast.getContract();
         assert (contract instanceof AlternativeFundingContract);
         AlternativeFundingContract afContract = (AlternativeFundingContract) contract;
 
@@ -249,9 +250,9 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
         Double ownEquity = forecast.getOwnShareEntitlement() != null ? forecast.getOwnShareEntitlement() : new Double(0);
         Double carryOil = forecast.getCarryOil() != null ? forecast.getCarryOil() : 0.0;
 
-       // Contract contract = forecast.getContract();
-        ContractPK cPK = new ContractPK(forecast.getFiscalArrangementId(),forecast.getCrudeTypeCode());
-        Contract contract = contractBean.find(cPK); //forecast.getContract();
+        Contract contract = forecast.getContract();
+//        ContractPK cPK = new ContractPK(forecast.getContract().getFiscalArrangementId(),forecast.getContract().getCrudeTypeCode());
+//        Contract contract = contractBean.find(cPK); //forecast.getContract();
         assert (contract instanceof AlternativeFundingContract);
         AlternativeFundingContract afContract = (AlternativeFundingContract) contract;
         Double sharedOilRatio = afContract.getSharedOilRatio() != null ? afContract.getSharedOilRatio() : 0.0;
@@ -550,7 +551,7 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
 
         TypedQuery<Long> query = getEntityManager().createQuery(
                 "SELECT COUNT(f) "
-                + "FROM AlternativeFundingForecast f  WHERE f.contract = :contract AND f.sharedOil != null", Long.class);
+                        + "FROM AlternativeFundingForecast f  WHERE f.contract = :contract AND f.sharedOil != null", Long.class);
         query.setParameter("contract", contract);
 
         long sharedOilPeriod = query.getSingleResult();

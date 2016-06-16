@@ -316,8 +316,8 @@ public class JvProductionController implements Serializable {
         ProductionPK pPK = new ProductionPK(
                 forecast.getPeriodYear(),
                 forecast.getPeriodMonth(),
-                forecast.getFiscalArrangementId(),
-                forecast.getCrudeTypeCode()
+                forecast.getContract().getFiscalArrangementId(),
+                forecast.getContract().getCrudeTypeCode()
         );
         production = (Production) getProductionBean().find(pPK);
         LOG.log(Level.INFO, "************findByContractStreamPeriod returning {0}...", currentProduction);
@@ -343,8 +343,8 @@ public class JvProductionController implements Serializable {
 //            production.setContract(forecast.getContract());
             production.setPeriodYear(forecast.getPeriodYear());
             production.setPeriodMonth(forecast.getPeriodMonth());
-            production.setFiscalArrangementId(forecast.getFiscalArrangementId());
-            production.setCrudeTypeCode(forecast.getCrudeTypeCode());
+            production.setFiscalArrangementId(forecast.getContract().getFiscalArrangementId());
+            production.setCrudeTypeCode(forecast.getContract().getCrudeTypeCode());
 
             // getProductionBean().enrich(currentProduction);
         }

@@ -179,11 +179,7 @@ public class JvForecastController implements Serializable {
     private void persist(JsfUtil.PersistAction persistAction, String successMessage) {
         if (currentProduction != null) {
             //setEmbeddableKeys();
-            LOG.log(Level.INFO, "Persisting Forecast Year={0}, Month={1}, FiscalArr={2}, CrudeType={3}",
-                    new Object[]{currentProduction.getPeriodYear(),
-                        currentProduction.getPeriodMonth(),
-                        currentProduction.getFiscalArrangementId(),
-                        currentProduction.getCrudeTypeCode()});
+
             try {
                 if (persistAction != JsfUtil.PersistAction.DELETE) {
                     getForecastBean().edit(currentProduction);
@@ -411,9 +407,7 @@ public class JvForecastController implements Serializable {
     private void setEmbeddableKeys() {
         currentProduction.setPeriodYear(periodYear);
         currentProduction.setPeriodMonth(periodMonth);
-        currentProduction.setFiscalArrangementId(currentContract.getFiscalArrangementId());
-        currentProduction.setCrudeTypeCode(currentContract.getCrudeTypeCode());
-
+        currentProduction.setContract(currentContract);
         if (contractBean.isPersist(currentContract)) {
             LOG.log(Level.INFO, "Yeh!, {0} is persisting...", currentContract);
         } else {

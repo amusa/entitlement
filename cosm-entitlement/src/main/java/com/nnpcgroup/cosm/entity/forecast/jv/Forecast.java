@@ -29,8 +29,6 @@ public abstract class Forecast implements Serializable {
 
     private Integer periodYear;
     private Integer periodMonth;
-    private Long fiscalArrangementId;
-    private String crudeTypeCode;
     private Contract contract;
     private Double openingStock;
     private Double partnerOpeningStock;
@@ -70,27 +68,10 @@ public abstract class Forecast implements Serializable {
     }
 
     @Id
-    public Long getFiscalArrangementId() {
-        return fiscalArrangementId;
-    }
-
-    public void setFiscalArrangementId(Long fiscalArrangementId) {
-        this.fiscalArrangementId = fiscalArrangementId;
-    }
-
-    @Id
-    public String getCrudeTypeCode() {
-        return crudeTypeCode;
-    }
-
-    public void setCrudeTypeCode(String crudeTypeCode) {
-        this.crudeTypeCode = crudeTypeCode;
-    }
-
     @ManyToOne
     @JoinColumns({
-            @JoinColumn(name = "FISCALARRANGEMENTID", referencedColumnName = "FISCALARRANGEMENTID", insertable = false, updatable = false),
-            @JoinColumn(name = "CRUDETYPECODE", referencedColumnName = "CRUDETYPECODE", insertable = false, updatable = false)
+            @JoinColumn(name = "FISCALARRANGEMENTID", referencedColumnName = "FISCALARRANGEMENTID"),
+            @JoinColumn(name = "CRUDETYPECODE", referencedColumnName = "CRUDETYPECODE")
     })
     public Contract getContract() {
         return contract;
@@ -233,8 +214,7 @@ public abstract class Forecast implements Serializable {
 
         if (!periodYear.equals(forecast.periodYear)) return false;
         if (!periodMonth.equals(forecast.periodMonth)) return false;
-        if (!fiscalArrangementId.equals(forecast.fiscalArrangementId)) return false;
-        return crudeTypeCode.equals(forecast.crudeTypeCode);
+        return contract.equals(forecast.contract);
 
     }
 
@@ -242,8 +222,7 @@ public abstract class Forecast implements Serializable {
     public int hashCode() {
         int result = periodYear.hashCode();
         result = 31 * result + periodMonth.hashCode();
-        result = 31 * result + fiscalArrangementId.hashCode();
-        result = 31 * result + crudeTypeCode.hashCode();
+        result = 31 * result + contract.hashCode();
         return result;
     }
 }

@@ -7,8 +7,11 @@ package com.nnpcgroup.cosm.entity.contract;
 
 import com.nnpcgroup.cosm.entity.CrudeType;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
+import com.nnpcgroup.cosm.entity.forecast.jv.Forecast;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import javax.persistence.*;
 
@@ -54,7 +57,7 @@ public abstract class Contract implements Serializable {
         this.fiscalArrangementId = fiscalArrangementId;
     }
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     @MapsId("fiscalArrangementId")
     @JoinColumn(name = "FISCALARRANGEMENTID", referencedColumnName = "ID", updatable = false, insertable = false)
     public FiscalArrangement getFiscalArrangement() {
@@ -90,12 +93,18 @@ public abstract class Contract implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         Contract contract = (Contract) o;
 
-        if (!fiscalArrangementId.equals(contract.fiscalArrangementId)) return false;
+        if (!fiscalArrangementId.equals(contract.fiscalArrangementId)) {
+            return false;
+        }
         return crudeTypeCode.equals(contract.crudeTypeCode);
 
     }

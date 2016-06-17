@@ -10,11 +10,21 @@ import com.nnpcgroup.cosm.entity.contract.Contract;
 import java.io.Serializable;
 import java.util.List;
 import java.util.logging.Logger;
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.DiscriminatorColumn;
+//import javax.persistence.*;
 import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.IdClass;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-
 
 /**
  * @author 18359
@@ -71,11 +81,11 @@ public abstract class Forecast implements Serializable {
     }
 
     @Id
-    @ManyToOne(cascade = CascadeType.REFRESH)
+    @ManyToOne
     @JoinColumns({
-            @JoinColumn(name = "FISCALARRANGEMENTID", referencedColumnName = "FISCALARRANGEMENTID", insertable = false, updatable = false),
-            @JoinColumn(name = "CRUDETYPECODE", referencedColumnName = "CRUDETYPECODE", insertable = false, updatable = false)
-    })
+            @JoinColumn(name = "FISCALARRANGEMENTID", referencedColumnName = "FISCALARRANGEMENTID"),
+            @JoinColumn(name = "CRUDETYPECODE", referencedColumnName = "CRUDETYPECODE")
+    })     
     public Contract getContract() {
         return contract;
     }
@@ -210,13 +220,21 @@ public abstract class Forecast implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         Forecast forecast = (Forecast) o;
 
-        if (!periodYear.equals(forecast.periodYear)) return false;
-        if (!periodMonth.equals(forecast.periodMonth)) return false;
+        if (!periodYear.equals(forecast.periodYear)) {
+            return false;
+        }
+        if (!periodMonth.equals(forecast.periodMonth)) {
+            return false;
+        }
         return contract.equals(forecast.contract);
 
     }

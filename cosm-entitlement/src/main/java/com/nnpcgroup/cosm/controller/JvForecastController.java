@@ -194,7 +194,7 @@ public class JvForecastController implements Serializable {
 
             try {
                 if (persistAction != JsfUtil.PersistAction.DELETE) {
-                    getForecastBean().edit(currentProduction);
+                    getForecastBean().create(currentProduction);
                 } else {
                     getForecastBean().remove(currentProduction);
                 }
@@ -419,6 +419,6 @@ public class JvForecastController implements Serializable {
     private void setEmbeddableKeys() {
         currentProduction.setPeriodYear(periodYear);
         currentProduction.setPeriodMonth(periodMonth);
-        currentProduction.setContract(currentContract);
+        currentProduction.setContract(currentContract);        
     }
 }

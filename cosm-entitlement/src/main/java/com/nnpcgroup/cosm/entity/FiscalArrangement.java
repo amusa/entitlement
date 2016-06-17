@@ -25,7 +25,7 @@ public abstract class FiscalArrangement implements Serializable {
     protected Long id;
     protected String title;
     protected Company operator;
-    protected List<Contract> contracts;
+   // protected List<Contract> contracts;
 
     public FiscalArrangement() {
     }
@@ -63,21 +63,21 @@ public abstract class FiscalArrangement implements Serializable {
         this.operator = operator;
     }
 
-    @OneToMany(mappedBy = "fiscalArrangement")
-    public List<Contract> getContracts() {
-        return contracts;
-    }
-
-    public void setContracts(List<Contract> contracts) {
-        this.contracts = contracts;
-    }
-
-    public void addContract(Contract contract) {
-        if (contracts == null) {
-            contracts = new ArrayList<>();
-        }
-        contracts.add(contract);
-    }
+//    @OneToMany(mappedBy = "fiscalArrangement")
+//    public List<Contract> getContracts() {
+//        return contracts;
+//    }
+//
+//    public void setContracts(List<Contract> contracts) {
+//        this.contracts = contracts;
+//    }
+//
+//    public void addContract(Contract contract) {
+//        if (contracts == null) {
+//            contracts = new ArrayList<>();
+//        }
+//        contracts.add(contract);
+//    }
 
     @Override
     public String toString() {

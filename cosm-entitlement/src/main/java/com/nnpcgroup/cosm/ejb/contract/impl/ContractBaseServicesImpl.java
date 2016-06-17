@@ -10,6 +10,7 @@ import com.nnpcgroup.cosm.ejb.contract.ContractServices;
 import com.nnpcgroup.cosm.ejb.impl.AbstractCrudServicesImpl;
 import com.nnpcgroup.cosm.entity.contract.Contract;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
+import com.nnpcgroup.cosm.entity.contract.ContractPK;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.enterprise.context.Dependent;
@@ -65,5 +66,19 @@ public abstract class ContractBaseServicesImpl<T extends Contract> extends Abstr
 
         return contracts;
     }
+
+    @Override
+    public T find(Object id) {
+        if(id instanceof Contract){
+            Contract contract = (Contract)id;
+            ContractPK cPK = new ContractPK();
+            cPK.setFiscalArrangementId(contract.getFiscalArrangementId());
+            cPK.setCrudeTypeCode(contract.getCrudeTypeCode());
+            return super.find(cPK);
+        }
+        return super.find(id); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    
 
 }

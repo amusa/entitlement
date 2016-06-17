@@ -17,6 +17,7 @@ import com.nnpcgroup.cosm.ejb.forecast.jv.JvRegularForecastServices;
 import com.nnpcgroup.cosm.entity.contract.CarryContract;
 import com.nnpcgroup.cosm.entity.contract.Contract;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
+import com.nnpcgroup.cosm.entity.contract.ContractPK;
 import com.nnpcgroup.cosm.entity.contract.ModifiedCarryContract;
 import com.nnpcgroup.cosm.entity.contract.RegularContract;
 import com.nnpcgroup.cosm.entity.forecast.jv.AlternativeFundingForecast;
@@ -116,8 +117,14 @@ public class JvForecastController implements Serializable {
 //                ? currentProduction.getContract().getFiscalArrangement() : null;
         this.currentFiscalArrangement = (currentProduction != null)
                 ? fiscalBean.find(currentProduction.getContract().getFiscalArrangementId()) : null;
-        this.currentContract = (currentProduction != null)
-                ? currentProduction.getContract() : null;
+//        this.currentContract = (currentProduction != null)
+//                ? currentProduction.getContract() : null;
+
+        if (currentProduction != null) {
+            Contract contract = currentProduction.getContract();
+            this.currentContract = contractBean.find(contract);
+        }
+
     }
 
     public AlternativeFundingForecast getCurrentAfProduction() {
@@ -226,7 +233,7 @@ public class JvForecastController implements Serializable {
         LOG.log(Level.INFO,
                 "Production Enriched::Own entmt={0},Partner entmt={1}",
                 new Object[]{currentProduction.getOwnShareEntitlement(),
-                        currentProduction.getPartnerShareEntitlement()
+                    currentProduction.getPartnerShareEntitlement()
                 });
 
     }
@@ -285,7 +292,7 @@ public class JvForecastController implements Serializable {
     }
 
     public void setCurrentContract(Contract currentContract) {
-        this.currentContract = currentContract;
+        this.currentContract = contractBean.find(currentContract);
         if (contractBean.isPersist(currentContract)) {
             LOG.log(Level.INFO, "Yeh!, {0} is persisting...", currentContract);
         } else {

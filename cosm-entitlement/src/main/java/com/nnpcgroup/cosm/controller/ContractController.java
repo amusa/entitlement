@@ -211,7 +211,7 @@ public class ContractController implements Serializable {
                 default:
                     break;
             }
-            //selected.setFiscalArrangement(fiscalArrangement);
+           selected.setFiscalArrangement(fiscalArrangement);
         }
     }
 
@@ -219,7 +219,7 @@ public class ContractController implements Serializable {
         LOG.log(Level.INFO, "Adding Contract for fiscal arrangement {0}...", fa);
         setSelected(new RegularContract()); //Default contract
         setFiscalArrangement(fa);
-        //selected.setFiscalArrangement(fiscalArrangement);
+        selected.setFiscalArrangement(fa);
     }
 
     @FacesConverter(forClass = Contract.class)

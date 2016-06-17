@@ -7,12 +7,12 @@ package com.nnpcgroup.cosm.entity.contract;
 
 import com.nnpcgroup.cosm.entity.CrudeType;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
+
 import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.*;
 
 /**
- *
  * @author 18359
  */
 @Entity
@@ -63,6 +63,9 @@ public abstract class Contract implements Serializable {
 
     public void setFiscalArrangement(FiscalArrangement fiscalArrangement) {
         this.fiscalArrangement = fiscalArrangement;
+        if (fiscalArrangement != null) {
+            this.fiscalArrangementId = fiscalArrangement.getId();
+        }
     }
 
     @ManyToOne
@@ -74,6 +77,9 @@ public abstract class Contract implements Serializable {
 
     public void setCrudeType(CrudeType crudeType) {
         this.crudeType = crudeType;
+        if (crudeType != null) {
+            this.crudeTypeCode = crudeType.getCode();
+        }
     }
 
     @Override

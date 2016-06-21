@@ -161,7 +161,6 @@ public class JvForecastController implements Serializable {
         LOG.log(Level.INFO, "Deleting {0}...", currentProduction);
         persist(JsfUtil.PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("ProductionDeleted"));
         if (!JsfUtil.isValidationFailed()) {
-            //dataModel.removeItem(currentProduction);
             currentProduction = null;
         }
     }
@@ -190,11 +189,9 @@ public class JvForecastController implements Serializable {
 
     private void persist(JsfUtil.PersistAction persistAction, String successMessage) {
         if (currentProduction != null) {
-            //setEmbeddableKeys();
-
             try {
                 if (persistAction != JsfUtil.PersistAction.DELETE) {
-                    getForecastBean().create(currentProduction);
+                   getForecastBean().edit(currentProduction);
                 } else {
                     getForecastBean().remove(currentProduction);
                 }
@@ -293,12 +290,6 @@ public class JvForecastController implements Serializable {
 
     public void setCurrentContract(Contract currentContract) {
         this.currentContract = contractBean.find(currentContract);
-        if (contractBean.isPersist(currentContract)) {
-            LOG.log(Level.INFO, "Yeh!, {0} is persisting...", currentContract);
-        } else {
-            LOG.log(Level.INFO, "Ooh!, {0} is not persisting...", currentContract);
-            contractBean.flush();
-        }
     }
 
     public SelectItem[] getContractSelectOne() {
@@ -310,16 +301,6 @@ public class JvForecastController implements Serializable {
 
         return JsfUtil.getSelectItems(contracts, true);
 
-    }
-
-    public List<Contract> getContractList() {
-        List<Contract> contracts = null;
-
-        if (currentFiscalArrangement != null) {
-            contracts = contractBean.findFiscalArrangementContracts(currentFiscalArrangement);
-        }
-
-        return contracts;
     }
 
     public Double getDailySum() {
@@ -419,6 +400,11 @@ public class JvForecastController implements Serializable {
     private void setEmbeddableKeys() {
         currentProduction.setPeriodYear(periodYear);
         currentProduction.setPeriodMonth(periodMonth);
-        currentProduction.setContract(currentContract);        
+//        ContractPK cPK = new ContractPK();
+//        cPK.setFiscalArrangementId(currentContract.getFiscalArrangementId());
+//        cPK.setCrudeTypeCode(currentContract.getCrudeTypeCode());
+//        Contract contract=contractBean.find(cPK);
+        currentProduction.setContract(currentContract);
+//      currentContract.addForecast(currentProduction);
     }
 }

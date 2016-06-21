@@ -16,6 +16,7 @@ import com.nnpcgroup.cosm.ejb.production.jv.JvProductionServices;
 import com.nnpcgroup.cosm.ejb.production.jv.ModifiedCarryProductionServices;
 import com.nnpcgroup.cosm.ejb.production.jv.RegularProductionServices;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
+import com.nnpcgroup.cosm.entity.FiscalArrangementPK;
 import com.nnpcgroup.cosm.entity.contract.CarryContract;
 import com.nnpcgroup.cosm.entity.contract.Contract;
 import com.nnpcgroup.cosm.entity.contract.ContractPK;

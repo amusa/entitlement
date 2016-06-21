@@ -20,7 +20,7 @@
                                 <div class="row">
                                     <div class="col-md-6 m-b-15">
                                         <h:outputLabel value="Fiscal Arrg" for="fiscalArrangement" />
-                                        <h:selectOneMenu id="fiscalArrangement" value="#{contractController.selected.fiscalArrangement}" class="form-control input-sm m-b-10">
+                                        <h:selectOneMenu id="fiscalArrangement" value="#{contractController.fiscalArrangement}" class="form-control input-sm m-b-10">
                                             <f:selectItems value="#{fiscalController.fiscalSelectOptions}"
                                                            var="fiscalArrangementItem"
                                                            itemValue="#{fiscalArrangementItem}"/>
@@ -28,7 +28,7 @@
                                         </h:selectOneMenu> 
 
                                         <h:outputLabel value="Crude Type" for="crudeType" />
-                                        <h:selectOneMenu id="crudeType" value="#{contractController.selected.crudeType}" class="form-control input-sm m-b-10">
+                                        <h:selectOneMenu id="crudeType" value="#{contractController.crudeType}" class="form-control input-sm m-b-10">
                                             <f:selectItems value="#{crudeTypeController.itemsAvailableSelectOne}"
                                                            var="crudeTypeItem"
                                                            itemValue="#{crudeTypeItem}"/>

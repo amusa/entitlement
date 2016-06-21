@@ -26,25 +26,16 @@ public abstract class Contract implements Serializable {
     private static final long serialVersionUID = 4374185291370537475L;
 
     private Long fiscalArrangementId;
+//    private FiscalArrangement fiscalArrangement;
     private String crudeTypeCode;
-
-    private FiscalArrangement fiscalArrangement;
-    private CrudeType crudeType;
+//    private CrudeType crudeType;
+    private String title;
 
     public Contract() {
     }
 
     public Contract(Long fiscalArrangementId, String crudeTypeCode) {
         this.fiscalArrangementId = fiscalArrangementId;
-        this.crudeTypeCode = crudeTypeCode;
-    }
-
-    @Id
-    public String getCrudeTypeCode() {
-        return crudeTypeCode;
-    }
-
-    public void setCrudeTypeCode(String crudeTypeCode) {
         this.crudeTypeCode = crudeTypeCode;
     }
 
@@ -57,32 +48,45 @@ public abstract class Contract implements Serializable {
         this.fiscalArrangementId = fiscalArrangementId;
     }
 
-    @ManyToOne(cascade = CascadeType.MERGE)
-    @MapsId("fiscalArrangementId")
-    @JoinColumn(name = "FISCALARRANGEMENTID", referencedColumnName = "ID", updatable = false, insertable = false)
-    public FiscalArrangement getFiscalArrangement() {
-        return fiscalArrangement;
+    @Id
+    public String getCrudeTypeCode() {
+        return crudeTypeCode;
     }
 
-    public void setFiscalArrangement(FiscalArrangement fiscalArrangement) {
-        this.fiscalArrangement = fiscalArrangement;
-        if (fiscalArrangement != null) {
-            this.fiscalArrangementId = fiscalArrangement.getId();
-        }
+    public void setCrudeTypeCode(String crudeTypeCode) {
+        this.crudeTypeCode = crudeTypeCode;
+    }
+//
+//        @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "FISCALARRANGEMENTID", insertable = false, updatable = false)
+//    @MapsId("fiscalArrangementId")
+//    public FiscalArrangement getFiscalArrangement() {
+//        return fiscalArrangement;
+//    }
+//
+//    public void setFiscalArrangement(FiscalArrangement fiscalArrangement) {
+//        this.fiscalArrangement = fiscalArrangement;
+//    }
+
+
+//    @ManyToOne
+//    @MapsId("crudeTypeCode")
+//    @JoinColumn(name = "CRUDETYPECODE", insertable = false, updatable = false)
+//      public CrudeType getCrudeType() {
+//        return crudeType;
+//    }
+//
+//    public void setCrudeType(CrudeType crudeType) {
+//        this.crudeType = crudeType;
+//    }
+
+    @Column(name = "TITLE")
+    public String getTitle() {
+        return title;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "CRUDETYPECODE", referencedColumnName = "CODE", updatable = false, insertable = false)
-    @MapsId("crudeTypeCode")
-    public CrudeType getCrudeType() {
-        return crudeType;
-    }
-
-    public void setCrudeType(CrudeType crudeType) {
-        this.crudeType = crudeType;
-        if (crudeType != null) {
-            this.crudeTypeCode = crudeType.getCode();
-        }
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     @Override
@@ -93,18 +97,12 @@ public abstract class Contract implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
         Contract contract = (Contract) o;
 
-        if (!fiscalArrangementId.equals(contract.fiscalArrangementId)) {
-            return false;
-        }
+        if (!fiscalArrangementId.equals(contract.fiscalArrangementId)) return false;
         return crudeTypeCode.equals(contract.crudeTypeCode);
 
     }

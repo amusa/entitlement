@@ -10,20 +10,8 @@ import com.nnpcgroup.cosm.entity.contract.Contract;
 import java.io.Serializable;
 import java.util.List;
 import java.util.logging.Logger;
-import javax.persistence.CascadeType;
-import javax.persistence.DiscriminatorColumn;
+import javax.persistence.*;
 //import javax.persistence.*;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.IdClass;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.PrimaryKeyJoinColumn;
-import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -63,6 +51,7 @@ public abstract class Forecast implements Serializable {
     }
 
     @Id
+    @Column(name = "PERIOD_YEAR")
     public Integer getPeriodYear() {
         return periodYear;
     }
@@ -72,6 +61,7 @@ public abstract class Forecast implements Serializable {
     }
 
     @Id
+    @Column(name = "PERIOD_MONTH")
     public Integer getPeriodMonth() {
         return periodMonth;
     }
@@ -82,10 +72,10 @@ public abstract class Forecast implements Serializable {
 
     @Id
     @ManyToOne
-    @JoinColumns({
-            @JoinColumn(name = "FISCALARRANGEMENTID", referencedColumnName = "FISCALARRANGEMENTID"),
-            @JoinColumn(name = "CRUDETYPECODE", referencedColumnName = "CRUDETYPECODE")
-    })     
+    @JoinColumns(value = {
+            @JoinColumn(name = "FISCALARRANGEMENT_ID", referencedColumnName = "FISCALARRANGEMENTID"),
+            @JoinColumn(name = "CRUDETYPE_CODE", referencedColumnName = "CRUDETYPECODE")
+    })
     public Contract getContract() {
         return contract;
     }
@@ -95,6 +85,7 @@ public abstract class Forecast implements Serializable {
     }
 
     @NotNull
+    @Column(name = "OPENING_STOCK")
     public Double getOpeningStock() {
         return openingStock;
     }
@@ -103,6 +94,7 @@ public abstract class Forecast implements Serializable {
         this.openingStock = openingStock;
     }
 
+    @Column(name = "CLOSING_STOCK")
     public Double getClosingStock() {
         return closingStock;
     }
@@ -112,6 +104,7 @@ public abstract class Forecast implements Serializable {
     }
 
     @NotNull
+    @Column(name = "PRODUCTION_VOLUME")
     public Double getProductionVolume() {
         return productionVolume;
     }
@@ -121,6 +114,7 @@ public abstract class Forecast implements Serializable {
     }
 
     @NotNull
+    @Column(name = "OWN_SHARE_ENTITLEMENT")
     public Double getOwnShareEntitlement() {
         return ownShareEntitlement;
     }
@@ -129,6 +123,7 @@ public abstract class Forecast implements Serializable {
         this.ownShareEntitlement = ownShareEntitlement;
     }
 
+    @Column(name = "PARTNER_SHARE_ENTITLEMENT")
     public Double getPartnerShareEntitlement() {
         return partnerShareEntitlement;
     }
@@ -137,6 +132,7 @@ public abstract class Forecast implements Serializable {
         this.partnerShareEntitlement = partnerShareEntitlement;
     }
 
+    @Column(name = "GROSS_PRODUCTION")
     public Double getGrossProduction() {
         return grossProduction;
     }
@@ -145,6 +141,7 @@ public abstract class Forecast implements Serializable {
         this.grossProduction = grossProduction;
     }
 
+    @Column(name = "LIFTING")
     public Double getLifting() {
         return lifting;
     }
@@ -153,6 +150,7 @@ public abstract class Forecast implements Serializable {
         this.lifting = lifting;
     }
 
+    @Column(name = "CARGOES")
     public Integer getCargos() {
         return cargos;
     }
@@ -161,6 +159,7 @@ public abstract class Forecast implements Serializable {
         this.cargos = cargos;
     }
 
+    @Column(name = "AVAILABILITY")
     public Double getAvailability() {
         return availability;
     }
@@ -169,6 +168,7 @@ public abstract class Forecast implements Serializable {
         this.availability = availability;
     }
 
+    @Column(name = "PARTNER_OPENING_STOCK")
     public Double getPartnerOpeningStock() {
         return partnerOpeningStock;
     }
@@ -177,6 +177,7 @@ public abstract class Forecast implements Serializable {
         this.partnerOpeningStock = partnerOpeningStock;
     }
 
+    @Column(name = "PARTNER_CLOSING_STOCK")
     public Double getPartnerClosingStock() {
         return partnerClosingStock;
     }
@@ -185,6 +186,7 @@ public abstract class Forecast implements Serializable {
         this.partnerClosingStock = partnerClosingStock;
     }
 
+    @Column(name = "PARTNER_AVAILABILITY")
     public Double getPartnerAvailability() {
         return partnerAvailability;
     }
@@ -193,6 +195,7 @@ public abstract class Forecast implements Serializable {
         this.partnerAvailability = partnerAvailability;
     }
 
+    @Column(name = "PARTNER_LIFTING")
     public Double getPartnerLifting() {
         return partnerLifting;
     }
@@ -201,6 +204,7 @@ public abstract class Forecast implements Serializable {
         this.partnerLifting = partnerLifting;
     }
 
+    @Column(name = "PARTNER_CARGOES")
     public Integer getPartnerCargos() {
         return partnerCargos;
     }

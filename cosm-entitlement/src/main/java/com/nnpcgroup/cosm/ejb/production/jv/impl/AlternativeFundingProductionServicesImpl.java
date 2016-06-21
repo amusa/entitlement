@@ -8,6 +8,7 @@ package com.nnpcgroup.cosm.ejb.production.jv.impl;
 import com.nnpcgroup.cosm.ejb.PriceBean;
 import com.nnpcgroup.cosm.ejb.contract.ContractServices;
 import com.nnpcgroup.cosm.ejb.production.jv.AlternativeFundingProductionServices;
+import com.nnpcgroup.cosm.entity.FiscalArrangementPK;
 import com.nnpcgroup.cosm.entity.Price;
 import com.nnpcgroup.cosm.entity.PricePK;
 import com.nnpcgroup.cosm.entity.contract.AlternativeFundingContract;

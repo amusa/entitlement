@@ -13,6 +13,7 @@ import com.nnpcgroup.cosm.entity.production.jv.Production;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.Resource;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -23,6 +24,8 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import com.nnpcgroup.cosm.ejb.CommonServices;
 import com.nnpcgroup.cosm.entity.FiscalPeriod;
+import com.nnpcgroup.cosm.util.COSMPersistence;
+
 import javax.persistence.TypedQuery;
 
 /**
@@ -34,7 +37,11 @@ public abstract class CommonServicesImpl<T> extends AbstractCrudServicesImpl<T> 
 
     private static final Logger log = Logger.getLogger(CommonServicesImpl.class.getName());
 
-    @PersistenceContext(unitName = "entitlementPU")
+//    @PersistenceContext(unitName = "entitlementPU")
+//    private EntityManager em;
+
+    @Inject
+    @COSMPersistence
     private EntityManager em;
 
     @Inject
@@ -113,7 +120,7 @@ public abstract class CommonServicesImpl<T> extends AbstractCrudServicesImpl<T> 
             cq.select(e).where(
                     cb.and(cb.equal(e.get("periodYear"), year),
                             cb.equal(e.get("periodMonth"), month),
-                            cb.equal(e.get("contract").get("fiscalArrangement"), fa)
+                            cb.equal(e.get("contract").get("fiscalArrangementId"), fa.getId())
                     ));
 //            cq.where(
 //                    cb.equal(e.get("contract").get("fiscalArrangement"), fa)

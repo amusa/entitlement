@@ -10,6 +10,7 @@ import com.nnpcgroup.cosm.ejb.FiscalArrangementBean;
 import com.nnpcgroup.cosm.ejb.forecast.jv.JvForecastServices;
 import com.nnpcgroup.cosm.ejb.impl.CommonServicesImpl;
 import com.nnpcgroup.cosm.entity.*;
+import com.nnpcgroup.cosm.entity.contract.Contract;
 import com.nnpcgroup.cosm.entity.contract.ContractPK;
 import com.nnpcgroup.cosm.entity.forecast.jv.Forecast;
 import com.nnpcgroup.cosm.entity.forecast.jv.ForecastPK;
@@ -188,6 +189,7 @@ public abstract class JvForecastServicesImpl<T extends Forecast> extends CommonS
         int year = forecast.getPeriodYear();
         FiscalPeriod prevFp = getPreviousFiscalPeriod(year, month);
         ContractPK cPK = new ContractPK(forecast.getContract().getFiscalArrangementId(), forecast.getContract().getCrudeTypeCode());
+
 
         T f = find(new ForecastPK(prevFp.getYear(), prevFp.getMonth(), cPK));
         //T f = findByContractPeriod(prevFp.getYear(), prevFp.getMonth(), cs);

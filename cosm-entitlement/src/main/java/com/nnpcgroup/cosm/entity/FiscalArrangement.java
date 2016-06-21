@@ -6,26 +6,31 @@
 package com.nnpcgroup.cosm.entity;
 
 import com.nnpcgroup.cosm.entity.contract.Contract;
+import org.hibernate.annotations.*;
+import org.hibernate.annotations.CascadeType;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 /**
  * @author 18359
  */
 @Entity
+//@IdClass(FiscalArrangementPK.class)
 @Table(name = "FISCAL_ARRANGEMENT")
 public abstract class FiscalArrangement implements Serializable {
 
     private static final long serialVersionUID = -5266137042066972524L;
-    protected Long id;
-    protected String title;
-    protected Company operator;
-   // protected List<Contract> contracts;
+    private Long id;
+    private String title;
+    private Company operator;
+    //protected List<Contract> contracts;
 
     public FiscalArrangement() {
     }
@@ -35,6 +40,7 @@ public abstract class FiscalArrangement implements Serializable {
     }
 
     @Id
+    @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long getId() {
         return id;
@@ -45,6 +51,7 @@ public abstract class FiscalArrangement implements Serializable {
     }
 
     @NotNull
+    @Column(name = "TITLE")
     public String getTitle() {
         return title;
     }
@@ -54,6 +61,7 @@ public abstract class FiscalArrangement implements Serializable {
     }
 
     @ManyToOne
+    @JoinColumn(name = "OPERATOR_ID")
     @NotNull
     public Company getOperator() {
         return operator;
@@ -63,7 +71,7 @@ public abstract class FiscalArrangement implements Serializable {
         this.operator = operator;
     }
 
-//    @OneToMany(mappedBy = "fiscalArrangement")
+//    @OneToMany(mappedBy = "fiscalArrangement", fetch = FetchType.EAGER, cascade = javax.persistence.CascadeType.MERGE)
 //    public List<Contract> getContracts() {
 //        return contracts;
 //    }

@@ -7,6 +7,8 @@ package com.nnpcgroup.cosm.entity.contract;
 
 import com.nnpcgroup.cosm.entity.CrudeType;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
+import com.nnpcgroup.cosm.entity.FiscalArrangementPK;
+
 import java.io.Serializable;
 import java.util.Objects;
 

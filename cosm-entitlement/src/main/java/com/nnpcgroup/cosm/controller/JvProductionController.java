@@ -181,8 +181,8 @@ public class JvProductionController implements Serializable {
     private void setEmbeddableKeys() {
         currentProduction.setPeriodYear(periodYear);
         currentProduction.setPeriodMonth(periodMonth);
-        currentProduction.setFiscalArrangementId(currentContract.getFiscalArrangementId());
-        currentProduction.setCrudeTypeCode(currentContract.getCrudeTypeCode());
+        currentProduction.setFiscalArrangementId(currentContract.getContractPK().getFiscalArrangementId());
+        currentProduction.setCrudeTypeCode(currentContract.getContractPK().getCrudeTypeCode());
     }
 
     public List<Production> getProductions() {
@@ -316,7 +316,7 @@ public class JvProductionController implements Serializable {
     public void actualize(Forecast forecast) throws Exception {
         LOG.log(Level.INFO, "************actualizing {0}...", forecast);
         reset();
-        ContractPK cPK = new ContractPK(forecast.getFiscalArrangementId(),forecast.getCrudeTypeCode());
+        ContractPK cPK = forecast.getContract().getContractPK();
         Contract contract = contractBean.find(cPK); //forecast.getContract();
 
 //        setCurrentContract(forecast.getContract());
@@ -326,8 +326,8 @@ public class JvProductionController implements Serializable {
         ProductionPK pPK = new ProductionPK(
                 forecast.getPeriodYear(),
                 forecast.getPeriodMonth(),
-                forecast.getFiscalArrangementId(),
-                forecast.getCrudeTypeCode()
+                forecast.getContract().getContractPK().getFiscalArrangementId(),
+                forecast.getContract().getContractPK().getCrudeTypeCode()
         );
         production = (Production) getProductionBean().find(pPK);
         LOG.log(Level.INFO, "************findByContractStreamPeriod returning {0}...", currentProduction);
@@ -353,8 +353,8 @@ public class JvProductionController implements Serializable {
 //            production.setContract(forecast.getContract());
             production.setPeriodYear(forecast.getPeriodYear());
             production.setPeriodMonth(forecast.getPeriodMonth());
-            production.setFiscalArrangementId(forecast.getFiscalArrangementId());
-            production.setCrudeTypeCode(forecast.getCrudeTypeCode());
+            production.setFiscalArrangementId(forecast.getContract().getContractPK().getFiscalArrangementId());
+            production.setCrudeTypeCode(forecast.getContract().getContractPK().getCrudeTypeCode());
 
             // getProductionBean().enrich(currentProduction);
         }

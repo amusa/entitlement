@@ -9,6 +9,8 @@ import com.nnpcgroup.cosm.entity.CrudeType;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
 import com.nnpcgroup.cosm.entity.FiscalArrangementPK;
 
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -16,6 +18,7 @@ import java.util.Objects;
  *
  * @author 18359
  */
+@Embeddable
 public class ContractPK implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -31,6 +34,7 @@ public class ContractPK implements Serializable {
         this.crudeTypeCode = crudeTypeCode;
     }
 
+    @Column(name = "FISCALARRANGEMENTID")
     public Long getFiscalArrangementId() {
         return fiscalArrangementId;
     }
@@ -39,6 +43,7 @@ public class ContractPK implements Serializable {
         this.fiscalArrangementId = fiscalArrangementId;
     }
 
+    @Column(name = "CRUDETYPECODE")
     public String getCrudeTypeCode() {
         return crudeTypeCode;
     }

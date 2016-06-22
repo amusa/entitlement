@@ -69,7 +69,7 @@ public abstract class FiscalArrangement implements Serializable {
         this.operator = operator;
     }
 
-    @OneToMany(mappedBy = "fiscalArrangement", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "fiscalArrangement", fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.REMOVE})
     public List<Contract> getContracts() {
         return contracts;
     }

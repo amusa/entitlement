@@ -193,9 +193,9 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
     }
     
     private boolean isSharedOilTerminalPeriodDue(T forecast) {
-        //Contract contract = forecast.getContract();
-        ContractPK cPK = new ContractPK(forecast.getFiscalArrangementId(),forecast.getCrudeTypeCode());
-        Contract contract = contractBean.find(cPK); //forecast.getContract();
+        Contract contract = forecast.getContract();
+//        ContractPK cPK = new ContractPK(forecast.getContract().getFiscalArrangementId(),forecast.getContract().getCrudeTypeCode());
+//        Contract contract = contractBean.find(cPK); //forecast.getContract();
         assert (contract instanceof AlternativeFundingContract);
         AlternativeFundingContract afContract = (AlternativeFundingContract) contract;
         
@@ -220,9 +220,9 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
             sharedOilCum = prev.getSharedOilCum();
         }
         
-        //Contract contract = forecast.getContract();
-        ContractPK cPK = new ContractPK(forecast.getFiscalArrangementId(),forecast.getCrudeTypeCode());
-        Contract contract = contractBean.find(cPK); //forecast.getContract();
+        Contract contract = forecast.getContract();
+//        ContractPK cPK = new ContractPK(forecast.getContract().getFiscalArrangementId(),forecast.getContract().getCrudeTypeCode());
+//        Contract contract = contractBean.find(cPK); //forecast.getContract();
         assert (contract instanceof AlternativeFundingContract);
         AlternativeFundingContract afContract = (AlternativeFundingContract) contract;
         
@@ -250,9 +250,9 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
         Double ownEquity = forecast.getOwnShareEntitlement() != null ? forecast.getOwnShareEntitlement() : new Double(0);
         Double carryOil = forecast.getCarryOil() != null ? forecast.getCarryOil() : 0.0;
         
-        //Contract contract = forecast.getContract();
-        ContractPK cPK = new ContractPK(forecast.getFiscalArrangementId(),forecast.getCrudeTypeCode());
-        Contract contract = contractBean.find(cPK); //forecast.getContract();
+        Contract contract = forecast.getContract();
+//        ContractPK cPK = new ContractPK(forecast.getContract().getFiscalArrangementId(),forecast.getContract().getCrudeTypeCode());
+//        Contract contract = contractBean.find(cPK); //forecast.getContract();
         assert (contract instanceof AlternativeFundingContract);
         AlternativeFundingContract afContract = (AlternativeFundingContract) contract;
         Double sharedOilRatio = afContract.getSharedOilRatio() != null ? afContract.getSharedOilRatio() : 0.0;

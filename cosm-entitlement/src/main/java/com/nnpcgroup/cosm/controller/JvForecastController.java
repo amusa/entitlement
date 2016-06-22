@@ -113,20 +113,10 @@ public class JvForecastController implements Serializable {
     public void setCurrentProduction(Forecast currentProduction) {
         LOG.info("ProductionController::setProduction called...");
         this.currentProduction = currentProduction;
-//        this.currentFiscalArrangement = (currentProduction != null)
-//                ? currentProduction.getContract().getFiscalArrangement() : null;
         this.currentFiscalArrangement = (currentProduction != null)
-                ? fiscalBean.find(currentProduction.getFiscalArrangementId()) : null;
-//        this.currentContract = (currentProduction != null)
-//                ? currentProduction.getContract() : null;
-
-        if (currentProduction != null) {
-            ContractPK cPK = new ContractPK(currentProduction.getFiscalArrangementId(),currentProduction.getCrudeTypeCode());
-            Contract contract = contractBean.find(cPK); //forecast.getContract();
-//            Contract contract = currentProduction.getContract();
-//            this.currentContract = contractBean.find(contract);
-        }
-
+                ? currentProduction.getContract().getFiscalArrangement() : null;
+        this.currentContract = (currentProduction != null)
+                ? currentProduction.getContract() : null;
     }
 
     public AlternativeFundingForecast getCurrentAfProduction() {
@@ -400,18 +390,16 @@ public class JvForecastController implements Serializable {
     }
 
     private void setEmbeddableKeys() {
+        ForecastPK fPK = new ForecastPK();
+        fPK.setPeriodYear(periodYear);
+        fPK.setPeriodMonth(periodMonth);
+        fPK.setContract(currentContract.getContractPK());
+        currentProduction.setForecastPK(fPK);
+
         currentProduction.setPeriodYear(periodYear);
         currentProduction.setPeriodMonth(periodMonth);
-        currentProduction.setFiscalArrangementId(currentContract.getFiscalArrangementId());
-        currentProduction.setCrudeTypeCode(currentContract.getCrudeTypeCode());
-//        ContractPK cPK = new ContractPK();
-//        cPK.setFiscalArrangementId(currentContract.getFiscalArrangementId());
-//        cPK.setCrudeTypeCode(currentContract.getCrudeTypeCode());
-//        Contract contract=contractBean.find(cPK);
-//        //currentProduction.setContract(contract);
-//       contract.addForecast(currentProduction);
-//        currentContract=contract;
-
-
+        currentProduction.setContract(currentContract);
+//        currentContract.addForecast(currentProduction);
+//        currentProduction.setContract(currentContract);
     }
 }

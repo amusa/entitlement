@@ -62,7 +62,7 @@ public abstract class ContractBaseServicesImpl<T extends Contract> extends Abstr
         try {
             cq.select(e).
                     where(
-                            cb.equal(e.get("fiscalArrangementId"), fa.getId())
+                            cb.equal(e.get("fiscalArrangement"), fa)
                     );
 
             Query query = getEntityManager().createQuery(cq);
@@ -79,9 +79,7 @@ public abstract class ContractBaseServicesImpl<T extends Contract> extends Abstr
     public T find(Object id) {
         if(id instanceof Contract){
             Contract contract = (Contract)id;
-            ContractPK cPK = new ContractPK();
-            cPK.setFiscalArrangementId(contract.getFiscalArrangementId());
-            cPK.setCrudeTypeCode(contract.getCrudeTypeCode());
+            ContractPK cPK = contract.getContractPK();
             return super.find(cPK);
         }
         return super.find(id); //To change body of generated methods, choose Tools | Templates.

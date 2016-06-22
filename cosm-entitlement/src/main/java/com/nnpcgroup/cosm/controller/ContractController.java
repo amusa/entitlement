@@ -116,12 +116,14 @@ public class ContractController implements Serializable {
     }
 
     protected void setEmbeddableKeys() {
-        if(selected!=null){
-            selected.setFiscalArrangementId(fiscalArrangement.getId());
+        if (selected != null) {
+            ContractPK cPK = new ContractPK();
+            cPK.setFiscalArrangementId(fiscalArrangement.getId());
+            cPK.setCrudeTypeCode(crudeType.getCode());
 
-            selected.setCrudeTypeCode(crudeType.getCode());
-
-//            selected.setFiscalArrangement(fiscalArrangement);
+            selected.setContractPK(cPK);
+            selected.setCrudeType(crudeType);
+            selected.setFiscalArrangement(fiscalArrangement);
             fiscalArrangement.addContract(selected);
             //crudeType.addContract(selected);
         }
@@ -279,9 +281,9 @@ public class ContractController implements Serializable {
 
         String getStringKey(Contract value) {
             StringBuilder sb = new StringBuilder();
-            sb.append(value.getFiscalArrangementId());
+            sb.append(value.getContractPK().getFiscalArrangementId());
             sb.append(SEPARATOR);
-            sb.append(value.getCrudeTypeCode());
+            sb.append(value.getContractPK().getCrudeTypeCode());
             return sb.toString();
         }
 

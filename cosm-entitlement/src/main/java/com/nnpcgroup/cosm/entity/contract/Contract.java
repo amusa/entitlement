@@ -19,49 +19,39 @@ import javax.persistence.*;
  * @author 18359
  */
 @Entity
-@IdClass(ContractPK.class)
+//@IdClass(ContractPK.class)
 @Table(name = "CONTRACT")
 public abstract class Contract implements Serializable {
 
     private static final long serialVersionUID = 4374185291370537475L;
 
-    private Long fiscalArrangementId;
-    private String crudeTypeCode;
-
+    private ContractPK contractPK;
     private FiscalArrangement fiscalArrangement;
     private CrudeType crudeType;
 
     private String title;
-//    private List<Forecast>forecasts;
+    private List<Forecast>forecasts;
 
     public Contract() {
     }
 
-    public Contract(Long fiscalArrangementId, String crudeTypeCode) {
-        this.fiscalArrangementId = fiscalArrangementId;
-        this.crudeTypeCode = crudeTypeCode;
+    public Contract(FiscalArrangement fiscalArrangement, CrudeType crudeType) {
+        this.fiscalArrangement = fiscalArrangement;
+        this.crudeType = crudeType;
     }
 
-    @Id
-    public Long getFiscalArrangementId() {
-        return fiscalArrangementId;
+    @EmbeddedId
+    public ContractPK getContractPK() {
+        return contractPK;
     }
 
-    public void setFiscalArrangementId(Long fiscalArrangementId) {
-        this.fiscalArrangementId = fiscalArrangementId;
+    public void setContractPK(ContractPK contractPK) {
+        this.contractPK = contractPK;
     }
 
-    @Id
-    public String getCrudeTypeCode() {
-        return crudeTypeCode;
-    }
-
-    public void setCrudeTypeCode(String crudeTypeCode) {
-        this.crudeTypeCode = crudeTypeCode;
-    }
 
         @ManyToOne
-    @JoinColumn(name = "FISCALARRANGEMENTID", insertable = false, updatable = false)
+    @JoinColumn(name = "FISCALARRANGEMENTID")
     @MapsId("fiscalArrangementId")
     public FiscalArrangement getFiscalArrangement() {
         return fiscalArrangement;
@@ -74,7 +64,7 @@ public abstract class Contract implements Serializable {
 
     @ManyToOne
     @MapsId("crudeTypeCode")
-    @JoinColumn(name = "CRUDETYPECODE", insertable = false, updatable = false)
+    @JoinColumn(name = "CRUDETYPECODE")
       public CrudeType getCrudeType() {
         return crudeType;
     }
@@ -92,21 +82,22 @@ public abstract class Contract implements Serializable {
         this.title = title;
     }
 
-//    @OneToMany(mappedBy = "contract", fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
-//    public List<Forecast> getForecasts() {
-//        return forecasts;
-//    }
-//
-//    public void setForecasts(List<Forecast> forecasts) {
-//        this.forecasts = forecasts;
-//    }
-//
-//    public void addForecast(Forecast forecast){
-//        if(forecasts==null){
-//            forecasts=new ArrayList<>();
-//        }
-//        forecasts.add(forecast);
-//    }
+    @OneToMany(mappedBy = "contract")
+    public List<Forecast> getForecasts() {
+        return forecasts;
+    }
+
+    public void setForecasts(List<Forecast> forecasts) {
+        this.forecasts = forecasts;
+    }
+
+    public void addForecast(Forecast forecast){
+        if(forecasts==null){
+            forecasts=new ArrayList<>();
+        }
+        forecasts.add(forecast);
+    }
+
 
     @Override
     public String toString() {
@@ -121,15 +112,15 @@ public abstract class Contract implements Serializable {
 
         Contract contract = (Contract) o;
 
-        if (!fiscalArrangementId.equals(contract.fiscalArrangementId)) return false;
-        return crudeTypeCode.equals(contract.crudeTypeCode);
+        if (!fiscalArrangement.equals(contract.fiscalArrangement)) return false;
+        return crudeType.equals(contract.crudeType);
 
     }
 
     @Override
     public int hashCode() {
-        int result = fiscalArrangementId.hashCode();
-        result = 31 * result + crudeTypeCode.hashCode();
+        int result = fiscalArrangement.hashCode();
+        result = 31 * result + crudeType.hashCode();
         return result;
     }
 }

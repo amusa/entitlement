@@ -116,13 +116,15 @@ public class JvForecastController implements Serializable {
 //        this.currentFiscalArrangement = (currentProduction != null)
 //                ? currentProduction.getContract().getFiscalArrangement() : null;
         this.currentFiscalArrangement = (currentProduction != null)
-                ? fiscalBean.find(currentProduction.getContract().getFiscalArrangementId()) : null;
+                ? fiscalBean.find(currentProduction.getFiscalArrangementId()) : null;
 //        this.currentContract = (currentProduction != null)
 //                ? currentProduction.getContract() : null;
 
         if (currentProduction != null) {
-            Contract contract = currentProduction.getContract();
-            this.currentContract = contractBean.find(contract);
+            ContractPK cPK = new ContractPK(currentProduction.getFiscalArrangementId(),currentProduction.getCrudeTypeCode());
+            Contract contract = contractBean.find(cPK); //forecast.getContract();
+//            Contract contract = currentProduction.getContract();
+//            this.currentContract = contractBean.find(contract);
         }
 
     }
@@ -400,11 +402,16 @@ public class JvForecastController implements Serializable {
     private void setEmbeddableKeys() {
         currentProduction.setPeriodYear(periodYear);
         currentProduction.setPeriodMonth(periodMonth);
+        currentProduction.setFiscalArrangementId(currentContract.getFiscalArrangementId());
+        currentProduction.setCrudeTypeCode(currentContract.getCrudeTypeCode());
 //        ContractPK cPK = new ContractPK();
 //        cPK.setFiscalArrangementId(currentContract.getFiscalArrangementId());
 //        cPK.setCrudeTypeCode(currentContract.getCrudeTypeCode());
 //        Contract contract=contractBean.find(cPK);
-        currentProduction.setContract(currentContract);
-//      currentContract.addForecast(currentProduction);
+//        //currentProduction.setContract(contract);
+//       contract.addForecast(currentProduction);
+//        currentContract=contract;
+
+
     }
 }

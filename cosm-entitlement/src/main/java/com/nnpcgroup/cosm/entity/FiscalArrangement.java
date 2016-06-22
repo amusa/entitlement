@@ -6,8 +6,6 @@
 package com.nnpcgroup.cosm.entity;
 
 import com.nnpcgroup.cosm.entity.contract.Contract;
-import org.hibernate.annotations.*;
-import org.hibernate.annotations.CascadeType;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -30,7 +28,7 @@ public abstract class FiscalArrangement implements Serializable {
     private Long id;
     private String title;
     private Company operator;
-    //protected List<Contract> contracts;
+    private List<Contract> contracts;
 
     public FiscalArrangement() {
     }
@@ -71,21 +69,21 @@ public abstract class FiscalArrangement implements Serializable {
         this.operator = operator;
     }
 
-//    @OneToMany(mappedBy = "fiscalArrangement", fetch = FetchType.EAGER, cascade = javax.persistence.CascadeType.MERGE)
-//    public List<Contract> getContracts() {
-//        return contracts;
-//    }
-//
-//    public void setContracts(List<Contract> contracts) {
-//        this.contracts = contracts;
-//    }
-//
-//    public void addContract(Contract contract) {
-//        if (contracts == null) {
-//            contracts = new ArrayList<>();
-//        }
-//        contracts.add(contract);
-//    }
+    @OneToMany(mappedBy = "fiscalArrangement", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    public List<Contract> getContracts() {
+        return contracts;
+    }
+
+    public void setContracts(List<Contract> contracts) {
+        this.contracts = contracts;
+    }
+
+    public void addContract(Contract contract) {
+        if (contracts == null) {
+            contracts = new ArrayList<>();
+        }
+        contracts.add(contract);
+    }
 
     @Override
     public String toString() {

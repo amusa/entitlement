@@ -120,7 +120,7 @@ public abstract class CommonServicesImpl<T> extends AbstractCrudServicesImpl<T> 
             cq.select(e).where(
                     cb.and(cb.equal(e.get("periodYear"), year),
                             cb.equal(e.get("periodMonth"), month),
-                            cb.equal(e.get("contract").get("fiscalArrangementId"), fa.getId())
+                            cb.equal(e.get("fiscalArrangement"), fa)
                     ));
 //            cq.where(
 //                    cb.equal(e.get("contract").get("fiscalArrangement"), fa)

@@ -19,15 +19,19 @@ public class ForecastPK implements Serializable {
     private static final long serialVersionUID = -5632726719147425922L;
     private Integer periodYear;
     private Integer periodMonth;
-    private ContractPK contract;
+//    private ContractPK contract;
+    private Long fiscalArrangementId;
+    private String crudeTypeCode;
+
     
     public ForecastPK() {
     }
 
-    public ForecastPK(Integer periodYear, Integer periodMonth, ContractPK contract) {
+    public ForecastPK(Integer periodYear, Integer periodMonth, Long fiscalArrangementId, String crudeTypeCode) {
         this.periodYear = periodYear;
         this.periodMonth = periodMonth;
-        this.contract = contract;
+        this.fiscalArrangementId = fiscalArrangementId;
+        this.crudeTypeCode = crudeTypeCode;
     }
 
     public Integer getPeriodYear() {
@@ -46,13 +50,29 @@ public class ForecastPK implements Serializable {
         this.periodMonth = periodMonth;
     }
 
-    public ContractPK getContract() {
-        return contract;
+    public Long getFiscalArrangementId() {
+        return fiscalArrangementId;
     }
 
-    public void setContract(ContractPK contract) {
-        this.contract = contract;
+    public void setFiscalArrangementId(Long fiscalArrangementId) {
+        this.fiscalArrangementId = fiscalArrangementId;
     }
+
+    public String getCrudeTypeCode() {
+        return crudeTypeCode;
+    }
+
+    public void setCrudeTypeCode(String crudeTypeCode) {
+        this.crudeTypeCode = crudeTypeCode;
+    }
+
+//    public ContractPK getContract() {
+//        return contract;
+//    }
+//
+//    public void setContract(ContractPK contract) {
+//        this.contract = contract;
+//    }
 
     @Override
     public boolean equals(Object o) {
@@ -63,7 +83,8 @@ public class ForecastPK implements Serializable {
 
         if (!periodYear.equals(that.periodYear)) return false;
         if (!periodMonth.equals(that.periodMonth)) return false;
-        return contract.equals(that.contract);
+        if (!fiscalArrangementId.equals(that.fiscalArrangementId)) return false;
+        return crudeTypeCode.equals(that.crudeTypeCode);
 
     }
 
@@ -71,7 +92,8 @@ public class ForecastPK implements Serializable {
     public int hashCode() {
         int result = periodYear.hashCode();
         result = 31 * result + periodMonth.hashCode();
-        result = 31 * result + contract.hashCode();
+        result = 31 * result + fiscalArrangementId.hashCode();
+        result = 31 * result + crudeTypeCode.hashCode();
         return result;
     }
 }

@@ -5,6 +5,8 @@
  */
 package com.nnpcgroup.cosm.entity.forecast.jv;
 
+import com.nnpcgroup.cosm.entity.CrudeType;
+import com.nnpcgroup.cosm.entity.FiscalArrangement;
 import com.nnpcgroup.cosm.entity.contract.Contract;
 
 import java.io.Serializable;
@@ -30,7 +32,12 @@ public abstract class Forecast implements Serializable {
 
     private Integer periodYear;
     private Integer periodMonth;
-    private Contract contract;
+    private Long fiscalArrangementId;
+    private String crudeTypeCode;
+//    private Contract contract;
+    private FiscalArrangement fiscalArrangement;
+    private CrudeType crudeType;
+
     private Double openingStock;
     private Double partnerOpeningStock;
     private Double closingStock;
@@ -71,18 +78,62 @@ public abstract class Forecast implements Serializable {
     }
 
     @Id
-    @ManyToOne
-    @JoinColumns(value = {
-            @JoinColumn(name = "FISCALARRANGEMENT_ID", referencedColumnName = "FISCALARRANGEMENTID"),
-            @JoinColumn(name = "CRUDETYPE_CODE", referencedColumnName = "CRUDETYPECODE")
-    })
-    public Contract getContract() {
-        return contract;
+    @Column(name = "FISCALARRANGEMENT_ID")
+    public Long getFiscalArrangementId() {
+        return fiscalArrangementId;
     }
 
-    public void setContract(Contract contract) {
-        this.contract = contract;
+    public void setFiscalArrangementId(Long fiscalArrangementId) {
+        this.fiscalArrangementId = fiscalArrangementId;
     }
+
+    @Id
+    @Column(name = "CRUDETYPE_CODE")
+    public String getCrudeTypeCode() {
+        return crudeTypeCode;
+    }
+
+    public void setCrudeTypeCode(String crudeTypeCode) {
+        this.crudeTypeCode = crudeTypeCode;
+    }
+
+//    @ManyToOne(cascade = CascadeType.ALL)
+//    @MapsId("contract")
+//    @JoinColumns({
+//            @JoinColumn(name = "FISCALARRANGEMENT_ID", referencedColumnName = "FISCALARRANGEMENTID", insertable = false, updatable = false),
+//            @JoinColumn(name = "CRUDETYPE_CODE", referencedColumnName = "CRUDETYPECODE", insertable = false, updatable = false)
+//    })
+//    public Contract getContract() {
+//        return contract;
+//    }
+//
+//        public void setContract(Contract contract) {
+//        this.contract = contract;
+//    }
+
+    @ManyToOne
+    @JoinColumn(name = "FISCALARRANGEMENT_ID", insertable = false, updatable = false)
+    @MapsId("fiscalArrangementId")
+    public FiscalArrangement getFiscalArrangement() {
+        return fiscalArrangement;
+    }
+
+    public void setFiscalArrangement(FiscalArrangement fiscalArrangement) {
+        this.fiscalArrangement = fiscalArrangement;
+    }
+
+
+    @ManyToOne
+    @MapsId("crudeTypeCode")
+    @JoinColumn(name = "CRUDETYPE_CODE", insertable = false, updatable = false)
+    public CrudeType getCrudeType() {
+        return crudeType;
+    }
+
+    public void setCrudeType(CrudeType crudeType) {
+        this.crudeType = crudeType;
+    }
+
 
     @NotNull
     @Column(name = "OPENING_STOCK")
@@ -224,22 +275,15 @@ public abstract class Forecast implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
         Forecast forecast = (Forecast) o;
 
-        if (!periodYear.equals(forecast.periodYear)) {
-            return false;
-        }
-        if (!periodMonth.equals(forecast.periodMonth)) {
-            return false;
-        }
-        return contract.equals(forecast.contract);
+        if (!periodYear.equals(forecast.periodYear)) return false;
+        if (!periodMonth.equals(forecast.periodMonth)) return false;
+        if (!fiscalArrangementId.equals(forecast.fiscalArrangementId)) return false;
+        return crudeTypeCode.equals(forecast.crudeTypeCode);
 
     }
 
@@ -247,7 +291,8 @@ public abstract class Forecast implements Serializable {
     public int hashCode() {
         int result = periodYear.hashCode();
         result = 31 * result + periodMonth.hashCode();
-        result = 31 * result + contract.hashCode();
+        result = 31 * result + fiscalArrangementId.hashCode();
+        result = 31 * result + crudeTypeCode.hashCode();
         return result;
     }
 }

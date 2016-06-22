@@ -316,13 +316,18 @@ public class JvProductionController implements Serializable {
     public void actualize(Forecast forecast) throws Exception {
         LOG.log(Level.INFO, "************actualizing {0}...", forecast);
         reset();
-        setCurrentContract(forecast.getContract());
+        ContractPK cPK = new ContractPK(forecast.getFiscalArrangementId(),forecast.getCrudeTypeCode());
+        Contract contract = contractBean.find(cPK); //forecast.getContract();
+
+//        setCurrentContract(forecast.getContract());
+        setCurrentContract(contract);
+
         Production production = null;
         ProductionPK pPK = new ProductionPK(
                 forecast.getPeriodYear(),
                 forecast.getPeriodMonth(),
-                forecast.getContract().getFiscalArrangementId(),
-                forecast.getContract().getCrudeTypeCode()
+                forecast.getFiscalArrangementId(),
+                forecast.getCrudeTypeCode()
         );
         production = (Production) getProductionBean().find(pPK);
         LOG.log(Level.INFO, "************findByContractStreamPeriod returning {0}...", currentProduction);
@@ -348,8 +353,8 @@ public class JvProductionController implements Serializable {
 //            production.setContract(forecast.getContract());
             production.setPeriodYear(forecast.getPeriodYear());
             production.setPeriodMonth(forecast.getPeriodMonth());
-            production.setFiscalArrangementId(forecast.getContract().getFiscalArrangementId());
-            production.setCrudeTypeCode(forecast.getContract().getCrudeTypeCode());
+            production.setFiscalArrangementId(forecast.getFiscalArrangementId());
+            production.setCrudeTypeCode(forecast.getCrudeTypeCode());
 
             // getProductionBean().enrich(currentProduction);
         }

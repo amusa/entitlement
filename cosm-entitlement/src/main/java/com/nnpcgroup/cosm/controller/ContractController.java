@@ -117,18 +117,13 @@ public class ContractController implements Serializable {
 
     protected void setEmbeddableKeys() {
         if(selected!=null){
-            //FiscalArrangement fa = fiscalBean.merge(fiscalArrangement);
             selected.setFiscalArrangementId(fiscalArrangement.getId());
-           // selected.setFiscalArrangement(fiscalArrangement);
-            //fiscalBean.edit(fa);
-//            CrudeType ct = crudeTypeBean.merge(crudeType);
+
             selected.setCrudeTypeCode(crudeType.getCode());
-           // selected.setCrudeType(crudeType);
 
 //            selected.setFiscalArrangement(fiscalArrangement);
-//            fiscalArrangement.addContract(selected);
-
-            //selected.getCrudeType().addContract(selected);
+            fiscalArrangement.addContract(selected);
+            //crudeType.addContract(selected);
         }
     }
 
@@ -185,9 +180,10 @@ public class ContractController implements Serializable {
 
     private void persist(PersistAction persistAction, String successMessage) {
         if (selected != null) {
-            setEmbeddableKeys();
+
             try {
                 if (persistAction != PersistAction.DELETE) {
+                    setEmbeddableKeys();
                     getFacade().edit(selected);
                 } else {
                     getFacade().remove(selected);

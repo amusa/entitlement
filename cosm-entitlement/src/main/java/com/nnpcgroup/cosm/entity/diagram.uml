@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement />
+  <nodes>
+    <node x="1429.4642857142856" y="0.0">com.nnpcgroup.cosm.entity.forecast.jv.Forecast</node>
+    <node x="430.0" y="1396.0">com.nnpcgroup.cosm.entity.JointVenture</node>
+    <node x="1890.5357142857142" y="2033.0">com.nnpcgroup.cosm.entity.forecast.jv.ModifiedCarryForecast</node>
+    <node x="422.4999999999999" y="345.0">com.nnpcgroup.cosm.entity.FiscalArrangement</node>
+    <node x="887.5" y="368.0">com.nnpcgroup.cosm.entity.CrudeType</node>
+    <node x="910.5357142857142" y="2256.0">com.nnpcgroup.cosm.entity.contract.ModifiedCarryContract</node>
+    <node x="1510.5357142857142" y="2033.0">com.nnpcgroup.cosm.entity.forecast.jv.CarryForecast</node>
+    <node x="1130.5357142857142" y="2033.0">com.nnpcgroup.cosm.entity.contract.RegularContract</node>
+    <node x="857.5" y="1281.0">com.nnpcgroup.cosm.entity.contract.Contract</node>
+    <node x="0.0" y="1419.0">com.nnpcgroup.cosm.entity.ProductionSharingContract</node>
+    <node x="2250.535714285714" y="1419.0">com.nnpcgroup.cosm.entity.forecast.jv.RegularForecast</node>
+    <node x="690.5357142857142" y="1964.0">com.nnpcgroup.cosm.entity.contract.AlternativeFundingContract</node>
+    <node x="530.5357142857142" y="2256.0">com.nnpcgroup.cosm.entity.contract.CarryContract</node>
+    <node x="1530.5357142857142" y="1028.0">com.nnpcgroup.cosm.entity.forecast.jv.AlternativeFundingForecast</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="com.nnpcgroup.cosm.entity.forecast.jv.Forecast" target="com.nnpcgroup.cosm.entity.contract.Contract">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="com.nnpcgroup.cosm.entity.contract.ModifiedCarryContract" target="com.nnpcgroup.cosm.entity.contract.AlternativeFundingContract">
+      <point x="0.0" y="-52.0" />
+      <point x="1090.5357142857142" y="2231.0" />
+      <point x="1005.5357142857142" y="2231.0" />
+      <point x="105.0" y="121.0" />
+    </edge>
+    <edge source="com.nnpcgroup.cosm.entity.contract.RegularContract" target="com.nnpcgroup.cosm.entity.contract.Contract">
+      <point x="0.0" y="-52.0" />
+      <point x="1310.5357142857142" y="1939.0" />
+      <point x="1217.5" y="1939.0" />
+      <point x="120.0" y="190.0" />
+    </edge>
+    <edge source="com.nnpcgroup.cosm.entity.FiscalArrangement" target="com.nnpcgroup.cosm.entity.contract.Contract">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="com.nnpcgroup.cosm.entity.contract.Contract" target="com.nnpcgroup.cosm.entity.CrudeType">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="com.nnpcgroup.cosm.entity.ProductionSharingContract" target="com.nnpcgroup.cosm.entity.FiscalArrangement">
+      <point x="0.0" y="-52.0" />
+      <point x="205.0" y="1008.0" />
+      <point x="477.4999999999999" y="1008.0" />
+      <point x="-165.0" y="144.0" />
+    </edge>
+    <edge source="com.nnpcgroup.cosm.entity.forecast.jv.AlternativeFundingForecast" target="com.nnpcgroup.cosm.entity.forecast.jv.Forecast">
+      <point x="0.0" y="-443.0" />
+      <point x="1880.5357142857142" y="1008.0" />
+      <point x="1891.9642857142856" y="1008.0" />
+      <point x="92.5" y="489.0" />
+    </edge>
+    <edge source="com.nnpcgroup.cosm.entity.contract.CarryContract" target="com.nnpcgroup.cosm.entity.contract.AlternativeFundingContract">
+      <point x="0.0" y="-52.0" />
+      <point x="710.5357142857142" y="2231.0" />
+      <point x="795.5357142857142" y="2231.0" />
+      <point x="-105.0" y="121.0" />
+    </edge>
+    <edge source="com.nnpcgroup.cosm.entity.contract.AlternativeFundingContract" target="com.nnpcgroup.cosm.entity.contract.Contract">
+      <point x="0.0" y="-121.0" />
+      <point x="900.5357142857142" y="1939.0" />
+      <point x="977.5" y="1939.0" />
+      <point x="-120.0" y="190.0" />
+    </edge>
+    <edge source="com.nnpcgroup.cosm.entity.contract.Contract" target="com.nnpcgroup.cosm.entity.forecast.jv.Forecast">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="com.nnpcgroup.cosm.entity.forecast.jv.RegularForecast" target="com.nnpcgroup.cosm.entity.forecast.jv.Forecast">
+      <point x="0.0" y="-52.0" />
+      <point x="2430.535714285714" y="1008.0" />
+      <point x="2076.9642857142853" y="1008.0" />
+      <point x="277.5" y="489.0" />
+    </edge>
+    <edge source="com.nnpcgroup.cosm.entity.forecast.jv.CarryForecast" target="com.nnpcgroup.cosm.entity.forecast.jv.AlternativeFundingForecast">
+      <point x="0.0" y="-52.0" />
+      <point x="1690.5357142857142" y="1939.0" />
+      <point x="1705.5357142857142" y="1939.0" />
+      <point x="-175.0" y="443.0" />
+    </edge>
+    <edge source="com.nnpcgroup.cosm.entity.contract.Contract" target="com.nnpcgroup.cosm.entity.FiscalArrangement">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="com.nnpcgroup.cosm.entity.forecast.jv.ModifiedCarryForecast" target="com.nnpcgroup.cosm.entity.forecast.jv.AlternativeFundingForecast">
+      <point x="0.0" y="-52.0" />
+      <point x="2070.535714285714" y="1939.0" />
+      <point x="2055.535714285714" y="1939.0" />
+      <point x="175.0" y="443.0" />
+    </edge>
+    <edge source="com.nnpcgroup.cosm.entity.JointVenture" target="com.nnpcgroup.cosm.entity.FiscalArrangement">
+      <point x="0.0" y="-75.0" />
+      <point x="620.0" y="1008.0" />
+      <point x="587.4999999999999" y="1008.0" />
+      <point x="-55.0" y="144.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="1.0" x="1452.5" y="1695.5" />
+  <SelectedNodes>
+    <node>com.nnpcgroup.cosm.entity.FiscalArrangement</node>
+  </SelectedNodes>
+  <Categories>
+    <Category>Fields</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

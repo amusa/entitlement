@@ -14,3 +14,6 @@ hs_err_pid*
 /cosm-admin/target/
 /cosm-lifting/target/
 /cosm-entitlement/target/
+
+/.idea/
+*.iml

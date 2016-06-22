@@ -122,10 +122,6 @@ public abstract class CommonServicesImpl<T> extends AbstractCrudServicesImpl<T> 
                             cb.equal(e.get("periodMonth"), month),
                             cb.equal(e.get("contract").get("fiscalArrangement"), fa)
                     ));
-//            cq.where(
-//                    cb.equal(e.get("contract").get("fiscalArrangement"), fa)
-//            );
-
             Query query = getEntityManager().createQuery(cq);
 
             productions = query.getResultList();
@@ -188,9 +184,7 @@ public abstract class CommonServicesImpl<T> extends AbstractCrudServicesImpl<T> 
             cq.select(e).where(
                     cb.and(cb.equal(e.get("periodYear"), year),
                             cb.equal(e.get("periodMonth"), month),
-                           // cb.equal(e.get("contract")
-                                    cb.equal(e.get("crudeTypeCode"),terminal.getCrudeType().getCode())
-                                  //  .get("terminal"), terminal)
+                            cb.equal(e.get("contract").get("crudeType").get("terminal"), terminal)
                     ));
 
             Query query = getEntityManager().createQuery(cq);

@@ -19,7 +19,6 @@ import javax.persistence.*;
  * @author 18359
  */
 @Entity
-//@IdClass(ContractPK.class)
 @Table(name = "CONTRACT")
 public abstract class Contract implements Serializable {
 
@@ -30,7 +29,7 @@ public abstract class Contract implements Serializable {
     private CrudeType crudeType;
 
     private String title;
-    private List<Forecast>forecasts;
+    private List<Forecast> forecasts;
 
     public Contract() {
     }
@@ -50,7 +49,7 @@ public abstract class Contract implements Serializable {
     }
 
 
-        @ManyToOne
+    @ManyToOne
     @JoinColumn(name = "FISCALARRANGEMENTID")
     @MapsId("fiscalArrangementId")
     public FiscalArrangement getFiscalArrangement() {
@@ -65,7 +64,7 @@ public abstract class Contract implements Serializable {
     @ManyToOne
     @MapsId("crudeTypeCode")
     @JoinColumn(name = "CRUDETYPECODE")
-      public CrudeType getCrudeType() {
+    public CrudeType getCrudeType() {
         return crudeType;
     }
 
@@ -91,9 +90,9 @@ public abstract class Contract implements Serializable {
         this.forecasts = forecasts;
     }
 
-    public void addForecast(Forecast forecast){
-        if(forecasts==null){
-            forecasts=new ArrayList<>();
+    public void addForecast(Forecast forecast) {
+        if (forecasts == null) {
+            forecasts = new ArrayList<>();
         }
         forecasts.add(forecast);
     }
@@ -102,7 +101,6 @@ public abstract class Contract implements Serializable {
     @Override
     public String toString() {
         return fiscalArrangement.getTitle() + "/" + crudeType.getCode();
-        //return fiscalArrangementId + "/" + crudeTypeCode;
     }
 
     @Override

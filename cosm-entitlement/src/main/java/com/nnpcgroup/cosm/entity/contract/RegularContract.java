@@ -23,9 +23,7 @@ public class RegularContract extends Contract{
     public RegularContract() {
     }
 
-    public RegularContract(FiscalArrangement fiscalArrangement, CrudeType crudeType) {
-        super(fiscalArrangement, crudeType);
+    public RegularContract(Long fiscalArrangementId, String crudeTypeCode) {
+        super(fiscalArrangementId, crudeTypeCode);
     }
-    
-    
 }

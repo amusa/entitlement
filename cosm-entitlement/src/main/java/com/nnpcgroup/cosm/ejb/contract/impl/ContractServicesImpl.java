@@ -5,62 +5,34 @@
  */
 package com.nnpcgroup.cosm.ejb.contract.impl;
 
+import com.nnpcgroup.cosm.ejb.contract.ContractBaseServices;
 import com.nnpcgroup.cosm.ejb.contract.ContractServices;
-import com.nnpcgroup.cosm.ejb.impl.AbstractCrudServicesImpl;
 import com.nnpcgroup.cosm.entity.contract.Contract;
-import com.nnpcgroup.cosm.entity.FiscalArrangement;
-import java.util.List;
+import com.nnpcgroup.cosm.util.COSMPersistence;
+
+import java.io.Serializable;
 import java.util.logging.Logger;
+import javax.ejb.Local;
+import javax.ejb.Stateless;
+import javax.enterprise.context.Dependent;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 
 /**
  *
  * @author 18359
  */
-public class ContractServicesImpl extends AbstractCrudServicesImpl<Contract> implements ContractServices {
+@Stateless
+@Local(ContractServices.class)
+@Dependent
+public class ContractServicesImpl extends ContractBaseServicesImpl<Contract> implements ContractServices, Serializable {
 
-    private static final Logger log = Logger.getLogger(ContractServicesImpl.class.getName());
+    private static final Logger LOG = Logger.getLogger(ContractServicesImpl.class.getName());
 
-    @PersistenceContext(unitName = "entitlementPU")
-    private EntityManager em;
 
-    public ContractServicesImpl(Class<Contract> entityClass) {
-        super(entityClass);
+    public ContractServicesImpl() {
+        super(Contract.class);
     }
 
-    @Override
-    protected EntityManager getEntityManager() {
-        return em;
-    }
-
-    @Override
-    public List<Contract> findFiscalArrangementContracts(FiscalArrangement fa) {
-        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
-
-        List<Contract> contracts;
-
-        CriteriaQuery cq = cb.createQuery();
-        Root<Contract> e = cq.from(entityClass);
-        try {
-            cq.select(e).
-                    where(
-                            cb.equal(e.get("fiscalArrangement"), fa)
-                    );
-
-            Query query = getEntityManager().createQuery(cq);
-
-            contracts = query.getResultList();
-        } catch (NoResultException nre) {
-            return null;
-        }
-
-        return contracts;
-    }
 
 }

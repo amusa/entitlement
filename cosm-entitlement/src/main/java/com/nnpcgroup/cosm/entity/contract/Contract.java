@@ -7,16 +7,15 @@ package com.nnpcgroup.cosm.entity.contract;
 
 import com.nnpcgroup.cosm.entity.CrudeType;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
+import com.nnpcgroup.cosm.entity.forecast.jv.Forecast;
+
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.IdClass;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
- *
  * @author 18359
  */
 @Entity
@@ -26,14 +25,44 @@ public abstract class Contract implements Serializable {
 
     private static final long serialVersionUID = 4374185291370537475L;
 
+    private Long fiscalArrangementId;
+    private String crudeTypeCode;
+
     private FiscalArrangement fiscalArrangement;
     private CrudeType crudeType;
+
+    private String title;
+//    private List<Forecast>forecasts;
 
     public Contract() {
     }
 
+    public Contract(Long fiscalArrangementId, String crudeTypeCode) {
+        this.fiscalArrangementId = fiscalArrangementId;
+        this.crudeTypeCode = crudeTypeCode;
+    }
+
     @Id
-    @ManyToOne
+    public Long getFiscalArrangementId() {
+        return fiscalArrangementId;
+    }
+
+    public void setFiscalArrangementId(Long fiscalArrangementId) {
+        this.fiscalArrangementId = fiscalArrangementId;
+    }
+
+    @Id
+    public String getCrudeTypeCode() {
+        return crudeTypeCode;
+    }
+
+    public void setCrudeTypeCode(String crudeTypeCode) {
+        this.crudeTypeCode = crudeTypeCode;
+    }
+
+        @ManyToOne
+    @JoinColumn(name = "FISCALARRANGEMENTID", insertable = false, updatable = false)
+    @MapsId("fiscalArrangementId")
     public FiscalArrangement getFiscalArrangement() {
         return fiscalArrangement;
     }
@@ -42,14 +71,11 @@ public abstract class Contract implements Serializable {
         this.fiscalArrangement = fiscalArrangement;
     }
 
-    public Contract(FiscalArrangement fiscalArrangement, CrudeType crudeType) {
-        this.fiscalArrangement = fiscalArrangement;
-        this.crudeType = crudeType;
-    }
 
-    @Id
     @ManyToOne
-    public CrudeType getCrudeType() {
+    @MapsId("crudeTypeCode")
+    @JoinColumn(name = "CRUDETYPECODE", insertable = false, updatable = false)
+      public CrudeType getCrudeType() {
         return crudeType;
     }
 
@@ -57,38 +83,53 @@ public abstract class Contract implements Serializable {
         this.crudeType = crudeType;
     }
 
+    @Column(name = "TITLE")
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+//    @OneToMany(mappedBy = "contract", fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+//    public List<Forecast> getForecasts() {
+//        return forecasts;
+//    }
+//
+//    public void setForecasts(List<Forecast> forecasts) {
+//        this.forecasts = forecasts;
+//    }
+//
+//    public void addForecast(Forecast forecast){
+//        if(forecasts==null){
+//            forecasts=new ArrayList<>();
+//        }
+//        forecasts.add(forecast);
+//    }
+
     @Override
     public String toString() {
         return fiscalArrangement.getTitle() + "/" + crudeType.getCode();
+        //return fiscalArrangementId + "/" + crudeTypeCode;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Contract contract = (Contract) o;
+
+        if (!fiscalArrangementId.equals(contract.fiscalArrangementId)) return false;
+        return crudeTypeCode.equals(contract.crudeTypeCode);
+
     }
 
     @Override
     public int hashCode() {
-        int hash = 5;
-        hash = 71 * hash + Objects.hashCode(this.crudeType);
-        hash = 71 * hash + Objects.hashCode(this.fiscalArrangement);
-        return hash;
+        int result = fiscalArrangementId.hashCode();
+        result = 31 * result + crudeTypeCode.hashCode();
+        return result;
     }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Contract other = (Contract) obj;
-        if (!Objects.equals(this.crudeType, other.crudeType)) {
-            return false;
-        }
-        if (!Objects.equals(this.fiscalArrangement, other.fiscalArrangement)) {
-            return false;
-        }
-        return true;
-    }
-
 }

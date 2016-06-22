@@ -5,32 +5,33 @@
  */
 package com.nnpcgroup.cosm.entity.forecast.jv;
 
-import com.nnpcgroup.cosm.entity.contract.Contract;
+import com.nnpcgroup.cosm.entity.contract.ContractPK;
+
 import java.io.Serializable;
-import java.util.Objects;
-import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.persistence.CascadeType;
-import org.hibernate.annotations.Cascade;
 
 /**
  *
  * @author 18359
  */
 public class ForecastPK implements Serializable {
-
+    private static final Logger LOG = Logger.getLogger(ForecastPK.class.getName());
     private static final long serialVersionUID = -5632726719147425922L;
     private Integer periodYear;
     private Integer periodMonth;
-    private Contract contract;
+//    private ContractPK contract;
+    private Long fiscalArrangementId;
+    private String crudeTypeCode;
 
+    
     public ForecastPK() {
     }
 
-    public ForecastPK(Integer periodYear, Integer periodMonth, Contract contract) {
+    public ForecastPK(Integer periodYear, Integer periodMonth, Long fiscalArrangementId, String crudeTypeCode) {
         this.periodYear = periodYear;
         this.periodMonth = periodMonth;
-        this.contract = contract;
+        this.fiscalArrangementId = fiscalArrangementId;
+        this.crudeTypeCode = crudeTypeCode;
     }
 
     public Integer getPeriodYear() {
@@ -49,51 +50,50 @@ public class ForecastPK implements Serializable {
         this.periodMonth = periodMonth;
     }
 
-    public Contract getContract() {
-        return contract;
+    public Long getFiscalArrangementId() {
+        return fiscalArrangementId;
     }
 
-    public void setContract(Contract contract) {
-        this.contract = contract;
+    public void setFiscalArrangementId(Long fiscalArrangementId) {
+        this.fiscalArrangementId = fiscalArrangementId;
+    }
+
+    public String getCrudeTypeCode() {
+        return crudeTypeCode;
+    }
+
+    public void setCrudeTypeCode(String crudeTypeCode) {
+        this.crudeTypeCode = crudeTypeCode;
+    }
+
+//    public ContractPK getContract() {
+//        return contract;
+//    }
+//
+//    public void setContract(ContractPK contract) {
+//        this.contract = contract;
+//    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ForecastPK that = (ForecastPK) o;
+
+        if (!periodYear.equals(that.periodYear)) return false;
+        if (!periodMonth.equals(that.periodMonth)) return false;
+        if (!fiscalArrangementId.equals(that.fiscalArrangementId)) return false;
+        return crudeTypeCode.equals(that.crudeTypeCode);
+
     }
 
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 79 * hash + Objects.hashCode(this.periodYear);
-        hash = 79 * hash + Objects.hashCode(this.periodMonth);
-        hash = 79 * hash + Objects.hashCode(this.contract);
-        return hash;
+        int result = periodYear.hashCode();
+        result = 31 * result + periodMonth.hashCode();
+        result = 31 * result + fiscalArrangementId.hashCode();
+        result = 31 * result + crudeTypeCode.hashCode();
+        return result;
     }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            LOG.log(Level.INFO, "{0} != {1}", new Object[]{getClass(), obj.getClass()});
-
-            return false;
-        }
-        final ForecastPK other = (ForecastPK) obj;
-        if (!Objects.equals(this.periodYear, other.periodYear)) {
-            LOG.log(Level.INFO, "{0} != {1}", new Object[]{this.periodYear, other.periodYear});
-            return false;
-        }
-        if (!Objects.equals(this.periodMonth, other.periodMonth)) {
-            return false;
-        }
-        if (!Objects.equals(this.contract, other.contract)) {
-            LOG.log(Level.INFO, "{0} != {1}", new Object[]{this.contract, other.contract});
-            return false;
-        }
-        LOG.log(Level.INFO, "{0} != {1}", new Object[]{this.contract, other.contract});
-        return true;
-    }
-    private static final Logger LOG = Logger.getLogger(ForecastPK.class.getName());
-
 }

@@ -6,13 +6,18 @@
 package com.nnpcgroup.cosm.ejb.contract;
 
 import com.nnpcgroup.cosm.entity.contract.Contract;
+import com.nnpcgroup.cosm.ejb.AbstractCrudServices;
+import com.nnpcgroup.cosm.entity.FiscalArrangement;
+import java.util.List;
 
 /**
  *
  * @author 18359
- *  * @param <T>
+ * @param <T>
  */
-public interface ContractServices extends ContractBaseServices<Contract> {
+public interface ContractBaseServices<T extends Contract> extends AbstractCrudServices<T> {
     
-     
+    public List<T> findFiscalArrangementContracts(FiscalArrangement fa);
+        
+   
 }

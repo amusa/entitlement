@@ -6,31 +6,29 @@
 package com.nnpcgroup.cosm.entity;
 
 import com.nnpcgroup.cosm.entity.contract.Contract;
+
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import javax.persistence.*;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 /**
- *
  * @author 18359
  */
 @Entity
+//@IdClass(FiscalArrangementPK.class)
 @Table(name = "FISCAL_ARRANGEMENT")
-public class FiscalArrangement implements Serializable {
+public abstract class FiscalArrangement implements Serializable {
 
     private static final long serialVersionUID = -5266137042066972524L;
-    protected Long id;
-    protected String title;
-    protected Company operator;
-    protected List<Contract> contracts;
+    private Long id;
+    private String title;
+    private Company operator;
+    private List<Contract> contracts;
 
     public FiscalArrangement() {
     }
@@ -40,6 +38,7 @@ public class FiscalArrangement implements Serializable {
     }
 
     @Id
+    @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long getId() {
         return id;
@@ -50,6 +49,7 @@ public class FiscalArrangement implements Serializable {
     }
 
     @NotNull
+    @Column(name = "TITLE")
     public String getTitle() {
         return title;
     }
@@ -59,6 +59,7 @@ public class FiscalArrangement implements Serializable {
     }
 
     @ManyToOne
+    @JoinColumn(name = "OPERATOR_ID")
     @NotNull
     public Company getOperator() {
         return operator;
@@ -68,7 +69,7 @@ public class FiscalArrangement implements Serializable {
         this.operator = operator;
     }
 
-    @OneToMany(mappedBy = "fiscalArrangement")
+    @OneToMany(mappedBy = "fiscalArrangement", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     public List<Contract> getContracts() {
         return contracts;
     }
@@ -76,7 +77,14 @@ public class FiscalArrangement implements Serializable {
     public void setContracts(List<Contract> contracts) {
         this.contracts = contracts;
     }
-    
+
+    public void addContract(Contract contract) {
+        if (contracts == null) {
+            contracts = new ArrayList<>();
+        }
+        contracts.add(contract);
+    }
+
     @Override
     public String toString() {
         return title;
@@ -110,7 +118,6 @@ public class FiscalArrangement implements Serializable {
         }
         return true;
     }
-    
-    
+
 
 }

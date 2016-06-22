@@ -6,29 +6,25 @@
 package com.nnpcgroup.cosm.ejb.forecast.jv.impl;
 
 import com.nnpcgroup.cosm.controller.GeneralController;
+import com.nnpcgroup.cosm.ejb.FiscalArrangementBean;
 import com.nnpcgroup.cosm.ejb.forecast.jv.JvForecastServices;
 import com.nnpcgroup.cosm.ejb.impl.CommonServicesImpl;
+import com.nnpcgroup.cosm.entity.*;
 import com.nnpcgroup.cosm.entity.contract.Contract;
-import com.nnpcgroup.cosm.entity.EquityType;
-import com.nnpcgroup.cosm.entity.FiscalArrangement;
-import com.nnpcgroup.cosm.entity.FiscalPeriod;
-import com.nnpcgroup.cosm.entity.JointVenture;
-import com.nnpcgroup.cosm.entity.contract.CarryContract;
 import com.nnpcgroup.cosm.entity.contract.ContractPK;
-import com.nnpcgroup.cosm.entity.contract.ModifiedCarryContract;
-import com.nnpcgroup.cosm.entity.contract.RegularContract;
 import com.nnpcgroup.cosm.entity.forecast.jv.Forecast;
 import com.nnpcgroup.cosm.entity.forecast.jv.ForecastPK;
+
 import java.io.Serializable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.ejb.EJB;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
 /**
- *
- * @author 18359
  * @param <T>
+ * @author 18359
  */
 @Dependent
 public abstract class JvForecastServicesImpl<T extends Forecast> extends CommonServicesImpl<T> implements JvForecastServices<T>, Serializable {
@@ -37,6 +33,9 @@ public abstract class JvForecastServicesImpl<T extends Forecast> extends CommonS
 
     @Inject
     GeneralController genController;
+
+    @EJB
+    FiscalArrangementBean fiscalBean;
 
     public JvForecastServicesImpl(Class<T> entityClass) {
         super(entityClass);
@@ -123,7 +122,8 @@ public abstract class JvForecastServicesImpl<T extends Forecast> extends CommonS
         FiscalArrangement fa;
         JointVenture jv;
 
-        fa = production.getContract().getFiscalArrangement();
+        //fa = production.getContract().getFiscalArrangement();
+        fa = fiscalBean.find(production.getFiscalArrangementId());
 
         assert (fa instanceof JointVenture);
 
@@ -187,21 +187,11 @@ public abstract class JvForecastServicesImpl<T extends Forecast> extends CommonS
     public T getPreviousMonthProduction(T forecast) {
         int month = forecast.getPeriodMonth();
         int year = forecast.getPeriodYear();
-        Contract cs = forecast.getContract();
-        LOG.log(Level.INFO,"class of forecast Contract {0} is {1}", new Object[]{cs, cs.getClass()});
-        Contract contract = null;
-        
-        if (cs instanceof RegularContract) {
-             contract = new RegularContract(cs.getFiscalArrangement(), cs.getCrudeType());
-        } else if (cs instanceof CarryContract) {
-            contract = new CarryContract(cs.getFiscalArrangement(), cs.getCrudeType());
-        } else if (contract instanceof ModifiedCarryContract) {
-            contract = new ModifiedCarryContract(cs.getFiscalArrangement(), cs.getCrudeType());
-        }
-
         FiscalPeriod prevFp = getPreviousFiscalPeriod(year, month);
+        ContractPK cPK = new ContractPK(forecast.getFiscalArrangementId(), forecast.getCrudeTypeCode());
 
-        T f = find(new ForecastPK(prevFp.getYear(), prevFp.getMonth(), contract));
+
+        T f = find(new ForecastPK(prevFp.getYear(), prevFp.getMonth(), forecast.getFiscalArrangementId(), forecast.getCrudeTypeCode()));
         //T f = findByContractPeriod(prevFp.getYear(), prevFp.getMonth(), cs);
 
         return f;

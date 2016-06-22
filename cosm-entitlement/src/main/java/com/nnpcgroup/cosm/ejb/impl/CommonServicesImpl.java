@@ -13,6 +13,7 @@ import com.nnpcgroup.cosm.entity.production.jv.Production;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.Resource;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -23,6 +24,9 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import com.nnpcgroup.cosm.ejb.CommonServices;
 import com.nnpcgroup.cosm.entity.FiscalPeriod;
+import com.nnpcgroup.cosm.util.COSMPersistence;
+
+import javax.persistence.TypedQuery;
 
 /**
  *
@@ -33,7 +37,11 @@ public abstract class CommonServicesImpl<T> extends AbstractCrudServicesImpl<T> 
 
     private static final Logger log = Logger.getLogger(CommonServicesImpl.class.getName());
 
-    @PersistenceContext(unitName = "entitlementPU")
+//    @PersistenceContext(unitName = "entitlementPU")
+//    private EntityManager em;
+
+    @Inject
+    @COSMPersistence
     private EntityManager em;
 
     @Inject
@@ -108,11 +116,11 @@ public abstract class CommonServicesImpl<T> extends AbstractCrudServicesImpl<T> 
         CriteriaQuery cq = cb.createQuery();
         Root<T> e = cq.from(entityClass);
         try {
-            
+
             cq.select(e).where(
                     cb.and(cb.equal(e.get("periodYear"), year),
                             cb.equal(e.get("periodMonth"), month),
-                            cb.equal(e.get("contract").get("fiscalArrangement"), fa)
+                            cb.equal(e.get("fiscalArrangement"), fa)
                     ));
 //            cq.where(
 //                    cb.equal(e.get("contract").get("fiscalArrangement"), fa)
@@ -174,15 +182,15 @@ public abstract class CommonServicesImpl<T> extends AbstractCrudServicesImpl<T> 
 
         List<T> productions;
 
-        CriteriaQuery cq = cb.createQuery();
-        Root e = cq.from(entityClass);
+        CriteriaQuery<T> cq = cb.createQuery(entityClass);
+        Root<T> e = cq.from(entityClass);
         try {
-            cq.where(
+            cq.select(e).where(
                     cb.and(cb.equal(e.get("periodYear"), year),
                             cb.equal(e.get("periodMonth"), month),
-                            cb.equal(e.get("contract")
-                                    .get("crudeType")
-                                    .get("terminal"), terminal)
+                           // cb.equal(e.get("contract")
+                                    cb.equal(e.get("crudeTypeCode"),terminal.getCrudeType().getCode())
+                                  //  .get("terminal"), terminal)
                     ));
 
             Query query = getEntityManager().createQuery(cq);

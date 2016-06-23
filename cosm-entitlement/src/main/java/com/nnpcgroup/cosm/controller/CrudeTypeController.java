@@ -67,12 +67,22 @@ public class CrudeTypeController implements Serializable {
         persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("CrudeTypeUpdated"));
     }
 
+    public void destroy(CrudeType crudeType) {
+       setSelected(crudeType);
+        destroy();
+    }
+
     public void destroy() {
         persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("CrudeTypeDeleted"));
         if (!JsfUtil.isValidationFailed()) {
             selected = null; // Remove selection
             items = null;    // Invalidate list of items to trigger re-query.
         }
+    }
+
+    public void cancel() {
+        items = null;
+        selected = null;
     }
 
     public List<CrudeType> getItems() {

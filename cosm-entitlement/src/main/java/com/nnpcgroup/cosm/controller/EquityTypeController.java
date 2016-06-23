@@ -81,6 +81,11 @@ public class EquityTypeController implements Serializable {
         }
     }
 
+    public void cancel() {
+        items = null;
+        selected = null;
+    }
+
     public List<EquityType> getItems() {
         if (items == null) {
             items = getFacade().findAll();

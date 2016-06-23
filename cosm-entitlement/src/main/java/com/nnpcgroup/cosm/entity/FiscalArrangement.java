@@ -20,7 +20,6 @@ import javax.validation.constraints.NotNull;
  * @author 18359
  */
 @Entity
-//@IdClass(FiscalArrangementPK.class)
 @Table(name = "FISCAL_ARRANGEMENT")
 public abstract class FiscalArrangement implements Serializable {
 

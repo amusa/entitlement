@@ -7,38 +7,16 @@ package com.nnpcgroup.cosm.controller;
 
 import com.nnpcgroup.cosm.controller.util.JsfUtil;
 import com.nnpcgroup.cosm.ejb.FiscalArrangementBean;
-import com.nnpcgroup.cosm.ejb.contract.ContractBaseServices;
 import com.nnpcgroup.cosm.ejb.contract.ContractServices;
-import com.nnpcgroup.cosm.ejb.production.jv.AlternativeFundingProductionServices;
-import com.nnpcgroup.cosm.ejb.production.jv.CarryProductionServices;
-import com.nnpcgroup.cosm.ejb.production.jv.JvProduction;
-import com.nnpcgroup.cosm.ejb.production.jv.JvProductionServices;
-import com.nnpcgroup.cosm.ejb.production.jv.ModifiedCarryProductionServices;
-import com.nnpcgroup.cosm.ejb.production.jv.RegularProductionServices;
+import com.nnpcgroup.cosm.ejb.production.jv.*;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
-import com.nnpcgroup.cosm.entity.FiscalArrangementPK;
-import com.nnpcgroup.cosm.entity.contract.CarryContract;
-import com.nnpcgroup.cosm.entity.contract.Contract;
-import com.nnpcgroup.cosm.entity.contract.ContractPK;
-import com.nnpcgroup.cosm.entity.contract.ModifiedCarryContract;
-import com.nnpcgroup.cosm.entity.contract.RegularContract;
+import com.nnpcgroup.cosm.entity.contract.*;
 import com.nnpcgroup.cosm.entity.forecast.jv.CarryForecast;
 import com.nnpcgroup.cosm.entity.forecast.jv.Forecast;
 import com.nnpcgroup.cosm.entity.forecast.jv.ModifiedCarryForecast;
 import com.nnpcgroup.cosm.entity.forecast.jv.RegularForecast;
-import com.nnpcgroup.cosm.entity.production.jv.AlternativeFundingProduction;
-import com.nnpcgroup.cosm.entity.production.jv.CarryProduction;
-import com.nnpcgroup.cosm.entity.production.jv.ModifiedCarryProduction;
-import com.nnpcgroup.cosm.entity.production.jv.RegularProduction;
-import com.nnpcgroup.cosm.entity.production.jv.Production;
-import com.nnpcgroup.cosm.entity.production.jv.ProductionPK;
+import com.nnpcgroup.cosm.entity.production.jv.*;
 
-import javax.inject.Named;
-import java.io.Serializable;
-import java.util.List;
-import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.enterprise.context.SessionScoped;
@@ -49,6 +27,12 @@ import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.faces.validator.ValidatorException;
 import javax.inject.Inject;
+import javax.inject.Named;
+import java.io.Serializable;
+import java.util.List;
+import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author 18359

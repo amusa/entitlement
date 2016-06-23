@@ -184,7 +184,7 @@ public abstract class CommonServicesImpl<T> extends AbstractCrudServicesImpl<T> 
             cq.select(e).where(
                     cb.and(cb.equal(e.get("periodYear"), year),
                             cb.equal(e.get("periodMonth"), month),
-                            cb.equal(e.get("contract").get("crudeType").get("terminal"), terminal)
+                            cb.equal(e.get("contract").get("crudeType"), terminal.getCrudeType())
                     ));
 
             Query query = getEntityManager().createQuery(cq);
@@ -193,6 +193,17 @@ public abstract class CommonServicesImpl<T> extends AbstractCrudServicesImpl<T> 
         } catch (NoResultException nre) {
             return null;
         }
+
+//        TypedQuery<T> query = getEntityManager().createQuery(
+//                "SELECT f "
+//                        + "FROM Forecast f WHERE f.periodYear = :periodYear "
+//                        + "AND f.periodMonth = :periodMonth AND f.contract.crudeType = :crudeType", entityClass);
+//        query.setParameter("periodYear", year);
+//        query.setParameter("periodMonth", month);
+//        query.setParameter("crudeType", terminal.getCrudeType());
+//
+//        List<T> productions = query.getResultList();
+
 
         return productions;
     }

@@ -23,10 +23,7 @@ public class ForecastPK implements Serializable {
     private Integer periodYear;
     private Integer periodMonth;
     private ContractPK contract;
-//    private Long fiscalArrangementId;
-//    private String crudeTypeCode;
 
-    
     public ForecastPK() {
     }
 

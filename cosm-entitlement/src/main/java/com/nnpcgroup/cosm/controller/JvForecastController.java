@@ -26,6 +26,7 @@ import com.nnpcgroup.cosm.entity.forecast.jv.Forecast;
 import com.nnpcgroup.cosm.entity.forecast.jv.ForecastPK;
 import com.nnpcgroup.cosm.entity.forecast.jv.ModifiedCarryForecast;
 import com.nnpcgroup.cosm.entity.forecast.jv.RegularForecast;
+import com.nnpcgroup.cosm.exceptions.NoRealizablePriceException;
 
 import javax.inject.Named;
 import java.io.Serializable;
@@ -218,18 +219,27 @@ public class JvForecastController implements Serializable {
     }
 
     public void productionVolumeChanged() {
-        getForecastBean().enrich(currentProduction);
-        LOG.log(Level.INFO,
-                "Production Enriched::Own entmt={0},Partner entmt={1}",
-                new Object[]{currentProduction.getOwnShareEntitlement(),
-                    currentProduction.getPartnerShareEntitlement()
-                });
-
+        try {
+            getForecastBean().enrich(currentProduction);
+            LOG.log(Level.INFO,
+                    "Production Enriched::Own entmt={0},Partner entmt={1}",
+                    new Object[]{currentProduction.getOwnShareEntitlement(),
+                            currentProduction.getPartnerShareEntitlement()
+                    });
+        } catch (NoRealizablePriceException rpe) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, rpe);
+            JsfUtil.addErrorMessage(rpe, ResourceBundle.getBundle("/Bundle").getString("RealizablePriceErrorOccured"));
+        }
     }
 
-    public void alternativeFundingCostListener() {
+    public void alternativeFundingCostListener()  {
         JvAlternativeFundingForecastServices afBean = (JvAlternativeFundingForecastServices) getForecastBean();
-        afBean.computeAlternativeFunding(getCurrentAfProduction());
+        try {
+            afBean.computeAlternativeFunding(getCurrentAfProduction());
+        } catch (NoRealizablePriceException rpe) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, rpe);
+            JsfUtil.addErrorMessage(rpe, ResourceBundle.getBundle("/Bundle").getString("RealizablePriceErrorOccured"));
+        }
     }
 
     public void openingStockChanged() {
@@ -239,7 +249,12 @@ public class JvForecastController implements Serializable {
 
     public void resetDefaults() {
         LOG.log(Level.INFO, "Resetting to default...");
-        getForecastBean().enrich(currentProduction);
+        try {
+            getForecastBean().enrich(currentProduction);
+        } catch (NoRealizablePriceException rpe) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, rpe);
+            JsfUtil.addErrorMessage(rpe, ResourceBundle.getBundle("/Bundle").getString("RealizablePriceErrorOccured"));
+        }
     }
 
     private void reset() {
@@ -358,7 +373,7 @@ public class JvForecastController implements Serializable {
         return (getCurrentProduction() instanceof AlternativeFundingForecast);
     }
 
-    public void currentContractChanged() throws Exception {
+    public void currentContractChanged(){// throws Exception {
         LOG.log(Level.INFO, "Contract Selected...{0}", currentContract);
 
         if (currentContract instanceof RegularContract) {
@@ -372,7 +387,7 @@ public class JvForecastController implements Serializable {
             currentProduction = new ModifiedCarryForecast();
         } else {
             LOG.log(Level.INFO, "Undefined contract selection...{0}", currentContract);
-            throw new Exception("Undefined contract type");
+            //throw new Exception("Undefined contract type");
             //currentProduction = new RegularForecast();
 
         }

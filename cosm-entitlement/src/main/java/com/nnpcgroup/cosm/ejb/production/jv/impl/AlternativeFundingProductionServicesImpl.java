@@ -8,12 +8,13 @@ package com.nnpcgroup.cosm.ejb.production.jv.impl;
 import com.nnpcgroup.cosm.ejb.PriceBean;
 import com.nnpcgroup.cosm.ejb.contract.ContractServices;
 import com.nnpcgroup.cosm.ejb.production.jv.AlternativeFundingProductionServices;
-import com.nnpcgroup.cosm.entity.FiscalArrangementPK;
 import com.nnpcgroup.cosm.entity.Price;
 import com.nnpcgroup.cosm.entity.PricePK;
 import com.nnpcgroup.cosm.entity.contract.AlternativeFundingContract;
 import com.nnpcgroup.cosm.entity.contract.ContractPK;
 import com.nnpcgroup.cosm.entity.production.jv.AlternativeFundingProduction;
+import com.nnpcgroup.cosm.exceptions.NoRealizablePriceException;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
@@ -64,7 +65,7 @@ public abstract class AlternativeFundingProductionServicesImpl<T extends Alterna
     }
 
     @Override
-    public T enrich(T production) {
+    public T enrich(T production) throws NoRealizablePriceException {
         LOG.log(Level.INFO, "Enriching production {0}...", production);
         return computeClosingStock(
                 computeLifting(

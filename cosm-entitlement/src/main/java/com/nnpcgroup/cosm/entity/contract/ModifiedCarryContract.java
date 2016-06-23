@@ -5,6 +5,8 @@
  */
 package com.nnpcgroup.cosm.entity.contract;
 
+import com.nnpcgroup.cosm.entity.CrudeType;
+import com.nnpcgroup.cosm.entity.FiscalArrangement;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
@@ -17,5 +19,11 @@ import javax.persistence.Entity;
 public class ModifiedCarryContract extends AlternativeFundingContract{
     
     private static final long serialVersionUID = -308376402305136004L;
-    
+
+    public ModifiedCarryContract() {
+    }
+
+    public ModifiedCarryContract(Long fiscalArrangementId, String crudeTypeCode) {
+        super(fiscalArrangementId, crudeTypeCode);
+    }
 }

@@ -6,14 +6,12 @@
 package com.nnpcgroup.cosm.entity;
 
 import com.nnpcgroup.cosm.entity.contract.Contract;
-import com.nnpcgroup.cosm.entity.production.jv.Production;
-import com.nnpcgroup.cosm.entity.production.jv.ProductionPK;
 import java.io.Serializable;
+import java.util.Objects;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.IdClass;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.Table;
@@ -24,26 +22,47 @@ import javax.validation.constraints.NotNull;
  * @author 18359
  */
 @Entity
+@IdClass(TerminalBlendPK.class)
 @Table(name = "TERMINAL_BLEND")
 public class TerminalBlend implements Serializable {
 
     private static final long serialVersionUID = -8220877789250153033L;
 
-    private TerminalBlendPK terminalBlendPK;
+    private int periodYear;
+    private int periodMonth;
     private Contract contract;
+
+    @Id
+    public int getPeriodYear() {
+        return periodYear;
+    }
+
+    public void setPeriodYear(int periodYear) {
+        this.periodYear = periodYear;
+    }
+
+    @Id
+    public int getPeriodMonth() {
+        return periodMonth;
+    }
+
+    public void setPeriodMonth(int periodMonth) {
+        this.periodMonth = periodMonth;
+    }
+
+    @Id
+    @ManyToOne
+    public Contract getContract() {
+        return contract;
+    }
+
+    public void setContract(Contract contract) {
+        this.contract = contract;
+    }
 
     private Double volume;
 
     public TerminalBlend() {
-    }
-
-    @EmbeddedId
-    public TerminalBlendPK getTerminalBlendPK() {
-        return terminalBlendPK;
-    }
-
-    public void setTerminalBlendPK(TerminalBlendPK terminalBlendPK) {
-        this.terminalBlendPK = terminalBlendPK;
     }
 
     @NotNull
@@ -55,14 +74,37 @@ public class TerminalBlend implements Serializable {
         this.volume = volume;
     }
 
-    @ManyToOne
-    @NotNull
-    @MapsId("contractPK")
-    public Contract getContract() {
-        return contract;
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 61 * hash + this.periodYear;
+        hash = 61 * hash + this.periodMonth;
+        hash = 61 * hash + Objects.hashCode(this.contract);
+        return hash;
     }
 
-    public void setContract(Contract contract) {
-        this.contract = contract;
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final TerminalBlend other = (TerminalBlend) obj;
+        if (this.periodYear != other.periodYear) {
+            return false;
+        }
+        if (this.periodMonth != other.periodMonth) {
+            return false;
+        }
+        if (!Objects.equals(this.contract, other.contract)) {
+            return false;
+        }
+        return true;
     }
+
 }

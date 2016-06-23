@@ -5,21 +5,20 @@
  */
 package com.nnpcgroup.cosm.entity;
 
-import com.nnpcgroup.cosm.entity.contract.ContractPK;
+import com.nnpcgroup.cosm.entity.contract.Contract;
 import java.io.Serializable;
-import javax.persistence.Embeddable;
+import java.util.Objects;
 
 /**
  *
  * @author 18359
  */
-@Embeddable
 public class TerminalBlendPK implements Serializable {
 
     private static final long serialVersionUID = -5632726719147425922L;
     private int periodYear;
     private int periodMonth;    
-    private ContractPK contractPK;
+    private Contract contract;
 
     public int getPeriodYear() {
         return periodYear;
@@ -37,13 +36,47 @@ public class TerminalBlendPK implements Serializable {
         this.periodMonth = periodMonth;
     }
 
-    public ContractPK getContractPK() {
-        return contractPK;
+    public Contract getContract() {
+        return contract;
     }
 
-    public void setContractPK(ContractPK contractPK) {
-        this.contractPK = contractPK;
+    public void setContract(Contract contract) {
+        this.contract = contract;
     }
 
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 89 * hash + this.periodYear;
+        hash = 89 * hash + this.periodMonth;
+        hash = 89 * hash + Objects.hashCode(this.contract);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final TerminalBlendPK other = (TerminalBlendPK) obj;
+        if (this.periodYear != other.periodYear) {
+            return false;
+        }
+        if (this.periodMonth != other.periodMonth) {
+            return false;
+        }
+        if (!Objects.equals(this.contract, other.contract)) {
+            return false;
+        }
+        return true;
+    }
+
+    
     
 }

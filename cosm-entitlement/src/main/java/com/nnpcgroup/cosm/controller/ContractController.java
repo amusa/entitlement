@@ -1,9 +1,12 @@
 package com.nnpcgroup.cosm.controller;
 
+import com.nnpcgroup.cosm.ejb.contract.ContractServices;
 import com.nnpcgroup.cosm.entity.contract.Contract;
 import com.nnpcgroup.cosm.controller.util.JsfUtil;
 import com.nnpcgroup.cosm.controller.util.JsfUtil.PersistAction;
+import com.nnpcgroup.cosm.ejb.contract.ContractBaseServices;
 import com.nnpcgroup.cosm.ejb.contract.ContractServices;
+import com.nnpcgroup.cosm.entity.CrudeType;
 import com.nnpcgroup.cosm.entity.contract.CarryContract;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
 import com.nnpcgroup.cosm.entity.contract.AlternativeFundingContract;
@@ -26,6 +29,7 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.model.SelectItem;
+import javax.inject.Inject;
 
 @Named("contractController")
 @SessionScoped
@@ -35,10 +39,10 @@ public class ContractController implements Serializable {
 
     private static final long serialVersionUID = 3411266588734031876L;
 
-    @EJB
+    @Inject//EJB
     private ContractServices ejbFacade;
 
-    private List<Contract> items = null;
+    private List<? extends Contract> items = null;
     private Contract selected;
     private String contractType;
     private FiscalArrangement fiscalArrangement;
@@ -94,12 +98,16 @@ public class ContractController implements Serializable {
     }
 
     protected void setEmbeddableKeys() {
+        if(selected!=null){
+            selected.setFiscalArrangementId(selected.getFiscalArrangement().getId());
+            selected.setCrudeTypeCode(selected.getCrudeType().getCode());
+        }
     }
 
     protected void initializeEmbeddableKey() {
     }
 
-    private ContractServices getFacade() {
+    private ContractBaseServices getFacade() {
         return ejbFacade;
     }
 
@@ -142,7 +150,7 @@ public class ContractController implements Serializable {
         }
     }
 
-    public List<Contract> getItems() {
+    public List<? extends Contract> getItems() {
         items = getFacade().findAll();
         return items;
     }
@@ -176,7 +184,7 @@ public class ContractController implements Serializable {
     }
 
     public Contract getContract(ContractPK cPK) {
-        return getFacade().find(cPK);
+        return (Contract) getFacade().find(cPK);
     }
 
     public List<Contract> getItemsAvailableSelectMany() {
@@ -233,15 +241,17 @@ public class ContractController implements Serializable {
         ContractPK getKey(String value) {
             ContractPK key;
             String values[] = value.split(SEPARATOR_ESCAPED);
-            key = new ContractPK(Long.valueOf(values[0]), values[1]);
+            Long fiscalArrangementId = Long.valueOf(values[0]);
+            String crudeTypeCode = values[1];
+            key = new ContractPK(fiscalArrangementId, crudeTypeCode);
             return key;
         }
 
-        String getStringKey(ContractPK value) {
+        String getStringKey(Contract value) {
             StringBuilder sb = new StringBuilder();
-            sb.append(value.getFiscalArrangementId());
+            sb.append(value.getFiscalArrangement().getId());
             sb.append(SEPARATOR);
-            sb.append(value.getCrudeTypeCode());
+            sb.append(value.getCrudeType().getCode());
             return sb.toString();
         }
 
@@ -252,7 +262,7 @@ public class ContractController implements Serializable {
             }
             if (object instanceof Contract) {
                 Contract o = (Contract) object;
-                return getStringKey(o.getContractPK());
+                return getStringKey(o);
             } else {
                 Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), Contract.class.getName()});
                 return null;

@@ -40,9 +40,6 @@ public class Lifting implements Serializable {
     
     @ManyToOne
     private Terminal terminal;
-   
-//    @ManyToOne
-//    private CrudeType crudeType;
     
     private Double quantity;
 

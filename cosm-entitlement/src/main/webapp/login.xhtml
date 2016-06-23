@@ -45,7 +45,7 @@
                         Remember Me
                     </label>
                 </div>
-                <button class="btn btn-sm m-r-5" jsf:outcome="index">Sign In</button>
+<!--                <button class="btn btn-sm m-r-5" jsf:outcome="index">Sign In</button>-->
                 <h:commandButton value="Sign In" class="btn btn-sm m-r-5">
                     <f:ajax event="click" listener="#{userAuth.login}" execute="username password" render="msg" />
                 </h:commandButton>                

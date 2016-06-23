@@ -202,15 +202,15 @@ public abstract class JvProductionServicesImpl<T extends Production, E extends C
 
     @Override
     public T getPreviousMonthProduction(T production) {
-        int month = production.getProductionPK().getPeriodMonth();
-        int year = production.getProductionPK().getPeriodYear();
+        int month = production.getPeriodMonth();
+        int year = production.getPeriodYear();
         Contract cs = production.getContract();
-        ContractPK cPK = production.getProductionPK().getContractPK();
+       // ContractPK cPK = production.getProductionPK().getContractPK();
 
         FiscalPeriod prevFp = getPreviousFiscalPeriod(year, month);
 
         //T prod = findByContractPeriod(prevFp.getYear(), prevFp.getMonth(), cs);
-        T prod = find(new ProductionPK(prevFp.getYear(), prevFp.getMonth(), cPK));
+        T prod = find(new ProductionPK(prevFp.getYear(), prevFp.getMonth(), cs));
 
         return prod;
 

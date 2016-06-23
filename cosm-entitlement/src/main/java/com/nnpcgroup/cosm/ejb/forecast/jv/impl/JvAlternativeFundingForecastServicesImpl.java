@@ -6,19 +6,18 @@
 package com.nnpcgroup.cosm.ejb.forecast.jv.impl;
 
 import com.nnpcgroup.cosm.ejb.PriceBean;
+import com.nnpcgroup.cosm.ejb.contract.ContractBaseServices;
+import com.nnpcgroup.cosm.ejb.contract.ContractServices;
 import com.nnpcgroup.cosm.ejb.forecast.jv.JvAlternativeFundingForecastServices;
 import com.nnpcgroup.cosm.entity.Price;
 import com.nnpcgroup.cosm.entity.PricePK;
-import com.nnpcgroup.cosm.entity.contract.AlternativeFundingContract;
-import com.nnpcgroup.cosm.entity.contract.Contract;
+import com.nnpcgroup.cosm.entity.contract.*;
 import com.nnpcgroup.cosm.entity.forecast.jv.AlternativeFundingForecast;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.enterprise.context.Dependent;
-import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -40,18 +39,11 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
     @EJB
     PriceBean priceBean;
 
-    @PersistenceContext(unitName = "entitlementPU")
-    private EntityManager em;
+    @EJB
+    ContractServices contractBean;
 
     public JvAlternativeFundingForecastServicesImpl(Class<T> entityClass) {
         super(entityClass);
-    }
-
-    @Override
-    protected EntityManager getEntityManager() {
-        LOG.info("returning entityManager...");
-
-        return em;
     }
 
     @Override
@@ -202,7 +194,8 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
     }
 
     private boolean isSharedOilTerminalPeriodDue(T forecast) {
-        Contract contract = forecast.getContract();
+        ContractPK cPK = new ContractPK(forecast.getFiscalArrangementId(),forecast.getCrudeTypeCode());
+        Contract contract = contractBean.find(cPK); //forecast.getContract();
         assert (contract instanceof AlternativeFundingContract);
         AlternativeFundingContract afContract = (AlternativeFundingContract) contract;
 
@@ -227,7 +220,9 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
             sharedOilCum = prev.getSharedOilCum();
         }
 
-        Contract contract = forecast.getContract();
+        //Contract contract = forecast.getContract();
+        ContractPK cPK = new ContractPK(forecast.getFiscalArrangementId(),forecast.getCrudeTypeCode());
+        Contract contract = contractBean.find(cPK); //forecast.getContract();
         assert (contract instanceof AlternativeFundingContract);
         AlternativeFundingContract afContract = (AlternativeFundingContract) contract;
 
@@ -255,7 +250,9 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
         Double ownEquity = forecast.getOwnShareEntitlement() != null ? forecast.getOwnShareEntitlement() : new Double(0);
         Double carryOil = forecast.getCarryOil() != null ? forecast.getCarryOil() : 0.0;
 
-        Contract contract = forecast.getContract();
+       // Contract contract = forecast.getContract();
+        ContractPK cPK = new ContractPK(forecast.getFiscalArrangementId(),forecast.getCrudeTypeCode());
+        Contract contract = contractBean.find(cPK); //forecast.getContract();
         assert (contract instanceof AlternativeFundingContract);
         AlternativeFundingContract afContract = (AlternativeFundingContract) contract;
         Double sharedOilRatio = afContract.getSharedOilRatio() != null ? afContract.getSharedOilRatio() : 0.0;
@@ -287,9 +284,9 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
     @Override
     public T computeGuaranteedNotionalMargin(T forecast) {
         PricePK pricePK = new PricePK();
-        LOG.log(Level.INFO, "*********NPE Check********* forecast={0}, ForecastPK={1}", new Object[]{forecast, forecast.getForecastPK()});
-        pricePK.setPeriodMonth(forecast.getForecastPK().getPeriodMonth());
-        pricePK.setPeriodYear(forecast.getForecastPK().getPeriodYear());
+        LOG.log(Level.INFO, "*********NPE Check********* forecast={0}", new Object[]{forecast});
+        pricePK.setPeriodMonth(forecast.getPeriodMonth());
+        pricePK.setPeriodYear(forecast.getPeriodYear());
 
         Double GNM = null;// = 4.1465; //TODO:temporary placeholder
 

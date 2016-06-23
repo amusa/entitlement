@@ -3,12 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.nnpcgroup.cosm.entity.production.jv;
+package com.nnpcgroup.cosm.entity.forecast.jv;
 
+import com.nnpcgroup.cosm.entity.Company;
 import com.nnpcgroup.cosm.entity.contract.Contract;
-import com.nnpcgroup.cosm.entity.contract.ContractPK;
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.Embeddable;
 
 /**
@@ -16,18 +18,20 @@ import javax.persistence.Embeddable;
  * @author 18359
  */
 //@Embeddable
-public class ProductionPK implements Serializable {
+public class ForecastEntitlementPK implements Serializable {
 
-    private static final long serialVersionUID = 2983325339937581443L;
-
+    private static final Logger LOG = Logger.getLogger(ForecastEntitlementPK.class.getName());
+    
+    private static final long serialVersionUID = -5632726719147425922L;
     private Integer periodYear;
     private Integer periodMonth;
     private Contract contract;
+    private Company company;
 
-    public ProductionPK() {
+    public ForecastEntitlementPK() {
     }
 
-    public ProductionPK(Integer periodYear, Integer periodMonth, Contract contract) {
+    public ForecastEntitlementPK(Integer periodYear, Integer periodMonth, Contract contract) {
         this.periodYear = periodYear;
         this.periodMonth = periodMonth;
         this.contract = contract;
@@ -37,34 +41,40 @@ public class ProductionPK implements Serializable {
         return periodYear;
     }
 
-    public void setPeriodYear(Integer periodYear) {
-        this.periodYear = periodYear;
-    }
-
     public Integer getPeriodMonth() {
         return periodMonth;
-    }
-
-    public void setPeriodMonth(Integer periodMonth) {
-        this.periodMonth = periodMonth;
     }
 
     public Contract getContract() {
         return contract;
     }
 
+    public void setPeriodYear(Integer periodYear) {
+        this.periodYear = periodYear;
+    }
+
+    public void setPeriodMonth(Integer periodMonth) {
+        this.periodMonth = periodMonth;
+    }
+
     public void setContract(Contract contract) {
         this.contract = contract;
     }
 
-   
+    public Company getCompany() {
+        return company;
+    }
 
+    public void setCompany(Company company) {
+        this.company = company;
+    }
+        
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 17 * hash + Objects.hashCode(this.periodYear);
-        hash = 17 * hash + Objects.hashCode(this.periodMonth);
-        hash = 17 * hash + Objects.hashCode(this.contract);
+        hash = 79 * hash + Objects.hashCode(this.periodYear);
+        hash = 79 * hash + Objects.hashCode(this.periodMonth);
+        hash = 79 * hash + Objects.hashCode(this.contract);
         return hash;
     }
 
@@ -77,19 +87,23 @@ public class ProductionPK implements Serializable {
             return false;
         }
         if (getClass() != obj.getClass()) {
+            LOG.log(Level.INFO, "{0} != {1}", new Object[]{getClass(), obj.getClass()});
+
             return false;
         }
-        final ProductionPK other = (ProductionPK) obj;
+        final ForecastEntitlementPK other = (ForecastEntitlementPK) obj;
         if (!Objects.equals(this.periodYear, other.periodYear)) {
+            LOG.log(Level.INFO, "{0} != {1}", new Object[]{this.periodYear, other.periodYear});
             return false;
         }
         if (!Objects.equals(this.periodMonth, other.periodMonth)) {
             return false;
         }
         if (!Objects.equals(this.contract, other.contract)) {
+            LOG.log(Level.INFO, "{0} != {1}", new Object[]{this.contract, other.contract});
             return false;
         }
+        LOG.log(Level.INFO, "{0} != {1}", new Object[]{this.contract, other.contract});
         return true;
     }
-
 }

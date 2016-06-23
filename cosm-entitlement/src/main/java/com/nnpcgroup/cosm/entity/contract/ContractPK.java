@@ -5,15 +5,15 @@
  */
 package com.nnpcgroup.cosm.entity.contract;
 
+import com.nnpcgroup.cosm.entity.CrudeType;
+import com.nnpcgroup.cosm.entity.FiscalArrangement;
 import java.io.Serializable;
 import java.util.Objects;
-import javax.persistence.Embeddable;
 
 /**
  *
  * @author 18359
  */
-@Embeddable
 public class ContractPK implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -33,12 +33,12 @@ public class ContractPK implements Serializable {
         return fiscalArrangementId;
     }
 
-    public String getCrudeTypeCode() {
-        return crudeTypeCode;
-    }
-
     public void setFiscalArrangementId(Long fiscalArrangementId) {
         this.fiscalArrangementId = fiscalArrangementId;
+    }
+
+    public String getCrudeTypeCode() {
+        return crudeTypeCode;
     }
 
     public void setCrudeTypeCode(String crudeTypeCode) {
@@ -46,32 +46,21 @@ public class ContractPK implements Serializable {
     }
 
     @Override
-    public int hashCode() {
-        int hash = 3;
-        hash = 83 * hash + Objects.hashCode(this.fiscalArrangementId);
-        hash = 83 * hash + Objects.hashCode(this.crudeTypeCode);
-        return hash;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ContractPK that = (ContractPK) o;
+
+        if (!fiscalArrangementId.equals(that.fiscalArrangementId)) return false;
+        return crudeTypeCode.equals(that.crudeTypeCode);
+
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final ContractPK other = (ContractPK) obj;
-        if (!Objects.equals(this.crudeTypeCode, other.crudeTypeCode)) {
-            return false;
-        }
-        if (!Objects.equals(this.fiscalArrangementId, other.fiscalArrangementId)) {
-            return false;
-        }
-        return true;
+    public int hashCode() {
+        int result = fiscalArrangementId.hashCode();
+        result = 31 * result + crudeTypeCode.hashCode();
+        return result;
     }
-
 }

@@ -9,7 +9,12 @@ import com.nnpcgroup.cosm.ejb.impl.AbstractCrudServicesImpl;
 import com.nnpcgroup.cosm.entity.Company;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 /**
  *
@@ -29,5 +34,27 @@ public class CompanyBean extends AbstractCrudServicesImpl<Company> {
     public CompanyBean() {
         super(Company.class);
     }
-    
+
+    public Company findByCompanyName(String compName) {
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+
+        Company company;
+
+        CriteriaQuery cq = cb.createQuery();
+        Root e = cq.from(entityClass);
+        try {
+            cq.where(
+                    cb.equal(e.get("name"), compName)
+            );
+
+            Query query = getEntityManager().createQuery(cq);
+
+            company = (Company) query.getSingleResult();
+        } catch (NoResultException nre) {
+            return null;
+        }
+
+        return company;
+    }
+
 }

@@ -5,31 +5,21 @@
  */
 package com.nnpcgroup.cosm.entity.forecast.jv;
 
-import com.nnpcgroup.cosm.entity.CrudeType;
-import com.nnpcgroup.cosm.entity.FiscalArrangement;
 import com.nnpcgroup.cosm.entity.contract.Contract;
+import com.nnpcgroup.cosm.entity.contract.ContractPK;
+
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
-import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.persistence.Column;
-import javax.persistence.DiscriminatorColumn;
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
-import javax.persistence.ManyToOne;
-import javax.persistence.MapsId;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 /**
- *
  * @author 18359
  */
 @Entity
+@IdClass(ForecastPK.class)
 @Table(name = "FORECAST")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "FTYPE")
@@ -39,9 +29,10 @@ public abstract class Forecast implements Serializable {
 
     private static final Logger LOG = Logger.getLogger(Forecast.class.getName());
 
-    private ForecastPK forecastPK;
     private Integer periodYear;
     private Integer periodMonth;
+    private Long fiscalArrangementId;
+    private String crudeTypeCode;
     private Contract contract;
     private Double openingStock;
     private Double partnerOpeningStock;
@@ -57,21 +48,12 @@ public abstract class Forecast implements Serializable {
     private Integer partnerCargos;
     private Double availability;
     private Double partnerAvailability;
+    private List<ForecastEntitlement> forecastEntitlements;
 
     public Forecast() {
     }
 
-    @EmbeddedId
-    public ForecastPK getForecastPK() {
-        return forecastPK;
-    }
-
-    public void setForecastPK(ForecastPK forecastPK) {
-        this.forecastPK = forecastPK;
-    }
-
-    @NotNull
-    @Column(insertable = false, updatable = false)
+    @Id
     public Integer getPeriodYear() {
         return periodYear;
     }
@@ -80,8 +62,7 @@ public abstract class Forecast implements Serializable {
         this.periodYear = periodYear;
     }
 
-    @NotNull
-    @Column(insertable = false, updatable = false)
+    @Id
     public Integer getPeriodMonth() {
         return periodMonth;
     }
@@ -90,12 +71,28 @@ public abstract class Forecast implements Serializable {
         this.periodMonth = periodMonth;
     }
 
+    @Id
+    public Long getFiscalArrangementId() {
+        return fiscalArrangementId;
+    }
+
+    public void setFiscalArrangementId(Long fiscalArrangementId) {
+        this.fiscalArrangementId = fiscalArrangementId;
+    }
+
+    @Id
+    public String getCrudeTypeCode() {
+        return crudeTypeCode;
+    }
+
+    public void setCrudeTypeCode(String crudeTypeCode) {
+        this.crudeTypeCode = crudeTypeCode;
+    }
+
     @ManyToOne
-    @NotNull
-    @MapsId("contractPK")
     @JoinColumns({
-        @JoinColumn(name = "FISCALARRANGEMENT_ID", referencedColumnName = "FISCALARRANGEMENT_ID"),
-        @JoinColumn(name = "CRUDETYPE_CODE", referencedColumnName = "CRUDETYPE_CODE")
+            @JoinColumn(name = "FISCALARRANGEMENTID", referencedColumnName = "FISCALARRANGEMENTID", insertable = false, updatable = false),
+            @JoinColumn(name = "CRUDETYPECODE", referencedColumnName = "CRUDETYPECODE", insertable = false, updatable = false)
     })
     public Contract getContract() {
         return contract;
@@ -220,37 +217,35 @@ public abstract class Forecast implements Serializable {
         this.partnerCargos = partnerCargos;
     }
 
+    @OneToMany(mappedBy = "forecast", cascade = {CascadeType.PERSIST})
+    public List<ForecastEntitlement> getForecastEntitlements() {
+        return forecastEntitlements;
+    }
+
+    public void setForecastEntitlements(List<ForecastEntitlement> forecastEntitlements) {
+        this.forecastEntitlements = forecastEntitlements;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Forecast forecast = (Forecast) o;
+
+        if (!periodYear.equals(forecast.periodYear)) return false;
+        if (!periodMonth.equals(forecast.periodMonth)) return false;
+        if (!fiscalArrangementId.equals(forecast.fiscalArrangementId)) return false;
+        return crudeTypeCode.equals(forecast.crudeTypeCode);
+
+    }
+
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 17 * hash + Objects.hashCode(this.periodYear);
-        hash = 17 * hash + Objects.hashCode(this.periodMonth);
-        hash = 17 * hash + Objects.hashCode(this.contract);
-        return hash;
+        int result = periodYear.hashCode();
+        result = 31 * result + periodMonth.hashCode();
+        result = 31 * result + fiscalArrangementId.hashCode();
+        result = 31 * result + crudeTypeCode.hashCode();
+        return result;
     }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Forecast other = (Forecast) obj;
-        if (!Objects.equals(this.periodYear, other.periodYear)) {
-            return false;
-        }
-        if (!Objects.equals(this.periodMonth, other.periodMonth)) {
-            return false;
-        }
-        if (!Objects.equals(this.contract, other.contract)) {
-            return false;
-        }
-        return true;
-    }
-
 }

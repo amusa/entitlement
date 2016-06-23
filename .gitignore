@@ -13,7 +13,15 @@ hs_err_pid*
 /cosm-common/target/
 /cosm-admin/target/
 /cosm-lifting/target/
-/cosm-entitlement/target/
+/cosm-entitlement/target/cosm-common/nb-configuration.xml
+cosm-entitlement/.gitignore
+cosm-entitlement/src/main/resources/rebel.xml
+cosm-common/nb-configuration.xml
+cosm-entitlement/target/
+cosm-admin/nb-configuration.xml
+cosm-entitlement/nb-configuration.xml
+cosm-lifting/nb-configuration.xml
 
 /.idea/
 *.iml
+*.xhtml~

@@ -6,9 +6,7 @@
 package com.nnpcgroup.cosm.entity;
 
 import java.io.Serializable;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -21,20 +19,24 @@ public class EquityType implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    private String code;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     @NotNull
     private String description;
+
     @NotNull
     private Double ownEquity;
+
     @NotNull
     private Double partnerEquity;
 
-    public String getCode() {
-        return code;
+    public Long getId() {
+        return id;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getDescription() {
@@ -60,32 +62,28 @@ public class EquityType implements Serializable {
     public void setPartnerEquity(Double partnerEquity) {
         this.partnerEquity = partnerEquity;
     }
-    
-    
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (code != null ? code.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof EquityType)) {
-            return false;
-        }
-        EquityType other = (EquityType) object;
-        if ((this.code == null && other.code != null) || (this.code != null && !this.code.equals(other.code))) {
-            return false;
-        }
-        return true;
-    }
 
     @Override
     public String toString() {
         return description;
     }
-    
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        EquityType that = (EquityType) o;
+
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
+        return description != null ? description.equals(that.description) : that.description == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (description != null ? description.hashCode() : 0);
+        return result;
+    }
 }

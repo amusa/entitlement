@@ -23,6 +23,8 @@ import javax.faces.convert.FacesConverter;
 @SessionScoped
 public class EquityTypeController implements Serializable {
 
+    private static final Logger LOG = Logger.getLogger(EquityTypeController.class.getName());
+
     @EJB
     private com.nnpcgroup.cosm.ejb.EquityTypeBean ejbFacade;
     private List<EquityType> items = null;
@@ -64,6 +66,11 @@ public class EquityTypeController implements Serializable {
 
     public void update() {
         persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("EquityTypeUpdated"));
+    }
+
+    public void destroy(EquityType equityType) {
+       setSelected(equityType);
+        destroy();
     }
 
     public void destroy() {
@@ -121,6 +128,21 @@ public class EquityTypeController implements Serializable {
         return getFacade().findAll();
     }
 
+    public void equityDescriptionListener(){
+        LOG.log(Level.INFO,"Equity description event triggered...");
+
+        String equities[] = selected.getDescription().split("/");
+        if(equities.length > 0){
+            double ownEquity = Double.parseDouble(equities[0]);
+            selected.setOwnEquity(ownEquity);
+        }
+
+        if(equities.length>1) {
+            double partnerEquity = Double.parseDouble(equities[0]);
+            selected.setPartnerEquity(partnerEquity);
+        }
+    }
+
     @FacesConverter(forClass = EquityType.class)
     public static class EquityTypeControllerConverter implements Converter {
 
@@ -140,7 +162,7 @@ public class EquityTypeController implements Serializable {
             return key;
         }
 
-        String getStringKey(java.lang.String value) {
+        String getStringKey(java.lang.Long value) {
             StringBuilder sb = new StringBuilder();
             sb.append(value);
             return sb.toString();
@@ -153,7 +175,7 @@ public class EquityTypeController implements Serializable {
             }
             if (object instanceof EquityType) {
                 EquityType o = (EquityType) object;
-                return getStringKey(o.getCode());
+                return getStringKey(o.getId());
             } else {
                 Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), EquityType.class.getName()});
                 return null;

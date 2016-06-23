@@ -40,6 +40,11 @@ public abstract class AbstractCrudServicesImpl<T> implements AbstractCrudService
     }
 
     @Override
+    public void delete(T entity) {
+        getEntityManager().remove(entity);
+    }
+
+    @Override
     public T find(Object id) {
         return getEntityManager().find(entityClass, id);
     }

@@ -6,19 +6,16 @@
 package com.nnpcgroup.cosm.entity;
 
 import com.nnpcgroup.cosm.entity.contract.Contract;
+
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 /**
- *
  * @author 18359
  */
 @Entity
@@ -30,7 +27,7 @@ public class CrudeType implements Serializable {
     private String code;
     private String crudeType;
     private Terminal terminal;
-    private List<Contract> contracts;
+    //private List<Contract> contracts;
 
     public CrudeType() {
     }
@@ -38,8 +35,9 @@ public class CrudeType implements Serializable {
     public CrudeType(String code) {
         this.code = code;
     }
-    
-        @Id
+
+    @Id
+    @Column(name = "CODE")
     public String getCode() {
         return code;
     }
@@ -49,6 +47,7 @@ public class CrudeType implements Serializable {
     }
 
     @NotNull
+    @Column(name = "CRUDE_TYPE")
     public String getCrudeType() {
         return crudeType;
     }
@@ -66,16 +65,22 @@ public class CrudeType implements Serializable {
         this.terminal = terminal;
     }
 
-    @OneToMany(mappedBy = "crudeType")
-    //@OneToMany(mappedBy = "crudeType", fetch = FetchType.LAZY)
-    //@JoinColumn(name = "crudeTypeCode", insertable = false, updatable = false)
-    public List<Contract> getContracts() {
-        return contracts;
-    }
-
-    public void setContracts(List<Contract> contracts) {
-        this.contracts = contracts;
-    }
+//    @OneToMany(mappedBy = "crudeType", fetch = FetchType.EAGER)
+//    public List<Contract> getContracts() {
+//        return contracts;
+//    }
+//
+//    public void setContracts(List<Contract> contracts) {
+//        this.contracts = contracts;
+//    }
+//
+//    public void addContract(Contract contract){
+//        if (contracts==null){
+//            contracts=new ArrayList<>();
+//
+//        }
+//        contracts.add(contract);
+//    }
 
     @Override
     public int hashCode() {

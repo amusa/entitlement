@@ -1,6 +1,9 @@
 package com.nnpcgroup.cosm.controller;
 
+import com.nnpcgroup.cosm.ejb.CrudeTypeBean;
+import com.nnpcgroup.cosm.ejb.FiscalArrangementBean;
 import com.nnpcgroup.cosm.ejb.contract.ContractServices;
+import com.nnpcgroup.cosm.entity.FiscalArrangementPK;
 import com.nnpcgroup.cosm.entity.contract.Contract;
 import com.nnpcgroup.cosm.controller.util.JsfUtil;
 import com.nnpcgroup.cosm.controller.util.JsfUtil.PersistAction;
@@ -39,13 +42,20 @@ public class ContractController implements Serializable {
 
     private static final long serialVersionUID = 3411266588734031876L;
 
-    @Inject//EJB
+    @EJB
     private ContractServices ejbFacade;
+
+    @EJB
+    private FiscalArrangementBean fiscalBean;
+
+    @EJB
+    private CrudeTypeBean crudeTypeBean;
 
     private List<? extends Contract> items = null;
     private Contract selected;
     private String contractType;
     private FiscalArrangement fiscalArrangement;
+    private CrudeType crudeType;
 
     public ContractController() {
     }
@@ -97,17 +107,32 @@ public class ContractController implements Serializable {
         }
     }
 
+    public CrudeType getCrudeType() {
+        return crudeType;
+    }
+
+    public void setCrudeType(CrudeType crudeType) {
+        this.crudeType = crudeType;
+    }
+
     protected void setEmbeddableKeys() {
-        if(selected!=null){
-            selected.setFiscalArrangementId(selected.getFiscalArrangement().getId());
-            selected.setCrudeTypeCode(selected.getCrudeType().getCode());
+        if (selected != null) {
+            ContractPK cPK = new ContractPK();
+            cPK.setFiscalArrangementId(fiscalArrangement.getId());
+            cPK.setCrudeTypeCode(crudeType.getCode());
+
+            selected.setContractPK(cPK);
+            selected.setCrudeType(crudeType);
+            selected.setFiscalArrangement(fiscalArrangement);
+            fiscalArrangement.addContract(selected);
+            //crudeType.addContract(selected);
         }
     }
 
     protected void initializeEmbeddableKey() {
     }
 
-    private ContractBaseServices getFacade() {
+    private ContractServices getFacade() {
         return ejbFacade;
     }
 
@@ -157,9 +182,10 @@ public class ContractController implements Serializable {
 
     private void persist(PersistAction persistAction, String successMessage) {
         if (selected != null) {
-            setEmbeddableKeys();
+
             try {
                 if (persistAction != PersistAction.DELETE) {
+                    setEmbeddableKeys();
                     getFacade().edit(selected);
                 } else {
                     getFacade().remove(selected);
@@ -211,15 +237,20 @@ public class ContractController implements Serializable {
                 default:
                     break;
             }
-            selected.setFiscalArrangement(fiscalArrangement);
+
+//           selected.setFiscalArrangement(fiscalArrangement);
+//            fiscalArrangement.getContracts().add(selected);
         }
     }
 
     public void addContractFiscalArrangement(FiscalArrangement fa) {
         LOG.log(Level.INFO, "Adding Contract for fiscal arrangement {0}...", fa);
         setSelected(new RegularContract()); //Default contract
+//        FiscalArrangement freshFiscal=  fiscalBean.find(fa.getId());
         setFiscalArrangement(fa);
-        selected.setFiscalArrangement(fiscalArrangement);
+//        selected.setFiscalArrangement(fa);
+//        fa.getContracts().add(selected);
+
     }
 
     @FacesConverter(forClass = Contract.class)
@@ -243,15 +274,16 @@ public class ContractController implements Serializable {
             String values[] = value.split(SEPARATOR_ESCAPED);
             Long fiscalArrangementId = Long.valueOf(values[0]);
             String crudeTypeCode = values[1];
+            FiscalArrangementPK fPK = new FiscalArrangementPK(fiscalArrangementId);
             key = new ContractPK(fiscalArrangementId, crudeTypeCode);
             return key;
         }
 
         String getStringKey(Contract value) {
             StringBuilder sb = new StringBuilder();
-            sb.append(value.getFiscalArrangement().getId());
+            sb.append(value.getContractPK().getFiscalArrangementId());
             sb.append(SEPARATOR);
-            sb.append(value.getCrudeType().getCode());
+            sb.append(value.getContractPK().getCrudeTypeCode());
             return sb.toString();
         }
 

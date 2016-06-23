@@ -23,7 +23,7 @@ public class ModifiedCarryContract extends AlternativeFundingContract{
     public ModifiedCarryContract() {
     }
 
-    public ModifiedCarryContract(Long fiscalArrangementId, String crudeTypeCode) {
-        super(fiscalArrangementId, crudeTypeCode);
+    public ModifiedCarryContract(FiscalArrangement fiscalArrangement, CrudeType crudeType) {
+        super(fiscalArrangement, crudeType);
     }
 }

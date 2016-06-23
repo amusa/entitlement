@@ -27,8 +27,8 @@ public abstract class AlternativeFundingContract extends Contract{
     public AlternativeFundingContract() {
     }
 
-    public AlternativeFundingContract(Long fiscalArrangementId, String crudeTypeCode) {
-        super(fiscalArrangementId, crudeTypeCode);
+    public AlternativeFundingContract(FiscalArrangement fiscalArrangement, CrudeType crudeType) {
+        super(fiscalArrangement, crudeType);
     }
 
     public Double getSharedOilRatio() {

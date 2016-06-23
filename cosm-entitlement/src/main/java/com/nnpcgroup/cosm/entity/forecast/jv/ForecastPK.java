@@ -5,6 +5,10 @@
  */
 package com.nnpcgroup.cosm.entity.forecast.jv;
 
+import com.nnpcgroup.cosm.entity.contract.ContractPK;
+
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
 import java.io.Serializable;
 import java.util.logging.Logger;
 
@@ -12,28 +16,32 @@ import java.util.logging.Logger;
  *
  * @author 18359
  */
+@Embeddable
 public class ForecastPK implements Serializable {
     private static final Logger LOG = Logger.getLogger(ForecastPK.class.getName());
     private static final long serialVersionUID = -5632726719147425922L;
     private Integer periodYear;
     private Integer periodMonth;
-    private Long fiscalArrangementId;
-    private String crudeTypeCode;
+    private ContractPK contract;
+//    private Long fiscalArrangementId;
+//    private String crudeTypeCode;
+
     
     public ForecastPK() {
     }
 
-    public ForecastPK(Integer periodYear, Integer periodMonth, Long fiscalArrangementId, String crudeTypeCode) {
+    public ForecastPK(Integer periodYear, Integer periodMonth, ContractPK contract) {
         this.periodYear = periodYear;
         this.periodMonth = periodMonth;
-        this.fiscalArrangementId = fiscalArrangementId;
-        this.crudeTypeCode = crudeTypeCode;
+        this.contract = contract;
     }
 
+    @Column(name = "PERIOD_YEAR")
     public Integer getPeriodYear() {
         return periodYear;
     }
 
+    @Column(name = "PERIOD_MONTH")
     public Integer getPeriodMonth() {
         return periodMonth;
     }
@@ -46,20 +54,13 @@ public class ForecastPK implements Serializable {
         this.periodMonth = periodMonth;
     }
 
-    public Long getFiscalArrangementId() {
-        return fiscalArrangementId;
+
+    public ContractPK getContract() {
+        return contract;
     }
 
-    public void setFiscalArrangementId(Long fiscalArrangementId) {
-        this.fiscalArrangementId = fiscalArrangementId;
-    }
-
-    public String getCrudeTypeCode() {
-        return crudeTypeCode;
-    }
-
-    public void setCrudeTypeCode(String crudeTypeCode) {
-        this.crudeTypeCode = crudeTypeCode;
+    public void setContract(ContractPK contract) {
+        this.contract = contract;
     }
 
     @Override
@@ -71,8 +72,7 @@ public class ForecastPK implements Serializable {
 
         if (!periodYear.equals(that.periodYear)) return false;
         if (!periodMonth.equals(that.periodMonth)) return false;
-        if (!fiscalArrangementId.equals(that.fiscalArrangementId)) return false;
-        return crudeTypeCode.equals(that.crudeTypeCode);
+        return contract.equals(that.contract);
 
     }
 
@@ -80,8 +80,7 @@ public class ForecastPK implements Serializable {
     public int hashCode() {
         int result = periodYear.hashCode();
         result = 31 * result + periodMonth.hashCode();
-        result = 31 * result + fiscalArrangementId.hashCode();
-        result = 31 * result + crudeTypeCode.hashCode();
+        result = 31 * result + contract.hashCode();
         return result;
     }
 }

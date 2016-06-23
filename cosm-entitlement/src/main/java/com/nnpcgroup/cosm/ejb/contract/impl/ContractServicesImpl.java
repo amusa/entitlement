@@ -8,11 +8,15 @@ package com.nnpcgroup.cosm.ejb.contract.impl;
 import com.nnpcgroup.cosm.ejb.contract.ContractBaseServices;
 import com.nnpcgroup.cosm.ejb.contract.ContractServices;
 import com.nnpcgroup.cosm.entity.contract.Contract;
+import com.nnpcgroup.cosm.util.COSMPersistence;
+
 import java.io.Serializable;
 import java.util.logging.Logger;
 import javax.ejb.Local;
 import javax.ejb.Stateless;
 import javax.enterprise.context.Dependent;
+import javax.inject.Inject;
+import javax.persistence.EntityManager;
 
 /**
  *
@@ -25,8 +29,10 @@ public class ContractServicesImpl extends ContractBaseServicesImpl<Contract> imp
 
     private static final Logger LOG = Logger.getLogger(ContractServicesImpl.class.getName());
 
+
     public ContractServicesImpl() {
         super(Contract.class);
     }
+
 
 }

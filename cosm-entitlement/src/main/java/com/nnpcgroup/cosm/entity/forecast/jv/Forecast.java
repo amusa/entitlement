@@ -5,19 +5,22 @@
  */
 package com.nnpcgroup.cosm.entity.forecast.jv;
 
+import com.nnpcgroup.cosm.entity.CrudeType;
+import com.nnpcgroup.cosm.entity.FiscalArrangement;
 import com.nnpcgroup.cosm.entity.contract.Contract;
 
 import java.io.Serializable;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.persistence.*;
+//import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 /**
  * @author 18359
  */
 @Entity
-@IdClass(ForecastPK.class)
+//@IdClass(ForecastPK.class)
 @Table(name = "FORECAST")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "FTYPE")
@@ -27,11 +30,15 @@ public abstract class Forecast implements Serializable {
 
     private static final Logger LOG = Logger.getLogger(Forecast.class.getName());
 
+    private ForecastPK forecastPK;
     private Integer periodYear;
     private Integer periodMonth;
-    private Long fiscalArrangementId;
-    private String crudeTypeCode;
+    //    private Long fiscalArrangementId;
+//    private String crudeTypeCode;
     private Contract contract;
+//    private FiscalArrangement fiscalArrangement;
+//    private CrudeType crudeType;
+
     private Double openingStock;
     private Double partnerOpeningStock;
     private Double closingStock;
@@ -51,7 +58,18 @@ public abstract class Forecast implements Serializable {
     public Forecast() {
     }
 
-    @Id
+    @EmbeddedId
+    public ForecastPK getForecastPK() {
+        return forecastPK;
+    }
+
+    public void setForecastPK(ForecastPK forecastPK) {
+        this.forecastPK = forecastPK;
+        this.periodYear = forecastPK.getPeriodYear();
+        this.periodMonth = forecastPK.getPeriodMonth();
+    }
+
+    @Column(name = "PERIOD_YEAR", updatable = false, insertable = false)
     public Integer getPeriodYear() {
         return periodYear;
     }
@@ -60,7 +78,7 @@ public abstract class Forecast implements Serializable {
         this.periodYear = periodYear;
     }
 
-    @Id
+    @Column(name = "PERIOD_MONTH", updatable = false, insertable = false)
     public Integer getPeriodMonth() {
         return periodMonth;
     }
@@ -69,28 +87,32 @@ public abstract class Forecast implements Serializable {
         this.periodMonth = periodMonth;
     }
 
-    @Id
-    public Long getFiscalArrangementId() {
-        return fiscalArrangementId;
-    }
+//    @Id
+//    @Column(name = "FISCALARRANGEMENT_ID")
+//    public Long getFiscalArrangementId() {
+//        return fiscalArrangementId;
+//    }
+//
+//    public void setFiscalArrangementId(Long fiscalArrangementId) {
+//        this.fiscalArrangementId = fiscalArrangementId;
+//    }
+//
+//    @Id
+//    @Column(name = "CRUDETYPE_CODE")
+//    public String getCrudeTypeCode() {
+//        return crudeTypeCode;
+//    }
+//
+//    public void setCrudeTypeCode(String crudeTypeCode) {
+//        this.crudeTypeCode = crudeTypeCode;
+//    }
 
-    public void setFiscalArrangementId(Long fiscalArrangementId) {
-        this.fiscalArrangementId = fiscalArrangementId;
-    }
-
-    @Id
-    public String getCrudeTypeCode() {
-        return crudeTypeCode;
-    }
-
-    public void setCrudeTypeCode(String crudeTypeCode) {
-        this.crudeTypeCode = crudeTypeCode;
-    }
 
     @ManyToOne
+    @MapsId("contract")
     @JoinColumns({
-            @JoinColumn(name = "FISCALARRANGEMENTID", referencedColumnName = "FISCALARRANGEMENTID", insertable = false, updatable = false),
-            @JoinColumn(name = "CRUDETYPECODE", referencedColumnName = "CRUDETYPECODE", insertable = false, updatable = false)
+            @JoinColumn(name = "FISCALARRANGEMENT_ID", referencedColumnName = "FISCALARRANGEMENTID", insertable = false, updatable = false),
+            @JoinColumn(name = "CRUDETYPE_CODE", referencedColumnName = "CRUDETYPECODE", insertable = false, updatable = false)
     })
     public Contract getContract() {
         return contract;
@@ -100,7 +122,32 @@ public abstract class Forecast implements Serializable {
         this.contract = contract;
     }
 
+//    @ManyToOne
+//    @JoinColumn(name = "FISCALARRANGEMENT_ID", insertable = false, updatable = false)
+//    @MapsId("fiscalArrangementId")
+//    public FiscalArrangement getFiscalArrangement() {
+//        return fiscalArrangement;
+//    }
+//
+//    public void setFiscalArrangement(FiscalArrangement fiscalArrangement) {
+//        this.fiscalArrangement = fiscalArrangement;
+//    }
+//
+//
+//    @ManyToOne
+//    @MapsId("crudeTypeCode")
+//    @JoinColumn(name = "CRUDETYPE_CODE", insertable = false, updatable = false)
+//    public CrudeType getCrudeType() {
+//        return crudeType;
+//    }
+//
+//    public void setCrudeType(CrudeType crudeType) {
+//        this.crudeType = crudeType;
+//    }
+
+
     @NotNull
+    @Column(name = "OPENING_STOCK")
     public Double getOpeningStock() {
         return openingStock;
     }
@@ -109,6 +156,7 @@ public abstract class Forecast implements Serializable {
         this.openingStock = openingStock;
     }
 
+    @Column(name = "CLOSING_STOCK")
     public Double getClosingStock() {
         return closingStock;
     }
@@ -118,6 +166,7 @@ public abstract class Forecast implements Serializable {
     }
 
     @NotNull
+    @Column(name = "PRODUCTION_VOLUME")
     public Double getProductionVolume() {
         return productionVolume;
     }
@@ -127,6 +176,7 @@ public abstract class Forecast implements Serializable {
     }
 
     @NotNull
+    @Column(name = "OWN_SHARE_ENTITLEMENT")
     public Double getOwnShareEntitlement() {
         return ownShareEntitlement;
     }
@@ -135,6 +185,7 @@ public abstract class Forecast implements Serializable {
         this.ownShareEntitlement = ownShareEntitlement;
     }
 
+    @Column(name = "PARTNER_SHARE_ENTITLEMENT")
     public Double getPartnerShareEntitlement() {
         return partnerShareEntitlement;
     }
@@ -143,6 +194,7 @@ public abstract class Forecast implements Serializable {
         this.partnerShareEntitlement = partnerShareEntitlement;
     }
 
+    @Column(name = "GROSS_PRODUCTION")
     public Double getGrossProduction() {
         return grossProduction;
     }
@@ -151,6 +203,7 @@ public abstract class Forecast implements Serializable {
         this.grossProduction = grossProduction;
     }
 
+    @Column(name = "LIFTING")
     public Double getLifting() {
         return lifting;
     }
@@ -159,6 +212,7 @@ public abstract class Forecast implements Serializable {
         this.lifting = lifting;
     }
 
+    @Column(name = "CARGOES")
     public Integer getCargos() {
         return cargos;
     }
@@ -167,6 +221,7 @@ public abstract class Forecast implements Serializable {
         this.cargos = cargos;
     }
 
+    @Column(name = "AVAILABILITY")
     public Double getAvailability() {
         return availability;
     }
@@ -175,6 +230,7 @@ public abstract class Forecast implements Serializable {
         this.availability = availability;
     }
 
+    @Column(name = "PARTNER_OPENING_STOCK")
     public Double getPartnerOpeningStock() {
         return partnerOpeningStock;
     }
@@ -183,6 +239,7 @@ public abstract class Forecast implements Serializable {
         this.partnerOpeningStock = partnerOpeningStock;
     }
 
+    @Column(name = "PARTNER_CLOSING_STOCK")
     public Double getPartnerClosingStock() {
         return partnerClosingStock;
     }
@@ -191,6 +248,7 @@ public abstract class Forecast implements Serializable {
         this.partnerClosingStock = partnerClosingStock;
     }
 
+    @Column(name = "PARTNER_AVAILABILITY")
     public Double getPartnerAvailability() {
         return partnerAvailability;
     }
@@ -199,6 +257,7 @@ public abstract class Forecast implements Serializable {
         this.partnerAvailability = partnerAvailability;
     }
 
+    @Column(name = "PARTNER_LIFTING")
     public Double getPartnerLifting() {
         return partnerLifting;
     }
@@ -207,6 +266,7 @@ public abstract class Forecast implements Serializable {
         this.partnerLifting = partnerLifting;
     }
 
+    @Column(name = "PARTNER_CARGOES")
     public Integer getPartnerCargos() {
         return partnerCargos;
     }
@@ -215,7 +275,7 @@ public abstract class Forecast implements Serializable {
         this.partnerCargos = partnerCargos;
     }
 
-    @OneToMany(mappedBy = "forecast", cascade = {CascadeType.PERSIST})
+    @OneToMany(mappedBy = "forecast", cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     public List<ForecastEntitlement> getForecastEntitlements() {
         return forecastEntitlements;
     }
@@ -233,8 +293,7 @@ public abstract class Forecast implements Serializable {
 
         if (!periodYear.equals(forecast.periodYear)) return false;
         if (!periodMonth.equals(forecast.periodMonth)) return false;
-        if (!fiscalArrangementId.equals(forecast.fiscalArrangementId)) return false;
-        return crudeTypeCode.equals(forecast.crudeTypeCode);
+        return contract.equals(forecast.contract);
 
     }
 
@@ -242,8 +301,7 @@ public abstract class Forecast implements Serializable {
     public int hashCode() {
         int result = periodYear.hashCode();
         result = 31 * result + periodMonth.hashCode();
-        result = 31 * result + fiscalArrangementId.hashCode();
-        result = 31 * result + crudeTypeCode.hashCode();
+        result = 31 * result + contract.hashCode();
         return result;
     }
 }

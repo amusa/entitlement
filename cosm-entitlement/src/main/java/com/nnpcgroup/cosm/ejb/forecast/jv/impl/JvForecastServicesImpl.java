@@ -10,8 +10,11 @@ import com.nnpcgroup.cosm.ejb.FiscalArrangementBean;
 import com.nnpcgroup.cosm.ejb.forecast.jv.JvForecastServices;
 import com.nnpcgroup.cosm.ejb.impl.CommonServicesImpl;
 import com.nnpcgroup.cosm.entity.*;
+import com.nnpcgroup.cosm.entity.contract.Contract;
+import com.nnpcgroup.cosm.entity.contract.ContractPK;
 import com.nnpcgroup.cosm.entity.forecast.jv.Forecast;
 import com.nnpcgroup.cosm.entity.forecast.jv.ForecastPK;
+
 import java.io.Serializable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,9 +23,8 @@ import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
 /**
- *
- * @author 18359
  * @param <T>
+ * @author 18359
  */
 @Dependent
 public abstract class JvForecastServicesImpl<T extends Forecast> extends CommonServicesImpl<T> implements JvForecastServices<T>, Serializable {
@@ -120,8 +122,8 @@ public abstract class JvForecastServicesImpl<T extends Forecast> extends CommonS
         FiscalArrangement fa;
         JointVenture jv;
 
-       // fa = production.getContract().getFiscalArrangement();
-        fa = fiscalBean.find(production.getFiscalArrangementId());
+        fa = production.getContract().getFiscalArrangement();
+        //fa = fiscalBean.find(production.getContract().getFiscalArrangementId());
 
         assert (fa instanceof JointVenture);
 
@@ -155,7 +157,6 @@ public abstract class JvForecastServicesImpl<T extends Forecast> extends CommonS
         Double partnerEntitlement = production.getPartnerShareEntitlement();
         Double openingStock = production.getOpeningStock();
         Double partnerOpeningStock = production.getPartnerOpeningStock();
-
         availability = ownEntitlement + openingStock;
         partnerAvailability = partnerEntitlement + partnerOpeningStock;
 
@@ -186,8 +187,10 @@ public abstract class JvForecastServicesImpl<T extends Forecast> extends CommonS
         int month = forecast.getPeriodMonth();
         int year = forecast.getPeriodYear();
         FiscalPeriod prevFp = getPreviousFiscalPeriod(year, month);
+        ContractPK cPK = forecast.getContract().getContractPK();
 
-        T f = find(new ForecastPK(prevFp.getYear(), prevFp.getMonth(), forecast.getFiscalArrangementId(), forecast.getCrudeTypeCode()));
+
+        T f = find(new ForecastPK(prevFp.getYear(), prevFp.getMonth(), cPK));
         //T f = findByContractPeriod(prevFp.getYear(), prevFp.getMonth(), cs);
 
         return f;

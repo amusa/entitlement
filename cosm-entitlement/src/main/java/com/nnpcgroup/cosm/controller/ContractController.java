@@ -1,30 +1,16 @@
 package com.nnpcgroup.cosm.controller;
 
+import com.nnpcgroup.cosm.controller.util.JsfUtil;
+import com.nnpcgroup.cosm.controller.util.JsfUtil.PersistAction;
 import com.nnpcgroup.cosm.ejb.CrudeTypeBean;
 import com.nnpcgroup.cosm.ejb.FiscalArrangementBean;
 import com.nnpcgroup.cosm.ejb.contract.ContractServices;
-import com.nnpcgroup.cosm.entity.FiscalArrangementPK;
-import com.nnpcgroup.cosm.entity.contract.Contract;
-import com.nnpcgroup.cosm.controller.util.JsfUtil;
-import com.nnpcgroup.cosm.controller.util.JsfUtil.PersistAction;
-import com.nnpcgroup.cosm.ejb.contract.ContractBaseServices;
-import com.nnpcgroup.cosm.ejb.contract.ContractServices;
 import com.nnpcgroup.cosm.entity.CrudeType;
-import com.nnpcgroup.cosm.entity.contract.CarryContract;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
-import com.nnpcgroup.cosm.entity.contract.AlternativeFundingContract;
-import com.nnpcgroup.cosm.entity.contract.ContractPK;
-import com.nnpcgroup.cosm.entity.contract.ModifiedCarryContract;
-import com.nnpcgroup.cosm.entity.contract.RegularContract;
+import com.nnpcgroup.cosm.entity.contract.*;
 
-import java.io.Serializable;
-import java.util.List;
-import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
-import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -32,7 +18,12 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.model.SelectItem;
-import javax.inject.Inject;
+import javax.inject.Named;
+import java.io.Serializable;
+import java.util.List;
+import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Named("contractController")
 @SessionScoped
@@ -274,7 +265,6 @@ public class ContractController implements Serializable {
             String values[] = value.split(SEPARATOR_ESCAPED);
             Long fiscalArrangementId = Long.valueOf(values[0]);
             String crudeTypeCode = values[1];
-            FiscalArrangementPK fPK = new FiscalArrangementPK(fiscalArrangementId);
             key = new ContractPK(fiscalArrangementId, crudeTypeCode);
             return key;
         }

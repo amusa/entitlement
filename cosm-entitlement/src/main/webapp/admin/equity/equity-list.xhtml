@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:jsf="http://xmlns.jcp.org/jsf">
+
+
+    <ui:composition template="/cosm-template.xhtml">
+
+        <ui:define name="title">
+            <h:outputText value="JV Equity List"></h:outputText>
+        </ui:define>
+
+        <ui:define name="breadcrumb">
+            <ol class="breadcrumb hidden-xs">
+                <li><a href="../../index.xhtml">Home</a></li>  
+                <li><a href="../index.xhtml">Admin</a></li>
+                <li class="active">Equity</li>
+            </ol>
+        </ui:define>
+
+        <ui:define name="page-title">
+            <h:outputText value="#{bundle.EquityTypeListTitle}"></h:outputText>
+        </ui:define>
+
+        <ui:define name="side-menu">
+            <ui:include src="_equity-menu.xhtml"/>
+        </ui:define>
+
+        <ui:define name="content-area">  
+            <h:form id="equityListForm">
+                <!-- Multi Column -->
+                <div jsf:id="equityPanel" class="row">
+                    <div class="col-md-9 m-b-9">
+                        <h:dataTable id="equityTable" var="equity" value="#{equityTypeController.items}"
+                                     class="table table-bordered table-hover tile">
+                            <h:column>
+                                <f:facet name="header">
+                                    <h:outputText value="#{bundle.EquityTypeDesc}"/>
+                                </f:facet>
+                                <h:outputText value="#{equity.description}"/>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">
+                                    <h:outputText value="#{bundle.EquityTypeOwn}"/>
+                                </f:facet>
+                                <h:outputText value="#{equity.ownEquity}"/>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">
+                                    <h:outputText value="#{bundle.EquityTypePartner}"/>
+                                </f:facet>
+                                <h:outputText value="#{equity.partnerEquity}"/>
+                            </h:column>
+                            <h:column>
+                                <div class="btn-group">
+                                    <button jsf:id="action" type="button" class="btn btn-sm dropdown-toggle" data-toggle="dropdown">
+                                        Action <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" jsf:id="btnList">
+                                        <li>
+                                            <h:commandLink  pt:data-target="#EquityCreateDlg" pt:look="warning" pt:data-toggle="modal" >
+                                                <span class="icon">&#61943;</span>
+                                                #{bundle.Create}
+                                                <f:ajax event="click" render="EquityCreateForm" listener="#{equityTypeController.prepareCreate}" />
+                                            </h:commandLink>                                       
+                                        </li>
+
+                                        <li>
+                                            <h:commandLink pt:data-target="#EquityViewDlg" pt:look="warning" pt:data-toggle="modal">
+                                                <span class="icon">&#61698;</span>
+                                                #{bundle.View}
+                                                <f:ajax event="click" render="EquityViewForm" listener="#{equityTypeController.setSelected(equity)}"/>
+                                            </h:commandLink>
+                                        </li>
+                                        <li><h:commandLink pt:data-target="#EquityEditDlg" pt:look="warning" pt:data-toggle="modal">
+                                                <span class="icon">&#61952;</span>
+                                                #{bundle.Edit}
+                                                <f:ajax event="click" render="EquityEditForm" listener="#{equityTypeController.setSelected(equity)}"/>
+                                            </h:commandLink>
+                                        </li>  
+                                        <li>
+                                            <h:commandLink>
+                                                <span class="icon">&#61918;</span>
+                                                #{bundle.Delete}
+                                                <f:ajax render="equityListForm equityTable msgs" listener="#{equityTypeController.destroy(equity)}"/>
+                                            </h:commandLink>
+                                        </li> 
+                                    </ul>
+                                </div>
+                            </h:column>
+
+                            <f:facet name="footer">                                                                
+                                <button jsf:id="createButton" look="warning" data-target="#EquityCreateDlg" data-toggle="modal" class="btn m-r-5">
+                                    <span class="icon">&#61943;</span>
+                                    #{bundle.Create}
+                                    <f:ajax event="click" render="EquityCreateForm" listener="#{equityTypeController.prepareCreate}" />
+                                </button>
+
+                                <button jsf:id="viewButton" look="warning" data-target="#EquityViewDlg" data-toggle="modal" class="btn m-r-5">
+                                    <span class="icon">&#61698;</span>
+                                    #{bundle.View}
+                                    <f:ajax event="click" render="EquityViewForm" />
+                                </button>
+                                <button jsf:id="editButton" look="warning" data-target="#EquityEditDlg" data-toggle="modal" class="btn m-r-5">
+                                    <span class="icon">&#61952;</span>                                    
+                                    #{bundle.Edit}
+                                    <f:ajax event="click" render="EquityEditForm" />
+                                </button>
+
+                                <button jsf:id="deleteButton" class="btn m-r-5" jsf:disabled="#{empty equityTypeController.selected}">
+                                    <span class="icon">&#61918;</span>
+                                    #{bundle.Delete}
+                                    <f:ajax render="equityTable" listener="#{equityTypeController.destroy}"/>
+                                </button>
+
+                            </f:facet>
+                        </h:dataTable>
+                    </div>
+                </div>
+            </h:form>
+            <ui:include src="_equity-create.xhtml"/>
+            <ui:include src="_equity-edit.xhtml"/>
+            <ui:include src="_equity-view.xhtml"/>
+        </ui:define>
+    </ui:composition>
+
+
+
+</html>

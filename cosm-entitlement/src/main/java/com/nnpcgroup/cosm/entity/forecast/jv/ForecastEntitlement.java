@@ -10,12 +10,7 @@ import com.nnpcgroup.cosm.entity.contract.Contract;
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.logging.Logger;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.IdClass;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  *
@@ -46,6 +41,7 @@ public class ForecastEntitlement implements Serializable {
     }
 
     @Id
+    @Column(name = "PERIOD_YEAR")
     public Integer getPeriodYear() {
         return periodYear;
     }
@@ -55,6 +51,7 @@ public class ForecastEntitlement implements Serializable {
     }
 
     @Id
+    @Column(name = "PERIOD_MONTH")
     public Integer getPeriodMonth() {
         return periodMonth;
     }
@@ -65,6 +62,10 @@ public class ForecastEntitlement implements Serializable {
 
     @Id
     @OneToOne
+    @JoinColumns({
+            @JoinColumn(name = "FISCALARRANGEMENT_ID", referencedColumnName = "FISCALARRANGEMENTID", insertable = false, updatable = false),
+            @JoinColumn(name = "CRUDETYPE_CODE", referencedColumnName = "CRUDETYPECODE", insertable = false, updatable = false)
+    })
     public Contract getContract() {
         return contract;
     }
@@ -84,6 +85,12 @@ public class ForecastEntitlement implements Serializable {
     }
 
     @ManyToOne
+    @JoinColumns({
+            @JoinColumn(name = "PERIOD_YEAR", referencedColumnName = "PERIOD_YEAR", insertable = false, updatable = false),
+            @JoinColumn(name = "PERIOD_MONTH", referencedColumnName = "PERIOD_MONTH", insertable = false, updatable = false),
+            @JoinColumn(name = "FISCALARRANGEMENT_ID", referencedColumnName = "FISCALARRANGEMENT_ID", insertable = false, updatable = false),
+            @JoinColumn(name = "CRUDETYPE_CODE", referencedColumnName = "CRUDETYPE_CODE", insertable = false, updatable = false)
+    })
     public Forecast getForecast() {
         return forecast;
     }

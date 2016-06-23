@@ -10,10 +10,10 @@ import com.nnpcgroup.cosm.ejb.FiscalArrangementBean;
 import com.nnpcgroup.cosm.ejb.forecast.jv.JvForecastServices;
 import com.nnpcgroup.cosm.ejb.impl.CommonServicesImpl;
 import com.nnpcgroup.cosm.entity.*;
-import com.nnpcgroup.cosm.entity.contract.Contract;
 import com.nnpcgroup.cosm.entity.contract.ContractPK;
 import com.nnpcgroup.cosm.entity.forecast.jv.Forecast;
 import com.nnpcgroup.cosm.entity.forecast.jv.ForecastPK;
+import com.nnpcgroup.cosm.exceptions.NoRealizablePriceException;
 
 import java.io.Serializable;
 import java.util.logging.Level;
@@ -101,7 +101,7 @@ public abstract class JvForecastServicesImpl<T extends Forecast> extends CommonS
     }
 
     @Override
-    public T enrich(T production) {
+    public T enrich(T production) throws NoRealizablePriceException {
         LOG.log(Level.INFO, "Enriching production {0}...", production);
         return computeClosingStock(
                 computeLifting(

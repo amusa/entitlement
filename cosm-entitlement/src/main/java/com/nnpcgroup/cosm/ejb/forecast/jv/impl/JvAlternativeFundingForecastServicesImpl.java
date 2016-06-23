@@ -12,6 +12,7 @@ import com.nnpcgroup.cosm.entity.Price;
 import com.nnpcgroup.cosm.entity.PricePK;
 import com.nnpcgroup.cosm.entity.contract.*;
 import com.nnpcgroup.cosm.entity.forecast.jv.AlternativeFundingForecast;
+import com.nnpcgroup.cosm.exceptions.NoRealizablePriceException;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -99,7 +100,7 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
     }
     
     @Override
-    public T enrich(T production) {
+    public T enrich(T production) throws NoRealizablePriceException {
         LOG.log(Level.INFO, "Enriching forecast {0}...", production);
         return computeClosingStock(
                 computeLifting(
@@ -150,7 +151,7 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
     }
     
     @Override
-    public T computeAlternativeFunding(T production) {
+    public T computeAlternativeFunding(T production) throws NoRealizablePriceException {
         return computeCummulative(
                 computeSharedOil(
                         computeCarryOilReceived(
@@ -282,7 +283,7 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
     }
     
     @Override
-    public T computeGuaranteedNotionalMargin(T forecast) {
+    public T computeGuaranteedNotionalMargin(T forecast) throws NoRealizablePriceException {
         PricePK pricePK = new PricePK();
         LOG.log(Level.INFO, "*********NPE Check********* forecast={0}", new Object[]{forecast});
         pricePK.setPeriodMonth(forecast.getPeriodMonth());
@@ -296,6 +297,11 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
             GNM = price.getRealizablePrice() * 0.12225;
         } else {
             LOG.log(Level.INFO, "Realizable Price NOT found {0}");
+
+            throw new NoRealizablePriceException(String.format
+                    ("Realizable Price for the year %s and month %s not found!",
+                            new Object[]{pricePK.getPeriodYear(), pricePK.getPeriodMonth()}
+                    ));
         }
         
         forecast.setGuaranteedNotionalMargin(GNM);

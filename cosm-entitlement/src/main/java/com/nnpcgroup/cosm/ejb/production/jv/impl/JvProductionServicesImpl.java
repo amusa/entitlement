@@ -15,6 +15,8 @@ import com.nnpcgroup.cosm.entity.FiscalPeriod;
 import com.nnpcgroup.cosm.entity.JointVenture;
 import com.nnpcgroup.cosm.entity.production.jv.Production;
 import com.nnpcgroup.cosm.entity.production.jv.ProductionPK;
+import com.nnpcgroup.cosm.exceptions.NoRealizablePriceException;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
@@ -37,7 +39,7 @@ public abstract class JvProductionServicesImpl<T extends Production, E extends C
     }
 
     @Override
-    public T enrich(T production) {
+    public T enrich(T production) throws NoRealizablePriceException {
         LOG.log(Level.INFO, "Enriching production {0}...", production);
         return computeClosingStock(
                 computeLifting(

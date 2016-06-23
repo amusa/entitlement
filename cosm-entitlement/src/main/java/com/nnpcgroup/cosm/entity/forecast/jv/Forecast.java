@@ -20,7 +20,6 @@ import javax.validation.constraints.NotNull;
  * @author 18359
  */
 @Entity
-//@IdClass(ForecastPK.class)
 @Table(name = "FORECAST")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "FTYPE")
@@ -33,12 +32,7 @@ public abstract class Forecast implements Serializable {
     private ForecastPK forecastPK;
     private Integer periodYear;
     private Integer periodMonth;
-    //    private Long fiscalArrangementId;
-//    private String crudeTypeCode;
     private Contract contract;
-//    private FiscalArrangement fiscalArrangement;
-//    private CrudeType crudeType;
-
     private Double openingStock;
     private Double partnerOpeningStock;
     private Double closingStock;
@@ -87,27 +81,6 @@ public abstract class Forecast implements Serializable {
         this.periodMonth = periodMonth;
     }
 
-//    @Id
-//    @Column(name = "FISCALARRANGEMENT_ID")
-//    public Long getFiscalArrangementId() {
-//        return fiscalArrangementId;
-//    }
-//
-//    public void setFiscalArrangementId(Long fiscalArrangementId) {
-//        this.fiscalArrangementId = fiscalArrangementId;
-//    }
-//
-//    @Id
-//    @Column(name = "CRUDETYPE_CODE")
-//    public String getCrudeTypeCode() {
-//        return crudeTypeCode;
-//    }
-//
-//    public void setCrudeTypeCode(String crudeTypeCode) {
-//        this.crudeTypeCode = crudeTypeCode;
-//    }
-
-
     @ManyToOne
     @MapsId("contract")
     @JoinColumns({
@@ -121,30 +94,6 @@ public abstract class Forecast implements Serializable {
     public void setContract(Contract contract) {
         this.contract = contract;
     }
-
-//    @ManyToOne
-//    @JoinColumn(name = "FISCALARRANGEMENT_ID", insertable = false, updatable = false)
-//    @MapsId("fiscalArrangementId")
-//    public FiscalArrangement getFiscalArrangement() {
-//        return fiscalArrangement;
-//    }
-//
-//    public void setFiscalArrangement(FiscalArrangement fiscalArrangement) {
-//        this.fiscalArrangement = fiscalArrangement;
-//    }
-//
-//
-//    @ManyToOne
-//    @MapsId("crudeTypeCode")
-//    @JoinColumn(name = "CRUDETYPE_CODE", insertable = false, updatable = false)
-//    public CrudeType getCrudeType() {
-//        return crudeType;
-//    }
-//
-//    public void setCrudeType(CrudeType crudeType) {
-//        this.crudeType = crudeType;
-//    }
-
 
     @NotNull
     @Column(name = "OPENING_STOCK")

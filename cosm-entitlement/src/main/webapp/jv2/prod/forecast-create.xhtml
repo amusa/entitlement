@@ -65,7 +65,7 @@
                                         <h:outputLabel value="Contract" for="contracts" />
                                         <h:selectOneMenu id="contracts" value="#{jvProdController.currentContract}" class="form-control input-sm m-b-10" required="true">
                                             <f:selectItems value="#{jvProdController.contractSelectOne}"/>
-                                            <f:ajax event="change" listener="#{jvProdController.currentContractChanged}" render="JvCreateForm carryContractInfo carryContractInfo2 carryContractInfoYTD"/>
+                                            <f:ajax event="change" listener="#{jvProdController.currentContractChanged}" render="JvCreateForm carryContractInfo carryContractInfo2 carryContractInfoYTD msgs"/>
                                         </h:selectOneMenu>
                                     </div>
                                 </div>
@@ -82,7 +82,7 @@
                                         <h:inputText id="tangible" value="#{jvProdController.currentAfProduction.tangibleCost}" class="form-control input-sm m-b-10">
                                             <f:convertNumber pattern="###,###,###.####" />
                                             <f:ajax event="change" listener="#{jvProdController.alternativeFundingCostListener}"
-                                                    render="carryOil carryOilCum sharedOil sharedOilCum cor ccc ccca cte ctr rce ignm cccaCum cteCum ctrCum rceCum ignmCum corCum"/>
+                                                    render="carryOil carryOilCum sharedOil sharedOilCum cor ccc ccca cte ctr rce ignm cccaCum cteCum ctrCum rceCum ignmCum corCum msgs"/>
                                         </h:inputText>
                                     </div>
                                     <div class="col-md-4 m-b-15">
@@ -90,7 +90,7 @@
                                         <h:inputText id="intangible" value="#{jvProdController.currentAfProduction.intangibleCost}" class="form-control input-sm m-b-10">
                                             <f:convertNumber pattern="###,###,###.####" />
                                             <f:ajax event="change" listener="#{jvProdController.alternativeFundingCostListener}"
-                                                    render="carryOil carryOilCum sharedOil sharedOilCum cor ccc ccca cte ctr rce ignm cccaCum cteCum ctrCum rceCum ignmCum corCum"/>
+                                                    render="carryOil carryOilCum sharedOil sharedOilCum cor ccc ccca cte ctr rce ignm cccaCum cteCum ctrCum rceCum ignmCum corCum msgs"/>
                                         </h:inputText>
                                     </div>
                                     <div class="col-md-4 m-b-15">
@@ -119,7 +119,7 @@
                                         <h:outputLabel value="Daily Prod (bpd)" for="productionVolume" />
                                         <h:inputText id="productionVolume" value="#{jvProdController.currentProduction.productionVolume}" title="Daily Production Volume" class="form-control input-sm" >
                                             <f:ajax event="change" listener="#{jvProdController.productionVolumeChanged}"
-                                                    render="grossVolume carryOil carryOilCum sharedOil sharedOilCum openingStock ownShareEntitlement closingStock lifting cargoes availability ptnrOpeningStock ptnrEntitlement ptnrClosingStock ptnrLifting ptnrCargoes ptnrAvailability ccc ccca cte ctr rce cor ignm cccaCum cteCum ctrCum rceCum ignmCum corCum"/>
+                                                    render="grossVolume carryOil carryOilCum sharedOil sharedOilCum openingStock ownShareEntitlement closingStock lifting cargoes availability ptnrOpeningStock ptnrEntitlement ptnrClosingStock ptnrLifting ptnrCargoes ptnrAvailability ccc ccca cte ctr rce cor ignm cccaCum cteCum ctrCum rceCum ignmCum corCum msgs"/>
 
                                         </h:inputText>
                                     </div>

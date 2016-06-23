@@ -32,6 +32,7 @@ import com.nnpcgroup.cosm.entity.production.jv.ModifiedCarryProduction;
 import com.nnpcgroup.cosm.entity.production.jv.RegularProduction;
 import com.nnpcgroup.cosm.entity.production.jv.Production;
 import com.nnpcgroup.cosm.entity.production.jv.ProductionPK;
+
 import javax.inject.Named;
 import java.io.Serializable;
 import java.util.List;
@@ -50,7 +51,6 @@ import javax.faces.validator.ValidatorException;
 import javax.inject.Inject;
 
 /**
- *
  * @author 18359
  */
 @Named(value = "jvActualController")
@@ -87,6 +87,7 @@ public class JvProductionController implements Serializable {
     private Integer periodMonth;
     private FiscalArrangement currentFiscalArrangement;
     private Contract currentContract;
+    private boolean directActualizing =false;
 
     /**
      * Creates a new instance of JvController
@@ -131,7 +132,7 @@ public class JvProductionController implements Serializable {
 
         currentContract = contractBean.find(contractPK);
         if (currentContract != null) {
-           // currentFiscalArrangement = currentContract.getFiscalArrangement();
+            // currentFiscalArrangement = currentContract.getFiscalArrangement();
         }
 
     }
@@ -212,8 +213,8 @@ public class JvProductionController implements Serializable {
         LOG.log(Level.INFO,
                 "Own entmt={0},Partner entmt={1}, Stock Adj={2}...",
                 new Object[]{currentProduction.getOwnShareEntitlement(),
-                    currentProduction.getPartnerShareEntitlement(),
-                    currentProduction.getStockAdjustment()});
+                        currentProduction.getPartnerShareEntitlement(),
+                        currentProduction.getStockAdjustment()});
 
     }
 
@@ -222,8 +223,8 @@ public class JvProductionController implements Serializable {
         LOG.log(Level.INFO,
                 "Own entmt={0},Partner entmt={1}, Stock Adj={2}...",
                 new Object[]{currentProduction.getOwnShareEntitlement(),
-                    currentProduction.getPartnerShareEntitlement(),
-                    currentProduction.getStockAdjustment()});
+                        currentProduction.getPartnerShareEntitlement(),
+                        currentProduction.getStockAdjustment()});
 
     }
 
@@ -244,7 +245,7 @@ public class JvProductionController implements Serializable {
         if (bucket - lifting - partnerLifting < 0) {
             FacesMessage msg
                     = new FacesMessage("Stock Lifting validation failed!",
-                            "Please check your availability and lifting volume");
+                    "Please check your availability and lifting volume");
             msg.setSeverity(FacesMessage.SEVERITY_ERROR);
 
             throw new ValidatorException(msg);
@@ -361,6 +362,8 @@ public class JvProductionController implements Serializable {
         setCurrentProduction(production);
         setPeriodYear(forecast.getPeriodYear());
         setPeriodMonth(forecast.getPeriodMonth());
+        setCurrentFiscalArrangement(contract.getFiscalArrangement());
+        setDirectActualizing(false);//actualizing through targeted forecast and not directly through the entry actualizing interface
     }
 
     public void destroy() {
@@ -384,6 +387,7 @@ public class JvProductionController implements Serializable {
         // setEmbeddableKeys();
         //return currentProduction;
         reset();
+        setDirectActualizing(true);
     }
 
     public void create() {
@@ -445,11 +449,18 @@ public class JvProductionController implements Serializable {
         if (bucket - lifting - partnerLifting < 0) {
             FacesMessage msg
                     = new FacesMessage("Stock Lifting validation failed!",
-                            "Please check your availability and lifting volume");
+                    "Please check your availability and lifting volume");
             msg.setSeverity(FacesMessage.SEVERITY_ERROR);
 
             throw new ValidatorException(msg);
         }
     }
 
+    public boolean isDirectActualizing() {
+        return directActualizing;
+    }
+
+    public void setDirectActualizing(boolean directActualizing) {
+        this.directActualizing = directActualizing;
+    }
 }

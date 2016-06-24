@@ -20,7 +20,9 @@
                             <div class="row">
                                 <div class="col-md-6 m-b-15">
                                     <h:outputLabel value="#{bundle.EquityTypeDesc}" for="desc" />
-                                    <h:inputText id="desc" value="#{equityTypeController.selected.description}" title="#{bundle.EquityTypeDesc}" class="form-control input-sm m-b-10"/>
+                                    <h:inputText id="desc" value="#{equityTypeController.selected.description}" title="#{bundle.EquityTypeDesc}" class="form-control input-sm m-b-10">
+                                    <f:ajax render="ownEquity partnerEquity msgs" listener="#{equityTypeController.equityDescriptionListener}" event="keyup"/>
+                                    </h:inputText>
                                 </div>
                                 <div class="col-md-6 m-b-15">
                                     <h:outputLabel value="#{bundle.EquityTypeOwn}" for="ownEquity" />
@@ -38,7 +40,7 @@
                     </div>
                     <div class="modal-footer">
                         <h:commandButton value="#{bundle.Save}" pt:data-dismiss="modal" class="btn btn-sm">
-                            <f:ajax listener="#{equityTypeController.create}" execute="name" render="equityListForm equityTable msgs"/>
+                            <f:ajax listener="#{equityTypeController.update}" execute="desc ownEquity partnerEquity" render="equityListForm equityTable msgs"/>
                         </h:commandButton>
                         <h:commandButton value="#{bundle.Cancel}" immediate="true" pt:data-dismiss="modal" class="btn btn-sm">
                             <f:ajax listener="#{equityTypeController.cancel}" render="equityListForm equityTable msgs"/>

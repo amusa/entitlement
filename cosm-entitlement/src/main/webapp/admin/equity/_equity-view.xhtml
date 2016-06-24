@@ -39,12 +39,7 @@
 
                     </div>
                     <div class="modal-footer">
-                        <h:commandButton value="#{bundle.Save}" pt:data-dismiss="modal" class="btn btn-sm">
-                            <f:ajax listener="#{equityTypeController.create}" execute="name" render="equityListForm equityTable msgs"/>
-                        </h:commandButton>
-                        <h:commandButton value="#{bundle.Cancel}" immediate="true" pt:data-dismiss="modal" class="btn btn-sm">
-                            <f:ajax listener="#{equityTypeController.cancel}" render="equityListForm equityTable msgs"/>
-                        </h:commandButton>
+                        <h:commandButton value="#{bundle.Close}" pt:data-dismiss="modal" class="btn btn-sm"/>
                     </div>
                 </h:form>
             </div>

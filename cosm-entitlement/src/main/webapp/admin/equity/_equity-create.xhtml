@@ -26,13 +26,16 @@
                                     </div>
                                     <div class="col-md-6 m-b-15">
                                         <h:outputLabel value="#{bundle.EquityTypeOwn}" for="ownEquity" />
-                                        <h:inputText id="ownEquity" value="#{equityTypeController.selected.ownEquity}" title="#{bundle.EquityTypeOwn}" class="form-control input-sm m-b-10"/>
+                                        <h:inputText id="ownEquity" value="#{equityTypeController.selected.ownEquity}" title="#{bundle.EquityTypeOwn}" class="form-control input-sm m-b-10"
+                                        />
+
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6 m-b-15">
                                         <h:outputLabel value="#{bundle.EquityTypePartner}" for="partnerEquity" />
-                                        <h:inputText id="partnerEquity" value="#{equityTypeController.selected.partnerEquity}" title="#{bundle.EquityTypePartner}" class="form-control input-sm m-b-10"/>
+                                        <h:inputText id="partnerEquity" value="#{equityTypeController.selected.partnerEquity}"
+                                                     validator="#{equityTypeController.equityRatioValidator}" title="#{bundle.EquityTypePartner}" class="form-control input-sm m-b-10"/>
                                     </div>
                                 </div>
                             </h:panelGroup>

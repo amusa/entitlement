@@ -121,7 +121,7 @@ public class EquityTypeController implements Serializable {
         }
     }
 
-    public EquityType getEquityType(java.lang.String id) {
+    public EquityType getEquityType(java.lang.Long id) {
         return getFacade().find(id);
     }
 
@@ -159,9 +159,9 @@ public class EquityTypeController implements Serializable {
             return controller.getEquityType(getKey(value));
         }
 
-        java.lang.String getKey(String value) {
-            java.lang.String key;
-            key = value;
+        java.lang.Long getKey(String value) {
+            java.lang.Long key;
+            key = Long.valueOf(value);
             return key;
         }
 

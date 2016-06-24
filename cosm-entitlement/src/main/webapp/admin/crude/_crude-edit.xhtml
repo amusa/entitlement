@@ -32,7 +32,7 @@
                     </div>
                     <div class="modal-footer">
                         <h:commandButton value="#{bundle.Save}" pt:data-dismiss="modal" class="btn btn-sm">
-                            <f:ajax listener="#{crudeTypeController.create}" execute="code crudeType" render="crudeTypeListForm crudeTypeTable msgs"/>
+                            <f:ajax listener="#{crudeTypeController.update}" execute="code crudeType" render="crudeTypeListForm crudeTypeTable msgs"/>
                         </h:commandButton>
                         <h:commandButton value="#{bundle.Cancel}" immediate="true" pt:data-dismiss="modal" class="btn btn-sm">
                             <f:ajax listener="#{crudeTypeController.cancel}" render="crudeTypeListForm crudeTypeTable msgs"/>

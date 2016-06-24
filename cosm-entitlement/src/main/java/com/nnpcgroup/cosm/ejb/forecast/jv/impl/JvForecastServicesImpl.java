@@ -10,13 +10,11 @@ import com.nnpcgroup.cosm.ejb.FiscalArrangementBean;
 import com.nnpcgroup.cosm.ejb.forecast.jv.JvForecastServices;
 import com.nnpcgroup.cosm.ejb.impl.CommonServicesImpl;
 import com.nnpcgroup.cosm.entity.*;
-import com.nnpcgroup.cosm.entity.contract.Contract;
-import com.nnpcgroup.cosm.entity.contract.CarryContract;
 import com.nnpcgroup.cosm.entity.contract.ContractPK;
-import com.nnpcgroup.cosm.entity.contract.ModifiedCarryContract;
-import com.nnpcgroup.cosm.entity.contract.RegularContract;
 import com.nnpcgroup.cosm.entity.forecast.jv.Forecast;
 import com.nnpcgroup.cosm.entity.forecast.jv.ForecastPK;
+import com.nnpcgroup.cosm.exceptions.NoRealizablePriceException;
+
 import java.io.Serializable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -25,9 +23,8 @@ import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
 /**
- *
- * @author 18359
  * @param <T>
+ * @author 18359
  */
 @Dependent
 public abstract class JvForecastServicesImpl<T extends Forecast> extends CommonServicesImpl<T> implements JvForecastServices<T>, Serializable {
@@ -104,7 +101,7 @@ public abstract class JvForecastServicesImpl<T extends Forecast> extends CommonS
     }
 
     @Override
-    public T enrich(T production) {
+    public T enrich(T production) throws NoRealizablePriceException {
         LOG.log(Level.INFO, "Enriching production {0}...", production);
         return computeClosingStock(
                 computeLifting(
@@ -125,8 +122,8 @@ public abstract class JvForecastServicesImpl<T extends Forecast> extends CommonS
         FiscalArrangement fa;
         JointVenture jv;
 
-       // fa = production.getContract().getFiscalArrangement();
-        fa = fiscalBean.find(production.getFiscalArrangementId());
+        fa = production.getContract().getFiscalArrangement();
+        //fa = fiscalBean.find(production.getContract().getFiscalArrangementId());
 
         assert (fa instanceof JointVenture);
 
@@ -160,7 +157,6 @@ public abstract class JvForecastServicesImpl<T extends Forecast> extends CommonS
         Double partnerEntitlement = production.getPartnerShareEntitlement();
         Double openingStock = production.getOpeningStock();
         Double partnerOpeningStock = production.getPartnerOpeningStock();
-
         availability = ownEntitlement + openingStock;
         partnerAvailability = partnerEntitlement + partnerOpeningStock;
 
@@ -190,26 +186,11 @@ public abstract class JvForecastServicesImpl<T extends Forecast> extends CommonS
     public T getPreviousMonthProduction(T forecast) {
         int month = forecast.getPeriodMonth();
         int year = forecast.getPeriodYear();
-//        Contract cs = forecast.getContract();
-//        ContractPK cPK = new ContractPK();
-//        cPK.setFiscalArrangementId(forecast.getFiscalArrangementId());
-//        cPK.setCrudeTypeCode(forecast.getCrudeTypeCode());
-        //LOG.log(Level.INFO,"class of forecast Contract {0} is {1}", new Object[]{cs, cs.getClass()});
-       // Contract contract = cs;
-        
-//        if (cs instanceof RegularContract) {
-//            FiscalArrangement fa = new FiscalArrangement(cs.getFiscalArrangement().getId());
-//            CrudeType ct = new CrudeType(cs.getCrudeType().getCode());
-//             contract = new RegularContract(fa, ct);
-//        } else if (cs instanceof CarryContract) {
-//            contract = new CarryContract(cs.getFiscalArrangement(), cs.getCrudeType());
-//        } else if (contract instanceof ModifiedCarryContract) {
-//            contract = new ModifiedCarryContract(cs.getFiscalArrangement(), cs.getCrudeType());
-//        }
-
         FiscalPeriod prevFp = getPreviousFiscalPeriod(year, month);
+        ContractPK cPK = forecast.getContract().getContractPK();
 
-        T f = find(new ForecastPK(prevFp.getYear(), prevFp.getMonth(), forecast.getFiscalArrangementId(), forecast.getCrudeTypeCode()));
+
+        T f = find(new ForecastPK(prevFp.getYear(), prevFp.getMonth(), cPK));
         //T f = findByContractPeriod(prevFp.getYear(), prevFp.getMonth(), cs);
 
         return f;

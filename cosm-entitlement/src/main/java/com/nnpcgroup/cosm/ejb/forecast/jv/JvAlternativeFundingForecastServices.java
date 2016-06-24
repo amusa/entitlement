@@ -7,6 +7,7 @@ package com.nnpcgroup.cosm.ejb.forecast.jv;
 
 import com.nnpcgroup.cosm.entity.contract.Contract;
 import com.nnpcgroup.cosm.entity.forecast.jv.AlternativeFundingForecast;
+import com.nnpcgroup.cosm.exceptions.NoRealizablePriceException;
 
 /**
  *
@@ -19,7 +20,7 @@ public interface JvAlternativeFundingForecastServices<T extends AlternativeFundi
 
     public T computeSharedOil(T forecast);
 
-    public T computeGuaranteedNotionalMargin(T forecast);
+    public T computeGuaranteedNotionalMargin(T forecast) throws NoRealizablePriceException;
 
     public T computeResidualCarryExpenditure(T forecast);
 
@@ -29,7 +30,7 @@ public interface JvAlternativeFundingForecastServices<T extends AlternativeFundi
 
     public T computeCapitalCarryCostAmortized(T forecast);
 
-    public T computeAlternativeFunding(T production);
+    public T computeAlternativeFunding(T production) throws NoRealizablePriceException;
 
     public Double computeCarryOilCum(Contract cs);
 

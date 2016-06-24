@@ -23,7 +23,7 @@ public class CarryContract extends AlternativeFundingContract {
     public CarryContract() {
     }
 
-    public CarryContract(Long fiscalArrangementId, String crudeTypeCode) {
-        super(fiscalArrangementId, crudeTypeCode);
+    public CarryContract(FiscalArrangement fiscalArrangement, CrudeType crudeType) {
+        super(fiscalArrangement, crudeType);
     }
 }

@@ -13,6 +13,7 @@ import com.nnpcgroup.cosm.entity.production.jv.Production;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.Resource;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -23,6 +24,8 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import com.nnpcgroup.cosm.ejb.CommonServices;
 import com.nnpcgroup.cosm.entity.FiscalPeriod;
+import com.nnpcgroup.cosm.util.COSMPersistence;
+
 import javax.persistence.TypedQuery;
 
 /**
@@ -34,7 +37,11 @@ public abstract class CommonServicesImpl<T> extends AbstractCrudServicesImpl<T> 
 
     private static final Logger log = Logger.getLogger(CommonServicesImpl.class.getName());
 
-    @PersistenceContext(unitName = "entitlementPU")
+//    @PersistenceContext(unitName = "entitlementPU")
+//    private EntityManager em;
+
+    @Inject
+    @COSMPersistence
     private EntityManager em;
 
     @Inject
@@ -115,10 +122,6 @@ public abstract class CommonServicesImpl<T> extends AbstractCrudServicesImpl<T> 
                             cb.equal(e.get("periodMonth"), month),
                             cb.equal(e.get("contract").get("fiscalArrangement"), fa)
                     ));
-//            cq.where(
-//                    cb.equal(e.get("contract").get("fiscalArrangement"), fa)
-//            );
-
             Query query = getEntityManager().createQuery(cq);
 
             productions = query.getResultList();
@@ -181,9 +184,7 @@ public abstract class CommonServicesImpl<T> extends AbstractCrudServicesImpl<T> 
             cq.select(e).where(
                     cb.and(cb.equal(e.get("periodYear"), year),
                             cb.equal(e.get("periodMonth"), month),
-                           // cb.equal(e.get("contract")
-                                    cb.equal(e.get("crudeTypeCode"),terminal.getCrudeType().getCode())
-                                  //  .get("terminal"), terminal)
+                            cb.equal(e.get("contract").get("crudeType"), terminal.getCrudeType())
                     ));
 
             Query query = getEntityManager().createQuery(cq);
@@ -192,6 +193,17 @@ public abstract class CommonServicesImpl<T> extends AbstractCrudServicesImpl<T> 
         } catch (NoResultException nre) {
             return null;
         }
+
+//        TypedQuery<T> query = getEntityManager().createQuery(
+//                "SELECT f "
+//                        + "FROM Forecast f WHERE f.periodYear = :periodYear "
+//                        + "AND f.periodMonth = :periodMonth AND f.contract.crudeType = :crudeType", entityClass);
+//        query.setParameter("periodYear", year);
+//        query.setParameter("periodMonth", month);
+//        query.setParameter("crudeType", terminal.getCrudeType());
+//
+//        List<T> productions = query.getResultList();
+
 
         return productions;
     }

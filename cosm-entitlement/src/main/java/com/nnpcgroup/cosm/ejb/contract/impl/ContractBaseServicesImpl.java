@@ -6,20 +6,21 @@
 package com.nnpcgroup.cosm.ejb.contract.impl;
 
 import com.nnpcgroup.cosm.ejb.contract.ContractBaseServices;
-import com.nnpcgroup.cosm.ejb.contract.ContractServices;
 import com.nnpcgroup.cosm.ejb.impl.AbstractCrudServicesImpl;
-import com.nnpcgroup.cosm.entity.contract.Contract;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
-import java.util.List;
-import java.util.logging.Logger;
-import javax.enterprise.context.Dependent;
+import com.nnpcgroup.cosm.entity.contract.Contract;
+import com.nnpcgroup.cosm.entity.contract.ContractPK;
+import com.nnpcgroup.cosm.util.COSMPersistence;
+
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import java.util.List;
+import java.util.logging.Logger;
 
 /**
  *
@@ -30,7 +31,11 @@ public abstract class ContractBaseServicesImpl<T extends Contract> extends Abstr
 
     private static final Logger LOG = Logger.getLogger(ContractBaseServicesImpl.class.getName());
 
-    @PersistenceContext(unitName = "entitlementPU")
+//    @PersistenceContext(unitName = "entitlementPU")
+//    private EntityManager em;
+
+    @Inject
+    @COSMPersistence
     private EntityManager em;
 
     public ContractBaseServicesImpl(Class<T> entityClass) {
@@ -65,5 +70,17 @@ public abstract class ContractBaseServicesImpl<T extends Contract> extends Abstr
 
         return contracts;
     }
+
+    @Override
+    public T find(Object id) {
+        if(id instanceof Contract){
+            Contract contract = (Contract)id;
+            ContractPK cPK = contract.getContractPK();
+            return super.find(cPK);
+        }
+        return super.find(id); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    
 
 }

@@ -20,6 +20,8 @@ public interface AbstractCrudServices<T> {
 
     public void remove(T entity);
 
+    public void delete(T entity);
+
     public T find(Object id);
 
     public List<T> findAll();

@@ -6,35 +6,17 @@
 package com.nnpcgroup.cosm.controller;
 
 import com.nnpcgroup.cosm.controller.util.JsfUtil;
-import com.nnpcgroup.cosm.ejb.contract.ContractBaseServices;
+import com.nnpcgroup.cosm.ejb.FiscalArrangementBean;
 import com.nnpcgroup.cosm.ejb.contract.ContractServices;
-import com.nnpcgroup.cosm.ejb.production.jv.AlternativeFundingProductionServices;
-import com.nnpcgroup.cosm.ejb.production.jv.CarryProductionServices;
-import com.nnpcgroup.cosm.ejb.production.jv.JvProduction;
-import com.nnpcgroup.cosm.ejb.production.jv.JvProductionServices;
-import com.nnpcgroup.cosm.ejb.production.jv.ModifiedCarryProductionServices;
-import com.nnpcgroup.cosm.ejb.production.jv.RegularProductionServices;
+import com.nnpcgroup.cosm.ejb.production.jv.*;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
-import com.nnpcgroup.cosm.entity.contract.CarryContract;
-import com.nnpcgroup.cosm.entity.contract.Contract;
-import com.nnpcgroup.cosm.entity.contract.ModifiedCarryContract;
-import com.nnpcgroup.cosm.entity.contract.RegularContract;
+import com.nnpcgroup.cosm.entity.contract.*;
 import com.nnpcgroup.cosm.entity.forecast.jv.CarryForecast;
 import com.nnpcgroup.cosm.entity.forecast.jv.Forecast;
 import com.nnpcgroup.cosm.entity.forecast.jv.ModifiedCarryForecast;
 import com.nnpcgroup.cosm.entity.forecast.jv.RegularForecast;
-import com.nnpcgroup.cosm.entity.production.jv.AlternativeFundingProduction;
-import com.nnpcgroup.cosm.entity.production.jv.CarryProduction;
-import com.nnpcgroup.cosm.entity.production.jv.ModifiedCarryProduction;
-import com.nnpcgroup.cosm.entity.production.jv.RegularProduction;
-import com.nnpcgroup.cosm.entity.production.jv.Production;
-import com.nnpcgroup.cosm.entity.production.jv.ProductionPK;
-import javax.inject.Named;
-import java.io.Serializable;
-import java.util.List;
-import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import com.nnpcgroup.cosm.entity.production.jv.*;
+
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.enterprise.context.SessionScoped;
@@ -45,9 +27,14 @@ import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.faces.validator.ValidatorException;
 import javax.inject.Inject;
+import javax.inject.Named;
+import java.io.Serializable;
+import java.util.List;
+import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
- *
  * @author 18359
  */
 @Named(value = "jvActualController")
@@ -75,19 +62,22 @@ public class JvProductionController implements Serializable {
     @EJB
     private ContractServices contractBean;
 
+    @EJB
+    private FiscalArrangementBean fiscalBean;
+
     private Production currentProduction;
     private List<Production> productions;
     private Integer periodYear;
     private Integer periodMonth;
     private FiscalArrangement currentFiscalArrangement;
     private Contract currentContract;
+    private boolean directActualizing =false;
 
     /**
      * Creates a new instance of JvController
      */
     public JvProductionController() {
         LOG.info("JvActualProductionController::constructor activated...");
-        // LOG.log(Level.INFO, "Entitlement calculated: {0}", entitlement.calculateEntitlement());
     }
 
     public JvProductionServices getProductionBean() {
@@ -119,10 +109,16 @@ public class JvProductionController implements Serializable {
     public void setCurrentProduction(Production currentProduction) {
         LOG.info("JvActualProductionController::setProduction called...");
         this.currentProduction = currentProduction;
-        this.currentFiscalArrangement = (currentProduction != null)
-                ? currentProduction.getContract().getFiscalArrangement() : null;
-        this.currentContract = (currentProduction != null)
-                ? currentProduction.getContract() : null;
+
+        ContractPK contractPK = new ContractPK();
+        contractPK.setFiscalArrangementId(currentProduction.getFiscalArrangementId());
+        contractPK.setCrudeTypeCode(currentProduction.getCrudeTypeCode());
+
+        currentContract = contractBean.find(contractPK);
+        if (currentContract != null) {
+            // currentFiscalArrangement = currentContract.getFiscalArrangement();
+        }
+
     }
 
     public AlternativeFundingProduction getCurrentAfProduction() {
@@ -147,7 +143,7 @@ public class JvProductionController implements Serializable {
         afBean.computeAlternativeFunding(getCurrentAfProduction());
     }
 
-    public void currentContractChanged() {
+    public void currentContractChanged() throws Exception {
         LOG.log(Level.INFO, "Contract Selected...{0}", currentContract);
         if (currentContract instanceof RegularContract) {
             currentProduction = new RegularProduction();
@@ -157,25 +153,21 @@ public class JvProductionController implements Serializable {
             currentProduction = new ModifiedCarryProduction();
         } else {
             LOG.log(Level.INFO, "Undefined contract selection...{0}", currentContract);
-            //throw new Exception("Undefined contract type");
+            throw new Exception("Undefined contract type");
         }
 
         if (currentProduction != null) {
-            currentProduction.setContract(currentContract);
-
             if (periodYear != null && periodMonth != null) {
                 setEmbeddableKeys();
-
             }
         }
     }
 
     private void setEmbeddableKeys() {
-        //ProductionPK fPK = new ProductionPK(periodYear, periodMonth, currentContract);
-        //currentProduction.setProductionPK(fPK);
         currentProduction.setPeriodYear(periodYear);
         currentProduction.setPeriodMonth(periodMonth);
-        currentProduction.setContract(currentContract);
+        currentProduction.setFiscalArrangementId(currentContract.getContractPK().getFiscalArrangementId());
+        currentProduction.setCrudeTypeCode(currentContract.getContractPK().getCrudeTypeCode());
     }
 
     public List<Production> getProductions() {
@@ -205,8 +197,8 @@ public class JvProductionController implements Serializable {
         LOG.log(Level.INFO,
                 "Own entmt={0},Partner entmt={1}, Stock Adj={2}...",
                 new Object[]{currentProduction.getOwnShareEntitlement(),
-                    currentProduction.getPartnerShareEntitlement(),
-                    currentProduction.getStockAdjustment()});
+                        currentProduction.getPartnerShareEntitlement(),
+                        currentProduction.getStockAdjustment()});
 
     }
 
@@ -215,8 +207,8 @@ public class JvProductionController implements Serializable {
         LOG.log(Level.INFO,
                 "Own entmt={0},Partner entmt={1}, Stock Adj={2}...",
                 new Object[]{currentProduction.getOwnShareEntitlement(),
-                    currentProduction.getPartnerShareEntitlement(),
-                    currentProduction.getStockAdjustment()});
+                        currentProduction.getPartnerShareEntitlement(),
+                        currentProduction.getStockAdjustment()});
 
     }
 
@@ -237,7 +229,7 @@ public class JvProductionController implements Serializable {
         if (bucket - lifting - partnerLifting < 0) {
             FacesMessage msg
                     = new FacesMessage("Stock Lifting validation failed!",
-                            "Please check your availability and lifting volume");
+                    "Please check your availability and lifting volume");
             msg.setSeverity(FacesMessage.SEVERITY_ERROR);
 
             throw new ValidatorException(msg);
@@ -306,20 +298,22 @@ public class JvProductionController implements Serializable {
         this.currentContract = currentContract;
     }
 
-    public void actualize(Forecast forecast) {
+    public void actualize(Forecast forecast) throws Exception {
         LOG.log(Level.INFO, "************actualizing {0}...", forecast);
         reset();
-        setCurrentContract(forecast.getContract());
+        ContractPK cPK = forecast.getContract().getContractPK();
+        Contract contract = contractBean.find(cPK); //forecast.getContract();
+
+//        setCurrentContract(forecast.getContract());
+        setCurrentContract(contract);
+
         Production production = null;
         ProductionPK pPK = new ProductionPK(
                 forecast.getPeriodYear(),
                 forecast.getPeriodMonth(),
-                forecast.getContract()
+                forecast.getContract().getContractPK().getFiscalArrangementId(),
+                forecast.getContract().getContractPK().getCrudeTypeCode()
         );
-//        production = (Production) getProductionBean().findByContractPeriod(
-//                forecast.getForecastPK().getPeriodYear(),
-//                forecast.getForecastPK().getPeriodMonth(),
-//                forecast.getContract());
         production = (Production) getProductionBean().find(pPK);
         LOG.log(Level.INFO, "************findByContractStreamPeriod returning {0}...", currentProduction);
 
@@ -336,17 +330,24 @@ public class JvProductionController implements Serializable {
             } else {
                 //something is wrong
                 LOG.log(Level.INFO, "Something is wrong! Forecast type not determined {0}...", forecast);
+                throw new Exception("Forecast type not determined");
             }
 
             LOG.log(Level.INFO, "************getProductionBean().createInstance() returning {0}...", currentProduction);
             //production.setProductionPK(pPK);
-            production.setContract(forecast.getContract());
+//            production.setContract(forecast.getContract());
+            production.setPeriodYear(forecast.getPeriodYear());
+            production.setPeriodMonth(forecast.getPeriodMonth());
+            production.setFiscalArrangementId(forecast.getContract().getContractPK().getFiscalArrangementId());
+            production.setCrudeTypeCode(forecast.getContract().getContractPK().getCrudeTypeCode());
 
             // getProductionBean().enrich(currentProduction);
         }
         setCurrentProduction(production);
         setPeriodYear(forecast.getPeriodYear());
         setPeriodMonth(forecast.getPeriodMonth());
+        setCurrentFiscalArrangement(contract.getFiscalArrangement());
+        setDirectActualizing(false);//actualizing through targeted forecast and not directly through the entry actualizing interface
     }
 
     public void destroy() {
@@ -370,6 +371,7 @@ public class JvProductionController implements Serializable {
         // setEmbeddableKeys();
         //return currentProduction;
         reset();
+        setDirectActualizing(true);
     }
 
     public void create() {
@@ -431,11 +433,18 @@ public class JvProductionController implements Serializable {
         if (bucket - lifting - partnerLifting < 0) {
             FacesMessage msg
                     = new FacesMessage("Stock Lifting validation failed!",
-                            "Please check your availability and lifting volume");
+                    "Please check your availability and lifting volume");
             msg.setSeverity(FacesMessage.SEVERITY_ERROR);
 
             throw new ValidatorException(msg);
         }
     }
 
+    public boolean isDirectActualizing() {
+        return directActualizing;
+    }
+
+    public void setDirectActualizing(boolean directActualizing) {
+        this.directActualizing = directActualizing;
+    }
 }

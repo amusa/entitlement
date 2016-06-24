@@ -9,6 +9,8 @@ import com.nnpcgroup.cosm.entity.contract.Contract;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
 import com.nnpcgroup.cosm.entity.FiscalPeriod;
 import com.nnpcgroup.cosm.entity.Terminal;
+import com.nnpcgroup.cosm.exceptions.NoRealizablePriceException;
+
 import java.util.List;
 
 /**
@@ -44,7 +46,7 @@ public interface CommonServices<T> extends AbstractCrudServices<T> {
 
     public T computeLifting(T production);
     
-    public T enrich(T production);
+    public T enrich(T production) throws NoRealizablePriceException;
     
     public List<T> getTerminalProduction(int year, int month, Terminal terminal);
             

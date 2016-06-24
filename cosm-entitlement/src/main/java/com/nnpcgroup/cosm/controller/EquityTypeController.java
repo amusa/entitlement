@@ -150,9 +150,6 @@ public class EquityTypeController implements Serializable {
     }
 
     public void equityRatioValidator(FacesContext facesContext, UIComponent uiComponent, Object object) throws ValidatorException {
-        UIInput uiOwnEquity = (UIInput) facesContext.getViewRoot().findComponent("EquityCreateForm:ownEquity");
-        UIInput uiPartnerEquity = (UIInput) facesContext.getViewRoot().findComponent("EquityCreateForm:partnerEquity");
-
         double ownEquity = selected.getOwnEquity(); //(double) uiOwnEquity.getValue();
         double partnerEquity = selected.getPartnerEquity(); //(double)uiPartnerEquity.getValue();
 

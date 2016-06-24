@@ -69,7 +69,7 @@ public class EquityTypeController implements Serializable {
     }
 
     public void destroy(EquityType equityType) {
-       setSelected(equityType);
+        setSelected(equityType);
         destroy();
     }
 
@@ -133,17 +133,15 @@ public class EquityTypeController implements Serializable {
         return getFacade().findAll();
     }
 
-    public void equityDescriptionListener(){
-        LOG.log(Level.INFO,"Equity description event triggered...");
-
+    public void equityDescriptionListener() {
         String equities[] = selected.getDescription().split("/");
-        if(equities.length > 0){
+        if (equities.length == 1 && !equities[0].isEmpty()) {
             double ownEquity = Double.parseDouble(equities[0]);
             selected.setOwnEquity(ownEquity);
         }
 
-        if(equities.length>1) {
-            double partnerEquity = Double.parseDouble(equities[0]);
+        if (equities.length == 2 && !equities[1].isEmpty()) {
+            double partnerEquity = Double.parseDouble(equities[1]);
             selected.setPartnerEquity(partnerEquity);
         }
     }

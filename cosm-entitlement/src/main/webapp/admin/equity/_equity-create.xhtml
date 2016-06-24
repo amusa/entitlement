@@ -21,7 +21,7 @@
                                     <div class="col-md-6 m-b-15">
                                         <h:outputLabel value="#{bundle.EquityTypeDesc}" for="desc" />
                                         <h:inputText id="desc" value="#{equityTypeController.selected.description}" title="#{bundle.EquityTypeDesc}" class="form-control input-sm m-b-10">
-                                        <f:ajax render="ownEquity partnerEquity msgs" listener="#{equityTypeController.equityDescriptionListener}" event="keypress"/>
+                                        <f:ajax render="ownEquity partnerEquity msgs" listener="#{equityTypeController.equityDescriptionListener}" event="keyup"/>
                                         </h:inputText>
                                     </div>
                                     <div class="col-md-6 m-b-15">

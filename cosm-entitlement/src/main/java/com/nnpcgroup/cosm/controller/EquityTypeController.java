@@ -12,6 +12,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
+import javax.faces.application.FacesMessage;
+import javax.faces.component.UIInput;
+import javax.faces.validator.ValidatorException;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.component.UIComponent;
@@ -145,6 +148,21 @@ public class EquityTypeController implements Serializable {
             selected.setPartnerEquity(partnerEquity);
         }
     }
+
+    public void equityRatioValidator(FacesContext facesContext, UIComponent uiComponent, Object object) throws ValidatorException {
+        double ownEquity = selected.getOwnEquity();
+        double partnerEquity = selected.getPartnerEquity();
+
+        double equity = ownEquity + partnerEquity;
+        if (equity != 100.0) {
+            cancel();
+            FacesMessage msg = new FacesMessage(ResourceBundle.getBundle("/Bundle").getString("EquityRationValidationError"));
+            msg.setSeverity(FacesMessage.SEVERITY_ERROR);
+            throw new ValidatorException(msg);
+        }
+
+    }
+
 
     @FacesConverter(forClass = EquityType.class)
     public static class EquityTypeControllerConverter implements Converter {

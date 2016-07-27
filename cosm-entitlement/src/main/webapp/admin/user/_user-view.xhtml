@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+
+    <ui:composition>
+        <div class="modal fade" id="UserViewDlg" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">View User</h4>
+                    </div>
+                    <h:form id="UserViewForm">
+                        <div class="modal-body">
+                            <h:panelGroup id="UserViewPanel" rendered="#{userController.selected != null}">
+                                <div class="row">                                    
+                                    <div class="col-md-6 m-b-15">
+                                        <h:outputLabel value="#{bundle.UserFistNameTitle}" for="firstName" />
+                                        <h:inputText id="firstName" value="#{userController.selected.firstName}" title="#{bundle.UserFistNameTitle}" class="form-control input-sm m-b-10"/>
+                                    </div>
+                                    <div class="col-md-6 m-b-15">
+                                        <h:outputLabel value="#{bundle.UserLastNameTitle}" for="lastName" />
+                                        <h:inputText id="lastName" value="#{userController.selected.lastName}" title="#{bundle.UserLastNameTitle}" class="form-control input-sm m-b-10"/>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 m-b-15">
+                                        <h:outputLabel value="#{bundle.UserUserNameTitle}" for="userName" />
+                                        <h:inputText id="userName" value="#{userController.selected.userName}" title="#{bundle.UserUserNameTitle}" class="form-control input-sm m-b-10"/>
+                                    </div>
+                                    <div class="col-md-6 m-b-15">
+                                        <h:outputLabel value="#{bundle.UserPasswordTitle}" for="password" />
+                                        <h:inputText id="password" value="#{userController.selected.userName}" title="#{bundle.UserPasswordTitle}" class="form-control input-sm m-b-10"/>
+                                    </div>                                    
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 m-b-15">
+                                        <h:outputLabel value="#{bundle.UserEmailTitle}" for="email" />
+                                        <h:inputText id="email" value="#{userController.selected.email}" title="#{bundle.UserEmailTitle}" class="form-control input-sm m-b-10"/>
+                                    </div>                                                                       
+                                </div>
+                            </h:panelGroup>
+
+                        </div>
+                        <div class="modal-footer">
+                             <h:commandButton value="#{bundle.Cancel}"  pt:data-dismiss="modal" class="btn btn-sm"/>
+                        </div>
+                    </h:form>
+                </div>
+            </div>
+        </div> 
+
+    </ui:composition>
+</html>
+

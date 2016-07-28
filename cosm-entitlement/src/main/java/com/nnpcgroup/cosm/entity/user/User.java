@@ -11,11 +11,15 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+<<<<<<< HEAD
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+=======
+import javax.persistence.Id;
+>>>>>>> 93c948df2c8f8120a83697581ea8ba68047149b9
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -63,6 +67,7 @@ public class User implements Serializable {
     @Size(max = 45)
     @Column(name = "email")
     private String email;
+<<<<<<< HEAD
     
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name="user_role", joinColumns = 
@@ -71,6 +76,10 @@ public class User implements Serializable {
                
     )
     private List<Role> roleList;
+=======
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    private List<UserRole> userRoleList;
+>>>>>>> 93c948df2c8f8120a83697581ea8ba68047149b9
 
     public User() {
     }
@@ -124,6 +133,7 @@ public class User implements Serializable {
         this.email = email;
     }
 
+<<<<<<< HEAD
     //@XmlTransient
     public List<Role> getRoleList() {
         return roleList;
@@ -131,6 +141,15 @@ public class User implements Serializable {
 
     public void setRoleList(List<Role> roleList) {
         this.roleList = roleList;
+=======
+    @XmlTransient
+    public List<UserRole> getUserRoleList() {
+        return userRoleList;
+    }
+
+    public void setUserRoleList(List<UserRole> userRoleList) {
+        this.userRoleList = userRoleList;
+>>>>>>> 93c948df2c8f8120a83697581ea8ba68047149b9
     }
 
     @Override

@@ -9,21 +9,14 @@ import com.nnpcgroup.cosm.controller.util.JsfUtil;
 import com.nnpcgroup.cosm.ejb.UserBean;
 import com.nnpcgroup.cosm.entity.Company;
 import com.nnpcgroup.cosm.entity.user.User;
-<<<<<<< HEAD
 import java.io.Serializable;
-=======
->>>>>>> 93c948df2c8f8120a83697581ea8ba68047149b9
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
-import javax.enterprise.context.RequestScoped;
-<<<<<<< HEAD
 import javax.enterprise.context.SessionScoped;
-=======
->>>>>>> 93c948df2c8f8120a83697581ea8ba68047149b9
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
@@ -34,14 +27,11 @@ import javax.inject.Named;
  *
  * @author 18359
  */
+
+
 @Named("userController")
-<<<<<<< HEAD
 @SessionScoped
-public class UserController implements Serializable{
-=======
-@RequestScoped
-public class UserController {
->>>>>>> 93c948df2c8f8120a83697581ea8ba68047149b9
+public class UserController implements Serializable {
 
     @EJB
     private UserBean userBean;
@@ -77,10 +67,8 @@ public class UserController {
     }
 
     public User prepareCreate() {
-<<<<<<< HEAD
-        LOG.log(Level.INFO,"preparing to create...");
-=======
->>>>>>> 93c948df2c8f8120a83697581ea8ba68047149b9
+        LOG.log(Level.INFO, "preparing to create...");
+
         selected = new User();
         initializeEmbeddableKey();
         return selected;
@@ -92,15 +80,10 @@ public class UserController {
     }
 
     public void create() {
-<<<<<<< HEAD
-        LOG.log(Level.INFO,"creating user...");
+        LOG.log(Level.INFO, "creating user...");
         persist(JsfUtil.PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("UserCreated"));
         if (!JsfUtil.isValidationFailed()) {
-             LOG.log(Level.INFO,"validation failed...");
-=======
-        persist(JsfUtil.PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("UserCreated"));
-        if (!JsfUtil.isValidationFailed()) {
->>>>>>> 93c948df2c8f8120a83697581ea8ba68047149b9
+            LOG.log(Level.INFO, "validation failed...");
             users = null;    // Invalidate list of items to trigger re-query.
         }
     }
@@ -130,23 +113,15 @@ public class UserController {
     }
 
     private void persist(JsfUtil.PersistAction persistAction, String successMessage) {
-<<<<<<< HEAD
-         LOG.log(Level.INFO,"checking selected user null condition...", selected);
+        LOG.log(Level.INFO, "checking selected user null condition...", selected);
         if (selected != null) {
-             LOG.log(Level.INFO,"selected user not null...");
+            LOG.log(Level.INFO, "selected user not null...");
             setEmbeddableKeys();
             try {
                 if (persistAction != JsfUtil.PersistAction.DELETE) {
-                    LOG.log(Level.INFO,"saving...");
+                    LOG.log(Level.INFO, "saving...");
                     getFacade().edit(selected);
-                    LOG.log(Level.INFO,"save successful...");
-=======
-        if (selected != null) {
-            setEmbeddableKeys();
-            try {
-                if (persistAction != JsfUtil.PersistAction.DELETE) {
-                    getFacade().edit(selected);
->>>>>>> 93c948df2c8f8120a83697581ea8ba68047149b9
+                    LOG.log(Level.INFO, "save successful...");
                 } else {
                     getFacade().remove(selected);
                 }
@@ -190,11 +165,8 @@ public class UserController {
                 return null;
             }
             UserController controller = (UserController) facesContext.getApplication().getELResolver().
-<<<<<<< HEAD
                     getValue(facesContext.getELContext(), null, "userController");
-=======
-                    getValue(facesContext.getELContext(), null, "companyController");
->>>>>>> 93c948df2c8f8120a83697581ea8ba68047149b9
+
             return controller.getUser(value);
         }
 

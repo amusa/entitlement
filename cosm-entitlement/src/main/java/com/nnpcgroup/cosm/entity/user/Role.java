@@ -6,7 +6,6 @@
 package com.nnpcgroup.cosm.entity.user;
 
 import java.io.Serializable;
-<<<<<<< HEAD
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -17,12 +16,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-=======
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
->>>>>>> 93c948df2c8f8120a83697581ea8ba68047149b9
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -53,8 +46,7 @@ public class Role implements Serializable {
     @Size(max = 45)
     @Column(name = "description")
     private String description;
-<<<<<<< HEAD
-    
+
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "roleList")
 //    @JoinTable(name="user_role", joinColumns = 
 //            {@JoinColumn(name="role", updatable = false, insertable = false)}, 
@@ -62,8 +54,6 @@ public class Role implements Serializable {
 //               
 //    )
     private List<User> userList;
-=======
->>>>>>> 93c948df2c8f8120a83697581ea8ba68047149b9
 
     public Role() {
     }
@@ -88,7 +78,6 @@ public class Role implements Serializable {
         this.description = description;
     }
 
-<<<<<<< HEAD
     public List<User> getUserList() {
         return userList;
     }
@@ -96,11 +85,7 @@ public class Role implements Serializable {
     public void setUserList(List<User> userList) {
         this.userList = userList;
     }
-    
-    
 
-=======
->>>>>>> 93c948df2c8f8120a83697581ea8ba68047149b9
     @Override
     public int hashCode() {
         int hash = 0;
@@ -125,5 +110,5 @@ public class Role implements Serializable {
     public String toString() {
         return "com.nnpcgroup.cosm.entity.user.Role[ role=" + role + " ]";
     }
-    
+
 }

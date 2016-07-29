@@ -6,10 +6,9 @@
 package com.nnpcgroup.cosm.controller;
 
 import com.nnpcgroup.cosm.controller.util.JsfUtil;
-import com.nnpcgroup.cosm.ejb.UserBean;
+import com.nnpcgroup.cosm.ejb.RoleBean;
 import com.nnpcgroup.cosm.entity.Company;
 import com.nnpcgroup.cosm.entity.user.Role;
-import com.nnpcgroup.cosm.entity.user.User;
 import java.io.Serializable;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -28,98 +27,89 @@ import javax.inject.Named;
  *
  * @author 18359
  */
-@Named("userController")
+@Named("roleController")
 @SessionScoped
-public class UserController implements Serializable {
-    
+public class RoleController implements Serializable {
+
     @EJB
-    private UserBean userBean;
-    private static final Logger LOG = Logger.getLogger(UserController.class.getName());
-    
-    private User selected;
-    private List<User> users;
-    private List<Role> selectedRoles;
-    
-    public UserBean getUserBean() {
-        return userBean;
+    private RoleBean roleBean;
+    private static final Logger LOG = Logger.getLogger(RoleController.class.getName());
+
+    private Role selected;
+    private List<Role> roles;
+
+    public RoleBean getRoleBean() {
+        return roleBean;
     }
-    
-    public void setUserBean(UserBean userBean) {
-        this.userBean = userBean;
+
+    public void setUserBean(RoleBean roleBean) {
+        this.roleBean = roleBean;
     }
-    
-    public User getSelected() {
+
+    public Role getSelected() {
         return selected;
     }
-    
-    public void setSelected(User selected) {
+
+    public void setSelected(Role selected) {
         this.selected = selected;
     }
-    
-    public List<Role> getSelectedRoles() {
-        return selectedRoles;
-    }
-    
-    public void setSelectedRoles(List<Role> selectedRoles) {
-        this.selectedRoles = selectedRoles;
-    }
-    
+
     protected void setEmbeddableKeys() {
     }
-    
+
     protected void initializeEmbeddableKey() {
     }
-    
-    private UserBean getFacade() {
-        return userBean;
+
+    private RoleBean getFacade() {
+        return roleBean;
     }
-    
-    public User prepareCreate() {
+
+    public Role prepareCreate() {
         LOG.log(Level.INFO, "preparing to create...");
-        
-        selected = new User();
+
+        selected = new Role();
         initializeEmbeddableKey();
         return selected;
     }
-    
+
     public void cancel() {
-        users = null;
+        roles = null;
         selected = null;
     }
-    
+
     public void create() {
         LOG.log(Level.INFO, "creating user...");
         persist(JsfUtil.PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("UserCreated"));
         if (!JsfUtil.isValidationFailed()) {
             LOG.log(Level.INFO, "validation failed...");
-            users = null;    // Invalidate list of items to trigger re-query.
+            roles = null;    // Invalidate list of items to trigger re-query.
         }
     }
-    
+
     public void update() {
         persist(JsfUtil.PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("UserUpdated"));
     }
-    
-    public void destroy(User user) {
-        setSelected(user);
+
+    public void destroy(Role role) {
+        setSelected(role);
         destroy();
     }
-    
+
     public void destroy() {
         persist(JsfUtil.PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("UserDeleted"));
         if (!JsfUtil.isValidationFailed()) {
             selected = null; // Remove selection
-            users = null;    // Invalidate list of items to trigger re-query.
+            roles = null;    // Invalidate list of items to trigger re-query.
         }
     }
-    
-    public List<User> getUsers() {
-        if (users == null) {
-            users = getFacade().findAll();
+
+    public List<Role> getUsers() {
+        if (roles == null) {
+            roles = getFacade().findAll();
         }
-        return users;
+        return roles;
     }
-    
+
     private void persist(JsfUtil.PersistAction persistAction, String successMessage) {
         LOG.log(Level.INFO, "checking selected user null condition...", selected);
         if (selected != null) {
@@ -151,67 +141,58 @@ public class UserController implements Serializable {
             }
         }
     }
-    
-    public User getUser(String id) {
+
+    public Role getRole(String id) {
         return getFacade().find(id);
     }
-    
-    public List<User> getItemsAvailableSelectMany() {
+
+    public List<Role> getItemsAvailableSelectMany() {
         return getFacade().findAll();
     }
-    
-    public List<User> getItemsAvailableSelectOne() {
+
+    public List<Role> getItemsAvailableSelectOne() {
         return getFacade().findAll();
     }
-    
-    public void addRolesListener() {
-        LOG.log(Level.INFO, "adding roles...", selectedRoles);
-        if (selected.getRoleList() != null) {
-            selected.getRoleList().addAll(selectedRoles);
-        } else {
-            selected.setRoleList(selectedRoles);
-        }
-    }
-    
-    @FacesConverter(forClass = User.class)
-    public static class UserControllerConverter implements Converter {
-        
+
+    @FacesConverter(forClass = Role.class)
+    public static class RoleControllerConverter implements Converter {
+
         @Override
         public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
             if (value == null || value.length() == 0) {
                 return null;
             }
-            UserController controller = (UserController) facesContext.getApplication().getELResolver().
-                    getValue(facesContext.getELContext(), null, "userController");
-            
-            return controller.getUser(value);
+            RoleController controller = (RoleController) facesContext.getApplication().getELResolver().
+                    getValue(facesContext.getELContext(), null, "roleController");
+
+            return controller.getRole(value);
         }
-        
+
         int getKey(String value) {
             int key;
             key = Integer.parseInt(value);
             return key;
         }
-        
+
         String getStringKey(int value) {
             StringBuilder sb = new StringBuilder();
             sb.append(value);
             return sb.toString();
         }
-        
+
         @Override
         public String getAsString(FacesContext facesContext, UIComponent component, Object object) {
             if (object == null) {
                 return null;
             }
-            if (object instanceof User) {
-                User o = (User) object;
-                return o.getUserName();
+            if (object instanceof Role) {
+                Role o = (Role) object;
+                return o.getRole();
             } else {
                 Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), Company.class.getName()});
                 return null;
             }
         }
-        
+
     }
 }

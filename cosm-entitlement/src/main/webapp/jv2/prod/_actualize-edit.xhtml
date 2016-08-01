@@ -4,7 +4,6 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui"
       xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
       xmlns:jsf="http://xmlns.jcp.org/jsf">
 
@@ -109,7 +108,7 @@
                                                 <h:inputText id="grossVolume" value="#{jvActualController.currentProduction.grossProduction}" title="Gross Prod Volume" class="form-control input-sm" >
                                                     <f:convertNumber pattern="###,###,###.####" />
                                                     <f:ajax event="change" listener="#{jvActualController.grossProductionChanged}"
-                                                            render="carryOil carryOilCum sharedOil sharedOilCum openingStock ownShareEntitlement closingStock lifting cargoes availability ptnrOpeningStock ptnrEntitlement ptnrClosingStock ptnrLifting ptnrCargoes ptnrAvailability ccc ccca cte ctr rce ignm cccaCum cteCum ctrCum rceCum ignmCum"/>
+                                                            render="netVolume carryOil carryOilCum sharedOil sharedOilCum openingStock ownShareEntitlement closingStock lifting cargoes availability ptnrOpeningStock ptnrEntitlement ptnrClosingStock ptnrLifting ptnrCargoes ptnrAvailability ccc ccca cte ctr rce ignm cccaCum cteCum ctrCum rceCum ignmCum"/>
                                                     execute="contract"/>
                                                 </h:inputText>
                                             </div>
@@ -118,8 +117,14 @@
                                                 <h:inputText id="stockAdjustment" value="#{jvActualController.currentProduction.stockAdjustment}" title="Stock Adjustment" class="form-control input-sm" >
                                                     <f:convertNumber pattern="###,###,###.####" />
                                                     <f:ajax event="change" listener="#{jvActualController.stockAdjustmentChanged}"
-                                                            render="carryOil carryOilCum sharedOil sharedOilCum openingStock ownShareEntitlement closingStock lifting cargoes availability ptnrOpeningStock ptnrEntitlement ptnrClosingStock ptnrLifting ptnrCargoes ptnrAvailability ccc ccca cte ctr rce ignm cccaCum cteCum ctrCum rceCum ignmCum"/>
+                                                            render="netVolume carryOil carryOilCum sharedOil sharedOilCum openingStock ownShareEntitlement closingStock lifting cargoes availability ptnrOpeningStock ptnrEntitlement ptnrClosingStock ptnrLifting ptnrCargoes ptnrAvailability ccc ccca cte ctr rce ignm cccaCum cteCum ctrCum rceCum ignmCum"/>
                                                     execute="contract"/>
+                                                </h:inputText>
+                                            </div>
+                                            <div class="col-md-4 m-b-15">
+                                                <h:outputLabel value="Net Prod" for="netVolume" />
+                                                <h:inputText id="netVolume" value="#{jvActualController.currentProduction.netProduction}" title="Net Prod Volume" class="form-control input-sm" >
+                                                    <f:convertNumber pattern="###,###,###.####" />                                                    
                                                 </h:inputText>
                                             </div>
                                         </div>

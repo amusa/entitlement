@@ -68,18 +68,16 @@ public abstract class JvProductionServicesImpl<T extends Production, E extends C
 
         Double ownEntitlement;
         Double partnerEntitlement;
-        Double grossProd = production.getGrossProduction();
-        Double stockAdjustment = production.getStockAdjustment() != null ? production.getStockAdjustment() : 0;
 
-        grossProd = grossProd == null ? 0 : grossProd;
+        Double netProduction = production.getNetProduction() != null ? production.getNetProduction() : 0;
 
-        ownEntitlement = ((grossProd + stockAdjustment)
+        ownEntitlement = (netProduction
                 * et.getOwnEquity() * 0.01);
-        LOG.log(Level.INFO, "Own Entitlement=>{0} * {1} * 0.01 = {2}", new Object[]{grossProd, et.getOwnEquity(), ownEntitlement});
+        LOG.log(Level.INFO, "Own Entitlement=>{0} * {1} * 0.01 = {2}", new Object[]{netProduction, et.getOwnEquity(), ownEntitlement});
 
-        partnerEntitlement = ((grossProd + stockAdjustment)
+        partnerEntitlement = (netProduction
                 * et.getPartnerEquity() * 0.01);
-        LOG.log(Level.INFO, "Partner Entitlement=>{0} * {1} * 0.01 = {2}", new Object[]{grossProd, et.getPartnerEquity(), partnerEntitlement});
+        LOG.log(Level.INFO, "Partner Entitlement=>{0} * {1} * 0.01 = {2}", new Object[]{netProduction, et.getPartnerEquity(), partnerEntitlement});
 
         production.setOwnShareEntitlement(ownEntitlement);
         production.setPartnerShareEntitlement(partnerEntitlement);
@@ -205,7 +203,7 @@ public abstract class JvProductionServicesImpl<T extends Production, E extends C
     public T getPreviousMonthProduction(T production) {
         int month = production.getPeriodMonth();
         int year = production.getPeriodYear();
-        
+
         FiscalPeriod prevFp = getPreviousFiscalPeriod(year, month);
 
         //T prod = findByContractPeriod(prevFp.getYear(), prevFp.getMonth(), cs);

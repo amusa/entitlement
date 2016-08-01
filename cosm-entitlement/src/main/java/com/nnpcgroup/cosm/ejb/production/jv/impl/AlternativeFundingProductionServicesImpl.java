@@ -201,7 +201,7 @@ public abstract class AlternativeFundingProductionServicesImpl<T extends Alterna
         //E afContract = (E) production.getContract();
         ContractPK cPK = new ContractPK(production.getFiscalArrangementId(), production.getCrudeTypeCode());
         E afContract = (E) contractBean.find(cPK);
-        
+
         Double terminalSharedOil = afContract.getTerminalSharedOil();
 
         if (terminalSharedOil == null) {

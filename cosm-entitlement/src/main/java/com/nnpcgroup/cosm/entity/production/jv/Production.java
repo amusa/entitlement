@@ -18,6 +18,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -241,6 +242,16 @@ public abstract class Production implements Serializable {
 
     public void setPartnerOverlift(Double partnerOverlift) {
         this.partnerOverlift = partnerOverlift;
+    }
+
+    @Transient
+    public Double getNetProduction() {
+        Double netProduction;
+        Double gp = grossProduction != null ? grossProduction : 0;
+        Double sa = stockAdjustment != null ? stockAdjustment : 0;
+
+        netProduction = gp + sa;
+        return netProduction;
     }
 
     @Override

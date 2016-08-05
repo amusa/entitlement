@@ -13,6 +13,8 @@ import com.nnpcgroup.cosm.entity.EquityType;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
 import com.nnpcgroup.cosm.entity.FiscalPeriod;
 import com.nnpcgroup.cosm.entity.JointVenture;
+import com.nnpcgroup.cosm.entity.contract.ContractPK;
+import com.nnpcgroup.cosm.entity.forecast.jv.ForecastPK;
 import com.nnpcgroup.cosm.entity.production.jv.Production;
 import com.nnpcgroup.cosm.entity.production.jv.ProductionPK;
 import com.nnpcgroup.cosm.exceptions.NoRealizablePriceException;
@@ -211,6 +213,20 @@ public abstract class JvProductionServicesImpl<T extends Production, E extends C
 
         return prod;
 
+    }
+    
+    @Override
+    public T getNextMonthProduction(T forecast) {
+        int month = forecast.getPeriodMonth();
+        int year = forecast.getPeriodYear();
+        FiscalPeriod nextFp = getNextFiscalPeriod(year, month);
+        ContractPK cPK = forecast.getContract().getContractPK();
+
+
+        T f = find(new ForecastPK(nextFp.getYear(), nextFp.getMonth(), cPK));
+        //T f = findByContractPeriod(prevFp.getYear(), prevFp.getMonth(), cs);
+
+        return f;
     }
 
     @Override

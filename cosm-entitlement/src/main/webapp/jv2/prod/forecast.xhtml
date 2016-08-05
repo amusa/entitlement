@@ -185,7 +185,7 @@
                                         </li>
                                         <li><h:commandLink action="forecast-edit" actionListener="#{jvProdController.setCurrentProduction(prod)}">
                                                 <span class="icon">&#61952;</span>
-                                                #{bundle.Edit}                                               
+                                                #{bundle.Edit}
                                             </h:commandLink>
                                         </li>  
                                         <li>
@@ -220,7 +220,7 @@
                                 <button jsf:id="editButton" look="warning" data-target="#JvEditDlg" data-toggle="modal" class="btn m-r-5">
                                     <span class="icon">&#61952;</span>                                    
                                     #{bundle.Edit}
-                                    <f:ajax event="click" render="JvEditForm" />
+                                    <f:ajax event="click" render="JvEditForm" listener="#{jvProdController.enableEditMode}" />
                                 </button>
 
                                 <button jsf:id="deleteButton" class="btn m-r-5" jsf:disabled="#{empty jvProdController.currentProduction}">

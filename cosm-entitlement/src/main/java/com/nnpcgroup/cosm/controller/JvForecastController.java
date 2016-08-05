@@ -30,6 +30,7 @@ import com.nnpcgroup.cosm.exceptions.NoRealizablePriceException;
 
 import javax.inject.Named;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -78,11 +79,13 @@ public class JvForecastController implements Serializable {
     private Integer periodMonth;
     private FiscalArrangement currentFiscalArrangement;
     private Contract currentContract;
+    private boolean editMode;
 
     /**
      * Creates a new instance of JvController
      */
     public JvForecastController() {
+        this.editMode = false;
         LOG.info("ProductionController::constructor activated...");
     }
 
@@ -174,17 +177,37 @@ public class JvForecastController implements Serializable {
     public void cancel() {
         reset();
         loadProductions();
+        disableEditMode();
     }
 
     public void update() {
         persist(JsfUtil.PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("ProductionUpdated"));
+        if (isEditMode()) {
+            List<Forecast> adjforecasts = new ArrayList<>();
+            Forecast thisForecast = currentProduction;
+            Forecast nextForecast;
+            while ((nextForecast = (Forecast) getForecastBean().getNextMonthProduction(thisForecast)) != null) {
+                try {
+                    getForecastBean().enrich(nextForecast);
+                    getForecastBean().edit(nextForecast);
+                   // adjforecasts.add(nextForecast);
+                    thisForecast = nextForecast;
+                } catch (NoRealizablePriceException rpe) {
+                    Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, rpe);
+                    JsfUtil.addErrorMessage(rpe, ResourceBundle.getBundle("/Bundle").getString("RealizablePriceErrorOccured"));
+                }
+            }
+            
+           // getForecastBean().edit(adjforecasts);
+            disableEditMode();
+        }
     }
 
     private void persist(JsfUtil.PersistAction persistAction, String successMessage) {
         if (currentProduction != null) {
             try {
                 if (persistAction != JsfUtil.PersistAction.DELETE) {
-                   getForecastBean().edit(currentProduction);
+                    getForecastBean().edit(currentProduction);
                 } else {
                     getForecastBean().remove(currentProduction);
                 }
@@ -218,13 +241,30 @@ public class JvForecastController implements Serializable {
         }
     }
 
+    public boolean isEditMode() {
+        return editMode;
+    }
+
+    public void setEditMode(boolean editMode) {
+        this.editMode = editMode;
+    }
+
+    public void enableEditMode() {
+        setEditMode(true);
+        productionVolumeChanged();
+    }
+
+    public void disableEditMode() {
+        setEditMode(false);
+    }
+
     public void productionVolumeChanged() {
         try {
             getForecastBean().enrich(currentProduction);
             LOG.log(Level.INFO,
                     "Production Enriched::Own entmt={0},Partner entmt={1}",
                     new Object[]{currentProduction.getOwnShareEntitlement(),
-                            currentProduction.getPartnerShareEntitlement()
+                        currentProduction.getPartnerShareEntitlement()
                     });
         } catch (NoRealizablePriceException rpe) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, rpe);
@@ -232,7 +272,7 @@ public class JvForecastController implements Serializable {
         }
     }
 
-    public void alternativeFundingCostListener()  {
+    public void alternativeFundingCostListener() {
         JvAlternativeFundingForecastServices afBean = (JvAlternativeFundingForecastServices) getForecastBean();
         try {
             afBean.computeAlternativeFunding(getCurrentAfProduction());
@@ -373,7 +413,7 @@ public class JvForecastController implements Serializable {
         return (getCurrentProduction() instanceof AlternativeFundingForecast);
     }
 
-    public void currentContractChanged(){// throws Exception {
+    public void currentContractChanged() {// throws Exception {
         LOG.log(Level.INFO, "Contract Selected...{0}", currentContract);
 
         if (currentContract instanceof RegularContract) {

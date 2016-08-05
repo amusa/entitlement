@@ -34,9 +34,13 @@ public interface CommonServices<T> extends AbstractCrudServices<T> {
 
     public T getPreviousMonthProduction(T production);
     
+    public T getNextMonthProduction(T production);
+    
     public FiscalPeriod getPreviousFiscalPeriod(FiscalPeriod fp);
     
     public FiscalPeriod getPreviousFiscalPeriod(int year, int month);
+    
+    public FiscalPeriod getNextFiscalPeriod(int year, int month);
 
     public T computeClosingStock(T production);
         

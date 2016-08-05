@@ -39,7 +39,6 @@ public abstract class CommonServicesImpl<T> extends AbstractCrudServicesImpl<T> 
 
 //    @PersistenceContext(unitName = "entitlementPU")
 //    private EntityManager em;
-
     @Inject
     @COSMPersistence
     private EntityManager em;
@@ -163,6 +162,18 @@ public abstract class CommonServicesImpl<T> extends AbstractCrudServicesImpl<T> 
     }
 
     @Override
+    public FiscalPeriod getNextFiscalPeriod(int year, int month) {
+        int mt = (month % 12) + 1;
+        int yr = year;
+        
+        if (mt == 1) {           
+            ++yr;
+        }
+
+        return new FiscalPeriod(yr, mt);
+    }
+
+    @Override
     public T openingStockChanged(T production) {
         log.log(Level.INFO, "Opening Stock changed {0}...", production);
         return computeClosingStock(
@@ -203,8 +214,6 @@ public abstract class CommonServicesImpl<T> extends AbstractCrudServicesImpl<T> 
 //        query.setParameter("crudeType", terminal.getCrudeType());
 //
 //        List<T> productions = query.getResultList();
-
-
         return productions;
     }
 

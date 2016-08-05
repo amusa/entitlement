@@ -118,20 +118,19 @@
                                     <div class="col-md-4 m-b-15">
                                         <h:outputLabel value="Daily Prod (bpd)" for="productionVolume" />
                                         <h:inputText id="productionVolume" value="#{jvProdController.currentProduction.productionVolume}" title="Daily Production Volume" class="form-control input-sm" >
-                                            <f:ajax event="change" listener="#{jvProdController.productionVolumeChanged}"
+                                            <f:ajax event="change" listener="#{jvProdController.enableEditMode}"
                                                     render="grossVolume carryOil carryOilCum sharedOil sharedOilCum openingStock ownShareEntitlement closingStock lifting cargoes availability ptnrOpeningStock ptnrEntitlement ptnrClosingStock ptnrLifting ptnrCargoes ptnrAvailability ccc ccca cte ctr rce cor ignm cccaCum cteCum ctrCum rceCum ignmCum corCum"/>
-
                                         </h:inputText>
                                     </div>
                                     <div class="col-md-4 m-b-15">
                                         <h:outputLabel value="Gross Prod" for="grossVolume" />
                                         <h:inputText id="grossVolume" value="#{jvProdController.currentProduction.grossProduction}" title="Gross Prod Volume" class="form-control input-sm" >
-                                            <f:convertNumber pattern="###,###,###.####" />
+                                            <f:convertNumber pattern="###,###,###.####" />                                           
                                         </h:inputText>
                                     </div>
                                 </div>
                             </div>
-                            
+
                         </div>
 
                         <div jsf:id="carryContractInfo2" jsf:rendered="#{jvProdController.fiscalArrangementAfContract}" class="panel panel-default tile">
@@ -376,7 +375,7 @@
                 </div>
                 <div class="modal-footer">
                     <h:commandButton  value="#{bundle.Back}" action="forecast" immediate="true" class="btn btn-sm"/>
-                    
+
                     <h:commandButton  value="#{bundle.Save}"  class="btn btn-sm">
                         <f:ajax listener="#{jvProdController.update}" render="@form msgs"/>
                     </h:commandButton>

@@ -8,7 +8,9 @@ package com.nnpcgroup.cosm.entity.production.jv;
 import com.nnpcgroup.cosm.entity.contract.Contract;
 import java.io.Serializable;
 import java.util.Objects;
+import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
@@ -17,6 +19,7 @@ import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
+import javax.persistence.MapsId;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
@@ -26,7 +29,6 @@ import javax.validation.constraints.NotNull;
  * @author 18359
  */
 @Entity
-@IdClass(ProductionPK.class)
 @Table(name = "PRODUCTION")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "PTYPE")
@@ -34,10 +36,9 @@ public abstract class Production implements Serializable {
 
     private static final long serialVersionUID = -795843614381155072L;
 
+    private ProductionPK productionPK;
     private Integer periodYear;
     private Integer periodMonth;
-    private Long fiscalArrangementId;
-    private String crudeTypeCode;
     private Contract contract;
     private Double openingStock;
     private Double partnerOpeningStock;
@@ -59,13 +60,22 @@ public abstract class Production implements Serializable {
     public Production() {
     }
 
-    public Production(int periodYear, int periodMonth, Contract contract) {
-        this.periodYear = periodYear;
-        this.periodMonth = periodMonth;
-        this.contract = contract;
+//    public Production(int periodYear, int periodMonth, Contract contract) {
+//        this.periodYear = periodYear;
+//        this.periodMonth = periodMonth;
+//        this.contract = contract;
+//    }
+
+    @EmbeddedId
+    public ProductionPK getProductionPK() {
+        return productionPK;
     }
 
-    @Id
+    public void setProductionPK(ProductionPK productionPK) {
+        this.productionPK = productionPK;
+    }
+
+    @Column(updatable = false, insertable = false)
     public Integer getPeriodYear() {
         return periodYear;
     }
@@ -74,7 +84,7 @@ public abstract class Production implements Serializable {
         this.periodYear = periodYear;
     }
 
-    @Id
+    @Column(updatable = false, insertable = false)
     public Integer getPeriodMonth() {
         return periodMonth;
     }
@@ -83,28 +93,17 @@ public abstract class Production implements Serializable {
         this.periodMonth = periodMonth;
     }
 
-    @Id
-    public Long getFiscalArrangementId() {
-        return fiscalArrangementId;
-    }
-
-    public void setFiscalArrangementId(Long fiscalArrangementId) {
-        this.fiscalArrangementId = fiscalArrangementId;
-    }
-
-    @Id
-    public String getCrudeTypeCode() {
-        return crudeTypeCode;
-    }
-
-    public void setCrudeTypeCode(String crudeTypeCode) {
-        this.crudeTypeCode = crudeTypeCode;
-    }
-
+//    @ManyToOne
+//    @JoinColumns({
+//        @JoinColumn(name = "FISCALARRANGEMENTID", referencedColumnName = "FISCALARRANGEMENTID", insertable = false, updatable = false),
+//        @JoinColumn(name = "CRUDETYPECODE", referencedColumnName = "CRUDETYPECODE", insertable = false, updatable = false)
+//    })
+        
     @ManyToOne
+    @MapsId("contract")
     @JoinColumns({
-        @JoinColumn(name = "FISCALARRANGEMENTID", referencedColumnName = "FISCALARRANGEMENTID", insertable = false, updatable = false),
-        @JoinColumn(name = "CRUDETYPECODE", referencedColumnName = "CRUDETYPECODE", insertable = false, updatable = false)
+            @JoinColumn(name = "FISCALARRANGEMENTID", referencedColumnName = "FISCALARRANGEMENTID", insertable = false, updatable = false),
+            @JoinColumn(name = "CRUDETYPECODE", referencedColumnName = "CRUDETYPECODE", insertable = false, updatable = false)
     })
     public Contract getContract() {
         return contract;
@@ -256,11 +255,8 @@ public abstract class Production implements Serializable {
 
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 79 * hash + Objects.hashCode(this.periodYear);
-        hash = 79 * hash + Objects.hashCode(this.periodMonth);
-        hash = 79 * hash + Objects.hashCode(this.fiscalArrangementId);
-        hash = 79 * hash + Objects.hashCode(this.crudeTypeCode);
+        int hash = 3;
+        hash = 59 * hash + Objects.hashCode(this.productionPK);
         return hash;
     }
 
@@ -276,16 +272,7 @@ public abstract class Production implements Serializable {
             return false;
         }
         final Production other = (Production) obj;
-        if (!Objects.equals(this.crudeTypeCode, other.crudeTypeCode)) {
-            return false;
-        }
-        if (!Objects.equals(this.periodYear, other.periodYear)) {
-            return false;
-        }
-        if (!Objects.equals(this.periodMonth, other.periodMonth)) {
-            return false;
-        }
-        if (!Objects.equals(this.fiscalArrangementId, other.fiscalArrangementId)) {
+        if (!Objects.equals(this.productionPK, other.productionPK)) {
             return false;
         }
         return true;

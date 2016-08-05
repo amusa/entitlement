@@ -107,7 +107,7 @@
                                                 <h:outputLabel value="Gross Prod" for="grossVolume" />
                                                 <h:inputText id="grossVolume" value="#{jvActualController.currentProduction.grossProduction}" title="Gross Prod Volume" class="form-control input-sm" >
                                                     <f:convertNumber pattern="###,###,###.####" />
-                                                    <f:ajax event="change" listener="#{jvActualController.grossProductionChanged}"
+                                                    <f:ajax event="change" listener="#{jvActualController.enableEditMode}"
                                                             render="netVolume carryOil carryOilCum sharedOil sharedOilCum openingStock ownShareEntitlement closingStock lifting cargoes availability ptnrOpeningStock ptnrEntitlement ptnrClosingStock ptnrLifting ptnrCargoes ptnrAvailability ccc ccca cte ctr rce ignm cccaCum cteCum ctrCum rceCum ignmCum"/>
                                                     execute="contract"/>
                                                 </h:inputText>
@@ -116,7 +116,7 @@
                                                 <h:outputLabel value="Stock Adjustment" for="stockAdjustment" />
                                                 <h:inputText id="stockAdjustment" value="#{jvActualController.currentProduction.stockAdjustment}" title="Stock Adjustment" class="form-control input-sm" >
                                                     <f:convertNumber pattern="###,###,###.####" />
-                                                    <f:ajax event="change" listener="#{jvActualController.stockAdjustmentChanged}"
+                                                    <f:ajax event="change" listener="#{jvActualController.stockAdjustmentChangedEditMode}"
                                                             render="netVolume carryOil carryOilCum sharedOil sharedOilCum openingStock ownShareEntitlement closingStock lifting cargoes availability ptnrOpeningStock ptnrEntitlement ptnrClosingStock ptnrLifting ptnrCargoes ptnrAvailability ccc ccca cte ctr rce ignm cccaCum cteCum ctrCum rceCum ignmCum"/>
                                                     execute="contract"/>
                                                 </h:inputText>

@@ -14,7 +14,6 @@ import com.nnpcgroup.cosm.entity.FiscalArrangement;
 import com.nnpcgroup.cosm.entity.FiscalPeriod;
 import com.nnpcgroup.cosm.entity.JointVenture;
 import com.nnpcgroup.cosm.entity.contract.ContractPK;
-import com.nnpcgroup.cosm.entity.forecast.jv.ForecastPK;
 import com.nnpcgroup.cosm.entity.production.jv.Production;
 import com.nnpcgroup.cosm.entity.production.jv.ProductionPK;
 import com.nnpcgroup.cosm.exceptions.NoRealizablePriceException;
@@ -60,8 +59,8 @@ public abstract class JvProductionServicesImpl<T extends Production, E extends C
         FiscalArrangement fa;
         JointVenture jv;
 
-//        fa = production.getContract().getFiscalArrangement();
-        fa = fiscalBean.find(production.getFiscalArrangementId());
+        fa = production.getContract().getFiscalArrangement();
+        //fa = fiscalBean.find(production.getFiscalArrangementId());
 
         assert (fa instanceof JointVenture);
 
@@ -207,23 +206,22 @@ public abstract class JvProductionServicesImpl<T extends Production, E extends C
         int year = production.getPeriodYear();
 
         FiscalPeriod prevFp = getPreviousFiscalPeriod(year, month);
-
+        ContractPK cPK = production.getContract().getContractPK();
         //T prod = findByContractPeriod(prevFp.getYear(), prevFp.getMonth(), cs);
-        T prod = find(new ProductionPK(prevFp.getYear(), prevFp.getMonth(), production.getFiscalArrangementId(), production.getCrudeTypeCode()));
+        T prod = find(new ProductionPK(prevFp.getYear(), prevFp.getMonth(), cPK));
 
         return prod;
 
     }
-    
+
     @Override
-    public T getNextMonthProduction(T forecast) {
-        int month = forecast.getPeriodMonth();
-        int year = forecast.getPeriodYear();
-        FiscalPeriod nextFp = getNextFiscalPeriod(year, month);
-        ContractPK cPK = forecast.getContract().getContractPK();
+    public T getNextMonthProduction(T production) {
+        int month = production.getPeriodMonth();
+        int year = production.getPeriodYear();
+        FiscalPeriod nextProd = getNextFiscalPeriod(year, month);
+        ContractPK cPK = production.getContract().getContractPK();
 
-
-        T f = find(new ForecastPK(nextFp.getYear(), nextFp.getMonth(), cPK));
+        T f = find(new ProductionPK(nextProd.getYear(), nextProd.getMonth(), cPK));
         //T f = findByContractPeriod(prevFp.getYear(), prevFp.getMonth(), cs);
 
         return f;

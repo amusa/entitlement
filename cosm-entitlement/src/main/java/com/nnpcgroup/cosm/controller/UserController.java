@@ -10,7 +10,10 @@ import com.nnpcgroup.cosm.ejb.UserBean;
 import com.nnpcgroup.cosm.entity.Company;
 import com.nnpcgroup.cosm.entity.user.Role;
 import com.nnpcgroup.cosm.entity.user.User;
+import com.nnpcgroup.cosm.util.Sha256Encoder;
+
 import java.io.Serializable;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -87,7 +90,10 @@ public class UserController implements Serializable {
         selected = null;
     }
     
-    public void create() {
+    public void create() throws Exception {
+        LOG.log(Level.INFO, "encoding password...");
+        Sha256Encoder encoder = new Sha256Encoder();
+        selected.setPasswd(encoder.encode(selected.getPasswd()));
         LOG.log(Level.INFO, "creating user...");
         persist(JsfUtil.PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("UserCreated"));
         if (!JsfUtil.isValidationFailed()) {

@@ -38,8 +38,19 @@
                     <li><a href="terminal-blend.xhtml">Terminal Blend</a></li>
                     <li><a href="#">Cargo Allocation</a></li>                    
                 </ul>
-            </li>            
-            
+            </li>
+            <li class="dropdown">
+                <a class="sa-side-ui" href="">
+                    <span class="menu-item">Account</span>
+                </a>
+                <ul class="list-unstyled menu-item">
+                    <li>
+                        <form jsf:id="logoutForm" class="margin-clear">
+                            <h:commandLink value="Logout" actionListener="#{userAuth.logout}"/>
+                        </form>
+                    </li>
+                </ul>
+            </li>
         </ul>
     </ui:composition>
 </html>

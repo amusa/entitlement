@@ -1,7 +1,9 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:jsf="http://xmlns.jcp.org/jsf"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
         <meta name="format-detection" content="telephone=no"/>
@@ -246,6 +248,18 @@
                                                 <li><a href="404.html">404 Error</a></li>
                                             </ul>
                                         </li>-->
+                    <li class="dropdown">
+                        <a class="sa-side-ui" href="">
+                            <span class="menu-item">Account</span>
+                        </a>
+                        <ul class="list-unstyled menu-item">
+                            <li>
+                                <form jsf:id="logoutForm" class="margin-clear">
+                                    <h:commandLink value="Logout" actionListener="#{userAuth.logout}"/>
+                                </form>
+                            </li>
+                        </ul>
+                    </li>
                 </ul>
 
             </aside>

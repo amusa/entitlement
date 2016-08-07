@@ -21,6 +21,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
+import javax.faces.model.SelectItem;
 import javax.inject.Named;
 
 /**
@@ -148,13 +149,14 @@ public class RoleController implements Serializable {
 
     public List<Role> getItemsAvailableSelectMany() {
         return getFacade().findAll();
+
     }
 
-    public List<Role> getItemsAvailableSelectOne() {
-        return getFacade().findAll();
+    public SelectItem[] getItemsAvailableSelectOne() {
+        return  JsfUtil.getSelectItems(getFacade().findAll(),false);
     }
 
-    @FacesConverter(forClass = Role.class)
+    @FacesConverter(forClass = com.nnpcgroup.cosm.entity.user.Role.class)
     public static class RoleControllerConverter implements Converter {
 
         @Override

@@ -14,6 +14,7 @@ import com.nnpcgroup.cosm.util.Sha256Encoder;
 
 import java.io.Serializable;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -25,6 +26,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
+import javax.inject.Inject;
 import javax.inject.Named;
 
 /**
@@ -37,12 +39,14 @@ public class UserController implements Serializable {
     
     @EJB
     private UserBean userBean;
+    @Inject
+    RoleController roleController;
     private static final Logger LOG = Logger.getLogger(UserController.class.getName());
     
     private User selected;
     private List<User> users;
-    private List<Role> selectedRoles;
-    
+    private String[] selectedRoles;
+
     public UserBean getUserBean() {
         return userBean;
     }
@@ -59,14 +63,14 @@ public class UserController implements Serializable {
         this.selected = selected;
     }
     
-    public List<Role> getSelectedRoles() {
+    public String[] getSelectedRoles() {
         return selectedRoles;
     }
-    
-    public void setSelectedRoles(List<Role> selectedRoles) {
+
+       public void setSelectedRoles(String[] selectedRoles) {
         this.selectedRoles = selectedRoles;
     }
-    
+
     protected void setEmbeddableKeys() {
     }
     
@@ -95,6 +99,7 @@ public class UserController implements Serializable {
         Sha256Encoder encoder = new Sha256Encoder();
         selected.setPasswd(encoder.encode(selected.getPasswd()));
         LOG.log(Level.INFO, "creating user...");
+
         persist(JsfUtil.PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("UserCreated"));
         if (!JsfUtil.isValidationFailed()) {
             LOG.log(Level.INFO, "validation failed...");
@@ -172,13 +177,23 @@ public class UserController implements Serializable {
     
     public void addRolesListener() {
         LOG.log(Level.INFO, "adding roles...", selectedRoles);
+        List<Role> roleList = getRoleList(selectedRoles);
         if (selected.getRoleList() != null) {
-            selected.getRoleList().addAll(selectedRoles);
+            selected.getRoleList().addAll(roleList);
         } else {
-            selected.setRoleList(selectedRoles);
+            selected.setRoleList(roleList);
         }
     }
-    
+
+    private List<Role> getRoleList(String[] selectedRoles) {
+        List<Role>roleList=new ArrayList<>();
+        for(String roleId:selectedRoles){
+            Role role= roleController.getRole(roleId);
+            roleList.add(role);
+        }
+        return roleList;
+    }
+
     @FacesConverter(forClass = User.class)
     public static class UserControllerConverter implements Converter {
         

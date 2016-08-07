@@ -49,11 +49,10 @@
                                                                             
                             
                             <h:selectManyListbox id="roleList" value="#{userController.selectedRoles}" class="form-control input-sm m-b-10">
-                                <f:selectItems value="#{roleController.itemsAvailableSelectMany}" />   
-                                <f:ajax event="change" render="rolesTable" listener="#{userController.addRolesListener}"/>
+                                <f:selectItems value="#{roleController.itemsAvailableSelectOne}" />
                             </h:selectManyListbox>
 
-                            <h:commandButton value ="Add Role" class="btn m-r-10"> 
+                           <h:commandButton value ="Add Role" class="btn m-r-10">
                                 <f:ajax event="click" execute="roleList" render="rolesTable" listener="#{userController.addRolesListener}"/>
                             </h:commandButton>
 

@@ -113,6 +113,7 @@ public class UserAuth implements Serializable {
         externalContext.invalidateSession();
         loggedUser = null;
         externalContext.redirect(externalContext.getRequestContextPath() + "/faces/login.xhtml");
+        LOG.info("Logged out!");
     }
 
     public void changePassword() throws Exception {

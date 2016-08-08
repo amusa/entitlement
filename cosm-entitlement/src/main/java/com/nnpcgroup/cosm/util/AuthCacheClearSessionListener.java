@@ -5,7 +5,6 @@
  */
 package com.nnpcgroup.cosm.util;
 
-import com.nnpcgroup.cosm.controller.UserAuth;
 import java.security.Principal;
 import java.util.logging.Logger;
 import javax.annotation.Resource;
@@ -23,9 +22,9 @@ import org.jboss.security.CacheableManager;
  * @author Ayemi
  */
 @WebListener
-public class CosmSessionListener implements HttpSessionListener {
+public class AuthCacheClearSessionListener implements HttpSessionListener {
 
-    private static final Logger LOG = Logger.getLogger(CosmSessionListener.class.getName());
+    private static final Logger LOG = Logger.getLogger(AuthCacheClearSessionListener.class.getName());
 
     @Inject
     private Principal principal;
@@ -41,7 +40,7 @@ public class CosmSessionListener implements HttpSessionListener {
     @Override
     public void sessionDestroyed(HttpSessionEvent se) {
         LOG.info("Clearing cache...");
-        //authenticationManager.flushCache(principal);
+        authenticationManager.flushCache(principal);
         //clearCache(principal.getName());
     }
 

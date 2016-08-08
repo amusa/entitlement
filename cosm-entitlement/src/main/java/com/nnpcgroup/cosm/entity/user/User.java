@@ -133,6 +133,10 @@ public class User implements Serializable {
         this.roleList = roleList;
     }
 
+    public String getFullName() {
+        return String.format("%s %s", new Object[]{firstName, lastName});
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;

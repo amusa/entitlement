@@ -13,7 +13,6 @@ import com.nnpcgroup.cosm.entity.user.User;
 import com.nnpcgroup.cosm.util.Sha256Encoder;
 
 import java.io.Serializable;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;

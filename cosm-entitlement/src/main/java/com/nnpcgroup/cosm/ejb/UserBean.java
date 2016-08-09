@@ -7,7 +7,6 @@ package com.nnpcgroup.cosm.ejb;
 
 import com.nnpcgroup.cosm.ejb.impl.AbstractCrudServicesImpl;
 import com.nnpcgroup.cosm.entity.user.User;
-import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -67,7 +66,7 @@ public class UserBean extends AbstractCrudServicesImpl<User> {
                             cb.equal(e.get("passwd"), password)
                     ));
             Query query = getEntityManager().createQuery(cq);
-            User user = (User)query.getSingleResult();
+            
             return query.getMaxResults() > 0;
         } catch (NoResultException nre) {
             return false;

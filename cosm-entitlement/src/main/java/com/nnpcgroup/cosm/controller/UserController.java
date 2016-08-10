@@ -200,7 +200,7 @@ public class UserController implements Serializable {
             getFacade().updatePassword(userName, encoder.encode(newPassword));
         } else {
             //Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-            JsfUtil.addErrorMessage(ResourceBundle.getBundle("/Bundle").getString("PasswordChangeError"));
+            JsfUtil.addErrorMessage(ResourceBundle.getBundle("/Bundle").getString("PasswordChangeMatchError"));
         }
     }
 

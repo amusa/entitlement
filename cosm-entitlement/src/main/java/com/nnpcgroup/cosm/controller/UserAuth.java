@@ -44,7 +44,6 @@ public class UserAuth implements Serializable {
     private String originalURL;
     private User loggedUser;
     private String newPassword;
-    private String newPasswordConfirm;
 
     /**
      * Creates a new instance of UserAuth
@@ -120,16 +119,20 @@ public class UserAuth implements Serializable {
         LOG.info("Logged out!");
     }
 
-    public void changePassword() throws Exception {
+    public void changePassword() {
         if (loggedUser != null) {
-            userController.changePassword(loggedUser.getUserName(), password, newPassword);
-            JsfUtil.addErrorMessage(ResourceBundle.getBundle("/Bundle").getString("PasswordChangeSuccess"));
+            try {
+                userController.changePassword(loggedUser.getUserName(), password, newPassword);
+                JsfUtil.addErrorMessage(ResourceBundle.getBundle("/Bundle").getString("PasswordChangeSuccess"));
+            } catch (Exception ex) {
+                Logger.getLogger(UserAuth.class.getName()).log(Level.SEVERE, null, ex);
+                 JsfUtil.addErrorMessage(ResourceBundle.getBundle("/Bundle").getString("PasswordChangeError"));
+            }
         }
 
         username = null;
         password = null;
         newPassword = null;
-        newPasswordConfirm = null;
     }
 
     public void validatePassword(ComponentSystemEvent event) {
@@ -195,14 +198,6 @@ public class UserAuth implements Serializable {
 
     public void setNewPassword(String newPassword) {
         this.newPassword = newPassword;
-    }
-
-    public String getNewPasswordConfirm() {
-        return newPasswordConfirm;
-    }
-
-    public void setNewPasswordConfirm(String newPasswordConfirm) {
-        this.newPasswordConfirm = newPasswordConfirm;
     }
 
     public String getOriginalURL() {

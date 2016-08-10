@@ -366,7 +366,7 @@ public class JvProductionController implements Serializable {
 
             LOG.log(Level.INFO, "************getProductionBean().createInstance() returning {0}...", currentProduction);
             //production.setProductionPK(pPK);
-//            production.setContract(forecast.getContract());
+            production.setContract(forecast.getContract());
             production.setPeriodYear(forecast.getPeriodYear());
             production.setPeriodMonth(forecast.getPeriodMonth());
 //            production.setFiscalArrangementId(forecast.getContract().getContractPK().getFiscalArrangementId());

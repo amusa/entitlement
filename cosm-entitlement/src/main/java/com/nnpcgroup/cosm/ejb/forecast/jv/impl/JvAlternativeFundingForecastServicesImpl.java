@@ -157,7 +157,7 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
                         computeCarryOilReceived(
                                 computeCarryOil(
                                         computeResidualCarryExpenditure(
-                                                computeGuaranteedNotionalMargin(
+                                                computeNotionalMargin(
                                                         computeCarryTaxRelief(
                                                                 computeCarryTaxExpenditure(
                                                                         computeCapitalCarryCostAmortized(production)
@@ -281,42 +281,14 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
         
         return forecast;
     }
-    
-    @Override
-    public T computeGuaranteedNotionalMargin(T forecast) throws NoRealizablePriceException {
-        PricePK pricePK = new PricePK();
-        LOG.log(Level.INFO, "*********NPE Check********* forecast={0}", new Object[]{forecast});
-        pricePK.setPeriodMonth(forecast.getPeriodMonth());
-        pricePK.setPeriodYear(forecast.getPeriodYear());
-        
-        Double GNM = null;// = 4.1465; //TODO:temporary placeholder
-
-        Price price = priceBean.find(pricePK);
-        if (price != null) {
-            LOG.log(Level.INFO, "Realizable Price found {0}", price.getRealizablePrice());
-            GNM = price.getRealizablePrice() * 0.12225;
-        } else {
-            LOG.log(Level.INFO, "Realizable Price NOT found {0}");
-
-            throw new NoRealizablePriceException(String.format
-                    ("Realizable Price for the year %s and month %s not found!",
-                            new Object[]{pricePK.getPeriodYear(), pricePK.getPeriodMonth()}
-                    ));
-        }
-        
-        forecast.setGuaranteedNotionalMargin(GNM);
-        LOG.log(Level.INFO, "Guaranteed National Margin (GNM)=>{0}", GNM);
-        
-        return forecast;
-    }
-    
+            
     @Override
     public T computeResidualCarryExpenditure(T forecast) {
         Double RCE;
         Double CCCA = forecast.getCapitalCarryCostAmortized() != null ? forecast.getCapitalCarryCostAmortized() : 0.0;
         Double CTR = forecast.getCarryTaxRelief() != null ? forecast.getCarryTaxRelief() : 0.0;
         Double COR = forecast.getCarryOilReceived() != null ? forecast.getCarryOilReceived() : 0.0;
-        Double IGNM = forecast.getGuaranteedNotionalMargin() != null ? forecast.getGuaranteedNotionalMargin() : 0.0;
+        Double IGNM = forecast.getMargin() != null ? forecast.getMargin() : 0.0;
         
         RCE = (Math.max(0, (CCCA - CTR - COR))) / IGNM;
         forecast.setResidualCarryExpenditure(RCE);
@@ -335,7 +307,7 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
         if (prev != null) {
             carryOil = prev.getCarryOil() != null ? prev.getCarryOil() : 0.0;
         }
-        margin = forecast.getGuaranteedNotionalMargin() != null ? forecast.getGuaranteedNotionalMargin() : 0.0;
+        margin = forecast.getMargin() != null ? forecast.getMargin() : 0.0;
         
         COR = carryOil * margin;
         forecast.setCarryOilReceived(COR);
@@ -568,5 +540,6 @@ public abstract class JvAlternativeFundingForecastServicesImpl<T extends Alterna
         
         return sharedOilPeriod;
         
-    }
+    }    
+    
 }

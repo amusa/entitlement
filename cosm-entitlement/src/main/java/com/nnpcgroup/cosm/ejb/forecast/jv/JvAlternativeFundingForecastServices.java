@@ -19,10 +19,10 @@ public interface JvAlternativeFundingForecastServices<T extends AlternativeFundi
     public T computeCarryOil(T forecast);
 
     public T computeSharedOil(T forecast);
-
-    public T computeGuaranteedNotionalMargin(T forecast) throws NoRealizablePriceException;
-
+    
     public T computeResidualCarryExpenditure(T forecast);
+    
+    public T computeNotionalMargin(T forecast) throws NoRealizablePriceException;
 
     public T computeCarryTaxRelief(T forecast);
 

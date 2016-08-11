@@ -26,7 +26,7 @@ public abstract class AlternativeFundingForecast extends Forecast {
     private Double carryTaxExpenditure;
     private Double carryTaxRelief;
     private Double residualCarryExpenditure;
-    private Double guaranteedNotionalMargin;
+    private Double margin;
     private Double capitalCarryCostAmortized;
     private Double carryOilCum;
     private Double sharedOilCum;
@@ -95,12 +95,12 @@ public abstract class AlternativeFundingForecast extends Forecast {
         this.residualCarryExpenditure = residualCarryExpenditure;
     }
 
-    public Double getGuaranteedNotionalMargin() {
-        return guaranteedNotionalMargin;
+    public Double getMargin() {
+        return margin;
     }
 
-    public void setGuaranteedNotionalMargin(Double guaranteedNotionalMargin) {
-        this.guaranteedNotionalMargin = guaranteedNotionalMargin;
+    public void setMargin(Double margin) {
+        this.margin = margin;
     }
 
     public Double getCapitalCarryCostAmortized() {

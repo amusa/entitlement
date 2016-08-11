@@ -98,6 +98,19 @@ public class ContractController implements Serializable {
         }
     }
 
+    public ModifiedCarryContract getMcaSelected() {
+        if (selected instanceof ModifiedCarryContract) {
+            return (ModifiedCarryContract) selected;
+        }
+        return null;
+    }
+
+    public void setMcaSelected(ModifiedCarryContract mcaSelected) {
+        if (mcaSelected != null) {
+            this.selected = mcaSelected;
+        }
+    }
+
     public CrudeType getCrudeType() {
         return crudeType;
     }

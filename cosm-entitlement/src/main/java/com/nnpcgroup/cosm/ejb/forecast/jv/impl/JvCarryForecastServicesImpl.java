@@ -29,8 +29,7 @@ public abstract class JvCarryForecastServicesImpl extends JvAlternativeFundingFo
 
     @Override
     public CarryForecast computeNotionalMargin(CarryForecast forecast) throws NoRealizablePriceException {
-        PricePK pricePK = new PricePK();
-        LOG.log(Level.INFO, "*********NPE Check********* forecast={0}", new Object[]{forecast});
+        PricePK pricePK = new PricePK();        
         pricePK.setPeriodMonth(forecast.getPeriodMonth());
         pricePK.setPeriodYear(forecast.getPeriodYear());
 
@@ -49,7 +48,7 @@ public abstract class JvCarryForecastServicesImpl extends JvAlternativeFundingFo
         }
 
         forecast.setMargin(GNM);
-        LOG.log(Level.INFO, "Guaranteed National Margin (GNM)=>{0}", GNM);
+        LOG.log(Level.INFO, "Increamental Notional Margin (GNM)=>{0}", GNM);
 
         return forecast;
     }

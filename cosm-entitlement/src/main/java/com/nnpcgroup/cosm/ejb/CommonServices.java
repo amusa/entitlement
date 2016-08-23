@@ -28,7 +28,7 @@ public interface CommonServices<T> extends AbstractCrudServices<T> {
         
     public T computeEntitlement(T production);
 
-//    public T createInstance();
+    public T createInstance();
 
     public T computeOpeningStock(T production);
 

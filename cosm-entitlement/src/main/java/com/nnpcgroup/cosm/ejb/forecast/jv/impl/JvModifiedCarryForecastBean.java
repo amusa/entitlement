@@ -5,7 +5,9 @@
  */
 package com.nnpcgroup.cosm.ejb.forecast.jv.impl;
 
-import com.nnpcgroup.cosm.ejb.forecast.jv.ModifiedCarryForecastServices;
+import com.nnpcgroup.cosm.ejb.forecast.jv.JvCarryForecastServices;
+import com.nnpcgroup.cosm.ejb.forecast.jv.JvModifiedCarryForecastServices;
+import com.nnpcgroup.cosm.entity.forecast.jv.CarryForecast;
 import com.nnpcgroup.cosm.entity.forecast.jv.ModifiedCarryForecast;
 import java.util.logging.Logger;
 import javax.ejb.Local;
@@ -16,12 +18,12 @@ import javax.ejb.Stateless;
  * @author 18359
  */
 @Stateless
-@Local(ModifiedCarryForecastServices.class)
-public class ModifiedCarryForecastBean extends ModifiedCarryForecastServicesImpl implements ModifiedCarryForecastServices {
+@Local(JvModifiedCarryForecastServices.class)
+public class JvModifiedCarryForecastBean extends JvModifiedCarryForecastServicesImpl implements JvModifiedCarryForecastServices {
 
-    private static final Logger LOG = Logger.getLogger(ModifiedCarryForecastBean.class.getName());
+    private static final Logger LOG = Logger.getLogger(JvModifiedCarryForecastBean.class.getName());
 
-    public ModifiedCarryForecastBean() {
+    public JvModifiedCarryForecastBean() {
         super(ModifiedCarryForecast.class);
         LOG.info("ProductionBean::constructor activated...");
 

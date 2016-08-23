@@ -13,8 +13,8 @@ import com.nnpcgroup.cosm.entity.FiscalArrangement;
 import com.nnpcgroup.cosm.entity.contract.*;
 import com.nnpcgroup.cosm.entity.forecast.jv.CarryForecast;
 import com.nnpcgroup.cosm.entity.forecast.jv.Forecast;
-import com.nnpcgroup.cosm.entity.forecast.jv.JvForecast;
 import com.nnpcgroup.cosm.entity.forecast.jv.ModifiedCarryForecast;
+import com.nnpcgroup.cosm.entity.forecast.jv.RegularForecast;
 import com.nnpcgroup.cosm.entity.production.jv.*;
 import com.nnpcgroup.cosm.exceptions.NoRealizablePriceException;
 
@@ -84,7 +84,7 @@ public class JvProductionController implements Serializable {
     }
 
     public JvProductionServices getProductionBean() {
-        if (currentContract instanceof JvContract) {
+        if (currentContract instanceof RegularContract) {
             LOG.log(Level.INFO, "Returning RegularProduction bean...{0}", regProductionBean);
             return regProductionBean;
         } else if (currentContract instanceof CarryContract) {
@@ -148,7 +148,7 @@ public class JvProductionController implements Serializable {
 
     public void currentContractChanged() throws Exception {
         LOG.log(Level.INFO, "Contract Selected...{0}", currentContract);
-        if (currentContract instanceof JvContract) {
+        if (currentContract instanceof RegularContract) {
             currentProduction = new RegularProduction();
         } else if (currentContract instanceof CarryContract) {
             currentProduction = new CarryProduction();
@@ -356,12 +356,12 @@ public class JvProductionController implements Serializable {
                 production = new ModifiedCarryProduction();
             } else if (forecast instanceof CarryForecast) {
                 production = new CarryProduction();
-            } else if (forecast instanceof JvForecast) {
+            } else if (forecast instanceof RegularForecast) {
                 production = new RegularProduction();
             } else {
                 //something is wrong
-                LOG.log(Level.INFO, "Something is wrong! JvForecastServices type not determined {0}...", forecast);
-                throw new Exception("JvForecastServices type not determined");
+                LOG.log(Level.INFO, "Something is wrong! Forecast type not determined {0}...", forecast);
+                throw new Exception("Forecast type not determined");
             }
 
             LOG.log(Level.INFO, "************getProductionBean().createInstance() returning {0}...", currentProduction);

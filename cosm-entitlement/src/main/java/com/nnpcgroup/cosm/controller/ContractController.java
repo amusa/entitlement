@@ -75,7 +75,7 @@ public class ContractController implements Serializable {
 
     public void setSelected(Contract selected) {
         this.selected = selected;
-        if (selected instanceof JvContract) {
+        if (selected instanceof RegularContract) {
             contractType = "REG";
         } else if (selected instanceof CarryContract) {
             contractType = "CA";
@@ -141,7 +141,7 @@ public class ContractController implements Serializable {
     }
 
     public Contract prepareCreate() {
-        selected = new JvContract(); //TODO:evaluate type of contract first
+        selected = new RegularContract(); //TODO:evaluate type of contract first
         initializeEmbeddableKey();
         return selected;
     }
@@ -230,7 +230,7 @@ public class ContractController implements Serializable {
         if (null != contractType) {
             switch (contractType) {
                 case "REG":
-                    selected = new JvContract();
+                    selected = new RegularContract();
                     break;
                 case "MCA":
                     selected = new ModifiedCarryContract();
@@ -249,7 +249,7 @@ public class ContractController implements Serializable {
 
     public void addContractFiscalArrangement(FiscalArrangement fa) {
         LOG.log(Level.INFO, "Adding Contract for fiscal arrangement {0}...", fa);
-        setSelected(new JvContract()); //Default contract
+        setSelected(new RegularContract()); //Default contract
 //        FiscalArrangement freshFiscal=  fiscalBean.find(fa.getId());
         setFiscalArrangement(fa);
 //        selected.setFiscalArrangement(fa);

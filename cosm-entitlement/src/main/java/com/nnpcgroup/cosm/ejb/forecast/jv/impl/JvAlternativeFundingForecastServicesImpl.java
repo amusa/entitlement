@@ -7,7 +7,9 @@ package com.nnpcgroup.cosm.ejb.forecast.jv.impl;
 
 import com.nnpcgroup.cosm.ejb.PriceBean;
 import com.nnpcgroup.cosm.ejb.contract.ContractServices;
-import com.nnpcgroup.cosm.ejb.forecast.jv.AlternativeFundingForecastServices;
+import com.nnpcgroup.cosm.ejb.forecast.jv.JvAlternativeFundingForecastServices;
+import com.nnpcgroup.cosm.entity.Price;
+import com.nnpcgroup.cosm.entity.PricePK;
 import com.nnpcgroup.cosm.entity.contract.*;
 import com.nnpcgroup.cosm.entity.forecast.jv.AlternativeFundingForecast;
 import com.nnpcgroup.cosm.exceptions.NoRealizablePriceException;
@@ -29,9 +31,9 @@ import javax.persistence.criteria.Root;
  * @author 18359
  */
 @Dependent
-public abstract class AlternativeFundingForecastServicesImpl<T extends AlternativeFundingForecast> extends JvForecastServicesImpl<T> implements AlternativeFundingForecastServices<T> {
+public abstract class JvAlternativeFundingForecastServicesImpl<T extends AlternativeFundingForecast> extends JvForecastServicesImpl<T> implements JvAlternativeFundingForecastServices<T> {
     
-    private static final Logger LOG = Logger.getLogger(AlternativeFundingForecastServicesImpl.class.getName());
+    private static final Logger LOG = Logger.getLogger(JvAlternativeFundingForecastServicesImpl.class.getName());
     private static final long serialVersionUID = -5826414842990437262L;
     
     @EJB
@@ -40,7 +42,7 @@ public abstract class AlternativeFundingForecastServicesImpl<T extends Alternati
     @EJB
     ContractServices contractBean;
     
-    public AlternativeFundingForecastServicesImpl(Class<T> entityClass) {
+    public JvAlternativeFundingForecastServicesImpl(Class<T> entityClass) {
         super(entityClass);
     }
     
@@ -96,7 +98,7 @@ public abstract class AlternativeFundingForecastServicesImpl<T extends Alternati
         
         return forecast;
     }
-
+    
     @Override
     public T enrich(T production) throws NoRealizablePriceException {
         LOG.log(Level.INFO, "Enriching forecast {0}...", production);
@@ -126,7 +128,7 @@ public abstract class AlternativeFundingForecastServicesImpl<T extends Alternati
         Double CORCum = forecast.getCarryOilReceived();
         
         if (prev != null) {
-            LOG.log(Level.INFO, "SharedOilCum = {0}, Previous JvForecastServices = {1}, prev.getSharedOilCum() = {2}", new Object[]{sharedOilCum, prev, prev.getSharedOilCum()});
+            LOG.log(Level.INFO, "SharedOilCum = {0}, Previous Forecast = {1}, prev.getSharedOilCum() = {2}", new Object[]{sharedOilCum, prev, prev.getSharedOilCum()});
             
             sharedOilCum += prev.getSharedOilCum();
             carryOilCum += prev.getCarryOilCum();

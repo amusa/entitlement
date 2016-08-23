@@ -7,23 +7,28 @@ package com.nnpcgroup.cosm.entity.contract;
 
 import com.nnpcgroup.cosm.entity.CrudeType;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
+import com.nnpcgroup.cosm.entity.forecast.jv.ForecastEntitlement;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.util.List;
 
 /**
- *
  * @author 18359
  */
 @Entity
-@DiscriminatorValue("REG")
-public class RegularContract extends Contract{
+@DiscriminatorValue("JV")
+public class JvContract extends Contract {
 
     private static final long serialVersionUID = -6307338449430627486L;
 
-    public RegularContract() {
+
+    public JvContract() {
     }
 
-    public RegularContract(FiscalArrangement fiscalArrangement, CrudeType crudeType) {
+    public JvContract(FiscalArrangement fiscalArrangement, CrudeType crudeType) {
         super(fiscalArrangement, crudeType);
     }
+
+
 }

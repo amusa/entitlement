@@ -6,7 +6,7 @@
 package com.nnpcgroup.cosm.ejb.production.jv.impl;
 
 import com.nnpcgroup.cosm.ejb.production.jv.RegularProductionServices;
-import com.nnpcgroup.cosm.entity.contract.RegularContract;
+import com.nnpcgroup.cosm.entity.contract.JvContract;
 import com.nnpcgroup.cosm.entity.production.jv.RegularProduction;
 import java.util.logging.Logger;
 import javax.enterprise.context.Dependent;
@@ -16,7 +16,7 @@ import javax.enterprise.context.Dependent;
  * @author 18359
  */
 @Dependent
-public  class RegularProductionServicesImpl extends JvProductionServicesImpl<RegularProduction, RegularContract> implements RegularProductionServices{
+public  class RegularProductionServicesImpl extends JvProductionServicesImpl<RegularProduction, JvContract> implements RegularProductionServices{
 
     private static final Logger LOG = Logger.getLogger(RegularProductionServicesImpl.class.getName());
 
@@ -172,7 +172,7 @@ public  class RegularProductionServicesImpl extends JvProductionServicesImpl<Reg
 //    
 //    
 
-    @Override
+    //@Override
     public RegularProduction createInstance() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }

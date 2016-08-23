@@ -135,8 +135,8 @@ public abstract class CommonServicesImpl<T> extends AbstractCrudServicesImpl<T> 
     @Override
     public abstract T computeEntitlement(T production);
 
-    @Override
-    public abstract T createInstance();
+//    @Override
+//    public abstract T createInstance();
 
     @Override
     public abstract T computeOpeningStock(T production);
@@ -207,7 +207,7 @@ public abstract class CommonServicesImpl<T> extends AbstractCrudServicesImpl<T> 
 
 //        TypedQuery<T> query = getEntityManager().createQuery(
 //                "SELECT f "
-//                        + "FROM Forecast f WHERE f.periodYear = :periodYear "
+//                        + "FROM JvForecastServices f WHERE f.periodYear = :periodYear "
 //                        + "AND f.periodMonth = :periodMonth AND f.contract.crudeType = :crudeType", entityClass);
 //        query.setParameter("periodYear", year);
 //        query.setParameter("periodMonth", month);

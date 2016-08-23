@@ -30,7 +30,7 @@ public class AlternativeFundingProductionBean extends AlternativeFundingProducti
         super(entityClass);
     }
 
-    @Override
+    //@Override
     public AlternativeFundingProduction createInstance() {
         return new AlternativeFundingProduction();
     }

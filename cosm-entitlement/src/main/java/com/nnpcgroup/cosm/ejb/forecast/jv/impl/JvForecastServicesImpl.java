@@ -5,37 +5,34 @@
  */
 package com.nnpcgroup.cosm.ejb.forecast.jv.impl;
 
-import com.nnpcgroup.cosm.controller.GeneralController;
-import com.nnpcgroup.cosm.ejb.FiscalArrangementBean;
 import com.nnpcgroup.cosm.ejb.forecast.jv.JvForecastServices;
-import com.nnpcgroup.cosm.ejb.impl.CommonServicesImpl;
-import com.nnpcgroup.cosm.entity.*;
+import com.nnpcgroup.cosm.entity.EquityType;
+import com.nnpcgroup.cosm.entity.FiscalArrangement;
+import com.nnpcgroup.cosm.entity.FiscalPeriod;
+import com.nnpcgroup.cosm.entity.JointVenture;
 import com.nnpcgroup.cosm.entity.contract.ContractPK;
 import com.nnpcgroup.cosm.entity.forecast.jv.Forecast;
 import com.nnpcgroup.cosm.entity.forecast.jv.ForecastPK;
+import com.nnpcgroup.cosm.entity.forecast.jv.JvForecast;
 import com.nnpcgroup.cosm.exceptions.NoRealizablePriceException;
 
 import java.io.Serializable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.ejb.EJB;
+import javax.ejb.Local;
+import javax.ejb.Stateless;
 import javax.enterprise.context.Dependent;
-import javax.inject.Inject;
 
 /**
- * @param <T>
+ *
  * @author 18359
  */
-@Dependent
-public abstract class JvForecastServicesImpl<T extends Forecast> extends CommonServicesImpl<T> implements JvForecastServices<T>, Serializable {
+
+//@Dependent
+public abstract class JvForecastServicesImpl<T extends JvForecast> extends ForecastServicesImpl<T> implements JvForecastServices<T>, Serializable{
 
     private static final Logger LOG = Logger.getLogger(JvForecastServicesImpl.class.getName());
-
-    @Inject
-    GeneralController genController;
-
-    @EJB
-    FiscalArrangementBean fiscalBean;
+    private static final long serialVersionUID = 8993596753945847377L;
 
     public JvForecastServicesImpl(Class<T> entityClass) {
         super(entityClass);
@@ -43,7 +40,7 @@ public abstract class JvForecastServicesImpl<T extends Forecast> extends CommonS
 
     @Override
     public T computeOpeningStock(T forecast) {
-        Forecast prod = getPreviousMonthProduction(forecast);
+        JvForecast prod = getPreviousMonthProduction(forecast);
         if (prod != null) {
             Double openingStock = prod.getClosingStock();
             Double partnerOpeningStock = prod.getPartnerClosingStock();
@@ -64,7 +61,7 @@ public abstract class JvForecastServicesImpl<T extends Forecast> extends CommonS
         int days = genController.daysOfMonth(periodYear, periodMonth);
         Double grossProd = prodVolume * days;
 
-        LOG.log(Level.INFO, "Gross Forecast = DailyProd * Days => {0} * {1} = {2}", new Object[]{prodVolume, days, grossProd});
+        LOG.log(Level.INFO, "Gross JvForecastServices = DailyProd * Days => {0} * {1} = {2}", new Object[]{prodVolume, days, grossProd});
 
         forecast.setGrossProduction(grossProd);
         return forecast;
@@ -150,6 +147,8 @@ public abstract class JvForecastServicesImpl<T extends Forecast> extends CommonS
         return production;
     }
 
+
+
     @Override
     public T computeAvailability(T production) {
         Double availability, partnerAvailability;
@@ -209,7 +208,6 @@ public abstract class JvForecastServicesImpl<T extends Forecast> extends CommonS
 
         return f;
     }
-    
-    
+
 
 }

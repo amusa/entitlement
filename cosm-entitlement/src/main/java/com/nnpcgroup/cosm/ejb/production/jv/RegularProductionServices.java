@@ -5,7 +5,7 @@
  */
 package com.nnpcgroup.cosm.ejb.production.jv;
 
-import com.nnpcgroup.cosm.entity.contract.RegularContract;
+import com.nnpcgroup.cosm.entity.contract.JvContract;
 import com.nnpcgroup.cosm.entity.production.jv.RegularProduction;
 
 /**
@@ -13,6 +13,6 @@ import com.nnpcgroup.cosm.entity.production.jv.RegularProduction;
  * @author 18359
 
  */
-public interface RegularProductionServices extends JvProductionServices<RegularProduction, RegularContract>{
+public interface RegularProductionServices extends JvProductionServices<RegularProduction, JvContract>{
     
 }

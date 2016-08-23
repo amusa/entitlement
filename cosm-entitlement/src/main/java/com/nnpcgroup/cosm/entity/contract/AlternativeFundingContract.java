@@ -16,7 +16,7 @@ import javax.persistence.Entity;
  */
 @Entity
 @DiscriminatorValue("AF")
-public abstract class AlternativeFundingContract extends Contract{
+public abstract class AlternativeFundingContract extends JvContract {
     
     private static final long serialVersionUID = 8684470740659960243L;
     

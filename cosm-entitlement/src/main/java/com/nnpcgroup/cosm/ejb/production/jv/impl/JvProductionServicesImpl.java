@@ -232,7 +232,7 @@ public abstract class JvProductionServicesImpl<T extends Production, E extends C
         Production prod = getPreviousMonthProduction(production);
         if (prod != null) {
             Double openingStock = prod.getClosingStock();
-            Double partnerOpeningStock = prod.getPartnerOpeningStock();
+            Double partnerOpeningStock = prod.getPartnerClosingStock();
             production.setOpeningStock(openingStock);
             production.setPartnerOpeningStock(partnerOpeningStock);
         } else {

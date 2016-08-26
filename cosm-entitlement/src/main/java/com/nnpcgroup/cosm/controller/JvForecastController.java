@@ -27,14 +27,15 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.enterprise.context.SessionScoped;
 import javax.enterprise.inject.Produces;
 import javax.faces.model.SelectItem;
 import javax.inject.Inject;
+import org.apache.log4j.Level;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 /**
  * @author 18359
@@ -44,7 +45,8 @@ import javax.inject.Inject;
 public class JvForecastController implements Serializable {
 
     private static final long serialVersionUID = -7596150432081506756L;
-    private static final Logger LOG = Logger.getLogger(JvForecastController.class.getName());
+    //private static final Logger LOG = Logger.getLogger(JvForecastController.class.getName());
+    private static final Logger LOG = LogManager.getRootLogger();
 
     //@Inject
     @EJB
@@ -80,16 +82,12 @@ public class JvForecastController implements Serializable {
 
     public JvForecastServices getForecastBean() {
         if (currentContract instanceof CarryContract) {
-            LOG.log(Level.INFO, "Returning CarryForecast bean...{0}", caForecastBean);
             return caForecastBean;
         } else if (currentContract instanceof ModifiedCarryContract) {
-            LOG.log(Level.INFO, "Returning ModifiedCarryForecast bean...{0}", mcaForecastBean);
             return mcaForecastBean;
         } else if (currentContract instanceof JvContract) {
-            LOG.log(Level.INFO, "Returning JvForecastServices bean...{0}", forecastBean);
             return forecastBean;
         } else {
-            LOG.log(Level.INFO, "Returning JvForecastServices bean...{0}", forecastBean);
             return forecastBean;
         }
     }
@@ -104,7 +102,6 @@ public class JvForecastController implements Serializable {
     }
 
     public void setCurrentProduction(JvForecast currentProduction) {
-        LOG.info("ProductionController::setProduction called...");
         this.currentProduction = currentProduction;
         this.currentFiscalArrangement = (currentProduction != null)
                 ? currentProduction.getContract().getFiscalArrangement() : null;
@@ -126,24 +123,20 @@ public class JvForecastController implements Serializable {
     }
 
     public List<JvForecast> getProductions() {
-        LOG.info("ProductionController::getProductions called...");
         loadProductions();
         return productions;
     }
 
     public void setProductions(List<JvForecast> productions) {
-        LOG.info("ProductionController::setProductions called...");
         this.productions = productions;
     }
 
     public String prepareCreate() {
-        LOG.info("prepareCreate called...");
         reset();
         return "forecast-create";
     }
 
     public void destroy() {
-        LOG.log(Level.INFO, "Deleting {0}...", currentProduction);
         persist(JsfUtil.PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("ProductionDeleted"));
         if (!JsfUtil.isValidationFailed()) {
             currentProduction = null;
@@ -182,7 +175,7 @@ public class JvForecastController implements Serializable {
                     // adjforecasts.add(nextForecast);
                     thisForecast = nextForecast;
                 } catch (NoRealizablePriceException rpe) {
-                    Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, rpe);
+                    Logger.getLogger(this.getClass().getName()).log(Level.ERROR, null, rpe);
                     JsfUtil.addErrorMessage(rpe, ResourceBundle.getBundle("/Bundle").getString("RealizablePriceErrorOccured"));
                 }
             }
@@ -213,7 +206,7 @@ public class JvForecastController implements Serializable {
                     JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
                 }
             } catch (Exception ex) {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(this.getClass().getName()).log(Level.ERROR, null, ex);
                 JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
             }
         }
@@ -251,12 +244,12 @@ public class JvForecastController implements Serializable {
         try {
             getForecastBean().enrich(currentProduction);
             LOG.log(Level.INFO,
-                    "Production Enriched::Own entmt={0},Partner entmt={1}",
-                    new Object[]{currentProduction.getOwnShareEntitlement(),
-                            currentProduction.getPartnerShareEntitlement()
-                    });
+                    String.format("Production Enriched::Own entmt=%f, Partner entmt=%f",
+                            new Object[]{currentProduction.getOwnShareEntitlement(),
+                                currentProduction.getPartnerShareEntitlement()
+                            }));
         } catch (NoRealizablePriceException rpe) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, rpe);
+            Logger.getLogger(this.getClass().getName()).log(Level.ERROR, null, rpe);
             JsfUtil.addErrorMessage(rpe, ResourceBundle.getBundle("/Bundle").getString("RealizablePriceErrorOccured"));
         }
     }
@@ -266,7 +259,7 @@ public class JvForecastController implements Serializable {
         try {
             afBean.computeAlternativeFunding(getCurrentAfProduction());
         } catch (NoRealizablePriceException rpe) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, rpe);
+            Logger.getLogger(this.getClass().getName()).log(Level.ERROR, null, rpe);
             JsfUtil.addErrorMessage(rpe, ResourceBundle.getBundle("/Bundle").getString("RealizablePriceErrorOccured"));
         }
     }
@@ -281,7 +274,7 @@ public class JvForecastController implements Serializable {
         try {
             getForecastBean().enrich(currentProduction);
         } catch (NoRealizablePriceException rpe) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, rpe);
+            Logger.getLogger(this.getClass().getName()).log(Level.ERROR, null, rpe);
             JsfUtil.addErrorMessage(rpe, ResourceBundle.getBundle("/Bundle").getString("RealizablePriceErrorOccured"));
         }
     }
@@ -297,18 +290,14 @@ public class JvForecastController implements Serializable {
     }
 
     public void setPeriodYear(Integer periodYear) {
-        LOG.log(Level.INFO, "************JvProductionController::setPeriodYear called with value {0}", periodYear);
         this.periodYear = periodYear;
     }
 
     public Integer getPeriodMonth() {
-        LOG.log(Level.INFO, "************JvProductionController::getPeriodMonth called. returning {0}...", periodMonth);
-
         return periodMonth;
     }
 
     public void setPeriodMonth(Integer periodMonth) {
-        LOG.log(Level.INFO, "************JvProductionController::setPeriodMonth called with value {0}", periodMonth);
         this.periodMonth = periodMonth;
     }
 
@@ -403,20 +392,13 @@ public class JvForecastController implements Serializable {
     }
 
     public void currentContractChanged() {// throws Exception {
-        LOG.log(Level.INFO, "Contract Selected...{0}", currentContract);
-
         if (currentContract instanceof CarryContract) {
-            LOG.log(Level.INFO, "Carry Contract Selected...{0}", currentContract);
             currentProduction = new CarryForecast();
         } else if (currentContract instanceof ModifiedCarryContract) {
-            LOG.log(Level.INFO, "Modified Carry Contract Selected...{0}", currentContract);
             currentProduction = new ModifiedCarryForecast();
-
         } else if (currentContract instanceof JvContract) {
-            LOG.log(Level.INFO, "Regular Contract Selected...{0}", currentContract);
             currentProduction = new JvForecast();
         } else {
-            LOG.log(Level.INFO, "Undefined contract selection...{0}", currentContract);
             //throw new Exception("Undefined contract type");
             //currentProduction = new JvForecastServices();
 

@@ -6,20 +6,11 @@
 package com.nnpcgroup.cosm.ejb.forecast.jv.impl;
 
 import com.nnpcgroup.cosm.ejb.forecast.jv.JvForecastServices;
-import com.nnpcgroup.cosm.entity.EquityType;
-import com.nnpcgroup.cosm.entity.FiscalArrangement;
-import com.nnpcgroup.cosm.entity.FiscalPeriod;
-import com.nnpcgroup.cosm.entity.JointVenture;
-import com.nnpcgroup.cosm.entity.contract.ContractPK;
-import com.nnpcgroup.cosm.entity.forecast.jv.ForecastPK;
 import com.nnpcgroup.cosm.entity.forecast.jv.JvForecast;
-import com.nnpcgroup.cosm.exceptions.NoRealizablePriceException;
 
 import javax.ejb.Local;
 import javax.ejb.Stateless;
-import javax.enterprise.context.Dependent;
 import java.io.Serializable;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -28,7 +19,6 @@ import java.util.logging.Logger;
  */
 @Stateless
 @Local(JvForecastServices.class)
-//@Dependent
 public class JvForecastServicesBean extends JvForecastServicesImpl<JvForecast> implements JvForecastServices<JvForecast>, Serializable{
 
     private static final Logger LOG = Logger.getLogger(JvForecastServicesBean.class.getName());

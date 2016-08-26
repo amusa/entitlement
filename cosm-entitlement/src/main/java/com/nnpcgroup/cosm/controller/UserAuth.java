@@ -158,8 +158,8 @@ public class UserAuth implements Serializable {
         }
 
         if (!password.equals(confirmPassword)) {
-
             FacesMessage msg = new FacesMessage("Password must match confirm password");
+            LOG.info("Password must match confirm password");
             msg.setSeverity(FacesMessage.SEVERITY_ERROR);
             fc.addMessage(passwordId, msg);
             fc.renderResponse();

@@ -80,21 +80,16 @@ public class JvProductionController implements Serializable {
      * Creates a new instance of JvController
      */
     public JvProductionController() {
-        LOG.info("JvActualProductionController::constructor activated...");
     }
 
     public JvProductionServices getProductionBean() {
         if (currentContract instanceof JvContract) {
-            LOG.log(Level.INFO, "Returning RegularProduction bean...{0}", regProductionBean);
             return regProductionBean;
         } else if (currentContract instanceof CarryContract) {
-            LOG.log(Level.INFO, "Returning CarryProduction bean...{0}", caProductionBean);
             return caProductionBean;
         } else if (currentContract instanceof ModifiedCarryContract) {
-            LOG.log(Level.INFO, "Returning ModifiedCarryProduction bean...{0}", mcaProductionBean);
             return mcaProductionBean;
         } else {
-            LOG.log(Level.INFO, "Returning Defualt Production bean...{0}", productionBean);
             return productionBean;
         }
     }
@@ -105,12 +100,10 @@ public class JvProductionController implements Serializable {
     }
 
     public Production getCurrentProduction() {
-        LOG.info("JvActualProductionController::getProduction called...");
         return currentProduction;
     }
 
     public void setCurrentProduction(Production currentProduction) {
-        LOG.info("JvActualProductionController::setProduction called...");
         this.currentProduction = currentProduction;
 
         ContractPK contractPK;// = new ContractPK();
@@ -147,7 +140,6 @@ public class JvProductionController implements Serializable {
     }
 
     public void currentContractChanged() throws Exception {
-        LOG.log(Level.INFO, "Contract Selected...{0}", currentContract);
         if (currentContract instanceof JvContract) {
             currentProduction = new RegularProduction();
         } else if (currentContract instanceof CarryContract) {
@@ -181,12 +173,10 @@ public class JvProductionController implements Serializable {
     }
 
     public List<Production> getProductions() {
-        LOG.info("JvActualProductionController::getProductions called...");
         return productions;
     }
 
     public void setProductions(List<Production> productions) {
-        LOG.info("JvActualProductionController::setProductions called...");
         this.productions = productions;
     }
 
@@ -245,7 +235,7 @@ public class JvProductionController implements Serializable {
     }
 
     public void liftingChanged() {
-        LOG.log(Level.INFO, "LIfting changed...");
+        LOG.log(Level.INFO, "Lifting changed...");
         getProductionBean().liftingChanged(currentProduction);
 
 //        Double openingStock = currentProduction.getOpeningStock();
@@ -266,7 +256,6 @@ public class JvProductionController implements Serializable {
 //
 //            throw new ValidatorException(msg);
 //        }
-
     }
 
     public void openingStockChanged() {
@@ -290,7 +279,6 @@ public class JvProductionController implements Serializable {
     }
 
     public void setPeriodYear(Integer periodYear) {
-        LOG.log(Level.INFO, "************JvActualProductionController::setPeriodYear called with value {0}", periodYear);
         this.periodYear = periodYear;
     }
 
@@ -299,7 +287,6 @@ public class JvProductionController implements Serializable {
     }
 
     public void setPeriodMonth(Integer periodMonth) {
-        LOG.log(Level.INFO, "************JvActualProductionController::setPeriodMonth called with value {0}", periodMonth);
         this.periodMonth = periodMonth;
     }
 
@@ -312,7 +299,6 @@ public class JvProductionController implements Serializable {
     }
 
     public SelectItem[] getContractSelectOne() {
-
         List<Contract> contracts = null;
 
         if (currentFiscalArrangement != null) {
@@ -331,7 +317,7 @@ public class JvProductionController implements Serializable {
     }
 
     public void actualize(Forecast forecast) throws Exception {
-        LOG.log(Level.INFO, "************actualizing {0}...", forecast);
+        LOG.log(Level.INFO, "Actualizing {0}...", forecast);
         reset();
         ContractPK cPK = forecast.getContract().getContractPK();
         Contract contract = contractBean.find(cPK); //forecast.getContract();
@@ -346,10 +332,9 @@ public class JvProductionController implements Serializable {
                 forecast.getContract().getContractPK()
         );
         production = (Production) getProductionBean().find(pPK);
-        LOG.log(Level.INFO, "************findByContractStreamPeriod returning {0}...", currentProduction);
 
         if (production == null) {
-            LOG.log(Level.INFO, "************actualizing returning new JV Production instance...");
+            LOG.log(Level.INFO, "Actualizing: Creating new JV Production instance...");
 
 //TODO:find better way to evaluate datatype
             if (forecast instanceof ModifiedCarryForecast) {

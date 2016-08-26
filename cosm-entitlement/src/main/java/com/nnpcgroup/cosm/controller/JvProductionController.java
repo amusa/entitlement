@@ -248,24 +248,24 @@ public class JvProductionController implements Serializable {
         LOG.log(Level.INFO, "LIfting changed...");
         getProductionBean().liftingChanged(currentProduction);
 
-        Double openingStock = currentProduction.getOpeningStock();
-        Double entitlement = currentProduction.getOwnShareEntitlement();
-        Double lifting = currentProduction.getLifting();
-
-        Double partnerOpeningStock = currentProduction.getPartnerOpeningStock();
-        Double partnerEntitlement = currentProduction.getPartnerShareEntitlement();
-        Double partnerLifting = currentProduction.getPartnerLifting();
-
-        Double bucket = openingStock + entitlement + partnerOpeningStock + partnerEntitlement;
-
-        if (bucket - lifting - partnerLifting < 0) {
-            FacesMessage msg
-                    = new FacesMessage("Stock Lifting validation failed!",
-                            "Please check your availability and lifting volume");
-            msg.setSeverity(FacesMessage.SEVERITY_ERROR);
-
-            throw new ValidatorException(msg);
-        }
+//        Double openingStock = currentProduction.getOpeningStock();
+//        Double entitlement = currentProduction.getOwnShareEntitlement();
+//        Double lifting = currentProduction.getLifting();
+//
+//        Double partnerOpeningStock = currentProduction.getPartnerOpeningStock();
+//        Double partnerEntitlement = currentProduction.getPartnerShareEntitlement();
+//        Double partnerLifting = currentProduction.getPartnerLifting();
+//
+//        Double bucket = openingStock + entitlement + partnerOpeningStock + partnerEntitlement;
+//
+//        if (bucket - lifting - partnerLifting < 0) {
+//            FacesMessage msg
+//                    = new FacesMessage("Stock Lifting validation failed!",
+//                            "Please check your availability and lifting volume");
+//            msg.setSeverity(FacesMessage.SEVERITY_ERROR);
+//
+//            throw new ValidatorException(msg);
+//        }
 
     }
 

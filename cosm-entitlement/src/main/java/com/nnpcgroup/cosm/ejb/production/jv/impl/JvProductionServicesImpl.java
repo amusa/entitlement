@@ -93,11 +93,11 @@ public abstract class JvProductionServicesImpl<T extends Production, E extends C
         Double partnerEntitlement = production.getPartnerShareEntitlement();
         Double openingStock = production.getOpeningStock();
         Double partnerOpeningStock = production.getPartnerOpeningStock();
-        Double overlift = production.getOverlift() != null ? production.getOverlift() : 0.0;
-        Double partnerOverlift = production.getPartnerOverlift() != null ? production.getPartnerOverlift() : 0.0;
+        //Double overlift = production.getOverlift() != null ? production.getOverlift() : 0.0;
+        //Double partnerOverlift = production.getPartnerOverlift() != null ? production.getPartnerOverlift() : 0.0;
 
-        availability = ownEntitlement + openingStock + overlift;
-        partnerAvailability = partnerEntitlement + partnerOpeningStock + partnerOverlift;
+        availability = ownEntitlement + openingStock;//+ overlift;
+        partnerAvailability = partnerEntitlement + partnerOpeningStock;// + partnerOverlift;
 
         production.setAvailability(availability);
         production.setPartnerAvailability(partnerAvailability);
@@ -125,15 +125,17 @@ public abstract class JvProductionServicesImpl<T extends Production, E extends C
     public T liftingChanged(T production) {
         LOG.log(Level.INFO, "Lifting changed {0}...", production);
         return computeClosingStock(
-                computeAvailability(
-                        computeOverlift(
-                                computeClosingStock(
-                                        computeAvailability(
-                                                overLiftReset(production)
-                                        )
-                                )
-                        )
-                )
+                //                computeAvailability(
+                //                        computeOverlift(
+                //                                computeClosingStock(
+                //                                        computeAvailability(
+                //                                                overLiftReset(
+                production
+        //                                                )
+        //                                        )
+        //                                )
+        //                        )
+        //                )
         );
     }
 

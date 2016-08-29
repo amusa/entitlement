@@ -12,8 +12,6 @@ import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.IdClass;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
@@ -56,6 +54,12 @@ public abstract class Production implements Serializable {
     private Double stockAdjustment;
     private Double overlift;
     private Double partnerOverlift;
+    private Double bswLoss;
+    private Double meteringInacuracyLoss;
+    private Double theftLoss;
+    private Double terminalAdjustment;
+    private Double productionAdjustment;
+    private Double unitization;
 
     public Production() {
     }
@@ -65,7 +69,6 @@ public abstract class Production implements Serializable {
 //        this.periodMonth = periodMonth;
 //        this.contract = contract;
 //    }
-
     @EmbeddedId
     public ProductionPK getProductionPK() {
         return productionPK;
@@ -98,12 +101,11 @@ public abstract class Production implements Serializable {
 //        @JoinColumn(name = "FISCALARRANGEMENTID", referencedColumnName = "FISCALARRANGEMENTID", insertable = false, updatable = false),
 //        @JoinColumn(name = "CRUDETYPECODE", referencedColumnName = "CRUDETYPECODE", insertable = false, updatable = false)
 //    })
-        
     @ManyToOne
     @MapsId("contract")
     @JoinColumns({
-            @JoinColumn(name = "FISCALARRANGEMENTID", referencedColumnName = "FISCALARRANGEMENTID", insertable = false, updatable = false),
-            @JoinColumn(name = "CRUDETYPECODE", referencedColumnName = "CRUDETYPECODE", insertable = false, updatable = false)
+        @JoinColumn(name = "FISCALARRANGEMENTID", referencedColumnName = "FISCALARRANGEMENTID", insertable = false, updatable = false),
+        @JoinColumn(name = "CRUDETYPECODE", referencedColumnName = "CRUDETYPECODE", insertable = false, updatable = false)
     })
     public Contract getContract() {
         return contract;
@@ -248,9 +250,63 @@ public abstract class Production implements Serializable {
         Double netProduction;
         Double gp = grossProduction != null ? grossProduction : 0;
         Double sa = stockAdjustment != null ? stockAdjustment : 0;
+        Double bsw = bswLoss != null ? bswLoss : 0;
+        Double metering = meteringInacuracyLoss != null ? meteringInacuracyLoss : 0;
+        Double theft = theftLoss != null ? theftLoss : 0;
+        Double termAdj = terminalAdjustment != null ? terminalAdjustment : 0;
+        Double prodAdj = productionAdjustment != null ? productionAdjustment : 0;
+        Double unit = unitization != null ? unitization : 0;
 
-        netProduction = gp + sa;
+        netProduction = gp + sa - bsw - metering - theft - termAdj + prodAdj + unit;
         return netProduction;
+    }
+
+    public Double getBswLoss() {
+        return bswLoss;
+    }
+
+    public void setBswLoss(Double bswLoss) {
+        this.bswLoss = bswLoss;
+    }
+
+    public Double getMeteringInacuracyLoss() {
+        return meteringInacuracyLoss;
+    }
+
+    public void setMeteringInacuracyLoss(Double meteringInacuracyLoss) {
+        this.meteringInacuracyLoss = meteringInacuracyLoss;
+    }
+
+    public Double getTheftLoss() {
+        return theftLoss;
+    }
+
+    public void setTheftLoss(Double theftLoss) {
+        this.theftLoss = theftLoss;
+    }
+
+    public Double getTerminalAdjustment() {
+        return terminalAdjustment;
+    }
+
+    public void setTerminalAdjustment(Double terminalAdjustment) {
+        this.terminalAdjustment = terminalAdjustment;
+    }
+
+    public Double getProductionAdjustment() {
+        return productionAdjustment;
+    }
+
+    public void setProductionAdjustment(Double productionAdjustment) {
+        this.productionAdjustment = productionAdjustment;
+    }
+
+    public Double getUnitization() {
+        return unitization;
+    }
+
+    public void setUnitization(Double unitization) {
+        this.unitization = unitization;
     }
 
     @Override

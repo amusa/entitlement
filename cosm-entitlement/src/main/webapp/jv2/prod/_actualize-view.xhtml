@@ -100,8 +100,8 @@
                                                 </h:inputText>
                                             </div>
                                             <div class="col-md-4 m-b-15">
-                                                <h:outputLabel value="Stock Adjustment" for="stockAdjustment" />
-                                                <h:inputText id="stockAdjustment" value="#{jvActualController.currentProduction.stockAdjustment}" title="Stock Adjustment" class="form-control input-sm" >
+                                                <h:outputLabel value="Stock Adjustment (+/-)" for="stockAdjustment" />
+                                                <h:inputText id="stockAdjustment" value="#{jvActualController.currentProduction.stockAdjustment}" title="Stock Adjustment (+/-)" class="form-control input-sm" >
                                                     <f:convertNumber pattern="###,###,###.####" />
                                                 </h:inputText>
                                             </div>
@@ -109,6 +109,58 @@
                                                 <h:outputLabel value="Net Prod" for="netVolume" />
                                                 <h:inputText id="netVolume" value="#{jvActualController.currentProduction.netProduction}" title="Net Prod Volume" class="form-control input-sm" >
                                                     <f:convertNumber pattern="###,###,###.####" />                                                    
+                                                </h:inputText>
+                                            </div>
+                                        </div>
+                                        <div class="row">                                            
+                                            <div class="col-md-4 m-b-15">
+                                                <h:outputLabel value="BS&amp;W Loss (-)" for="bswLoss" />
+                                                <h:inputText id="bswLoss" value="#{jvActualController.currentProduction.bswLoss}" title="BS&amp;W Loss (-)" class="form-control input-sm" >
+                                                    <f:convertNumber pattern="###,###,###.####" />
+                                                    <f:ajax event="change" listener="#{jvActualController.stockAdjustmentChanged}"
+                                                            render="netVolume carryOil carryOilCum sharedOil sharedOilCum openingStock ownShareEntitlement closingStock lifting cargoes availability ptnrOpeningStock ptnrEntitlement ptnrClosingStock ptnrLifting ptnrCargoes ptnrAvailability ccc ccca cte ctr rce cor ignm cccaCum cteCum ctrCum rceCum ignmCum corCum"/>
+                                                </h:inputText>
+                                            </div>
+                                            <div class="col-md-4 m-b-15">
+                                                <h:outputLabel value="Metering Inaccuracy (-)" for="meteringInac" />
+                                                <h:inputText id="meteringInac" value="#{jvActualController.currentProduction.meteringInacuracyLoss}" title="Metering Inaccuracy (-)" class="form-control input-sm" >
+                                                    <f:convertNumber pattern="###,###,###.####" />
+                                                    <f:ajax event="change" listener="#{jvActualController.stockAdjustmentChanged}"
+                                                            render="netVolume carryOil carryOilCum sharedOil sharedOilCum openingStock ownShareEntitlement closingStock lifting cargoes availability ptnrOpeningStock ptnrEntitlement ptnrClosingStock ptnrLifting ptnrCargoes ptnrAvailability ccc ccca cte ctr rce cor ignm cccaCum cteCum ctrCum rceCum ignmCum corCum"/>
+                                                </h:inputText>
+                                            </div>
+                                            <div class="col-md-4 m-b-15">
+                                                <h:outputLabel value="Theft Loss (-)" for="theft" />
+                                                <h:inputText id="theft" value="#{jvActualController.currentProduction.theftLoss}" title="Theft Loss (-)" class="form-control input-sm" >
+                                                    <f:convertNumber pattern="###,###,###.####" />
+                                                    <f:ajax event="change" listener="#{jvActualController.stockAdjustmentChanged}"
+                                                            render="netVolume carryOil carryOilCum sharedOil sharedOilCum openingStock ownShareEntitlement closingStock lifting cargoes availability ptnrOpeningStock ptnrEntitlement ptnrClosingStock ptnrLifting ptnrCargoes ptnrAvailability ccc ccca cte ctr rce cor ignm cccaCum cteCum ctrCum rceCum ignmCum corCum"/>
+                                                </h:inputText>
+                                            </div>
+                                        </div>
+                                        <div class="row">                                            
+                                            <div class="col-md-4 m-b-15">
+                                                <h:outputLabel value="Terminal Adjustment (-)" for="termAdj" />
+                                                <h:inputText id="termAdj" value="#{jvActualController.currentProduction.terminalAdjustment}" title="Terminal Adjustment (-)" class="form-control input-sm" >
+                                                    <f:convertNumber pattern="###,###,###.####" />
+                                                    <f:ajax event="change" listener="#{jvActualController.stockAdjustmentChanged}"
+                                                            render="netVolume carryOil carryOilCum sharedOil sharedOilCum openingStock ownShareEntitlement closingStock lifting cargoes availability ptnrOpeningStock ptnrEntitlement ptnrClosingStock ptnrLifting ptnrCargoes ptnrAvailability ccc ccca cte ctr rce cor ignm cccaCum cteCum ctrCum rceCum ignmCum corCum"/>
+                                                </h:inputText>
+                                            </div>
+                                            <div class="col-md-4 m-b-15">
+                                                <h:outputLabel value="Production Adjustment (+)" for="prodAdj" />
+                                                <h:inputText id="prodAdj" value="#{jvActualController.currentProduction.productionAdjustment}" title="Production Adjustment (+)" class="form-control input-sm" >
+                                                    <f:convertNumber pattern="###,###,###.####" />
+                                                    <f:ajax event="change" listener="#{jvActualController.stockAdjustmentChanged}"
+                                                            render="netVolume carryOil carryOilCum sharedOil sharedOilCum openingStock ownShareEntitlement closingStock lifting cargoes availability ptnrOpeningStock ptnrEntitlement ptnrClosingStock ptnrLifting ptnrCargoes ptnrAvailability ccc ccca cte ctr rce cor ignm cccaCum cteCum ctrCum rceCum ignmCum corCum"/>
+                                                </h:inputText>
+                                            </div>
+                                            <div class="col-md-4 m-b-15">
+                                                <h:outputLabel value="Unitization (+)" for="unitization" />
+                                                <h:inputText id="unitization" value="#{jvActualController.currentProduction.unitization}" title="Unitization (+)" class="form-control input-sm" >
+                                                    <f:convertNumber pattern="###,###,###.####" />
+                                                    <f:ajax event="change" listener="#{jvActualController.stockAdjustmentChanged}"
+                                                            render="netVolume carryOil carryOilCum sharedOil sharedOilCum openingStock ownShareEntitlement closingStock lifting cargoes availability ptnrOpeningStock ptnrEntitlement ptnrClosingStock ptnrLifting ptnrCargoes ptnrAvailability ccc ccca cte ctr rce cor ignm cccaCum cteCum ctrCum rceCum ignmCum corCum"/>
                                                 </h:inputText>
                                             </div>
                                         </div>

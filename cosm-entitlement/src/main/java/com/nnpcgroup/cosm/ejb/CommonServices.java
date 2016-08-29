@@ -20,38 +20,39 @@ import java.util.List;
  */
 public interface CommonServices<T> extends AbstractCrudServices<T> {
 
-   // public List<T> findByYearAndMonth(int year, int month);
+    public List<T> findByYearAndMonth(int year, int month);
+
+    public List<T> findAnnualProduction(int year, FiscalArrangement fa);
 
     public T findByContractPeriod(int year, int month, Contract cs);
 
     public List<T> findByContractPeriod(int year, int month, FiscalArrangement fa);
-        
+
     public T computeEntitlement(T production);
 
 //    public T createInstance();
-
     public T computeOpeningStock(T production);
 
     public T getPreviousMonthProduction(T production);
-    
+
     public T getNextMonthProduction(T production);
-    
+
     public FiscalPeriod getPreviousFiscalPeriod(FiscalPeriod fp);
-    
+
     public FiscalPeriod getPreviousFiscalPeriod(int year, int month);
-    
+
     public FiscalPeriod getNextFiscalPeriod(int year, int month);
 
     public T computeClosingStock(T production);
-        
+
     public T openingStockChanged(T production);
 
     public T computeAvailability(T production);
 
     public T computeLifting(T production);
-    
+
     public T enrich(T production) throws NoRealizablePriceException;
-    
+
     public List<T> getTerminalProduction(int year, int month, Terminal terminal);
-            
+
 }

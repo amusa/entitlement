@@ -182,13 +182,16 @@ public class JvProductionController implements Serializable {
 
     public void loadProductions() {
         reset();
-        if (periodYear != null && periodMonth != null) {
-            if (currentFiscalArrangement == null) {
-                // productions = getProductionBean().findByYearAndMonth(periodYear, periodMonth);
-            } else {
-                productions = getProductionBean().findByContractPeriod(periodYear, periodMonth, currentFiscalArrangement);
+        if (periodYear != null) {
+            if (periodMonth != null) {
+                if (currentFiscalArrangement == null) {
+                    productions = getProductionBean().findByYearAndMonth(periodYear, periodMonth);
+                } else {
+                    productions = getProductionBean().findByContractPeriod(periodYear, periodMonth, currentFiscalArrangement);
+                }
+            } else if (currentFiscalArrangement != null) {
+                productions = getProductionBean().findAnnualProduction(periodYear, currentFiscalArrangement);           
             }
-
         }
     }
 

@@ -49,31 +49,32 @@ public abstract class CommonServicesImpl<T> extends AbstractCrudServicesImpl<T> 
         return em;
     }
 
-//    @Override
-//    public List<T> findByYearAndMonth(int year, int month) {
-//        log.log(Level.INFO, "Parameters: year={0}, month={1}", new Object[]{year, month});
-//
-//        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
-//
-//        List<T> productions;
-//
-//        CriteriaQuery cq = cb.createQuery();
-//        Root e = cq.from(entityClass);
-//        try {
-//            cq.where(
-//                    cb.and(cb.equal(e.get("periodYear"), year),
-//                            cb.equal(e.get("periodMonth"), month)
-//                    ));
-//
-//            Query query = getEntityManager().createQuery(cq);
-//
-//            productions = query.getResultList();
-//        } catch (NoResultException nre) {
-//            return null;
-//        }
-//
-//        return productions;
-//    }
+    @Override
+    public List<T> findByYearAndMonth(int year, int month) {
+        LOG.log(Level.INFO, String.format("Parameters: year=%d, month=%d", new Object[]{year, month}));
+
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+
+        List<T> productions;
+
+        CriteriaQuery cq = cb.createQuery();
+        Root e = cq.from(entityClass);
+        try {
+            cq.where(
+                    cb.and(cb.equal(e.get("periodYear"), year),
+                            cb.equal(e.get("periodMonth"), month)
+                    ));
+
+            Query query = getEntityManager().createQuery(cq);
+
+            productions = query.getResultList();
+        } catch (NoResultException nre) {
+            return null;
+        }
+
+        return productions;
+    }
+
     @Override
     public T findByContractPeriod(int year, int month, Contract cs) {
         CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
@@ -123,6 +124,30 @@ public abstract class CommonServicesImpl<T> extends AbstractCrudServicesImpl<T> 
 
         return productions;
 
+    }
+
+    @Override
+    public List<T> findAnnualProduction(int year, FiscalArrangement fa) {
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+
+        List<T> productions;
+
+        CriteriaQuery cq = cb.createQuery();
+        Root<T> e = cq.from(entityClass);
+        try {
+
+            cq.select(e).where(
+                    cb.and(cb.equal(e.get("periodYear"), year),
+                            cb.equal(e.get("contract").get("fiscalArrangement"), fa)
+                    ));
+            Query query = getEntityManager().createQuery(cq);
+
+            productions = query.getResultList();
+        } catch (NoResultException nre) {
+            return null;
+        }
+
+        return productions;
     }
 
     @Override

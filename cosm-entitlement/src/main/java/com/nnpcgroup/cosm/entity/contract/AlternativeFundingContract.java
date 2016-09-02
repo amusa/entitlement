@@ -9,6 +9,7 @@ import com.nnpcgroup.cosm.entity.CrudeType;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 
 /**
  *
@@ -17,9 +18,10 @@ import javax.persistence.Entity;
 @Entity
 @DiscriminatorValue("AF")
 public abstract class AlternativeFundingContract extends JvContract {
-    
+
     private static final long serialVersionUID = 8684470740659960243L;
-    
+
+    private JvContract jvContract;
     private Double sharedOilRatio;
     private Double terminalPeriod;
     private Double terminalSharedOil;
@@ -54,5 +56,14 @@ public abstract class AlternativeFundingContract extends JvContract {
     public void setTerminalSharedOil(Double terminalSharedOil) {
         this.terminalSharedOil = terminalSharedOil;
     }
-    
+
+    @ManyToOne
+    public JvContract getJvContract() {
+        return jvContract;
+    }
+
+    public void setJvContract(JvContract jvContract) {
+        this.jvContract = jvContract;
+    }
+
 }

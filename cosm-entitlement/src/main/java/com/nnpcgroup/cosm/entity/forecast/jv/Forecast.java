@@ -5,16 +5,12 @@
  */
 package com.nnpcgroup.cosm.entity.forecast.jv;
 
-import com.nnpcgroup.cosm.entity.CrudeType;
-import com.nnpcgroup.cosm.entity.FiscalArrangement;
 import com.nnpcgroup.cosm.entity.contract.Contract;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.logging.Logger;
 import javax.persistence.*;
 //import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 
 /**
  * @author 18359

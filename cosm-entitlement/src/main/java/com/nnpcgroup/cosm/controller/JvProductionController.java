@@ -236,6 +236,10 @@ public class JvProductionController implements Serializable {
                     currentProduction.getStockAdjustment()});
 
     }
+    
+    public void operatorDeclaredVolumeListener(){
+        getProductionBean().computeOperatorDeclaredEquity(currentProduction);        
+    }
 
     public void liftingChanged() {
         LOG.log(Level.INFO, "Lifting changed...");

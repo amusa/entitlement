@@ -214,11 +214,16 @@ public class JvForecastController implements Serializable {
 
     public void loadProductions() {
         reset();
-        if (periodYear != null && periodMonth != null) {
-            if (currentFiscalArrangement == null) {
-                //  productions = getForecastBean().findByYearAndMonth(periodYear, periodMonth);
-            } else {
-                productions = getForecastBean().findByContractPeriod(periodYear, periodMonth, currentFiscalArrangement);
+
+        if (periodYear != null) {
+            if (periodMonth != null) {
+                if (currentFiscalArrangement == null) {
+                    productions = getForecastBean().findByYearAndMonth(periodYear, periodMonth);
+                } else {
+                    productions = getForecastBean().findByContractPeriod(periodYear, periodMonth, currentFiscalArrangement);
+                }
+            } else if (currentFiscalArrangement != null) {
+                productions = getForecastBean().findAnnualProduction(periodYear, currentFiscalArrangement);
             }
         }
     }
@@ -267,6 +272,10 @@ public class JvForecastController implements Serializable {
     public void openingStockChanged() {
         LOG.log(Level.INFO, "Opening Stock changed...");
         getForecastBean().openingStockChanged(currentProduction);
+    }
+
+    public void liftingChanged() {
+        getForecastBean().computeClosingStock(currentProduction);
     }
 
     public void resetDefaults() {

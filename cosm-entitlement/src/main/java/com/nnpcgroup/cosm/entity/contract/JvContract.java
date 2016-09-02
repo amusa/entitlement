@@ -7,10 +7,8 @@ package com.nnpcgroup.cosm.entity.contract;
 
 import com.nnpcgroup.cosm.entity.CrudeType;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
-import com.nnpcgroup.cosm.entity.forecast.jv.ForecastEntitlement;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -22,6 +20,7 @@ public class JvContract extends Contract {
 
     private static final long serialVersionUID = -6307338449430627486L;
 
+    private List<AlternativeFundingContract> alternativeFundingContracts;
 
     public JvContract() {
     }
@@ -30,5 +29,13 @@ public class JvContract extends Contract {
         super(fiscalArrangement, crudeType);
     }
 
+    @OneToMany(mappedBy = "jvContract")
+    public List<AlternativeFundingContract> getAlternativeFundingContracts() {
+        return alternativeFundingContracts;
+    }
+
+    public void setAlternativeFundingContracts(List<AlternativeFundingContract> alternativeFundingContracts) {
+        this.alternativeFundingContracts = alternativeFundingContracts;
+    }
 
 }

@@ -60,6 +60,9 @@ public abstract class Production implements Serializable {
     private Double terminalAdjustment;
     private Double productionAdjustment;
     private Double unitization;
+    private Double operatorDeclaredVolume;
+    private Double operatorDeclaredOwnAvailability;
+    private Double operatorDeclaredPartnerAvailability;
 
     public Production() {
     }
@@ -307,6 +310,54 @@ public abstract class Production implements Serializable {
 
     public void setUnitization(Double unitization) {
         this.unitization = unitization;
+    }
+
+    public Double getOperatorDeclaredVolume() {
+        return operatorDeclaredVolume;
+    }
+
+    public void setOperatorDeclaredVolume(Double operatorDeclaredVolume) {
+        this.operatorDeclaredVolume = operatorDeclaredVolume;
+    }
+
+    @Transient
+    public Double getTotalAvailability() {
+        return availability + partnerAvailability;
+    }
+
+    @Transient
+    public Double getOwnEquityRatio() {
+        if (operatorDeclaredVolume == null) {
+            return null;
+        }
+
+        return availability / getTotalAvailability();
+
+    }
+
+    @Transient
+    public Double getPartnerEquityRatio() {
+        if (operatorDeclaredVolume == null) {
+            return null;
+        }
+
+        return partnerAvailability / getTotalAvailability();
+    }
+
+    public Double getOperatorDeclaredOwnAvailability() {
+        return operatorDeclaredOwnAvailability;
+    }
+
+    public void setOperatorDeclaredOwnAvailability(Double operatorDeclaredOwnAvailability) {
+        this.operatorDeclaredOwnAvailability = operatorDeclaredOwnAvailability;
+    }
+
+    public Double getOperatorDeclaredPartnerAvailability() {
+        return operatorDeclaredPartnerAvailability;
+    }
+
+    public void setOperatorDeclaredPartnerAvailability(Double operatorDeclaredPartnerAvailability) {
+        this.operatorDeclaredPartnerAvailability = operatorDeclaredPartnerAvailability;
     }
 
     @Override

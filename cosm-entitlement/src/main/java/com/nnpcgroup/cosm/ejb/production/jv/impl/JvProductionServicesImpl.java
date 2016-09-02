@@ -108,8 +108,16 @@ public abstract class JvProductionServicesImpl<T extends Production, E extends C
     @Override
     public T computeClosingStock(T production) {
         Double closingStock, partnerClosingStock;
-        Double availability = production.getAvailability();
-        Double partnerAvailability = production.getPartnerAvailability();
+        Double availability, partnerAvailability;
+
+        if (production.getOperatorDeclaredVolume() == null) {
+            availability = production.getAvailability();
+            partnerAvailability = production.getPartnerAvailability();
+        } else {
+            availability = production.getOperatorDeclaredOwnAvailability();
+            partnerAvailability = production.getOperatorDeclaredPartnerAvailability();
+        }
+
         Double lifting = production.getLifting();
         Double partnerLifting = production.getPartnerLifting();
 
@@ -176,6 +184,26 @@ public abstract class JvProductionServicesImpl<T extends Production, E extends C
         );
     }
 
+    @Override
+    public T computeOperatorDeclaredEquity(T production) {
+        if (production.getOperatorDeclaredVolume() == null) {
+            production.setOperatorDeclaredOwnAvailability(null);
+            production.setOperatorDeclaredPartnerAvailability(null);
+
+        } else {
+            Double operatorVol = production.getOperatorDeclaredVolume();
+            Double ownAvail2 = operatorVol * production.getOwnEquityRatio();
+            Double partnerAvail2 = operatorVol * production.getPartnerEquityRatio();
+
+            production.setOperatorDeclaredOwnAvailability(ownAvail2);
+            production.setOperatorDeclaredPartnerAvailability(partnerAvail2);
+        }
+
+        return computeClosingStock(
+                computeLifting(production)
+        );
+    }
+
     public T overLiftReset(T production) {
         production.setOverlift(null);
         production.setPartnerOverlift(null);
@@ -186,8 +214,15 @@ public abstract class JvProductionServicesImpl<T extends Production, E extends C
     public T computeLifting(T production) {
         Double liftableVolume, partnerLiftableVolume;
         Integer cargoes, partnerCargoes;
-        Double availability = production.getAvailability();
-        Double partnerAvailability = production.getPartnerAvailability();
+        Double availability, partnerAvailability;
+
+        if (production.getOperatorDeclaredVolume() == null) {
+            availability = production.getAvailability();
+            partnerAvailability = production.getPartnerAvailability();
+        } else {
+            availability = production.getOperatorDeclaredOwnAvailability();
+            partnerAvailability = production.getOperatorDeclaredPartnerAvailability();
+        }
 
         cargoes = (int) (availability / 950000.0);
         partnerCargoes = (int) (partnerAvailability / 950000.0);

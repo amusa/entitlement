@@ -292,11 +292,12 @@
 
                                 <div class="row">
                                     <div class="col-md-4 m-b-15">
-                                        <h:outputLabel value="Liftable Vol (Nom)" for="lifting" />
-                                        <h:outputLabel id="lifting" value="#{jvProdController.currentProduction.lifting}" title="Lifting (Actual)"
-                                                       class="form-control input-sm">
+                                        <h:outputLabel value="Exportable Vol (Nom)" for="lifting" />
+                                        <h:inputText id="lifting" value="#{jvProdController.currentProduction.lifting}" title="Lifting (Actual)"
+                                                     class="form-control input-sm">
                                             <f:convertNumber pattern="###,###,###.####" />
-                                        </h:outputLabel>
+                                            <f:ajax event="change" listener="#{jvProdController.liftingChanged}" render="@form"/>
+                                        </h:inputText>
                                     </div>
                                     <div class="col-md-4 m-b-15">
                                         <h:outputLabel value="Lifting Cargoes" for="cargoes" />
@@ -350,6 +351,7 @@
                                         <h:inputText id="ptnrLifting" value="#{jvProdController.currentProduction.partnerLifting}" title="Lifting (Actual)"
                                                      class="form-control input-sm">
                                             <f:convertNumber pattern="###,###,###.####" />
+                                            <f:ajax event="change" listener="#{jvProdController.liftingChanged}" render="@form"/>
                                         </h:inputText>
                                     </div>
                                     <div class="col-md-4 m-b-15">

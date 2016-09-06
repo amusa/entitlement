@@ -190,7 +190,7 @@ public class JvProductionController implements Serializable {
                     productions = getProductionBean().findByContractPeriod(periodYear, periodMonth, currentFiscalArrangement);
                 }
             } else if (currentFiscalArrangement != null) {
-                productions = getProductionBean().findAnnualProduction(periodYear, currentFiscalArrangement);           
+                productions = getProductionBean().findAnnualProduction(periodYear, currentFiscalArrangement);
             }
         }
     }
@@ -236,9 +236,9 @@ public class JvProductionController implements Serializable {
                     currentProduction.getStockAdjustment()});
 
     }
-    
-    public void operatorDeclaredVolumeListener(){
-        getProductionBean().computeOperatorDeclaredEquity(currentProduction);        
+
+    public void operatorDeclaredVolumeListener() {
+        getProductionBean().computeOperatorDeclaredEquity(currentProduction);
     }
 
     public void liftingChanged() {
@@ -387,7 +387,7 @@ public class JvProductionController implements Serializable {
         destroy();
     }
 
-    public void prepareCreate() {
+    public String prepareCreate() {
         LOG.log(Level.INFO, "Preparing new instance of JvActualProduction for create...");
         // currentProduction = new RegularProduction();//getProductionBean().createInstance(); TODO:evaluate
 //        currentProduction.setPeriodYear(periodYear);
@@ -396,6 +396,7 @@ public class JvProductionController implements Serializable {
         //return currentProduction;
         reset();
         setDirectActualizing(true);
+        return "actual-create";
     }
 
     public void create() {

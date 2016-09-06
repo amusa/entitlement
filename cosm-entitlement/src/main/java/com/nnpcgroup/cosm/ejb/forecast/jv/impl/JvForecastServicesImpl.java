@@ -81,15 +81,19 @@ public abstract class JvForecastServicesImpl<T extends JvForecast> extends Forec
         Double availability = forecast.getAvailability();
         Double partnerAvailability = forecast.getPartnerAvailability();
 
-        cargoes = (int) (availability / 950000.0);
-        partnerCargoes = (int) (partnerAvailability / 950000.0);
-        liftableVolume = cargoes * 950000.0;
-        partnerLiftableVolume = partnerCargoes * 950000.0;
+        if (forecast.getLifting() == null) {
+            cargoes = (int) (availability / 950000.0);
+            liftableVolume = cargoes * 950000.0;
+            forecast.setCargos(cargoes);
+            forecast.setLifting(liftableVolume);
+        }
 
-        forecast.setCargos(cargoes);
-        forecast.setLifting(liftableVolume);
-        forecast.setPartnerCargos(partnerCargoes);
-        forecast.setPartnerLifting(partnerLiftableVolume);
+        if (forecast.getPartnerLifting() == null) {
+            partnerCargoes = (int) (partnerAvailability / 950000.0);
+            partnerLiftableVolume = partnerCargoes * 950000.0;
+            forecast.setPartnerCargos(partnerCargoes);
+            forecast.setPartnerLifting(partnerLiftableVolume);
+        }
 
         return forecast;
     }

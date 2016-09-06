@@ -224,15 +224,19 @@ public abstract class JvProductionServicesImpl<T extends Production, E extends C
             partnerAvailability = production.getOperatorDeclaredPartnerAvailability();
         }
 
-        cargoes = (int) (availability / 950000.0);
-        partnerCargoes = (int) (partnerAvailability / 950000.0);
-        liftableVolume = cargoes * 950000.0;
-        partnerLiftableVolume = partnerCargoes * 950000.0;
+        if (production.getLifting() == null) {
+            cargoes = (int) (availability / 950000.0);
+            liftableVolume = cargoes * 950000.0;
+            production.setCargos(cargoes);
+            production.setLifting(liftableVolume);
+        }
 
-        production.setCargos(cargoes);
-        production.setLifting(liftableVolume);
-        production.setPartnerCargos(partnerCargoes);
-        production.setPartnerLifting(partnerLiftableVolume);
+        if (production.getPartnerLifting() == null) {
+            partnerCargoes = (int) (partnerAvailability / 950000.0);
+            partnerLiftableVolume = partnerCargoes * 950000.0;
+            production.setPartnerCargos(partnerCargoes);
+            production.setPartnerLifting(partnerLiftableVolume);
+        }
 
         return production;
     }

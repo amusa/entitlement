@@ -23,10 +23,14 @@ public interface CommonServices<T> extends AbstractCrudServices<T> {
     public List<T> findByYearAndMonth(int year, int month);
 
     public List<T> findAnnualProduction(int year, FiscalArrangement fa);
+    
+    public List<T> findByContractPeriod(int year, Contract cs);
 
-    public T findByContractPeriod(int year, int month, Contract cs);
+    public List<T> findByContractPeriod(int year, int month, Contract cs);
 
     public List<T> findByContractPeriod(int year, int month, FiscalArrangement fa);
+    
+    public T findSingleByContractPeriod(int year, int month, Contract cs);
 
     public T computeEntitlement(T production);
 

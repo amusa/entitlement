@@ -219,11 +219,17 @@ public class JvForecastController implements Serializable {
             if (periodMonth != null) {
                 if (currentFiscalArrangement == null) {
                     productions = getForecastBean().findByYearAndMonth(periodYear, periodMonth);
-                } else {
+                } else if(currentContract==null){
                     productions = getForecastBean().findByContractPeriod(periodYear, periodMonth, currentFiscalArrangement);
+                }else{
+                    productions = getForecastBean().findByContractPeriod(periodYear, periodMonth, currentContract);
                 }
             } else if (currentFiscalArrangement != null) {
-                productions = getForecastBean().findAnnualProduction(periodYear, currentFiscalArrangement);
+                if (currentContract == null) {
+                    productions = getForecastBean().findAnnualProduction(periodYear, currentFiscalArrangement);
+                } else {
+                    productions = getForecastBean().findByContractPeriod(periodYear, currentContract);
+                }
             }
         }
     }

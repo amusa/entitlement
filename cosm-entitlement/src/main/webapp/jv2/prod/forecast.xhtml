@@ -52,10 +52,17 @@
                         <label>Fiscal Arrangement</label>
                         <h:selectOneMenu id="contract" value="#{jvProdController.currentFiscalArrangement}" class="form-control input-sm m-b-10">                                              
                             <f:selectItems value="#{fiscalController.fiscalSelectOptions}" />   
-                            <f:ajax />     
+                            <f:ajax event="change" render="contracts"/>    
                         </h:selectOneMenu>
                     </div>
-                </div>
+                    <div class="col-md-4 m-b-15">
+                        <h:outputLabel value="Contract" for="contracts" />
+                        <h:selectOneMenu id="contracts" value="#{jvProdController.currentContract}" class="form-control input-sm m-b-10">
+                            <f:selectItems value="#{jvProdController.contractSelectOne}"/>   
+                            <f:ajax />
+                        </h:selectOneMenu>
+                    </div>
+                </div>              
 
                 <div class="row" >
                     <div class="col-md-10 m-b-20">
@@ -65,7 +72,7 @@
 
                         <h:commandButton  value="Get Forecast"  class="btn m-r-10" >
                             <f:ajax listener="#{jvProdController.loadProductions}" event="click"
-                                    execute="periodYear periodMonth"
+                                    execute="periodYear periodMonth contract contracts"
                                     render="forecast_panel prodTable msgs"/>
 
                         </h:commandButton>

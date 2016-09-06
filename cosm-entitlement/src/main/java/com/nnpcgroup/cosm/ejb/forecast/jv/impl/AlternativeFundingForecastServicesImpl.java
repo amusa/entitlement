@@ -387,7 +387,7 @@ public abstract class AlternativeFundingForecastServicesImpl<T extends Alternati
     }
     
     @Override
-    public T findByContractPeriod(int year, int month, Contract cs) {
+    public T findSingleByContractPeriod(int year, int month, Contract cs) {
         CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
         
         T production;

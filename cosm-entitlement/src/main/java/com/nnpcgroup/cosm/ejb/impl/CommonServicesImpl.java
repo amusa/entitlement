@@ -76,15 +76,64 @@ public abstract class CommonServicesImpl<T> extends AbstractCrudServicesImpl<T> 
     }
 
     @Override
-    public T findByContractPeriod(int year, int month, Contract cs) {
+    public List<T> findByContractPeriod(int year, int month, Contract cs) {
         CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
 
-        T production;
+        List<T> productions;
 
         CriteriaQuery cq = cb.createQuery();
         Root<T> e = cq.from(entityClass);
         try {
             cq.select(e).where(
+                    cb.and(cb.equal(e.get("periodYear"), year),
+                            cb.equal(e.get("periodMonth"), month),
+                            cb.equal(e.get("contract"), cs)
+                    ));
+
+            Query query = getEntityManager().createQuery(cq);
+
+            productions = query.getResultList();
+        } catch (NoResultException nre) {
+            return null;
+        }
+
+        return productions;
+    }
+
+    @Override
+    public List<T> findByContractPeriod(int year, Contract cs) {
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+
+        List<T> productions;
+
+        CriteriaQuery cq = cb.createQuery();
+        Root<T> e = cq.from(entityClass);
+        try {
+            cq.select(e).where(
+                    cb.and(cb.equal(e.get("periodYear"), year),
+                            cb.equal(e.get("contract"), cs)
+                    ));
+
+            Query query = getEntityManager().createQuery(cq);
+
+            productions = query.getResultList();
+        } catch (NoResultException nre) {
+            return null;
+        }
+
+        return productions;
+    }
+
+    @Override
+    public T findSingleByContractPeriod(int year, int month, Contract cs) {
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+
+        T production;
+
+        CriteriaQuery cq = cb.createQuery();
+        Root e = cq.from(entityClass);
+        try {
+            cq.where(
                     cb.and(cb.equal(e.get("periodYear"), year),
                             cb.equal(e.get("periodMonth"), month),
                             cb.equal(e.get("contract"), cs)

@@ -55,7 +55,7 @@
                             <f:ajax event="change" render="contracts"/>    
                         </h:selectOneMenu>
                     </div>
-                    <div class="col-md-4 m-b-15">
+                    <div class="col-md-3 m-b-10">
                         <h:outputLabel value="Contract" for="contracts" />
                         <h:selectOneMenu id="contracts" value="#{jvProdController.currentContract}" class="form-control input-sm m-b-10">
                             <f:selectItems value="#{jvProdController.contractSelectOne}"/>   
@@ -72,7 +72,6 @@
 
                         <h:commandButton  value="Get Forecast"  class="btn m-r-10" >
                             <f:ajax listener="#{jvProdController.loadProductions}" event="click"
-                                    execute="periodYear periodMonth contract contracts"
                                     render="forecast_panel prodTable msgs"/>
 
                         </h:commandButton>
@@ -213,11 +212,10 @@
                                     <f:ajax event="click" render="JvActualizeCreateForm" listener="#{jvActualController.actualize(jvProdController.currentProduction)}"/>
                                 </button>
 
-                                <button jsf:id="createButton" jsf:outcome="forecast-create" class="btn m-r-5">
+                                <h:commandLink id="createButton" action="#{jvProdController.prepareCreate}" class="btn m-r-5">
                                     <span class="icon">&#61943;</span>
-                                    #{bundle.Create}  
-                                    <f:ajax event="click" listener="#{jvProdController.prepareCreate}"/> 
-                                </button>
+                                    #{bundle.Create}
+                                </h:commandLink>
 
                                 <button jsf:id="viewButton" look="warning" data-target="#JvViewDlg" data-toggle="modal" class="btn m-r-5">
                                     <span class="icon">&#61698;</span>

@@ -133,6 +133,7 @@ public class JvForecastController implements Serializable {
 
     public String prepareCreate() {
         reset();
+        currentContractChanged();
         return "forecast-create";
     }
 
@@ -297,7 +298,7 @@ public class JvForecastController implements Serializable {
     private void reset() {
         currentProduction = null;
         productions = null;
-        currentContract = null;
+//        currentContract = null;
     }
 
     public Integer getPeriodYear() {

@@ -431,9 +431,7 @@ public class JvForecastController implements Serializable {
         } else if (currentContract instanceof JvContract) {
             currentProduction = new JvForecast();
         } else {
-            //throw new Exception("Undefined contract type");
-            //currentProduction = new JvForecastServices();
-
+            LOG.info("Undefined contract selection...");
         }
 
         if (currentProduction != null) {

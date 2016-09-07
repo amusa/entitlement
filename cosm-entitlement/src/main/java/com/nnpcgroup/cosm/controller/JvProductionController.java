@@ -139,7 +139,7 @@ public class JvProductionController implements Serializable {
         afBean.computeAlternativeFunding(getCurrentAfProduction());
     }
 
-    public void currentContractChanged() throws Exception {
+    public void currentContractChanged() {
         if (currentContract instanceof JvContract) {
             currentProduction = new RegularProduction();
         } else if (currentContract instanceof CarryContract) {
@@ -148,7 +148,6 @@ public class JvProductionController implements Serializable {
             currentProduction = new ModifiedCarryProduction();
         } else {
             LOG.log(Level.INFO, "Undefined contract selection...{0}", currentContract);
-            throw new Exception("Undefined contract type");
         }
 
         if (currentProduction != null) {
@@ -184,13 +183,23 @@ public class JvProductionController implements Serializable {
         reset();
         if (periodYear != null) {
             if (periodMonth != null) {
-                if (currentFiscalArrangement == null) {
-                    productions = getProductionBean().findByYearAndMonth(periodYear, periodMonth);
+                if (currentFiscalArrangement != null) {
+                    if (currentContract == null) {
+                        productions = getProductionBean().findByContractPeriod(periodYear, periodMonth, currentFiscalArrangement);
+                    } else {
+                        productions = getProductionBean().findByContractPeriod(periodYear, periodMonth, currentContract);
+                    }
+
                 } else {
-                    productions = getProductionBean().findByContractPeriod(periodYear, periodMonth, currentFiscalArrangement);
+                    productions = getProductionBean().findByYearAndMonth(periodYear, periodMonth);
                 }
+
             } else if (currentFiscalArrangement != null) {
-                productions = getProductionBean().findAnnualProduction(periodYear, currentFiscalArrangement);
+                if (currentContract == null) {
+                    productions = getProductionBean().findAnnualProduction(periodYear, currentFiscalArrangement);
+                } else {
+                    productions = getProductionBean().findByContractPeriod(periodYear, currentContract);
+                }
             }
         }
     }
@@ -278,7 +287,7 @@ public class JvProductionController implements Serializable {
     private void reset() {
         currentProduction = null;
         productions = null;
-        currentContract = null;
+//        currentContract = null;
     }
 
     public Integer getPeriodYear() {
@@ -388,14 +397,9 @@ public class JvProductionController implements Serializable {
     }
 
     public String prepareCreate() {
-        LOG.log(Level.INFO, "Preparing new instance of JvActualProduction for create...");
-        // currentProduction = new RegularProduction();//getProductionBean().createInstance(); TODO:evaluate
-//        currentProduction.setPeriodYear(periodYear);
-//        currentProduction.setPeriodMonth(periodMonth);
-        // setEmbeddableKeys();
-        //return currentProduction;
         reset();
         setDirectActualizing(true);
+        currentContractChanged();
         return "actual-create";
     }
 

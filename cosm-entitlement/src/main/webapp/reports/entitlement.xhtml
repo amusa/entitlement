@@ -110,7 +110,9 @@
 
                                 <h:commandLink id="downloadButton" actionListener="#{reportController.downloadEntitlementReport}" class="btn m-r-5">
                                     <span class="icon">&#61698;</span>
-                                    Download                                  
+                                    Download
+                                    <f:param name="periodYear" value="#{reportController.periodYear}"/>
+
                                 </h:commandLink>
                             </f:facet>
                         </h:dataTable>

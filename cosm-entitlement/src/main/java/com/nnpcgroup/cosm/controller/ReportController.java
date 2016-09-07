@@ -17,6 +17,7 @@ import com.nnpcgroup.cosm.entity.contract.JvContract;
 import com.nnpcgroup.cosm.entity.forecast.jv.AlternativeFundingForecast;
 import com.nnpcgroup.cosm.entity.forecast.jv.ForecastPK;
 import com.nnpcgroup.cosm.entity.forecast.jv.JvForecast;
+
 import java.io.IOException;
 
 import javax.inject.Named;
@@ -32,6 +33,7 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -155,10 +157,12 @@ public class ReportController implements Serializable {
 
     public void downloadEntitlementReport() throws IOException, ServletException {
 //        FacesContext.getCurrentInstance().getExternalContext().dispatch("/EntitlementReport");
-        HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
-        request.setAttribute("periodYear", periodYear);
-        request.setAttribute("periodMonth", periodMonth);
-        
-        FacesContext.getCurrentInstance().getExternalContext().redirect("EntitlementReport");
+//        HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+       // request.setAttribute("periodYear", periodYear);
+//        request.setAttribute("periodMonth", periodMonth);
+
+        FacesContext.getCurrentInstance().getExternalContext()
+                .redirect(String.format("EntitlementReport?periodYear=%s&periodMonth=%s", periodYear, periodMonth));
+//        FacesContext.getCurrentInstance().getExternalContext().redirect("EntitlementReport");
     }
 }

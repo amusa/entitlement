@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:jsf="http://xmlns.jcp.org/jsf">
+
+    <ui:composition>  
+        <h:form>
+            <h:commandLink id="createButton" action="#{reportController.runEntitlementReport}" class="btn m-r-5">
+                <span class="icon">&#61943;</span>
+                Entitlement Report
+            </h:commandLink>
+            <!--            <button jsf:id="runEntitlementReport" look="warning" data-target="#SelCriteriaDlg" data-toggle="modal" class="btn m-r-5" >
+                            <span class="icon">&#61845;</span>
+                            Entitlement Report
+                            <f:ajax event="click" render="SelCriteriaForm" />
+                        </button>-->
+        </h:form>
+        <ui:include src="_sel-criteria.xhtml"/>
+    </ui:composition>
+</html>

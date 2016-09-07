@@ -218,21 +218,37 @@ public class JvForecastController implements Serializable {
 
         if (periodYear != null) {
             if (periodMonth != null) {
-                if (currentFiscalArrangement == null) {
-                    productions = getForecastBean().findByYearAndMonth(periodYear, periodMonth);
-                } else if(currentContract==null){
-                    productions = getForecastBean().findByContractPeriod(periodYear, periodMonth, currentFiscalArrangement);
-                }else{
-                    productions = getForecastBean().findByContractPeriod(periodYear, periodMonth, currentContract);
-                }
-            } else if (currentFiscalArrangement != null) {
-                if (currentContract == null) {
-                    productions = getForecastBean().findAnnualProduction(periodYear, currentFiscalArrangement);
-                } else {
-                    productions = getForecastBean().findByContractPeriod(periodYear, currentContract);
-                }
+                handleMonthlyProduction();
+            } else {
+                handleAnnualProduction();
             }
         }
+    }
+
+    private List<JvForecast> handleAnnualProduction() {
+        if (currentFiscalArrangement != null) {
+            if (currentContract == null) {
+                productions = getForecastBean().findAnnualProduction(periodYear, currentFiscalArrangement);
+            } else {
+                productions = getForecastBean().findByContractPeriod(periodYear, currentContract);
+            }
+        }
+        return productions;
+    }
+
+    private List<JvForecast> handleMonthlyProduction() {
+        if (currentFiscalArrangement != null) {
+            if (currentContract == null) {
+                productions = getForecastBean().findByContractPeriod(periodYear, periodMonth, currentFiscalArrangement);
+            } else {
+                productions = getForecastBean().findByContractPeriod(periodYear, periodMonth, currentContract);
+            }
+
+        } else {
+            productions = getForecastBean().findByYearAndMonth(periodYear, periodMonth);
+        }
+
+        return productions;
     }
 
     public boolean isEditMode() {

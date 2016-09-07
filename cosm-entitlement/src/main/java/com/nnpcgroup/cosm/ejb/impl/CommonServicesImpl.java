@@ -60,7 +60,7 @@ public abstract class CommonServicesImpl<T> extends AbstractCrudServicesImpl<T> 
         CriteriaQuery cq = cb.createQuery();
         Root e = cq.from(entityClass);
         try {
-            cq.where(
+            cq.select(e).where(
                     cb.and(cb.equal(e.get("periodYear"), year),
                             cb.equal(e.get("periodMonth"), month)
                     ));

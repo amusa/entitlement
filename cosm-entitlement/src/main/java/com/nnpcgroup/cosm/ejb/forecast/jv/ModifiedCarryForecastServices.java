@@ -5,14 +5,12 @@
  */
 package com.nnpcgroup.cosm.ejb.forecast.jv;
 
-import com.nnpcgroup.cosm.entity.forecast.jv.Forecast;
+import com.nnpcgroup.cosm.entity.forecast.jv.ModifiedCarryForecast;
 
 /**
  *
  * @author 18359
  */
-public interface JvForecast extends JvForecastServices<Forecast> {
+public interface ModifiedCarryForecastServices extends AlternativeFundingForecastServices<ModifiedCarryForecast> {
 
-    
-   
 }

@@ -14,15 +14,15 @@ import com.nnpcgroup.cosm.exceptions.NoRealizablePriceException;
  * @author 18359
  * @param <T>
  */
-public interface JvAlternativeFundingForecastServices<T extends AlternativeFundingForecast> extends JvForecastServices<T> {
+public interface AlternativeFundingForecastServices<T extends AlternativeFundingForecast> extends JvForecastServices<T> {
 
     public T computeCarryOil(T forecast);
 
     public T computeSharedOil(T forecast);
-
-    public T computeGuaranteedNotionalMargin(T forecast) throws NoRealizablePriceException;
-
+    
     public T computeResidualCarryExpenditure(T forecast);
+    
+    public T computeNotionalMargin(T forecast) throws NoRealizablePriceException;
 
     public T computeCarryTaxRelief(T forecast);
 

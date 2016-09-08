@@ -75,7 +75,7 @@ public class ContractController implements Serializable {
 
     public void setSelected(Contract selected) {
         this.selected = selected;
-        if (selected instanceof RegularContract) {
+        if (selected instanceof JvContract) {
             contractType = "REG";
         } else if (selected instanceof CarryContract) {
             contractType = "CA";
@@ -98,6 +98,19 @@ public class ContractController implements Serializable {
         }
     }
 
+    public ModifiedCarryContract getMcaSelected() {
+        if (selected instanceof ModifiedCarryContract) {
+            return (ModifiedCarryContract) selected;
+        }
+        return null;
+    }
+
+    public void setMcaSelected(ModifiedCarryContract mcaSelected) {
+        if (mcaSelected != null) {
+            this.selected = mcaSelected;
+        }
+    }
+
     public CrudeType getCrudeType() {
         return crudeType;
     }
@@ -109,6 +122,8 @@ public class ContractController implements Serializable {
     protected void setEmbeddableKeys() {
         if (selected != null) {
             ContractPK cPK = new ContractPK();
+            long contractId = getNextContractNumber(fiscalArrangement, crudeType);
+            cPK.setId(contractId);
             cPK.setFiscalArrangementId(fiscalArrangement.getId());
             cPK.setCrudeTypeCode(crudeType.getCode());
 
@@ -120,6 +135,11 @@ public class ContractController implements Serializable {
         }
     }
 
+    private long getNextContractNumber(FiscalArrangement fa, CrudeType ct) {
+        long contractCount = ejbFacade.findContractCount(fa, ct);
+        return contractCount + 1;
+    }
+
     protected void initializeEmbeddableKey() {
     }
 
@@ -128,7 +148,7 @@ public class ContractController implements Serializable {
     }
 
     public Contract prepareCreate() {
-        selected = new RegularContract(); //TODO:evaluate type of contract first
+        selected = new JvContract(); //TODO:evaluate type of contract first
         initializeEmbeddableKey();
         return selected;
     }
@@ -176,7 +196,9 @@ public class ContractController implements Serializable {
 
             try {
                 if (persistAction != PersistAction.DELETE) {
-                    setEmbeddableKeys();
+                    if (persistAction == PersistAction.CREATE) {
+                        setEmbeddableKeys();
+                    }
                     getFacade().edit(selected);
                 } else {
                     getFacade().remove(selected);
@@ -217,7 +239,7 @@ public class ContractController implements Serializable {
         if (null != contractType) {
             switch (contractType) {
                 case "REG":
-                    selected = new RegularContract();
+                    selected = new JvContract();
                     break;
                 case "MCA":
                     selected = new ModifiedCarryContract();
@@ -236,7 +258,7 @@ public class ContractController implements Serializable {
 
     public void addContractFiscalArrangement(FiscalArrangement fa) {
         LOG.log(Level.INFO, "Adding Contract for fiscal arrangement {0}...", fa);
-        setSelected(new RegularContract()); //Default contract
+        setSelected(new JvContract()); //Default contract
 //        FiscalArrangement freshFiscal=  fiscalBean.find(fa.getId());
         setFiscalArrangement(fa);
 //        selected.setFiscalArrangement(fa);
@@ -263,14 +285,17 @@ public class ContractController implements Serializable {
         ContractPK getKey(String value) {
             ContractPK key;
             String values[] = value.split(SEPARATOR_ESCAPED);
-            Long fiscalArrangementId = Long.valueOf(values[0]);
-            String crudeTypeCode = values[1];
-            key = new ContractPK(fiscalArrangementId, crudeTypeCode);
+            Long id = Long.valueOf(values[0]);
+            Long fiscalArrangementId = Long.valueOf(values[1]);
+            String crudeTypeCode = values[2];
+            key = new ContractPK(id, fiscalArrangementId, crudeTypeCode);
             return key;
         }
 
         String getStringKey(Contract value) {
             StringBuilder sb = new StringBuilder();
+            sb.append(value.getContractPK().getId());
+            sb.append(SEPARATOR);
             sb.append(value.getContractPK().getFiscalArrangementId());
             sb.append(SEPARATOR);
             sb.append(value.getContractPK().getCrudeTypeCode());

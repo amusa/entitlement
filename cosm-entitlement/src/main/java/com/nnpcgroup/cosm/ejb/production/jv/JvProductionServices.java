@@ -22,4 +22,6 @@ public interface JvProductionServices<T extends Production, E extends Contract> 
     public T liftingChanged(T production);
        
     public T computeOverlift(T production);
+    
+    public T computeOperatorDeclaredEquity(T production);
 }

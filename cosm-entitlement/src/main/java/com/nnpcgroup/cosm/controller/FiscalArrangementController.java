@@ -78,7 +78,7 @@ public class FiscalArrangementController implements Serializable {
 //        return JsfUtil.getSelectItems(fiscalBean.findAll(), false);
 //    }
     public SelectItem[] getFiscalSelectOptions() {
-        return JsfUtil.getSelectItems(fiscalBean.findAll(), true);
+        return JsfUtil.getSelectItems(fiscalBean.findAll(), false);
     }
 
     public List<FiscalArrangement> getFiscalList() {

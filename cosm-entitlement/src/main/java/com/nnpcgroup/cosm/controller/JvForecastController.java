@@ -156,7 +156,7 @@ public class JvForecastController implements Serializable {
             reset();
             currentContractChanged();
             loadProductions();
-            setNewForecast(false);
+//            setNewForecast(false);
         }
     }
 
@@ -349,10 +349,10 @@ public class JvForecastController implements Serializable {
     }
 
     public void setCurrentContract(Contract currentContract) {
-        if (currentContract == null) {
-            return;
-        }
-        this.currentContract = contractBean.find(currentContract);
+//        if (currentContract == null) {
+//            return;
+//        }
+        this.currentContract = currentContract;//contractBean.find(currentContract);
     }
 
     public SelectItem[] getContractSelectOne() {
@@ -362,7 +362,7 @@ public class JvForecastController implements Serializable {
             contracts = contractBean.findFiscalArrangementContracts(currentFiscalArrangement);
         }
 
-        return JsfUtil.getSelectItems(contracts, true);
+        return JsfUtil.getSelectItems(contracts, false);
 
     }
 

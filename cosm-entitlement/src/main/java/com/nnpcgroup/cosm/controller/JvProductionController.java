@@ -431,7 +431,7 @@ public class JvProductionController implements Serializable {
             reset();
             currentContractChanged();
             loadProductions();
-            setNewProduction(false);
+//            setNewProduction(false);
         }
     }
 

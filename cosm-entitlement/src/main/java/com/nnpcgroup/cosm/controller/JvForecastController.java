@@ -346,6 +346,9 @@ public class JvForecastController implements Serializable {
     }
 
     public void setCurrentContract(Contract currentContract) {
+        if (currentContract == null) {
+            return;
+        }
         this.currentContract = contractBean.find(currentContract);
     }
 

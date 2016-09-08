@@ -75,6 +75,7 @@ public class JvProductionController implements Serializable {
     private Contract currentContract;
     private boolean directActualizing = false;
     private boolean editMode;
+    private boolean newProduction = false;
 
     /**
      * Creates a new instance of JvController
@@ -142,10 +143,13 @@ public class JvProductionController implements Serializable {
     public void currentContractChanged() {
         if (currentContract instanceof JvContract) {
             currentProduction = new RegularProduction();
+            setNewProduction(true);
         } else if (currentContract instanceof CarryContract) {
             currentProduction = new CarryProduction();
+            setNewProduction(true);
         } else if (currentContract instanceof ModifiedCarryContract) {
             currentProduction = new ModifiedCarryProduction();
+            setNewProduction(true);
         } else {
             LOG.log(Level.INFO, "Undefined contract selection...{0}", currentContract);
         }
@@ -170,7 +174,22 @@ public class JvProductionController implements Serializable {
 //        currentContract.addForecast(currentProduction);
 //        currentProduction.setContract(currentContract);
     }
+    
+    public void periodMonthChanged(){
+        if(isNewProduction()){
+            setEmbeddableKeys();
+        }
+    }
 
+    public boolean isNewProduction() {
+        return newProduction;
+    }
+
+    public void setNewProduction(boolean newProduction) {
+        this.newProduction = newProduction;
+    }
+
+    
     public List<Production> getProductions() {
         return productions;
     }
@@ -180,7 +199,6 @@ public class JvProductionController implements Serializable {
     }
 
     public void loadProductions() {
-        reset();
         if (periodYear != null) {
             if (periodMonth != null) {
                 if (currentFiscalArrangement != null) {
@@ -332,6 +350,10 @@ public class JvProductionController implements Serializable {
         this.currentContract = currentContract;
     }
 
+    public void fiscalArrangementChanged() {
+        currentContract = null;
+    }
+
     public void actualize(Forecast forecast) throws Exception {
         LOG.log(Level.INFO, "Actualizing {0}...", forecast);
         reset();
@@ -407,7 +429,9 @@ public class JvProductionController implements Serializable {
         persist(JsfUtil.PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("ProductionCreated"));
         if (!JsfUtil.isValidationFailed()) {
             reset();
+            currentContractChanged();
             loadProductions();
+            setNewProduction(false);
         }
     }
 
@@ -415,6 +439,7 @@ public class JvProductionController implements Serializable {
         reset();
         loadProductions();
         disableEditMode();
+        setNewProduction(false);
     }
 
     public void update() {

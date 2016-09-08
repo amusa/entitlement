@@ -71,6 +71,7 @@ public class JvForecastController implements Serializable {
     private FiscalArrangement currentFiscalArrangement;
     private Contract currentContract;
     private boolean editMode;
+    private boolean newForecast = false;
 
     /**
      * Creates a new instance of JvController
@@ -153,14 +154,18 @@ public class JvForecastController implements Serializable {
         persist(JsfUtil.PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("ProductionCreated"));
         if (!JsfUtil.isValidationFailed()) {
             reset();
+            currentContractChanged();
             loadProductions();
+            setNewForecast(false);
         }
     }
 
     public void cancel() {
         reset();
+        currentContractChanged();
         loadProductions();
         disableEditMode();
+        setNewForecast(false);
     }
 
     public void update() {
@@ -214,8 +219,6 @@ public class JvForecastController implements Serializable {
     }
 
     public void loadProductions() {
-        reset();
-
         if (periodYear != null) {
             if (periodMonth != null) {
                 handleMonthlyProduction();
@@ -363,6 +366,18 @@ public class JvForecastController implements Serializable {
 
     }
 
+    public void fiscalArrangementChanged() {
+        currentContract = null;
+    }
+
+    public boolean isNewForecast() {
+        return newForecast;
+    }
+
+    public void setNewForecast(boolean newForecast) {
+        this.newForecast = newForecast;
+    }
+
     public Double getDailySum() {
         Double dailySum = productions.stream()
                 .mapToDouble(p -> p.getProductionVolume())
@@ -429,10 +444,13 @@ public class JvForecastController implements Serializable {
     public void currentContractChanged() {// throws Exception {
         if (currentContract instanceof CarryContract) {
             currentProduction = new CarryForecast();
+            setNewForecast(true);
         } else if (currentContract instanceof ModifiedCarryContract) {
             currentProduction = new ModifiedCarryForecast();
+            setNewForecast(true);
         } else if (currentContract instanceof JvContract) {
             currentProduction = new JvForecast();
+            setNewForecast(true);
         } else {
             LOG.info("Undefined contract selection...");
         }
@@ -461,5 +479,11 @@ public class JvForecastController implements Serializable {
         currentProduction.setContract(currentContract);
 //        currentContract.addForecast(currentProduction);
 //        currentProduction.setContract(currentContract);
+    }
+
+    public void periodMonthChanged() {
+        if (isNewForecast()) {
+            setEmbeddableKeys();
+        }
     }
 }

@@ -52,7 +52,7 @@
                         <label>Fiscal Arrangement</label>
                         <h:selectOneMenu id="contract" value="#{jvProdController.currentFiscalArrangement}" class="form-control input-sm m-b-10">                                              
                             <f:selectItems value="#{fiscalController.fiscalSelectOptions}" />   
-                            <f:ajax event="change" render="contracts"/>    
+                            <f:ajax event="change" render="contracts" listener="#{jvProdController.fiscalArrangementChanged}"/>    
                         </h:selectOneMenu>
                     </div>
                     <div class="col-md-3 m-b-10">

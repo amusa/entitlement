@@ -13,13 +13,16 @@ import java.io.Serializable;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
+
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ComponentSystemEvent;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -63,39 +66,24 @@ public class UserAuth implements Serializable {
         }
     }
 
-//    @PostConstruct
-//    public void init() {
-//        ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
-//        HttpServletRequest request = (HttpServletRequest) externalContext.getRequest();
-//        originalURL = (String) request.getAttribute("original.url");// (String) externalContext.getRequestMap().get(RequestDispatcher.FORWARD_REQUEST_URI);
-//
-//        if (originalURL == null) {
-//            originalURL = externalContext.getRequestContextPath() + "/faces/index.xhtml";
-//        } else {
-//            String originalQuery = (String) externalContext.getRequestMap().get(RequestDispatcher.FORWARD_QUERY_STRING);
-//
-//            if (originalQuery != null) {
-//                originalURL += "?" + originalQuery;
-//            }
-//        }
-//    }
     public void login() throws IOException {
         FacesContext context = FacesContext.getCurrentInstance();
         ExternalContext externalContext = context.getExternalContext();
 
         HttpServletRequest request = (HttpServletRequest) externalContext.getRequest();
 
-//        originalURL = (String) request.getAttribute("original.url");//(String) externalContext.getRequestMap().get(RequestDispatcher.FORWARD_REQUEST_URI);
-//
-//        if (originalURL == null) {
-//            originalURL = externalContext.getRequestContextPath() + "/faces/index.xhtml";
-//        } else {
-//            String originalQuery = (String) externalContext.getRequestMap().get(RequestDispatcher.FORWARD_QUERY_STRING);
-//
-//            if (originalQuery != null) {
-//                originalURL += "?" + originalQuery;
-//            }
-//        }
+        originalURL = (String) externalContext.getRequestMap().get(RequestDispatcher.FORWARD_REQUEST_URI);
+
+        if (originalURL == null) {
+            originalURL = externalContext.getRequestContextPath() + "/faces/index.xhtml";
+        } else {
+            String originalQuery = (String) externalContext.getRequestMap().get(RequestDispatcher.FORWARD_QUERY_STRING);
+
+            if (originalQuery != null) {
+                originalURL += "?" + originalQuery;
+            }
+        }
+
         try {
             request.login(username, password);
             LOG.log(Level.INFO, "Login successful {0}", username);
@@ -105,9 +93,9 @@ public class UserAuth implements Serializable {
             password = null;
             externalContext.redirect(originalURL);
         } catch (ServletException e) {
-            // Handle unknown username/password in request.login().
-            context.addMessage(null, new FacesMessage("Unknown login"));
-            LOG.log(Level.INFO, "Unknown login {0}", username);
+            // Handle unknown username/password in request.login().           
+            context.addMessage(null, new FacesMessage(e.getMessage()));
+            LOG.log(Level.INFO, "{0} {1}", new Object[]{e.getMessage(), username});
         }
     }
 
@@ -126,7 +114,7 @@ public class UserAuth implements Serializable {
                 JsfUtil.addErrorMessage(ResourceBundle.getBundle("/Bundle").getString("PasswordChangeSuccess"));
             } catch (Exception ex) {
                 Logger.getLogger(UserAuth.class.getName()).log(Level.SEVERE, null, ex);
-                 JsfUtil.addErrorMessage(ResourceBundle.getBundle("/Bundle").getString("PasswordChangeError"));
+                JsfUtil.addErrorMessage(ResourceBundle.getBundle("/Bundle").getString("PasswordChangeError"));
             }
         }
 

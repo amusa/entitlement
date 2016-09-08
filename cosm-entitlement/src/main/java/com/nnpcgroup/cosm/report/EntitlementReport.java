@@ -26,23 +26,12 @@ import com.nnpcgroup.cosm.entity.forecast.jv.JvForecast;
 
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
-import java.util.*;
 
 /**
  * @author Ayemi
  */
 @WebServlet(name = "EntitlementReport", urlPatterns = {"/faces/reports/EntitlementReport"})
 public class EntitlementReport extends HttpServlet {
-
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
 
     @EJB
     private JvForecastServices forecastBean;
@@ -64,33 +53,24 @@ public class EntitlementReport extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
 
-
-        //try (PrintWriter out = response.getWriter()) {
         try {
-            /* TODO output your page here. You may use following sample code. */
-            // Get the text that will be added to the PDF
             String year = request.getParameter("periodYear");
             String month = request.getParameter("periodMonth");
 
             periodYear = Integer.parseInt(year);
             periodMonth = Integer.parseInt(month);
 
-            // step 1
             Document document = new Document();
-            // step 2
             baos = new ByteArrayOutputStream();
             PdfWriter.getInstance(document, baos);
-            // step 3
+            
             document.open();
             addMetaData(document);
             addTitlePage(document);
             addContent(document);
-            // step 4
-
-            // step 5
+            
             document.close();
-
-            // setting some response headers
+            
             setResponseHeaders(response);
 
             OutputStream os = response.getOutputStream();
@@ -106,20 +86,14 @@ public class EntitlementReport extends HttpServlet {
         response.setHeader("Expires", "0");
         response.setHeader("Cache-Control",
                 "must-revalidate, post-check=0, pre-check=0");
-        response.setHeader("Pragma", "public");
-        // setting the content type
+        response.setHeader("Pragma", "public");        
         response.setContentType("application/pdf");
-        // the contentlength
         response.setContentLength(baos.size());
-        // write ByteArrayOutputStream to the ServletOutputStream
     }
 
     private void addContent(Document document) throws DocumentException {
-
         loadProductions();
-
         PdfPTable table = new PdfPTable(5);
-
         PdfPCell c1 = new PdfPCell(new Phrase("JV COMPANY"));
         c1.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(c1);
@@ -144,33 +118,10 @@ public class EntitlementReport extends HttpServlet {
 
         addTableContent(table);
 
-
         document.add(table);
-
-
-//        PdfPTable table2 = new PdfPTable(3);
-//        // the cell object
-//        PdfPCell cell;
-//        // we add a cell with colspan 3
-//        cell = new PdfPCell(new Phrase("Cell with colspan 3"));
-//        cell.setColspan(3);
-//        table2.addCell(cell);
-//        // now we add a cell with rowspan 2
-//        cell = new PdfPCell(new Phrase("Cell with rowspan 2"));
-//        cell.setRowspan(2);
-//        table2.addCell(cell);
-//        // we add the four remaining cells with addCell()
-//        table2.addCell("row 1; cell 1");
-//        table2.addCell("row 1; cell 2");
-//        table2.addCell("row 2; cell 1");
-//        table2.addCell("row 2; cell 2");
-//
-//        document.add(table2);
-
     }
 
     private void addTableContent(PdfPTable table) {
-
         if (productions != null) {
             for (JvForecast forecast : productions) {
                 table.addCell(forecast.getContract().getFiscalArrangement().getOperator().getName());
@@ -214,16 +165,14 @@ public class EntitlementReport extends HttpServlet {
         }
     }
 
-
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-
     /**
      * Handles the HTTP <code>GET</code> method.
      *
-     * @param request  servlet request
+     * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException      if an I/O error occurs
+     * @throws IOException if an I/O error occurs
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -234,10 +183,10 @@ public class EntitlementReport extends HttpServlet {
     /**
      * Handles the HTTP <code>POST</code> method.
      *
-     * @param request  servlet request
+     * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException      if an I/O error occurs
+     * @throws IOException if an I/O error occurs
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)

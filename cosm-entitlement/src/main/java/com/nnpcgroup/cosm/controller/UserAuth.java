@@ -71,19 +71,7 @@ public class UserAuth implements Serializable {
         ExternalContext externalContext = context.getExternalContext();
 
         HttpServletRequest request = (HttpServletRequest) externalContext.getRequest();
-
-        originalURL = (String) externalContext.getRequestMap().get(RequestDispatcher.FORWARD_REQUEST_URI);
-
-        if (originalURL == null) {
-            originalURL = externalContext.getRequestContextPath() + "/faces/index.xhtml";
-        } else {
-            String originalQuery = (String) externalContext.getRequestMap().get(RequestDispatcher.FORWARD_QUERY_STRING);
-
-            if (originalQuery != null) {
-                originalURL += "?" + originalQuery;
-            }
-        }
-
+        
         try {
             request.login(username, password);
             LOG.log(Level.INFO, "Login successful {0}", username);

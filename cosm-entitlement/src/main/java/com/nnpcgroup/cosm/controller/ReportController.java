@@ -27,28 +27,15 @@ import org.apache.log4j.Logger;
 public class ReportController implements Serializable {
 
     private static final long serialVersionUID = -7596150432081506756L;
-   private static final Logger LOG = Logger.getLogger(JvForecastController.class.getName());
-    //private static final Logger LOG = LogManager.getRootLogger();
+    private static final Logger LOG = Logger.getLogger(JvForecastController.class.getName());
 
-    //@Inject
     @EJB
     private JvForecastServices forecastBean;
 
-//    @Inject
-//    private ContractServices contractBean;
-
-  
-
-//    private JvForecast currentProduction;
     private List<JvForecast> productions;
     private Integer periodYear;
     private Integer periodMonth;
-//    private FiscalArrangement currentFiscalArrangement;
-//    private Contract currentContract;
 
-    /**
-     * Creates a new instance of JvController
-     */
     public ReportController() {
 
         LOG.info("ProductionController::constructor activated...");
@@ -58,15 +45,7 @@ public class ReportController implements Serializable {
         return forecastBean;
     }
 
-//    public JvForecast getCurrentProduction() {
-//        return currentProduction;
-//    }
-//
-//    public void setCurrentProduction(JvForecast currentProduction) {
-//        this.currentProduction = currentProduction;        
-//    }
-
-    public List<JvForecast> getProductions() {        
+    public List<JvForecast> getProductions() {
         return productions;
     }
 
@@ -95,37 +74,6 @@ public class ReportController implements Serializable {
     public void setPeriodMonth(Integer periodMonth) {
         this.periodMonth = periodMonth;
     }
-
-//    public FiscalArrangement getCurrentFiscalArrangement() {
-//        return currentFiscalArrangement;
-//    }
-//
-//    public void setCurrentFiscalArrangement(FiscalArrangement currentFiscalArrangement) {
-//        this.currentFiscalArrangement = currentFiscalArrangement;
-//    }
-
-//    public Contract getCurrentContract() {
-//        return currentContract;
-//    }
-//
-//    public void setCurrentContract(Contract currentContract) {
-//        this.currentContract = contractBean.find(currentContract);
-//    }
-
-//    public SelectItem[] getContractSelectOne() {
-//        List<Contract> contracts = null;
-//
-//        if (currentFiscalArrangement != null) {
-//            contracts = contractBean.findFiscalArrangementContracts(currentFiscalArrangement);
-//        }
-//
-//        return JsfUtil.getSelectItems(contracts, true);
-//
-//    }
-//
-//    public JvForecast getContract(ForecastPK fPK) {
-//        return (JvForecast) getForecastBean().find(fPK);
-//    }
 
     public String runEntitlementReport() {
         return "entitlement";

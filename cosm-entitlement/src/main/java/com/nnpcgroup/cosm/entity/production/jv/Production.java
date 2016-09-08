@@ -260,7 +260,7 @@ public abstract class Production implements Serializable {
         Double prodAdj = productionAdjustment != null ? productionAdjustment : 0;
         Double unit = unitization != null ? unitization : 0;
 
-        netProduction = gp + sa - bsw - metering - theft - termAdj + prodAdj + unit;
+        netProduction = gp + sa - bsw - metering - theft + termAdj + prodAdj + unit;
         return netProduction;
     }
 

@@ -49,7 +49,7 @@
                                         <h:selectOneMenu id="periodMonth" value="#{jvActualController.periodMonth}" class="form-control input-sm m-b-10">
                                             <f:selectItem itemValue="#{null}" itemLabel="--select--" />
                                             <f:selectItems value="#{generalController.months}" var="mth" itemValue="#{mth.month}" itemLabel="#{mth.monthStr}" />
-                                            <f:ajax />
+                                            <f:ajax listener="#{jvActualController.periodMonthChanged}"/>
                                         </h:selectOneMenu>
                                     </div>
                                     <div class="col-md-4 m-b-15">
@@ -166,7 +166,7 @@
                                 </div>
                                 <div class="row">                                            
                                     <div class="col-md-4 m-b-15">
-                                        <h:outputLabel value="Terminal Adjustment (-)" for="termAdj" />
+                                        <h:outputLabel value="Terminal Adjustment (+/-)" for="termAdj" />
                                         <h:inputText id="termAdj" value="#{jvActualController.currentProduction.terminalAdjustment}" title="Terminal Adjustment (-)" class="form-control input-sm" >
                                             <f:convertNumber pattern="###,###,###.####" />
                                             <f:ajax event="change" listener="#{jvActualController.stockAdjustmentChanged}"
@@ -182,7 +182,7 @@
                                         </h:inputText>
                                     </div>
                                     <div class="col-md-4 m-b-15">
-                                        <h:outputLabel value="Unitization (+)" for="unitization" />
+                                        <h:outputLabel value="Unitization (+/-)" for="unitization" />
                                         <h:inputText id="unitization" value="#{jvActualController.currentProduction.unitization}" title="Unitization (+)" class="form-control input-sm" >
                                             <f:convertNumber pattern="###,###,###.####" />
                                             <f:ajax event="change" listener="#{jvActualController.stockAdjustmentChanged}"

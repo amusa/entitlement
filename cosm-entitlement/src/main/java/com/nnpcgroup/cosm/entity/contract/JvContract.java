@@ -38,4 +38,10 @@ public class JvContract extends Contract {
         this.alternativeFundingContracts = alternativeFundingContracts;
     }
 
+    @Override
+    public String discriminatorValue() {
+        DiscriminatorValue discriminatorValue = JvContract.class.getAnnotation(DiscriminatorValue.class);
+        return discriminatorValue.value();
+    }
+
 }

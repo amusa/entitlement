@@ -20,6 +20,7 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "CONTRACT")
+@DiscriminatorColumn(name = "DTYPE")
 public abstract class Contract implements Serializable {
 
     private static final long serialVersionUID = 4374185291370537475L;
@@ -47,7 +48,6 @@ public abstract class Contract implements Serializable {
     public void setContractPK(ContractPK contractPK) {
         this.contractPK = contractPK;
     }
-
 
     @ManyToOne
     @JoinColumn(name = "FISCALARRANGEMENTID")
@@ -97,10 +97,11 @@ public abstract class Contract implements Serializable {
         forecasts.add(forecast);
     }
 
+    public abstract String discriminatorValue();
 
     @Override
     public String toString() {
-        return fiscalArrangement.getTitle() + "/" + crudeType.getCode();
+        return String.format("%s/%s(%s)", fiscalArrangement.getTitle(), crudeType.getCode(), discriminatorValue());
     }
 
     @Override
@@ -110,15 +111,12 @@ public abstract class Contract implements Serializable {
 
         Contract contract = (Contract) o;
 
-        if (!fiscalArrangement.equals(contract.fiscalArrangement)) return false;
-        return crudeType.equals(contract.crudeType);
+        return contractPK != null ? contractPK.equals(contract.contractPK) : contract.contractPK == null;
 
     }
 
     @Override
     public int hashCode() {
-        int result = fiscalArrangement.hashCode();
-        result = 31 * result + crudeType.hashCode();
-        return result;
+        return contractPK != null ? contractPK.hashCode() : 0;
     }
 }

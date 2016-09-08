@@ -339,7 +339,7 @@ public class JvProductionController implements Serializable {
             contracts = contractBean.findFiscalArrangementContracts(currentFiscalArrangement);
         }
 
-        return JsfUtil.getSelectItems(contracts, true);
+        return JsfUtil.getSelectItems(contracts, false);
     }
 
     public Contract getCurrentContract() {

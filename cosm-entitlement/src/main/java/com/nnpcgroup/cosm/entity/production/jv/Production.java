@@ -6,6 +6,7 @@
 package com.nnpcgroup.cosm.entity.production.jv;
 
 import com.nnpcgroup.cosm.entity.contract.Contract;
+
 import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Column;
@@ -23,7 +24,6 @@ import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 /**
- *
  * @author 18359
  */
 @Entity
@@ -67,7 +67,7 @@ public abstract class Production implements Serializable {
     public Production() {
     }
 
-//    public Production(int periodYear, int periodMonth, Contract contract) {
+    //    public Production(int periodYear, int periodMonth, Contract contract) {
 //        this.periodYear = periodYear;
 //        this.periodMonth = periodMonth;
 //        this.contract = contract;
@@ -99,7 +99,7 @@ public abstract class Production implements Serializable {
         this.periodMonth = periodMonth;
     }
 
-//    @ManyToOne
+    //    @ManyToOne
 //    @JoinColumns({
 //        @JoinColumn(name = "FISCALARRANGEMENTID", referencedColumnName = "FISCALARRANGEMENTID", insertable = false, updatable = false),
 //        @JoinColumn(name = "CRUDETYPECODE", referencedColumnName = "CRUDETYPECODE", insertable = false, updatable = false)
@@ -107,8 +107,9 @@ public abstract class Production implements Serializable {
     @ManyToOne
     @MapsId("contract")
     @JoinColumns({
-        @JoinColumn(name = "FISCALARRANGEMENTID", referencedColumnName = "FISCALARRANGEMENTID", insertable = false, updatable = false),
-        @JoinColumn(name = "CRUDETYPECODE", referencedColumnName = "CRUDETYPECODE", insertable = false, updatable = false)
+            @JoinColumn(name = "CONTRACT_ID", referencedColumnName = "ID", insertable = false, updatable = false),
+            @JoinColumn(name = "FISCALARRANGEMENTID", referencedColumnName = "FISCALARRANGEMENTID", insertable = false, updatable = false),
+            @JoinColumn(name = "CRUDETYPECODE", referencedColumnName = "CRUDETYPECODE", insertable = false, updatable = false)
     })
     public Contract getContract() {
         return contract;

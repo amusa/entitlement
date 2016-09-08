@@ -46,4 +46,9 @@ public class ModifiedCarryContract extends AlternativeFundingContract {
         this.royaltyRate = royaltyRate;
     }
 
+    @Override
+    public String discriminatorValue() {
+        DiscriminatorValue discriminatorValue = ModifiedCarryContract.class.getAnnotation(DiscriminatorValue.class);
+        return discriminatorValue.value();
+    }
 }

@@ -41,7 +41,7 @@
                                         </h:selectOneMenu>                                                                                                                  
                                     </div>
                                 </div>
-                                
+
                                 <div class="row" jsf:id="carryContractInfo" jsf:rendered="#{contractController.contractType eq 'CA' or contractController.contractType eq 'MCA'}">
                                     <div class="col-md-6 m-b-15">
                                         <h:outputLabel value="Shared Oil Ratio" for="sharedOilRatio" />
@@ -61,6 +61,21 @@
                                             <f:ajax />
                                         </h:inputText>                                                                                                                  
                                     </div>
+                                </div>
+
+                                <div class="row" jsf:id="mcaContractInfo" jsf:rendered="#{contractController.contractType eq 'MCA'}">
+                                    <div class="col-md-6 m-b-15">
+                                        <h:outputLabel value="Tax Rate" for="taxRate" />
+                                        <h:inputText id="taxRate"  value="#{contractController.mcaSelected.taxRate}" class="form-control input-sm m-b-10">
+                                            <f:ajax />
+                                        </h:inputText>                                                                                                                  
+                                    </div>
+                                    <div class="col-md-6 m-b-15">
+                                        <h:outputLabel value="Royalty Rate" for="royaltyRate" />
+                                        <h:inputText id="royaltyRate"  value="#{contractController.mcaSelected.royaltyRate}" class="form-control input-sm m-b-10">
+                                            <f:ajax />
+                                        </h:inputText>                                                                                                                  
+                                    </div>                                   
                                 </div>
                             </h:panelGroup>
 

@@ -13,6 +13,7 @@ import com.nnpcgroup.cosm.entity.EquityType;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
 import com.nnpcgroup.cosm.entity.FiscalPeriod;
 import com.nnpcgroup.cosm.entity.JointVenture;
+import com.nnpcgroup.cosm.entity.contract.ContractPK;
 import com.nnpcgroup.cosm.entity.production.jv.Production;
 import com.nnpcgroup.cosm.entity.production.jv.ProductionPK;
 import com.nnpcgroup.cosm.exceptions.NoRealizablePriceException;
@@ -58,8 +59,8 @@ public abstract class JvProductionServicesImpl<T extends Production, E extends C
         FiscalArrangement fa;
         JointVenture jv;
 
-//        fa = production.getContract().getFiscalArrangement();
-        fa = fiscalBean.find(production.getFiscalArrangementId());
+        fa = production.getContract().getFiscalArrangement();
+        //fa = fiscalBean.find(production.getFiscalArrangementId());
 
         assert (fa instanceof JointVenture);
 
@@ -68,18 +69,16 @@ public abstract class JvProductionServicesImpl<T extends Production, E extends C
 
         Double ownEntitlement;
         Double partnerEntitlement;
-        Double grossProd = production.getGrossProduction();
-        Double stockAdjustment = production.getStockAdjustment() != null ? production.getStockAdjustment() : 0;
 
-        grossProd = grossProd == null ? 0 : grossProd;
+        Double netProduction = production.getNetProduction() != null ? production.getNetProduction() : 0;
 
-        ownEntitlement = ((grossProd + stockAdjustment)
+        ownEntitlement = (netProduction
                 * et.getOwnEquity() * 0.01);
-        LOG.log(Level.INFO, "Own Entitlement=>{0} * {1} * 0.01 = {2}", new Object[]{grossProd, et.getOwnEquity(), ownEntitlement});
+        LOG.log(Level.INFO, "Own Entitlement=>{0} * {1} * 0.01 = {2}", new Object[]{netProduction, et.getOwnEquity(), ownEntitlement});
 
-        partnerEntitlement = ((grossProd + stockAdjustment)
+        partnerEntitlement = (netProduction
                 * et.getPartnerEquity() * 0.01);
-        LOG.log(Level.INFO, "Partner Entitlement=>{0} * {1} * 0.01 = {2}", new Object[]{grossProd, et.getPartnerEquity(), partnerEntitlement});
+        LOG.log(Level.INFO, "Partner Entitlement=>{0} * {1} * 0.01 = {2}", new Object[]{netProduction, et.getPartnerEquity(), partnerEntitlement});
 
         production.setOwnShareEntitlement(ownEntitlement);
         production.setPartnerShareEntitlement(partnerEntitlement);
@@ -94,11 +93,11 @@ public abstract class JvProductionServicesImpl<T extends Production, E extends C
         Double partnerEntitlement = production.getPartnerShareEntitlement();
         Double openingStock = production.getOpeningStock();
         Double partnerOpeningStock = production.getPartnerOpeningStock();
-        Double overlift = production.getOverlift() != null ? production.getOverlift() : 0.0;
-        Double partnerOverlift = production.getPartnerOverlift() != null ? production.getPartnerOverlift() : 0.0;
+        //Double overlift = production.getOverlift() != null ? production.getOverlift() : 0.0;
+        //Double partnerOverlift = production.getPartnerOverlift() != null ? production.getPartnerOverlift() : 0.0;
 
-        availability = ownEntitlement + openingStock + overlift;
-        partnerAvailability = partnerEntitlement + partnerOpeningStock + partnerOverlift;
+        availability = ownEntitlement + openingStock;//+ overlift;
+        partnerAvailability = partnerEntitlement + partnerOpeningStock;// + partnerOverlift;
 
         production.setAvailability(availability);
         production.setPartnerAvailability(partnerAvailability);
@@ -109,8 +108,16 @@ public abstract class JvProductionServicesImpl<T extends Production, E extends C
     @Override
     public T computeClosingStock(T production) {
         Double closingStock, partnerClosingStock;
-        Double availability = production.getAvailability();
-        Double partnerAvailability = production.getPartnerAvailability();
+        Double availability, partnerAvailability;
+
+        if (production.getOperatorDeclaredVolume() == null) {
+            availability = production.getAvailability();
+            partnerAvailability = production.getPartnerAvailability();
+        } else {
+            availability = production.getOperatorDeclaredOwnAvailability();
+            partnerAvailability = production.getOperatorDeclaredPartnerAvailability();
+        }
+
         Double lifting = production.getLifting();
         Double partnerLifting = production.getPartnerLifting();
 
@@ -126,15 +133,17 @@ public abstract class JvProductionServicesImpl<T extends Production, E extends C
     public T liftingChanged(T production) {
         LOG.log(Level.INFO, "Lifting changed {0}...", production);
         return computeClosingStock(
-                computeAvailability(
-                        computeOverlift(
-                                computeClosingStock(
-                                        computeAvailability(
-                                                overLiftReset(production)
-                                        )
-                                )
-                        )
-                )
+                //                computeAvailability(
+                //                        computeOverlift(
+                //                                computeClosingStock(
+                //                                        computeAvailability(
+                //                                                overLiftReset(
+                production
+        //                                                )
+        //                                        )
+        //                                )
+        //                        )
+        //                )
         );
     }
 
@@ -175,6 +184,26 @@ public abstract class JvProductionServicesImpl<T extends Production, E extends C
         );
     }
 
+    @Override
+    public T computeOperatorDeclaredEquity(T production) {
+        if (production.getOperatorDeclaredVolume() == null) {
+            production.setOperatorDeclaredOwnAvailability(null);
+            production.setOperatorDeclaredPartnerAvailability(null);
+
+        } else {
+            Double operatorVol = production.getOperatorDeclaredVolume();
+            Double ownAvail2 = operatorVol * production.getOwnEquityRatio();
+            Double partnerAvail2 = operatorVol * production.getPartnerEquityRatio();
+
+            production.setOperatorDeclaredOwnAvailability(ownAvail2);
+            production.setOperatorDeclaredPartnerAvailability(partnerAvail2);
+        }
+
+        return computeClosingStock(
+                computeLifting(production)
+        );
+    }
+
     public T overLiftReset(T production) {
         production.setOverlift(null);
         production.setPartnerOverlift(null);
@@ -185,18 +214,29 @@ public abstract class JvProductionServicesImpl<T extends Production, E extends C
     public T computeLifting(T production) {
         Double liftableVolume, partnerLiftableVolume;
         Integer cargoes, partnerCargoes;
-        Double availability = production.getAvailability();
-        Double partnerAvailability = production.getPartnerAvailability();
+        Double availability, partnerAvailability;
 
-        cargoes = (int) (availability / 950000.0);
-        partnerCargoes = (int) (partnerAvailability / 950000.0);
-        liftableVolume = cargoes * 950000.0;
-        partnerLiftableVolume = partnerCargoes * 950000.0;
+        if (production.getOperatorDeclaredVolume() == null) {
+            availability = production.getAvailability();
+            partnerAvailability = production.getPartnerAvailability();
+        } else {
+            availability = production.getOperatorDeclaredOwnAvailability();
+            partnerAvailability = production.getOperatorDeclaredPartnerAvailability();
+        }
 
-        production.setCargos(cargoes);
-        production.setLifting(liftableVolume);
-        production.setPartnerCargos(partnerCargoes);
-        production.setPartnerLifting(partnerLiftableVolume);
+        if (production.getLifting() == null) {
+            cargoes = (int) (availability / 950000.0);
+            liftableVolume = cargoes * 950000.0;
+            production.setCargos(cargoes);
+            production.setLifting(liftableVolume);
+        }
+
+        if (production.getPartnerLifting() == null) {
+            partnerCargoes = (int) (partnerAvailability / 950000.0);
+            partnerLiftableVolume = partnerCargoes * 950000.0;
+            production.setPartnerCargos(partnerCargoes);
+            production.setPartnerLifting(partnerLiftableVolume);
+        }
 
         return production;
     }
@@ -205,14 +245,27 @@ public abstract class JvProductionServicesImpl<T extends Production, E extends C
     public T getPreviousMonthProduction(T production) {
         int month = production.getPeriodMonth();
         int year = production.getPeriodYear();
-        
-        FiscalPeriod prevFp = getPreviousFiscalPeriod(year, month);
 
+        FiscalPeriod prevFp = getPreviousFiscalPeriod(year, month);
+        ContractPK cPK = production.getContract().getContractPK();
         //T prod = findByContractPeriod(prevFp.getYear(), prevFp.getMonth(), cs);
-        T prod = find(new ProductionPK(prevFp.getYear(), prevFp.getMonth(), production.getFiscalArrangementId(), production.getCrudeTypeCode()));
+        T prod = find(new ProductionPK(prevFp.getYear(), prevFp.getMonth(), cPK));
 
         return prod;
 
+    }
+
+    @Override
+    public T getNextMonthProduction(T production) {
+        int month = production.getPeriodMonth();
+        int year = production.getPeriodYear();
+        FiscalPeriod nextProd = getNextFiscalPeriod(year, month);
+        ContractPK cPK = production.getContract().getContractPK();
+
+        T f = find(new ProductionPK(nextProd.getYear(), nextProd.getMonth(), cPK));
+        //T f = findByContractPeriod(prevFp.getYear(), prevFp.getMonth(), cs);
+
+        return f;
     }
 
     @Override
@@ -220,7 +273,7 @@ public abstract class JvProductionServicesImpl<T extends Production, E extends C
         Production prod = getPreviousMonthProduction(production);
         if (prod != null) {
             Double openingStock = prod.getClosingStock();
-            Double partnerOpeningStock = prod.getPartnerOpeningStock();
+            Double partnerOpeningStock = prod.getPartnerClosingStock();
             production.setOpeningStock(openingStock);
             production.setPartnerOpeningStock(partnerOpeningStock);
         } else {

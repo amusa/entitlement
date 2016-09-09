@@ -40,9 +40,7 @@ public class YearGeneratorImpl implements YearGenerator, Serializable {
         }
 
         List<Integer> yearsArray = Arrays.asList(years);
-        
-        log.log(Level.INFO, "returning years array {0}", year);
-        
+
         return yearsArray;
     }
 

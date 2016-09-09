@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
     <!--[if IE 9 ]><html class="ie9"><![endif]-->
     <h:head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
@@ -345,7 +344,7 @@
 
         <!-- Other -->
         <h:outputScript name="js/calendar.min.js"/> <!-- Calendar -->
-        <h:outputScript name="js/weather.min.js"/> <!-- Weather -->
+<!--        <h:outputScript name="js/weather.min.js"/>  Weather -->
         <h:outputScript name="js/feeds.min.js"/> <!-- News Feeds -->
 
         <!--  Form Related -->
@@ -365,7 +364,7 @@
 
         </ui:insert>
 
-
+        <ui:include src="_user-change-password.xhtml"/>
 
     </h:body>
 </html>

@@ -5,9 +5,9 @@
  */
 package com.nnpcgroup.cosm.controller;
 
-import com.nnpcgroup.cosm.ejb.forecast.jv.JvForecast;
+import com.nnpcgroup.cosm.ejb.forecast.jv.JvForecastServices;
 import com.nnpcgroup.cosm.entity.Terminal;
-import com.nnpcgroup.cosm.entity.forecast.jv.Forecast;
+import com.nnpcgroup.cosm.entity.forecast.jv.JvForecast;
 
 import javax.inject.Named;
 import java.io.Serializable;
@@ -30,11 +30,11 @@ public class JvTerminalBlendController implements Serializable {
     private static final Logger log = Logger.getLogger(JvTerminalBlendController.class.getName());
 
     @EJB
-    private JvForecast productionBean;
+    private JvForecastServices productionBean;
 
-    private Forecast currentProduction;
+    private JvForecast currentProduction;
 
-    private List<Forecast> productions;
+    private List<JvForecast> productions;
 
     private Integer periodYear;
     private Integer periodMonth;
@@ -47,22 +47,22 @@ public class JvTerminalBlendController implements Serializable {
         productions = new ArrayList<>();
     }
 
-    public Forecast getCurrentProduction() {
+    public JvForecast getCurrentProduction() {
         return currentProduction;
     }
 
-    public void setCurrentProduction(Forecast currentProduction) {
+    public void setCurrentProduction(JvForecast currentProduction) {
         log.info("ProductionController::setProduction called...");
         this.currentProduction = currentProduction;
     }
 
-    public List<Forecast> getProductions() {
+    public List<JvForecast> getProductions() {
         log.info("ProductionController::getProductions called...");
         loadProductions();
         return productions;
     }
 
-    public void setProductions(List<Forecast> productions) {
+    public void setProductions(List<JvForecast> productions) {
         log.info("ProductionController::setProductions called...");
         this.productions = productions;
     }

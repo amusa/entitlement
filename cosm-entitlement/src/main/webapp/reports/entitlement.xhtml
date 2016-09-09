@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:jsf="http://xmlns.jcp.org/jsf">
+
+
+    <ui:composition template="/cosm-template.xhtml">
+
+        <ui:define name="title">
+            <h:outputText value="Entitlement Report"></h:outputText>
+        </ui:define>
+
+        <ui:define name="breadcrumb">
+            <ol class="breadcrumb hidden-xs">
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Reports</a></li>
+                <li class="active">Entitlement Report</li>
+            </ol>
+        </ui:define>
+
+        <ui:define name="page-title">
+            <h:outputText value="ENTITLEMENT REPORT"></h:outputText>
+        </ui:define>
+
+        <ui:define name="side-menu">
+            <ui:include src="_report-menu.xhtml"/>
+        </ui:define>
+
+        <ui:define name="content-area">            
+            <h:form id="jvProdListForm"> 
+                <div class="row">
+                    <div class="col-md-3 m-b-10">
+                        <label>Year</label>
+                        <h:selectOneMenu id="periodYear" value="#{reportController.periodYear}" class="form-control input-sm m-b-10" >
+                            <f:selectItem itemValue="#{null}" itemLabel="--select--" />
+                            <f:selectItems value="#{generalController.yearsAvailableSelectOne}" var="year" itemValue="#{year.value}"/>
+                            <f:ajax listener="#{generalController.yearChanged}" event="change" render="periodMonth"/>     
+                        </h:selectOneMenu>
+                    </div>
+                    <div class="col-md-3 m-b-10">
+                        <label>Month</label>
+                        <h:selectOneMenu id="periodMonth" value="#{reportController.periodMonth}" class="form-control input-sm m-b-10">                                              
+                            <f:selectItem itemValue="#{null}" itemLabel="--select--" />
+                            <f:selectItems value="#{generalController.months}" var="mth" itemValue="#{mth.month}" itemLabel="#{mth.monthStr}" />   
+                            <f:ajax />     
+                        </h:selectOneMenu>
+                    </div>
+
+                </div>              
+
+                <div class="row" >
+                    <div class="col-md-10 m-b-20">
+                        <h:commandButton  value="Run Report"  class="btn m-r-10" >
+                            <f:ajax listener="#{reportController.loadProductions}" event="click"
+                                    render="forecast_panel prodTable msgs"/>
+
+                        </h:commandButton>
+                    </div>
+                </div>
+
+                <!-- Multi Column -->
+                <div jsf:id="forecast_panel" class="row">
+                    <div class="col-md-12 m-b-12">
+                        <h:dataTable id="prodTable" var="prod" value="#{reportController.productions}" 
+                                     class="table table-bordered table-hover tile"> 
+                            <h:column>                                                        
+                                <f:facet name="header">
+                                    <h:outputText value="JV COMPANY"/>
+                                </f:facet>
+                                <h:outputText value="#{prod.contract.fiscalArrangement.operator.name}"/>
+                            </h:column>    
+                            <h:column>                                                        
+                                <f:facet name="header">
+                                    <h:outputText value="CRUDE TYPE"/>
+                                </f:facet>
+                                <h:outputText value="#{prod.contract.crudeType.code}"/>
+                            </h:column> 
+                            <h:column>
+                                <f:facet name="header">
+                                    <h:outputText value="NNPC (BBLS)" />
+                                </f:facet>                                                            
+                                <h:outputText value="#{prod.lifting}">
+                                    <f:convertNumber pattern="###,###,###.####" />
+                                </h:outputText>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">
+                                    <h:outputText value="COMPANY (BBLS)" />
+                                </f:facet>                                                            
+                                <h:outputText value="#{prod.partnerLifting}">
+                                    <f:convertNumber pattern="###,###,###.####" />
+                                </h:outputText>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">
+                                    <h:outputText value="REMARK" />
+                                </f:facet>                                                            
+                                <h:outputText value=""/>
+                            </h:column>
+                            <f:facet name="footer">                                                                
+                                <button jsf:id="printButton" class="btn m-r-5" >
+                                    <span class="icon">&#61845;</span>
+                                    Print                                   
+                                </button>
+                                <h:commandLink id="downloadButton" actionListener="#{reportController.downloadEntitlementReport}" class="btn m-r-5">
+                                    <span class="icon">&#61698;</span>
+                                    Download
+                                    <f:param name="periodYear" value="#{reportController.periodYear}"/>
+                                </h:commandLink>
+                            </f:facet>
+                        </h:dataTable>
+                    </div>
+                </div>
+            </h:form>            
+        </ui:define>
+    </ui:composition>
+</html>

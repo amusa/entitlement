@@ -175,7 +175,8 @@ public abstract class AlternativeFundingProductionServicesImpl<T extends Alterna
     }
 
     private boolean isSharedOilTerminalPeriodDue(T production) {
-        ContractPK cPK = new ContractPK(production.getFiscalArrangementId(), production.getCrudeTypeCode());
+       // ContractPK cPK = new ContractPK(production.getFiscalArrangementId(), production.getCrudeTypeCode());
+       ContractPK cPK = production.getContract().getContractPK();
         E afContract = (E) contractBean.find(cPK);//production.getContract();
         Double terminalPeriod = afContract.getTerminalPeriod();
 
@@ -199,9 +200,10 @@ public abstract class AlternativeFundingProductionServicesImpl<T extends Alterna
         }
 
         //E afContract = (E) production.getContract();
-        ContractPK cPK = new ContractPK(production.getFiscalArrangementId(), production.getCrudeTypeCode());
+        //ContractPK cPK = new ContractPK(production.getFiscalArrangementId(), production.getCrudeTypeCode());
+        ContractPK cPK = production.getContract().getContractPK();
         E afContract = (E) contractBean.find(cPK);
-        
+
         Double terminalSharedOil = afContract.getTerminalSharedOil();
 
         if (terminalSharedOil == null) {
@@ -227,7 +229,8 @@ public abstract class AlternativeFundingProductionServicesImpl<T extends Alterna
         Double carryOil = production.getCarryOil() != null ? production.getCarryOil() : new Double(0);
 
         //E afContract = (E) production.getContract();
-        ContractPK cPK = new ContractPK(production.getFiscalArrangementId(), production.getCrudeTypeCode());
+        //ContractPK cPK = new ContractPK(production.getFiscalArrangementId(), production.getCrudeTypeCode());
+        ContractPK cPK = production.getContract().getContractPK();
         E afContract = (E) contractBean.find(cPK);
         Double sharedOilRatio = afContract.getSharedOilRatio();
 

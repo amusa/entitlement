@@ -18,15 +18,26 @@ public class ContractPK implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    private Long id;
     private Long fiscalArrangementId;
     private String crudeTypeCode;
 
     public ContractPK() {
     }
 
-    public ContractPK(Long fiscalArrangementId, String crudeTypeCode) {
+    public ContractPK(Long id, Long fiscalArrangementId, String crudeTypeCode) {
+        this.id = id;
         this.fiscalArrangementId = fiscalArrangementId;
         this.crudeTypeCode = crudeTypeCode;
+    }
+
+    @Column(name = "ID")
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     @Column(name = "FISCALARRANGEMENTID")
@@ -54,15 +65,18 @@ public class ContractPK implements Serializable {
 
         ContractPK that = (ContractPK) o;
 
-        if (!fiscalArrangementId.equals(that.fiscalArrangementId)) return false;
-        return crudeTypeCode.equals(that.crudeTypeCode);
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
+        if (fiscalArrangementId != null ? !fiscalArrangementId.equals(that.fiscalArrangementId) : that.fiscalArrangementId != null)
+            return false;
+        return crudeTypeCode != null ? crudeTypeCode.equals(that.crudeTypeCode) : that.crudeTypeCode == null;
 
     }
 
     @Override
     public int hashCode() {
-        int result = fiscalArrangementId.hashCode();
-        result = 31 * result + crudeTypeCode.hashCode();
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (fiscalArrangementId != null ? fiscalArrangementId.hashCode() : 0);
+        result = 31 * result + (crudeTypeCode != null ? crudeTypeCode.hashCode() : 0);
         return result;
     }
 }

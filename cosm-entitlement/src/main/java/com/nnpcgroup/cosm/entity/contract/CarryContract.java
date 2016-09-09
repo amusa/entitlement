@@ -26,4 +26,10 @@ public class CarryContract extends AlternativeFundingContract {
     public CarryContract(FiscalArrangement fiscalArrangement, CrudeType crudeType) {
         super(fiscalArrangement, crudeType);
     }
+
+    @Override
+    public String discriminatorValue() {
+        DiscriminatorValue discriminatorValue = CarryContract.class.getAnnotation(DiscriminatorValue.class);
+        return discriminatorValue.value();
+    }
 }

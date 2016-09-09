@@ -5,37 +5,31 @@
  */
 package com.nnpcgroup.cosm.ejb.forecast.jv.impl;
 
-import com.nnpcgroup.cosm.controller.GeneralController;
-import com.nnpcgroup.cosm.ejb.FiscalArrangementBean;
 import com.nnpcgroup.cosm.ejb.forecast.jv.JvForecastServices;
-import com.nnpcgroup.cosm.ejb.impl.CommonServicesImpl;
-import com.nnpcgroup.cosm.entity.*;
+import com.nnpcgroup.cosm.entity.EquityType;
+import com.nnpcgroup.cosm.entity.FiscalArrangement;
+import com.nnpcgroup.cosm.entity.FiscalPeriod;
+import com.nnpcgroup.cosm.entity.JointVenture;
 import com.nnpcgroup.cosm.entity.contract.ContractPK;
-import com.nnpcgroup.cosm.entity.forecast.jv.Forecast;
 import com.nnpcgroup.cosm.entity.forecast.jv.ForecastPK;
+import com.nnpcgroup.cosm.entity.forecast.jv.JvForecast;
 import com.nnpcgroup.cosm.exceptions.NoRealizablePriceException;
 
 import java.io.Serializable;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.ejb.EJB;
-import javax.enterprise.context.Dependent;
-import javax.inject.Inject;
+import org.apache.log4j.Level;
+
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 /**
- * @param <T>
+ *
  * @author 18359
  */
-@Dependent
-public abstract class JvForecastServicesImpl<T extends Forecast> extends CommonServicesImpl<T> implements JvForecastServices<T>, Serializable {
+public abstract class JvForecastServicesImpl<T extends JvForecast> extends ForecastServicesImpl<T> implements JvForecastServices<T>, Serializable {
 
-    private static final Logger LOG = Logger.getLogger(JvForecastServicesImpl.class.getName());
-
-    @Inject
-    GeneralController genController;
-
-    @EJB
-    FiscalArrangementBean fiscalBean;
+    //private static final Logger LOG = Logger.getLogger(JvForecastServicesImpl.class.getName());
+    private static final Logger LOG = LogManager.getRootLogger();
+    private static final long serialVersionUID = 8993596753945847377L;
 
     public JvForecastServicesImpl(Class<T> entityClass) {
         super(entityClass);
@@ -43,7 +37,7 @@ public abstract class JvForecastServicesImpl<T extends Forecast> extends CommonS
 
     @Override
     public T computeOpeningStock(T forecast) {
-        Forecast prod = getPreviousMonthProduction(forecast);
+        JvForecast prod = getPreviousMonthProduction(forecast);
         if (prod != null) {
             Double openingStock = prod.getClosingStock();
             Double partnerOpeningStock = prod.getPartnerClosingStock();
@@ -64,7 +58,7 @@ public abstract class JvForecastServicesImpl<T extends Forecast> extends CommonS
         int days = genController.daysOfMonth(periodYear, periodMonth);
         Double grossProd = prodVolume * days;
 
-        LOG.log(Level.INFO, "Gross Forecast = DailyProd * Days => {0} * {1} = {2}", new Object[]{prodVolume, days, grossProd});
+        LOG.log(Level.INFO, String.format("Gross Production = DailyProd * Days => %f * %d = %f", new Object[]{prodVolume, days, grossProd}));
 
         forecast.setGrossProduction(grossProd);
         return forecast;
@@ -72,7 +66,7 @@ public abstract class JvForecastServicesImpl<T extends Forecast> extends CommonS
 
     @Override
     public T openingStockChanged(T forecast) {
-        LOG.log(Level.INFO, "Opening Stock changed {0}...", forecast);
+        LOG.log(Level.INFO, "Opening Stock changed:");
         return computeClosingStock(
                 computeLifting(
                         computeAvailability(forecast)
@@ -87,22 +81,26 @@ public abstract class JvForecastServicesImpl<T extends Forecast> extends CommonS
         Double availability = forecast.getAvailability();
         Double partnerAvailability = forecast.getPartnerAvailability();
 
-        cargoes = (int) (availability / 950000.0);
-        partnerCargoes = (int) (partnerAvailability / 950000.0);
-        liftableVolume = cargoes * 950000.0;
-        partnerLiftableVolume = partnerCargoes * 950000.0;
+        if (forecast.getLifting() == null) {
+            cargoes = (int) (availability / 950000.0);
+            liftableVolume = cargoes * 950000.0;
+            forecast.setCargos(cargoes);
+            forecast.setLifting(liftableVolume);
+        }
 
-        forecast.setCargos(cargoes);
-        forecast.setLifting(liftableVolume);
-        forecast.setPartnerCargos(partnerCargoes);
-        forecast.setPartnerLifting(partnerLiftableVolume);
+        if (forecast.getPartnerLifting() == null) {
+            partnerCargoes = (int) (partnerAvailability / 950000.0);
+            partnerLiftableVolume = partnerCargoes * 950000.0;
+            forecast.setPartnerCargos(partnerCargoes);
+            forecast.setPartnerLifting(partnerLiftableVolume);
+        }
 
         return forecast;
     }
 
     @Override
     public T enrich(T production) throws NoRealizablePriceException {
-        LOG.log(Level.INFO, "Enriching production {0}...", production);
+        LOG.log(Level.INFO, "Enriching production:");
         return computeClosingStock(
                 computeLifting(
                         computeAvailability(
@@ -138,11 +136,11 @@ public abstract class JvForecastServicesImpl<T extends Forecast> extends CommonS
 
         ownEntitlement = (grossProd
                 * et.getOwnEquity() * 0.01);
-        LOG.log(Level.INFO, "Own Entitlement=>{0} * {1} * 0.01 = {2}", new Object[]{grossProd, et.getOwnEquity(), ownEntitlement});
+        LOG.log(Level.INFO, String.format("Own Entitlement=>%f * %f * 0.01 = %f", new Object[]{grossProd, et.getOwnEquity(), ownEntitlement}));
 
         partnerEntitlement = (grossProd
                 * et.getPartnerEquity() * 0.01);
-        LOG.log(Level.INFO, "Partner Entitlement=>{0} * {1} * 0.01 = {2}", new Object[]{grossProd, et.getPartnerEquity(), partnerEntitlement});
+        LOG.log(Level.INFO, String.format("Partner Entitlement=>%f * %f * 0.01 = %f", new Object[]{grossProd, et.getPartnerEquity(), partnerEntitlement}));
 
         production.setOwnShareEntitlement(ownEntitlement);
         production.setPartnerShareEntitlement(partnerEntitlement);
@@ -162,6 +160,8 @@ public abstract class JvForecastServicesImpl<T extends Forecast> extends CommonS
 
         production.setAvailability(availability);
         production.setPartnerAvailability(partnerAvailability);
+        LOG.log(Level.INFO, String.format("Own Availability=entitlement + openingStock => %f + %f = %f", new Object[]{ownEntitlement, openingStock, availability}));
+        LOG.log(Level.INFO, String.format("Partner Availability=entitlement + openingStock => %f + %f = %f", new Object[]{partnerEntitlement, partnerOpeningStock, partnerAvailability}));
 
         return production;
     }
@@ -178,6 +178,8 @@ public abstract class JvForecastServicesImpl<T extends Forecast> extends CommonS
         partnerClosingStock = partnerAvailability - partnerLifting;
         production.setClosingStock(closingStock);
         production.setPartnerClosingStock(partnerClosingStock);
+        LOG.log(Level.INFO, String.format("ClosingStock=availability - lifting => %f - %f = %f", new Object[]{availability, lifting, closingStock}));
+        LOG.log(Level.INFO, String.format("Partner ClosingStock=availability - lifting => %f - %f = %f", new Object[]{partnerAvailability, partnerLifting, partnerClosingStock}));
 
         return production;
     }
@@ -189,8 +191,20 @@ public abstract class JvForecastServicesImpl<T extends Forecast> extends CommonS
         FiscalPeriod prevFp = getPreviousFiscalPeriod(year, month);
         ContractPK cPK = forecast.getContract().getContractPK();
 
-
         T f = find(new ForecastPK(prevFp.getYear(), prevFp.getMonth(), cPK));
+        //T f = findByContractPeriod(prevFp.getYear(), prevFp.getMonth(), cs);
+
+        return f;
+    }
+
+    @Override
+    public T getNextMonthProduction(T forecast) {
+        int month = forecast.getPeriodMonth();
+        int year = forecast.getPeriodYear();
+        FiscalPeriod nextFp = getNextFiscalPeriod(year, month);
+        ContractPK cPK = forecast.getContract().getContractPK();
+
+        T f = find(new ForecastPK(nextFp.getYear(), nextFp.getMonth(), cPK));
         //T f = findByContractPeriod(prevFp.getYear(), prevFp.getMonth(), cs);
 
         return f;

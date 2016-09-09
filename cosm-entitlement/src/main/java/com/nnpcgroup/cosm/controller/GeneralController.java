@@ -30,7 +30,7 @@ public class GeneralController implements Serializable {
     List<PeriodMonth> months;
 
     public SelectItem[] getYearsAvailableSelectOne() {
-        return JsfUtil.getSelectItems(yearGen.generateYears(15), true);
+        return JsfUtil.getSelectItems(yearGen.generateYears(15), false);
     }
 
     public List<Integer> getYears() {

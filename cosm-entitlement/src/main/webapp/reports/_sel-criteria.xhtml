@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:jsf="http://xmlns.jcp.org/jsf">
+
+    <ui:composition>
+        <div class="modal fade" id="SelCriteriaDlg" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">Options</h4>
+                    </div>
+                    <h:form id="SelCriteriaForm">
+                        <div class="modal-body">
+                            <h:panelGroup id="SelCriteriaPanel">
+                                <div class="row">
+                                    <div class="col-md-4 m-b-15">
+                                        <h:outputLabel value="Year" for="periodYear"/>
+                                        <h:selectOneMenu id="periodYear" value="#{jvProdController.periodYear}" class="form-control input-sm m-b-10" >                                              
+                                            <f:selectItems value="#{generalController.yearsAvailableSelectOne}" var="year" itemValue="#{year.value}"/>   
+                                            <f:ajax listener="#{generalController.yearChanged}" event="change" render="periodMonth"/>     
+                                        </h:selectOneMenu>                                        
+                                    </div>
+                                    <div class="col-md-4 m-b-15">
+                                        <h:outputLabel value="Month" for="periodMonth"/>
+                                        <h:selectOneMenu id="periodMonth" value="#{jvProdController.periodMonth}" class="form-control input-sm m-b-10">                                              
+                                            <f:selectItem itemValue="#{null}" itemLabel="--select--" />
+                                            <f:selectItems value="#{generalController.months}" var="mth" itemValue="#{mth.month}" itemLabel="#{mth.monthStr}" />   
+                                            <f:ajax />     
+                                        </h:selectOneMenu>
+                                    </div>                                    
+                                </div>
+
+                            </h:panelGroup>
+
+
+                        </div>
+                        <div class="modal-footer">
+                            <h:commandButton  value="Run" pt:data-dismiss="modal" class="btn btn-sm" action="entitlement"/>
+                        </div>
+                    </h:form>
+                </div>
+            </div>
+        </div> 
+
+    </ui:composition>
+</html>

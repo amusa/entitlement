@@ -5,6 +5,7 @@
  */
 package com.nnpcgroup.cosm.ejb.contract;
 
+import com.nnpcgroup.cosm.entity.CrudeType;
 import com.nnpcgroup.cosm.entity.contract.Contract;
 import com.nnpcgroup.cosm.ejb.AbstractCrudServices;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
@@ -18,6 +19,7 @@ import java.util.List;
 public interface ContractBaseServices<T extends Contract> extends AbstractCrudServices<T> {
     
     public List<T> findFiscalArrangementContracts(FiscalArrangement fa);
+    public Long findContractCount(FiscalArrangement fa, CrudeType ct);
         
    
 }

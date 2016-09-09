@@ -7,6 +7,7 @@ package com.nnpcgroup.cosm.ejb.contract.impl;
 
 import com.nnpcgroup.cosm.ejb.contract.ContractBaseServices;
 import com.nnpcgroup.cosm.ejb.impl.AbstractCrudServicesImpl;
+import com.nnpcgroup.cosm.entity.CrudeType;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
 import com.nnpcgroup.cosm.entity.contract.Contract;
 import com.nnpcgroup.cosm.entity.contract.ContractPK;
@@ -16,10 +17,12 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -80,7 +83,18 @@ public abstract class ContractBaseServicesImpl<T extends Contract> extends Abstr
         }
         return super.find(id); //To change body of generated methods, choose Tools | Templates.
     }
-    
-    
 
+    @Override
+    public Long findContractCount(FiscalArrangement fa, CrudeType ct) {
+
+        TypedQuery<Long> query = getEntityManager().createQuery(
+                "SELECT COUNT(c) "
+                        + "FROM Contract c  WHERE c.fiscalArrangement = :fiscalArrangement AND c.crudeType = :crudeType", Long.class);
+        query.setParameter("fiscalArrangement", fa);
+        query.setParameter("crudeType", ct);
+
+        long count = query.getSingleResult();
+
+        return count;
+    }
 }

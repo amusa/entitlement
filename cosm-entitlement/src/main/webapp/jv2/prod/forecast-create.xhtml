@@ -39,7 +39,7 @@
                                 <div class="row">
                                     <div class="col-md-4 m-b-15">
                                         <h:outputLabel value="Year" for="periodYear"/>
-                                        <h:selectOneMenu id="periodYear" value="#{jvProdController.periodYear}" class="form-control input-sm m-b-10" required="true">
+                                        <h:selectOneMenu id="periodYear" value="#{jvProdController.periodYear}" class="form-control input-sm m-b-10" required="true" disabled="true">
                                             <f:selectItems value="#{generalController.yearsAvailableSelectOne}" var="year" itemValue="#{year.value}"/>
                                             <f:ajax listener="#{generalController.yearChanged}" event="change" render="periodMonth"/>
                                         </h:selectOneMenu>
@@ -49,7 +49,7 @@
                                         <h:selectOneMenu id="periodMonth" value="#{jvProdController.periodMonth}" class="form-control input-sm m-b-10" required="true">
                                             <f:selectItem itemValue="#{null}" itemLabel="--select--" />
                                             <f:selectItems value="#{generalController.months}" var="mth" itemValue="#{mth.month}" itemLabel="#{mth.monthStr}" />
-                                            <f:ajax />
+                                            <f:ajax listener="#{jvProdController.periodMonthChanged}"/>
                                         </h:selectOneMenu>
                                     </div>
                                     <div class="col-md-4 m-b-15">
@@ -168,7 +168,7 @@
                                 <div class="row">
                                     <div class="col-md-4 m-b-15">
                                         <h:outputLabel value="Inc. Margin (IGNM)" for="ignm" />
-                                        <h:outputLabel id="ignm" value="#{jvProdController.currentAfProduction.guaranteedNotionalMargin}" class="form-control input-sm m-b-10">
+                                        <h:outputLabel id="ignm" value="#{jvProdController.currentAfProduction.margin}" class="form-control input-sm m-b-10">
                                             <f:convertNumber pattern="###,###,###.####" />
                                         </h:outputLabel>
                                     </div>
@@ -232,7 +232,7 @@
                                 <div class="row">
                                     <div class="col-md-4 m-b-15">
                                         <h:outputLabel value="Inc. Margin (IGNM)" for="ignmCum" />
-                                        <h:outputLabel id="ignmCum" value="#{jvProdController.currentAfProduction.guaranteedNotionalMargin}" class="form-control input-sm m-b-10">
+                                        <h:outputLabel id="ignmCum" value="#{jvProdController.currentAfProduction.margin}" class="form-control input-sm m-b-10">
                                             <f:convertNumber pattern="###,###,###.####" />
                                         </h:outputLabel>
                                     </div>
@@ -299,11 +299,12 @@
 
                                 <div class="row">
                                     <div class="col-md-4 m-b-15">
-                                        <h:outputLabel value="Liftable Vol (Nom)" for="lifting" />
-                                        <h:outputLabel id="lifting" value="#{jvProdController.currentProduction.lifting}" title="Lifting (Actual)"
-                                                       class="form-control input-sm">
+                                        <h:outputLabel value="Exportable Vol (Nom)" for="lifting" />
+                                        <h:inputText id="lifting" value="#{jvProdController.currentProduction.lifting}" title="Lifting (Actual)"
+                                                     class="form-control input-sm">
                                             <f:convertNumber pattern="###,###,###.####" />
-                                        </h:outputLabel>
+                                            <f:ajax event="change" listener="#{jvProdController.liftingChanged}" render="@form"/>
+                                        </h:inputText>
                                     </div>
                                     <div class="col-md-4 m-b-15">
                                         <h:outputLabel value="Lifting Cargoes" for="cargoes" />
@@ -353,10 +354,11 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-md-4 m-b-15">
-                                        <h:outputLabel value="Liftable Vol (Nom)" for="ptnrLifting" />
+                                        <h:outputLabel value="Exportable Vol (Nom)" for="ptnrLifting" />
                                         <h:inputText id="ptnrLifting" value="#{jvProdController.currentProduction.partnerLifting}" title="Lifting (Actual)"
                                                      class="form-control input-sm">
                                             <f:convertNumber pattern="###,###,###.####" />
+                                            <f:ajax event="change" listener="#{jvProdController.liftingChanged}" render="@form"/>
                                         </h:inputText>
                                     </div>
                                     <div class="col-md-4 m-b-15">

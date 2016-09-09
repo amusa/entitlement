@@ -14,12 +14,21 @@ import javax.persistence.Entity;
  */
 @Entity
 @DiscriminatorValue("MCA")
-public class ModifiedCarryForecast extends AlternativeFundingForecast{
+public class ModifiedCarryForecast extends AlternativeFundingForecast {
 
     private static final long serialVersionUID = 4881837273578907336L;
 
+    private Double nonDrillingCapex;
+
     public ModifiedCarryForecast() {
     }
-    
-            
+
+    public Double getNonDrillingCapex() {
+        return nonDrillingCapex;
+    }
+
+    public void setNonDrillingCapex(Double nonDrillingCapex) {
+        this.nonDrillingCapex = nonDrillingCapex;
+    }
+
 }

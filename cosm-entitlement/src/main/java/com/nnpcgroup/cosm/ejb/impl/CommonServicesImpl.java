@@ -9,15 +9,10 @@ import com.nnpcgroup.cosm.controller.GeneralController;
 import com.nnpcgroup.cosm.entity.contract.Contract;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
 import com.nnpcgroup.cosm.entity.Terminal;
-import com.nnpcgroup.cosm.entity.production.jv.Production;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.annotation.Resource;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -25,8 +20,9 @@ import javax.persistence.criteria.Root;
 import com.nnpcgroup.cosm.ejb.CommonServices;
 import com.nnpcgroup.cosm.entity.FiscalPeriod;
 import com.nnpcgroup.cosm.util.COSMPersistence;
-
-import javax.persistence.TypedQuery;
+import org.apache.log4j.Level;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -35,11 +31,8 @@ import javax.persistence.TypedQuery;
  */
 public abstract class CommonServicesImpl<T> extends AbstractCrudServicesImpl<T> implements CommonServices<T> {
 
-    private static final Logger log = Logger.getLogger(CommonServicesImpl.class.getName());
-
-//    @PersistenceContext(unitName = "entitlementPU")
-//    private EntityManager em;
-
+    //private static final Logger log = Logger.getLogger(CommonServicesImpl.class.getName());
+    private static final Logger LOG = LogManager.getRootLogger();
     @Inject
     @COSMPersistence
     private EntityManager em;
@@ -53,45 +46,94 @@ public abstract class CommonServicesImpl<T> extends AbstractCrudServicesImpl<T> 
 
     @Override
     protected EntityManager getEntityManager() {
-        log.info("ProductionBean::setEntityManager() called...");
         return em;
     }
 
-//    @Override
-//    public List<T> findByYearAndMonth(int year, int month) {
-//        log.log(Level.INFO, "Parameters: year={0}, month={1}", new Object[]{year, month});
-//
-//        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
-//
-//        List<T> productions;
-//
-//        CriteriaQuery cq = cb.createQuery();
-//        Root e = cq.from(entityClass);
-//        try {
-//            cq.where(
-//                    cb.and(cb.equal(e.get("periodYear"), year),
-//                            cb.equal(e.get("periodMonth"), month)
-//                    ));
-//
-//            Query query = getEntityManager().createQuery(cq);
-//
-//            productions = query.getResultList();
-//        } catch (NoResultException nre) {
-//            return null;
-//        }
-//
-//        return productions;
-//    }
     @Override
-    public T findByContractPeriod(int year, int month, Contract cs) {
+    public List<T> findByYearAndMonth(int year, int month) {
+        LOG.log(Level.INFO, String.format("Parameters: year=%d, month=%d", new Object[]{year, month}));
+
         CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
 
-        T production;
+        List<T> productions;
+
+        CriteriaQuery cq = cb.createQuery();
+        Root e = cq.from(entityClass);
+        try {
+            cq.select(e).where(
+                    cb.and(cb.equal(e.get("periodYear"), year),
+                            cb.equal(e.get("periodMonth"), month)
+                    ));
+
+            Query query = getEntityManager().createQuery(cq);
+
+            productions = query.getResultList();
+        } catch (NoResultException nre) {
+            return null;
+        }
+
+        return productions;
+    }
+
+    @Override
+    public List<T> findByContractPeriod(int year, int month, Contract cs) {
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+
+        List<T> productions;
 
         CriteriaQuery cq = cb.createQuery();
         Root<T> e = cq.from(entityClass);
         try {
             cq.select(e).where(
+                    cb.and(cb.equal(e.get("periodYear"), year),
+                            cb.equal(e.get("periodMonth"), month),
+                            cb.equal(e.get("contract"), cs)
+                    ));
+
+            Query query = getEntityManager().createQuery(cq);
+
+            productions = query.getResultList();
+        } catch (NoResultException nre) {
+            return null;
+        }
+
+        return productions;
+    }
+
+    @Override
+    public List<T> findByContractPeriod(int year, Contract cs) {
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+
+        List<T> productions;
+
+        CriteriaQuery cq = cb.createQuery();
+        Root<T> e = cq.from(entityClass);
+        try {
+            cq.select(e).where(
+                    cb.and(cb.equal(e.get("periodYear"), year),
+                            cb.equal(e.get("contract"), cs)
+                    ));
+
+            Query query = getEntityManager().createQuery(cq);
+
+            productions = query.getResultList();
+        } catch (NoResultException nre) {
+            return null;
+        }
+
+        return productions;
+    }
+
+    @Override
+    public T findSingleByContractPeriod(int year, int month, Contract cs) {
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+
+        T production;
+
+        CriteriaQuery cq = cb.createQuery();
+        Root e = cq.from(entityClass);
+        try {
+            cq.where(
                     cb.and(cb.equal(e.get("periodYear"), year),
                             cb.equal(e.get("periodMonth"), month),
                             cb.equal(e.get("contract"), cs)
@@ -134,11 +176,34 @@ public abstract class CommonServicesImpl<T> extends AbstractCrudServicesImpl<T> 
     }
 
     @Override
-    public abstract T computeEntitlement(T production);
+    public List<T> findAnnualProduction(int year, FiscalArrangement fa) {
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+
+        List<T> productions;
+
+        CriteriaQuery cq = cb.createQuery();
+        Root<T> e = cq.from(entityClass);
+        try {
+
+            cq.select(e).where(
+                    cb.and(cb.equal(e.get("periodYear"), year),
+                            cb.equal(e.get("contract").get("fiscalArrangement"), fa)
+                    ));
+            Query query = getEntityManager().createQuery(cq);
+
+            productions = query.getResultList();
+        } catch (NoResultException nre) {
+            return null;
+        }
+
+        return productions;
+    }
 
     @Override
-    public abstract T createInstance();
+    public abstract T computeEntitlement(T production);
 
+//    @Override
+//    public abstract T createInstance();
     @Override
     public abstract T computeOpeningStock(T production);
 
@@ -163,8 +228,20 @@ public abstract class CommonServicesImpl<T> extends AbstractCrudServicesImpl<T> 
     }
 
     @Override
+    public FiscalPeriod getNextFiscalPeriod(int year, int month) {
+        int mt = (month % 12) + 1;
+        int yr = year;
+
+        if (mt == 1) {
+            ++yr;
+        }
+
+        return new FiscalPeriod(yr, mt);
+    }
+
+    @Override
     public T openingStockChanged(T production) {
-        log.log(Level.INFO, "Opening Stock changed {0}...", production);
+        LOG.log(Level.INFO, "Opening Stock changed {0}...");
         return computeClosingStock(
                 computeLifting(
                         computeAvailability(production)
@@ -196,15 +273,13 @@ public abstract class CommonServicesImpl<T> extends AbstractCrudServicesImpl<T> 
 
 //        TypedQuery<T> query = getEntityManager().createQuery(
 //                "SELECT f "
-//                        + "FROM Forecast f WHERE f.periodYear = :periodYear "
+//                        + "FROM JvForecastServices f WHERE f.periodYear = :periodYear "
 //                        + "AND f.periodMonth = :periodMonth AND f.contract.crudeType = :crudeType", entityClass);
 //        query.setParameter("periodYear", year);
 //        query.setParameter("periodMonth", month);
 //        query.setParameter("crudeType", terminal.getCrudeType());
 //
 //        List<T> productions = query.getResultList();
-
-
         return productions;
     }
 

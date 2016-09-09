@@ -16,14 +16,39 @@ import javax.persistence.Entity;
  */
 @Entity
 @DiscriminatorValue("MCA")
-public class ModifiedCarryContract extends AlternativeFundingContract{
-    
+public class ModifiedCarryContract extends AlternativeFundingContract {
+
     private static final long serialVersionUID = -308376402305136004L;
+
+    private Double taxRate;
+    private Double royaltyRate;
 
     public ModifiedCarryContract() {
     }
 
     public ModifiedCarryContract(FiscalArrangement fiscalArrangement, CrudeType crudeType) {
         super(fiscalArrangement, crudeType);
+    }
+
+    public Double getTaxRate() {
+        return taxRate;
+    }
+
+    public void setTaxRate(Double taxRate) {
+        this.taxRate = taxRate;
+    }
+
+    public Double getRoyaltyRate() {
+        return royaltyRate;
+    }
+
+    public void setRoyaltyRate(Double royaltyRate) {
+        this.royaltyRate = royaltyRate;
+    }
+
+    @Override
+    public String discriminatorValue() {
+        DiscriminatorValue discriminatorValue = ModifiedCarryContract.class.getAnnotation(DiscriminatorValue.class);
+        return discriminatorValue.value();
     }
 }

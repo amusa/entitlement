@@ -21,8 +21,7 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.nnpcgroup.cosm.controller.MonthGenerator;
 import com.nnpcgroup.cosm.controller.PeriodMonth;
-import com.nnpcgroup.cosm.ejb.forecast.jv.JvForecastServices;
-import com.nnpcgroup.cosm.entity.forecast.jv.JvForecast;
+import com.nnpcgroup.cosm.ejb.forecast.jv.JvForecastDetailServices;
 import com.nnpcgroup.cosm.entity.forecast.jv.JvForecastDetail;
 
 import java.io.ByteArrayOutputStream;
@@ -35,7 +34,7 @@ import java.io.OutputStream;
 public class EntitlementReport extends HttpServlet {
 
     @EJB
-    private JvForecastServices forecastBean;
+    private JvForecastDetailServices forecastBean;
     @Inject
     MonthGenerator monthGen;
 

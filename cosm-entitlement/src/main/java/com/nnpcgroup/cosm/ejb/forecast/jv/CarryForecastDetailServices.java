@@ -11,6 +11,6 @@ import com.nnpcgroup.cosm.entity.forecast.jv.CarryForecastDetail;
  *
  * @author 18359
  */
-public interface CarryForecastServices extends AlternativeFundingForecastServices<CarryForecastDetail> {
+public interface CarryForecastDetailServices extends AlternativeFundingForecastDetailServices<CarryForecastDetail> {
     
 }

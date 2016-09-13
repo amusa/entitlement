@@ -8,24 +8,28 @@ package com.nnpcgroup.cosm.ejb.forecast.jv.impl;
 import com.nnpcgroup.cosm.controller.GeneralController;
 import com.nnpcgroup.cosm.ejb.FiscalArrangementBean;
 import com.nnpcgroup.cosm.ejb.forecast.jv.ForecastDetailServices;
-import com.nnpcgroup.cosm.ejb.forecast.jv.ForecastServices;
-import com.nnpcgroup.cosm.ejb.impl.AbstractCrudServicesImpl;
 import com.nnpcgroup.cosm.ejb.impl.CommonServicesImpl;
-import com.nnpcgroup.cosm.entity.forecast.jv.Forecast;
 import com.nnpcgroup.cosm.entity.forecast.jv.ForecastDetail;
 
+import java.io.Serializable;
 import javax.ejb.EJB;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
-import java.io.Serializable;
 
 /**
  * @param <T>
  * @author 18359
  */
-public abstract class ForecastServicesImpl<T extends Forecast> extends AbstractCrudServicesImpl<T> implements ForecastServices<T>, Serializable {
+@Dependent
+public abstract class ForecastDetailServicesImpl<T extends ForecastDetail> extends CommonServicesImpl<T> implements ForecastDetailServices<T>, Serializable {
 
-    public ForecastServicesImpl(Class<T> entityClass) {
+    @Inject
+    GeneralController genController;
+
+    @EJB
+    FiscalArrangementBean fiscalBean;
+
+    public ForecastDetailServicesImpl(Class<T> entityClass) {
         super(entityClass);
     }
 }

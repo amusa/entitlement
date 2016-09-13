@@ -5,8 +5,7 @@
  */
 package com.nnpcgroup.cosm.ejb.forecast.jv.impl;
 
-import com.nnpcgroup.cosm.ejb.forecast.jv.JvForecastServices;
-import com.nnpcgroup.cosm.entity.forecast.jv.JvForecast;
+import com.nnpcgroup.cosm.ejb.forecast.jv.JvForecastDetailServices;
 import com.nnpcgroup.cosm.entity.forecast.jv.JvForecastDetail;
 
 import javax.ejb.Local;
@@ -19,17 +18,17 @@ import java.util.logging.Logger;
  * @author 18359
  */
 @Stateless
-@Local(JvForecastServices.class)
-public class JvForecastServicesBean extends JvForecastServicesImpl<JvForecastDetail> implements JvForecastServices<JvForecastDetail>, Serializable{
+@Local(JvForecastDetailServices.class)
+public class JvForecastDetailServicesBean extends JvForecastDetailServicesImpl<JvForecastDetail> implements JvForecastDetailServices<JvForecastDetail>, Serializable{
 
-    private static final Logger LOG = Logger.getLogger(JvForecastServicesBean.class.getName());
+    private static final Logger LOG = Logger.getLogger(JvForecastDetailServicesBean.class.getName());
     private static final long serialVersionUID = 8993596753945847377L;
 
-    public JvForecastServicesBean(Class<JvForecastDetail> entityClass) {
+    public JvForecastDetailServicesBean(Class<JvForecastDetail> entityClass) {
         super(entityClass);
     }
 
-    public JvForecastServicesBean(){
+    public JvForecastDetailServicesBean(){
         super(JvForecastDetail.class);
     }
 

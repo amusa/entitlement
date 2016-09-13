@@ -380,8 +380,8 @@ public class JvProductionController implements Serializable {
                 production = new RegularProduction();
             } else {
                 //something is wrong
-                LOG.log(Level.INFO, "Something is wrong! JvForecastServices type not determined {0}...", forecastDetail);
-                throw new Exception("JvForecastServices type not determined");
+                LOG.log(Level.INFO, "Something is wrong! JvForecastDetailServices type not determined {0}...", forecastDetail);
+                throw new Exception("JvForecastDetailServices type not determined");
             }
 
             LOG.log(Level.INFO, "************getProductionBean().createInstance() returning {0}...", currentProduction);

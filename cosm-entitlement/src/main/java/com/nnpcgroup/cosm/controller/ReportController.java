@@ -30,7 +30,7 @@ public class ReportController implements Serializable {
     private static final Logger LOG = Logger.getLogger(JvForecastController.class.getName());
 
     @EJB
-    private JvForecastServices forecastBean;
+    private JvForecastDetailServices forecastBean;
 
     private List<JvForecast> productions;
     private Integer periodYear;
@@ -41,7 +41,7 @@ public class ReportController implements Serializable {
         LOG.info("ProductionController::constructor activated...");
     }
 
-    public JvForecastServices getForecastBean() {
+    public JvForecastDetailServices getForecastBean() {
         return forecastBean;
     }
 

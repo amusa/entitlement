@@ -5,7 +5,7 @@
  */
 package com.nnpcgroup.cosm.ejb.forecast.jv.impl;
 
-import com.nnpcgroup.cosm.ejb.forecast.jv.ModifiedCarryForecastServices;
+import com.nnpcgroup.cosm.ejb.forecast.jv.ModifiedCarryForecastDetailServices;
 import com.nnpcgroup.cosm.entity.Price;
 import com.nnpcgroup.cosm.entity.PricePK;
 import com.nnpcgroup.cosm.entity.contract.Contract;
@@ -21,11 +21,11 @@ import javax.enterprise.context.Dependent;
  * @author 18359
  */
 @Dependent
-public class ModifiedCarryForecastServicesImpl extends AlternativeFundingForecastServicesImpl<ModifiedCarryForecastDetail> implements ModifiedCarryForecastServices {
+public class ModifiedCarryForecastDetailServicesImpl extends AlternativeFundingForecastDetailServicesImpl<ModifiedCarryForecastDetail> implements ModifiedCarryForecastDetailServices {
 
-    private static final Logger LOG = Logger.getLogger(ModifiedCarryForecastServicesImpl.class.getName());
+    private static final Logger LOG = Logger.getLogger(ModifiedCarryForecastDetailServicesImpl.class.getName());
 
-    public ModifiedCarryForecastServicesImpl(Class<ModifiedCarryForecastDetail> entityClass) {
+    public ModifiedCarryForecastDetailServicesImpl(Class<ModifiedCarryForecastDetail> entityClass) {
         super(entityClass);
     }
 

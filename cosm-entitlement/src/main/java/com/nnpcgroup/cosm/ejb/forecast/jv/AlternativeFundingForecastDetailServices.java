@@ -14,7 +14,7 @@ import com.nnpcgroup.cosm.exceptions.NoRealizablePriceException;
  * @author 18359
  * @param <T>
  */
-public interface AlternativeFundingForecastServices<T extends AlternativeFundingForecastDetail> extends JvForecastServices<T> {
+public interface AlternativeFundingForecastDetailServices<T extends AlternativeFundingForecastDetail> extends JvForecastDetailServices<T> {
 
     public T computeCarryOil(T forecast);
 

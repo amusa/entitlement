@@ -5,7 +5,7 @@
  */
 package com.nnpcgroup.cosm.ejb.forecast.jv.impl;
 
-import com.nnpcgroup.cosm.ejb.forecast.jv.CarryForecastServices;
+import com.nnpcgroup.cosm.ejb.forecast.jv.CarryForecastDetailServices;
 import com.nnpcgroup.cosm.entity.forecast.jv.CarryForecastDetail;
 
 import java.io.Serializable;
@@ -19,13 +19,13 @@ import javax.ejb.Stateless;
  */
 
 @Stateless
-@Local(CarryForecastServices.class)
-public class CarryForecastBean extends CarryForecastServicesImpl implements CarryForecastServices, Serializable {
+@Local(CarryForecastDetailServices.class)
+public class CarryForecastDetailBean extends CarryForecastDetailServicesImpl implements CarryForecastDetailServices, Serializable {
 
-    private static final Logger LOG = Logger.getLogger(CarryForecastBean.class.getName());
+    private static final Logger LOG = Logger.getLogger(CarryForecastDetailBean.class.getName());
     private static final long serialVersionUID = -60220421460416910L;
 
-    public CarryForecastBean() {
+    public CarryForecastDetailBean() {
         super(CarryForecastDetail.class);
         LOG.info("ProductionBean::constructor activated...");
 

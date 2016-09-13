@@ -5,7 +5,7 @@
  */
 package com.nnpcgroup.cosm.ejb.forecast.jv.impl;
 
-import com.nnpcgroup.cosm.ejb.forecast.jv.CarryForecastServices;
+import com.nnpcgroup.cosm.ejb.forecast.jv.CarryForecastDetailServices;
 import com.nnpcgroup.cosm.entity.Price;
 import com.nnpcgroup.cosm.entity.PricePK;
 import com.nnpcgroup.cosm.entity.forecast.jv.CarryForecastDetail;
@@ -19,11 +19,11 @@ import javax.enterprise.context.Dependent;
  * @author 18359
  */
 @Dependent
-public abstract class CarryForecastServicesImpl extends AlternativeFundingForecastServicesImpl<CarryForecastDetail> implements CarryForecastServices {
+public abstract class CarryForecastDetailServicesImpl extends AlternativeFundingForecastDetailServicesImpl<CarryForecastDetail> implements CarryForecastDetailServices {
 
-    private static final Logger LOG = Logger.getLogger(CarryForecastServicesImpl.class.getName());
+    private static final Logger LOG = Logger.getLogger(CarryForecastDetailServicesImpl.class.getName());
 
-    public CarryForecastServicesImpl(Class<CarryForecastDetail> entityClass) {
+    public CarryForecastDetailServicesImpl(Class<CarryForecastDetail> entityClass) {
         super(entityClass);
     }
 

@@ -11,7 +11,7 @@ import com.nnpcgroup.cosm.entity.forecast.jv.PscForecast;
  *
  * @author 18359
  */
-public interface PscForecastServices extends ForecastServices<PscForecast> {
+public interface PscForecastDetailServices extends ForecastDetailServices<PscForecast> {
 
     
    

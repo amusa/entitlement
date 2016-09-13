@@ -11,21 +11,23 @@ import com.nnpcgroup.cosm.entity.FiscalArrangement;
 import com.nnpcgroup.cosm.entity.FiscalPeriod;
 import com.nnpcgroup.cosm.entity.JointVenture;
 import com.nnpcgroup.cosm.entity.contract.ContractPK;
+import com.nnpcgroup.cosm.entity.forecast.jv.ForecastDetailPK;
 import com.nnpcgroup.cosm.entity.forecast.jv.ForecastPK;
 import com.nnpcgroup.cosm.entity.forecast.jv.JvForecast;
+import com.nnpcgroup.cosm.entity.forecast.jv.JvForecastDetail;
 import com.nnpcgroup.cosm.exceptions.NoRealizablePriceException;
 
 import java.io.Serializable;
+
 import org.apache.log4j.Level;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 /**
- *
  * @author 18359
  */
-public abstract class JvForecastServicesImpl<T extends JvForecast> extends ForecastServicesImpl<T> implements JvForecastServices<T>, Serializable {
+public abstract class JvForecastServicesImpl<T extends JvForecastDetail> extends ForecastServicesImpl<T> implements JvForecastServices<T>, Serializable {
 
     //private static final Logger LOG = Logger.getLogger(JvForecastServicesImpl.class.getName());
     private static final Logger LOG = LogManager.getRootLogger();
@@ -37,7 +39,7 @@ public abstract class JvForecastServicesImpl<T extends JvForecast> extends Forec
 
     @Override
     public T computeOpeningStock(T forecast) {
-        JvForecast prod = getPreviousMonthProduction(forecast);
+        JvForecastDetail prod = getPreviousMonthProduction(forecast);
         if (prod != null) {
             Double openingStock = prod.getClosingStock();
             Double partnerOpeningStock = prod.getPartnerClosingStock();
@@ -189,9 +191,10 @@ public abstract class JvForecastServicesImpl<T extends JvForecast> extends Forec
         int month = forecast.getPeriodMonth();
         int year = forecast.getPeriodYear();
         FiscalPeriod prevFp = getPreviousFiscalPeriod(year, month);
-        ContractPK cPK = forecast.getContract().getContractPK();
+        ContractPK cPK = forecast.getForecastDetailPK().getContract();
+        ForecastPK fPK = new ForecastPK(prevFp.getYear(), prevFp.getMonth(), forecast.getForecast().getFiscalArrangement().getId());
 
-        T f = find(new ForecastPK(prevFp.getYear(), prevFp.getMonth(), cPK));
+        T f = find(new ForecastDetailPK(fPK, cPK));
         //T f = findByContractPeriod(prevFp.getYear(), prevFp.getMonth(), cs);
 
         return f;
@@ -203,8 +206,9 @@ public abstract class JvForecastServicesImpl<T extends JvForecast> extends Forec
         int year = forecast.getPeriodYear();
         FiscalPeriod nextFp = getNextFiscalPeriod(year, month);
         ContractPK cPK = forecast.getContract().getContractPK();
+        ForecastPK fPK = new ForecastPK(nextFp.getYear(), nextFp.getMonth(), forecast.getForecastDetailPK().getForecast().getFiscalArrangementId());
 
-        T f = find(new ForecastPK(nextFp.getYear(), nextFp.getMonth(), cPK));
+        T f = find(new ForecastDetailPK(fPK, cPK));
         //T f = findByContractPeriod(prevFp.getYear(), prevFp.getMonth(), cs);
 
         return f;

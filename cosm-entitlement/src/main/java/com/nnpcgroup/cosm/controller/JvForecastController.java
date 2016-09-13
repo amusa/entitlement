@@ -14,12 +14,7 @@ import com.nnpcgroup.cosm.entity.contract.Contract;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
 import com.nnpcgroup.cosm.entity.contract.ModifiedCarryContract;
 import com.nnpcgroup.cosm.entity.contract.JvContract;
-import com.nnpcgroup.cosm.entity.forecast.jv.AlternativeFundingForecast;
-import com.nnpcgroup.cosm.entity.forecast.jv.CarryForecast;
-import com.nnpcgroup.cosm.entity.forecast.jv.Forecast;
-import com.nnpcgroup.cosm.entity.forecast.jv.ForecastPK;
-import com.nnpcgroup.cosm.entity.forecast.jv.ModifiedCarryForecast;
-import com.nnpcgroup.cosm.entity.forecast.jv.JvForecast;
+import com.nnpcgroup.cosm.entity.forecast.jv.*;
 import com.nnpcgroup.cosm.exceptions.NoRealizablePriceException;
 
 import javax.inject.Named;
@@ -33,6 +28,7 @@ import javax.enterprise.context.SessionScoped;
 import javax.enterprise.inject.Produces;
 import javax.faces.model.SelectItem;
 import javax.inject.Inject;
+
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -66,6 +62,8 @@ public class JvForecastController implements Serializable {
 
     private JvForecast currentProduction;
     private List<JvForecast> productions;
+    private List<JvForecastDetail> forecastDetails;
+    private JvForecastDetail currentForecastDetail;
     private Integer periodYear;
     private Integer periodMonth;
     private FiscalArrangement currentFiscalArrangement;
@@ -104,22 +102,22 @@ public class JvForecastController implements Serializable {
 
     public void setCurrentProduction(JvForecast currentProduction) {
         this.currentProduction = currentProduction;
-        this.currentFiscalArrangement = (currentProduction != null)
-                ? currentProduction.getContract().getFiscalArrangement() : null;
-        this.currentContract = (currentProduction != null)
-                ? currentProduction.getContract() : null;
+//        this.currentFiscalArrangement = (currentProduction != null)
+//                ? currentProduction.getContract().getFiscalArrangement() : null;
+//        this.currentContract = (currentProduction != null)
+//                ? currentProduction.getContract() : null;
     }
 
-    public AlternativeFundingForecast getCurrentAfProduction() {
-        if (currentProduction instanceof AlternativeFundingForecast) {
-            return (AlternativeFundingForecast) currentProduction;
+    public AlternativeFundingForecastDetail getCurrentAfProduction() {
+        if (currentForecastDetail instanceof AlternativeFundingForecastDetail) {
+            return (AlternativeFundingForecastDetail) currentForecastDetail;
         }
         return null;
     }
 
-    public void setCurrentAfProduction(AlternativeFundingForecast afProduction) {
+    public void setCurrentAfProduction(AlternativeFundingForecastDetail afProduction) {
         if (afProduction != null) {
-            this.currentProduction = afProduction;
+            this.currentForecastDetail = afProduction;
         }
     }
 
@@ -132,9 +130,27 @@ public class JvForecastController implements Serializable {
         this.productions = productions;
     }
 
+    public JvForecastDetail getCurrentForecastDetail() {
+        return currentForecastDetail;
+    }
+
+    public void setCurrentForecastDetail(JvForecastDetail currentForecastDetail) {
+        this.currentForecastDetail = currentForecastDetail;
+    }
+
+    public List<JvForecastDetail> getForecastDetails() {
+        return forecastDetails;
+    }
+
+    public void setForecastDetails(List<JvForecastDetail> forecastDetails) {
+        this.forecastDetails = forecastDetails;
+    }
+
     public String prepareCreate() {
         reset();
+        currentProduction = new JvForecast();
         currentContractChanged();
+        setForecastEmbeddableKeys();
         return "forecast-create";
     }
 
@@ -228,30 +244,30 @@ public class JvForecastController implements Serializable {
         }
     }
 
-    private List<JvForecast> handleAnnualProduction() {
+    private List<JvForecastDetail> handleAnnualProduction() {
         if (currentFiscalArrangement != null) {
             if (currentContract == null) {
-                productions = getForecastBean().findAnnualProduction(periodYear, currentFiscalArrangement);
+                forecastDetails = getForecastBean().findAnnualProduction(periodYear, currentFiscalArrangement);
             } else {
-                productions = getForecastBean().findByContractPeriod(periodYear, currentContract);
+                forecastDetails = getForecastBean().findByContractPeriod(periodYear, currentContract);
             }
         }
-        return productions;
+        return forecastDetails;
     }
 
-    private List<JvForecast> handleMonthlyProduction() {
+    private List<JvForecastDetail> handleMonthlyProduction() {
         if (currentFiscalArrangement != null) {
             if (currentContract == null) {
-                productions = getForecastBean().findByContractPeriod(periodYear, periodMonth, currentFiscalArrangement);
+                forecastDetails = getForecastBean().findByContractPeriod(periodYear, periodMonth, currentFiscalArrangement);
             } else {
-                productions = getForecastBean().findByContractPeriod(periodYear, periodMonth, currentContract);
+                forecastDetails = getForecastBean().findByContractPeriod(periodYear, periodMonth, currentContract);
             }
 
         } else {
-            productions = getForecastBean().findByYearAndMonth(periodYear, periodMonth);
+            forecastDetails = getForecastBean().findByYearAndMonth(periodYear, periodMonth);
         }
 
-        return productions;
+        return forecastDetails;
     }
 
     public boolean isEditMode() {
@@ -273,11 +289,11 @@ public class JvForecastController implements Serializable {
 
     public void productionVolumeChanged() {
         try {
-            getForecastBean().enrich(currentProduction);
+            getForecastBean().enrich(currentForecastDetail);
             LOG.log(Level.INFO,
                     String.format("Production Enriched::Own entmt=%f, Partner entmt=%f",
-                            new Object[]{currentProduction.getOwnShareEntitlement(),
-                                currentProduction.getPartnerShareEntitlement()
+                            new Object[]{currentForecastDetail.getOwnShareEntitlement(),
+                                    currentForecastDetail.getPartnerShareEntitlement()
                             }));
         } catch (NoRealizablePriceException rpe) {
             Logger.getLogger(this.getClass().getName()).log(Level.ERROR, null, rpe);
@@ -315,7 +331,8 @@ public class JvForecastController implements Serializable {
     }
 
     private void reset() {
-        currentProduction = null;
+        //       currentProduction = null;
+        currentForecastDetail = null;
         productions = null;
 //        currentContract = null;
     }
@@ -379,42 +396,42 @@ public class JvForecastController implements Serializable {
     }
 
     public Double getDailySum() {
-        Double dailySum = productions.stream()
+        Double dailySum = forecastDetails.stream()
                 .mapToDouble(p -> p.getProductionVolume())
                 .sum();
         return dailySum;
     }
 
     public Double getGrossSum() {
-        Double grossProd = productions.stream()
+        Double grossProd = forecastDetails.stream()
                 .mapToDouble(p -> p.getGrossProduction())
                 .sum();
         return grossProd;
     }
 
     public Double getOwnEntitlementSum() {
-        Double ownEntitlement = productions.stream()
+        Double ownEntitlement = forecastDetails.stream()
                 .mapToDouble(p -> p.getOwnShareEntitlement())
                 .sum();
         return ownEntitlement;
     }
 
     public Double getPartnerEntitlementSum() {
-        Double partnerEntitlement = productions.stream()
+        Double partnerEntitlement = forecastDetails.stream()
                 .mapToDouble(p -> p.getPartnerShareEntitlement())
                 .sum();
         return partnerEntitlement;
     }
 
     public Double getOpeningStockSum() {
-        Double openingStockSum = productions.stream()
+        Double openingStockSum = forecastDetails.stream()
                 .mapToDouble(p -> p.getOpeningStock())
                 .sum();
         return openingStockSum;
     }
 
     public Double getAvailabilitySum() {
-        Double availabilitySum = productions.stream()
+        Double availabilitySum = forecastDetails.stream()
                 .mapToDouble(p -> p.getAvailability())
                 .sum();
 
@@ -438,27 +455,27 @@ public class JvForecastController implements Serializable {
     }
 
     public boolean isFiscalArrangementAfContract() {
-        return (getCurrentProduction() instanceof AlternativeFundingForecast);
+        return (getCurrentForecastDetail() instanceof AlternativeFundingForecastDetail);
     }
 
     public void currentContractChanged() {// throws Exception {
         if (currentContract instanceof CarryContract) {
-            currentProduction = new CarryForecast();
+            currentForecastDetail = new CarryForecastDetail();
             setNewForecast(true);
         } else if (currentContract instanceof ModifiedCarryContract) {
-            currentProduction = new ModifiedCarryForecast();
+            currentForecastDetail = new ModifiedCarryForecastDetail();
             setNewForecast(true);
         } else if (currentContract instanceof JvContract) {
-            currentProduction = new JvForecast();
+            currentForecastDetail = new JvForecastDetail();
             setNewForecast(true);
         } else {
             LOG.info("Undefined contract selection...");
         }
 
-        if (currentProduction != null) {
+        if (currentForecastDetail != null) {
 
             if (periodYear != null && periodMonth != null) {
-                setEmbeddableKeys();
+                setForecastDetailEmbeddableKeys();
             }
         }
     }
@@ -467,23 +484,38 @@ public class JvForecastController implements Serializable {
         return (JvForecast) getForecastBean().find(fPK);
     }
 
-    private void setEmbeddableKeys() {
+    private void setForecastDetailEmbeddableKeys() {
+        ForecastDetailPK fPK = new ForecastDetailPK();
+        fPK.setForecast(currentProduction.getForecastPK());
+        fPK.setContract(currentContract.getContractPK());
+
+        currentForecastDetail.setForecastDetailPK(fPK);
+
+        currentForecastDetail.setPeriodYear(periodYear);
+        currentForecastDetail.setPeriodMonth(periodMonth);
+        currentForecastDetail.setContract(currentContract);
+        currentForecastDetail.setForecast(currentProduction);
+
+        currentProduction.addForecastDetails(currentForecastDetail);
+
+    }
+
+    private void setForecastEmbeddableKeys() {
         ForecastPK fPK = new ForecastPK();
         fPK.setPeriodYear(periodYear);
         fPK.setPeriodMonth(periodMonth);
-        fPK.setContract(currentContract.getContractPK());
-        currentProduction.setForecastPK(fPK);
+        fPK.setFiscalArrangementId(currentFiscalArrangement.getId());
 
+        currentProduction.setForecastPK(fPK);
         currentProduction.setPeriodYear(periodYear);
         currentProduction.setPeriodMonth(periodMonth);
-        currentProduction.setContract(currentContract);
-//        currentContract.addForecast(currentProduction);
-//        currentProduction.setContract(currentContract);
+
+        currentProduction.setFiscalArrangement(currentFiscalArrangement);
     }
 
     public void periodMonthChanged() {
         if (isNewForecast()) {
-            setEmbeddableKeys();
+            setForecastDetailEmbeddableKeys();
         }
     }
 }

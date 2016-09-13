@@ -21,12 +21,13 @@
     <class>com.nnpcgroup.cosm.entity.contract.ModifiedCarryContract</class>
     <class>com.nnpcgroup.cosm.entity.contract.JvContract</class>
     <class>com.nnpcgroup.cosm.entity.contract.PscContract</class>
-    <class>com.nnpcgroup.cosm.entity.forecast.jv.AlternativeFundingForecast</class>
-    <class>com.nnpcgroup.cosm.entity.forecast.jv.CarryForecast</class>
+    <class>com.nnpcgroup.cosm.entity.forecast.jv.AlternativeFundingForecastDetail</class>
+    <class>com.nnpcgroup.cosm.entity.forecast.jv.CarryForecastDetail</class>
     <class>com.nnpcgroup.cosm.entity.forecast.jv.Forecast</class>
-    <class>com.nnpcgroup.cosm.entity.forecast.jv.ForecastEntitlement</class>
-    <class>com.nnpcgroup.cosm.entity.forecast.jv.ModifiedCarryForecast</class>
+    <class>com.nnpcgroup.cosm.entity.forecast.jv.ForecastDetail</class>
+     <class>com.nnpcgroup.cosm.entity.forecast.jv.ModifiedCarryForecastDetail</class>
     <class>com.nnpcgroup.cosm.entity.forecast.jv.JvForecast</class>
+      <class>com.nnpcgroup.cosm.entity.forecast.jv.JvForecastDetail</class>
     <class>com.nnpcgroup.cosm.entity.forecast.jv.PscForecast</class>
     <class>com.nnpcgroup.cosm.entity.production.jv.AlternativeFundingProduction</class>
     <class>com.nnpcgroup.cosm.entity.production.jv.CarryProduction</class>

@@ -9,7 +9,7 @@ import com.nnpcgroup.cosm.ejb.PriceBean;
 import com.nnpcgroup.cosm.ejb.contract.ContractServices;
 import com.nnpcgroup.cosm.ejb.forecast.jv.AlternativeFundingForecastServices;
 import com.nnpcgroup.cosm.entity.contract.*;
-import com.nnpcgroup.cosm.entity.forecast.jv.AlternativeFundingForecast;
+import com.nnpcgroup.cosm.entity.forecast.jv.AlternativeFundingForecastDetail;
 import com.nnpcgroup.cosm.exceptions.NoRealizablePriceException;
 
 import java.util.logging.Level;
@@ -29,7 +29,7 @@ import javax.persistence.criteria.Root;
  * @author 18359
  */
 @Dependent
-public abstract class AlternativeFundingForecastServicesImpl<T extends AlternativeFundingForecast> extends JvForecastServicesImpl<T> implements AlternativeFundingForecastServices<T> {
+public abstract class AlternativeFundingForecastServicesImpl<T extends AlternativeFundingForecastDetail> extends JvForecastServicesImpl<T> implements AlternativeFundingForecastServices<T> {
     
     private static final Logger LOG = Logger.getLogger(AlternativeFundingForecastServicesImpl.class.getName());
     private static final long serialVersionUID = -5826414842990437262L;

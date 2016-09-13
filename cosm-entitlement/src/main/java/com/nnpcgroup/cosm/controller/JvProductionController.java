@@ -11,10 +11,7 @@ import com.nnpcgroup.cosm.ejb.contract.ContractServices;
 import com.nnpcgroup.cosm.ejb.production.jv.*;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
 import com.nnpcgroup.cosm.entity.contract.*;
-import com.nnpcgroup.cosm.entity.forecast.jv.CarryForecast;
-import com.nnpcgroup.cosm.entity.forecast.jv.Forecast;
-import com.nnpcgroup.cosm.entity.forecast.jv.JvForecast;
-import com.nnpcgroup.cosm.entity.forecast.jv.ModifiedCarryForecast;
+import com.nnpcgroup.cosm.entity.forecast.jv.*;
 import com.nnpcgroup.cosm.entity.production.jv.*;
 import com.nnpcgroup.cosm.exceptions.NoRealizablePriceException;
 
@@ -354,10 +351,10 @@ public class JvProductionController implements Serializable {
         currentContract = null;
     }
 
-    public void actualize(Forecast forecast) throws Exception {
-        LOG.log(Level.INFO, "Actualizing {0}...", forecast);
+    public void actualize(ForecastDetail forecastDetail) throws Exception {
+        LOG.log(Level.INFO, "Actualizing {0}...", forecastDetail);
         reset();
-        ContractPK cPK = forecast.getContract().getContractPK();
+        ContractPK cPK = forecastDetail.getContract().getContractPK();
         Contract contract = contractBean.find(cPK); //forecast.getContract();
 
 //        setCurrentContract(forecast.getContract());
@@ -365,9 +362,9 @@ public class JvProductionController implements Serializable {
 
         Production production = null;
         ProductionPK pPK = new ProductionPK(
-                forecast.getPeriodYear(),
-                forecast.getPeriodMonth(),
-                forecast.getContract().getContractPK()
+                forecastDetail.getPeriodYear(),
+                forecastDetail.getPeriodMonth(),
+                forecastDetail.getContract().getContractPK()
         );
         production = (Production) getProductionBean().find(pPK);
 
@@ -375,23 +372,23 @@ public class JvProductionController implements Serializable {
             LOG.log(Level.INFO, "Actualizing: Creating new JV Production instance...");
 
 //TODO:find better way to evaluate datatype
-            if (forecast instanceof ModifiedCarryForecast) {
+            if (forecastDetail instanceof ModifiedCarryForecastDetail) {
                 production = new ModifiedCarryProduction();
-            } else if (forecast instanceof CarryForecast) {
+            } else if (forecastDetail instanceof CarryForecastDetail) {
                 production = new CarryProduction();
-            } else if (forecast instanceof JvForecast) {
+            } else if (forecastDetail instanceof JvForecastDetail) {
                 production = new RegularProduction();
             } else {
                 //something is wrong
-                LOG.log(Level.INFO, "Something is wrong! JvForecastServices type not determined {0}...", forecast);
+                LOG.log(Level.INFO, "Something is wrong! JvForecastServices type not determined {0}...", forecastDetail);
                 throw new Exception("JvForecastServices type not determined");
             }
 
             LOG.log(Level.INFO, "************getProductionBean().createInstance() returning {0}...", currentProduction);
             //production.setProductionPK(pPK);
-            production.setContract(forecast.getContract());
-            production.setPeriodYear(forecast.getPeriodYear());
-            production.setPeriodMonth(forecast.getPeriodMonth());
+            production.setContract(forecastDetail.getContract());
+            production.setPeriodYear(forecastDetail.getPeriodYear());
+            production.setPeriodMonth(forecastDetail.getPeriodMonth());
 //            production.setFiscalArrangementId(forecast.getContract().getContractPK().getFiscalArrangementId());
 //            production.setCrudeTypeCode(forecast.getContract().getContractPK().getCrudeTypeCode());
             production.setProductionPK(pPK);
@@ -399,8 +396,8 @@ public class JvProductionController implements Serializable {
             // getProductionBean().enrich(currentProduction);
         }
         setCurrentProduction(production);
-        setPeriodYear(forecast.getPeriodYear());
-        setPeriodMonth(forecast.getPeriodMonth());
+        setPeriodYear(forecastDetail.getPeriodYear());
+        setPeriodMonth(forecastDetail.getPeriodMonth());
         setCurrentFiscalArrangement(contract.getFiscalArrangement());
         setDirectActualizing(false);//actualizing through targeted forecast and not directly through the entry actualizing interface
     }

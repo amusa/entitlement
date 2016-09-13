@@ -7,6 +7,8 @@ package com.nnpcgroup.cosm.ejb.forecast.jv;
 
 import com.nnpcgroup.cosm.ejb.*;
 import com.nnpcgroup.cosm.entity.forecast.jv.Forecast;
+import com.nnpcgroup.cosm.entity.forecast.jv.ForecastDetail;
+
 import java.io.Serializable;
 import javax.enterprise.context.Dependent;
 
@@ -16,7 +18,7 @@ import javax.enterprise.context.Dependent;
  * @param <T>
  */
 @Dependent
-public interface ForecastServices<T extends Forecast> extends CommonServices<T>, Serializable {
+public interface ForecastServices<T extends ForecastDetail> extends CommonServices<T>, Serializable {
 
     public T computeGrossProduction(T forecast);    
    

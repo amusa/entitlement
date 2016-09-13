@@ -14,7 +14,7 @@ import javax.persistence.Entity;
  */
 @Entity
 @DiscriminatorValue("PSC")
-public class PscForecast extends Forecast {
+public class PscForecast extends ForecastDetail {
 
     private static final long serialVersionUID = 2917192116735019964L;
 

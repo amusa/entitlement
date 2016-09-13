@@ -8,6 +8,7 @@ package com.nnpcgroup.cosm.controller;
 import com.nnpcgroup.cosm.ejb.forecast.jv.JvForecastServices;
 import com.nnpcgroup.cosm.entity.Terminal;
 import com.nnpcgroup.cosm.entity.forecast.jv.JvForecast;
+import com.nnpcgroup.cosm.entity.forecast.jv.JvForecastDetail;
 
 import javax.inject.Named;
 import java.io.Serializable;
@@ -35,6 +36,7 @@ public class JvTerminalBlendController implements Serializable {
     private JvForecast currentProduction;
 
     private List<JvForecast> productions;
+    private List<JvForecastDetail> forecastDetails;
 
     private Integer periodYear;
     private Integer periodMonth;
@@ -67,7 +69,15 @@ public class JvTerminalBlendController implements Serializable {
         this.productions = productions;
     }
 
-//    public void prepareCreate() {
+    public List<JvForecastDetail> getForecastDetails() {
+        return forecastDetails;
+    }
+
+    public void setForecastDetails(List<JvForecastDetail> forecastDetails) {
+        this.forecastDetails = forecastDetails;
+    }
+
+    //    public void prepareCreate() {
 //        log.info("prepareCreate called...");
 //        currentProduction = productionBean.createInstance();
 //        if (periodYear != null && periodMonth != null) {
@@ -170,58 +180,58 @@ public class JvTerminalBlendController implements Serializable {
         if (productions.isEmpty()) {
             return null;
         }
-        Double dailySum = productions.stream()
+        Double dailySum = forecastDetails.stream()
                 .mapToDouble(p -> p.getProductionVolume())
                 .sum();
         return dailySum;
     }
 
     public Double getGrossSum() {
-        log.log(Level.INFO, "productions is not empty {0}", productions);
-        if (productions.isEmpty()) {
+        log.log(Level.INFO, "productions is not empty {0}", forecastDetails);
+        if (forecastDetails.isEmpty()) {
             return null;
         }
-        Double grossProd = productions.stream()
+        Double grossProd = forecastDetails.stream()
                 .mapToDouble(p -> p.getGrossProduction())
                 .sum();
         return grossProd;
     }
 
     public Double getOwnEntitlementSum() {
-        if (productions.isEmpty()) {
+        if (forecastDetails.isEmpty()) {
             return null;
         }
-        Double ownEntitlement = productions.stream()
+        Double ownEntitlement = forecastDetails.stream()
                 .mapToDouble(p -> p.getOwnShareEntitlement())
                 .sum();
         return ownEntitlement;
     }
 
     public Double getPartnerEntitlementSum() {
-        if (productions.isEmpty()) {
+        if (forecastDetails.isEmpty()) {
             return null;
         }
-        Double partnerEntitlement = productions.stream()
+        Double partnerEntitlement = forecastDetails.stream()
                 .mapToDouble(p -> p.getPartnerShareEntitlement())
                 .sum();
         return partnerEntitlement;
     }
 
     public Double getOpeningStockSum() {
-        if (productions.isEmpty()) {
+        if (forecastDetails.isEmpty()) {
             return null;
         }
-        Double openingStockSum = productions.stream()
+        Double openingStockSum = forecastDetails.stream()
                 .mapToDouble(p -> p.getOpeningStock())
                 .sum();
         return openingStockSum;
     }
 
     public Double getAvailabilitySum() {
-        if (productions.isEmpty()) {
+        if (forecastDetails.isEmpty()) {
             return null;
         }
-        Double availabilitySum = productions.stream()
+        Double availabilitySum = forecastDetails.stream()
                 .mapToDouble(p -> p.getAvailability())
                 .sum();
 

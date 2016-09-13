@@ -5,8 +5,6 @@
  */
 package com.nnpcgroup.cosm.entity.forecast.jv;
 
-import com.nnpcgroup.cosm.entity.contract.ContractPK;
-
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.io.Serializable;
@@ -22,16 +20,23 @@ public class ForecastPK implements Serializable {
     private static final long serialVersionUID = -5632726719147425922L;
     private Integer periodYear;
     private Integer periodMonth;
-    private ContractPK contract;
+    private Long fiscalArrangementId;
+//    private ContractPK contract;
 
     public ForecastPK() {
     }
 
-    public ForecastPK(Integer periodYear, Integer periodMonth, ContractPK contract) {
+    public ForecastPK(Integer periodYear, Integer periodMonth, Long fiscalArrangementId) {
         this.periodYear = periodYear;
         this.periodMonth = periodMonth;
-        this.contract = contract;
+        this.fiscalArrangementId = fiscalArrangementId;
     }
+
+//    public ForecastPK(Integer periodYear, Integer periodMonth, ContractPK contract) {
+//        this.periodYear = periodYear;
+//        this.periodMonth = periodMonth;
+//        this.contract = contract;
+//    }
 
     @Column(name = "PERIOD_YEAR")
     public Integer getPeriodYear() {
@@ -51,14 +56,23 @@ public class ForecastPK implements Serializable {
         this.periodMonth = periodMonth;
     }
 
-
-    public ContractPK getContract() {
-        return contract;
+    @Column(name = "FISCALARRANGEMENT_ID")
+    public Long getFiscalArrangementId() {
+        return fiscalArrangementId;
     }
 
-    public void setContract(ContractPK contract) {
-        this.contract = contract;
+    public void setFiscalArrangementId(Long fiscalArrangementId) {
+        this.fiscalArrangementId = fiscalArrangementId;
     }
+
+//    public ContractPK getContract() {
+//        return contract;
+//    }
+//
+//    public void setContract(ContractPK contract) {
+//        this.contract = contract;
+//    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -67,17 +81,17 @@ public class ForecastPK implements Serializable {
 
         ForecastPK that = (ForecastPK) o;
 
-        if (!periodYear.equals(that.periodYear)) return false;
-        if (!periodMonth.equals(that.periodMonth)) return false;
-        return contract.equals(that.contract);
+        if (periodYear != null ? !periodYear.equals(that.periodYear) : that.periodYear != null) return false;
+        if (periodMonth != null ? !periodMonth.equals(that.periodMonth) : that.periodMonth != null) return false;
+        return fiscalArrangementId != null ? fiscalArrangementId.equals(that.fiscalArrangementId) : that.fiscalArrangementId == null;
 
     }
 
     @Override
     public int hashCode() {
-        int result = periodYear.hashCode();
-        result = 31 * result + periodMonth.hashCode();
-        result = 31 * result + contract.hashCode();
+        int result = periodYear != null ? periodYear.hashCode() : 0;
+        result = 31 * result + (periodMonth != null ? periodMonth.hashCode() : 0);
+        result = 31 * result + (fiscalArrangementId != null ? fiscalArrangementId.hashCode() : 0);
         return result;
     }
 }

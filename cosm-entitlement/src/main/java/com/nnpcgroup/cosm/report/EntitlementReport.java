@@ -23,6 +23,7 @@ import com.nnpcgroup.cosm.controller.MonthGenerator;
 import com.nnpcgroup.cosm.controller.PeriodMonth;
 import com.nnpcgroup.cosm.ejb.forecast.jv.JvForecastServices;
 import com.nnpcgroup.cosm.entity.forecast.jv.JvForecast;
+import com.nnpcgroup.cosm.entity.forecast.jv.JvForecastDetail;
 
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
@@ -38,7 +39,7 @@ public class EntitlementReport extends HttpServlet {
     @Inject
     MonthGenerator monthGen;
 
-    private java.util.List<JvForecast> productions;
+    private java.util.List<JvForecastDetail> productions;
 
     Integer periodYear;
     Integer periodMonth;
@@ -123,7 +124,7 @@ public class EntitlementReport extends HttpServlet {
 
     private void addTableContent(PdfPTable table) {
         if (productions != null) {
-            for (JvForecast forecast : productions) {
+            for (JvForecastDetail forecast : productions) {
                 table.addCell(forecast.getContract().getFiscalArrangement().getOperator().getName());
                 table.addCell(forecast.getContract().getCrudeType().getCode());
                 table.addCell(String.valueOf(forecast.getLifting()));

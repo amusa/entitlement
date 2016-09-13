@@ -7,6 +7,7 @@ package com.nnpcgroup.cosm.ejb.forecast.jv.impl;
 
 import com.nnpcgroup.cosm.ejb.forecast.jv.RegularForecastServices;
 import com.nnpcgroup.cosm.entity.forecast.jv.JvForecast;
+import com.nnpcgroup.cosm.entity.forecast.jv.JvForecastDetail;
 
 import java.util.logging.Logger;
 import javax.enterprise.context.Dependent;
@@ -16,12 +17,12 @@ import javax.enterprise.context.Dependent;
  * @author 18359
  */
 @Dependent
-public abstract class RegularForecastServicesImpl extends ForecastServicesImpl<JvForecast> implements RegularForecastServices {
+public abstract class RegularForecastServicesImpl extends ForecastServicesImpl<JvForecastDetail> implements RegularForecastServices {
 
     private static final Logger LOG = Logger.getLogger(RegularForecastServicesImpl.class.getName());
 
 
-    public RegularForecastServicesImpl(Class<JvForecast> entityClass) {
+    public RegularForecastServicesImpl(Class<JvForecastDetail> entityClass) {
         super(entityClass);
     }
 

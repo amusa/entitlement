@@ -7,6 +7,7 @@ package com.nnpcgroup.cosm.ejb.forecast.jv.impl;
 
 import com.nnpcgroup.cosm.ejb.forecast.jv.JvForecastServices;
 import com.nnpcgroup.cosm.entity.forecast.jv.JvForecast;
+import com.nnpcgroup.cosm.entity.forecast.jv.JvForecastDetail;
 
 import javax.ejb.Local;
 import javax.ejb.Stateless;
@@ -19,17 +20,17 @@ import java.util.logging.Logger;
  */
 @Stateless
 @Local(JvForecastServices.class)
-public class JvForecastServicesBean extends JvForecastServicesImpl<JvForecast> implements JvForecastServices<JvForecast>, Serializable{
+public class JvForecastServicesBean extends JvForecastServicesImpl<JvForecastDetail> implements JvForecastServices<JvForecastDetail>, Serializable{
 
     private static final Logger LOG = Logger.getLogger(JvForecastServicesBean.class.getName());
     private static final long serialVersionUID = 8993596753945847377L;
 
-    public JvForecastServicesBean(Class<JvForecast> entityClass) {
+    public JvForecastServicesBean(Class<JvForecastDetail> entityClass) {
         super(entityClass);
     }
 
     public JvForecastServicesBean(){
-        super(JvForecast.class);
+        super(JvForecastDetail.class);
     }
 
 

@@ -25,7 +25,7 @@ public abstract class ForecastDetail implements Serializable {
     private Integer periodYear;
     private Integer periodMonth;
     private Contract contract;
-    private Forecast forecast;
+
 
 
     public ForecastDetail() {
@@ -72,22 +72,5 @@ public abstract class ForecastDetail implements Serializable {
     public void setContract(Contract contract) {
         this.contract = contract;
     }
-
-
-    @ManyToOne
-    @MapsId("forecast")
-    @JoinColumns({
-            @JoinColumn(name = "PERIOD_YEAR", referencedColumnName = "PERIOD_YEAR", updatable = false, insertable = false),
-            @JoinColumn(name = "PERIOD_MONTH", referencedColumnName = "PERIOD_MONTH", updatable = false, insertable = false),
-            @JoinColumn(name = "FISCALARRANGEMENT_ID", referencedColumnName = "FISCALARRANGEMENT_ID", insertable = false, updatable = false)
-    })
-    public Forecast getForecast() {
-        return forecast;
-    }
-
-    public void setForecast(Forecast forecast) {
-        this.forecast = forecast;
-    }
-
 
 }

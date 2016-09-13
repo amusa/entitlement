@@ -7,6 +7,7 @@ package com.nnpcgroup.cosm.entity.forecast.jv;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,7 +20,28 @@ public class JvForecast extends Forecast {
 
     private static final long serialVersionUID = 2917192116735019964L;
 
+    private List<JvForecastDetail> forecastDetails;
+
     public JvForecast() {
+    }
+
+    @OneToMany(mappedBy = "forecast", cascade = CascadeType.ALL)
+    public List<JvForecastDetail> getForecastDetails() {
+        return forecastDetails;
+    }
+
+    public void setForecastDetails(List<JvForecastDetail> forecastDetails) {
+        this.forecastDetails = forecastDetails;
+    }
+
+
+
+    public void addForecastDetails(JvForecastDetail forecastDetail) {
+        if (forecastDetails == null) {
+            forecastDetails = new ArrayList<>();
+
+        }
+        forecastDetails.add(forecastDetail);
     }
 
 }

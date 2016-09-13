@@ -149,9 +149,22 @@ public class JvForecastController implements Serializable {
     public String prepareCreate() {
         reset();
         currentProduction = new JvForecast();
+        currentForecastDetail = new JvForecastDetail();
         currentContractChanged();
         setForecastEmbeddableKeys();
         return "forecast-create";
+    }
+
+    public String prepareCreateForecast() {
+        currentProduction = new JvForecast();
+        setForecastEmbeddableKeys();
+        forecastDetails = new ArrayList<>();
+        return "forecast-create2";
+    }
+
+    public String prepareAddForecastDetail() {
+        currentContractChanged();
+        return "forecast-detail-create";
     }
 
     public void destroy() {
@@ -166,6 +179,10 @@ public class JvForecastController implements Serializable {
         destroy();
     }
 
+    public void remove(JvForecastDetail forecastDetail) {
+        forecastDetails.remove(forecastDetail);
+    }
+
     public void create() {
         persist(JsfUtil.PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("ProductionCreated"));
         if (!JsfUtil.isValidationFailed()) {
@@ -176,12 +193,44 @@ public class JvForecastController implements Serializable {
         }
     }
 
+    public String addForecastDetail() {
+        if (forecastDetails == null) {
+            forecastDetails = new ArrayList<>();
+        }
+        forecastDetails.add(currentForecastDetail);
+        return "forecast-create2";
+    }
+
+    public String createForecast() {
+        currentProduction.setForecastDetails(forecastDetails);
+        persist(JsfUtil.PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("ProductionCreated"));
+        if (!JsfUtil.isValidationFailed()) {
+            reset();
+            currentContract = null;
+            loadProductions();
+//            setNewForecast(false);
+            return "forecast2";
+        }
+        return null;
+    }
+
     public void cancel() {
         reset();
         currentContractChanged();
         loadProductions();
         disableEditMode();
         setNewForecast(false);
+    }
+
+    public void cancelForecast() {
+        reset2();
+        loadForecastDetails();
+
+    }
+
+    public String cancelForecastDetail() {
+        currentForecastDetail = null;
+        return "forecast-create2";
     }
 
     public void update() {
@@ -235,6 +284,16 @@ public class JvForecastController implements Serializable {
     }
 
     public void loadProductions() {
+        if (periodYear != null) {
+            if (periodMonth != null) {
+                handleMonthlyProduction();
+            } else {
+                handleAnnualProduction();
+            }
+        }
+    }
+
+    public void loadForecastDetails() {
         if (periodYear != null) {
             if (periodMonth != null) {
                 handleMonthlyProduction();
@@ -335,6 +394,14 @@ public class JvForecastController implements Serializable {
         currentForecastDetail = null;
         productions = null;
 //        currentContract = null;
+    }
+
+    private void reset2() {
+        currentProduction = null;
+        currentForecastDetail = null;
+        productions = null;
+//        currentContract = null;
+        forecastDetails = null;
     }
 
     public Integer getPeriodYear() {
@@ -494,9 +561,8 @@ public class JvForecastController implements Serializable {
         currentForecastDetail.setPeriodYear(periodYear);
         currentForecastDetail.setPeriodMonth(periodMonth);
         currentForecastDetail.setContract(currentContract);
-        currentForecastDetail.setForecast(currentProduction);
 
-        currentProduction.addForecastDetails(currentForecastDetail);
+        currentForecastDetail.setForecast(currentProduction);
 
     }
 
@@ -511,6 +577,8 @@ public class JvForecastController implements Serializable {
         currentProduction.setPeriodMonth(periodMonth);
 
         currentProduction.setFiscalArrangement(currentFiscalArrangement);
+        currentProduction.setForecastDetails(forecastDetails);
+
     }
 
     public void periodMonthChanged() {

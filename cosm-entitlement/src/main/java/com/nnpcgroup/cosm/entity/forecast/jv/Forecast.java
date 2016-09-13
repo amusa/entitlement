@@ -31,7 +31,7 @@ public abstract class Forecast implements Serializable {
     private Integer periodMonth;
     private FiscalArrangement fiscalArrangement;
     private String remark;
-    private List<ForecastDetail> forecastDetails;
+
 
 
     public Forecast() {
@@ -92,15 +92,6 @@ public abstract class Forecast implements Serializable {
 //        this.contract = contract;
 //    }
 
-    @OneToMany(mappedBy = "forecast", cascade = CascadeType.ALL)
-    public List<ForecastDetail> getForecastDetails() {
-        return forecastDetails;
-    }
-
-    public void setForecastDetails(List<ForecastDetail> forecastDetails) {
-        this.forecastDetails = forecastDetails;
-    }
-
     @Column(name = "REMARK")
     public String getRemark() {
         return remark;
@@ -108,14 +99,6 @@ public abstract class Forecast implements Serializable {
 
     public void setRemark(String remark) {
         this.remark = remark;
-    }
-
-    public void addForecastDetails(ForecastDetail forecastDetail) {
-        if (forecastDetails == null) {
-            forecastDetails = new ArrayList<>();
-
-        }
-        forecastDetails.add(forecastDetail);
     }
 
     @Override

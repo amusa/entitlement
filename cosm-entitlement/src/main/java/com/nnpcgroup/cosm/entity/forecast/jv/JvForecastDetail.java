@@ -5,9 +5,7 @@
  */
 package com.nnpcgroup.cosm.entity.forecast.jv;
 
-import javax.persistence.Column;
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -20,7 +18,6 @@ public class JvForecastDetail extends ForecastDetail {
 
     private static final long serialVersionUID = 2917192116735019964L;
 
-    //    private Forecast forecast;
     private Double grossProduction;
     private Double productionVolume;
     private Double openingStock;
@@ -35,6 +32,7 @@ public class JvForecastDetail extends ForecastDetail {
     private Integer partnerCargos;
     private Double availability;
     private Double partnerAvailability;
+    private Forecast forecast;
 
 
     public JvForecastDetail() {
@@ -168,6 +166,21 @@ public class JvForecastDetail extends ForecastDetail {
 
     public void setPartnerCargos(Integer partnerCargos) {
         this.partnerCargos = partnerCargos;
+    }
+
+    @ManyToOne
+    @MapsId("forecast")
+    @JoinColumns({
+            @JoinColumn(name = "PERIOD_YEAR", referencedColumnName = "PERIOD_YEAR", updatable = false, insertable = false),
+            @JoinColumn(name = "PERIOD_MONTH", referencedColumnName = "PERIOD_MONTH", updatable = false, insertable = false),
+            @JoinColumn(name = "FISCALARRANGEMENT_ID", referencedColumnName = "FISCALARRANGEMENT_ID", insertable = false, updatable = false)
+    })
+    public Forecast getForecast() {
+        return forecast;
+    }
+
+    public void setForecast(Forecast forecast) {
+        this.forecast = forecast;
     }
 
 }

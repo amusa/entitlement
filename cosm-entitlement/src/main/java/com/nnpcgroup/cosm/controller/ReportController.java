@@ -10,6 +10,7 @@ import com.nnpcgroup.cosm.entity.forecast.jv.JvForecast;
 
 import java.io.IOException;
 
+import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
 import java.util.List;
@@ -17,6 +18,8 @@ import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletException;
+
+import com.nnpcgroup.cosm.entity.forecast.jv.JvForecastDetail;
 import org.apache.log4j.Logger;
 
 /**
@@ -30,9 +33,13 @@ public class ReportController implements Serializable {
     private static final Logger LOG = Logger.getLogger(JvForecastController.class.getName());
 
     @EJB
-    private JvForecastDetailServices forecastBean;
+    private JvForecastDetailServices forecastDetailBean;
+
+    @Inject
+    private JvForecastServices forecastBean;
 
     private List<JvForecast> productions;
+    private List<JvForecastDetail>forecastDetails;
     private Integer periodYear;
     private Integer periodMonth;
 
@@ -41,7 +48,11 @@ public class ReportController implements Serializable {
         LOG.info("ProductionController::constructor activated...");
     }
 
-    public JvForecastDetailServices getForecastBean() {
+    public JvForecastDetailServices getForecastDetailBean() {
+        return forecastDetailBean;
+    }
+
+    public JvForecastServices getForecastBean() {
         return forecastBean;
     }
 
@@ -53,9 +64,17 @@ public class ReportController implements Serializable {
         this.productions = productions;
     }
 
+    public List<JvForecastDetail> getForecastDetails() {
+        return forecastDetails;
+    }
+
+    public void setForecastDetails(List<JvForecastDetail> forecastDetails) {
+        this.forecastDetails = forecastDetails;
+    }
+
     public void loadProductions() {
         if (periodYear != null && periodMonth != null) {
-            productions = getForecastBean().findByYearAndMonth(periodYear, periodMonth);
+            forecastDetails = getForecastDetailBean().findByYearAndMonth(periodYear, periodMonth);
         }
     }
 

@@ -25,7 +25,7 @@ public class JvForecast extends Forecast {
     public JvForecast() {
     }
 
-    @OneToMany(mappedBy = "forecast", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "forecast", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     public List<JvForecastDetail> getForecastDetails() {
         return forecastDetails;
     }

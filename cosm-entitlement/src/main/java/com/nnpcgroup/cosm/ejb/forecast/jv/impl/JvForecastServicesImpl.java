@@ -5,27 +5,22 @@
  */
 package com.nnpcgroup.cosm.ejb.forecast.jv.impl;
 
-import com.nnpcgroup.cosm.ejb.forecast.jv.JvForecastDetailServices;
 import com.nnpcgroup.cosm.ejb.forecast.jv.JvForecastServices;
-import com.nnpcgroup.cosm.entity.EquityType;
-import com.nnpcgroup.cosm.entity.FiscalArrangement;
-import com.nnpcgroup.cosm.entity.FiscalPeriod;
-import com.nnpcgroup.cosm.entity.JointVenture;
-import com.nnpcgroup.cosm.entity.contract.ContractPK;
-import com.nnpcgroup.cosm.entity.forecast.jv.ForecastDetailPK;
-import com.nnpcgroup.cosm.entity.forecast.jv.ForecastPK;
 import com.nnpcgroup.cosm.entity.forecast.jv.JvForecast;
-import com.nnpcgroup.cosm.entity.forecast.jv.JvForecastDetail;
-import com.nnpcgroup.cosm.exceptions.NoRealizablePriceException;
 import com.nnpcgroup.cosm.util.COSMPersistence;
-import org.apache.log4j.Level;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
 
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.io.Serializable;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author 18359
@@ -55,4 +50,29 @@ public class JvForecastServicesImpl extends ForecastServicesImpl<JvForecast> imp
     }
 
 
+    @Override
+    public List<JvForecast> findByYearAndMonth(int year, int month) {
+        LOG.log(Level.INFO, "Parameters: year={0}, month={1}", new Object[]{year, month});
+
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+
+        List<JvForecast> productions;
+
+        CriteriaQuery cq = cb.createQuery();
+        Root e = cq.from(JvForecast.class);
+        try {
+            cq.select(e).where(
+                    cb.and(cb.equal(e.get("periodYear"), year),
+                            cb.equal(e.get("periodMonth"), month)
+                    ));
+
+            Query query = getEntityManager().createQuery(cq);
+
+            productions = query.getResultList();
+        } catch (NoResultException nre) {
+            return null;
+        }
+
+        return productions;
+    }
 }

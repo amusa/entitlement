@@ -9,7 +9,6 @@ import com.nnpcgroup.cosm.ejb.forecast.jv.JvForecastServices;
 import com.nnpcgroup.cosm.entity.forecast.jv.JvForecast;
 import com.nnpcgroup.cosm.util.COSMPersistence;
 
-import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -21,11 +20,14 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.ejb.Local;
+import javax.ejb.Stateless;
 
 /**
  * @author 18359
  */
-@Dependent
+@Stateless
+@Local(JvForecastServices.class)
 public class JvForecastServicesImpl extends ForecastServicesImpl<JvForecast> implements JvForecastServices, Serializable {
 
   private static final Logger LOG = Logger.getLogger(JvForecastServicesImpl.class.getName());

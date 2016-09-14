@@ -6,8 +6,14 @@
 package com.nnpcgroup.cosm.report;
 
 import com.itextpdf.text.*;
+import com.itextpdf.text.Font.FontFamily;
+import com.itextpdf.text.pdf.ColumnText;
+import com.itextpdf.text.pdf.PdfContentByte;
+import com.itextpdf.text.pdf.PdfGState;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfReader;
+import com.itextpdf.text.pdf.PdfStamper;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.nnpcgroup.cosm.controller.MonthGenerator;
 import com.nnpcgroup.cosm.controller.PeriodMonth;
@@ -22,6 +28,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
@@ -62,7 +69,9 @@ public class EntitlementReport extends HttpServlet {
 
             Document document = new Document(PageSize.A4);
             baos = new ByteArrayOutputStream();
-            PdfWriter.getInstance(document, baos);
+            //PdfWriter.getInstance(document, baos);
+            PdfWriter writer = PdfWriter.getInstance(document, baos);
+            writer.setPageEvent(new PdfWatermarkHelper());
 
             document.open();
             addMetaData(document);
@@ -77,6 +86,41 @@ public class EntitlementReport extends HttpServlet {
             baos.writeTo(os);
             os.flush();
             os.close();
+
+//            PdfReader reader = new PdfReader(src);
+//            int n = reader.getNumberOfPages();
+//            PdfStamper stamper = new PdfStamper(reader, new FileOutputStream(dest));
+//            // text watermark
+//            Font f = new Font(FontFamily.HELVETICA, 30);
+//            Phrase p = new Phrase("My watermark (text)", f);
+//            // image watermark
+//            Image img = Image.getInstance(IMG);
+//            float w = img.getScaledWidth();
+//            float h = img.getScaledHeight();
+//            // transparency
+//            PdfGState gs1 = new PdfGState();
+//            gs1.setFillOpacity(0.5f);
+//            // properties
+//            PdfContentByte over;
+//            Rectangle pagesize;
+//            float x, y;
+//            // loop over every page
+//            for (int i = 1; i <= n; i++) {
+//                pagesize = reader.getPageSizeWithRotation(i);
+//                x = (pagesize.getLeft() + pagesize.getRight()) / 2;
+//                y = (pagesize.getTop() + pagesize.getBottom()) / 2;
+//                over = stamper.getOverContent(i);
+//                over.saveState();
+//                over.setGState(gs1);
+//                if (i % 2 == 1) {
+//                    ColumnText.showTextAligned(over, Element.ALIGN_CENTER, p, x, y, 0);
+//                } else {
+//                    over.addImage(img, w, 0, 0, h, x - (w / 2), y - (h / 2));
+//                }
+//                over.restoreState();
+//            }
+//            stamper.close();
+//            reader.close();
         } catch (DocumentException e) {
             throw new IOException(e.getMessage());
         }
@@ -140,7 +184,6 @@ public class EntitlementReport extends HttpServlet {
                     cell.setRowspan(fcount);
                     table.addCell(cell);
 
-
                     int count = 0;
                     for (JvForecastDetail forecastDetail : forecastDetails) {
                         count++;
@@ -157,7 +200,6 @@ public class EntitlementReport extends HttpServlet {
                             table.addCell(cell);
                         }
                     }
-
 
                 }
 
@@ -202,14 +244,13 @@ public class EntitlementReport extends HttpServlet {
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-
     /**
      * Handles the HTTP <code>GET</code> method.
      *
-     * @param request  servlet request
+     * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException      if an I/O error occurs
+     * @throws IOException if an I/O error occurs
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -224,10 +265,10 @@ public class EntitlementReport extends HttpServlet {
     /**
      * Handles the HTTP <code>POST</code> method.
      *
-     * @param request  servlet request
+     * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException      if an I/O error occurs
+     * @throws IOException if an I/O error occurs
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)

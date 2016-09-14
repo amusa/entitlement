@@ -189,10 +189,10 @@
                                             <h:commandLink pt:data-target="#JvViewDlg" pt:look="warning" pt:data-toggle="modal">
                                                 <span class="icon">&#61698;</span>
                                                 #{bundle.View}
-                                                <f:ajax event="click" render="JvViewForm" listener="#{jvProdController.setCurrentProduction(prod)}"/>
+                                                <f:ajax event="click" render="JvViewForm" listener="#{jvProdController.setCurrentForecastDetail(prod)}"/>
                                             </h:commandLink>
                                         </li>
-                                        <li><h:commandLink action="forecast-edit" actionListener="#{jvProdController.setCurrentProduction(prod)}">
+                                        <li><h:commandLink action="forecast-edit" actionListener="#{jvProdController.setCurrentForecastDetail(prod)}">
                                                 <span class="icon">&#61952;</span>
                                                 #{bundle.Edit}
                                             </h:commandLink>
@@ -201,7 +201,7 @@
                                             <h:commandLink>
                                                 <span class="icon">&#61918;</span>
                                                 #{bundle.Delete}
-                                                <f:ajax render="jvProdListForm prodTable msgs" listener="#{jvProdController.destroy(prod)}"/>
+                                                <f:ajax render="jvProdListForm prodTable msgs" listener="#{jvProdController.destroyForecastDetail(prod)}"/>
                                             </h:commandLink>
                                         </li> 
                                     </ul>
@@ -212,7 +212,7 @@
                                 <button jsf:id="actualizeButton" class="btn m-r-5" jsf:disabled="#{empty jvProdController.currentProduction}" >
                                     <span class="icon">&#61845;</span>
                                     #{bundle.Actualize}
-                                    <f:ajax event="click" render="JvActualizeCreateForm" listener="#{jvActualController.actualize(jvProdController.currentProduction)}"/>
+                                    <f:ajax event="click" render="JvActualizeCreateForm" listener="#{jvActualController.actualize(jvProdController.currentForecastDetail)}"/>
                                 </button>
 
                                 <h:commandLink id="createButton" action="#{jvProdController.prepareCreate}" class="btn m-r-5">

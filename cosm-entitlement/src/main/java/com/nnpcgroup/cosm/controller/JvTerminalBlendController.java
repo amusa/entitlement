@@ -20,7 +20,6 @@ import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 
 /**
- *
  * @author 18359
  */
 @Named(value = "jvTermBlendController")
@@ -47,6 +46,7 @@ public class JvTerminalBlendController implements Serializable {
      */
     public JvTerminalBlendController() {
         productions = new ArrayList<>();
+        forecastDetails = new ArrayList<>();
     }
 
     public JvForecast getCurrentProduction() {
@@ -60,7 +60,7 @@ public class JvTerminalBlendController implements Serializable {
 
     public List<JvForecast> getProductions() {
         log.info("ProductionController::getProductions called...");
-        loadProductions();
+        //loadProductions();
         return productions;
     }
 
@@ -70,6 +70,7 @@ public class JvTerminalBlendController implements Serializable {
     }
 
     public List<JvForecastDetail> getForecastDetails() {
+        loadProductions();
         return forecastDetails;
     }
 
@@ -139,7 +140,7 @@ public class JvTerminalBlendController implements Serializable {
 //    }
     public void loadProductions() {
         if (periodYear != null && periodMonth != null && currentTerminal != null) {
-            productions = productionBean.getTerminalProduction(periodYear, periodMonth, currentTerminal);
+            forecastDetails = productionBean.getTerminalProduction(periodYear, periodMonth, currentTerminal);
         }
     }
 
@@ -177,7 +178,7 @@ public class JvTerminalBlendController implements Serializable {
 
     public Double getDailySum() {
         log.log(Level.INFO, "Productions: {0}", productions);
-        if (productions.isEmpty()) {
+        if (forecastDetails.isEmpty()) {
             return null;
         }
         Double dailySum = forecastDetails.stream()

@@ -175,6 +175,10 @@ public class JvForecastController implements Serializable {
 
     public String prepareUpdateForecast() {
         loadFiscalMonthlyProduction();
+        if (currentProduction==null){
+             JsfUtil.addErrorMessage(ResourceBundle.getBundle("/Bundle").getString("NoForecastData"));
+            return null;
+        }
         return "forecast-edit2";
     }
 

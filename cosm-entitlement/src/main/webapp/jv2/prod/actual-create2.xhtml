@@ -54,34 +54,30 @@
                         <label>Fiscal Arrangement</label>
                         <h:selectOneMenu id="contract" value="#{jvActualController.currentFiscalArrangement}" class="form-control input-sm m-b-10">                                              
                             <f:selectItem itemValue="#{null}" itemLabel="--select--" />
-                            <f:selectItems value="#{fiscalController.fiscalSelectOptions}" />   
-                            <f:ajax event="change" render="contracts" listener="#{jvActualController.fiscalArrangementChanged}"/>    
+                            <f:selectItems value="#{fiscalController.fiscalSelectOptions}" />                                  
                         </h:selectOneMenu>
-                    </div>
-                    <div class="col-md-3 m-b-10">
-                        <h:outputLabel value="Contract" for="contracts" />
-                        <h:selectOneMenu id="contracts" value="#{jvActualController.currentContract}" class="form-control input-sm m-b-10">
-                            <f:selectItem itemValue="#{null}" itemLabel="--select--" />
-                            <f:selectItems value="#{jvActualController.contractSelectOne}"/>   
+                    </div>                    
+                </div>
+
+                <div class="row">
+                    <div class="col-md-10 m-b-10">
+                        <label>Remark</label>
+                        <h:inputTextarea id="remark" value="#{jvActualController.currentProduction.remark}"
+                                         class="form-control input-sm m-b-10">
                             <f:ajax />
-                        </h:selectOneMenu>
+                        </h:inputTextarea>
                     </div>
                 </div>
 
                 <div class="row">
-                    <div class="col-md-5 m-b-10" id="button-tags">                       
-                        <h:commandButton  value="Get Actuals From SAP"  class="btn m-r-5" disabled="true" >
-                            <f:ajax event="click" render="prodTable msgs"  />
-                        </h:commandButton>
-
-                        <h:commandButton  value="Get Actuals"  class="btn m-r-5" >
-                            <f:ajax listener="#{jvActualController.loadProductionDetails}" event="click"
-                                    render="actual_panel prodTable msgs"/>
-
-                        </h:commandButton>
+                    <div class="col-md-10 m-b-20">
+                        <h:commandLink id="addProductionDetail" action="#{jvActualController.prepareAddProductionDetail}" class="btn m-r-10" >
+                            <span class="icon">&#61943;</span>
+                            #{bundle.AddProductionDetail}
+                        </h:commandLink>
                     </div>
                 </div>
-
+               
                 <h:panelGroup id="actual_panel">
 
                     <h:dataTable id="prodTable" var="prod" value="#{jvActualController.productionDetails}" 
@@ -162,61 +158,38 @@
                                     Action <span class="caret"></span>
                                 </button>
                                 <ul class="dropdown-menu" jsf:id="btnList"> 
-                                    <li>
-                                        <h:commandLink  pt:data-target="#JvActualCreateDlg" pt:look="warning" pt:data-toggle="modal" >
-                                            <span class="icon">&#61943;</span>
-                                            #{bundle.Create}
-                                            <f:ajax event="click" render="JvActualCreateForm" listener="#{jvActualController.prepareCreate}" />
-                                        </h:commandLink>                                       
-                                    </li>
-
+                                    
                                     <li>
                                         <h:commandLink pt:data-target="#JvViewDlg" pt:look="warning" pt:data-toggle="modal">
                                             <span class="icon">&#61698;</span>
                                             #{bundle.View}
-                                            <f:ajax event="click" render="JvViewForm" listener="#{jvActualController.setCurrentProduction(prod)}"/>
+                                            <f:ajax event="click" render="JvViewForm" listener="#{jvActualController.setCurrentProductionDetail(prod)}"/>
                                         </h:commandLink>
                                     </li>
-                                    <li>
-                                        <h:commandLink pt:data-target="#JvEditDlg" pt:look="warning" pt:data-toggle="modal">
-                                            <span class="icon">&#61952;</span>
-                                            #{bundle.Edit}
-                                            <f:ajax event="click" render="JvEditForm" listener="#{jvActualController.setCurrentProduction(prod)}"/>
-                                        </h:commandLink>
-                                    </li> 
-                                    <li class="divider"></li>
+                                    
+                                    <li class="divider"></li>                                    
                                     <li>
                                         <h:commandLink>
                                             <span class="icon">&#61918;</span>
-                                            #{bundle.Delete}
-                                            <f:ajax render="jvProdListForm prodTable msgs" listener="#{jvActualController.destroy(prod)}"/>
+                                            #{bundle.Remove}
+                                            <f:ajax render="jvProdListForm prodTable msgs"
+                                                    listener="#{jvActualController.removeProductionDetail(prod)}"/>
                                         </h:commandLink>
-                                    </li> 
+                                    </li>
                                 </ul>
                             </div>
                         </h:column>
 
-                        <f:facet name="footer">
-                            <h:commandLink id="createButton" action="#{jvActualController.prepareCreate}" class="btn m-r-5">
-                                <span class="icon">&#61943;</span>
-                                #{bundle.Create}                                 
-                            </h:commandLink>
-                            <button jsf:id="viewButton" look="warning" data-target="#JvViewDlg" data-toggle="modal" class="btn m-r-5">
-                                <span class="icon">&#61698;</span>
-                                #{bundle.View}
-                                <f:ajax event="click" render="JvViewForm" />
-                            </button>
-                            <button jsf:id="editButton" look="warning" data-target="#JvEditDlg" data-toggle="modal" class="btn m-r-5">
-                                <span class="icon">&#61952;</span>                                    
-                                #{bundle.Edit}
-                                <f:ajax event="click" render="JvEditForm" />
-                            </button>
-                            <button jsf:id="deleteButton" class="btn m-r-5" jsf:disabled="#{empty jvActualController.currentProduction}">
-                                <span class="icon">&#61918;</span>
-                                #{bundle.Delete}
-                                <f:ajax render="jvProdListForm prodTable msgs" listener="#{jvActualController.destroy}"/>
-                            </button>
+                        <f:facet name="footer">                                                       
+                             <h:commandButton  value="#{bundle.Back}" action="actualize2" immediate="true" class="btn btn-sm"/>
 
+                            <h:commandButton  value="#{bundle.Save}" action="#{jvActualController.createProduction}" class="btn btn-sm">
+
+                            </h:commandButton>
+
+                            <h:commandButton   value="#{bundle.Cancel}" action="forecast2" immediate="true" class="btn btn-sm">
+                                <f:ajax listener="#{jvActualController.cancelProduction}" />
+                            </h:commandButton>
                         </f:facet>
                     </h:dataTable>
 

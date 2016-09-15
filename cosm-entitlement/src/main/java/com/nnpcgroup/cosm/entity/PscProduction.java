@@ -5,7 +5,7 @@
  */
 package com.nnpcgroup.cosm.entity;
 
-import com.nnpcgroup.cosm.entity.production.jv.Production;
+import com.nnpcgroup.cosm.entity.production.jv.ProductionDetail;
 import javax.persistence.MappedSuperclass;
 
 /**
@@ -14,7 +14,7 @@ import javax.persistence.MappedSuperclass;
  */
 
 @MappedSuperclass
-public abstract class PscProduction extends Production {
+public abstract class PscProduction extends ProductionDetail {
 
     private static final long serialVersionUID = 4881837273578907336L;
 

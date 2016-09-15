@@ -6,12 +6,12 @@
 package com.nnpcgroup.cosm.ejb.production.jv;
 
 import com.nnpcgroup.cosm.entity.contract.CarryContract;
-import com.nnpcgroup.cosm.entity.production.jv.CarryProduction;
+import com.nnpcgroup.cosm.entity.production.jv.CarryProductionDetail;
 
 /**
  *
  * @author 18359
  */
-public interface CarryProductionServices extends AlternativeFundingProductionServices<CarryProduction, CarryContract> {
+public interface CarryProductionDetailServices extends AlternativeFundingProductionDetailServices<CarryProductionDetail, CarryContract> {
     
 }

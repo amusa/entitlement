@@ -10,6 +10,7 @@ import com.nnpcgroup.cosm.entity.forecast.jv.JvForecastDetail;
 /**
  *
  * @author 18359
+ * @param <T>
  */
 public interface JvForecastDetailServices<T extends JvForecastDetail> extends ForecastDetailServices<T> {
 

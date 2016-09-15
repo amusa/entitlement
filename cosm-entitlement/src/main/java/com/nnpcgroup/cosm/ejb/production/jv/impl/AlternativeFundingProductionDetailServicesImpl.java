@@ -7,12 +7,11 @@ package com.nnpcgroup.cosm.ejb.production.jv.impl;
 
 import com.nnpcgroup.cosm.ejb.PriceBean;
 import com.nnpcgroup.cosm.ejb.contract.ContractServices;
-import com.nnpcgroup.cosm.ejb.production.jv.AlternativeFundingProductionServices;
 import com.nnpcgroup.cosm.entity.Price;
 import com.nnpcgroup.cosm.entity.PricePK;
 import com.nnpcgroup.cosm.entity.contract.AlternativeFundingContract;
 import com.nnpcgroup.cosm.entity.contract.ContractPK;
-import com.nnpcgroup.cosm.entity.production.jv.AlternativeFundingProduction;
+import com.nnpcgroup.cosm.entity.production.jv.AlternativeFundingProductionDetail;
 import com.nnpcgroup.cosm.exceptions.NoRealizablePriceException;
 
 import java.util.logging.Level;
@@ -23,6 +22,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Root;
+import com.nnpcgroup.cosm.ejb.production.jv.AlternativeFundingProductionDetailServices;
 
 /**
  *
@@ -30,9 +30,9 @@ import javax.persistence.criteria.Root;
  * @param <T>
  * @param <E>
  */
-public abstract class AlternativeFundingProductionServicesImpl<T extends AlternativeFundingProduction, E extends AlternativeFundingContract> extends JvProductionServicesImpl<T, E> implements AlternativeFundingProductionServices<T, E> {
+public abstract class AlternativeFundingProductionDetailServicesImpl<T extends AlternativeFundingProductionDetail, E extends AlternativeFundingContract> extends JvProductionDetailServicesImpl<T, E> implements AlternativeFundingProductionDetailServices<T, E> {
 
-    private static final Logger LOG = Logger.getLogger(AlternativeFundingProductionServicesImpl.class.getName());
+    private static final Logger LOG = Logger.getLogger(AlternativeFundingProductionDetailServicesImpl.class.getName());
 
     @EJB
     PriceBean priceBean;
@@ -40,7 +40,7 @@ public abstract class AlternativeFundingProductionServicesImpl<T extends Alterna
     @EJB
     ContractServices contractBean;
 
-    public AlternativeFundingProductionServicesImpl(Class<T> entityClass) {
+    public AlternativeFundingProductionDetailServicesImpl(Class<T> entityClass) {
         super(entityClass);
     }
 
@@ -502,7 +502,7 @@ public abstract class AlternativeFundingProductionServicesImpl<T extends Alterna
 
         TypedQuery<Long> query = getEntityManager().createQuery(
                 "SELECT COUNT(f) "
-                + "FROM AlternativeFundingProduction f  WHERE f.contract = :contract AND f.sharedOil != null", Long.class);
+                + "FROM AlternativeFundingProductionDetail f  WHERE f.contract = :contract AND f.sharedOil != null", Long.class);
         query.setParameter("contract", contract);
 
         long sharedOilPeriod = query.getSingleResult();

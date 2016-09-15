@@ -14,7 +14,7 @@ import javax.persistence.Entity;
  */
 @Entity
 @DiscriminatorValue("MCA")
-public class ModifiedCarryProduction extends AlternativeFundingProduction {
+public class ModifiedCarryProductionDetail extends AlternativeFundingProductionDetail {
 
     private static final long serialVersionUID = 4881837273578907336L;
         

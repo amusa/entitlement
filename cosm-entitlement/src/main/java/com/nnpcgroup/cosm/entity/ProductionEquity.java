@@ -5,7 +5,7 @@
  */
 package com.nnpcgroup.cosm.entity;
 
-import com.nnpcgroup.cosm.entity.production.jv.Production;
+import com.nnpcgroup.cosm.entity.production.jv.ProductionDetail;
 import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -26,7 +26,7 @@ public class ProductionEquity implements Serializable {
     private static final long serialVersionUID = -795843614381155072L;
 
     private Long id;
-    private Production production;
+    private ProductionDetail production;
     private Double openingStock;
     private Double closingStock;
     private Double entitlement;
@@ -48,11 +48,11 @@ public class ProductionEquity implements Serializable {
     }
 
     @ManyToOne
-    public Production getProduction() {
+    public ProductionDetail getProduction() {
         return production;
     }
 
-    public void setProduction(Production production) {
+    public void setProduction(ProductionDetail production) {
         this.production = production;
     }
 

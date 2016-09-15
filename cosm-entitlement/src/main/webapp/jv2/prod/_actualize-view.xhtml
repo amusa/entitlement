@@ -24,13 +24,13 @@
                                         <div class="row">
                                             <div class="col-md-4 m-b-15">
                                                 <h:outputLabel value="Year" for="periodYear"/>
-                                                <h:selectOneMenu id="periodYear" value="#{jvActualController.currentProduction.periodYear}" class="form-control input-sm m-b-10" >
+                                                <h:selectOneMenu id="periodYear" value="#{jvActualController.currentProductionDetail.periodYear}" class="form-control input-sm m-b-10" >
                                                     <f:selectItems value="#{generalController.yearsAvailableSelectOne}" var="year" itemValue="#{year.value}"/>
                                                 </h:selectOneMenu>
                                             </div>
                                             <div class="col-md-4 m-b-15">
                                                 <h:outputLabel value="Month" for="periodMonth"/>
-                                                <h:selectOneMenu id="periodMonth" value="#{jvActualController.currentProduction.periodMonth}" class="form-control input-sm m-b-10">
+                                                <h:selectOneMenu id="periodMonth" value="#{jvActualController.currentProductionDetail.periodMonth}" class="form-control input-sm m-b-10">
                                                     <f:selectItem itemValue="#{null}" itemLabel="--select--" />
                                                     <f:selectItems value="#{generalController.months}" var="mth" itemValue="#{mth.month}" itemLabel="#{mth.monthStr}" />
                                                 </h:selectOneMenu>
@@ -45,7 +45,7 @@
                                         <div class="row">
                                             <div class="col-md-4 m-b-15">
                                                 <h:outputLabel value="Contract" for="contracts" />
-                                                <h:selectOneMenu id="contracts" value="#{jvActualController.currentProduction.contract}" class="form-control input-sm m-b-10">
+                                                <h:selectOneMenu id="contracts" value="#{jvActualController.currentProductionDetail.contract}" class="form-control input-sm m-b-10">
                                                     <f:selectItems value="#{jvActualController.contractSelectOne}"/>
                                                 </h:selectOneMenu>
                                             </div>
@@ -95,13 +95,13 @@
                                         <div class="row">                                            
                                             <div class="col-md-4 m-b-15">
                                                 <h:outputLabel value="Gross Prod" for="grossVolume" />
-                                                <h:inputText id="grossVolume" value="#{jvActualController.currentProduction.grossProduction}" title="Gross Prod Volume" class="form-control input-sm" >
+                                                <h:inputText id="grossVolume" value="#{jvActualController.currentProductionDetail.grossProduction}" title="Gross Prod Volume" class="form-control input-sm" >
                                                     <f:convertNumber pattern="###,###,###.####" />
                                                 </h:inputText>
                                             </div>
                                             <div class="col-md-4 m-b-15">
                                                 <h:outputLabel value="Stock Adjustment (+/-)" for="stockAdjustment" />
-                                                <h:inputText id="stockAdjustment" value="#{jvActualController.currentProduction.stockAdjustment}" title="Stock Adjustment (+/-)" class="form-control input-sm" >
+                                                <h:inputText id="stockAdjustment" value="#{jvActualController.currentProductionDetail.stockAdjustment}" title="Stock Adjustment (+/-)" class="form-control input-sm" >
                                                     <f:convertNumber pattern="###,###,###.####" />
                                                 </h:inputText>
                                             </div>                                            
@@ -109,19 +109,19 @@
                                         <div class="row">                                            
                                             <div class="col-md-4 m-b-15">
                                                 <h:outputLabel value="BS&amp;W Loss (-)" for="bswLoss" />
-                                                <h:inputText id="bswLoss" value="#{jvActualController.currentProduction.bswLoss}" title="BS&amp;W Loss (-)" class="form-control input-sm" >
+                                                <h:inputText id="bswLoss" value="#{jvActualController.currentProductionDetail.bswLoss}" title="BS&amp;W Loss (-)" class="form-control input-sm" >
                                                     <f:convertNumber pattern="###,###,###.####" />                                                    
                                                 </h:inputText>
                                             </div>
                                             <div class="col-md-4 m-b-15">
                                                 <h:outputLabel value="Metering Inaccuracy (-)" for="meteringInac" />
-                                                <h:inputText id="meteringInac" value="#{jvActualController.currentProduction.meteringInacuracyLoss}" title="Metering Inaccuracy (-)" class="form-control input-sm" >
+                                                <h:inputText id="meteringInac" value="#{jvActualController.currentProductionDetail.meteringInacuracyLoss}" title="Metering Inaccuracy (-)" class="form-control input-sm" >
                                                     <f:convertNumber pattern="###,###,###.####" />
                                                 </h:inputText>
                                             </div>
                                             <div class="col-md-4 m-b-15">
                                                 <h:outputLabel value="Theft Loss (-)" for="theft" />
-                                                <h:inputText id="theft" value="#{jvActualController.currentProduction.theftLoss}" title="Theft Loss (-)" class="form-control input-sm" >
+                                                <h:inputText id="theft" value="#{jvActualController.currentProductionDetail.theftLoss}" title="Theft Loss (-)" class="form-control input-sm" >
                                                     <f:convertNumber pattern="###,###,###.####" />
                                                 </h:inputText>
                                             </div>
@@ -129,19 +129,19 @@
                                         <div class="row">                                            
                                             <div class="col-md-4 m-b-15">
                                                 <h:outputLabel value="Terminal Adjustment (-)" for="termAdj" />
-                                                <h:inputText id="termAdj" value="#{jvActualController.currentProduction.terminalAdjustment}" title="Terminal Adjustment (-)" class="form-control input-sm" >
+                                                <h:inputText id="termAdj" value="#{jvActualController.currentProductionDetail.terminalAdjustment}" title="Terminal Adjustment (-)" class="form-control input-sm" >
                                                     <f:convertNumber pattern="###,###,###.####" />
                                                 </h:inputText>
                                             </div>
                                             <div class="col-md-4 m-b-15">
                                                 <h:outputLabel value="Production Adjustment (+)" for="prodAdj" />
-                                                <h:inputText id="prodAdj" value="#{jvActualController.currentProduction.productionAdjustment}" title="Production Adjustment (+)" class="form-control input-sm" >
+                                                <h:inputText id="prodAdj" value="#{jvActualController.currentProductionDetail.productionAdjustment}" title="Production Adjustment (+)" class="form-control input-sm" >
                                                     <f:convertNumber pattern="###,###,###.####" />
                                                 </h:inputText>
                                             </div>
                                             <div class="col-md-4 m-b-15">
                                                 <h:outputLabel value="Unitization (+)" for="unitization" />
-                                                <h:inputText id="unitization" value="#{jvActualController.currentProduction.unitization}" title="Unitization (+)" class="form-control input-sm" >
+                                                <h:inputText id="unitization" value="#{jvActualController.currentProductionDetail.unitization}" title="Unitization (+)" class="form-control input-sm" >
                                                     <f:convertNumber pattern="###,###,###.####" />
                                                 </h:inputText>
                                             </div>
@@ -149,13 +149,13 @@
                                         <div class="row">                           
                                             <div class="col-md-4 m-b-15">
                                                 <h:outputLabel value="Net Prod" for="netVolume" />
-                                                <h:inputText id="netVolume" value="#{jvActualController.currentProduction.netProduction}" title="Net Prod Volume" class="form-control input-sm" >
+                                                <h:inputText id="netVolume" value="#{jvActualController.currentProductionDetail.netProduction}" title="Net Prod Volume" class="form-control input-sm" >
                                                     <f:convertNumber pattern="###,###,###.####" />                                                    
                                                 </h:inputText>
                                             </div>
                                             <div class="col-md-4 m-b-15">
                                                 <h:outputLabel value="Operator Declared Vol." for="operatorDeclaredVolume" />
-                                                <h:inputText id="operatorDeclaredVolume" value="#{jvActualController.currentProduction.operatorDeclaredVolume}" title="Gross Prod Volume" class="form-control input-sm" >
+                                                <h:inputText id="operatorDeclaredVolume" value="#{jvActualController.currentProductionDetail.operatorDeclaredVolume}" title="Gross Prod Volume" class="form-control input-sm" >
                                                     <f:convertNumber pattern="###,###,###.####" />
                                                 </h:inputText>
                                             </div>    
@@ -300,19 +300,19 @@
                                         <div class="row">
                                             <div class="col-md-4 m-b-15">
                                                 <h:outputLabel value="Opening Stock:" for="openingStock" />
-                                                <h:inputText id="openingStock" value="#{jvActualController.currentProduction.openingStock}" title="Opening Stock" class="form-control input-sm">
+                                                <h:inputText id="openingStock" value="#{jvActualController.currentProductionDetail.openingStock}" title="Opening Stock" class="form-control input-sm">
                                                     <f:convertNumber pattern="###,###,###.####" />
                                                 </h:inputText>
                                             </div>
                                             <div class="col-md-4 m-b-15">
                                                 <h:outputLabel value="Entitlement:" for="ownShareEntitlement" />
-                                                <h:inputText id="ownShareEntitlement" value="#{jvActualController.currentProduction.ownShareEntitlement}" title="Own Entitlement" class="form-control input-sm">
+                                                <h:inputText id="ownShareEntitlement" value="#{jvActualController.currentProductionDetail.ownShareEntitlement}" title="Own Entitlement" class="form-control input-sm">
                                                     <f:convertNumber pattern="###,###,###.####" />
                                                 </h:inputText>
                                             </div>
                                             <div class="col-md-4 m-b-15">
                                                 <h:outputLabel value="Availability" for="availability" />
-                                                <h:outputLabel id="availability" value="#{jvActualController.currentProduction.availability}" title="Availability" class="form-control input-sm">
+                                                <h:outputLabel id="availability" value="#{jvActualController.currentProductionDetail.availability}" title="Availability" class="form-control input-sm">
                                                     <f:convertNumber pattern="###,###,###.####" />
                                                 </h:outputLabel>
                                             </div>                                       
@@ -320,13 +320,13 @@
                                         <div class="row">
                                             <div class="col-md-4 m-b-15">
                                                 <h:outputLabel value="Equity Ratio" for="ownEquityRatio" />
-                                                <h:outputLabel id="ownEquityRatio" value="#{jvActualController.currentProduction.ownEquityRatio}" title="Overlift" class="form-control input-sm">
+                                                <h:outputLabel id="ownEquityRatio" value="#{jvActualController.currentProductionDetail.ownEquityRatio}" title="Overlift" class="form-control input-sm">
                                                     <f:convertNumber pattern="###,###,###.####" />
                                                 </h:outputLabel>
                                             </div>   
                                             <div class="col-md-4 m-b-15">
                                                 <h:outputLabel value="Operator Declared Availability" for="ownAvailability2" />
-                                                <h:inputText id="ownAvailability2" value="#{jvActualController.currentProduction.operatorDeclaredOwnAvailability}" title="Operator Declared Availability"
+                                                <h:inputText id="ownAvailability2" value="#{jvActualController.currentProductionDetail.operatorDeclaredOwnAvailability}" title="Operator Declared Availability"
                                                              class="form-control input-sm">
                                                     <f:convertNumber pattern="###,###,###.####" />                                                   
                                                 </h:inputText>
@@ -336,7 +336,7 @@
                                         <div class="row">                                            
                                             <div class="col-md-4 m-b-15">
                                                 <h:outputLabel value="Exportable Vol (Actual)" for="lifting" />
-                                                <h:inputText id="lifting" value="#{jvActualController.currentProduction.lifting}" title="Lifting (Actual)"
+                                                <h:inputText id="lifting" value="#{jvActualController.currentProductionDetail.lifting}" title="Lifting (Actual)"
                                                              class="form-control input-sm">
                                                     <f:convertNumber pattern="###,###,###.####" />
                                                     <f:ajax event="change" listener="#{jvActualController.liftingChanged}" render="@form"/>
@@ -344,7 +344,7 @@
                                             </div>
                                             <div class="col-md-4 m-b-15">
                                                 <h:outputLabel value="Lifting Cargoes" for="cargoes" />
-                                                <h:inputText id="cargoes" value="#{jvActualController.currentProduction.cargos}" title="Lifting Cargoes" class="form-control input-sm"/>
+                                                <h:inputText id="cargoes" value="#{jvActualController.currentProductionDetail.cargos}" title="Lifting Cargoes" class="form-control input-sm"/>
                                             </div>
                                         </div>
                                     </div>
@@ -353,7 +353,7 @@
                                         <div class="form-group">
                                             <label class="col-md-2 control-label">Closing Stock: </label>
                                             <label jsf:id="closingStock" class="col-md-5 control-label">
-                                                #{jvActualController.currentProduction.closingStock}
+                                                #{jvActualController.currentProductionDetail.closingStock}
                                                 <f:convertNumber pattern="###,###,###.####" />
                                             </label>
                                         </div>
@@ -368,19 +368,19 @@
                                         <div class="row">
                                             <div class="col-md-4 m-b-15">
                                                 <h:outputLabel value="Opening Stock:" for="ptnrOpeningStock" />
-                                                <h:inputText id="ptnrOpeningStock" value="#{jvActualController.currentProduction.partnerOpeningStock}" title="Opening Stock" class="form-control input-sm">
+                                                <h:inputText id="ptnrOpeningStock" value="#{jvActualController.currentProductionDetail.partnerOpeningStock}" title="Opening Stock" class="form-control input-sm">
                                                     <f:convertNumber pattern="###,###,###.####" />
                                                 </h:inputText>
                                             </div>
                                             <div class="col-md-4 m-b-15">
                                                 <h:outputLabel value="Entitlement:" for="ptnrEntitlement" />
-                                                <h:inputText id="ptnrEntitlement" value="#{jvActualController.currentProduction.partnerShareEntitlement}" title="Partner Entitlement" class="form-control input-sm">
+                                                <h:inputText id="ptnrEntitlement" value="#{jvActualController.currentProductionDetail.partnerShareEntitlement}" title="Partner Entitlement" class="form-control input-sm">
                                                     <f:convertNumber pattern="###,###,###.####" />
                                                 </h:inputText>
                                             </div>
                                             <div class="col-md-4 m-b-15">
                                                 <h:outputLabel value="Availability" for="ptnrAvailability" />
-                                                <h:outputLabel id="ptnrAvailability" value="#{jvActualController.currentProduction.partnerAvailability}" title="Availability" class="form-control input-sm">
+                                                <h:outputLabel id="ptnrAvailability" value="#{jvActualController.currentProductionDetail.partnerAvailability}" title="Availability" class="form-control input-sm">
                                                     <f:convertNumber pattern="###,###,###.####" />
                                                 </h:outputLabel>
                                             </div>                                            
@@ -388,13 +388,13 @@
                                         <div class="row">
                                             <div class="col-md-4 m-b-15">
                                                 <h:outputLabel value="Equity Ratio" for="partnerEquityRatio" />
-                                                <h:outputLabel id="partnerEquityRatio" value="#{jvActualController.currentProduction.partnerEquityRatio}" title="Equity Ratio" class="form-control input-sm">
+                                                <h:outputLabel id="partnerEquityRatio" value="#{jvActualController.currentProductionDetail.partnerEquityRatio}" title="Equity Ratio" class="form-control input-sm">
                                                     <f:convertNumber pattern="###,###,###.####" />
                                                 </h:outputLabel>
                                             </div> 
                                             <div class="col-md-4 m-b-15">
                                                 <h:outputLabel value="Operator Declared Availability" for="partnerAvailability2" />
-                                                <h:inputText id="partnerAvailability2" value="#{jvActualController.currentProduction.operatorDeclaredPartnerAvailability}" title="Operator Declared Availability"
+                                                <h:inputText id="partnerAvailability2" value="#{jvActualController.currentProductionDetail.operatorDeclaredPartnerAvailability}" title="Operator Declared Availability"
                                                              class="form-control input-sm">
                                                     <f:convertNumber pattern="###,###,###.####" />                                                   
                                                 </h:inputText>
@@ -403,7 +403,7 @@
                                         <div class="row">                                            
                                             <div class="col-md-4 m-b-15">
                                                 <h:outputLabel value="Exportable Vol (Actual)" for="ptnrLifting" />
-                                                <h:inputText id="ptnrLifting" value="#{jvActualController.currentProduction.partnerLifting}" title="Exportable Vol (Actual)"
+                                                <h:inputText id="ptnrLifting" value="#{jvActualController.currentProductionDetail.partnerLifting}" title="Exportable Vol (Actual)"
                                                              class="form-control input-sm">
                                                     <f:convertNumber pattern="###,###,###.####" />
                                                     <f:ajax event="change" listener="#{jvActualController.liftingChanged}" render="@form"/>
@@ -411,7 +411,7 @@
                                             </div>
                                             <div class="col-md-4 m-b-15">
                                                 <h:outputLabel value="Lifting Cargoes" for="ptnrCargoes" />
-                                                <h:inputText id="ptnrCargoes" value="#{jvActualController.currentProduction.partnerCargos}" title="Lifting Cargoes" class="form-control input-sm"/>
+                                                <h:inputText id="ptnrCargoes" value="#{jvActualController.currentProductionDetail.partnerCargos}" title="Lifting Cargoes" class="form-control input-sm"/>
                                             </div>
                                         </div>
                                     </div>
@@ -420,7 +420,7 @@
                                         <div class="form-group">
                                             <label class="col-md-2 control-label">Closing Stock: </label>
                                             <label jsf:id="ptnrClosingStock" class="col-md-5 control-label">
-                                                #{jvActualController.currentProduction.partnerClosingStock}
+                                                #{jvActualController.currentProductionDetail.partnerClosingStock}
                                                 <f:convertNumber pattern="###,###,###.####" />
                                             </label>
                                         </div>

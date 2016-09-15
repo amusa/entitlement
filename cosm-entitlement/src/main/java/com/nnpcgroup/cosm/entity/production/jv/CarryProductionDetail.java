@@ -14,7 +14,7 @@ import javax.persistence.Entity;
  */
 @Entity
 @DiscriminatorValue("CA")
-public class CarryProduction extends AlternativeFundingProduction {
+public class CarryProductionDetail extends AlternativeFundingProductionDetail {
 
     private static final long serialVersionUID = 4881837273578907336L;
         

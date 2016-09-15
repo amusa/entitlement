@@ -6,7 +6,7 @@
 package com.nnpcgroup.cosm.validators;
 
 import com.nnpcgroup.cosm.controller.JvProductionController;
-import com.nnpcgroup.cosm.entity.production.jv.Production;
+import com.nnpcgroup.cosm.entity.production.jv.JvProductionDetail;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -27,15 +27,15 @@ public class StockLiftingValidator implements Validator {
         JvProductionController jvActualController = (JvProductionController) facesContext.getApplication().getELResolver().
                 getValue(facesContext.getELContext(), null, "jvActualController");
 
-        Production currentProduction = jvActualController.getCurrentProduction();
+        JvProductionDetail currentProductionDetail = jvActualController.getCurrentProductionDetail();
 
-        Double openingStock = currentProduction.getOpeningStock();
-        Double entitlement = currentProduction.getOwnShareEntitlement();
-        Double lifting = currentProduction.getLifting();
+        Double openingStock = currentProductionDetail.getOpeningStock();
+        Double entitlement = currentProductionDetail.getOwnShareEntitlement();
+        Double lifting = currentProductionDetail.getLifting();
 
-        Double partnerOpeningStock = currentProduction.getPartnerOpeningStock();
-        Double partnerEntitlement = currentProduction.getPartnerShareEntitlement();
-        Double partnerLifting = currentProduction.getPartnerLifting();
+        Double partnerOpeningStock = currentProductionDetail.getPartnerOpeningStock();
+        Double partnerEntitlement = currentProductionDetail.getPartnerShareEntitlement();
+        Double partnerLifting = currentProductionDetail.getPartnerLifting();
 
         Double bucket = openingStock + entitlement + partnerOpeningStock + partnerEntitlement;
 

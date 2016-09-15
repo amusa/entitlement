@@ -6,7 +6,7 @@
 package com.nnpcgroup.cosm.ejb.production.jv;
 
 import com.nnpcgroup.cosm.entity.contract.AlternativeFundingContract;
-import com.nnpcgroup.cosm.entity.production.jv.AlternativeFundingProduction;
+import com.nnpcgroup.cosm.entity.production.jv.AlternativeFundingProductionDetail;
 
 /**
  *
@@ -14,7 +14,7 @@ import com.nnpcgroup.cosm.entity.production.jv.AlternativeFundingProduction;
  * @param <T>
  * @param <E>
  */
-public interface AlternativeFundingProductionServices<T extends AlternativeFundingProduction, E extends AlternativeFundingContract> extends JvProductionServices<T, E> {
+public interface AlternativeFundingProductionDetailServices<T extends AlternativeFundingProductionDetail, E extends AlternativeFundingContract> extends JvProductionDetailServices<T, E> {
 
     public T computeCarryOil(T production);
 

@@ -14,7 +14,7 @@ import javax.persistence.Entity;
  */
 @Entity
 @DiscriminatorValue("AF")
-public class AlternativeFundingProduction extends Production {
+public abstract class AlternativeFundingProductionDetail extends JvProductionDetail {
 
     private static final long serialVersionUID = 4881837273578907336L;
 
@@ -36,7 +36,7 @@ public class AlternativeFundingProduction extends Production {
     private Double capitalCarryCostAmortizedCum;
     private Double carryOilReceivedCum;
 
-    public AlternativeFundingProduction() {
+    public AlternativeFundingProductionDetail() {
     }
 
     public Double getTangibleCost() {
@@ -175,5 +175,4 @@ public class AlternativeFundingProduction extends Production {
         this.carryOilReceivedCum = carryOilReceivedCum;
     }
 
-    
 }

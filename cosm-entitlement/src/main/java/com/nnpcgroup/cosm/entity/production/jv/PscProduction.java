@@ -13,13 +13,10 @@ import javax.persistence.Entity;
  * @author 18359
  */
 @Entity
-@DiscriminatorValue("REG")
-public class RegularProduction extends Production {
+@DiscriminatorValue("PSC")
+public class PscProduction extends Production {
 
-    private static final long serialVersionUID = 4881837273578907336L;
-
-    public RegularProduction() {
+    public PscProduction() {
     }
 
-   
 }

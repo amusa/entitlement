@@ -5,13 +5,16 @@
  */
 package com.nnpcgroup.cosm.ejb.production.jv;
 
-import com.nnpcgroup.cosm.entity.production.jv.JvProduction;
+import com.nnpcgroup.cosm.ejb.*;
+import com.nnpcgroup.cosm.entity.production.jv.Production;
+import java.io.Serializable;
 
 /**
  *
  * @author 18359
+ * @param <T>
  */
-public interface JvProductionServices extends ProductionServices<JvProduction>{
+public interface ProductionServices<T extends Production> extends AbstractCrudServices<T>, Serializable {
 
-   
+    
 }

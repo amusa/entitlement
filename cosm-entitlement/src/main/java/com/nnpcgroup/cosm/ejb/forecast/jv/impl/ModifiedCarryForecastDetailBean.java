@@ -25,13 +25,6 @@ public class ModifiedCarryForecastDetailBean extends ModifiedCarryForecastDetail
     public ModifiedCarryForecastDetailBean() {
         super(ModifiedCarryForecastDetail.class);
         LOG.info("ProductionBean::constructor activated...");
-
     }
-
-    @Override
-    public ModifiedCarryForecastDetail createInstance() {
-        return new ModifiedCarryForecastDetail();
-    }
-
     
 }

@@ -30,9 +30,4 @@ public class AlternativeFundingProductionDetailBean extends AlternativeFundingPr
         super(entityClass);
     }
 
-    //@Override
-//    public AlternativeFundingProductionDetail createInstance() {
-//        return new AlternativeFundingProductionDetail();
-//    }
-
 }

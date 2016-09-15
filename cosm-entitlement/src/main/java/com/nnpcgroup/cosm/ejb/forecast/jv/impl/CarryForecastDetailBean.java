@@ -30,11 +30,5 @@ public class CarryForecastDetailBean extends CarryForecastDetailServicesImpl imp
         LOG.info("ProductionBean::constructor activated...");
 
     }
-
-    //@Override
-    public CarryForecastDetail createInstance() {
-        return new CarryForecastDetail();
-    }
-
-    
+   
 }

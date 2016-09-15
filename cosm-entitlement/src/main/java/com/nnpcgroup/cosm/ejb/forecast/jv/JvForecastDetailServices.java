@@ -5,13 +5,13 @@
  */
 package com.nnpcgroup.cosm.ejb.forecast.jv;
 
-import com.nnpcgroup.cosm.entity.forecast.jv.PscForecast;
+import com.nnpcgroup.cosm.entity.forecast.jv.JvForecastDetail;
 
 /**
  *
  * @author 18359
  */
-public interface PscForecastServices extends ForecastServices<PscForecast> {
+public interface JvForecastDetailServices<T extends JvForecastDetail> extends ForecastDetailServices<T> {
 
     
    

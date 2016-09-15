@@ -14,7 +14,7 @@ import javax.persistence.Entity;
  */
 @Entity
 @DiscriminatorValue("AF")
-public abstract class AlternativeFundingForecast extends JvForecast {
+public abstract class AlternativeFundingForecastDetail extends JvForecastDetail {
 
     private static final long serialVersionUID = 2917192116735019964L;
 
@@ -36,7 +36,7 @@ public abstract class AlternativeFundingForecast extends JvForecast {
     private Double capitalCarryCostAmortizedCum;
     private Double carryOilReceivedCum;
 
-    public AlternativeFundingForecast() {
+    public AlternativeFundingForecastDetail() {
     }
 
     public Double getTangibleCost() {

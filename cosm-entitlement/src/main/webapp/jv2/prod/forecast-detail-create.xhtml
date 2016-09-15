@@ -40,25 +40,23 @@
                                     <div class="col-md-4 m-b-15">
                                         <h:outputLabel value="Year" for="periodYear"/>
                                         <h:selectOneMenu id="periodYear" value="#{jvProdController.periodYear}" class="form-control input-sm m-b-10" required="true" disabled="true">
-                                            <f:selectItem itemValue="#{null}" itemLabel="--select--" />
+                                            <f:selectItem itemValue="#{null}" itemLabel="--select--"/>
                                             <f:selectItems value="#{generalController.yearsAvailableSelectOne}" var="year" itemValue="#{year.value}"/>
                                             <f:ajax listener="#{generalController.yearChanged}" event="change" render="periodMonth"/>
                                         </h:selectOneMenu>
                                     </div>
                                     <div class="col-md-4 m-b-15">
                                         <h:outputLabel value="Month" for="periodMonth"/>
-                                        <h:selectOneMenu id="periodMonth" value="#{jvProdController.periodMonth}" class="form-control input-sm m-b-10" required="true">
+                                        <h:selectOneMenu id="periodMonth" value="#{jvProdController.periodMonth}" class="form-control input-sm m-b-10" required="true" disabled="true">
                                             <f:selectItem itemValue="#{null}" itemLabel="--select--" />
                                             <f:selectItems value="#{generalController.months}" var="mth" itemValue="#{mth.month}" itemLabel="#{mth.monthStr}" />
-                                            <f:ajax listener="#{jvProdController.periodMonthChanged}"/>
                                         </h:selectOneMenu>
                                     </div>
                                     <div class="col-md-4 m-b-15">
                                         <label>Fiscal Arrangement</label>
-                                        <h:selectOneMenu id="fiscalArrangement" value="#{jvProdController.currentFiscalArrangement}" class="form-control input-sm m-b-10" required="true">
+                                        <h:selectOneMenu id="fiscalArrangement" value="#{jvProdController.currentFiscalArrangement}" class="form-control input-sm m-b-10" required="true" disabled="true">
                                             <f:selectItem itemValue="#{null}" itemLabel="--select--" />
                                             <f:selectItems value="#{fiscalController.fiscalSelectOptions}" />
-                                            <f:ajax event="change" render="contracts"/>
                                         </h:selectOneMenu>
                                     </div>
                                 </div>
@@ -123,6 +121,7 @@
                                         <h:inputText id="productionVolume" value="#{jvProdController.currentForecastDetail.productionVolume}" title="Daily Production Volume" class="form-control input-sm" >
                                             <f:ajax event="change" listener="#{jvProdController.productionVolumeChanged}"
                                                     render="grossVolume carryOil carryOilCum sharedOil sharedOilCum openingStock ownShareEntitlement closingStock lifting cargoes availability ptnrOpeningStock ptnrEntitlement ptnrClosingStock ptnrLifting ptnrCargoes ptnrAvailability ccc ccca cte ctr rce cor ignm cccaCum cteCum ctrCum rceCum ignmCum corCum msgs"/>
+
                                         </h:inputText>
                                     </div>
                                     <div class="col-md-4 m-b-15">
@@ -386,14 +385,12 @@
 
                 </div>
                 <div class="modal-footer">
-                    <h:commandButton  value="#{bundle.Back}" action="forecast" immediate="true" class="btn btn-sm"/>
+                    <h:commandButton  value="#{bundle.OK}" action="#{jvProdController.addForecastDetail}" class="btn btn-sm">
 
-                    <h:commandButton  value="#{bundle.Save}"  class="btn btn-sm">
-                        <f:ajax listener="#{jvProdController.create}" render="@form msgs"/>
                     </h:commandButton>
 
-                    <h:commandButton   value="#{bundle.Cancel}" action="forecast" immediate="true" class="btn btn-sm">
-                        <f:ajax listener="#{jvProdController.cancel}" />
+                    <h:commandButton   value="#{bundle.Cancel}" action="#{jvProdController.cancelForecastDetail}" immediate="true" class="btn btn-sm">
+
                     </h:commandButton>
                 </div>
             </h:form>

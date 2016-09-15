@@ -5,10 +5,10 @@
  */
 package com.nnpcgroup.cosm.ejb.forecast.jv.impl;
 
-import com.nnpcgroup.cosm.ejb.forecast.jv.CarryForecastServices;
+import com.nnpcgroup.cosm.ejb.forecast.jv.CarryForecastDetailServices;
 import com.nnpcgroup.cosm.entity.Price;
 import com.nnpcgroup.cosm.entity.PricePK;
-import com.nnpcgroup.cosm.entity.forecast.jv.CarryForecast;
+import com.nnpcgroup.cosm.entity.forecast.jv.CarryForecastDetail;
 import com.nnpcgroup.cosm.exceptions.NoRealizablePriceException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -19,16 +19,16 @@ import javax.enterprise.context.Dependent;
  * @author 18359
  */
 @Dependent
-public abstract class CarryForecastServicesImpl extends AlternativeFundingForecastServicesImpl<CarryForecast> implements CarryForecastServices {
+public abstract class CarryForecastDetailServicesImpl extends AlternativeFundingForecastDetailServicesImpl<CarryForecastDetail> implements CarryForecastDetailServices {
 
-    private static final Logger LOG = Logger.getLogger(CarryForecastServicesImpl.class.getName());
+    private static final Logger LOG = Logger.getLogger(CarryForecastDetailServicesImpl.class.getName());
 
-    public CarryForecastServicesImpl(Class<CarryForecast> entityClass) {
+    public CarryForecastDetailServicesImpl(Class<CarryForecastDetail> entityClass) {
         super(entityClass);
     }
 
     @Override
-    public CarryForecast computeNotionalMargin(CarryForecast forecast) throws NoRealizablePriceException {
+    public CarryForecastDetail computeNotionalMargin(CarryForecastDetail forecast) throws NoRealizablePriceException {
         PricePK pricePK = new PricePK();        
         pricePK.setPeriodMonth(forecast.getPeriodMonth());
         pricePK.setPeriodYear(forecast.getPeriodYear());

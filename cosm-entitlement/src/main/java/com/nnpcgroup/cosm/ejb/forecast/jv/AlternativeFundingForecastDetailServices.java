@@ -6,7 +6,7 @@
 package com.nnpcgroup.cosm.ejb.forecast.jv;
 
 import com.nnpcgroup.cosm.entity.contract.Contract;
-import com.nnpcgroup.cosm.entity.forecast.jv.AlternativeFundingForecast;
+import com.nnpcgroup.cosm.entity.forecast.jv.AlternativeFundingForecastDetail;
 import com.nnpcgroup.cosm.exceptions.NoRealizablePriceException;
 
 /**
@@ -14,7 +14,7 @@ import com.nnpcgroup.cosm.exceptions.NoRealizablePriceException;
  * @author 18359
  * @param <T>
  */
-public interface AlternativeFundingForecastServices<T extends AlternativeFundingForecast> extends JvForecastServices<T> {
+public interface AlternativeFundingForecastDetailServices<T extends AlternativeFundingForecastDetail> extends JvForecastDetailServices<T> {
 
     public T computeCarryOil(T forecast);
 

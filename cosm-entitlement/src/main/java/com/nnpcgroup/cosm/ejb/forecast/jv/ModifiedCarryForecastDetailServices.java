@@ -5,16 +5,12 @@
  */
 package com.nnpcgroup.cosm.ejb.forecast.jv;
 
-import com.nnpcgroup.cosm.entity.forecast.jv.JvForecast;
-
-import java.util.List;
+import com.nnpcgroup.cosm.entity.forecast.jv.ModifiedCarryForecastDetail;
 
 /**
  *
  * @author 18359
  */
-public interface JvForecastServices extends ForecastServices<JvForecast> {
+public interface ModifiedCarryForecastDetailServices extends AlternativeFundingForecastDetailServices<ModifiedCarryForecastDetail> {
 
-    public List<JvForecast> findByYearAndMonth(int year, int month);
-   
 }

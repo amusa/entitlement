@@ -5,12 +5,12 @@
  */
 package com.nnpcgroup.cosm.ejb.forecast.jv.impl;
 
-import com.nnpcgroup.cosm.ejb.forecast.jv.ModifiedCarryForecastServices;
+import com.nnpcgroup.cosm.ejb.forecast.jv.ModifiedCarryForecastDetailServices;
 import com.nnpcgroup.cosm.entity.Price;
 import com.nnpcgroup.cosm.entity.PricePK;
 import com.nnpcgroup.cosm.entity.contract.Contract;
 import com.nnpcgroup.cosm.entity.contract.ModifiedCarryContract;
-import com.nnpcgroup.cosm.entity.forecast.jv.ModifiedCarryForecast;
+import com.nnpcgroup.cosm.entity.forecast.jv.ModifiedCarryForecastDetail;
 import com.nnpcgroup.cosm.exceptions.NoRealizablePriceException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,21 +21,21 @@ import javax.enterprise.context.Dependent;
  * @author 18359
  */
 @Dependent
-public class ModifiedCarryForecastServicesImpl extends AlternativeFundingForecastServicesImpl<ModifiedCarryForecast> implements ModifiedCarryForecastServices {
+public class ModifiedCarryForecastDetailServicesImpl extends AlternativeFundingForecastDetailServicesImpl<ModifiedCarryForecastDetail> implements ModifiedCarryForecastDetailServices {
 
-    private static final Logger LOG = Logger.getLogger(ModifiedCarryForecastServicesImpl.class.getName());
+    private static final Logger LOG = Logger.getLogger(ModifiedCarryForecastDetailServicesImpl.class.getName());
 
-    public ModifiedCarryForecastServicesImpl(Class<ModifiedCarryForecast> entityClass) {
+    public ModifiedCarryForecastDetailServicesImpl(Class<ModifiedCarryForecastDetail> entityClass) {
         super(entityClass);
     }
 
     //@Override
-    public ModifiedCarryForecast createInstance() {
-        return new ModifiedCarryForecast();
+    public ModifiedCarryForecastDetail createInstance() {
+        return new ModifiedCarryForecastDetail();
     }
 
     @Override
-    public ModifiedCarryForecast computeNotionalMargin(ModifiedCarryForecast forecast) throws NoRealizablePriceException {
+    public ModifiedCarryForecastDetail computeNotionalMargin(ModifiedCarryForecastDetail forecast) throws NoRealizablePriceException {
         PricePK pricePK = new PricePK();
         LOG.log(Level.INFO, "*********NPE Check********* forecast={0}", new Object[]{forecast});
         pricePK.setPeriodMonth(forecast.getPeriodMonth());

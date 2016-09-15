@@ -187,11 +187,11 @@ public class EntitlementReport extends HttpServlet {
                     int count = 0;
                     for (JvForecastDetail forecastDetail : forecastDetails) {
                         count++;
-                        cell = new PdfPCell(new Phrase(forecastDetail.getContract().getCrudeType().getCode()));
+                        cell = new PdfPCell(new Phrase(forecastDetail.getContract().getCrudeType().getCrudeType()));
                         table.addCell(cell);
-                        cell = new PdfPCell(new Phrase(String.valueOf(forecastDetail.getLifting())));
+                        cell = new PdfPCell(new Phrase(String.format("%,.2f", forecastDetail.getLifting())));
                         table.addCell(cell);
-                        cell = new PdfPCell(new Phrase(String.valueOf(forecastDetail.getPartnerLifting())));
+                        cell = new PdfPCell(new Phrase(String.format("%,.2f", forecastDetail.getPartnerLifting())));
                         table.addCell(cell);
 
                         if (count == 1) {

@@ -529,7 +529,7 @@ public abstract class AlternativeFundingForecastDetailServicesImpl<T extends Alt
         
         TypedQuery<Long> query = getEntityManager().createQuery(
                 "SELECT COUNT(f) "
-                + "FROM AlternativeFundingForecast f  WHERE f.contract = :contract AND f.sharedOil != null", Long.class);
+                + "FROM AlternativeFundingForecastDetail f  WHERE f.contract = :contract AND f.sharedOil != null", Long.class);
         query.setParameter("contract", contractToFind);
         
         long sharedOilPeriod = query.getSingleResult();

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE log4j:configuration SYSTEM "log4j.dtd" >
-<log4j:configuration debug="false">
+<log4j:configuration debug="true">
     <appender name="le" class="com.logentries.log4j.LogentriesAppender">
         <param name="Token" value="045c6b57-ee14-43ac-a828-93b2fd989543"/>
         <param name="Ssl" value="false"/>
@@ -15,10 +15,10 @@
         </layout>
     </appender>
     <logger name="example">
-        <level value="info"/>
+        <level value="debug"/>
     </logger>
     <root>
-        <priority value="info"></priority>
+        <priority value="debug"></priority>
         <appender-ref ref="le"/>
         <appender-ref ref="CON" />
     </root>

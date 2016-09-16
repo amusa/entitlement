@@ -14,9 +14,9 @@ import javax.validation.constraints.NotNull;
  */
 @Entity
 @DiscriminatorValue("JV")
-public class JvForecastDetail extends ForecastDetail {
+public class JvForecastDetail extends ForecastDetail<JvForecast> {
 
-    private static final long serialVersionUID = 2917192116735019964L;
+    private static final long serialVersionUID = 2917191116735019064L;
 
     private Double grossProduction;
     private Double productionVolume;
@@ -32,8 +32,6 @@ public class JvForecastDetail extends ForecastDetail {
     private Integer partnerCargos;
     private Double availability;
     private Double partnerAvailability;
-    private Forecast forecast;
-
 
     public JvForecastDetail() {
     }
@@ -75,7 +73,6 @@ public class JvForecastDetail extends ForecastDetail {
     public void setClosingStock(Double closingStock) {
         this.closingStock = closingStock;
     }
-
 
     @NotNull
     @Column(name = "OWN_SHARE_ENTITLEMENT")
@@ -166,21 +163,6 @@ public class JvForecastDetail extends ForecastDetail {
 
     public void setPartnerCargos(Integer partnerCargos) {
         this.partnerCargos = partnerCargos;
-    }
-
-    @ManyToOne
-    @MapsId("forecast")
-    @JoinColumns({
-            @JoinColumn(name = "PERIOD_YEAR", referencedColumnName = "PERIOD_YEAR", updatable = false, insertable = false),
-            @JoinColumn(name = "PERIOD_MONTH", referencedColumnName = "PERIOD_MONTH", updatable = false, insertable = false),
-            @JoinColumn(name = "FISCALARRANGEMENT_ID", referencedColumnName = "FISCALARRANGEMENT_ID", insertable = false, updatable = false)
-    })
-    public Forecast getForecast() {
-        return forecast;
-    }
-
-    public void setForecast(Forecast forecast) {
-        this.forecast = forecast;
     }
 
 }

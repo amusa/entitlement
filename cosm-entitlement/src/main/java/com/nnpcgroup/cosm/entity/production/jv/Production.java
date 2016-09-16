@@ -8,34 +8,41 @@ package com.nnpcgroup.cosm.entity.production.jv;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
  * @author 18359
+ * @param <E>
  */
 @Entity
 @Table(name = "PRODUCTION")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "PTYPE")
-public abstract class Production implements Serializable {
+public abstract class Production<E extends ProductionDetail> implements Serializable {
 
-    private static final long serialVersionUID = -795843614381155072L;
+    private static final long serialVersionUID = -705843614381155070L;
 
     private ProductionPK productionPK;
     private Integer periodYear;
     private Integer periodMonth;
     private FiscalArrangement fiscalArrangement;
     private String remark;
+    private List<E> productionDetails;
 
     public Production() {
     }
@@ -85,6 +92,23 @@ public abstract class Production implements Serializable {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    @OneToMany(mappedBy = "production", cascade = CascadeType.ALL, fetch = FetchType.EAGER, targetEntity = ProductionDetail.class)
+    public List<E> getProductionDetails() {
+        return productionDetails;
+    }
+
+    public void setProductionDetails(List<E> productionDetails) {
+        this.productionDetails = productionDetails;
+    }
+
+    public void addProductionDetails(E productionDetail) {
+        if (productionDetails == null) {
+            productionDetails = new ArrayList<>();
+
+        }
+        productionDetails.add(productionDetail);
     }
 
     @Override

@@ -5,13 +5,8 @@
  */
 package com.nnpcgroup.cosm.entity.production.jv;
 
-import java.util.ArrayList;
-import java.util.List;
-import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.OneToMany;
 
 /**
  *
@@ -19,30 +14,11 @@ import javax.persistence.OneToMany;
  */
 @Entity
 @DiscriminatorValue("JV")
-public class JvProduction extends Production {
+public class JvProduction extends Production<JvProductionDetail> {
 
-    private static final long serialVersionUID = 4881837273578907336L;
-
-    private List<JvProductionDetail> productionDetails;
+    private static final long serialVersionUID = 4181837273878907334L;
 
     public JvProduction() {
-    }
-
-    @OneToMany(mappedBy = "production", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    public List<JvProductionDetail> getProductionDetails() {
-        return productionDetails;
-    }
-
-    public void setProductionDetails(List<JvProductionDetail> productionDetails) {
-        this.productionDetails = productionDetails;
-    }
-
-    public void addProductionDetails(JvProductionDetail productionDetail) {
-        if (productionDetails == null) {
-            productionDetails = new ArrayList<>();
-
-        }
-        productionDetails.add(productionDetail);
     }
 
 }

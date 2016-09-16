@@ -114,15 +114,6 @@ public class JvProductionController implements Serializable {
 
     public void setCurrentProduction(JvProduction currentProduction) {
         this.currentProduction = currentProduction;
-//        ContractPK contractPK;// = new ContractPK();
-////        contractPK.setFiscalArrangementId(currentProduction.getFiscalArrangementId());
-////        contractPK.setCrudeTypeCode(currentProduction.getCrudeTypeCode());
-//        contractPK = currentProduction.getContract().getContractPK();
-//        currentContract = contractBean.find(contractPK);
-//        if (currentContract != null) {
-//            // currentFiscalArrangement = currentContract.getFiscalArrangement();
-//        }
-
     }
 
     public AlternativeFundingProductionDetail getCurrentAfProduction() {
@@ -158,11 +149,11 @@ public class JvProductionController implements Serializable {
             currentProductionDetail = new JvProductionDetail();
             setNewProduction(true);
         } else {
-            LOG.log(Level.INFO, "Undefined contract selection...{0}", currentContract);
+            LOG.log(Level.FINE, "Undefined contract selection...{0}", currentContract);
         }
 
         if (currentProductionDetail != null) {
-            if (periodYear != null && periodMonth != null) {
+            if (periodYear != null && periodMonth != null && currentContract != null) {
                 setProductionDetailEmbeddableKeys();
             }
         }
@@ -255,8 +246,9 @@ public class JvProductionController implements Serializable {
             currentProduction = findProduction(periodYear, periodMonth, currentFiscalArrangement);
 
             if (currentProduction != null) {
-                productionDetails = currentProduction.getProductionDetails();
-                //  productionDetails = getProductionDetailBean().findByContractPeriod(periodYear, periodMonth, currentFiscalArrangement);
+                //TODO:fix ORM double linkage
+                //productionDetails = currentProduction.getProductionDetails();
+                productionDetails = getProductionDetailBean().findByContractPeriod(periodYear, periodMonth, currentFiscalArrangement);
             } else {
                 productionDetails = null;
             }
@@ -294,23 +286,17 @@ public class JvProductionController implements Serializable {
     }
 
     public void grossProductionChanged() {
-        getProductionDetailBean().grossProductionChanged(currentProductionDetail);
         LOG.log(Level.INFO,
-                "Own entmt={0},Partner entmt={1}, Stock Adj={2}...",
-                new Object[]{currentProductionDetail.getOwnShareEntitlement(),
-                    currentProductionDetail.getPartnerShareEntitlement(),
-                    currentProductionDetail.getStockAdjustment()});
-
+                "Gross production changed to {0}",                
+                    currentProductionDetail.getGrossProduction());
+        getProductionDetailBean().grossProductionChanged(currentProductionDetail);
     }
 
     public void stockAdjustmentChanged() {
+         LOG.log(Level.INFO,
+                "Computing stock adjustment/variation",                
+                    currentProductionDetail.getGrossProduction());
         getProductionDetailBean().grossProductionChanged(currentProductionDetail);
-        LOG.log(Level.INFO,
-                "Own entmt={0},Partner entmt={1}, Stock Adj={2}...",
-                new Object[]{currentProductionDetail.getOwnShareEntitlement(),
-                    currentProductionDetail.getPartnerShareEntitlement(),
-                    currentProductionDetail.getStockAdjustment()});
-
     }
 
     public void operatorDeclaredVolumeListener() {
@@ -318,7 +304,7 @@ public class JvProductionController implements Serializable {
     }
 
     public void liftingChanged() {
-        LOG.log(Level.INFO, "Lifting changed...");
+        LOG.log(Level.INFO, "Exportable volume changed");
         getProductionDetailBean().liftingChanged(currentProductionDetail);
 
 //        Double openingStock = currentProduction.getOpeningStock();
@@ -409,7 +395,7 @@ public class JvProductionController implements Serializable {
     }
 
     public void actualize(JvForecastDetail forecastDetail) throws Exception {
-        LOG.log(Level.INFO, "Actualizing {0}...", forecastDetail);
+        LOG.log(Level.INFO, "Actualizing forecast {0}...", forecastDetail);
         reset();
         ContractPK cPK = forecastDetail.getContract().getContractPK();
         Contract contract = contractBean.find(cPK); //forecast.getContract();
@@ -436,7 +422,7 @@ public class JvProductionController implements Serializable {
                 productionDetail = new JvProductionDetail();
             } else {
                 //something is wrong
-                LOG.log(Level.INFO, "Something is wrong! JvForecastDetailServices type not determined {0}...", forecastDetail);
+                LOG.log(Level.WARNING, "Something is wrong! JvForecastDetailServices type not determined {0}...", forecastDetail);
                 throw new Exception("JvForecastDetailServices type not determined");
             }
 
@@ -470,16 +456,16 @@ public class JvProductionController implements Serializable {
         destroy();
     }
 
-    public void destroyForecastDetail() {
+    public void destroyProductionDetail() {
         persistProductionDetail(JsfUtil.PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("ProductionDeleted"));
         if (!JsfUtil.isValidationFailed()) {
             currentProductionDetail = null;
         }
     }
 
-    public void destroyForecastDetail(JvProductionDetail prod) {
+    public void destroyProductionDetail(JvProductionDetail prod) {
         setCurrentProductionDetail(prod);
-        destroyForecastDetail();
+        destroyProductionDetail();
     }
 
     public void removeProductionDetail(JvProductionDetail productionDetail) {

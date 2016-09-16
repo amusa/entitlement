@@ -22,16 +22,15 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.enterprise.context.SessionScoped;
 import javax.enterprise.inject.Produces;
 import javax.faces.model.SelectItem;
 import javax.inject.Inject;
-
-import org.apache.log4j.Level;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
 
 /**
  * @author 18359
@@ -41,8 +40,8 @@ import org.apache.log4j.Logger;
 public class JvForecastController implements Serializable {
 
     private static final long serialVersionUID = -7596150432081506756L;
-    //private static final Logger LOG = Logger.getLogger(JvForecastController.class.getName());
-    private static final Logger LOG = LogManager.getRootLogger();
+    private static final Logger LOG = Logger.getLogger(JvForecastController.class.getName());
+    //private static final Logger LOG = LogManager.getRootLogger();
 
     @Inject
     private JvForecastServices jvForecastServices;
@@ -78,7 +77,6 @@ public class JvForecastController implements Serializable {
      */
     public JvForecastController() {
         this.editMode = false;
-        LOG.info("ProductionController::constructor activated...");
     }
 
     public JvForecastServices getForecastBean() {
@@ -108,10 +106,6 @@ public class JvForecastController implements Serializable {
 
     public void setCurrentProduction(JvForecast currentProduction) {
         this.currentProduction = currentProduction;
-//        this.currentFiscalArrangement = (currentProduction != null)
-//                ? currentProduction.getContract().getFiscalArrangement() : null;
-//        this.currentContract = (currentProduction != null)
-//                ? currentProduction.getContract() : null;
     }
 
     public AlternativeFundingForecastDetail getCurrentAfProduction() {
@@ -268,17 +262,23 @@ public class JvForecastController implements Serializable {
     public void update() {
         persistForecastDetail(JsfUtil.PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("ProductionUpdated"));
         if (isEditMode()) {
+            LOG.log(Level.INFO, "Performing automatic stock adjustment...");
             List<Forecast> adjforecasts = new ArrayList<>();
             JvForecastDetail thisForecastDetail = currentForecastDetail;
             JvForecastDetail nextForecastDetail;
             while ((nextForecastDetail = (JvForecastDetail) getForecastDetailBean().getNextMonthProduction(thisForecastDetail)) != null) {
                 try {
+                    LOG.log(Level.INFO, "Adjusting {0} {1}/{2}...",
+                            new Object[]{nextForecastDetail.getContract(),
+                                nextForecastDetail.getPeriodYear(),
+                                nextForecastDetail.getPeriodMonth()});
+
                     getForecastDetailBean().enrich(nextForecastDetail);
                     getForecastDetailBean().edit(nextForecastDetail);
                     // adjforecasts.add(nextForecast);
                     thisForecastDetail = nextForecastDetail;
                 } catch (NoRealizablePriceException rpe) {
-                    Logger.getLogger(this.getClass().getName()).log(Level.ERROR, null, rpe);
+                    Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, rpe);
                     JsfUtil.addErrorMessage(rpe, ResourceBundle.getBundle("/Bundle").getString("RealizablePriceErrorOccured"));
                 }
             }
@@ -313,7 +313,7 @@ public class JvForecastController implements Serializable {
                     JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
                 }
             } catch (Exception ex) {
-                Logger.getLogger(this.getClass().getName()).log(Level.ERROR, null, ex);
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
                 JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
             }
         }
@@ -340,7 +340,7 @@ public class JvForecastController implements Serializable {
                     JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
                 }
             } catch (Exception ex) {
-                Logger.getLogger(this.getClass().getName()).log(Level.ERROR, null, ex);
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
                 JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
             }
         }
@@ -437,19 +437,19 @@ public class JvForecastController implements Serializable {
     }
 
     public void productionVolumeChanged() {
+        LOG.log(Level.INFO,
+                "Daily production volume changed {0}",
+                new Object[]{currentForecastDetail.getProductionVolume()});
         try {
             checkNull();
             getForecastDetailBean().enrich(currentForecastDetail);
-            LOG.log(Level.INFO,
-                    String.format("Production Enriched::Own entmt=%f, Partner entmt=%f",
-                            new Object[]{currentForecastDetail.getOwnShareEntitlement(),
-                                    currentForecastDetail.getPartnerShareEntitlement()
-                            }));
         } catch (NoRealizablePriceException rpe) {
-            Logger.getLogger(this.getClass().getName()).log(Level.ERROR, null, rpe);
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, rpe);
             JsfUtil.addErrorMessage(rpe, ResourceBundle.getBundle("/Bundle").getString("RealizablePriceErrorOccured"));
         } catch (Exception ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
             JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/Bundle").getString("NullEncountered"));
+
         }
     }
 
@@ -458,26 +458,28 @@ public class JvForecastController implements Serializable {
         try {
             afBean.computeAlternativeFunding(getCurrentAfProduction());
         } catch (NoRealizablePriceException rpe) {
-            Logger.getLogger(this.getClass().getName()).log(Level.ERROR, null, rpe);
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, rpe);
             JsfUtil.addErrorMessage(rpe, ResourceBundle.getBundle("/Bundle").getString("RealizablePriceErrorOccured"));
         }
     }
 
     public void openingStockChanged() {
-        LOG.log(Level.INFO, "Opening Stock changed...");
-        getForecastDetailBean().openingStockChanged(currentProduction);
+        LOG.log(Level.INFO, "Opening Stock changed {0}...", currentForecastDetail);
+        getForecastDetailBean().openingStockChanged(currentForecastDetail);
     }
 
     public void liftingChanged() {
-        getForecastDetailBean().computeClosingStock(currentProduction);
+        LOG.log(Level.INFO, "Exportable volume changed: NNPC {0}, Partner {1}",
+                new Object[]{currentForecastDetail.getLifting(), currentForecastDetail.getPartnerLifting()});
+        getForecastDetailBean().computeClosingStock(currentForecastDetail);
     }
 
     public void resetDefaults() {
         LOG.log(Level.INFO, "Resetting to default...");
         try {
-            getForecastDetailBean().enrich(currentProduction);
+            getForecastDetailBean().enrich(currentForecastDetail);
         } catch (NoRealizablePriceException rpe) {
-            Logger.getLogger(this.getClass().getName()).log(Level.ERROR, null, rpe);
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, rpe);
             JsfUtil.addErrorMessage(rpe, ResourceBundle.getBundle("/Bundle").getString("RealizablePriceErrorOccured"));
         }
     }
@@ -626,13 +628,13 @@ public class JvForecastController implements Serializable {
             currentForecastDetail = new JvForecastDetail();
             setNewForecast(true);
         } else {
-            LOG.info("Undefined contract selection...");
+            LOG.fine("Undefined contract selection...");
             currentForecastDetail = null;
         }
 
         if (currentForecastDetail != null) {
 
-            if (periodYear != null && periodMonth != null) {
+            if (periodYear != null && periodMonth != null && currentContract != null) {
                 setForecastDetailEmbeddableKeys();
             }
         }

@@ -6,8 +6,6 @@
 package com.nnpcgroup.cosm.entity.forecast.jv;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  *
@@ -15,32 +13,10 @@ import java.util.List;
  */
 @Entity
 @DiscriminatorValue("JV")
-public class JvForecast extends Forecast {
+public class JvForecast extends Forecast<JvForecastDetail> {
 
-    private static final long serialVersionUID = 2917192116735019964L;
-
-    private List<JvForecastDetail> forecastDetails;
+    private static final long serialVersionUID = 3917192116735014964L;
 
     public JvForecast() {
     }
-
-    @OneToMany(mappedBy = "forecast", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    public List<JvForecastDetail> getForecastDetails() {
-        return forecastDetails;
-    }
-
-    public void setForecastDetails(List<JvForecastDetail> forecastDetails) {
-        this.forecastDetails = forecastDetails;
-    }
-
-
-
-    public void addForecastDetails(JvForecastDetail forecastDetail) {
-        if (forecastDetails == null) {
-            forecastDetails = new ArrayList<>();
-
-        }
-        forecastDetails.add(forecastDetail);
-    }
-
 }

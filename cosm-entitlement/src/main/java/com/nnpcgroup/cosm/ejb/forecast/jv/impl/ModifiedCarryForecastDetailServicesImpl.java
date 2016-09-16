@@ -28,12 +28,7 @@ public class ModifiedCarryForecastDetailServicesImpl extends AlternativeFundingF
     public ModifiedCarryForecastDetailServicesImpl(Class<ModifiedCarryForecastDetail> entityClass) {
         super(entityClass);
     }
-
-    //@Override
-    public ModifiedCarryForecastDetail createInstance() {
-        return new ModifiedCarryForecastDetail();
-    }
-
+    
     @Override
     public ModifiedCarryForecastDetail computeNotionalMargin(ModifiedCarryForecastDetail forecast) throws NoRealizablePriceException {
         PricePK pricePK = new PricePK();

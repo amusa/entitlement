@@ -20,7 +20,6 @@ public abstract class RegularForecastDetailServicesImpl extends ForecastDetailSe
 
     private static final Logger LOG = Logger.getLogger(RegularForecastDetailServicesImpl.class.getName());
 
-
     public RegularForecastDetailServicesImpl(Class<JvForecastDetail> entityClass) {
         super(entityClass);
     }

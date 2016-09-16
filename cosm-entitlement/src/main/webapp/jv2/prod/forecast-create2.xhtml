@@ -181,7 +181,7 @@
                                             <span class="icon">&#61698;</span>
                                             #{bundle.View}
                                             <f:ajax event="click" render="JvViewForm"
-                                                    listener="#{jvProdController.setCurrentProduction(prod)}"/>
+                                                    listener="#{jvProdController.setCurrentForecastDetail(prod)}"/>
                                         </h:commandLink>
                                     </li>
                                     <li>
@@ -189,7 +189,7 @@
                                             <span class="icon">&#61918;</span>
                                             #{bundle.Remove}
                                             <f:ajax render="jvProdListForm prodTable msgs"
-                                                    listener="#{jvProdController.remove(prod)}"/>
+                                                    listener="#{jvProdController.removeForecastDetail(prod)}"/>
                                         </h:commandLink>
                                     </li>
                                 </ul>

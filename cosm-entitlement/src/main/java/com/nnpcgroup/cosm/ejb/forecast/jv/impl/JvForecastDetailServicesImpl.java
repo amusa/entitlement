@@ -25,6 +25,7 @@ import org.apache.log4j.Logger;
 
 /**
  * @author 18359
+ * @param <T>
  */
 public abstract class JvForecastDetailServicesImpl<T extends JvForecastDetail> extends ForecastDetailServicesImpl<T> implements JvForecastDetailServices<T>, Serializable {
 

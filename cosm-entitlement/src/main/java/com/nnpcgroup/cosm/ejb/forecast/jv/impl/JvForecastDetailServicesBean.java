@@ -19,20 +19,13 @@ import java.util.logging.Logger;
  */
 @Stateless
 @Local(JvForecastDetailServices.class)
-public class JvForecastDetailServicesBean extends JvForecastDetailServicesImpl<JvForecastDetail> implements JvForecastDetailServices<JvForecastDetail>, Serializable{
+public class JvForecastDetailServicesBean extends JvForecastDetailServicesImpl<JvForecastDetail> implements JvForecastDetailServices<JvForecastDetail>, Serializable {
 
     private static final Logger LOG = Logger.getLogger(JvForecastDetailServicesBean.class.getName());
     private static final long serialVersionUID = 8993596753945847377L;
 
-    public JvForecastDetailServicesBean(Class<JvForecastDetail> entityClass) {
-        super(entityClass);
-    }
-
-    public JvForecastDetailServicesBean(){
+    public JvForecastDetailServicesBean() {
         super(JvForecastDetail.class);
     }
-
-
-
 
 }

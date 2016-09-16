@@ -25,15 +25,16 @@
     <class>com.nnpcgroup.cosm.entity.forecast.jv.CarryForecastDetail</class>
     <class>com.nnpcgroup.cosm.entity.forecast.jv.Forecast</class>
     <class>com.nnpcgroup.cosm.entity.forecast.jv.ForecastDetail</class>
-     <class>com.nnpcgroup.cosm.entity.forecast.jv.ModifiedCarryForecastDetail</class>
+    <class>com.nnpcgroup.cosm.entity.forecast.jv.ModifiedCarryForecastDetail</class>
     <class>com.nnpcgroup.cosm.entity.forecast.jv.JvForecast</class>
-      <class>com.nnpcgroup.cosm.entity.forecast.jv.JvForecastDetail</class>
+    <class>com.nnpcgroup.cosm.entity.forecast.jv.JvForecastDetail</class>
     <class>com.nnpcgroup.cosm.entity.forecast.jv.PscForecast</class>
-    <class>com.nnpcgroup.cosm.entity.production.jv.AlternativeFundingProduction</class>
-    <class>com.nnpcgroup.cosm.entity.production.jv.CarryProduction</class>
-    <class>com.nnpcgroup.cosm.entity.production.jv.ModifiedCarryProduction</class>
+    <class>com.nnpcgroup.cosm.entity.production.jv.ProductionDetail</class>
     <class>com.nnpcgroup.cosm.entity.production.jv.Production</class>
-    <class>com.nnpcgroup.cosm.entity.production.jv.RegularProduction</class>
+    <class>com.nnpcgroup.cosm.entity.production.jv.AlternativeFundingProductionDetail</class>
+    <class>com.nnpcgroup.cosm.entity.production.jv.CarryProductionDetail</class>
+    <class>com.nnpcgroup.cosm.entity.production.jv.ModifiedCarryProductionDetail</class>
+    <class>com.nnpcgroup.cosm.entity.production.jv.JvProduction</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties>
       <!--<property name="javax.persistence.schema-generation.database.action"  value="drop-and-create"/>-->

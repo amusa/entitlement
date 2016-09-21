@@ -9,24 +9,25 @@ import com.nnpcgroup.cosm.entity.contract.Contract;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * @author 18359
+ * @param <E>
  */
 @Entity
 @Table(name = "FORECAST_DETAIL")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "FTYPE")
-public abstract class ForecastDetail implements Serializable {
+public abstract class ForecastDetail<E extends Forecast> implements Serializable {
 
-    private static final long serialVersionUID = 2917192116735019964L;
+    private static final long serialVersionUID = 1917192116735019964L;
 
     private ForecastDetailPK forecastDetailPK;
     private Integer periodYear;
     private Integer periodMonth;
     private Contract contract;
-
-
+    private E forecast;
 
     public ForecastDetail() {
     }
@@ -61,9 +62,9 @@ public abstract class ForecastDetail implements Serializable {
     @ManyToOne
     @MapsId("contract")
     @JoinColumns({
-            @JoinColumn(name = "CONTRACT_ID", referencedColumnName = "ID", insertable = false, updatable = false),
-            @JoinColumn(name = "CONTRACT_FISCAL_ID", referencedColumnName = "FISCALARRANGEMENTID", insertable = false, updatable = false),
-            @JoinColumn(name = "CRUDETYPE_CODE", referencedColumnName = "CRUDETYPECODE", insertable = false, updatable = false)
+        @JoinColumn(name = "CONTRACT_ID", referencedColumnName = "ID", insertable = false, updatable = false),
+        @JoinColumn(name = "CONTRACT_FISCAL_ID", referencedColumnName = "FISCALARRANGEMENTID", insertable = false, updatable = false),
+        @JoinColumn(name = "CRUDETYPE_CODE", referencedColumnName = "CRUDETYPECODE", insertable = false, updatable = false)
     })
     public Contract getContract() {
         return contract;
@@ -72,5 +73,45 @@ public abstract class ForecastDetail implements Serializable {
     public void setContract(Contract contract) {
         this.contract = contract;
     }
+
+    @ManyToOne(targetEntity = Forecast.class)
+    @MapsId("forecast")
+    @JoinColumns({
+        @JoinColumn(name = "PERIOD_YEAR", referencedColumnName = "PERIOD_YEAR", updatable = false, insertable = false),
+        @JoinColumn(name = "PERIOD_MONTH", referencedColumnName = "PERIOD_MONTH", updatable = false, insertable = false),
+        @JoinColumn(name = "FISCALARRANGEMENT_ID", referencedColumnName = "FISCALARRANGEMENT_ID", insertable = false, updatable = false)
+    })
+    public E getForecast() {
+        return forecast;
+    }
+
+    public void setForecast(E forecast) {
+        this.forecast = forecast;
+    }
+
+//    @Override
+//    public int hashCode() {
+//        int hash = 7;
+//        hash = 73 * hash + Objects.hashCode(this.forecastDetailPK);
+//        return hash;
+//    }
+//
+//    @Override
+//    public boolean equals(Object obj) {
+//        if (this == obj) {
+//            return true;
+//        }
+//        if (obj == null) {
+//            return false;
+//        }
+//        if (getClass() != obj.getClass()) {
+//            return false;
+//        }
+//        final ForecastDetail<?> other = (ForecastDetail<?>) obj;
+//        if (!Objects.equals(this.forecastDetailPK, other.forecastDetailPK)) {
+//            return false;
+//        }
+//        return true;
+//    }
 
 }

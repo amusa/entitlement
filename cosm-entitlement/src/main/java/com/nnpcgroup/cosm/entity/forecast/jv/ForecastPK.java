@@ -16,12 +16,12 @@ import java.util.logging.Logger;
  */
 @Embeddable
 public class ForecastPK implements Serializable {
+
     private static final Logger LOG = Logger.getLogger(ForecastPK.class.getName());
     private static final long serialVersionUID = -5632726719147425922L;
     private Integer periodYear;
     private Integer periodMonth;
     private Long fiscalArrangementId;
-//    private ContractPK contract;
 
     public ForecastPK() {
     }
@@ -31,12 +31,6 @@ public class ForecastPK implements Serializable {
         this.periodMonth = periodMonth;
         this.fiscalArrangementId = fiscalArrangementId;
     }
-
-//    public ForecastPK(Integer periodYear, Integer periodMonth, ContractPK contract) {
-//        this.periodYear = periodYear;
-//        this.periodMonth = periodMonth;
-//        this.contract = contract;
-//    }
 
     @Column(name = "PERIOD_YEAR")
     public Integer getPeriodYear() {
@@ -65,24 +59,23 @@ public class ForecastPK implements Serializable {
         this.fiscalArrangementId = fiscalArrangementId;
     }
 
-//    public ContractPK getContract() {
-//        return contract;
-//    }
-//
-//    public void setContract(ContractPK contract) {
-//        this.contract = contract;
-//    }
-
-
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         ForecastPK that = (ForecastPK) o;
 
-        if (periodYear != null ? !periodYear.equals(that.periodYear) : that.periodYear != null) return false;
-        if (periodMonth != null ? !periodMonth.equals(that.periodMonth) : that.periodMonth != null) return false;
+        if (periodYear != null ? !periodYear.equals(that.periodYear) : that.periodYear != null) {
+            return false;
+        }
+        if (periodMonth != null ? !periodMonth.equals(that.periodMonth) : that.periodMonth != null) {
+            return false;
+        }
         return fiscalArrangementId != null ? fiscalArrangementId.equals(that.fiscalArrangementId) : that.fiscalArrangementId == null;
 
     }

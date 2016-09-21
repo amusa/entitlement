@@ -7,10 +7,6 @@ package com.nnpcgroup.cosm.entity.production.jv;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
-import javax.persistence.ManyToOne;
-import javax.persistence.MapsId;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
@@ -19,11 +15,10 @@ import javax.validation.constraints.NotNull;
  */
 @Entity
 @DiscriminatorValue("JV")
-public class JvProductionDetail extends ProductionDetail {
+public class JvProductionDetail extends ProductionDetail<JvProduction> {
 
-    private static final long serialVersionUID = -795843614381155072L;
+    private static final long serialVersionUID = -2958434381155072L;
 
-    private Production production;
     private Double openingStock;
     private Double partnerOpeningStock;
     private Double closingStock;
@@ -51,21 +46,6 @@ public class JvProductionDetail extends ProductionDetail {
     private Double operatorDeclaredPartnerAvailability;
 
     public JvProductionDetail() {
-    }
-
-    @ManyToOne
-    @MapsId("production")
-    @JoinColumns({
-            @JoinColumn(name = "PERIOD_YEAR", referencedColumnName = "PERIOD_YEAR", updatable = false, insertable = false),
-            @JoinColumn(name = "PERIOD_MONTH", referencedColumnName = "PERIOD_MONTH", updatable = false, insertable = false),
-            @JoinColumn(name = "FISCALARRANGEMENT_ID", referencedColumnName = "FISCALARRANGEMENT_ID", insertable = false, updatable = false)
-    })
-    public Production getProduction() {
-        return production;
-    }
-
-    public void setProduction(Production production) {
-        this.production = production;
     }
 
     @NotNull

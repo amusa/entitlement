@@ -8,6 +8,7 @@ package com.nnpcgroup.cosm.entity.production.jv;
 import com.nnpcgroup.cosm.entity.contract.Contract;
 
 import java.io.Serializable;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.EmbeddedId;
@@ -22,19 +23,21 @@ import javax.persistence.Table;
 
 /**
  * @author 18359
+ * @param <E>
  */
 @Entity
 @Table(name = "PRODUCTION_DETAIL")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "PTYPE")
-public abstract class ProductionDetail implements Serializable {
+public abstract class ProductionDetail<E extends Production> implements Serializable {
 
-    private static final long serialVersionUID = -795843614381155072L;
+    private static final long serialVersionUID = -115843614381155072L;
 
     private ProductionDetailPK productionDetailPK;
     private Integer periodYear;
     private Integer periodMonth;
     private Contract contract;
+    private E production;
 
     public ProductionDetail() {
     }
@@ -79,6 +82,46 @@ public abstract class ProductionDetail implements Serializable {
 
     public void setContract(Contract contract) {
         this.contract = contract;
+    }
+
+    @ManyToOne(targetEntity = Production.class)
+    @MapsId("production")
+    @JoinColumns({
+        @JoinColumn(name = "PERIOD_YEAR", referencedColumnName = "PERIOD_YEAR", updatable = false, insertable = false),
+        @JoinColumn(name = "PERIOD_MONTH", referencedColumnName = "PERIOD_MONTH", updatable = false, insertable = false),
+        @JoinColumn(name = "FISCALARRANGEMENT_ID", referencedColumnName = "FISCALARRANGEMENT_ID", insertable = false, updatable = false)
+    })
+    public E getProduction() {
+        return production;
+    }
+
+    public void setProduction(E production) {
+        this.production = production;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 31 * hash + Objects.hashCode(this.productionDetailPK);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final ProductionDetail other = (ProductionDetail) obj;
+        if (!Objects.equals(this.productionDetailPK, other.productionDetailPK)) {
+            return false;
+        }
+        return true;
     }
 
 }

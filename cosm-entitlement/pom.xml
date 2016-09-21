@@ -120,6 +120,7 @@
                 <artifactId>wildfly-maven-plugin</artifactId>
                 <configuration>
                     <skip>false</skip>
+                    <force>true</force>
                 </configuration>
             </plugin>           
         </plugins>

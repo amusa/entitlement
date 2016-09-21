@@ -1,6 +1,7 @@
 package com.nnpcgroup.cosm.controller;
 
 import com.nnpcgroup.cosm.controller.util.JsfUtil;
+
 import java.io.Serializable;
 import java.time.YearMonth;
 import java.util.List;
@@ -53,8 +54,9 @@ public class GeneralController implements Serializable {
     public void yearChanged(AjaxBehaviorEvent event) {
         Integer year = (Integer) ((UIOutput) event.getSource()).getValue();
         log.log(Level.INFO, "YearChanged event fired with value {0}, generating months...", year);
-
-        months = monthGen.generateMonths(year);
+        if (year != null) {
+            months = monthGen.generateMonths(year);
+        }
     }
 
     public PeriodMonth getPeriodMonth(Integer month) {

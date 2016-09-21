@@ -5,11 +5,10 @@
  */
 package com.nnpcgroup.cosm.entity.production.jv;
 
-import com.nnpcgroup.cosm.entity.contract.ContractPK;
-
 import javax.persistence.Embeddable;
 import java.io.Serializable;
 import java.util.Objects;
+import javax.persistence.Column;
 
 /**
  *
@@ -22,17 +21,18 @@ public class ProductionPK implements Serializable {
 
     private Integer periodYear;
     private Integer periodMonth;
-    private ContractPK contract;
+    private Long fiscalArrangementId;
 
     public ProductionPK() {
     }
 
-    public ProductionPK(Integer periodYear, Integer periodMonth, ContractPK contract) {
+    public ProductionPK(Integer periodYear, Integer periodMonth, Long fiscalArrangementId) {
         this.periodYear = periodYear;
         this.periodMonth = periodMonth;
-        this.contract = contract;
+        this.fiscalArrangementId = fiscalArrangementId;
     }
 
+    @Column(name = "PERIOD_YEAR")
     public Integer getPeriodYear() {
         return periodYear;
     }
@@ -41,6 +41,7 @@ public class ProductionPK implements Serializable {
         this.periodYear = periodYear;
     }
 
+    @Column(name = "PERIOD_MONTH")
     public Integer getPeriodMonth() {
         return periodMonth;
     }
@@ -49,22 +50,21 @@ public class ProductionPK implements Serializable {
         this.periodMonth = periodMonth;
     }
 
-    public ContractPK getContract() {
-        return contract;
+    @Column(name = "FISCALARRANGEMENT_ID")
+    public Long getFiscalArrangementId() {
+        return fiscalArrangementId;
     }
 
-    public void setContract(ContractPK contract) {
-        this.contract = contract;
+    public void setFiscalArrangementId(Long fiscalArrangementId) {
+        this.fiscalArrangementId = fiscalArrangementId;
     }
-    
-    
 
     @Override
     public int hashCode() {
-        int hash = 7;
+        int hash = 5;
         hash = 83 * hash + Objects.hashCode(this.periodYear);
         hash = 83 * hash + Objects.hashCode(this.periodMonth);
-        hash = 83 * hash + Objects.hashCode(this.contract);
+        hash = 83 * hash + Objects.hashCode(this.fiscalArrangementId);
         return hash;
     }
 
@@ -86,7 +86,7 @@ public class ProductionPK implements Serializable {
         if (!Objects.equals(this.periodMonth, other.periodMonth)) {
             return false;
         }
-        if (!Objects.equals(this.contract, other.contract)) {
+        if (!Objects.equals(this.fiscalArrangementId, other.fiscalArrangementId)) {
             return false;
         }
         return true;

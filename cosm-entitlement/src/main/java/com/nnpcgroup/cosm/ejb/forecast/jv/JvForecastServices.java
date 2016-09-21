@@ -7,12 +7,14 @@ package com.nnpcgroup.cosm.ejb.forecast.jv;
 
 import com.nnpcgroup.cosm.entity.forecast.jv.JvForecast;
 
+import java.util.List;
+
 /**
  *
  * @author 18359
  */
-public interface JvForecastServices<T extends JvForecast> extends ForecastServices<T> {
+public interface JvForecastServices extends ForecastServices<JvForecast> {
 
-    
+    public List<JvForecast> findByYearAndMonth(int year, int month);
    
 }

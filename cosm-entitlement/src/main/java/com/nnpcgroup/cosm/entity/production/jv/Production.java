@@ -5,73 +5,48 @@
  */
 package com.nnpcgroup.cosm.entity.production.jv;
 
-import com.nnpcgroup.cosm.entity.contract.Contract;
+import com.nnpcgroup.cosm.entity.FiscalArrangement;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
-import javax.validation.constraints.NotNull;
 
 /**
  * @author 18359
+ * @param <E>
  */
 @Entity
 @Table(name = "PRODUCTION")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "PTYPE")
-public abstract class Production implements Serializable {
+public abstract class Production<E extends ProductionDetail> implements Serializable {
 
-    private static final long serialVersionUID = -795843614381155072L;
+    private static final long serialVersionUID = -705843614381155070L;
 
     private ProductionPK productionPK;
     private Integer periodYear;
     private Integer periodMonth;
-    private Contract contract;
-    private Double openingStock;
-    private Double partnerOpeningStock;
-    private Double closingStock;
-    private Double partnerClosingStock;
-    private Double grossProduction;
-    private Double ownShareEntitlement;
-    private Double partnerShareEntitlement;
-    private Double lifting;
-    private Double partnerLifting;
-    private Integer cargos;
-    private Integer partnerCargos;
-    private Double availability;
-    private Double partnerAvailability;
-    private Double stockAdjustment;
-    private Double overlift;
-    private Double partnerOverlift;
-    private Double bswLoss;
-    private Double meteringInacuracyLoss;
-    private Double theftLoss;
-    private Double terminalAdjustment;
-    private Double productionAdjustment;
-    private Double unitization;
-    private Double operatorDeclaredVolume;
-    private Double operatorDeclaredOwnAvailability;
-    private Double operatorDeclaredPartnerAvailability;
+    private FiscalArrangement fiscalArrangement;
+    private String remark;
+    private List<E> productionDetails;
 
     public Production() {
     }
 
-    //    public Production(int periodYear, int periodMonth, Contract contract) {
-//        this.periodYear = periodYear;
-//        this.periodMonth = periodMonth;
-//        this.contract = contract;
-//    }
     @EmbeddedId
     public ProductionPK getProductionPK() {
         return productionPK;
@@ -81,7 +56,7 @@ public abstract class Production implements Serializable {
         this.productionPK = productionPK;
     }
 
-    @Column(updatable = false, insertable = false)
+    @Column(name = "PERIOD_YEAR", updatable = false, insertable = false)
     public Integer getPeriodYear() {
         return periodYear;
     }
@@ -90,7 +65,7 @@ public abstract class Production implements Serializable {
         this.periodYear = periodYear;
     }
 
-    @Column(updatable = false, insertable = false)
+    @Column(name = "PERIOD_MONTH", updatable = false, insertable = false)
     public Integer getPeriodMonth() {
         return periodMonth;
     }
@@ -99,271 +74,46 @@ public abstract class Production implements Serializable {
         this.periodMonth = periodMonth;
     }
 
-    //    @ManyToOne
-//    @JoinColumns({
-//        @JoinColumn(name = "FISCALARRANGEMENTID", referencedColumnName = "FISCALARRANGEMENTID", insertable = false, updatable = false),
-//        @JoinColumn(name = "CRUDETYPECODE", referencedColumnName = "CRUDETYPECODE", insertable = false, updatable = false)
-//    })
     @ManyToOne
-    @MapsId("contract")
-    @JoinColumns({
-            @JoinColumn(name = "CONTRACT_ID", referencedColumnName = "ID", insertable = false, updatable = false),
-            @JoinColumn(name = "FISCALARRANGEMENTID", referencedColumnName = "FISCALARRANGEMENTID", insertable = false, updatable = false),
-            @JoinColumn(name = "CRUDETYPECODE", referencedColumnName = "CRUDETYPECODE", insertable = false, updatable = false)
-    })
-    public Contract getContract() {
-        return contract;
+    @JoinColumn(name = "FISCALARRANGEMENT_ID", referencedColumnName = "ID", updatable = false, insertable = false)
+    @MapsId("fiscalArrangementId")
+    public FiscalArrangement getFiscalArrangement() {
+        return fiscalArrangement;
     }
 
-    public void setContract(Contract contract) {
-        this.contract = contract;
+    public void setFiscalArrangement(FiscalArrangement fiscalArrangement) {
+        this.fiscalArrangement = fiscalArrangement;
     }
 
-    @NotNull
-    public Double getOpeningStock() {
-        return openingStock;
+    @Column(name = "REMARK")
+    public String getRemark() {
+        return remark;
     }
 
-    public void setOpeningStock(Double openingStock) {
-        this.openingStock = openingStock;
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
-    public Double getClosingStock() {
-        return closingStock;
+    @OneToMany(mappedBy = "production", cascade = CascadeType.ALL, fetch = FetchType.EAGER, targetEntity = ProductionDetail.class)
+    public List<E> getProductionDetails() {
+        return productionDetails;
     }
 
-    public void setClosingStock(Double closingStock) {
-        this.closingStock = closingStock;
+    public void setProductionDetails(List<E> productionDetails) {
+        this.productionDetails = productionDetails;
     }
 
-    @NotNull
-    public Double getOwnShareEntitlement() {
-        return ownShareEntitlement;
-    }
+    public void addProductionDetails(E productionDetail) {
+        if (productionDetails == null) {
+            productionDetails = new ArrayList<>();
 
-    public void setOwnShareEntitlement(Double ownShareEntitlement) {
-        this.ownShareEntitlement = ownShareEntitlement;
-    }
-
-    public Double getPartnerShareEntitlement() {
-        return partnerShareEntitlement;
-    }
-
-    public void setPartnerShareEntitlement(Double partnerShareEntitlement) {
-        this.partnerShareEntitlement = partnerShareEntitlement;
-    }
-
-    public Double getGrossProduction() {
-        return grossProduction;
-    }
-
-    public void setGrossProduction(Double grossProduction) {
-        this.grossProduction = grossProduction;
-    }
-
-    public Double getLifting() {
-        return lifting;
-    }
-
-    public void setLifting(Double lifting) {
-        this.lifting = lifting;
-    }
-
-    public Integer getCargos() {
-        return cargos;
-    }
-
-    public void setCargos(Integer cargos) {
-        this.cargos = cargos;
-    }
-
-    public Double getAvailability() {
-        return availability;
-    }
-
-    public void setAvailability(Double availability) {
-        this.availability = availability;
-    }
-
-    public Double getPartnerOpeningStock() {
-        return partnerOpeningStock;
-    }
-
-    public void setPartnerOpeningStock(Double partnerOpeningStock) {
-        this.partnerOpeningStock = partnerOpeningStock;
-    }
-
-    public Double getPartnerClosingStock() {
-        return partnerClosingStock;
-    }
-
-    public void setPartnerClosingStock(Double partnerClosingStock) {
-        this.partnerClosingStock = partnerClosingStock;
-    }
-
-    public Double getPartnerAvailability() {
-        return partnerAvailability;
-    }
-
-    public void setPartnerAvailability(Double partnerAvailability) {
-        this.partnerAvailability = partnerAvailability;
-    }
-
-    public Double getPartnerLifting() {
-        return partnerLifting;
-    }
-
-    public void setPartnerLifting(Double partnerLifting) {
-        this.partnerLifting = partnerLifting;
-    }
-
-    public Integer getPartnerCargos() {
-        return partnerCargos;
-    }
-
-    public void setPartnerCargos(Integer partnerCargos) {
-        this.partnerCargos = partnerCargos;
-    }
-
-    public Double getStockAdjustment() {
-        return stockAdjustment;
-    }
-
-    public void setStockAdjustment(Double stockAdjustment) {
-        this.stockAdjustment = stockAdjustment;
-    }
-
-    public Double getOverlift() {
-        return overlift;
-    }
-
-    public void setOverlift(Double overlift) {
-        this.overlift = overlift;
-    }
-
-    public Double getPartnerOverlift() {
-        return partnerOverlift;
-    }
-
-    public void setPartnerOverlift(Double partnerOverlift) {
-        this.partnerOverlift = partnerOverlift;
-    }
-
-    @Transient
-    public Double getNetProduction() {
-        Double netProduction;
-        Double gp = grossProduction != null ? grossProduction : 0;
-        Double sa = stockAdjustment != null ? stockAdjustment : 0;
-        Double bsw = bswLoss != null ? bswLoss : 0;
-        Double metering = meteringInacuracyLoss != null ? meteringInacuracyLoss : 0;
-        Double theft = theftLoss != null ? theftLoss : 0;
-        Double termAdj = terminalAdjustment != null ? terminalAdjustment : 0;
-        Double prodAdj = productionAdjustment != null ? productionAdjustment : 0;
-        Double unit = unitization != null ? unitization : 0;
-
-        netProduction = gp + sa - bsw - metering - theft + termAdj + prodAdj + unit;
-        return netProduction;
-    }
-
-    public Double getBswLoss() {
-        return bswLoss;
-    }
-
-    public void setBswLoss(Double bswLoss) {
-        this.bswLoss = bswLoss;
-    }
-
-    public Double getMeteringInacuracyLoss() {
-        return meteringInacuracyLoss;
-    }
-
-    public void setMeteringInacuracyLoss(Double meteringInacuracyLoss) {
-        this.meteringInacuracyLoss = meteringInacuracyLoss;
-    }
-
-    public Double getTheftLoss() {
-        return theftLoss;
-    }
-
-    public void setTheftLoss(Double theftLoss) {
-        this.theftLoss = theftLoss;
-    }
-
-    public Double getTerminalAdjustment() {
-        return terminalAdjustment;
-    }
-
-    public void setTerminalAdjustment(Double terminalAdjustment) {
-        this.terminalAdjustment = terminalAdjustment;
-    }
-
-    public Double getProductionAdjustment() {
-        return productionAdjustment;
-    }
-
-    public void setProductionAdjustment(Double productionAdjustment) {
-        this.productionAdjustment = productionAdjustment;
-    }
-
-    public Double getUnitization() {
-        return unitization;
-    }
-
-    public void setUnitization(Double unitization) {
-        this.unitization = unitization;
-    }
-
-    public Double getOperatorDeclaredVolume() {
-        return operatorDeclaredVolume;
-    }
-
-    public void setOperatorDeclaredVolume(Double operatorDeclaredVolume) {
-        this.operatorDeclaredVolume = operatorDeclaredVolume;
-    }
-
-    @Transient
-    public Double getTotalAvailability() {
-        return availability + partnerAvailability;
-    }
-
-    @Transient
-    public Double getOwnEquityRatio() {
-        if (operatorDeclaredVolume == null) {
-            return null;
         }
-
-        return availability / getTotalAvailability();
-
-    }
-
-    @Transient
-    public Double getPartnerEquityRatio() {
-        if (operatorDeclaredVolume == null) {
-            return null;
-        }
-
-        return partnerAvailability / getTotalAvailability();
-    }
-
-    public Double getOperatorDeclaredOwnAvailability() {
-        return operatorDeclaredOwnAvailability;
-    }
-
-    public void setOperatorDeclaredOwnAvailability(Double operatorDeclaredOwnAvailability) {
-        this.operatorDeclaredOwnAvailability = operatorDeclaredOwnAvailability;
-    }
-
-    public Double getOperatorDeclaredPartnerAvailability() {
-        return operatorDeclaredPartnerAvailability;
-    }
-
-    public void setOperatorDeclaredPartnerAvailability(Double operatorDeclaredPartnerAvailability) {
-        this.operatorDeclaredPartnerAvailability = operatorDeclaredPartnerAvailability;
+        productionDetails.add(productionDetail);
     }
 
     @Override
     public int hashCode() {
-        int hash = 3;
+        int hash = 7;
         hash = 59 * hash + Objects.hashCode(this.productionPK);
         return hash;
     }

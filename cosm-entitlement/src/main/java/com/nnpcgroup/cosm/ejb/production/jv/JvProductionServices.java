@@ -5,23 +5,13 @@
  */
 package com.nnpcgroup.cosm.ejb.production.jv;
 
-import com.nnpcgroup.cosm.ejb.*;
-import com.nnpcgroup.cosm.entity.contract.Contract;
-import com.nnpcgroup.cosm.entity.production.jv.Production;
-import java.io.Serializable;
+import com.nnpcgroup.cosm.entity.production.jv.JvProduction;
 
 /**
  *
  * @author 18359
- * @param <T>
  */
-public interface JvProductionServices<T extends Production, E extends Contract> extends CommonServices<T>, Serializable {
+public interface JvProductionServices extends ProductionServices<JvProduction>{
 
-    public T grossProductionChanged(T production);
-
-    public T liftingChanged(T production);
-       
-    public T computeOverlift(T production);
-    
-    public T computeOperatorDeclaredEquity(T production);
+   
 }

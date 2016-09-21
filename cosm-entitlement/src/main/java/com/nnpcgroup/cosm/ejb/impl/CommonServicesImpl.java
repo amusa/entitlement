@@ -273,7 +273,7 @@ public abstract class CommonServicesImpl<T> extends AbstractCrudServicesImpl<T> 
 
 //        TypedQuery<T> query = getEntityManager().createQuery(
 //                "SELECT f "
-//                        + "FROM JvForecastServices f WHERE f.periodYear = :periodYear "
+//                        + "FROM JvForecastDetailServices f WHERE f.periodYear = :periodYear "
 //                        + "AND f.periodMonth = :periodMonth AND f.contract.crudeType = :crudeType", entityClass);
 //        query.setParameter("periodYear", year);
 //        query.setParameter("periodMonth", month);

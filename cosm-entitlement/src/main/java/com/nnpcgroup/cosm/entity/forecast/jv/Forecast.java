@@ -5,31 +5,34 @@
  */
 package com.nnpcgroup.cosm.entity.forecast.jv;
 
-import com.nnpcgroup.cosm.entity.contract.Contract;
+import com.nnpcgroup.cosm.entity.FiscalArrangement;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 import javax.persistence.*;
-//import javax.persistence.*;
 
 /**
  * @author 18359
+ * @param <E>
  */
 @Entity
 @Table(name = "FORECAST")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "FTYPE")
-public abstract class Forecast implements Serializable {
+public abstract class Forecast<E extends ForecastDetail> implements Serializable {
 
-    private static final long serialVersionUID = -795843614381155072L;
+    private static final long serialVersionUID = -295843614383355072L;
 
     private static final Logger LOG = Logger.getLogger(Forecast.class.getName());
 
     private ForecastPK forecastPK;
     private Integer periodYear;
     private Integer periodMonth;
-    private Contract contract;
-
+    private FiscalArrangement fiscalArrangement;
+    private String remark;
+    private List<E> forecastDetails;
 
     public Forecast() {
     }
@@ -64,39 +67,59 @@ public abstract class Forecast implements Serializable {
     }
 
     @ManyToOne
-    @MapsId("contract")
-    @JoinColumns({
-            @JoinColumn(name = "CONTRACT_ID", referencedColumnName = "ID", insertable = false, updatable = false),
-            @JoinColumn(name = "FISCALARRANGEMENT_ID", referencedColumnName = "FISCALARRANGEMENTID", insertable = false, updatable = false),
-            @JoinColumn(name = "CRUDETYPE_CODE", referencedColumnName = "CRUDETYPECODE", insertable = false, updatable = false)
-    })
-    public Contract getContract() {
-        return contract;
+    @JoinColumn(name = "FISCALARRANGEMENT_ID", referencedColumnName = "ID", updatable = false, insertable = false)
+    @MapsId("fiscalArrangementId")
+    public FiscalArrangement getFiscalArrangement() {
+        return fiscalArrangement;
     }
 
-    public void setContract(Contract contract) {
-        this.contract = contract;
+    public void setFiscalArrangement(FiscalArrangement fiscalArrangement) {
+        this.fiscalArrangement = fiscalArrangement;
     }
 
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Forecast forecast = (Forecast) o;
-
-        if (!periodYear.equals(forecast.periodYear)) return false;
-        if (!periodMonth.equals(forecast.periodMonth)) return false;
-        return contract.equals(forecast.contract);
-
+    @Column(name = "REMARK")
+    public String getRemark() {
+        return remark;
     }
 
-    @Override
-    public int hashCode() {
-        int result = periodYear.hashCode();
-        result = 31 * result + periodMonth.hashCode();
-        result = 31 * result + contract.hashCode();
-        return result;
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
+
+    @OneToMany(mappedBy = "forecast", cascade = CascadeType.ALL, fetch = FetchType.EAGER, targetEntity = ForecastDetail.class)
+    public List<E> getForecastDetails() {
+        return forecastDetails;
+    }
+
+    public void setForecastDetails(List<E> forecastDetails) {
+        this.forecastDetails = forecastDetails;
+    }
+
+    public void addForecastDetails(E forecastDetail) {
+        if (forecastDetails == null) {
+            forecastDetails = new ArrayList<>();
+
+        }
+        forecastDetails.add(forecastDetail);
+    }
+
+//    @Override
+//    public boolean equals(Object o) {
+//        if (this == o) {
+//            return true;
+//        }
+//        if (o == null || getClass() != o.getClass()) {
+//            return false;
+//        }
+//
+//        Forecast forecast = (Forecast) o;
+//
+//        return forecastPK != null ? forecastPK.equals(forecast.forecastPK) : forecast.forecastPK == null;
+//
+//    }
+//
+//    @Override
+//    public int hashCode() {
+//        return forecastPK != null ? forecastPK.hashCode() : 0;
+//    }
 }

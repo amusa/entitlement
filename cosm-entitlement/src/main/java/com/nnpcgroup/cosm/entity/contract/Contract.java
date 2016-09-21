@@ -8,6 +8,7 @@ package com.nnpcgroup.cosm.entity.contract;
 import com.nnpcgroup.cosm.entity.CrudeType;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
 import com.nnpcgroup.cosm.entity.forecast.jv.Forecast;
+import com.nnpcgroup.cosm.entity.forecast.jv.ForecastDetail;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ public abstract class Contract implements Serializable {
     private CrudeType crudeType;
 
     private String title;
-    private List<Forecast> forecasts;
+    private List<ForecastDetail> forecastDetails;
 
     public Contract() {
     }
@@ -82,19 +83,12 @@ public abstract class Contract implements Serializable {
     }
 
     @OneToMany(mappedBy = "contract")
-    public List<Forecast> getForecasts() {
-        return forecasts;
+    public List<ForecastDetail> getForecastDetails() {
+        return forecastDetails;
     }
 
-    public void setForecasts(List<Forecast> forecasts) {
-        this.forecasts = forecasts;
-    }
-
-    public void addForecast(Forecast forecast) {
-        if (forecasts == null) {
-            forecasts = new ArrayList<>();
-        }
-        forecasts.add(forecast);
+    public void setForecastDetails(List<ForecastDetail> forecastDetails) {
+        this.forecastDetails = forecastDetails;
     }
 
     public abstract String discriminatorValue();

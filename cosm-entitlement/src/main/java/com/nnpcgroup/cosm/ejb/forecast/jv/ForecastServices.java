@@ -5,19 +5,21 @@
  */
 package com.nnpcgroup.cosm.ejb.forecast.jv;
 
-import com.nnpcgroup.cosm.ejb.*;
+import com.nnpcgroup.cosm.ejb.AbstractCrudServices;
+import com.nnpcgroup.cosm.ejb.CommonServices;
 import com.nnpcgroup.cosm.entity.forecast.jv.Forecast;
-import java.io.Serializable;
+import com.nnpcgroup.cosm.entity.forecast.jv.ForecastDetail;
+
 import javax.enterprise.context.Dependent;
+import java.io.Serializable;
 
 /**
  *
  * @author 18359
  * @param <T>
  */
-@Dependent
-public interface ForecastServices<T extends Forecast> extends CommonServices<T>, Serializable {
+public interface ForecastServices<T extends Forecast> extends AbstractCrudServices<T>, Serializable {
 
-    public T computeGrossProduction(T forecast);    
+
    
 }

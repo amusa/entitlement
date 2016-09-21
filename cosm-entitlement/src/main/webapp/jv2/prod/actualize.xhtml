@@ -75,7 +75,7 @@
                         </h:commandButton>
 
                         <h:commandButton  value="Get Actuals"  class="btn m-r-5" >
-                            <f:ajax listener="#{jvActualController.loadProductions}" event="click"
+                            <f:ajax listener="#{jvActualController.loadProductionDetails}" event="click"
                                     render="actual_panel prodTable msgs"/>
 
                         </h:commandButton>
@@ -84,7 +84,7 @@
 
                 <h:panelGroup id="actual_panel">
 
-                    <h:dataTable id="prodTable" var="prod" value="#{jvActualController.productions}" 
+                    <h:dataTable id="prodTable" var="prod" value="#{jvActualController.productionDetails}" 
                                  class="table table-bordered table-hover tile">                                                 
                         <h:column>                                                        
                             <f:facet name="header">
@@ -197,26 +197,7 @@
                         </h:column>
 
                         <f:facet name="footer">
-                            <h:commandLink id="createButton" action="#{jvActualController.prepareCreate}" class="btn m-r-5">
-                                <span class="icon">&#61943;</span>
-                                #{bundle.Create}                                 
-                            </h:commandLink>
-                            <button jsf:id="viewButton" look="warning" data-target="#JvViewDlg" data-toggle="modal" class="btn m-r-5">
-                                <span class="icon">&#61698;</span>
-                                #{bundle.View}
-                                <f:ajax event="click" render="JvViewForm" />
-                            </button>
-                            <button jsf:id="editButton" look="warning" data-target="#JvEditDlg" data-toggle="modal" class="btn m-r-5">
-                                <span class="icon">&#61952;</span>                                    
-                                #{bundle.Edit}
-                                <f:ajax event="click" render="JvEditForm" />
-                            </button>
-                            <button jsf:id="deleteButton" class="btn m-r-5" jsf:disabled="#{empty jvActualController.currentProduction}">
-                                <span class="icon">&#61918;</span>
-                                #{bundle.Delete}
-                                <f:ajax render="jvProdListForm prodTable msgs" listener="#{jvActualController.destroy}"/>
-                            </button>
-
+                            
                         </f:facet>
                     </h:dataTable>
 

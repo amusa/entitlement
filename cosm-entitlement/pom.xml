@@ -110,17 +110,17 @@
                     </execution>
                 </executions>
             </plugin>
-            <!--            <plugin>
+            <plugin>
                 <groupId>org.wildfly.plugins</groupId>
                 <artifactId>wildfly-maven-plugin</artifactId>
                 <version>1.0.2.Final</version>                
-            </plugin> -->
-            <!--             JBoss AS plugin to deploy war 
+            </plugin> 
+            <!--JBoss AS plugin to deploy war--> 
             <plugin>
                 <groupId>org.jboss.as.plugins</groupId>
                 <artifactId>jboss-as-maven-plugin</artifactId>
                 <version>${version.jboss.maven.plugin}</version>
-            </plugin>          -->
+            </plugin>          
         </plugins>
     </build>
     <profiles>

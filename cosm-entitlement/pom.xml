@@ -19,8 +19,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <!-- JBoss AS dependency versions -->
         <version.jboss.maven.plugin>7.4.Final</version.jboss.maven.plugin>
-        <!-- WildFly dependency versions -->
-        <version.wildfly.maven.plugin>1.0.2.Final</version.wildfly.maven.plugin>
+        <!-- WildFly dependency versions -->        
     </properties>
     
         
@@ -116,86 +115,14 @@
                     </execution>
                 </executions>
             </plugin>
-<!--            <plugin>
+            <plugin>
                 <groupId>org.wildfly.plugins</groupId>
                 <artifactId>wildfly-maven-plugin</artifactId>
-                <version>${version.wildfly.maven.plugin}</version>                
-            </plugin> 
-            JBoss AS plugin to deploy war 
-            <plugin>
-                <groupId>org.jboss.as.plugins</groupId>
-                <artifactId>jboss-as-maven-plugin</artifactId>
-                <version>${version.jboss.maven.plugin}</version>
-            </plugin>          -->
+                <configuration>
+                    <skip>false</skip>
+                </configuration>
+            </plugin>           
         </plugins>
     </build>
-    <profiles>
-        <profile>
-            <!-- When built in OpenShift the 'openshift' profile will be used when invoking mvn. -->
-            <!-- Use this profile for any OpenShift specific customization your app will need. -->
-            <!-- By default that is to put the resulting archive into the 'deployments' folder. -->
-            <!-- http://maven.apache.org/guides/mini/guide-building-for-different-environments.html -->
-            <id>digitalocean</id>
-            <properties>
-                <wildfly-hostname>10.132.73.207</wildfly-hostname>
-                <!--<wildfly-hostname>104.236.97.70</wildfly-hostname>-->
-                <wildfly-port>9990</wildfly-port>
-                <wildfly-username>admin</wildfly-username>
-                <wildfly-password>admin@dm1n</wildfly-password>
-            </properties>
-            <build>
-                <finalName>ROOT</finalName>
-                <plugins>
-                    <plugin>
-                        <groupId>org.wildfly.plugins</groupId>
-                        <artifactId>wildfly-maven-plugin</artifactId>
-                        <version>${version.wildfly.maven.plugin}</version>
-                        <configuration>
-                            <!--                            <failOnMissingWebXml>false</failOnMissingWebXml>
-                            <outputDirectory>deployments</outputDirectory>-->
-                            <finalName>ROOT.war</finalName>
-                            <warName>ROOT</warName>
-                            <hostname>${wildfly-hostname}</hostname>
-                            <port>${wildfly-port}</port>
-                            <username>${wildfly-username}</username>
-                            <password>${wildfly-password}</password>
-                            <force>true</force>
-                        </configuration>
-                    </plugin>
-                    <!-- JBoss AS plugin to deploy war -->
-<!--                    <plugin>
-                        <groupId>org.jboss.as.plugins</groupId>
-                        <artifactId>jboss-as-maven-plugin</artifactId>
-                        <version>${version.jboss.maven.plugin}</version>
-                        <configuration>
-                            <failOnMissingWebXml>false</failOnMissingWebXml>
-                            <outputDirectory>deployments</outputDirectory>
-                            <warName>ROOT</warName>
-                            <finalName>ROOT</finalName>
-                            <hostname>${wildfly-hostname}</hostname>
-                            <port>${wildfly-port}</port>
-                            <username>${wildfly-username}</username>
-                            <password>${wildfly-password}</password>
-                        </configuration>
-                    </plugin>          -->
-                    <!--                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-war-plugin</artifactId>
-                        <version>2.3</version>
-                        <configuration>
-                            <failOnMissingWebXml>false</failOnMissingWebXml>
-                                                        <outputDirectory>deployments</outputDirectory>
-                            <warName>ROOT</warName>
-                            <finalName>ROOT.war</finalName>
-                            <hostname>${wildfly-hostname}</hostname>
-                            <port>${wildfly-port}</port>
-                            <username>${wildfly-username}</username>
-                            <password>${wildfly-password}</password>
-                            <force>true</force> 
-                        </configuration>
-                    </plugin>-->
-                </plugins>
-            </build>
-        </profile>
-    </profiles>    
+    
 </project>

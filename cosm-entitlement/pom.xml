@@ -20,7 +20,7 @@
         <!-- JBoss AS dependency versions -->
         <version.jboss.maven.plugin>7.4.Final</version.jboss.maven.plugin>
         <!-- WildFly dependency versions -->
-        <version.wildfly.maven.plugin>1.0.2.Final</version.wildfly.maven.plugin>
+        <version.wildfly.maven.plugin>1.1.0.Alpha8</version.wildfly.maven.plugin>
     </properties>
     
         
@@ -116,20 +116,17 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
+            <!--            <plugin>
                 <groupId>org.wildfly.plugins</groupId>
                 <artifactId>wildfly-maven-plugin</artifactId>
-                <version>1.0.2.Final</version>
-                <configuration>
-                    <jboss-home>${wildfly-home}</jboss-home>
-                </configuration>
-            </plugin> 
-            <!-- JBoss AS plugin to deploy war -->
+                <version>1.0.2.Final</version>                
+            </plugin> -->
+            <!--             JBoss AS plugin to deploy war 
             <plugin>
                 <groupId>org.jboss.as.plugins</groupId>
                 <artifactId>jboss-as-maven-plugin</artifactId>
                 <version>${version.jboss.maven.plugin}</version>
-            </plugin>          
+            </plugin>          -->
         </plugins>
     </build>
     <profiles>
@@ -141,6 +138,7 @@
             <id>digitalocean</id>
             <properties>
                 <wildfly-hostname>10.132.73.207</wildfly-hostname>
+                <!--<wildfly-hostname>104.236.97.70</wildfly-hostname>-->
                 <wildfly-port>9990</wildfly-port>
                 <wildfly-username>admin</wildfly-username>
                 <wildfly-password>admin@dm1n</wildfly-password>
@@ -155,51 +153,47 @@
                         <configuration>
                             <!--                            <failOnMissingWebXml>false</failOnMissingWebXml>
                             <outputDirectory>deployments</outputDirectory>-->
+                            <finalName>ROOT.war</finalName>
                             <warName>ROOT</warName>
                             <hostname>${wildfly-hostname}</hostname>
                             <port>${wildfly-port}</port>
                             <username>${wildfly-username}</username>
                             <password>${wildfly-password}</password>
+                            <force>true</force>
                         </configuration>
                     </plugin>
                     <!-- JBoss AS plugin to deploy war -->
-                    <plugin>
+                    <!--                    <plugin>
                         <groupId>org.jboss.as.plugins</groupId>
                         <artifactId>jboss-as-maven-plugin</artifactId>
                         <version>${version.jboss.maven.plugin}</version>
                         <configuration>
-                            <!--                            <failOnMissingWebXml>false</failOnMissingWebXml>
-                            <outputDirectory>deployments</outputDirectory>-->
+                                                        <failOnMissingWebXml>false</failOnMissingWebXml>
+                            <outputDirectory>deployments</outputDirectory>
                             <warName>ROOT</warName>
+                            <finalName>ROOT</finalName>
                             <hostname>${wildfly-hostname}</hostname>
                             <port>${wildfly-port}</port>
                             <username>${wildfly-username}</username>
                             <password>${wildfly-password}</password>
                         </configuration>
-                    </plugin>          
-                    <plugin>
+                    </plugin>          -->
+                    <!--                    <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-war-plugin</artifactId>
                         <version>2.3</version>
                         <configuration>
-                            <!--                            <failOnMissingWebXml>false</failOnMissingWebXml>
-                            <outputDirectory>deployments</outputDirectory>-->
+                                                        <failOnMissingWebXml>false</failOnMissingWebXml>
+                            <outputDirectory>deployments</outputDirectory>
                             <warName>ROOT</warName>
                             <hostname>${wildfly-hostname}</hostname>
                             <port>${wildfly-port}</port>
                             <username>${wildfly-username}</username>
                             <password>${wildfly-password}</password>
                         </configuration>
-                    </plugin>
+                    </plugin>-->
                 </plugins>
             </build>
         </profile>
-    </profiles>
-    <repositories>
-        <repository>
-            <id>unknown-jars-temp-repo</id>
-            <name>A temporary repository created by NetBeans for libraries and jars it could not identify. Please replace the dependencies in this repository with correct ones and delete this repository.</name>
-            <url>file:${project.basedir}/lib</url>
-        </repository>
-    </repositories>
+    </profiles>    
 </project>

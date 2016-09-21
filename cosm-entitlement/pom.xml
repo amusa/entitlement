@@ -20,7 +20,7 @@
         <!-- JBoss AS dependency versions -->
         <version.jboss.maven.plugin>7.4.Final</version.jboss.maven.plugin>
         <!-- WildFly dependency versions -->
-        <version.wildfly.maven.plugin>1.1.0.Alpha8</version.wildfly.maven.plugin>
+        <version.wildfly.maven.plugin>1.0.2.Final</version.wildfly.maven.plugin>
     </properties>
     
         
@@ -31,12 +31,6 @@
             <version>4.3.1.Final</version>
             <scope>provided</scope>
         </dependency>
-        <!--        <dependency>
-            <groupId>unknown.binary</groupId>
-            <artifactId>hibernate-jpamodelgen-4.3.1.Final</artifactId>
-            <version>SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>-->
         <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-web-api</artifactId>
@@ -178,20 +172,22 @@
                             <password>${wildfly-password}</password>
                         </configuration>
                     </plugin>          -->
-                    <!--                    <plugin>
+                    <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-war-plugin</artifactId>
                         <version>2.3</version>
                         <configuration>
-                                                        <failOnMissingWebXml>false</failOnMissingWebXml>
-                            <outputDirectory>deployments</outputDirectory>
+                            <failOnMissingWebXml>false</failOnMissingWebXml>
+                            <!--                            <outputDirectory>deployments</outputDirectory>-->
                             <warName>ROOT</warName>
+                            <finalName>ROOT.war</finalName>
                             <hostname>${wildfly-hostname}</hostname>
                             <port>${wildfly-port}</port>
                             <username>${wildfly-username}</username>
                             <password>${wildfly-password}</password>
+                            <force>true</force> 
                         </configuration>
-                    </plugin>-->
+                    </plugin>
                 </plugins>
             </build>
         </profile>

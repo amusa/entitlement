@@ -157,13 +157,13 @@
                         </configuration>
                     </plugin>
                     <!-- JBoss AS plugin to deploy war -->
-                    <!--                    <plugin>
+                    <plugin>
                         <groupId>org.jboss.as.plugins</groupId>
                         <artifactId>jboss-as-maven-plugin</artifactId>
                         <version>${version.jboss.maven.plugin}</version>
                         <configuration>
-                                                        <failOnMissingWebXml>false</failOnMissingWebXml>
-                            <outputDirectory>deployments</outputDirectory>
+                            <failOnMissingWebXml>false</failOnMissingWebXml>
+                            <!--<outputDirectory>deployments</outputDirectory>-->
                             <warName>ROOT</warName>
                             <finalName>ROOT</finalName>
                             <hostname>${wildfly-hostname}</hostname>
@@ -171,7 +171,7 @@
                             <username>${wildfly-username}</username>
                             <password>${wildfly-password}</password>
                         </configuration>
-                    </plugin>          -->
+                    </plugin>          
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-war-plugin</artifactId>

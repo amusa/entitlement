@@ -167,6 +167,15 @@
                         <groupId>org.jboss.as.plugins</groupId>
                         <artifactId>jboss-as-maven-plugin</artifactId>
                         <version>${version.jboss.maven.plugin}</version>
+                        <configuration>
+                            <!--                            <failOnMissingWebXml>false</failOnMissingWebXml>
+                            <outputDirectory>deployments</outputDirectory>-->
+                            <warName>ROOT</warName>
+                            <hostname>${wildfly-hostname}</hostname>
+                            <port>${wildfly-port}</port>
+                            <username>${wildfly-username}</username>
+                            <password>${wildfly-password}</password>
+                        </configuration>
                     </plugin>          
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>

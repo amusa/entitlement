@@ -20,7 +20,7 @@
         <!-- JBoss AS dependency versions -->
         <version.jboss.maven.plugin>7.4.Final</version.jboss.maven.plugin>
         <!-- WildFly dependency versions -->
-        <version.wildfly.maven.plugin>1.1.0.Alpha11</version.wildfly.maven.plugin>
+        <version.wildfly.maven.plugin>1.0.2.Final</version.wildfly.maven.plugin>
     </properties>
     
         
@@ -116,17 +116,17 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
+<!--            <plugin>
                 <groupId>org.wildfly.plugins</groupId>
                 <artifactId>wildfly-maven-plugin</artifactId>
                 <version>${version.wildfly.maven.plugin}</version>                
             </plugin> 
-            <!--JBoss AS plugin to deploy war--> 
+            JBoss AS plugin to deploy war 
             <plugin>
                 <groupId>org.jboss.as.plugins</groupId>
                 <artifactId>jboss-as-maven-plugin</artifactId>
                 <version>${version.jboss.maven.plugin}</version>
-            </plugin>          
+            </plugin>          -->
         </plugins>
     </build>
     <profiles>
@@ -163,13 +163,13 @@
                         </configuration>
                     </plugin>
                     <!-- JBoss AS plugin to deploy war -->
-                    <plugin>
+<!--                    <plugin>
                         <groupId>org.jboss.as.plugins</groupId>
                         <artifactId>jboss-as-maven-plugin</artifactId>
                         <version>${version.jboss.maven.plugin}</version>
                         <configuration>
                             <failOnMissingWebXml>false</failOnMissingWebXml>
-                            <!--<outputDirectory>deployments</outputDirectory>-->
+                            <outputDirectory>deployments</outputDirectory>
                             <warName>ROOT</warName>
                             <finalName>ROOT</finalName>
                             <hostname>${wildfly-hostname}</hostname>
@@ -177,14 +177,14 @@
                             <username>${wildfly-username}</username>
                             <password>${wildfly-password}</password>
                         </configuration>
-                    </plugin>          
-                    <plugin>
+                    </plugin>          -->
+                    <!--                    <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-war-plugin</artifactId>
                         <version>2.3</version>
                         <configuration>
                             <failOnMissingWebXml>false</failOnMissingWebXml>
-                            <!--                            <outputDirectory>deployments</outputDirectory>-->
+                                                        <outputDirectory>deployments</outputDirectory>
                             <warName>ROOT</warName>
                             <finalName>ROOT.war</finalName>
                             <hostname>${wildfly-hostname}</hostname>
@@ -193,7 +193,7 @@
                             <password>${wildfly-password}</password>
                             <force>true</force> 
                         </configuration>
-                    </plugin>
+                    </plugin>-->
                 </plugins>
             </build>
         </profile>

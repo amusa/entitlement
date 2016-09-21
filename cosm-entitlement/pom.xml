@@ -140,7 +140,7 @@
             <!-- http://maven.apache.org/guides/mini/guide-building-for-different-environments.html -->
             <id>digitalocean</id>
             <properties>
-                <wildfly-hostname>104.236.97.70</wildfly-hostname>
+                <wildfly-hostname>10.132.73.207</wildfly-hostname>
                 <wildfly-port>9990</wildfly-port>
                 <wildfly-username>admin</wildfly-username>
                 <wildfly-password>admin@dm1n</wildfly-password>
@@ -152,7 +152,22 @@
                         <groupId>org.wildfly.plugins</groupId>
                         <artifactId>wildfly-maven-plugin</artifactId>
                         <version>${version.wildfly.maven.plugin}</version>
+                        <configuration>
+                            <!--                            <failOnMissingWebXml>false</failOnMissingWebXml>
+                            <outputDirectory>deployments</outputDirectory>-->
+                            <warName>ROOT</warName>
+                            <hostname>${wildfly-hostname}</hostname>
+                            <port>${wildfly-port}</port>
+                            <username>${wildfly-username}</username>
+                            <password>${wildfly-password}</password>
+                        </configuration>
                     </plugin>
+                    <!-- JBoss AS plugin to deploy war -->
+                    <plugin>
+                        <groupId>org.jboss.as.plugins</groupId>
+                        <artifactId>jboss-as-maven-plugin</artifactId>
+                        <version>${version.jboss.maven.plugin}</version>
+                    </plugin>          
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-war-plugin</artifactId>

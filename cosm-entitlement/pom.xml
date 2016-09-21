@@ -20,7 +20,7 @@
         <!-- JBoss AS dependency versions -->
         <version.jboss.maven.plugin>7.4.Final</version.jboss.maven.plugin>
         <!-- WildFly dependency versions -->
-        <version.wildfly.maven.plugin>1.0.2.Final</version.wildfly.maven.plugin>
+        <version.wildfly.maven.plugin>1.1.0.Alpha11</version.wildfly.maven.plugin>
     </properties>
     
         
@@ -58,6 +58,12 @@
             <groupId>com.itextpdf</groupId>
             <artifactId>itextpdf</artifactId>
             <version>5.0.6</version>
+        </dependency>
+        <dependency>
+            <groupId>org.wildfly.plugins</groupId>
+            <artifactId>wildfly-maven-plugin</artifactId>
+            <version>${version.wildfly.maven.plugin}</version>  
+            <scope>runtime</scope>
         </dependency>
 
     </dependencies>
@@ -113,7 +119,7 @@
             <plugin>
                 <groupId>org.wildfly.plugins</groupId>
                 <artifactId>wildfly-maven-plugin</artifactId>
-                <version>1.0.2.Final</version>                
+                <version>${version.wildfly.maven.plugin}</version>                
             </plugin> 
             <!--JBoss AS plugin to deploy war--> 
             <plugin>

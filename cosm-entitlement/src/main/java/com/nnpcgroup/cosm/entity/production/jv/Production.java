@@ -6,6 +6,7 @@
 package com.nnpcgroup.cosm.entity.production.jv;
 
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
+import com.nnpcgroup.cosm.entity.forecast.jv.Forecast;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -103,12 +104,19 @@ public abstract class Production<E extends ProductionDetail> implements Serializ
         this.productionDetails = productionDetails;
     }
 
-    public void addProductionDetails(E productionDetail) {
+    public void addProductionDetail(E productionDetail) {
         if (productionDetails == null) {
             productionDetails = new ArrayList<>();
 
         }
         productionDetails.add(productionDetail);
+    }
+
+    public void initialize(Forecast forecast) {
+        this.periodMonth = forecast.getPeriodMonth();
+        this.periodYear = forecast.getPeriodYear();
+        this.fiscalArrangement = forecast.getFiscalArrangement();
+        this.productionPK = forecast.makeProductionPK();
     }
 
     @Override

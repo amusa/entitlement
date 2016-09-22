@@ -6,6 +6,7 @@
 package com.nnpcgroup.cosm.entity.forecast.jv;
 
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
+import com.nnpcgroup.cosm.entity.production.jv.ProductionPK;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -103,23 +104,29 @@ public abstract class Forecast<E extends ForecastDetail> implements Serializable
         forecastDetails.add(forecastDetail);
     }
 
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) {
-//            return true;
-//        }
-//        if (o == null || getClass() != o.getClass()) {
-//            return false;
-//        }
-//
-//        Forecast forecast = (Forecast) o;
-//
-//        return forecastPK != null ? forecastPK.equals(forecast.forecastPK) : forecast.forecastPK == null;
-//
-//    }
-//
-//    @Override
-//    public int hashCode() {
-//        return forecastPK != null ? forecastPK.hashCode() : 0;
-//    }
+    public ProductionPK makeProductionPK() {
+        ProductionPK pPK
+                = new ProductionPK(this.getPeriodYear(), this.getPeriodMonth(), this.getFiscalArrangement().getId());
+        return pPK;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        Forecast forecast = (Forecast) o;
+
+        return forecastPK != null ? forecastPK.equals(forecast.forecastPK) : forecast.forecastPK == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return forecastPK != null ? forecastPK.hashCode() : 0;
+    }
 }

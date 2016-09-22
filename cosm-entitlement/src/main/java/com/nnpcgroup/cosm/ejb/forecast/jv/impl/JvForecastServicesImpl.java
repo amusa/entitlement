@@ -6,6 +6,7 @@
 package com.nnpcgroup.cosm.ejb.forecast.jv.impl;
 
 import com.nnpcgroup.cosm.ejb.forecast.jv.JvForecastServices;
+import com.nnpcgroup.cosm.entity.FiscalArrangement;
 import com.nnpcgroup.cosm.entity.forecast.jv.JvForecast;
 import com.nnpcgroup.cosm.util.COSMPersistence;
 
@@ -30,11 +31,11 @@ import javax.ejb.Stateless;
 @Local(JvForecastServices.class)
 public class JvForecastServicesImpl extends ForecastServicesImpl<JvForecast> implements JvForecastServices, Serializable {
 
-  private static final Logger LOG = Logger.getLogger(JvForecastServicesImpl.class.getName());
+    private static final Logger LOG = Logger.getLogger(JvForecastServicesImpl.class.getName());
 
     private static final long serialVersionUID = 8993596753945847377L;
 
-    public JvForecastServicesImpl(){
+    public JvForecastServicesImpl() {
         super(JvForecast.class);
     }
 
@@ -50,7 +51,6 @@ public class JvForecastServicesImpl extends ForecastServicesImpl<JvForecast> imp
     protected EntityManager getEntityManager() {
         return em;
     }
-
 
     @Override
     public List<JvForecast> findByYearAndMonth(int year, int month) {
@@ -77,4 +77,31 @@ public class JvForecastServicesImpl extends ForecastServicesImpl<JvForecast> imp
 
         return productions;
     }
+
+    @Override
+    public JvForecast findByContractPeriod(int year, int month, FiscalArrangement fa) {
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+
+        JvForecast forecast;
+
+        CriteriaQuery cq = cb.createQuery();
+        Root<JvForecast> e = cq.from(entityClass);
+        try {
+
+            cq.select(e).where(
+                    cb.and(cb.equal(e.get("periodYear"), year),
+                            cb.equal(e.get("periodMonth"), month),
+                            cb.equal(e.get("fiscalArrangement"), fa)
+                    ));
+            Query query = getEntityManager().createQuery(cq);
+
+            forecast = (JvForecast) query.getSingleResult();
+        } catch (NoResultException nre) {
+            return null;
+        }
+
+        return forecast;
+
+    }
+
 }

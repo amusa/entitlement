@@ -15,8 +15,8 @@ import java.util.logging.Logger;
  * @author 18359
  */
 @Embeddable
-
 public class ForecastDetailPK implements Serializable {
+
     private static final Logger LOG = Logger.getLogger(ForecastDetailPK.class.getName());
     private static final long serialVersionUID = -5632726719147425922L;
 
@@ -31,7 +31,6 @@ public class ForecastDetailPK implements Serializable {
         this.contract = contractPK;
     }
 
-
 //    @AttributeOverrides( {
 //            @AttributeOverride(name="contract.id", column = @Column(name="CONTRACT_ID") ),
 //            @AttributeOverride(name="contract.fiscalArrangementId", column = @Column(name="FISCALARRANGEMENT_ID") ),
@@ -44,7 +43,6 @@ public class ForecastDetailPK implements Serializable {
 //    public void setForecast(ForecastPK forecast) {
 //        this.forecast = forecast;
 //    }
-
 //    @Column(name = "PERIOD_YEAR")
 //    public Integer getPeriodYear() {
 //        return periodYear;
@@ -62,8 +60,6 @@ public class ForecastDetailPK implements Serializable {
 //    public void setPeriodMonth(Integer periodMonth) {
 //        this.periodMonth = periodMonth;
 //    }
-
-
     public ContractPK getContract() {
         return contract;
     }
@@ -72,7 +68,7 @@ public class ForecastDetailPK implements Serializable {
         this.contract = contract;
     }
 
-       public ForecastPK getForecast() {
+    public ForecastPK getForecast() {
         return forecast;
     }
 
@@ -82,12 +78,18 @@ public class ForecastDetailPK implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         ForecastDetailPK that = (ForecastDetailPK) o;
 
-        if (forecast != null ? !forecast.equals(that.forecast) : that.forecast != null) return false;
+        if (forecast != null ? !forecast.equals(that.forecast) : that.forecast != null) {
+            return false;
+        }
         return contract != null ? contract.equals(that.contract) : that.contract == null;
 
     }

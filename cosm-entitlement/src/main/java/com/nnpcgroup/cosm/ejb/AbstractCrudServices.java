@@ -19,6 +19,8 @@ public interface AbstractCrudServices<T> {
     public void edit(T entity);
 
     public void remove(T entity);
+    
+    public void remove(List<T> entityList);
 
     public void delete(T entity);
 

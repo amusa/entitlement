@@ -6,6 +6,7 @@
 package com.nnpcgroup.cosm.entity.production.jv;
 
 import com.nnpcgroup.cosm.entity.contract.Contract;
+import com.nnpcgroup.cosm.entity.forecast.jv.ForecastDetail;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -93,6 +94,13 @@ public abstract class ProductionDetail<E extends Production> implements Serializ
     })
     public E getProduction() {
         return production;
+    }
+
+    public void duplicate(ForecastDetail forecastDetail) {
+        this.setContract(forecastDetail.getContract());
+        this.setPeriodYear(forecastDetail.getPeriodYear());
+        this.setPeriodMonth(forecastDetail.getPeriodMonth());
+        this.setProductionDetailPK(forecastDetail.makeProductionDetailPK());
     }
 
     public void setProduction(E production) {

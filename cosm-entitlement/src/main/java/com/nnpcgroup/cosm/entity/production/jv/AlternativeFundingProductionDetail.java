@@ -5,6 +5,9 @@
  */
 package com.nnpcgroup.cosm.entity.production.jv;
 
+import com.nnpcgroup.cosm.entity.forecast.jv.AlternativeFundingForecastDetail;
+import com.nnpcgroup.cosm.entity.forecast.jv.ForecastDetail;
+import com.nnpcgroup.cosm.entity.forecast.jv.JvForecastDetail;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
@@ -175,4 +178,12 @@ public abstract class AlternativeFundingProductionDetail extends JvProductionDet
         this.carryOilReceivedCum = carryOilReceivedCum;
     }
 
+    @Override
+    public void duplicate(ForecastDetail forecastDetail) {
+        super.duplicate(forecastDetail);
+        AlternativeFundingForecastDetail afDetail = (AlternativeFundingForecastDetail) forecastDetail;
+
+        this.tangibleCost = afDetail.getTangibleCost();
+        this.intangibleCost = afDetail.getIntangibleCost();
+    }
 }

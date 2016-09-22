@@ -45,6 +45,14 @@ public abstract class AbstractCrudServicesImpl<T> implements AbstractCrudService
     }
 
     @Override
+    public void remove(List<T> entityList) {
+        entityList.stream().forEach((e) -> {
+            getEntityManager().remove(e);
+        });
+
+    }
+
+    @Override
     public T find(Object id) {
         return getEntityManager().find(entityClass, id);
     }
@@ -95,9 +103,9 @@ public abstract class AbstractCrudServicesImpl<T> implements AbstractCrudService
     public void flush() {
         getEntityManager().flush();
     }
-    
+
     @Override
-    public T merge (T t){
+    public T merge(T t) {
         return getEntityManager().merge(t);
     }
 
@@ -107,10 +115,8 @@ public abstract class AbstractCrudServicesImpl<T> implements AbstractCrudService
     }
 
     @Override
-    public boolean isPersist(T t){
+    public boolean isPersist(T t) {
         return getEntityManager().contains(t);
     }
-    
-    
 
 }

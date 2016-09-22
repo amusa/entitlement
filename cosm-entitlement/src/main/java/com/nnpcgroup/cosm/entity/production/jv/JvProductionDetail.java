@@ -5,6 +5,8 @@
  */
 package com.nnpcgroup.cosm.entity.production.jv;
 
+import com.nnpcgroup.cosm.entity.forecast.jv.ForecastDetail;
+import com.nnpcgroup.cosm.entity.forecast.jv.JvForecastDetail;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.Transient;
@@ -288,6 +290,23 @@ public class JvProductionDetail extends ProductionDetail<JvProduction> {
 
     public void setOperatorDeclaredPartnerAvailability(Double operatorDeclaredPartnerAvailability) {
         this.operatorDeclaredPartnerAvailability = operatorDeclaredPartnerAvailability;
+    }
+
+    @Override
+    public void duplicate(ForecastDetail forecastDetail) {
+        super.duplicate(forecastDetail);
+        JvForecastDetail jvDetail = (JvForecastDetail) forecastDetail;
+
+        this.openingStock = jvDetail.getOpeningStock();
+        this.partnerOpeningStock = jvDetail.getPartnerOpeningStock();
+        this.closingStock = jvDetail.getClosingStock();
+        this.partnerClosingStock = jvDetail.getPartnerClosingStock();
+        this.grossProduction = jvDetail.getGrossProduction();
+        this.lifting = jvDetail.getLifting();
+        this.partnerLifting = jvDetail.getPartnerLifting();
+        this.cargos = jvDetail.getCargos();
+        this.partnerCargos = jvDetail.getPartnerCargos();
+
     }
 
 }

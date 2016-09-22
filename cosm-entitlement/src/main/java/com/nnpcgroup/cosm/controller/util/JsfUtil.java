@@ -1,6 +1,7 @@
 package com.nnpcgroup.cosm.controller.util;
 
 import java.util.List;
+import java.util.logging.Logger;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -8,6 +9,8 @@ import javax.faces.convert.Converter;
 import javax.faces.model.SelectItem;
 
 public class JsfUtil {
+
+    private static final Logger LOG = Logger.getLogger(JsfUtil.class.getName());
 
     public static SelectItem[] getSelectItems(List<?> entities, boolean selectOne) {
         if (entities == null) {
@@ -48,11 +51,19 @@ public class JsfUtil {
     public static void addErrorMessage(String msg) {
         FacesMessage facesMsg = new FacesMessage(FacesMessage.SEVERITY_ERROR, msg, msg);
         FacesContext.getCurrentInstance().addMessage(null, facesMsg);
+        LOG.warning(msg);
     }
 
     public static void addSuccessMessage(String msg) {
         FacesMessage facesMsg = new FacesMessage(FacesMessage.SEVERITY_INFO, msg, msg);
         FacesContext.getCurrentInstance().addMessage("successInfo", facesMsg);
+        LOG.info(msg);
+    }
+
+    public static void addWarningMessage(String msg) {
+        FacesMessage facesMsg = new FacesMessage(FacesMessage.SEVERITY_WARN, msg, msg);
+        FacesContext.getCurrentInstance().addMessage(null, facesMsg);
+        LOG.warning(msg);
     }
 
     public static String getRequestParameter(String key) {

@@ -239,6 +239,12 @@ public class JvProductionController implements Serializable {
                 }
             }
         }
+
+        if (productionDetails == null) {
+            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("NoProductionData"));
+            LOG.log(Level.INFO, ResourceBundle.getBundle("/Bundle").getString("NoProductionData")
+            );
+        }
     }
 
     public void loadFiscalMonthlyProduction() {
@@ -251,6 +257,9 @@ public class JvProductionController implements Serializable {
                 productionDetails = getProductionDetailBean().findByContractPeriod(periodYear, periodMonth, currentFiscalArrangement);
             } else {
                 productionDetails = null;
+                JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("NoProductionData"));
+                LOG.log(Level.INFO, ResourceBundle.getBundle("/Bundle").getString("NoProductionData")
+                );
             }
         }
     }
@@ -287,15 +296,15 @@ public class JvProductionController implements Serializable {
 
     public void grossProductionChanged() {
         LOG.log(Level.INFO,
-                "Gross production changed to {0}",                
-                    currentProductionDetail.getGrossProduction());
+                "Gross production changed to {0}",
+                currentProductionDetail.getGrossProduction());
         getProductionDetailBean().grossProductionChanged(currentProductionDetail);
     }
 
     public void stockAdjustmentChanged() {
-         LOG.log(Level.INFO,
-                "Computing stock adjustment/variation",                
-                    currentProductionDetail.getGrossProduction());
+        LOG.log(Level.INFO,
+                "Computing stock adjustment/variation",
+                currentProductionDetail.getGrossProduction());
         getProductionDetailBean().grossProductionChanged(currentProductionDetail);
     }
 
@@ -405,10 +414,11 @@ public class JvProductionController implements Serializable {
 
         JvProductionDetail productionDetail = null;
         ProductionDetailPK pPK = new ProductionDetailPK(
-                new ProductionPK(forecastDetail.getPeriodYear(), forecastDetail.getPeriodMonth(), forecastDetail.getForecast().getFiscalArrangement().getId()),
+                forecastDetail.getForecast().makeProductionPK(),
                 forecastDetail.getContract().getContractPK()
         );
         productionDetail = (JvProductionDetail) getProductionDetailBean().find(pPK);
+        JvProduction prod = null;
 
         if (productionDetail == null) {
             LOG.log(Level.INFO, "Actualizing: Creating new JV Production detail instance...");
@@ -426,15 +436,25 @@ public class JvProductionController implements Serializable {
                 throw new Exception("JvForecastDetailServices type not determined");
             }
 
-            productionDetail.setContract(forecastDetail.getContract());
-            productionDetail.setPeriodYear(forecastDetail.getPeriodYear());
-            productionDetail.setPeriodMonth(forecastDetail.getPeriodMonth());
-//            production.setFiscalArrangementId(forecast.getContract().getContractPK().getFiscalArrangementId());
-//            production.setCrudeTypeCode(forecast.getContract().getContractPK().getCrudeTypeCode());
-            productionDetail.setProductionDetailPK(pPK);
+            LOG.log(Level.INFO, "Copying forecast details to new actual {0}...", forecastDetail);
+            //Replaces lines below
+            productionDetail.duplicate(forecastDetail);
 
-            // getProductionDetailBean().enrich(currentProduction);
+            prod = getProductionBean().find(forecastDetail.getForecast().makeProductionPK());
+
+            if (prod == null) {
+                prod = new JvProduction();
+                prod.initialize(forecastDetail.getForecast());
+            }
+            prod.addProductionDetail(productionDetail);
+            addProductionDetail(productionDetail);
+            productionDetail.setProduction(prod);
+
+            getProductionDetailBean().enrich(productionDetail);
+        } else {
+            prod = productionDetail.getProduction();
         }
+        setCurrentProduction(prod);
         setCurrentProductionDetail(productionDetail);
         setPeriodYear(forecastDetail.getPeriodYear());
         setPeriodMonth(forecastDetail.getPeriodMonth());
@@ -478,11 +498,15 @@ public class JvProductionController implements Serializable {
     }
 
     public String addProductionDetail() {
+        addProductionDetail(currentProductionDetail);
+        return "actual-create2";
+    }
+
+    public void addProductionDetail(JvProductionDetail jvDetail) {
         if (productionDetails == null) {
             productionDetails = new ArrayList<>();
         }
-        productionDetails.add(currentProductionDetail);
-        return "actual-create2";
+        productionDetails.add(jvDetail);
     }
 
     public String cancelProductionDetail() {
@@ -505,23 +529,27 @@ public class JvProductionController implements Serializable {
         currentProduction = new JvProduction();
         setProductionEmbeddableKeys();
         productionDetails = new ArrayList<>();
+        setDirectActualizing(true);
         return "actual-create2";
     }
 
     public void create() {
         persistProductionDetail(JsfUtil.PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("ProductionCreated"));
         if (!JsfUtil.isValidationFailed()) {
-            reset();
-            currentContractChanged();
-            loadProductionDetails();
-//            setNewProduction(false);
+            if (isDirectActualizing()) {
+                reset();
+                currentContractChanged();
+                loadProductionDetails();
+//            setNewProduction(false); 
+            }
+
         }
     }
 
     public String createProduction() {
         currentProduction.setProductionDetails(productionDetails);
         persist(JsfUtil.PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("ProductionCreated"));
-        if (!JsfUtil.isValidationFailed()) {
+        if (!JsfUtil.isValidationFailed() && isDirectActualizing()) {
             reset();
             currentContract = null;
             loadProductionDetails();
@@ -608,7 +636,7 @@ public class JvProductionController implements Serializable {
     private void persistProductionDetail(JsfUtil.PersistAction persistAction, String successMessage) {
         if (currentProductionDetail != null) {
             try {
-                if (persistAction != JsfUtil.PersistAction.DELETE) {
+                if (persistAction != JsfUtil.PersistAction.DELETE) {                   
                     getProductionDetailBean().edit(currentProductionDetail);
                 } else {
                     getProductionDetailBean().remove(currentProductionDetail);

@@ -6,6 +6,8 @@
 package com.nnpcgroup.cosm.entity.forecast.jv;
 
 import com.nnpcgroup.cosm.entity.contract.Contract;
+import com.nnpcgroup.cosm.entity.production.jv.ProductionDetailPK;
+import com.nnpcgroup.cosm.entity.production.jv.ProductionPK;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -87,6 +89,15 @@ public abstract class ForecastDetail<E extends Forecast> implements Serializable
 
     public void setForecast(E forecast) {
         this.forecast = forecast;
+    }
+
+    public ProductionDetailPK makeProductionDetailPK() {
+        ProductionDetailPK pPK = new ProductionDetailPK(
+                new ProductionPK(this.getPeriodYear(), this.getPeriodMonth(), this.getForecast().getFiscalArrangement().getId()),
+                this.getContract().getContractPK()
+        );
+
+        return pPK;
     }
 
 //    @Override

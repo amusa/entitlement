@@ -467,7 +467,7 @@
 
                         <div class="modal-footer">
                             <h:commandButton value="#{bundle.Save}" class="btn btn-sm" pt:data-dismiss="modal" >
-                                <f:ajax event="click" listener="#{jvActualController.create}" render="jvProdListForm prodTable msgs"/>
+                                <f:ajax event="click" listener="#{jvActualController.createProduction}" render="jvProdListForm prodTable msgs"/>
                             </h:commandButton>
                             <h:commandButton   value="#{bundle.Cancel}" pt:data-dismiss="modal" immediate="true" class="btn btn-sm">
                                 <f:ajax event="click" listener="#{jvActualController.cancel}"/>

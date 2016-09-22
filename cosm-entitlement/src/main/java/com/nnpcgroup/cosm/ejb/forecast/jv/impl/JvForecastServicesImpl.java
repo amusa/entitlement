@@ -91,7 +91,7 @@ public class JvForecastServicesImpl extends ForecastServicesImpl<JvForecast> imp
             cq.select(e).where(
                     cb.and(cb.equal(e.get("periodYear"), year),
                             cb.equal(e.get("periodMonth"), month),
-                            cb.equal(e.get("contract").get("fiscalArrangement"), fa)
+                            cb.equal(e.get("fiscalArrangement"), fa)
                     ));
             Query query = getEntityManager().createQuery(cq);
 

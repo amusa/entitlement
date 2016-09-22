@@ -6,6 +6,7 @@
 package com.nnpcgroup.cosm.entity.forecast.jv;
 
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
+import com.nnpcgroup.cosm.entity.production.jv.ProductionPK;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -86,7 +87,7 @@ public abstract class Forecast<E extends ForecastDetail> implements Serializable
         this.remark = remark;
     }
 
-    @OneToMany(mappedBy = "forecast", cascade = CascadeType.ALL, fetch = FetchType.LAZY, targetEntity = ForecastDetail.class)
+    @OneToMany(mappedBy = "forecast", cascade = CascadeType.ALL, fetch = FetchType.EAGER, targetEntity = ForecastDetail.class)
     public List<E> getForecastDetails() {
         return forecastDetails;
     }
@@ -101,6 +102,12 @@ public abstract class Forecast<E extends ForecastDetail> implements Serializable
 
         }
         forecastDetails.add(forecastDetail);
+    }
+
+    public ProductionPK makeProductionPK() {
+        ProductionPK pPK
+                = new ProductionPK(this.getPeriodYear(), this.getPeriodMonth(), this.getFiscalArrangement().getId());
+        return pPK;
     }
 
     @Override

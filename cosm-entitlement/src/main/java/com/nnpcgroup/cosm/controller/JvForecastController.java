@@ -354,6 +354,7 @@ public class JvForecastController implements Serializable {
         }
     }
 
+    @Deprecated
     public void loadProductions() {
         if (periodYear != null) {
             if (periodMonth != null) {
@@ -371,6 +372,12 @@ public class JvForecastController implements Serializable {
             } else {
                 handleAnnualProduction();
             }
+        }
+
+        if (forecastDetails == null) {
+            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("NoForecastData"));
+            LOG.log(Level.INFO, ResourceBundle.getBundle("/Bundle").getString("NoForecastData")
+            );
         }
     }
 
@@ -409,6 +416,9 @@ public class JvForecastController implements Serializable {
                 //forecastDetails = getForecastDetailBean().findByContractPeriod(periodYear, periodMonth, currentFiscalArrangement);
             } else {
                 forecastDetails = null;
+                JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("NoForecastData"));
+                LOG.log(Level.INFO, ResourceBundle.getBundle("/Bundle").getString("NoForecastData")
+                );
             }
         }
     }

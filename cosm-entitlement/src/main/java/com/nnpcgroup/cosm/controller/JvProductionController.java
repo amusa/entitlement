@@ -567,8 +567,8 @@ public class JvProductionController implements Serializable {
     }
 
     public void cancelProduction() {
-        reset();
-        loadProductionDetails();
+        reset2();
+        loadFiscalMonthlyProduction();
 
     }
 
@@ -578,11 +578,23 @@ public class JvProductionController implements Serializable {
             JsfUtil.addErrorMessage(ResourceBundle.getBundle("/Bundle").getString("NoProductionData"));
             return null;
         }
-        return "actualize-edit2";
+        return "actual-edit2";
+    }
+    
+    public String updateProduction() {
+        persist(JsfUtil.PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("ProductionUpdated"));
+        if (!JsfUtil.isValidationFailed()) {
+            reset();
+//            currentContract = null;
+            loadFiscalMonthlyProduction();
+//            setNewForecast(false);
+            return "actualize2";
+        }
+        return null;
     }
 
     public void update() {
-        persist(JsfUtil.PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("ProductionUpdated"));
+        persistProductionDetail(JsfUtil.PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("ProductionUpdated"));
 
         if (isEditMode()) {
             List<ProductionDetail> adjProductions = new ArrayList<>();

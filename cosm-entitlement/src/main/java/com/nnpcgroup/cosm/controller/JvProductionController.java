@@ -96,6 +96,10 @@ public class JvProductionController implements Serializable {
         }
     }
 
+    public JvProductionDetailServices getJvProductionDetailBean() {
+        return jvProductionBean;
+    }
+
     public JvProductionServices getProductionBean() {
         return productionBean;
     }
@@ -217,6 +221,13 @@ public class JvProductionController implements Serializable {
         this.productions = productions;
     }
 
+    public void loadProductionDetails(JvProduction jvProd) {
+        productionDetails = getJvProductionDetailBean().findByContractPeriod(
+                jvProd.getPeriodYear(),
+                jvProd.getPeriodMonth(),
+                jvProd.getFiscalArrangement());
+    }
+
     public void loadProductionDetails() {
         if (periodYear != null) {
             if (periodMonth != null) {
@@ -254,7 +265,8 @@ public class JvProductionController implements Serializable {
             if (currentProduction != null) {
                 //TODO:fix ORM double linkage
                 //productionDetails = currentProduction.getProductionDetails();
-                productionDetails = getProductionDetailBean().findByContractPeriod(periodYear, periodMonth, currentFiscalArrangement);
+                //Always  use super class JV ProductionDetailService interface to return all subtypes
+                productionDetails = getJvProductionDetailBean().findByContractPeriod(periodYear, periodMonth, currentFiscalArrangement);
             } else {
                 productionDetails = null;
                 JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("NoProductionData"));
@@ -349,6 +361,8 @@ public class JvProductionController implements Serializable {
     private void reset() {
         currentProduction = null;
         productions = null;
+        productionDetails = null;
+        currentProductionDetail = null;
 //        currentContract = null;
     }
 
@@ -437,7 +451,7 @@ public class JvProductionController implements Serializable {
             }
 
             LOG.log(Level.INFO, "Copying forecast details to new actual {0}...", forecastDetail);
-            //Replaces lines below
+
             productionDetail.duplicate(forecastDetail);
 
             prod = getProductionBean().find(forecastDetail.getForecast().makeProductionPK());
@@ -445,8 +459,10 @@ public class JvProductionController implements Serializable {
             if (prod == null) {
                 prod = new JvProduction();
                 prod.initialize(forecastDetail.getForecast());
+            } else {
+                loadProductionDetails(prod);
             }
-            prod.addProductionDetail(productionDetail);
+            // prod.addProductionDetail(productionDetail);
             addProductionDetail(productionDetail);
             productionDetail.setProduction(prod);
 
@@ -580,7 +596,7 @@ public class JvProductionController implements Serializable {
         }
         return "actual-edit2";
     }
-    
+
     public String updateProduction() {
         persist(JsfUtil.PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("ProductionUpdated"));
         if (!JsfUtil.isValidationFailed()) {
@@ -648,7 +664,7 @@ public class JvProductionController implements Serializable {
     private void persistProductionDetail(JsfUtil.PersistAction persistAction, String successMessage) {
         if (currentProductionDetail != null) {
             try {
-                if (persistAction != JsfUtil.PersistAction.DELETE) {                   
+                if (persistAction != JsfUtil.PersistAction.DELETE) {
                     getProductionDetailBean().edit(currentProductionDetail);
                 } else {
                     getProductionDetailBean().remove(currentProductionDetail);

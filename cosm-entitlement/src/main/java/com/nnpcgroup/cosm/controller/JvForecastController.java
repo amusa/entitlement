@@ -288,8 +288,16 @@ public class JvForecastController implements Serializable {
         }
     }
 
-    public void updateForecast() {
+    public String updateForecast() {
         persist(JsfUtil.PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("ProductionUpdated"));
+        if (!JsfUtil.isValidationFailed()) {
+            reset();
+//            currentContract = null;
+            loadFiscalMonthlyProduction();
+//            setNewForecast(false);
+            return "forecast2";
+        }
+        return null;
     }
 
     private void persist(JsfUtil.PersistAction persistAction, String successMessage) {

@@ -196,11 +196,10 @@
                                 <span class="icon">&#61943;</span>
                                 #{bundle.Create}
                             </button>
-                            <button jsf:id="viewButton" look="warning" data-target="#JvViewDlg" data-toggle="modal"
+                            <button jsf:id="viewButton" action="actual-view2"
                                     class="btn m-r-5" jsf:disabled="${not jvActualController.enableControlButton}">
                                 <span class="icon">&#61698;</span>
-                                #{bundle.View}
-                                <f:ajax event="click" render="JvViewForm"/>
+                                #{bundle.View}                               
                             </button>
                             <button jsf:id="editButton" jsf:action="#{jvActualController.prepareUpdateProduction}"
                                     class="btn m-r-5" jsf:disabled="${not jvActualController.enableControlButton}">

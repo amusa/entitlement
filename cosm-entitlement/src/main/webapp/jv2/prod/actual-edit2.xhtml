@@ -18,13 +18,13 @@
             <ol class="breadcrumb hidden-xs">
                 <li><a href="#">Home</a></li>
                 <li><a href="#">Joint Venture</a></li>
-                <li class="active">Create Actual</li>
+                <li class="active">Edit Actual</li>
             </ol>
         </ui:define>
 
 
         <ui:define name="page-title">
-            <h:outputText value="JV ACTUALIZING"></h:outputText>
+            <h:outputText value="EDIT JV ACTUAL PRODUCTION"></h:outputText>
         </ui:define>
 
         <ui:define name="side-menu">
@@ -183,13 +183,14 @@
                         <f:facet name="footer">                                                       
                              <h:commandButton  value="#{bundle.Back}" action="actualize2" immediate="true" class="btn btn-sm"/>
 
-                            <h:commandButton  value="#{bundle.Save}" action="#{jvActualController.createProduction}" class="btn btn-sm">
+                             <h:commandButton  value="#{bundle.Save}" action="#{jvActualController.updateProduction}" class="btn btn-sm">
 
                             </h:commandButton>
 
                             <h:commandButton   value="#{bundle.Cancel}" action="actualize2" immediate="true" class="btn btn-sm">
                                 <f:ajax listener="#{jvActualController.cancelProduction}" />
                             </h:commandButton>
+                                                     
                         </f:facet>
                     </h:dataTable>
 

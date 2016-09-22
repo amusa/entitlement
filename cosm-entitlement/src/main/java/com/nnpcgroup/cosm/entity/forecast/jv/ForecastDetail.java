@@ -113,5 +113,41 @@ public abstract class ForecastDetail<E extends Forecast> implements Serializable
 //        }
 //        return true;
 //    }
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 89 * hash + Objects.hashCode(this.periodYear);
+        hash = 89 * hash + Objects.hashCode(this.periodMonth);
+        hash = 89 * hash + Objects.hashCode(this.contract);
+        hash = 89 * hash + Objects.hashCode(this.forecast);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final ForecastDetail<?> other = (ForecastDetail<?>) obj;
+        if (!Objects.equals(this.periodYear, other.periodYear)) {
+            return false;
+        }
+        if (!Objects.equals(this.periodMonth, other.periodMonth)) {
+            return false;
+        }
+        if (!Objects.equals(this.contract, other.contract)) {
+            return false;
+        }
+        if (!Objects.equals(this.forecast, other.forecast)) {
+            return false;
+        }
+        return true;
+    }
 
 }

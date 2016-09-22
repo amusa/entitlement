@@ -86,7 +86,7 @@ public abstract class Forecast<E extends ForecastDetail> implements Serializable
         this.remark = remark;
     }
 
-    @OneToMany(mappedBy = "forecast", cascade = CascadeType.ALL, fetch = FetchType.EAGER, targetEntity = ForecastDetail.class)
+    @OneToMany(mappedBy = "forecast", cascade = CascadeType.ALL, fetch = FetchType.LAZY, targetEntity = ForecastDetail.class)
     public List<E> getForecastDetails() {
         return forecastDetails;
     }
@@ -103,23 +103,23 @@ public abstract class Forecast<E extends ForecastDetail> implements Serializable
         forecastDetails.add(forecastDetail);
     }
 
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) {
-//            return true;
-//        }
-//        if (o == null || getClass() != o.getClass()) {
-//            return false;
-//        }
-//
-//        Forecast forecast = (Forecast) o;
-//
-//        return forecastPK != null ? forecastPK.equals(forecast.forecastPK) : forecast.forecastPK == null;
-//
-//    }
-//
-//    @Override
-//    public int hashCode() {
-//        return forecastPK != null ? forecastPK.hashCode() : 0;
-//    }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        Forecast forecast = (Forecast) o;
+
+        return forecastPK != null ? forecastPK.equals(forecast.forecastPK) : forecast.forecastPK == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return forecastPK != null ? forecastPK.hashCode() : 0;
+    }
 }

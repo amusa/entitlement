@@ -5,6 +5,7 @@
  */
 package com.nnpcgroup.cosm.ejb.forecast.jv;
 
+import com.nnpcgroup.cosm.entity.FiscalArrangement;
 import com.nnpcgroup.cosm.entity.forecast.jv.JvForecast;
 
 import java.util.List;
@@ -16,5 +17,7 @@ import java.util.List;
 public interface JvForecastServices extends ForecastServices<JvForecast> {
 
     public List<JvForecast> findByYearAndMonth(int year, int month);
-   
+
+    public JvForecast findByContractPeriod(int year, int month, FiscalArrangement fa);
+
 }

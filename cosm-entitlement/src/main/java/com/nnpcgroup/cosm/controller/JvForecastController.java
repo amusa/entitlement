@@ -138,6 +138,14 @@ public class JvForecastController implements Serializable {
         this.currentForecastDetail = currentForecastDetail;
     }
 
+    public void prepareEditForecastDetail(JvForecastDetail jvDetail) {
+        setCurrentForecastDetail(jvDetail);
+        if (currentForecastDetail != null) {
+            currentContract = currentForecastDetail.getContract();
+        }
+        setEditMode(true);
+    }
+
     public List<JvForecastDetail> getForecastDetails() {
         //loadForecastDetails();
         return forecastDetails;
@@ -184,20 +192,25 @@ public class JvForecastController implements Serializable {
     public void destroy() {
         persist(JsfUtil.PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("ProductionDeleted"));
         if (!JsfUtil.isValidationFailed()) {
-            currentProduction = null;
+            reset();
         }
     }
 
     public void destroyForecastDetail() {
         persistForecastDetail(JsfUtil.PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("ProductionDeleted"));
         if (!JsfUtil.isValidationFailed()) {
-            currentForecastDetail = null;
+            reset();
+            loadForecastDetails();
         }
     }
 
     public void destroyForecastDetail(JvForecastDetail prod) {
-        setCurrentForecastDetail(prod);
-        destroyForecastDetail();
+//        setCurrentForecastDetail(prod);
+//        destroyForecastDetail();
+        if (currentProduction != null) {
+            removeForecastDetail(prod);
+            getForecastBean().edit(currentProduction);
+        }
     }
 
     public void destroy(JvForecast prod) {
@@ -262,30 +275,38 @@ public class JvForecastController implements Serializable {
     public void update() {
         persistForecastDetail(JsfUtil.PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("ProductionUpdated"));
         if (isEditMode()) {
-            LOG.log(Level.INFO, "Performing automatic stock adjustment...");
-            List<Forecast> adjforecasts = new ArrayList<>();
-            JvForecastDetail thisForecastDetail = currentForecastDetail;
-            JvForecastDetail nextForecastDetail;
-            while ((nextForecastDetail = (JvForecastDetail) getForecastDetailBean().getNextMonthProduction(thisForecastDetail)) != null) {
-                try {
-                    LOG.log(Level.INFO, "Adjusting {0} {1}/{2}...",
-                            new Object[]{nextForecastDetail.getContract(),
-                                nextForecastDetail.getPeriodYear(),
-                                nextForecastDetail.getPeriodMonth()});
-
-                    getForecastDetailBean().enrich(nextForecastDetail);
-                    getForecastDetailBean().edit(nextForecastDetail);
-                    // adjforecasts.add(nextForecast);
-                    thisForecastDetail = nextForecastDetail;
-                } catch (NoRealizablePriceException rpe) {
-                    Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, rpe);
-                    JsfUtil.addErrorMessage(rpe, ResourceBundle.getBundle("/Bundle").getString("RealizablePriceErrorOccured"));
-                }
+            if (!JsfUtil.isValidationFailed()) {
+                performAutomaticStockAdjustment();
             }
 
-            // getForecastDetailBean().edit(adjforecasts);
             disableEditMode();
         }
+    }
+
+    public void performAutomaticStockAdjustment() {
+        LOG.log(Level.INFO, "Performing automatic stock adjustment...");
+        List<Forecast> adjforecasts = new ArrayList<>();
+        JvForecastDetail thisForecastDetail = currentForecastDetail;
+        JvForecastDetail nextForecastDetail;
+        while ((nextForecastDetail = (JvForecastDetail) getForecastDetailBean().getNextMonthProduction(thisForecastDetail)) != null) {
+            try {
+                LOG.log(Level.INFO, "Adjusting {0} {1}/{2}...",
+                        new Object[]{nextForecastDetail.getContract(),
+                            nextForecastDetail.getPeriodYear(),
+                            nextForecastDetail.getPeriodMonth()});
+
+                getForecastDetailBean().enrich(nextForecastDetail);
+                getForecastDetailBean().edit(nextForecastDetail);
+                // adjforecasts.add(nextForecast);
+                thisForecastDetail = nextForecastDetail;
+            } catch (NoRealizablePriceException rpe) {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, rpe);
+                JsfUtil.addErrorMessage(rpe, ResourceBundle.getBundle("/Bundle").getString("RealizablePriceErrorOccured"));
+            }
+        }
+
+        // getForecastDetailBean().edit(adjforecasts);
+        JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("StockAdjustmentSuccess"));
     }
 
     public String updateForecast() {

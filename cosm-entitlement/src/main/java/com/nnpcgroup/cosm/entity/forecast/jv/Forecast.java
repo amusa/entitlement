@@ -87,7 +87,7 @@ public abstract class Forecast<E extends ForecastDetail> implements Serializable
         this.remark = remark;
     }
 
-    @OneToMany(mappedBy = "forecast", cascade = CascadeType.ALL, fetch = FetchType.EAGER, targetEntity = ForecastDetail.class)
+    @OneToMany(mappedBy = "forecast", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER, targetEntity = ForecastDetail.class)
     public List<E> getForecastDetails() {
         return forecastDetails;
     }

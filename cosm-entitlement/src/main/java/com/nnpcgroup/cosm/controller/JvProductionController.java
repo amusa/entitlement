@@ -264,9 +264,9 @@ public class JvProductionController implements Serializable {
 
             if (currentProduction != null) {
                 //TODO:fix ORM double linkage
-                //productionDetails = currentProduction.getProductionDetails();
+                productionDetails = currentProduction.getProductionDetails();
                 //Always  use super class JV ProductionDetailService interface to return all subtypes
-                productionDetails = getJvProductionDetailBean().findByContractPeriod(periodYear, periodMonth, currentFiscalArrangement);
+//                productionDetails = getJvProductionDetailBean().findByContractPeriod(periodYear, periodMonth, currentFiscalArrangement);
             } else {
                 productionDetails = null;
                 JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("NoProductionData"));
@@ -277,11 +277,14 @@ public class JvProductionController implements Serializable {
     }
 
     private JvProduction findProduction(Integer periodYear, Integer periodMonth, FiscalArrangement currentFiscalArrangement) {
-        ProductionPK pPK = new ProductionPK();
-        pPK.setPeriodYear(periodYear);
-        pPK.setPeriodMonth(periodMonth);
-        pPK.setFiscalArrangementId(currentFiscalArrangement.getId());
-        return getProductionBean().find(pPK);
+//        ProductionPK pPK = new ProductionPK();
+//        pPK.setPeriodYear(periodYear);
+//        pPK.setPeriodMonth(periodMonth);
+//        pPK.setFiscalArrangementId(currentFiscalArrangement.getId());
+//        return getProductionBean().find(pPK);
+//Fixed N+1 Problem
+        JvProduction jvProd = getProductionBean().findByContractPeriod(periodYear, periodMonth, currentFiscalArrangement);
+        return jvProd;
     }
 
     public boolean isEditMode() {
@@ -500,7 +503,7 @@ public class JvProductionController implements Serializable {
     public void destroyProductionDetail(JvProductionDetail prod) {
 //        setCurrentProductionDetail(prod);
 //        destroyProductionDetail();
-        
+
         if (currentProduction != null) {
             removeProductionDetail(prod);
             getProductionBean().edit(currentProduction);

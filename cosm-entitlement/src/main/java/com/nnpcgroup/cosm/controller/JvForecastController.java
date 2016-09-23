@@ -458,6 +458,7 @@ public class JvForecastController implements Serializable {
 //        forecastPK.setPeriodMonth(periodMonth);
 //        forecastPK.setFiscalArrangementId(currentFiscalArrangement.getId());
 //        return getForecastBean().find(forecastPK);
+//Fixed N+1 Problem
         JvForecast jvForecast = getForecastBean().findByContractPeriod(periodYear, periodMonth, currentFiscalArrangement);
         return jvForecast;
     }

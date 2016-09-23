@@ -95,7 +95,7 @@ public abstract class Production<E extends ProductionDetail> implements Serializ
         this.remark = remark;
     }
 
-    @OneToMany(mappedBy = "production", cascade = CascadeType.ALL, fetch = FetchType.EAGER, targetEntity = ProductionDetail.class)
+    @OneToMany(mappedBy = "production", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER, targetEntity = ProductionDetail.class)
     public List<E> getProductionDetails() {
         return productionDetails;
     }

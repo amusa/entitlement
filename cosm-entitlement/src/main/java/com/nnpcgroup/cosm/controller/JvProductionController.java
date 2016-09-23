@@ -481,9 +481,7 @@ public class JvProductionController implements Serializable {
     public void destroy() {
         persist(JsfUtil.PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("ProductionDeleted"));
         if (!JsfUtil.isValidationFailed()) {
-            //reset();
-            //loadProductionDetails();
-            currentProduction = null;
+            reset();
         }
     }
 
@@ -500,8 +498,13 @@ public class JvProductionController implements Serializable {
     }
 
     public void destroyProductionDetail(JvProductionDetail prod) {
-        setCurrentProductionDetail(prod);
-        destroyProductionDetail();
+//        setCurrentProductionDetail(prod);
+//        destroyProductionDetail();
+        
+        if (currentProduction != null) {
+            removeProductionDetail(prod);
+            getProductionBean().edit(currentProduction);
+        }
     }
 
     public void removeProductionDetail(JvProductionDetail productionDetail) {

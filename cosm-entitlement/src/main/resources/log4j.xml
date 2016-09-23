@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE log4j:configuration SYSTEM "log4j.dtd" >
 <log4j:configuration debug="true">
-<!--    <appender name="le" class="com.logentries.log4j.LogentriesAppender">
+    <appender name="le" class="com.logentries.log4j.LogentriesAppender">
         <param name="Token" value="045c6b57-ee14-43ac-a828-93b2fd989543"/>
         <param name="Ssl" value="false"/>
         <layout class="org.apache.log4j.PatternLayout">
             <param name="ConversionPattern" value="%d{EEE MMM dd HH:mm:ss ZZZ yyyy},
 (%F:%L) %-5p: %m"/>
         </layout>
-    </appender>-->
+    </appender>
     <appender name="CON" class="org.apache.log4j.ConsoleAppender">
         <layout class="org.apache.log4j.PatternLayout">
             <param name="ConversionPattern" value="%-4r [%t] %-5p %c %x - %m%n" />

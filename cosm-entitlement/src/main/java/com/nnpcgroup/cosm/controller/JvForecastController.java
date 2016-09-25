@@ -19,6 +19,7 @@ import com.nnpcgroup.cosm.exceptions.NoRealizablePriceException;
 
 import javax.inject.Named;
 import java.io.Serializable;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -60,6 +61,9 @@ public class JvForecastController implements Serializable {
 
     @EJB
     private FiscalArrangementBean fiscalBean;
+
+    @Inject
+    Principal principal;
 
     private JvForecast currentProduction;
     private List<JvForecast> productions;
@@ -708,6 +712,7 @@ public class JvForecastController implements Serializable {
 
         currentForecastDetail.setForecast(currentProduction);
 
+        currentForecastDetail.setCurrentUser(principal.getName());
     }
 
     private void setForecastEmbeddableKeys() {
@@ -721,6 +726,8 @@ public class JvForecastController implements Serializable {
         currentProduction.setPeriodMonth(periodMonth);
 
         currentProduction.setFiscalArrangement(currentFiscalArrangement);
+
+        currentProduction.setCurrentUser(principal.getName());
     }
 
     public void periodMonthChanged() {

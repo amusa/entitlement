@@ -18,8 +18,10 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.model.SelectItem;
+import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
+import java.security.Principal;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -41,6 +43,8 @@ public class ContractController implements Serializable {
 
     @EJB
     private CrudeTypeBean crudeTypeBean;
+    @Inject
+    Principal principal;
 
     private List<? extends Contract> items = null;
     private Contract selected;
@@ -141,6 +145,7 @@ public class ContractController implements Serializable {
     }
 
     protected void initializeEmbeddableKey() {
+        selected.setCurrentUser(principal.getName());
     }
 
     private ContractServices getFacade() {
@@ -259,6 +264,7 @@ public class ContractController implements Serializable {
     public void addContractFiscalArrangement(FiscalArrangement fa) {
         LOG.log(Level.INFO, "Adding Contract for fiscal arrangement {0}...", fa);
         setSelected(new JvContract()); //Default contract
+        initializeEmbeddableKey();
 //        FiscalArrangement freshFiscal=  fiscalBean.find(fa.getId());
         setFiscalArrangement(fa);
 //        selected.setFiscalArrangement(fa);

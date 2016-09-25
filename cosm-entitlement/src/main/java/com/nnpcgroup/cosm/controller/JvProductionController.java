@@ -27,6 +27,7 @@ import javax.faces.validator.ValidatorException;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -60,6 +61,9 @@ public class JvProductionController implements Serializable {
 
     @EJB
     private FiscalArrangementBean fiscalBean;
+
+    @Inject
+    Principal principal;
 
     private JvProductionDetail currentProductionDetail;
     private JvProduction currentProduction;
@@ -176,6 +180,8 @@ public class JvProductionController implements Serializable {
         currentProductionDetail.setContract(currentContract);
 
         currentProductionDetail.setProduction(currentProduction);
+
+        currentProductionDetail.setCurrentUser(principal.getName());
     }
 
     private void setProductionEmbeddableKeys() {
@@ -189,6 +195,8 @@ public class JvProductionController implements Serializable {
         currentProduction.setPeriodYear(periodYear);
         currentProduction.setPeriodMonth(periodMonth);
         currentProduction.setFiscalArrangement(currentFiscalArrangement);
+
+        currentProduction.setCurrentUser(principal.getName());
     }
 
     public void periodMonthChanged() {
@@ -462,6 +470,7 @@ public class JvProductionController implements Serializable {
             if (prod == null) {
                 prod = new JvProduction();
                 prod.initialize(forecastDetail.getForecast());
+                prod.setCurrentUser(principal.getName());
             } else {
                 loadProductionDetails(prod);
             }
@@ -470,6 +479,7 @@ public class JvProductionController implements Serializable {
             productionDetail.setProduction(prod);
 
             getProductionDetailBean().enrich(productionDetail);
+            productionDetail.setCurrentUser(principal.getName());
         } else {
             prod = productionDetail.getProduction();
         }

@@ -19,15 +19,18 @@ import javax.validation.constraints.NotNull;
 /**
  * @author 18359
  */
+@EntityListeners(AuditListener.class)
 @Entity
 @Table(name = "FISCAL_ARRANGEMENT")
-public abstract class FiscalArrangement implements Serializable {
+public abstract class FiscalArrangement implements Auditable, Serializable {
 
     private static final long serialVersionUID = -5266137042066972524L;
     private Long id;
     private String title;
     private Company operator;
     private List<Contract> contracts;
+    private AuditInfo auditInfo = new AuditInfo();
+
 
     public FiscalArrangement() {
     }
@@ -82,6 +85,18 @@ public abstract class FiscalArrangement implements Serializable {
             contracts = new ArrayList<>();
         }
         contracts.add(contract);
+    }
+
+    public void setCurrentUser(String user) {
+//        auditInfo.setCurrentUser(user);
+        auditInfo.setLastModifiedBy(user);
+    }
+
+    @Embedded
+    public AuditInfo getAuditInfo() { return auditInfo; }
+
+    public void setAuditInfo(AuditInfo auditInfo) {
+        this.auditInfo = auditInfo;
     }
 
     @Override

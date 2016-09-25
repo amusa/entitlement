@@ -5,6 +5,9 @@
  */
 package com.nnpcgroup.cosm.entity.production.jv;
 
+import com.nnpcgroup.cosm.entity.AuditInfo;
+import com.nnpcgroup.cosm.entity.AuditListener;
+import com.nnpcgroup.cosm.entity.Auditable;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
 import com.nnpcgroup.cosm.entity.forecast.jv.Forecast;
 
@@ -12,29 +15,18 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.DiscriminatorColumn;
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.MapsId;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * @author 18359
  * @param <E>
  */
+@EntityListeners(AuditListener.class)
 @Entity
 @Table(name = "PRODUCTION")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "PTYPE")
-public abstract class Production<E extends ProductionDetail> implements Serializable {
+public abstract class Production<E extends ProductionDetail>  implements Auditable, Serializable {
 
     private static final long serialVersionUID = -705843614381155070L;
 
@@ -44,6 +36,7 @@ public abstract class Production<E extends ProductionDetail> implements Serializ
     private FiscalArrangement fiscalArrangement;
     private String remark;
     private List<E> productionDetails;
+    private AuditInfo auditInfo = new AuditInfo();
 
     public Production() {
     }
@@ -119,29 +112,15 @@ public abstract class Production<E extends ProductionDetail> implements Serializ
         this.productionPK = forecast.makeProductionPK();
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 7;
-        hash = 59 * hash + Objects.hashCode(this.productionPK);
-        return hash;
+    public void setCurrentUser(String user) {
+//        auditInfo.setCurrentUser(user);
+        auditInfo.setLastModifiedBy(user);
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Production other = (Production) obj;
-        if (!Objects.equals(this.productionPK, other.productionPK)) {
-            return false;
-        }
-        return true;
-    }
+    @Embedded
+    public AuditInfo getAuditInfo() { return auditInfo; }
 
+    public void setAuditInfo(AuditInfo auditInfo) {
+        this.auditInfo = auditInfo;
+    }
 }

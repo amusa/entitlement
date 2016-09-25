@@ -5,6 +5,9 @@
  */
 package com.nnpcgroup.cosm.entity.forecast.jv;
 
+import com.nnpcgroup.cosm.entity.AuditInfo;
+import com.nnpcgroup.cosm.entity.AuditListener;
+import com.nnpcgroup.cosm.entity.Auditable;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
 import com.nnpcgroup.cosm.entity.production.jv.ProductionPK;
 
@@ -18,11 +21,12 @@ import javax.persistence.*;
  * @author 18359
  * @param <E>
  */
+@EntityListeners(AuditListener.class)
 @Entity
 @Table(name = "FORECAST")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "FTYPE")
-public abstract class Forecast<E extends ForecastDetail> implements Serializable {
+public abstract class Forecast<E extends ForecastDetail>  implements Auditable, Serializable {
 
     private static final long serialVersionUID = -295843614383355072L;
 
@@ -34,6 +38,7 @@ public abstract class Forecast<E extends ForecastDetail> implements Serializable
     private FiscalArrangement fiscalArrangement;
     private String remark;
     private List<E> forecastDetails;
+    private AuditInfo auditInfo = new AuditInfo();
 
     public Forecast() {
     }
@@ -110,23 +115,15 @@ public abstract class Forecast<E extends ForecastDetail> implements Serializable
         return pPK;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-
-        Forecast forecast = (Forecast) o;
-
-        return forecastPK != null ? forecastPK.equals(forecast.forecastPK) : forecast.forecastPK == null;
-
+    public void setCurrentUser(String user) {
+//        auditInfo.setCurrentUser(user);
+        auditInfo.setLastModifiedBy(user);
     }
 
-    @Override
-    public int hashCode() {
-        return forecastPK != null ? forecastPK.hashCode() : 0;
+    @Embedded
+    public AuditInfo getAuditInfo() { return auditInfo; }
+
+    public void setAuditInfo(AuditInfo auditInfo) {
+        this.auditInfo = auditInfo;
     }
 }

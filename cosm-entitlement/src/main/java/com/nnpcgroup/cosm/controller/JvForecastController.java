@@ -209,12 +209,12 @@ public class JvForecastController implements Serializable {
     }
 
     public void destroyForecastDetail(JvForecastDetail prod) {
-//        setCurrentForecastDetail(prod);
-//        destroyForecastDetail();
-        if (currentProduction != null) {
-            removeForecastDetail(prod);
-            getForecastBean().edit(currentProduction);
-        }
+        setCurrentForecastDetail(prod);
+        destroyForecastDetail();
+//        if (currentProduction != null) {
+//            removeForecastDetail(prod);
+//            getForecastBean().edit(currentProduction);
+//        }
     }
 
     public void destroy(JvForecast prod) {

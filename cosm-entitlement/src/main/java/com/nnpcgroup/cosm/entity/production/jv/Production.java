@@ -10,6 +10,8 @@ import com.nnpcgroup.cosm.entity.AuditListener;
 import com.nnpcgroup.cosm.entity.Auditable;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
 import com.nnpcgroup.cosm.entity.forecast.jv.Forecast;
+import com.nnpcgroup.cosm.entity.forecast.jv.ForecastCustomizer;
+import org.eclipse.persistence.annotations.Customizer;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -21,6 +23,7 @@ import javax.persistence.*;
  * @author 18359
  * @param <E>
  */
+@Customizer(ProductionCustomizer.class)
 @EntityListeners(AuditListener.class)
 @Entity
 @Table(name = "PRODUCTION")

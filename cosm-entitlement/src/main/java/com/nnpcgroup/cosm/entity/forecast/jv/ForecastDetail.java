@@ -11,6 +11,7 @@ import com.nnpcgroup.cosm.entity.Auditable;
 import com.nnpcgroup.cosm.entity.contract.Contract;
 import com.nnpcgroup.cosm.entity.production.jv.ProductionDetailPK;
 import com.nnpcgroup.cosm.entity.production.jv.ProductionPK;
+import org.eclipse.persistence.annotations.Customizer;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -20,6 +21,7 @@ import java.util.Objects;
  * @param <E>
  * @author 18359
  */
+@Customizer(ForecastDetailCustomizer.class)
 @EntityListeners(AuditListener.class)
 @Entity
 @Table(name = "FORECAST_DETAIL")

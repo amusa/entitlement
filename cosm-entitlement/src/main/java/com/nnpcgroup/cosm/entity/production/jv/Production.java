@@ -10,7 +10,6 @@ import com.nnpcgroup.cosm.entity.AuditListener;
 import com.nnpcgroup.cosm.entity.Auditable;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
 import com.nnpcgroup.cosm.entity.forecast.jv.Forecast;
-import com.nnpcgroup.cosm.entity.forecast.jv.ForecastCustomizer;
 import org.eclipse.persistence.annotations.Customizer;
 
 import java.io.Serializable;
@@ -126,4 +125,31 @@ public abstract class Production<E extends ProductionDetail>  implements Auditab
     public void setAuditInfo(AuditInfo auditInfo) {
         this.auditInfo = auditInfo;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 47 * hash + Objects.hashCode(this.productionPK);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Production<?> other = (Production<?>) obj;
+        if (!Objects.equals(this.productionPK, other.productionPK)) {
+            return false;
+        }
+        return true;
+    }
+    
+    
 }

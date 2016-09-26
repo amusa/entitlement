@@ -15,5 +15,7 @@ import com.nnpcgroup.cosm.entity.production.jv.JvProduction;
 public interface JvProductionServices extends ProductionServices<JvProduction> {
 
     public JvProduction findByContractPeriod(int year, int month, FiscalArrangement fa);
+    
+    public void delete(int year, int month, FiscalArrangement fa);
 
 }

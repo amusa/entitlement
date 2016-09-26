@@ -15,6 +15,7 @@ import org.eclipse.persistence.annotations.Customizer;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.logging.Logger;
 import javax.persistence.*;
 
@@ -28,7 +29,7 @@ import javax.persistence.*;
 @Table(name = "FORECAST")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "FTYPE")
-public abstract class Forecast<E extends ForecastDetail>  implements Auditable, Serializable {
+public abstract class Forecast<E extends ForecastDetail> implements Auditable, Serializable {
 
     private static final long serialVersionUID = -295843614383355072L;
 
@@ -103,7 +104,7 @@ public abstract class Forecast<E extends ForecastDetail>  implements Auditable, 
         this.forecastDetails = forecastDetails;
     }
 
-    public void addForecastDetails(E forecastDetail) {
+    public void addForecastDetail(E forecastDetail) {
         if (forecastDetails == null) {
             forecastDetails = new ArrayList<>();
 
@@ -123,9 +124,37 @@ public abstract class Forecast<E extends ForecastDetail>  implements Auditable, 
     }
 
     @Embedded
-    public AuditInfo getAuditInfo() { return auditInfo; }
+    public AuditInfo getAuditInfo() {
+        return auditInfo;
+    }
 
     public void setAuditInfo(AuditInfo auditInfo) {
         this.auditInfo = auditInfo;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 29 * hash + Objects.hashCode(this.forecastPK);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Forecast<?> other = (Forecast<?>) obj;
+        if (!Objects.equals(this.forecastPK, other.forecastPK)) {
+            return false;
+        }
+        return true;
+    }
+
 }

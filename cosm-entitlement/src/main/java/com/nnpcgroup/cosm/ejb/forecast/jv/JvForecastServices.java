@@ -20,4 +20,6 @@ public interface JvForecastServices extends ForecastServices<JvForecast> {
 
     public JvForecast findByContractPeriod(int year, int month, FiscalArrangement fa);
 
+    public void delete(int year, int month, FiscalArrangement fa);
+
 }

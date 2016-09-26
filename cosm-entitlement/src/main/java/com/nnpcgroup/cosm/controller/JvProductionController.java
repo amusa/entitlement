@@ -27,6 +27,7 @@ import javax.faces.validator.ValidatorException;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -61,10 +62,14 @@ public class JvProductionController implements Serializable {
     @EJB
     private FiscalArrangementBean fiscalBean;
 
+    @Inject
+    Principal principal;
+
     private JvProductionDetail currentProductionDetail;
     private JvProduction currentProduction;
     private List<JvProduction> productions;
     private List<JvProductionDetail> productionDetails;
+    private List<JvProductionDetail> deleteDetails = null;
     private Integer periodYear;
     private Integer periodMonth;
     private FiscalArrangement currentFiscalArrangement;
@@ -176,6 +181,8 @@ public class JvProductionController implements Serializable {
         currentProductionDetail.setContract(currentContract);
 
         currentProductionDetail.setProduction(currentProduction);
+
+        currentProductionDetail.setCurrentUser(principal.getName());
     }
 
     private void setProductionEmbeddableKeys() {
@@ -189,6 +196,8 @@ public class JvProductionController implements Serializable {
         currentProduction.setPeriodYear(periodYear);
         currentProduction.setPeriodMonth(periodMonth);
         currentProduction.setFiscalArrangement(currentFiscalArrangement);
+
+        currentProduction.setCurrentUser(principal.getName());
     }
 
     public void periodMonthChanged() {
@@ -462,6 +471,7 @@ public class JvProductionController implements Serializable {
             if (prod == null) {
                 prod = new JvProduction();
                 prod.initialize(forecastDetail.getForecast());
+                prod.setCurrentUser(principal.getName());
             } else {
                 loadProductionDetails(prod);
             }
@@ -470,6 +480,7 @@ public class JvProductionController implements Serializable {
             productionDetail.setProduction(prod);
 
             getProductionDetailBean().enrich(productionDetail);
+            productionDetail.setCurrentUser(principal.getName());
         } else {
             prod = productionDetail.getProduction();
         }
@@ -482,8 +493,14 @@ public class JvProductionController implements Serializable {
     }
 
     public void destroy() {
-        persist(JsfUtil.PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("ProductionDeleted"));
+//        persist(JsfUtil.PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("ProductionDeleted"));
+        getProductionDetailBean().delete(currentProduction.getProductionDetails());
+        JvProduction production = getProductionBean().findByContractPeriod(periodYear, periodMonth, currentFiscalArrangement);
+        if (production != null) {
+            getProductionBean().delete(currentProduction.getPeriodYear(), currentProduction.getPeriodMonth(), currentProduction.getFiscalArrangement());
+        }
         if (!JsfUtil.isValidationFailed()) {
+            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("ProductionDeleted"));
             reset();
         }
     }
@@ -504,14 +521,34 @@ public class JvProductionController implements Serializable {
 //        setCurrentProductionDetail(prod);
 //        destroyProductionDetail();
 
-        if (currentProduction != null) {
-            removeProductionDetail(prod);
-            getProductionBean().edit(currentProduction);
+//        if (currentProduction != null) {
+//            removeProductionDetail(prod);
+//            getProductionBean().edit(currentProduction);
+//        }
+        try {
+            getProductionDetailBean().delete(prod.getPeriodYear(), prod.getPeriodMonth(), prod.getContract());
+            reset();
+            loadFiscalMonthlyProduction();
+            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("ProductionDeleted"));
+        } catch (Exception ex) {
+            JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
+            LOG.log(Level.WARNING, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
         }
     }
 
     public void removeProductionDetail(JvProductionDetail productionDetail) {
         productionDetails.remove(productionDetail);
+        if (isEditMode()) {
+            addToDeleteDetails(productionDetail);
+        }
+    }
+
+    private void addToDeleteDetails(JvProductionDetail productionDetail) {
+        if (deleteDetails == null) {
+            deleteDetails = new ArrayList<>();
+        }
+        deleteDetails.add(productionDetail);
+
     }
 
     public String prepareAddProductionDetail() {
@@ -600,16 +637,27 @@ public class JvProductionController implements Serializable {
             JsfUtil.addErrorMessage(ResourceBundle.getBundle("/Bundle").getString("NoProductionData"));
             return null;
         }
+        setEditMode(true);
         return "actual-edit2";
     }
 
     public String updateProduction() {
-        persist(JsfUtil.PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("ProductionUpdated"));
+        if (deleteDetails != null) {
+            getProductionDetailBean().delete(deleteDetails);
+            deleteDetails = null;
+        }
+
+        currentProduction = getProductionBean().findByContractPeriod(periodYear, periodMonth, currentFiscalArrangement);
+        if (currentProduction != null) {
+            persist(JsfUtil.PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("ProductionUpdated"));
+        }
+
         if (!JsfUtil.isValidationFailed()) {
             reset();
 //            currentContract = null;
             loadFiscalMonthlyProduction();
 //            setNewForecast(false);
+            disableEditMode();
             return "actualize2";
         }
         return null;

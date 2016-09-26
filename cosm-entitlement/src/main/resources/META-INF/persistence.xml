@@ -7,14 +7,11 @@
     <class>com.nnpcgroup.cosm.entity.EquityType</class>
     <class>com.nnpcgroup.cosm.entity.FiscalArrangement</class>
     <class>com.nnpcgroup.cosm.entity.JointVenture</class>
-    <class>com.nnpcgroup.cosm.entity.Lifting</class>
     <class>com.nnpcgroup.cosm.entity.Price</class>
-    <class>com.nnpcgroup.cosm.entity.ProductionEquity</class>
     <class>com.nnpcgroup.cosm.entity.ProductionSharingContract</class>
     <class>com.nnpcgroup.cosm.entity.PscActualProduction</class>
     <class>com.nnpcgroup.cosm.entity.PscForecastProduction</class>
     <class>com.nnpcgroup.cosm.entity.Terminal</class>
-    <class>com.nnpcgroup.cosm.entity.TerminalBlend</class>
     <class>com.nnpcgroup.cosm.entity.contract.AlternativeFundingContract</class>
     <class>com.nnpcgroup.cosm.entity.contract.CarryContract</class>
     <class>com.nnpcgroup.cosm.entity.contract.Contract</class>
@@ -37,7 +34,7 @@
     <class>com.nnpcgroup.cosm.entity.production.jv.JvProduction</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties>
-      <!--<property name="javax.persistence.schema-generation.database.action"  value="drop-and-create"/>-->
+<!--      <property name="javax.persistence.schema-generation.database.action"  value="drop-and-create"/>-->
       <!--<property name="javax.persistence.schema-generation.database.action" value="create"/>-->
     </properties>
   </persistence-unit>

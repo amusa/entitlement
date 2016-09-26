@@ -5,32 +5,28 @@
  */
 package com.nnpcgroup.cosm.entity.production.jv;
 
+import com.nnpcgroup.cosm.entity.AuditInfo;
+import com.nnpcgroup.cosm.entity.AuditListener;
+import com.nnpcgroup.cosm.entity.Auditable;
 import com.nnpcgroup.cosm.entity.contract.Contract;
 import com.nnpcgroup.cosm.entity.forecast.jv.ForecastDetail;
+import org.eclipse.persistence.annotations.Customizer;
 
 import java.io.Serializable;
 import java.util.Objects;
-import javax.persistence.Column;
-import javax.persistence.DiscriminatorColumn;
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
-import javax.persistence.ManyToOne;
-import javax.persistence.MapsId;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * @author 18359
  * @param <E>
  */
+@Customizer(ProductionDetailCustomizer.class)
+@EntityListeners(AuditListener.class)
 @Entity
 @Table(name = "PRODUCTION_DETAIL")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "PTYPE")
-public abstract class ProductionDetail<E extends Production> implements Serializable {
+public abstract class ProductionDetail<E extends Production> implements Auditable, Serializable {
 
     private static final long serialVersionUID = -115843614381155072L;
 
@@ -39,6 +35,7 @@ public abstract class ProductionDetail<E extends Production> implements Serializ
     private Integer periodMonth;
     private Contract contract;
     private E production;
+    private AuditInfo auditInfo = new AuditInfo();
 
     public ProductionDetail() {
     }
@@ -107,10 +104,24 @@ public abstract class ProductionDetail<E extends Production> implements Serializ
         this.production = production;
     }
 
+    public void setCurrentUser(String user) {
+//        auditInfo.setCurrentUser(user);
+        auditInfo.setLastModifiedBy(user);
+    }
+
+    @Embedded
+    public AuditInfo getAuditInfo() {
+        return auditInfo;
+    }
+
+    public void setAuditInfo(AuditInfo auditInfo) {
+        this.auditInfo = auditInfo;
+    }
+
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 31 * hash + Objects.hashCode(this.productionDetailPK);
+        hash = 53 * hash + Objects.hashCode(this.productionDetailPK);
         return hash;
     }
 
@@ -125,7 +136,7 @@ public abstract class ProductionDetail<E extends Production> implements Serializ
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final ProductionDetail other = (ProductionDetail) obj;
+        final ProductionDetail<?> other = (ProductionDetail<?>) obj;
         if (!Objects.equals(this.productionDetailPK, other.productionDetailPK)) {
             return false;
         }

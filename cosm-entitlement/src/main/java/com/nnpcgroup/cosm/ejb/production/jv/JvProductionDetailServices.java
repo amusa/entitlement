@@ -5,8 +5,11 @@
  */
 package com.nnpcgroup.cosm.ejb.production.jv;
 
+import com.nnpcgroup.cosm.entity.FiscalArrangement;
+import com.nnpcgroup.cosm.entity.contract.Contract;
 import com.nnpcgroup.cosm.entity.contract.JvContract;
 import com.nnpcgroup.cosm.entity.production.jv.JvProductionDetail;
+import java.util.List;
 
 /**
  *
@@ -17,4 +20,9 @@ import com.nnpcgroup.cosm.entity.production.jv.JvProductionDetail;
  */
 public interface JvProductionDetailServices<T extends JvProductionDetail, E extends JvContract> extends ProductionDetailServices<T, E> {
 
+    public void delete(int year, int month, Contract contract);
+
+    public void delete(int year, int month, FiscalArrangement fa);
+
+    public void delete(List<T> jvDetails);
 }

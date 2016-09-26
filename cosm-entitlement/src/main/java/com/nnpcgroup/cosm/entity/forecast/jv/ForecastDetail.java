@@ -5,23 +5,29 @@
  */
 package com.nnpcgroup.cosm.entity.forecast.jv;
 
+import com.nnpcgroup.cosm.entity.AuditInfo;
+import com.nnpcgroup.cosm.entity.AuditListener;
+import com.nnpcgroup.cosm.entity.Auditable;
 import com.nnpcgroup.cosm.entity.contract.Contract;
 import com.nnpcgroup.cosm.entity.production.jv.ProductionDetailPK;
 import com.nnpcgroup.cosm.entity.production.jv.ProductionPK;
+import org.eclipse.persistence.annotations.Customizer;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * @author 18359
  * @param <E>
+ * @author 18359
  */
+@Customizer(ForecastDetailCustomizer.class)
+@EntityListeners(AuditListener.class)
 @Entity
 @Table(name = "FORECAST_DETAIL")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "FTYPE")
-public abstract class ForecastDetail<E extends Forecast> implements Serializable {
+public abstract class ForecastDetail<E extends Forecast> implements Auditable, Serializable {
 
     private static final long serialVersionUID = 1917192116735019964L;
 
@@ -30,6 +36,7 @@ public abstract class ForecastDetail<E extends Forecast> implements Serializable
     private Integer periodMonth;
     private Contract contract;
     private E forecast;
+    private AuditInfo auditInfo = new AuditInfo();
 
     public ForecastDetail() {
     }
@@ -100,37 +107,24 @@ public abstract class ForecastDetail<E extends Forecast> implements Serializable
         return pPK;
     }
 
-//    @Override
-//    public int hashCode() {
-//        int hash = 7;
-//        hash = 73 * hash + Objects.hashCode(this.forecastDetailPK);
-//        return hash;
-//    }
-//
-//    @Override
-//    public boolean equals(Object obj) {
-//        if (this == obj) {
-//            return true;
-//        }
-//        if (obj == null) {
-//            return false;
-//        }
-//        if (getClass() != obj.getClass()) {
-//            return false;
-//        }
-//        final ForecastDetail<?> other = (ForecastDetail<?>) obj;
-//        if (!Objects.equals(this.forecastDetailPK, other.forecastDetailPK)) {
-//            return false;
-//        }
-//        return true;
-//    }
+    public void setCurrentUser(String user) {
+//        auditInfo.setCurrentUser(user);
+        auditInfo.setLastModifiedBy(user);
+    }
+
+    @Embedded
+    public AuditInfo getAuditInfo() {
+        return auditInfo;
+    }
+
+    public void setAuditInfo(AuditInfo auditInfo) {
+        this.auditInfo = auditInfo;
+    }
+
     @Override
     public int hashCode() {
-        int hash = 5;
-        hash = 89 * hash + Objects.hashCode(this.periodYear);
-        hash = 89 * hash + Objects.hashCode(this.periodMonth);
-        hash = 89 * hash + Objects.hashCode(this.contract);
-        hash = 89 * hash + Objects.hashCode(this.forecast);
+        int hash = 7;
+        hash = 67 * hash + Objects.hashCode(this.forecastDetailPK);
         return hash;
     }
 
@@ -146,16 +140,7 @@ public abstract class ForecastDetail<E extends Forecast> implements Serializable
             return false;
         }
         final ForecastDetail<?> other = (ForecastDetail<?>) obj;
-        if (!Objects.equals(this.periodYear, other.periodYear)) {
-            return false;
-        }
-        if (!Objects.equals(this.periodMonth, other.periodMonth)) {
-            return false;
-        }
-        if (!Objects.equals(this.contract, other.contract)) {
-            return false;
-        }
-        if (!Objects.equals(this.forecast, other.forecast)) {
+        if (!Objects.equals(this.forecastDetailPK, other.forecastDetailPK)) {
             return false;
         }
         return true;

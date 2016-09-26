@@ -11,6 +11,7 @@ import com.nnpcgroup.cosm.entity.EquityType;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
 import com.nnpcgroup.cosm.entity.FiscalPeriod;
 import com.nnpcgroup.cosm.entity.JointVenture;
+import com.nnpcgroup.cosm.entity.contract.Contract;
 import com.nnpcgroup.cosm.entity.contract.ContractPK;
 import com.nnpcgroup.cosm.entity.production.jv.ProductionPK;
 import com.nnpcgroup.cosm.exceptions.NoRealizablePriceException;
@@ -21,6 +22,11 @@ import javax.ejb.EJB;
 import com.nnpcgroup.cosm.entity.contract.JvContract;
 import com.nnpcgroup.cosm.entity.production.jv.JvProductionDetail;
 import com.nnpcgroup.cosm.entity.production.jv.ProductionDetailPK;
+import java.util.List;
+import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaDelete;
+import javax.persistence.criteria.Root;
 
 /**
  *
@@ -282,5 +288,62 @@ public abstract class JvProductionDetailServicesImpl<T extends JvProductionDetai
             production.setPartnerOpeningStock(0.0);
         }
         return production;
+    }
+    
+     @Override
+    public void delete(int year, int month, Contract contract) {
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+
+        // create delete
+        CriteriaDelete<T> delete = cb.
+                createCriteriaDelete(entityClass);
+
+        // set the root class
+        Root e = delete.from(entityClass);
+
+        // set where clause
+        delete.where(
+                cb.and(cb.equal(e.get("periodYear"), year),
+                        cb.equal(e.get("periodMonth"), month),
+                        cb.equal(e.get("contract"), contract)
+                ));
+
+        // perform update
+        getEntityManager().createQuery(delete).executeUpdate();
+    }
+
+    @Override
+    public void delete(int year, int month, FiscalArrangement fa) {
+//        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+//      
+//        CriteriaDelete<T> delete = cb.
+//                createCriteriaDelete(entityClass);
+//
+//        Root e = delete.from(entityClass);
+//
+//        delete.where(
+//                cb.and(cb.equal(e.get("periodYear"), year),
+//                        cb.equal(e.get("periodMonth"), month),
+//                        cb.equal(e.get("contract").get("fiscalArrangement"), fa)                        
+//                ));
+//
+//        getEntityManager().createQuery(delete).executeUpdate();
+
+        // perform update
+        Query query = getEntityManager().createQuery(
+                "DELETE "
+                + "FROM ProductionDetail p WHERE p.periodYear = :year AND p.periodMonth = :month AND p.contract.fiscalArrangement = :fa ");
+        query.setParameter("year", year)
+                .setParameter("month", month)
+                .setParameter("fa", fa);
+
+        query.executeUpdate();
+    }
+
+    @Override
+    public void delete(List<T> jvDetails) {
+        jvDetails.stream().forEach((fd) -> {
+            delete(fd.getPeriodYear(), fd.getPeriodMonth(), fd.getContract());
+        });
     }
 }

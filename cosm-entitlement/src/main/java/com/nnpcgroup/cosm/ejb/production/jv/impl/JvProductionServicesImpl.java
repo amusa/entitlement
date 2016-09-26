@@ -18,6 +18,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaDelete;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
@@ -74,4 +75,25 @@ public class JvProductionServicesImpl extends ProductionServicesImpl<JvProductio
 
     }
 
+    @Override
+    public void delete(int year, int month, FiscalArrangement fa) {
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+
+        // create delete
+        CriteriaDelete<JvProduction> delete = cb.
+                createCriteriaDelete(JvProduction.class);
+
+        // set the root class
+        Root e = delete.from(JvProduction.class);
+
+        // set where clause
+        delete.where(
+                cb.and(cb.equal(e.get("periodYear"), year),
+                        cb.equal(e.get("periodMonth"), month),
+                        cb.equal(e.get("fiscalArrangement"), fa)
+                ));
+
+        // perform update
+        getEntityManager().createQuery(delete).executeUpdate();
+    }
 }

@@ -5,30 +5,28 @@
  */
 package com.nnpcgroup.cosm.entity.contract;
 
-import com.nnpcgroup.cosm.entity.CrudeType;
-import com.nnpcgroup.cosm.entity.FiscalArrangement;
-import com.nnpcgroup.cosm.entity.forecast.jv.Forecast;
+import com.nnpcgroup.cosm.entity.*;
 import com.nnpcgroup.cosm.entity.forecast.jv.ForecastDetail;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import javax.persistence.*;
 
 /**
  * @author 18359
  */
+@EntityListeners(AuditListener.class)
 @Entity
 @Table(name = "CONTRACT")
 @DiscriminatorColumn(name = "DTYPE")
-public abstract class Contract implements Serializable {
+public abstract class Contract   implements Auditable, Serializable {
 
     private static final long serialVersionUID = 4374185291370537475L;
 
     private ContractPK contractPK;
     private FiscalArrangement fiscalArrangement;
     private CrudeType crudeType;
+    private AuditInfo auditInfo = new AuditInfo();
 
     private String title;
     private List<ForecastDetail> forecastDetails;
@@ -92,6 +90,19 @@ public abstract class Contract implements Serializable {
     }
 
     public abstract String discriminatorValue();
+
+    public void setCurrentUser(String user) {
+//        auditInfo.setCurrentUser(user);
+        auditInfo.setLastModifiedBy(user);
+    }
+
+
+    @Embedded
+    public AuditInfo getAuditInfo() { return auditInfo; }
+
+    public void setAuditInfo(AuditInfo auditInfo) {
+        this.auditInfo = auditInfo;
+    }
 
     @Override
     public String toString() {

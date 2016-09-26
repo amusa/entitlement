@@ -7,6 +7,7 @@ package com.nnpcgroup.cosm.ejb.forecast.jv.impl;
 
 import com.nnpcgroup.cosm.ejb.forecast.jv.JvForecastServices;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
+import com.nnpcgroup.cosm.entity.contract.Contract;
 import com.nnpcgroup.cosm.entity.forecast.jv.JvForecast;
 import com.nnpcgroup.cosm.util.COSMPersistence;
 
@@ -23,6 +24,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Local;
 import javax.ejb.Stateless;
+import javax.persistence.criteria.CriteriaDelete;
 
 /**
  * @author 18359
@@ -102,6 +104,28 @@ public class JvForecastServicesImpl extends ForecastServicesImpl<JvForecast> imp
 
         return forecast;
 
+    }
+
+    @Override
+    public void delete(int year, int month, FiscalArrangement fa) {
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+
+        // create delete
+        CriteriaDelete<JvForecast> delete = cb.
+                createCriteriaDelete(JvForecast.class);
+
+        // set the root class
+        Root e = delete.from(JvForecast.class);
+
+        // set where clause
+        delete.where(
+                cb.and(cb.equal(e.get("periodYear"), year),
+                        cb.equal(e.get("periodMonth"), month),
+                        cb.equal(e.get("fiscalArrangement"), fa)
+                ));
+
+        // perform update
+        getEntityManager().createQuery(delete).executeUpdate();
     }
 
 }

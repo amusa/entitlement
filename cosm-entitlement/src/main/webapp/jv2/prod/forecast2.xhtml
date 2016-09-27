@@ -84,7 +84,7 @@
                 <!-- Multi Column -->
                 <div jsf:id="forecast_panel" class="row">
                     <div class="col-md-12 m-b-12">
-                        <h:dataTable id="prodTable" var="prod" value="#{jvProdController.forecastDetails}"
+                        <h:dataTable id="prodTable" var="prod" value="#{jvProdController.currentProduction.forecastDetails}"
                                      class="table table-bordered table-hover tile">
                             <h:column>
                                 <f:facet name="header">
@@ -203,7 +203,7 @@
                                             <h:commandLink pt:data-target="#JvEditDlg" pt:look="warning" pt:data-toggle="modal">
                                                 <span class="icon">&#61698;</span>
                                                 #{bundle.Edit}
-                                                <f:ajax event="click" render="JvEditForm" listener="#{jvProdController.prepareEditForecastDetail(prod)}"/>
+                                                <f:ajax event="click" render="JvEditForm msgs" listener="#{jvProdController.prepareEditForecastDetail(prod)}"/>
                                             </h:commandLink>
                                         </li>                                        
                                         <li>
@@ -241,7 +241,7 @@
                                     <span class="icon">&#61952;</span>
                                     #{bundle.Edit}
                                 </button>
-                                <button jsf:id="deleteButton" class="btn m-r-5" jsf:disabled="${not jvProdController.enableControlButton}">
+                                <button jsf:id="deleteButton" class="btn m-r-5" jsf:disabled="${not jvProdController.enableControlButton or jvProdController.currentProduction eq null}">
                                     <span class="icon">&#61918;</span>
                                     #{bundle.Delete}
                                     <f:ajax render="jvProdListForm prodTable msgs" listener="#{jvProdController.destroy}"/>

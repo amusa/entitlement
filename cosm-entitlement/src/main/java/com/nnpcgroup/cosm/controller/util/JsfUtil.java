@@ -32,7 +32,7 @@ public class JsfUtil {
     public static boolean isValidationFailed() {
         return FacesContext.getCurrentInstance().isValidationFailed();
     }
-
+    
     public static void addErrorMessage(Exception ex, String defaultMsg) {
         String msg = ex.getLocalizedMessage();
         if (msg != null && msg.length() > 0) {

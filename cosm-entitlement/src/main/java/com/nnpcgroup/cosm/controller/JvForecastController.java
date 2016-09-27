@@ -19,6 +19,7 @@ import com.nnpcgroup.cosm.exceptions.NoRealizablePriceException;
 
 import javax.inject.Named;
 import java.io.Serializable;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -60,6 +61,9 @@ public class JvForecastController implements Serializable {
 
     @EJB
     private FiscalArrangementBean fiscalBean;
+
+    @Inject
+    Principal principal;
 
     private JvForecast currentProduction;
     private List<JvForecast> productions;
@@ -186,21 +190,28 @@ public class JvForecastController implements Serializable {
             JsfUtil.addErrorMessage(ResourceBundle.getBundle("/Bundle").getString("NoForecastData"));
             return null;
         }
+        setEditMode(true);
         return "forecast-edit2";
     }
 
     public void destroy() {
         persist(JsfUtil.PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("ProductionDeleted"));
-        if (!JsfUtil.isValidationFailed()) {
-            reset();
-        }
+//        getForecastDetailBean().delete(currentProduction.getPeriodYear(), currentProduction.getPeriodMonth(), currentProduction.getFiscalArrangement());
+//        getForecastDetailBean().delete(currentProduction.getForecastDetails());
+//        JvForecast forecast = getForecastBean().findByContractPeriod(periodYear, periodMonth, currentFiscalArrangement);
+//        if (forecast != null) {
+//            getForecastBean().delete(currentProduction.getPeriodYear(), currentProduction.getPeriodMonth(), currentProduction.getFiscalArrangement());
+//        }
+        
     }
 
     public void destroyForecastDetail() {
         persistForecastDetail(JsfUtil.PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("ProductionDeleted"));
         if (!JsfUtil.isValidationFailed()) {
             reset();
-            loadForecastDetails();
+//            loadForecastDetails();
+            loadFiscalMonthlyProduction();
+
         }
     }
 
@@ -209,8 +220,24 @@ public class JvForecastController implements Serializable {
 //        destroyForecastDetail();
         if (currentProduction != null) {
             removeForecastDetail(prod);
-            getForecastBean().edit(currentProduction);
+            try {
+                getForecastBean().edit(currentProduction);
+                JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("ProductionDeleted"));
+            } catch (Exception ex) {
+                JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
+                LOG.log(Level.WARNING, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
+            }
         }
+
+//        try {
+//            getForecastDetailBean().delete(prod.getPeriodYear(), prod.getPeriodMonth(), prod.getContract());
+//            reset();
+//            loadFiscalMonthlyProduction();
+//            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("ProductionDeleted"));
+//        } catch (Exception ex) {
+//            JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
+//            LOG.log(Level.WARNING, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
+//        }
     }
 
     public void destroy(JvForecast prod) {
@@ -219,7 +246,13 @@ public class JvForecastController implements Serializable {
     }
 
     public void removeForecastDetail(JvForecastDetail forecastDetail) {
-        forecastDetails.remove(forecastDetail);
+        List<JvForecastDetail> fDetails;
+        if (currentProduction != null) {
+            fDetails = currentProduction.getForecastDetails();
+            if (fDetails != null) {
+                fDetails.remove(forecastDetail);
+            }
+        }
     }
 
     public void create() {
@@ -227,21 +260,25 @@ public class JvForecastController implements Serializable {
         if (!JsfUtil.isValidationFailed()) {
             reset();
             currentContractChanged();
-            loadProductions();
+            //loadProductions();
 //            setNewForecast(false);
         }
     }
 
     public String addForecastDetail() {
-        if (forecastDetails == null) {
-            forecastDetails = new ArrayList<>();
+//        if (forecastDetails == null) {
+//            forecastDetails = new ArrayList<>();
+//        }
+//        forecastDetails.add(currentForecastDetail);
+
+        if (currentProduction != null) {
+            currentProduction.addForecastDetail(currentForecastDetail);
         }
-        forecastDetails.add(currentForecastDetail);
         return "forecast-create2";
     }
 
     public String createForecast() {
-        currentProduction.setForecastDetails(forecastDetails);
+        //currentProduction.setForecastDetails(forecastDetails);
         persist(JsfUtil.PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("ProductionCreated"));
         if (!JsfUtil.isValidationFailed()) {
             reset();
@@ -256,13 +293,14 @@ public class JvForecastController implements Serializable {
     public void cancel() {
         reset();
         currentContractChanged();
-        loadProductions();
+        // loadProductions();
         disableEditMode();
         setNewForecast(false);
     }
 
     public void cancelForecast() {
         reset2();
+        disableEditMode();
         loadForecastDetails();
 
     }
@@ -274,13 +312,11 @@ public class JvForecastController implements Serializable {
 
     public void update() {
         persistForecastDetail(JsfUtil.PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("ProductionUpdated"));
-        if (isEditMode()) {
-            if (!JsfUtil.isValidationFailed()) {
-                performAutomaticStockAdjustment();
-            }
 
-            disableEditMode();
+        if (!JsfUtil.isValidationFailed()) {
+
         }
+
     }
 
     public void performAutomaticStockAdjustment() {
@@ -310,12 +346,16 @@ public class JvForecastController implements Serializable {
     }
 
     public String updateForecast() {
-        persist(JsfUtil.PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("ProductionUpdated"));
+        if (currentProduction != null) {
+            persist(JsfUtil.PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("ProductionUpdated"));
+        }
+
         if (!JsfUtil.isValidationFailed()) {
             reset();
 //            currentContract = null;
             loadFiscalMonthlyProduction();
 //            setNewForecast(false);
+            disableEditMode();
             return "forecast2";
         }
         return null;
@@ -361,12 +401,18 @@ public class JvForecastController implements Serializable {
             try {
                 if (persistAction != JsfUtil.PersistAction.DELETE) {
                     getForecastDetailBean().edit(currentForecastDetail);
+                    if (isEditMode()) {
+                        performAutomaticStockAdjustment();
+                        disableEditMode();
+                    }
+
                 } else {
                     getForecastDetailBean().remove(currentForecastDetail);
                 }
                 JsfUtil.addSuccessMessage(successMessage);
             } catch (EJBException ex) {
                 String msg = "";
+
                 Throwable cause = ex.getCause();
                 if (cause != null) {
                     msg = cause.getLocalizedMessage();
@@ -402,7 +448,6 @@ public class JvForecastController implements Serializable {
                 handleAnnualProduction();
             }
         }
-
         if (forecastDetails == null) {
             JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("NoForecastData"));
             LOG.log(Level.INFO, ResourceBundle.getBundle("/Bundle").getString("NoForecastData")
@@ -440,11 +485,7 @@ public class JvForecastController implements Serializable {
         if (periodYear != null && periodMonth != null && currentFiscalArrangement != null) {
             currentProduction = findForecast(periodYear, periodMonth, currentFiscalArrangement);
 
-            if (currentProduction != null) {
-                forecastDetails = currentProduction.getForecastDetails();
-                //forecastDetails = getForecastDetailBean().findByContractPeriod(periodYear, periodMonth, currentFiscalArrangement);
-            } else {
-                forecastDetails = null;
+            if (currentProduction == null) {
                 JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("NoForecastData"));
                 LOG.log(Level.INFO, ResourceBundle.getBundle("/Bundle").getString("NoForecastData")
                 );
@@ -696,9 +737,9 @@ public class JvForecastController implements Serializable {
     }
 
     private void setForecastDetailEmbeddableKeys() {
-        ForecastDetailPK fPK = new ForecastDetailPK();
-        fPK.setForecast(currentProduction.getForecastPK());
-        fPK.setContract(currentContract.getContractPK());
+        ForecastDetailPK fPK = new ForecastDetailPK(currentProduction.getForecastPK(), currentContract.getContractPK());
+//        fPK.setForecast(currentProduction.getForecastPK());
+//        fPK.setContract(currentContract.getContractPK());
 
         currentForecastDetail.setForecastDetailPK(fPK);
 
@@ -708,6 +749,7 @@ public class JvForecastController implements Serializable {
 
         currentForecastDetail.setForecast(currentProduction);
 
+        currentForecastDetail.setCurrentUser(principal.getName());
     }
 
     private void setForecastEmbeddableKeys() {
@@ -721,6 +763,8 @@ public class JvForecastController implements Serializable {
         currentProduction.setPeriodMonth(periodMonth);
 
         currentProduction.setFiscalArrangement(currentFiscalArrangement);
+
+        currentProduction.setCurrentUser(principal.getName());
     }
 
     public void periodMonthChanged() {

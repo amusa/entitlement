@@ -5,12 +5,17 @@
  */
 package com.nnpcgroup.cosm.entity.forecast.jv;
 
+import com.nnpcgroup.cosm.entity.AuditInfo;
+import com.nnpcgroup.cosm.entity.AuditListener;
+import com.nnpcgroup.cosm.entity.Auditable;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
 import com.nnpcgroup.cosm.entity.production.jv.ProductionPK;
+import org.eclipse.persistence.annotations.Customizer;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.logging.Logger;
 import javax.persistence.*;
 
@@ -18,11 +23,13 @@ import javax.persistence.*;
  * @author 18359
  * @param <E>
  */
+@Customizer(ForecastCustomizer.class)
+@EntityListeners(AuditListener.class)
 @Entity
 @Table(name = "FORECAST")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "FTYPE")
-public abstract class Forecast<E extends ForecastDetail> implements Serializable {
+public abstract class Forecast<E extends ForecastDetail> implements Auditable, Serializable {
 
     private static final long serialVersionUID = -295843614383355072L;
 
@@ -34,6 +41,7 @@ public abstract class Forecast<E extends ForecastDetail> implements Serializable
     private FiscalArrangement fiscalArrangement;
     private String remark;
     private List<E> forecastDetails;
+    private AuditInfo auditInfo = new AuditInfo();
 
     public Forecast() {
     }
@@ -96,7 +104,7 @@ public abstract class Forecast<E extends ForecastDetail> implements Serializable
         this.forecastDetails = forecastDetails;
     }
 
-    public void addForecastDetails(E forecastDetail) {
+    public void addForecastDetail(E forecastDetail) {
         if (forecastDetails == null) {
             forecastDetails = new ArrayList<>();
 
@@ -110,23 +118,46 @@ public abstract class Forecast<E extends ForecastDetail> implements Serializable
         return pPK;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
+    public void setCurrentUser(String user) {
+//        auditInfo.setCurrentUser(user);
+        getAuditInfo().setLastModifiedBy(user);
+    }
+
+    @Embedded
+    public AuditInfo getAuditInfo() {
+        if (auditInfo == null) {
+            auditInfo = new AuditInfo();
         }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+        return auditInfo;
+    }
 
-        Forecast forecast = (Forecast) o;
-
-        return forecastPK != null ? forecastPK.equals(forecast.forecastPK) : forecast.forecastPK == null;
-
+    public void setAuditInfo(AuditInfo auditInfo) {
+        this.auditInfo = auditInfo;
     }
 
     @Override
     public int hashCode() {
-        return forecastPK != null ? forecastPK.hashCode() : 0;
+        int hash = 7;
+        hash = 29 * hash + Objects.hashCode(this.forecastPK);
+        return hash;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Forecast<E> other = (Forecast<E>) obj;
+        if (!Objects.equals(this.forecastPK, other.forecastPK)) {
+            return false;
+        }
+        return true;
+    }
+
 }

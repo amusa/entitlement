@@ -6,6 +6,7 @@ import com.nnpcgroup.cosm.controller.util.JsfUtil.PersistAction;
 import com.nnpcgroup.cosm.ejb.JointVentureBean;
 
 import java.io.Serializable;
+import java.security.Principal;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -14,6 +15,7 @@ import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.enterprise.context.SessionScoped;
 
+import javax.inject.Inject;
 import javax.inject.Named;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -31,6 +33,8 @@ public class JointVentureController implements Serializable {
     private JointVentureBean jvBean;
     private List<JointVenture> jvItems = null;
     private JointVenture selected;
+    @Inject
+    Principal principal;
 
     public JointVentureController() {
     }
@@ -47,6 +51,7 @@ public class JointVentureController implements Serializable {
     }
 
     protected void initializeEmbeddableKey() {
+        selected.setCurrentUser(principal.getName());
     }
 
     private JointVentureBean getJvBean() {

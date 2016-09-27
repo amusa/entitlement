@@ -195,50 +195,49 @@ public class JvForecastController implements Serializable {
     }
 
     public void destroy() {
-//        persist(JsfUtil.PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("ProductionDeleted"));
+        persist(JsfUtil.PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("ProductionDeleted"));
 //        getForecastDetailBean().delete(currentProduction.getPeriodYear(), currentProduction.getPeriodMonth(), currentProduction.getFiscalArrangement());
-        getForecastDetailBean().delete(currentProduction.getForecastDetails());
-        JvForecast forecast = getForecastBean().findByContractPeriod(periodYear, periodMonth, currentFiscalArrangement);
-        if (forecast != null) {
-            getForecastBean().delete(currentProduction.getPeriodYear(), currentProduction.getPeriodMonth(), currentProduction.getFiscalArrangement());
-        }
-        if (!JsfUtil.isValidationFailed()) {
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("ProductionDeleted"));
-            reset();
-        }
+//        getForecastDetailBean().delete(currentProduction.getForecastDetails());
+//        JvForecast forecast = getForecastBean().findByContractPeriod(periodYear, periodMonth, currentFiscalArrangement);
+//        if (forecast != null) {
+//            getForecastBean().delete(currentProduction.getPeriodYear(), currentProduction.getPeriodMonth(), currentProduction.getFiscalArrangement());
+//        }
+        
     }
 
     public void destroyForecastDetail() {
         persistForecastDetail(JsfUtil.PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("ProductionDeleted"));
         if (!JsfUtil.isValidationFailed()) {
             reset();
-            //loadForecastDetails();
+//            loadForecastDetails();
+            loadFiscalMonthlyProduction();
+
         }
     }
 
     public void destroyForecastDetail(JvForecastDetail prod) {
 //        setCurrentForecastDetail(prod);
 //        destroyForecastDetail();
-//        if (currentProduction != null) {
-//            removeForecastDetail(prod);
-//            try {
-//                getForecastBean().edit(currentProduction);
-//                JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("ProductionDeleted"));
-//            } catch (Exception ex) {
-//                JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
-//                LOG.log(Level.WARNING, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
-//            }
-//        }
-
-        try {
-            getForecastDetailBean().delete(prod.getPeriodYear(), prod.getPeriodMonth(), prod.getContract());
-            reset();
-            loadFiscalMonthlyProduction();
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("ProductionDeleted"));
-        } catch (Exception ex) {
-            JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
-            LOG.log(Level.WARNING, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
+        if (currentProduction != null) {
+            removeForecastDetail(prod);
+            try {
+                getForecastBean().edit(currentProduction);
+                JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("ProductionDeleted"));
+            } catch (Exception ex) {
+                JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
+                LOG.log(Level.WARNING, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
+            }
         }
+
+//        try {
+//            getForecastDetailBean().delete(prod.getPeriodYear(), prod.getPeriodMonth(), prod.getContract());
+//            reset();
+//            loadFiscalMonthlyProduction();
+//            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("ProductionDeleted"));
+//        } catch (Exception ex) {
+//            JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
+//            LOG.log(Level.WARNING, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
+//        }
     }
 
     public void destroy(JvForecast prod) {
@@ -486,11 +485,7 @@ public class JvForecastController implements Serializable {
         if (periodYear != null && periodMonth != null && currentFiscalArrangement != null) {
             currentProduction = findForecast(periodYear, periodMonth, currentFiscalArrangement);
 
-            if (currentProduction != null) {
-//                forecastDetails = currentProduction.getForecastDetails();
-                //forecastDetails = getForecastDetailBean().findByContractPeriod(periodYear, periodMonth, currentFiscalArrangement);
-            } else {
-//                forecastDetails = null;
+            if (currentProduction == null) {
                 JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("NoForecastData"));
                 LOG.log(Level.INFO, ResourceBundle.getBundle("/Bundle").getString("NoForecastData")
                 );
@@ -742,9 +737,9 @@ public class JvForecastController implements Serializable {
     }
 
     private void setForecastDetailEmbeddableKeys() {
-        ForecastDetailPK fPK = new ForecastDetailPK();
-        fPK.setForecast(currentProduction.getForecastPK());
-        fPK.setContract(currentContract.getContractPK());
+        ForecastDetailPK fPK = new ForecastDetailPK(currentProduction.getForecastPK(), currentContract.getContractPK());
+//        fPK.setForecast(currentProduction.getForecastPK());
+//        fPK.setContract(currentContract.getContractPK());
 
         currentForecastDetail.setForecastDetailPK(fPK);
 

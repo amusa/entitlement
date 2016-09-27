@@ -68,7 +68,7 @@ public abstract class ProductionDetail<E extends Production> implements Auditabl
     }
 
     @ManyToOne
-    @MapsId("contract")
+//    @MapsId("contract")
     @JoinColumns({
         @JoinColumn(name = "CONTRACT_ID", referencedColumnName = "ID", insertable = false, updatable = false),
         @JoinColumn(name = "CONTRACT_FISCAL_ID", referencedColumnName = "FISCALARRANGEMENTID", insertable = false, updatable = false),
@@ -83,7 +83,7 @@ public abstract class ProductionDetail<E extends Production> implements Auditabl
     }
 
     @ManyToOne(targetEntity = Production.class)
-    @MapsId("production")
+//    @MapsId("production")
     @JoinColumns({
         @JoinColumn(name = "PERIOD_YEAR", referencedColumnName = "PERIOD_YEAR", updatable = false, insertable = false),
         @JoinColumn(name = "PERIOD_MONTH", referencedColumnName = "PERIOD_MONTH", updatable = false, insertable = false),
@@ -106,11 +106,14 @@ public abstract class ProductionDetail<E extends Production> implements Auditabl
 
     public void setCurrentUser(String user) {
 //        auditInfo.setCurrentUser(user);
-        auditInfo.setLastModifiedBy(user);
+        getAuditInfo().setLastModifiedBy(user);
     }
 
     @Embedded
     public AuditInfo getAuditInfo() {
+        if (auditInfo == null) {
+            auditInfo = new AuditInfo();
+        }
         return auditInfo;
     }
 

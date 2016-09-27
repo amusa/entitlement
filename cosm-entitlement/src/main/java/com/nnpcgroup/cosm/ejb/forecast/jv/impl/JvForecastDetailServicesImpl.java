@@ -198,7 +198,7 @@ public abstract class JvForecastDetailServicesImpl<T extends JvForecastDetail> e
         int month = forecast.getPeriodMonth();
         int year = forecast.getPeriodYear();
         FiscalPeriod prevFp = getPreviousFiscalPeriod(year, month);
-        ContractPK cPK = forecast.getForecastDetailPK().getContract();
+        ContractPK cPK = forecast.getForecastDetailPK().getContractPK();
         ForecastPK fPK = new ForecastPK(prevFp.getYear(), prevFp.getMonth(), forecast.getForecast().getFiscalArrangement().getId());
 
         T f = find(new ForecastDetailPK(fPK, cPK));
@@ -213,7 +213,7 @@ public abstract class JvForecastDetailServicesImpl<T extends JvForecastDetail> e
         int year = forecast.getPeriodYear();
         FiscalPeriod nextFp = getNextFiscalPeriod(year, month);
         ContractPK cPK = forecast.getContract().getContractPK();
-        ForecastPK fPK = new ForecastPK(nextFp.getYear(), nextFp.getMonth(), forecast.getForecastDetailPK().getForecast().getFiscalArrangementId());
+        ForecastPK fPK = new ForecastPK(nextFp.getYear(), nextFp.getMonth(), forecast.getForecastDetailPK().getForecastPK().getFiscalArrangementId());
 
         T f = find(new ForecastDetailPK(fPK, cPK));
         //T f = findByContractPeriod(prevFp.getYear(), prevFp.getMonth(), cs);

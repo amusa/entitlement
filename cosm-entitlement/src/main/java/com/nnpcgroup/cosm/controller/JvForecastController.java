@@ -68,7 +68,6 @@ public class JvForecastController implements Serializable {
     private JvForecast currentProduction;
     private List<JvForecast> productions;
     private List<JvForecastDetail> forecastDetails;
-    private List<JvForecastDetail> deleteDetails = null;
     private JvForecastDetail currentForecastDetail;
     private Integer periodYear;
     private Integer periodMonth;
@@ -240,7 +239,6 @@ public class JvForecastController implements Serializable {
             JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
             LOG.log(Level.WARNING, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
         }
-
     }
 
     public void destroy(JvForecast prod) {
@@ -249,15 +247,11 @@ public class JvForecastController implements Serializable {
     }
 
     public void removeForecastDetail(JvForecastDetail forecastDetail) {
-        //forecastDetails.remove(forecastDetail);
         List<JvForecastDetail> fDetails;
         if (currentProduction != null) {
             fDetails = currentProduction.getForecastDetails();
             if (fDetails != null) {
                 fDetails.remove(forecastDetail);
-                if (isEditMode()) {
-                    addToDeleteDetails(forecastDetail);
-                }
             }
         }
     }
@@ -270,14 +264,6 @@ public class JvForecastController implements Serializable {
             //loadProductions();
 //            setNewForecast(false);
         }
-    }
-
-    private void addToDeleteDetails(JvForecastDetail forecastDetail) {
-        if (deleteDetails == null) {
-            deleteDetails = new ArrayList<>();
-        }
-        deleteDetails.add(forecastDetail);
-
     }
 
     public String addForecastDetail() {
@@ -327,13 +313,11 @@ public class JvForecastController implements Serializable {
 
     public void update() {
         persistForecastDetail(JsfUtil.PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("ProductionUpdated"));
-        if (isEditMode()) {
-            if (!JsfUtil.isValidationFailed()) {
-                performAutomaticStockAdjustment();
-            }
 
-            disableEditMode();
+        if (!JsfUtil.isValidationFailed()) {
+
         }
+
     }
 
     public void performAutomaticStockAdjustment() {
@@ -363,12 +347,6 @@ public class JvForecastController implements Serializable {
     }
 
     public String updateForecast() {
-        if (deleteDetails != null) {
-            getForecastDetailBean().delete(deleteDetails);
-            deleteDetails = null;
-        }
-
-        currentProduction = getForecastBean().findByContractPeriod(periodYear, periodMonth, currentFiscalArrangement);
         if (currentProduction != null) {
             persist(JsfUtil.PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("ProductionUpdated"));
         }
@@ -424,12 +402,18 @@ public class JvForecastController implements Serializable {
             try {
                 if (persistAction != JsfUtil.PersistAction.DELETE) {
                     getForecastDetailBean().edit(currentForecastDetail);
+                    if (isEditMode()) {
+                        performAutomaticStockAdjustment();
+                        disableEditMode();
+                    }
+
                 } else {
                     getForecastDetailBean().remove(currentForecastDetail);
                 }
                 JsfUtil.addSuccessMessage(successMessage);
             } catch (EJBException ex) {
                 String msg = "";
+
                 Throwable cause = ex.getCause();
                 if (cause != null) {
                     msg = cause.getLocalizedMessage();
@@ -503,10 +487,10 @@ public class JvForecastController implements Serializable {
             currentProduction = findForecast(periodYear, periodMonth, currentFiscalArrangement);
 
             if (currentProduction != null) {
-                forecastDetails = currentProduction.getForecastDetails();
+//                forecastDetails = currentProduction.getForecastDetails();
                 //forecastDetails = getForecastDetailBean().findByContractPeriod(periodYear, periodMonth, currentFiscalArrangement);
             } else {
-                forecastDetails = null;
+//                forecastDetails = null;
                 JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("NoForecastData"));
                 LOG.log(Level.INFO, ResourceBundle.getBundle("/Bundle").getString("NoForecastData")
                 );

@@ -100,4 +100,6 @@ public class ForecastDetailPK implements Serializable {
         result = 31 * result + (contract != null ? contract.hashCode() : 0);
         return result;
     }
+    
+    
 }

@@ -120,11 +120,14 @@ public abstract class Forecast<E extends ForecastDetail> implements Auditable, S
 
     public void setCurrentUser(String user) {
 //        auditInfo.setCurrentUser(user);
-        auditInfo.setLastModifiedBy(user);
+        getAuditInfo().setLastModifiedBy(user);
     }
 
     @Embedded
     public AuditInfo getAuditInfo() {
+        if (auditInfo == null) {
+            auditInfo = new AuditInfo();
+        }
         return auditInfo;
     }
 
@@ -150,7 +153,7 @@ public abstract class Forecast<E extends ForecastDetail> implements Auditable, S
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final Forecast<?> other = (Forecast<?>) obj;
+        final Forecast<E> other = (Forecast<E>) obj;
         if (!Objects.equals(this.forecastPK, other.forecastPK)) {
             return false;
         }

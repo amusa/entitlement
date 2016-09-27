@@ -139,7 +139,7 @@ public abstract class ForecastDetail<E extends Forecast> implements Auditable, S
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final ForecastDetail<?> other = (ForecastDetail<?>) obj;
+        final ForecastDetail<E> other = (ForecastDetail<E>) obj;
         if (!Objects.equals(this.forecastDetailPK, other.forecastDetailPK)) {
             return false;
         }

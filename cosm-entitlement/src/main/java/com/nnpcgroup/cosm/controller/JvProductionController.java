@@ -647,7 +647,7 @@ public class JvProductionController implements Serializable {
             deleteDetails = null;
         }
 
-        currentProduction = getProductionBean().findByContractPeriod(periodYear, periodMonth, currentFiscalArrangement);
+        //currentProduction = getProductionBean().findByContractPeriod(periodYear, periodMonth, currentFiscalArrangement);
         if (currentProduction != null) {
             persist(JsfUtil.PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("ProductionUpdated"));
         }

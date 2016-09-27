@@ -28,7 +28,7 @@ import javax.persistence.*;
 @Table(name = "PRODUCTION")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "PTYPE")
-public abstract class Production<E extends ProductionDetail>  implements Auditable, Serializable {
+public abstract class Production<E extends ProductionDetail> implements Auditable, Serializable {
 
     private static final long serialVersionUID = -705843614381155070L;
 
@@ -116,11 +116,16 @@ public abstract class Production<E extends ProductionDetail>  implements Auditab
 
     public void setCurrentUser(String user) {
 //        auditInfo.setCurrentUser(user);
-        auditInfo.setLastModifiedBy(user);
+        getAuditInfo().setLastModifiedBy(user);
     }
 
     @Embedded
-    public AuditInfo getAuditInfo() { return auditInfo; }
+    public AuditInfo getAuditInfo() {
+        if (auditInfo == null) {
+            auditInfo = new AuditInfo();
+        }
+        return auditInfo;
+    }
 
     public void setAuditInfo(AuditInfo auditInfo) {
         this.auditInfo = auditInfo;
@@ -150,6 +155,5 @@ public abstract class Production<E extends ProductionDetail>  implements Auditab
         }
         return true;
     }
-    
-    
+
 }

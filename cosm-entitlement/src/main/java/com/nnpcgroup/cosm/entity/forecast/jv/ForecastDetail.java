@@ -69,7 +69,7 @@ public abstract class ForecastDetail<E extends Forecast> implements Auditable, S
     }
 
     @ManyToOne
-    @MapsId("contract")
+    //@MapsId("contract")
     @JoinColumns({
         @JoinColumn(name = "CONTRACT_ID", referencedColumnName = "ID", insertable = false, updatable = false),
         @JoinColumn(name = "CONTRACT_FISCAL_ID", referencedColumnName = "FISCALARRANGEMENTID", insertable = false, updatable = false),
@@ -84,7 +84,7 @@ public abstract class ForecastDetail<E extends Forecast> implements Auditable, S
     }
 
     @ManyToOne(targetEntity = Forecast.class)
-    @MapsId("forecast")
+//    @MapsId("forecast")
     @JoinColumns({
         @JoinColumn(name = "PERIOD_YEAR", referencedColumnName = "PERIOD_YEAR", updatable = false, insertable = false),
         @JoinColumn(name = "PERIOD_MONTH", referencedColumnName = "PERIOD_MONTH", updatable = false, insertable = false),
@@ -109,11 +109,14 @@ public abstract class ForecastDetail<E extends Forecast> implements Auditable, S
 
     public void setCurrentUser(String user) {
 //        auditInfo.setCurrentUser(user);
-        auditInfo.setLastModifiedBy(user);
+        getAuditInfo().setLastModifiedBy(user);
     }
 
     @Embedded
     public AuditInfo getAuditInfo() {
+        if (auditInfo == null) {
+            auditInfo = new AuditInfo();
+        }
         return auditInfo;
     }
 
@@ -139,7 +142,7 @@ public abstract class ForecastDetail<E extends Forecast> implements Auditable, S
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final ForecastDetail<?> other = (ForecastDetail<?>) obj;
+        final ForecastDetail<E> other = (ForecastDetail<E>) obj;
         if (!Objects.equals(this.forecastDetailPK, other.forecastDetailPK)) {
             return false;
         }

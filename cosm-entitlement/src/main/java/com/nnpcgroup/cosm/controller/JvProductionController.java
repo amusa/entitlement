@@ -67,6 +67,7 @@ public class JvProductionController implements Serializable {
     private List<JvProduction> productions;
     private List<JvProductionDetail> productionDetails;
     private List<JvProductionDetail> deleteDetails = null;
+    private List<JvProductionDetail> editDetails;
     private Integer periodYear;
     private Integer periodMonth;
     private FiscalArrangement currentFiscalArrangement;
@@ -74,6 +75,7 @@ public class JvProductionController implements Serializable {
     private boolean directActualizing = false;
     private boolean editMode;
     private boolean newProduction = false;
+    private boolean newDetail = false;
 
     /**
      * Creates a new instance of JvController
@@ -112,6 +114,22 @@ public class JvProductionController implements Serializable {
 
     public void setCurrentProductionDetail(JvProductionDetail currentProductionDetail) {
         this.currentProductionDetail = currentProductionDetail;
+    }
+
+    public void prepareEditDetail(JvProductionDetail jvDetail) {
+        setCurrentProductionDetail(jvDetail);
+        if (currentProductionDetail != null) {
+            currentContract = currentProductionDetail.getContract();
+        }
+        setEditMode(true);
+    }
+
+    public void setNewDetail(boolean isNew) {
+        newDetail = isNew;
+    }
+
+    public boolean isNewDetail() {
+        return newDetail;
     }
 
     public JvProduction getCurrentProduction() {
@@ -265,13 +283,7 @@ public class JvProductionController implements Serializable {
         if (periodYear != null && periodMonth != null && currentFiscalArrangement != null) {
             currentProduction = findProduction(periodYear, periodMonth, currentFiscalArrangement);
 
-            if (currentProduction != null) {
-                //TODO:fix ORM double linkage
-                productionDetails = currentProduction.getProductionDetails();
-                //Always  use super class JV ProductionDetailService interface to return all subtypes
-//                productionDetails = getJvProductionDetailBean().findByContractPeriod(periodYear, periodMonth, currentFiscalArrangement);
-            } else {
-                productionDetails = null;
+            if (currentProduction == null) {
                 JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("NoProductionData"));
                 LOG.log(Level.INFO, ResourceBundle.getBundle("/Bundle").getString("NoProductionData")
                 );
@@ -558,21 +570,45 @@ public class JvProductionController implements Serializable {
         return "actual-detail-create";
     }
 
+    public String prepareEditDetail() {
+        currentContractChanged();
+        setNewDetail(true);
+        return "actual-detail-edit";
+    }
+
+    public String editProductionDetail() {
+        if (!isNewDetail()) {
+            if (editDetails == null) {
+                editDetails = new ArrayList<>();
+            }
+            editDetails.add(currentProductionDetail);
+        } else {
+            addProductionDetail(currentProductionDetail);
+            setNewDetail(false);
+        }
+
+        return "actual-edit2";
+    }
+
     public String addProductionDetail() {
         addProductionDetail(currentProductionDetail);
         return "actual-create2";
     }
 
     public void addProductionDetail(JvProductionDetail jvDetail) {
-        if (productionDetails == null) {
-            productionDetails = new ArrayList<>();
+        if (currentProduction != null) {
+            currentProduction.addProductionDetail(jvDetail);
         }
-        productionDetails.add(jvDetail);
     }
 
     public String cancelProductionDetail() {
         currentProductionDetail = null;
         return "actual-create2";
+    }
+
+    public String cancelEditDetail() {
+        currentProductionDetail = null;
+        return "actual-edit2";
     }
 
     public String prepareCreate() {
@@ -644,14 +680,13 @@ public class JvProductionController implements Serializable {
     }
 
     public String updateProduction() {
-//        if (deleteDetails != null) {
-//            getProductionDetailBean().delete(deleteDetails);
-//            deleteDetails = null;
-//        }
-
-        //currentProduction = getProductionBean().findByContractPeriod(periodYear, periodMonth, currentFiscalArrangement);
         if (currentProduction != null) {
-            persist(JsfUtil.PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("ProductionUpdated"));
+            getProductionBean().edit(currentProduction);
+
+            if (editDetails != null) {
+                performAutomaticStockAdjustment(editDetails);
+                editDetails = null;
+            }
         }
 
         if (!JsfUtil.isValidationFailed()) {
@@ -667,7 +702,12 @@ public class JvProductionController implements Serializable {
 
     public void update() {
         persistProductionDetail(JsfUtil.PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("ProductionUpdated"));
+    }
 
+    public void performAutomaticStockAdjustment(List<JvProductionDetail> detailsToAdjust) {
+        for (JvProductionDetail jvDetail : detailsToAdjust) {
+            performAutomaticStockAdjustment(jvDetail);
+        }
     }
 
     private void persist(JsfUtil.PersistAction persistAction, String successMessage) {
@@ -704,7 +744,7 @@ public class JvProductionController implements Serializable {
                 if (persistAction != JsfUtil.PersistAction.DELETE) {
                     getProductionDetailBean().edit(currentProductionDetail);
                     if (isEditMode()) {
-                        performAutomaticStockAdjustment();
+                        performAutomaticStockAdjustment(currentProductionDetail);
                         disableEditMode();
                     }
                 } else {
@@ -766,10 +806,10 @@ public class JvProductionController implements Serializable {
         return findProduction(periodYear, periodMonth, currentFiscalArrangement) != null;
     }
 
-    private void performAutomaticStockAdjustment() {
-        List<ProductionDetail> adjProductions = new ArrayList<>();
-        ProductionDetail thisProduction = currentProductionDetail;
+    private void performAutomaticStockAdjustment(JvProductionDetail jvDetail) {
+        ProductionDetail thisProduction = jvDetail;
         ProductionDetail nextProduction;
+
         while ((nextProduction = (ProductionDetail) getProductionDetailBean().getNextMonthProduction(thisProduction)) != null) {
             try {
                 getProductionDetailBean().enrich(nextProduction);
@@ -781,5 +821,7 @@ public class JvProductionController implements Serializable {
                 JsfUtil.addErrorMessage(rpe, ResourceBundle.getBundle("/Bundle").getString("RealizablePriceErrorOccured"));
             }
         }
+        
+        JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("StockAdjustmentSuccess"));
     }
 }

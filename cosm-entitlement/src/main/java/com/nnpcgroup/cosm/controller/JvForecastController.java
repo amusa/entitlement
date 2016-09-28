@@ -68,6 +68,7 @@ public class JvForecastController implements Serializable {
     private JvForecast currentProduction;
     private List<JvForecast> productions;
     private List<JvForecastDetail> forecastDetails;
+    private List<JvForecastDetail> editDetails;
     private JvForecastDetail currentForecastDetail;
     private Integer periodYear;
     private Integer periodMonth;
@@ -75,6 +76,7 @@ public class JvForecastController implements Serializable {
     private Contract currentContract;
     private boolean editMode;
     private boolean newForecast = false;
+    private boolean newDetail = false;
 
     /**
      * Creates a new instance of JvController
@@ -184,6 +186,20 @@ public class JvForecastController implements Serializable {
         return "forecast-detail-create";
     }
 
+    public String prepareEditDetail() {
+        currentContractChanged();
+        setNewDetail(true);
+        return "forecast-detail-edit";
+    }
+
+    private void setNewDetail(boolean isNew) {
+        newDetail = isNew;
+    }
+
+    public boolean isNewDetail() {
+        return newDetail;
+    }
+
     public String prepareUpdateForecast() {
         loadFiscalMonthlyProduction();
         if (currentProduction == null) {
@@ -202,7 +218,7 @@ public class JvForecastController implements Serializable {
 //        if (forecast != null) {
 //            getForecastBean().delete(currentProduction.getPeriodYear(), currentProduction.getPeriodMonth(), currentProduction.getFiscalArrangement());
 //        }
-        
+
     }
 
     public void destroyForecastDetail() {
@@ -270,11 +286,30 @@ public class JvForecastController implements Serializable {
 //            forecastDetails = new ArrayList<>();
 //        }
 //        forecastDetails.add(currentForecastDetail);
+        addForecastDetail(currentForecastDetail);
 
-        if (currentProduction != null) {
-            currentProduction.addForecastDetail(currentForecastDetail);
-        }
         return "forecast-create2";
+    }
+
+    public void addForecastDetail(JvForecastDetail jvDetail) {
+        if (currentProduction != null) {
+            currentProduction.addForecastDetail(jvDetail);
+        }
+
+    }
+
+    public String editForecastDetail() {
+        if (!isNewDetail()) {
+            if (editDetails == null) {
+                editDetails = new ArrayList<>();
+            }
+            editDetails.add(currentForecastDetail);            
+        } else {
+            addForecastDetail(currentForecastDetail);
+            setNewDetail(false);
+        }
+
+        return "forecast-edit2";
     }
 
     public String createForecast() {
@@ -305,6 +340,11 @@ public class JvForecastController implements Serializable {
 
     }
 
+    public String cancelEditDetail() {
+        currentForecastDetail = null;
+        return "forecast-edit2";
+    }
+
     public String cancelForecastDetail() {
         currentForecastDetail = null;
         return "forecast-create2";
@@ -319,10 +359,9 @@ public class JvForecastController implements Serializable {
 
     }
 
-    public void performAutomaticStockAdjustment() {
+    public void performAutomaticStockAdjustment(JvForecastDetail detailToAdjust) {
         LOG.log(Level.INFO, "Performing automatic stock adjustment...");
-        List<Forecast> adjforecasts = new ArrayList<>();
-        JvForecastDetail thisForecastDetail = currentForecastDetail;
+        JvForecastDetail thisForecastDetail = detailToAdjust;
         JvForecastDetail nextForecastDetail;
         while ((nextForecastDetail = (JvForecastDetail) getForecastDetailBean().getNextMonthProduction(thisForecastDetail)) != null) {
             try {
@@ -347,7 +386,12 @@ public class JvForecastController implements Serializable {
 
     public String updateForecast() {
         if (currentProduction != null) {
-            persist(JsfUtil.PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("ProductionUpdated"));
+//            persist(JsfUtil.PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("ProductionUpdated"));
+            getForecastBean().edit(currentProduction);
+            if (editDetails != null) {
+                performAutomaticStockAdjustment(editDetails);
+                editDetails = null;
+            }
         }
 
         if (!JsfUtil.isValidationFailed()) {
@@ -359,6 +403,12 @@ public class JvForecastController implements Serializable {
             return "forecast2";
         }
         return null;
+    }
+
+    public void performAutomaticStockAdjustment(List<JvForecastDetail> detailsToAdjust) {
+        for (JvForecastDetail jvDetail : detailsToAdjust) {
+            performAutomaticStockAdjustment(jvDetail);
+        }
     }
 
     private void persist(JsfUtil.PersistAction persistAction, String successMessage) {
@@ -402,7 +452,7 @@ public class JvForecastController implements Serializable {
                 if (persistAction != JsfUtil.PersistAction.DELETE) {
                     getForecastDetailBean().edit(currentForecastDetail);
                     if (isEditMode()) {
-                        performAutomaticStockAdjustment();
+                        performAutomaticStockAdjustment(currentForecastDetail);
                         disableEditMode();
                     }
 
@@ -780,4 +830,5 @@ public class JvForecastController implements Serializable {
     public boolean isForecastExists() {
         return findForecast(periodYear, periodMonth, currentFiscalArrangement) != null;
     }
+
 }

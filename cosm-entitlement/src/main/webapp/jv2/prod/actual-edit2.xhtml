@@ -71,7 +71,7 @@
 
                 <div class="row">
                     <div class="col-md-10 m-b-20">
-                        <h:commandLink id="addProductionDetail" action="#{jvActualController.prepareAddProductionDetail}" class="btn m-r-10" >
+                        <h:commandLink id="addProductionDetail" action="#{jvActualController.prepareEditDetail}" class="btn m-r-10" >
                             <span class="icon">&#61943;</span>
                             #{bundle.AddProductionDetail}
                         </h:commandLink>
@@ -80,7 +80,7 @@
 
                 <h:panelGroup id="actual_panel">
 
-                    <h:dataTable id="prodTable" var="prod" value="#{jvActualController.productionDetails}" 
+                    <h:dataTable id="prodTable" var="prod" value="#{jvActualController.currentProduction.productionDetails}" 
                                  class="table table-bordered table-hover tile">                                                 
                         <h:column>                                                        
                             <f:facet name="header">
@@ -167,12 +167,11 @@
                                         </h:commandLink>
                                     </li>
                                     <li>
-                                        <h:commandLink pt:data-target="#JvEditDlg" pt:look="warning" pt:data-toggle="modal">
+                                        <h:commandLink action="actual-detail-edit" actionListener="#{jvActualController.prepareEditDetail(prod)}">
                                             <span class="icon">&#61952;</span>
                                             #{bundle.Edit}
-                                            <f:ajax event="click" render="JvEditForm" listener="#{jvActualController.setCurrentProductionDetail(prod)}"/>
                                         </h:commandLink>
-                                    </li> 
+                                    </li>
                                     <li class="divider"></li>                                    
                                     <li>
                                         <h:commandLink>

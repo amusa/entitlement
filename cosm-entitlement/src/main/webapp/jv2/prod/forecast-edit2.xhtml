@@ -77,7 +77,7 @@
 
                 <div class="row">
                     <div class="col-md-10 m-b-20">
-                        <h:commandLink id="addForecastDetail" action="#{jvProdController.prepareAddForecastDetail}" class="btn m-r-10" >
+                        <h:commandLink id="addForecastDetail" action="#{jvProdController.prepareEditDetail}" class="btn m-r-10" >
                             <span class="icon">&#61943;</span>
                             #{bundle.AddForecastDetail}
                         </h:commandLink>
@@ -184,13 +184,11 @@
                                                         listener="#{jvProdController.setCurrentForecastDetail(prod)}"/>
                                             </h:commandLink>
                                         </li>
-                                        <li>
-                                            <h:commandLink pt:data-target="#JvEditDlg" pt:look="warning" pt:data-toggle="modal">
-                                                <span class="icon">&#61698;</span>
+                                        <li><h:commandLink action="forecast-detail-edit" actionListener="#{jvProdController.prepareEditForecastDetail(prod)}">
+                                                <span class="icon">&#61952;</span>
                                                 #{bundle.Edit}
-                                                <f:ajax event="click" render="JvEditForm msgs" listener="#{jvProdController.prepareEditForecastDetail(prod)}"/>
                                             </h:commandLink>
-                                        </li>   
+                                        </li>                                          
                                         <li>
                                             <h:commandLink>
                                                 <span class="icon">&#61918;</span>

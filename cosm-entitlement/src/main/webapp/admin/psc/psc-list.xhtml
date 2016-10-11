@@ -39,7 +39,7 @@
                                      class="table table-bordered table-hover tile">
                             <h:column>
                                 <f:facet name="header">
-                                    <h:outputText value="#{bundle.JointVentureListTitle}"/>
+                                    <h:outputText value="#{bundle.PSCListTitle}"/>
                                 </f:facet>
                                 <h:outputText value="#{psc.title}"/>
                             </h:column>
@@ -83,6 +83,20 @@
                                                 <f:ajax render="pscListForm pscTable msgs" listener="#{pscController.destroy(psc)}"/>
                                             </h:commandLink>
                                         </li> 
+                                        <li>
+                                            <h:commandLink pt:data-target="#AssetCreateDlg" pt:look="warning" pt:data-toggle="modal">
+                                                <span class="icon">&#61918;</span>
+                                                Add Contract                                                
+                                                <f:ajax listener="#{contractController.addContractFiscalArrangement(psc)}" render="AssetCreateDlg AssetCreateForm contractCreateFiscalTitle" />
+                                            </h:commandLink>
+                                        </li> 
+                                        <li>
+                                            <h:commandLink pt:data-target="#AssetListDlg" pt:look="warning" pt:data-toggle="modal">
+                                                <span class="icon">&#61918;</span>
+                                                View Contracts                                                
+                                                <f:ajax listener="#{fiscalController.setCurrentFiscal(psc)}" render="AssetListDlg AssetListForm contractListFiscalTitle" />
+                                            </h:commandLink>
+                                        </li> 
                                     </ul>
                                 </div>
                             </h:column>
@@ -119,14 +133,8 @@
             <ui:include src="_psc-create.xhtml"/>           
             <ui:include src="_psc-edit.xhtml"/>
             <ui:include src="_psc-view.xhtml"/>
+            <ui:include src="_psc-contract-create.xhtml"/>
+            <ui:include src="_psc-contract-list.xhtml"/>
         </ui:define>
-
-<!--        <ui:define name="page-stat"> 
-            <ui:include src="_psc-stat.xhtml"/>
-        </ui:define>-->
-
     </ui:composition>
-
-
-
 </html>

@@ -9,10 +9,8 @@ import com.nnpcgroup.cosm.entity.CrudeType;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
-import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -23,7 +21,7 @@ import javax.persistence.Entity;
  */
 @Entity
 @DiscriminatorValue("PSC")
-public class PscContract extends Contract{
+public class PscContract extends Contract {
 
     private static final long serialVersionUID = -6307338449430627486L;
 
@@ -33,15 +31,13 @@ public class PscContract extends Contract{
     private Double costRecoveryLimit;
     private Double costUplift;
     private Double pscRoyaltyRate;
-    @Embedded
+
     private TaxAndAllowance taxAndAllowance;
     private String profitOilSplitOption;
-    @Embedded
+
     private AreaSize areaSize;
     private List<OilField> oilFields;
 
-
-    private String dType;
     public PscContract() {
     }
 
@@ -49,8 +45,8 @@ public class PscContract extends Contract{
         super(fiscalArrangement, crudeType);
     }
 
-
     @Column(name = "CONTRACT_EXECUTION_DATE")
+    @Temporal(TemporalType.DATE)
     public Date getContractExecutionDate() {
         return contractExecutionDate;
     }
@@ -60,6 +56,7 @@ public class PscContract extends Contract{
     }
 
     @Column(name = "FIRST_OIL_DATE")
+    @Temporal(TemporalType.DATE)
     public Date getFirstOilDate() {
         return firstOilDate;
     }
@@ -69,6 +66,7 @@ public class PscContract extends Contract{
     }
 
     @Column(name = "COST_RECOVERY_START_DATE")
+    @Temporal(TemporalType.DATE)
     public Date getCostRecoveryStartDate() {
         return costRecoveryStartDate;
     }
@@ -104,6 +102,7 @@ public class PscContract extends Contract{
         this.pscRoyaltyRate = pscRoyaltyRate;
     }
 
+    @Embedded
     public TaxAndAllowance getTaxAndAllowance() {
         return taxAndAllowance;
     }
@@ -121,6 +120,7 @@ public class PscContract extends Contract{
         this.profitOilSplitOption = profitOilSplitOption;
     }
 
+    @Embedded
     public AreaSize getAreaSize() {
         return areaSize;
     }
@@ -129,7 +129,7 @@ public class PscContract extends Contract{
         this.areaSize = areaSize;
     }
 
-    @OneToMany(mappedBy = "contract")
+    @OneToMany(mappedBy = "contract", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     public List<OilField> getOilFields() {
         return oilFields;
     }

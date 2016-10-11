@@ -1,5 +1,6 @@
 package com.nnpcgroup.cosm.entity.contract;
 
+import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
@@ -7,7 +8,7 @@ import javax.persistence.Embeddable;
  * Created by maliska on 8/24/16.
  */
 @Embeddable
-public class TaxAndAllowance {
+public class TaxAndAllowance implements Serializable {
     private Double investmentTaxAllowance;
     private Double capitalAllowanceRate;
     private Double petroleumProfitTaxRateAferFiveYrs;

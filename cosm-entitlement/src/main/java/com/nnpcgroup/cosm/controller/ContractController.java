@@ -7,6 +7,8 @@ import com.nnpcgroup.cosm.ejb.FiscalArrangementBean;
 import com.nnpcgroup.cosm.ejb.contract.ContractServices;
 import com.nnpcgroup.cosm.entity.CrudeType;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
+import com.nnpcgroup.cosm.entity.JointVenture;
+import com.nnpcgroup.cosm.entity.ProductionSharingContract;
 import com.nnpcgroup.cosm.entity.contract.*;
 
 import javax.ejb.EJB;
@@ -80,11 +82,13 @@ public class ContractController implements Serializable {
     public void setSelected(Contract selected) {
         this.selected = selected;
         if (selected instanceof JvContract) {
-            contractType = "REG";
+            contractType = "JV";
         } else if (selected instanceof CarryContract) {
             contractType = "CA";
         } else if (selected instanceof ModifiedCarryContract) {
             contractType = "MCA";
+        } else if (selected instanceof PscContract) {
+            contractType = "PSC";
         }
         //this.selected.setFiscalArrangement(fiscalArrangement);
     }
@@ -243,7 +247,7 @@ public class ContractController implements Serializable {
         LOG.log(Level.INFO, "Contract Type Selected...{0}", contractType);
         if (null != contractType) {
             switch (contractType) {
-                case "REG":
+                case "JV":
                     selected = new JvContract();
                     break;
                 case "MCA":
@@ -251,6 +255,9 @@ public class ContractController implements Serializable {
                     break;
                 case "CA":
                     selected = new CarryContract();
+                    break;
+                case "PSC":
+                    selected = new PscContract();
                     break;
                 default:
                     break;
@@ -263,7 +270,12 @@ public class ContractController implements Serializable {
 
     public void addContractFiscalArrangement(FiscalArrangement fa) {
         LOG.log(Level.INFO, "Adding Contract for fiscal arrangement {0}...", fa);
-        setSelected(new JvContract()); //Default contract
+        if (fa instanceof JointVenture) {
+            setSelected(new JvContract());
+        } else if (fa instanceof ProductionSharingContract) {
+            setSelected(new PscContract());
+        }
+
         initializeEmbeddableKey();
 //        FiscalArrangement freshFiscal=  fiscalBean.find(fa.getId());
         setFiscalArrangement(fa);

@@ -1,5 +1,6 @@
 package com.nnpcgroup.cosm.entity.contract;
 
+import java.io.Serializable;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
@@ -8,8 +9,8 @@ import javax.validation.constraints.NotNull;
  */
 
 @Entity
-@Table(name = "FIELD")
-public class OilField {
+@Table(name = "OIL_FIELD")
+public class OilField implements Serializable {
     private Long id;
     private String title;
     private PscContract contract;
@@ -19,6 +20,7 @@ public class OilField {
 
     @Id
     @Column(name = "ID")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long getId() {
         return id;
     }
@@ -38,6 +40,11 @@ public class OilField {
     }
 
     @ManyToOne
+    @JoinColumns({
+        @JoinColumn(name = "CONTRACT_ID", referencedColumnName = "ID"),
+        @JoinColumn(name = "CONTRACT_FISCAL_ID", referencedColumnName = "FISCALARRANGEMENTID"),
+        @JoinColumn(name = "CRUDETYPE_CODE", referencedColumnName = "CRUDETYPECODE")
+    })
     public PscContract getContract() {
         return contract;
     }

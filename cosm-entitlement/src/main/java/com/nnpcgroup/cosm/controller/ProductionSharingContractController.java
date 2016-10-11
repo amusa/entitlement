@@ -26,7 +26,7 @@ public class ProductionSharingContractController implements Serializable {
     private static final long serialVersionUID = 1720728647859890689L;
 
     @EJB
-    private com.nnpcgroup.cosm.ejb.ProductionSharingContractBean ejbFacade;
+    private ProductionSharingContractBean ejbFacade;
     private List<ProductionSharingContract> pscItems = null;
     private ProductionSharingContract selected;
 

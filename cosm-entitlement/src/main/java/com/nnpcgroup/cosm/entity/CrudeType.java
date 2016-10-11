@@ -27,6 +27,7 @@ public class CrudeType implements Serializable {
     private String code;
     private String crudeType;
     private Terminal terminal;
+    private double apiGravity;
     //private List<Contract> contracts;
 
     public CrudeType() {
@@ -65,6 +66,16 @@ public class CrudeType implements Serializable {
         this.terminal = terminal;
     }
 
+    @NotNull
+    @Column(name = "API_GRAVITY")
+    public double getApiGravity() {
+        return apiGravity;
+    }
+
+    public void setApiGravity(double apiGravity) {
+        this.apiGravity = apiGravity;
+    }
+        
 //    @OneToMany(mappedBy = "crudeType", fetch = FetchType.EAGER)
 //    public List<Contract> getContracts() {
 //        return contracts;

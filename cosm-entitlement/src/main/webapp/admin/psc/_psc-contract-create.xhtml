@@ -13,7 +13,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title"><h:outputLabel id="contractCreateFiscalTitle" value ="Create Contract for JV Fiscal Arrangement: #{contractController.fiscalArrangement.title}"/></h4>
+                        <h4 class="modal-title"><h:outputLabel id="contractCreateFiscalTitle" value ="Create Contract for PSC Fiscal Arrangement: #{contractController.fiscalArrangement.title}"/></h4>
                     </div>
                     <h:form id="AssetCreateForm">
                         <div class="modal-body">
@@ -22,9 +22,8 @@
                                     <div class="col-md-6 m-b-15">
                                         <h:outputLabel value="Contract Type" for="contractType" />
                                         <h:selectOneMenu id="contractType" value="#{contractController.contractType}" class="form-control input-sm m-b-10">
-                                            <f:selectItem  itemLabel="Regular JV" itemValue="JV"/>
-                                            <f:selectItem  itemLabel="Carry Agreement" itemValue="CA"/>
-                                            <f:selectItem  itemLabel="Modified Carry Agreement" itemValue="MCA"/>
+                                            <f:selectItem  itemLabel="Regular PSC" itemValue="PSC"/>
+                                           
                                             <f:ajax event="change" render="AssetCreateForm carryContractInfo sharedOilRatio crudeType" listener="#{contractController.contractTypeSelected}"/>
                                         </h:selectOneMenu> 
                                     </div>

@@ -168,7 +168,7 @@
                                 <div class="row">                                            
                                     <div class="col-md-4 m-b-15">
                                         <h:outputLabel value="Terminal Adjustment (+/-)" for="termAdj" />
-                                        <h:inputText id="termAdj" value="#{jvActualController.currentProductionDetail.terminalAdjustment}" title="Terminal Adjustment (-)" class="form-control input-sm" >
+                                        <h:inputText id="termAdj" value="#{jvActualController.currentProductionDetail.terminalAdjustment}" title="Terminal Adjustment (+/-)" class="form-control input-sm" >
                                             <f:convertNumber pattern="###,###,###.####" />
                                             <f:ajax event="change" listener="#{jvActualController.stockAdjustmentChanged}"
                                                     render="operatorDeclaredVolume netVolume carryOil carryOilCum sharedOil sharedOilCum openingStock ownShareEntitlement closingStock lifting cargoes availability ptnrOpeningStock ptnrEntitlement ptnrClosingStock ptnrLifting ptnrCargoes ptnrAvailability ccc ccca cte ctr rce cor ignm cccaCum cteCum ctrCum rceCum ignmCum corCum"/>
@@ -176,7 +176,7 @@
                                     </div>
                                     <div class="col-md-4 m-b-15">
                                         <h:outputLabel value="Production Adjustment (+/-)" for="prodAdj" />
-                                        <h:inputText id="prodAdj" value="#{jvActualController.currentProductionDetail.productionAdjustment}" title="Production Adjustment (+)" class="form-control input-sm" >
+                                        <h:inputText id="prodAdj" value="#{jvActualController.currentProductionDetail.productionAdjustment}" title="Production Adjustment (+/-)" class="form-control input-sm" >
                                             <f:convertNumber pattern="###,###,###.####" />
                                             <f:ajax event="change" listener="#{jvActualController.stockAdjustmentChanged}"
                                                     render="operatorDeclaredVolume netVolume carryOil carryOilCum sharedOil sharedOilCum openingStock ownShareEntitlement closingStock lifting cargoes availability ptnrOpeningStock ptnrEntitlement ptnrClosingStock ptnrLifting ptnrCargoes ptnrAvailability ccc ccca cte ctr rce cor ignm cccaCum cteCum ctrCum rceCum ignmCum corCum"/>
@@ -184,7 +184,7 @@
                                     </div>
                                     <div class="col-md-4 m-b-15">
                                         <h:outputLabel value="Unitization (+/-)" for="unitization" />
-                                        <h:inputText id="unitization" value="#{jvActualController.currentProductionDetail.unitization}" title="Unitization (+)" class="form-control input-sm" >
+                                        <h:inputText id="unitization" value="#{jvActualController.currentProductionDetail.unitization}" title="Unitization (+/-)" class="form-control input-sm" >
                                             <f:convertNumber pattern="###,###,###.####" />
                                             <f:ajax event="change" listener="#{jvActualController.stockAdjustmentChanged}"
                                                     render="operatorDeclaredVolume netVolume carryOil carryOilCum sharedOil sharedOilCum openingStock ownShareEntitlement closingStock lifting cargoes availability ptnrOpeningStock ptnrEntitlement ptnrClosingStock ptnrLifting ptnrCargoes ptnrAvailability ccc ccca cte ctr rce cor ignm cccaCum cteCum ctrCum rceCum ignmCum corCum"/>
@@ -199,8 +199,8 @@
                                         </h:outputText>
                                     </div>
                                     <div class="col-md-4 m-b-15">
-                                        <h:outputLabel value="Operator Declared Vol." for="operatorDeclaredVolume" />
-                                        <h:inputText id="operatorDeclaredVolume" value="#{jvActualController.currentProductionDetail.operatorDeclaredVolume}" title="Gross Prod Volume" class="form-control input-sm" >
+                                        <h:outputLabel value="Terml Optr Decl Vol." for="operatorDeclaredVolume" />
+                                        <h:inputText id="operatorDeclaredVolume" value="#{jvActualController.currentProductionDetail.operatorDeclaredVolume}" title="Terminal Operator Declared Vol." class="form-control input-sm" >
                                             <f:convertNumber pattern="###,###,###.####" />
                                             <f:ajax event="change" listener="#{jvActualController.operatorDeclaredVolumeListener}"
                                                     render="ownAvailability2 partnerAvailability2 ownEquityRatio partnerEquityRatio netVolume carryOil carryOilCum sharedOil sharedOilCum openingStock ownShareEntitlement closingStock lifting cargoes availability ptnrOpeningStock ptnrEntitlement ptnrClosingStock ptnrLifting ptnrCargoes ptnrAvailability ccc ccca cte ctr rce cor ignm cccaCum cteCum ctrCum rceCum ignmCum corCum"/>
@@ -385,8 +385,8 @@
 
                                 <div class="row">                                            
                                     <div class="col-md-4 m-b-15">
-                                        <h:outputLabel value="Exportable Vol (Actual)" for="lifting" />
-                                        <h:inputText id="lifting" value="#{jvActualController.currentProductionDetail.lifting}" title="Lifting (Actual)"
+                                        <h:outputLabel value="Actual Lifted Vol." for="lifting" />
+                                        <h:inputText id="lifting" value="#{jvActualController.currentProductionDetail.lifting}" title="Actual Lifted Vol.)"
                                                      class="form-control input-sm">
                                             <f:convertNumber pattern="###,###,###.####" />
                                             <f:ajax event="change" listener="#{jvActualController.liftingChanged}" render="@form"/>
@@ -455,8 +455,8 @@
                                 </div>
                                 <div class="row">                                            
                                     <div class="col-md-4 m-b-15">
-                                        <h:outputLabel value="Exportable Vol (Actual)" for="ptnrLifting" />
-                                        <h:inputText id="ptnrLifting" value="#{jvActualController.currentProductionDetail.partnerLifting}" title="Exportable Vol (Actual)"
+                                        <h:outputLabel value="Actual Lifted Vol." for="ptnrLifting" />
+                                        <h:inputText id="ptnrLifting" value="#{jvActualController.currentProductionDetail.partnerLifting}" title="Actual Lifted Vol."
                                                      class="form-control input-sm">
                                             <f:convertNumber pattern="###,###,###.####" />
                                             <f:ajax event="change" listener="#{jvActualController.liftingChanged}" render="@form"/>

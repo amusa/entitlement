@@ -6,11 +6,7 @@
 package com.nnpcgroup.cosm.ejb.forecast.jv;
 
 import com.nnpcgroup.cosm.ejb.AbstractCrudServices;
-import com.nnpcgroup.cosm.ejb.CommonServices;
 import com.nnpcgroup.cosm.entity.forecast.jv.Forecast;
-import com.nnpcgroup.cosm.entity.forecast.jv.ForecastDetail;
-
-import javax.enterprise.context.Dependent;
 import java.io.Serializable;
 
 /**
@@ -19,7 +15,5 @@ import java.io.Serializable;
  * @param <T>
  */
 public interface ForecastServices<T extends Forecast> extends AbstractCrudServices<T>, Serializable {
-
-
-   
+    
 }

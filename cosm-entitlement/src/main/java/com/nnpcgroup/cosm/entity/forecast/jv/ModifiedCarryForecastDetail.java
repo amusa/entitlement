@@ -5,14 +5,20 @@
  */
 package com.nnpcgroup.cosm.entity.forecast.jv;
 
+import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 /**
  *
  * @author 18359
  */
 @Entity
+//@Table(uniqueConstraints = {
+//    @UniqueConstraint(columnNames = {"PERIOD_YEAR", "PERIOD_MONTH", "FISCALARRANGEMENT_ID", "CONTRACT_ID", "CONTRACT_FISCAL_ID", "CRUDETYPE_CODE"})
+//})
 @DiscriminatorValue("MCA")
 public class ModifiedCarryForecastDetail extends AlternativeFundingForecastDetail {
 
@@ -23,6 +29,7 @@ public class ModifiedCarryForecastDetail extends AlternativeFundingForecastDetai
     public ModifiedCarryForecastDetail() {
     }
 
+    @Column(name = "NON_DRILLING_CAPEX")
     public Double getNonDrillingCapex() {
         return nonDrillingCapex;
     }

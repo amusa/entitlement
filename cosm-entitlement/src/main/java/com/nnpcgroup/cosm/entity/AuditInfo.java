@@ -7,16 +7,15 @@ import java.util.Date;
 /**
  * Created by maliska on 9/24/16.
  */
-
 @Embeddable
-public class AuditInfo implements Serializable{
+public class AuditInfo implements Serializable {
+
     private String createdBy;
     private Date createdDate;
     private Date lastModifiedDate;
     private String lastModifiedBy;
-    @Transient
-    private String currentUser;
 
+    private String currentUser;
 
     @Column(name = "CREATED_BY")
     public String getCreatedBy() {
@@ -54,6 +53,11 @@ public class AuditInfo implements Serializable{
 
     public void setLastModifiedBy(String lastModifiedBy) {
         this.lastModifiedBy = lastModifiedBy;
+    }
+
+    @Transient
+    public String getCurrentUser() {
+        return currentUser;
     }
 
     public void setCurrentUser(String user) {

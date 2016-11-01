@@ -6,14 +6,19 @@
 package com.nnpcgroup.cosm.ejb.forecast.jv.impl;
 
 import com.nnpcgroup.cosm.ejb.forecast.jv.PscForecastDetailServices;
-import com.nnpcgroup.cosm.entity.forecast.jv.PscForecast;
-import com.nnpcgroup.cosm.exceptions.NoRealizablePriceException;
+import com.nnpcgroup.cosm.entity.contract.OilField;
+import com.nnpcgroup.cosm.entity.forecast.jv.PscForecastDetail;
 
 import javax.ejb.Local;
 import javax.ejb.Stateless;
 import javax.enterprise.context.Dependent;
 import java.io.Serializable;
 import java.util.logging.Logger;
+import javax.persistence.NoResultException;
+import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 /**
  *
@@ -22,61 +27,67 @@ import java.util.logging.Logger;
 @Stateless
 @Local(PscForecastDetailServices.class)
 @Dependent
-public class PscForecastDetailServicesImpl extends ForecastDetailServicesImpl<PscForecast> implements PscForecastDetailServices, Serializable {
+public class PscForecastDetailServicesImpl extends ForecastDetailServicesImpl<PscForecastDetail> implements PscForecastDetailServices, Serializable {
 
     private static final Logger LOG = Logger.getLogger(PscForecastDetailServicesImpl.class.getName());
     private static final long serialVersionUID = 8993596753945847377L;
 
     public PscForecastDetailServicesImpl() {
-        super(PscForecast.class);
+        super(PscForecastDetail.class);
     }
 
-    public PscForecastDetailServicesImpl(Class<PscForecast> entityClass) {
+    public PscForecastDetailServicesImpl(Class<PscForecastDetail> entityClass) {
         super(entityClass);
     }
 
     @Override
-    public PscForecast computeEntitlement(PscForecast production) {
+    public PscForecastDetail find(int year, int month, OilField oilField) {
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+
+        PscForecastDetail forecastDetail;
+
+        CriteriaQuery cq = cb.createQuery();
+        Root e = cq.from(entityClass);
+        try {
+            cq.where(
+                    cb.and(cb.equal(e.get("periodYear"), year),
+                            cb.equal(e.get("periodMonth"), month),
+                            cb.equal(e.get("oilField"), oilField)
+                    ));
+
+            Query query = getEntityManager().createQuery(cq);
+
+            forecastDetail = (PscForecastDetail) query.getSingleResult();
+        } catch (NoResultException nre) {
+            return null;
+        }
+
+        return forecastDetail;
+    }
+
+    @Override
+    public void delete(int year, int month, OilField oilField) {
+
+    }
+
+    @Override
+    public PscForecastDetail getPreviousMonthProduction(PscForecastDetail production) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public PscForecast computeOpeningStock(PscForecast production) {
+    public PscForecastDetail getNextMonthProduction(PscForecastDetail production) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public PscForecast getPreviousMonthProduction(PscForecast production) {
+    public PscForecastDetail enrich(PscForecastDetail production) throws Exception {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public PscForecast getNextMonthProduction(PscForecast production) {
+    public PscForecastDetail computeGrossProduction(PscForecastDetail forecast) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
-    public PscForecast computeClosingStock(PscForecast production) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public PscForecast computeAvailability(PscForecast production) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public PscForecast computeLifting(PscForecast production) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public PscForecast enrich(PscForecast production) throws NoRealizablePriceException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public PscForecast computeGrossProduction(PscForecast forecast) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 }

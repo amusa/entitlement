@@ -6,30 +6,20 @@
 package com.nnpcgroup.cosm.entity.forecast.jv;
 
 import com.nnpcgroup.cosm.entity.AuditInfo;
-import com.nnpcgroup.cosm.entity.AuditListener;
 import com.nnpcgroup.cosm.entity.Auditable;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
 import com.nnpcgroup.cosm.entity.production.jv.ProductionPK;
-import org.eclipse.persistence.annotations.Customizer;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import java.util.logging.Logger;
 import javax.persistence.*;
 
 /**
  * @author 18359
- * @param <E>
  */
-@Customizer(ForecastCustomizer.class)
-@EntityListeners(AuditListener.class)
-@Entity
-@Table(name = "FORECAST")
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "FTYPE")
-public abstract class Forecast<E extends ForecastDetail> implements Auditable, Serializable {
+@MappedSuperclass
+public abstract class Forecast implements Auditable, Serializable {
 
     private static final long serialVersionUID = -295843614383355072L;
 
@@ -40,7 +30,6 @@ public abstract class Forecast<E extends ForecastDetail> implements Auditable, S
     private Integer periodMonth;
     private FiscalArrangement fiscalArrangement;
     private String remark;
-    private List<E> forecastDetails;
     private AuditInfo auditInfo = new AuditInfo();
 
     public Forecast() {
@@ -76,7 +65,7 @@ public abstract class Forecast<E extends ForecastDetail> implements Auditable, S
     }
 
     @ManyToOne
-    @JoinColumn(name = "FISCALARRANGEMENT_ID", referencedColumnName = "ID", updatable = false, insertable = false)
+    @JoinColumn(name = "FISCALARRANGEMENT_ID", referencedColumnName = "ID")
     @MapsId("fiscalArrangementId")
     public FiscalArrangement getFiscalArrangement() {
         return fiscalArrangement;
@@ -93,23 +82,6 @@ public abstract class Forecast<E extends ForecastDetail> implements Auditable, S
 
     public void setRemark(String remark) {
         this.remark = remark;
-    }
-
-    @OneToMany(mappedBy = "forecast", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER, targetEntity = ForecastDetail.class)
-    public List<E> getForecastDetails() {
-        return forecastDetails;
-    }
-
-    public void setForecastDetails(List<E> forecastDetails) {
-        this.forecastDetails = forecastDetails;
-    }
-
-    public void addForecastDetail(E forecastDetail) {
-        if (forecastDetails == null) {
-            forecastDetails = new ArrayList<>();
-
-        }
-        forecastDetails.add(forecastDetail);
     }
 
     public ProductionPK makeProductionPK() {
@@ -153,7 +125,7 @@ public abstract class Forecast<E extends ForecastDetail> implements Auditable, S
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final Forecast<E> other = (Forecast<E>) obj;
+        final Forecast other = (Forecast) obj;
         if (!Objects.equals(this.forecastPK, other.forecastPK)) {
             return false;
         }

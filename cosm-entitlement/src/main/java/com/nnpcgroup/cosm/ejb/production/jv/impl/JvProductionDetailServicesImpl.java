@@ -59,8 +59,8 @@ public abstract class JvProductionDetailServicesImpl<T extends JvProductionDetai
         );
     }
 
-    @Override
-    public T computeEntitlement(T production) {
+   // @Override
+    public T computeEntitlement(T production){
         LOG.info("computing Entitlement...");
         FiscalArrangement fa;
         JointVenture jv;
@@ -99,9 +99,7 @@ public abstract class JvProductionDetailServicesImpl<T extends JvProductionDetai
         Double partnerEntitlement = production.getPartnerShareEntitlement();
         Double openingStock = production.getOpeningStock();
         Double partnerOpeningStock = production.getPartnerOpeningStock();
-        //Double overlift = production.getOverlift() != null ? production.getOverlift() : 0.0;
-        //Double partnerOverlift = production.getPartnerOverlift() != null ? production.getPartnerOverlift() : 0.0;
-
+        
         availability = ownEntitlement + openingStock;//+ overlift;
         partnerAvailability = partnerEntitlement + partnerOpeningStock;// + partnerOverlift;
 
@@ -275,7 +273,7 @@ public abstract class JvProductionDetailServicesImpl<T extends JvProductionDetai
         return prod;
     }
 
-    @Override
+   // @Override
     public T computeOpeningStock(T production) {
         JvProductionDetail prod = getPreviousMonthProduction(production);
         if (prod != null) {

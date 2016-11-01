@@ -6,7 +6,6 @@
 package com.nnpcgroup.cosm.controller;
 
 import com.nnpcgroup.cosm.controller.util.JsfUtil;
-import com.nnpcgroup.cosm.ejb.FiscalArrangementBean;
 import com.nnpcgroup.cosm.ejb.contract.ContractServices;
 import com.nnpcgroup.cosm.ejb.production.jv.*;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
@@ -684,7 +683,7 @@ public class JvProductionController implements Serializable {
             getProductionBean().edit(currentProduction);
 
             if (editDetails != null) {
-                performAutomaticStockAdjustment(editDetails);
+//                performAutomaticStockAdjustment(editDetails);
                 editDetails = null;
             }
         }
@@ -704,11 +703,11 @@ public class JvProductionController implements Serializable {
         persistProductionDetail(JsfUtil.PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("ProductionUpdated"));
     }
 
-    public void performAutomaticStockAdjustment(List<JvProductionDetail> detailsToAdjust) {
-        for (JvProductionDetail jvDetail : detailsToAdjust) {
-            performAutomaticStockAdjustment(jvDetail);
-        }
-    }
+//    public void performAutomaticStockAdjustment(List<JvProductionDetail> detailsToAdjust) {
+//        for (JvProductionDetail jvDetail : detailsToAdjust) {
+//            performAutomaticStockAdjustment(jvDetail);
+//        }
+//    }
 
     private void persist(JsfUtil.PersistAction persistAction, String successMessage) {
         if (currentProduction != null) {
@@ -744,7 +743,7 @@ public class JvProductionController implements Serializable {
                 if (persistAction != JsfUtil.PersistAction.DELETE) {
                     getProductionDetailBean().edit(currentProductionDetail);
                     if (isEditMode()) {
-                        performAutomaticStockAdjustment(currentProductionDetail);
+//                        performAutomaticStockAdjustment(currentProductionDetail);
                         disableEditMode();
                     }
                 } else {
@@ -806,22 +805,22 @@ public class JvProductionController implements Serializable {
         return findProduction(periodYear, periodMonth, currentFiscalArrangement) != null;
     }
 
-    private void performAutomaticStockAdjustment(JvProductionDetail jvDetail) {
-        ProductionDetail thisProduction = jvDetail;
-        ProductionDetail nextProduction;
-
-        while ((nextProduction = (ProductionDetail) getProductionDetailBean().getNextMonthProduction(thisProduction)) != null) {
-            try {
-                getProductionDetailBean().enrich(nextProduction);
-                getProductionDetailBean().edit(nextProduction);
-                // adjProductions.add(nextProduction);
-                thisProduction = nextProduction;
-            } catch (NoRealizablePriceException rpe) {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, rpe);
-                JsfUtil.addErrorMessage(rpe, ResourceBundle.getBundle("/Bundle").getString("RealizablePriceErrorOccured"));
-            }
-        }
-        
-        JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("StockAdjustmentSuccess"));
-    }
+//    private void performAutomaticStockAdjustment(JvProductionDetail jvDetail) {
+//        ProductionDetail thisProduction = jvDetail;
+//        ProductionDetail nextProduction;
+//
+//        while ((nextProduction = (ProductionDetail) getProductionDetailBean().getNextMonthProduction(thisProduction)) != null) {
+//            try {
+//                getProductionDetailBean().enrich(nextProduction);
+//                getProductionDetailBean().edit(nextProduction);
+//                // adjProductions.add(nextProduction);
+//                thisProduction = nextProduction;
+//            } catch (NoRealizablePriceException rpe) {
+//                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, rpe);
+//                JsfUtil.addErrorMessage(rpe, ResourceBundle.getBundle("/Bundle").getString("RealizablePriceErrorOccured"));
+//            }
+//        }
+//        
+//        JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("StockAdjustmentSuccess"));
+//    }
 }

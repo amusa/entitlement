@@ -9,6 +9,7 @@ import com.nnpcgroup.cosm.ejb.forecast.jv.JvForecastDetailServices;
 import com.nnpcgroup.cosm.entity.Terminal;
 import com.nnpcgroup.cosm.entity.forecast.jv.JvForecast;
 import com.nnpcgroup.cosm.entity.forecast.jv.JvForecastDetail;
+import com.nnpcgroup.cosm.entity.forecast.jv.JvForecastEntitlement;
 
 import javax.inject.Named;
 import java.io.Serializable;
@@ -36,6 +37,7 @@ public class JvTerminalBlendController implements Serializable {
 
     private List<JvForecast> productions;
     private List<JvForecastDetail> forecastDetails;
+    private List<JvForecastEntitlement> forecastEntitlements;
 
     private Integer periodYear;
     private Integer periodMonth;
@@ -76,6 +78,14 @@ public class JvTerminalBlendController implements Serializable {
 
     public void setForecastDetails(List<JvForecastDetail> forecastDetails) {
         this.forecastDetails = forecastDetails;
+    }
+
+    public List<JvForecastEntitlement> getForecastEntitlements() {
+        return forecastEntitlements;
+    }
+
+    public void setForecastEntitlements(List<JvForecastEntitlement> forecastEntitlements) {
+        this.forecastEntitlements = forecastEntitlements;
     }
 
     //    public void prepareCreate() {
@@ -182,7 +192,7 @@ public class JvTerminalBlendController implements Serializable {
             return null;
         }
         Double dailySum = forecastDetails.stream()
-                .mapToDouble(p -> p.getProductionVolume())
+                .mapToDouble(p -> p.getDailyProduction())
                 .sum();
         return dailySum;
     }
@@ -202,7 +212,7 @@ public class JvTerminalBlendController implements Serializable {
         if (forecastDetails.isEmpty()) {
             return null;
         }
-        Double ownEntitlement = forecastDetails.stream()
+        Double ownEntitlement = forecastEntitlements.stream()
                 .mapToDouble(p -> p.getOwnShareEntitlement())
                 .sum();
         return ownEntitlement;
@@ -212,7 +222,7 @@ public class JvTerminalBlendController implements Serializable {
         if (forecastDetails.isEmpty()) {
             return null;
         }
-        Double partnerEntitlement = forecastDetails.stream()
+        Double partnerEntitlement = forecastEntitlements.stream()
                 .mapToDouble(p -> p.getPartnerShareEntitlement())
                 .sum();
         return partnerEntitlement;
@@ -222,7 +232,7 @@ public class JvTerminalBlendController implements Serializable {
         if (forecastDetails.isEmpty()) {
             return null;
         }
-        Double openingStockSum = forecastDetails.stream()
+        Double openingStockSum = forecastEntitlements.stream()
                 .mapToDouble(p -> p.getOpeningStock())
                 .sum();
         return openingStockSum;
@@ -232,7 +242,7 @@ public class JvTerminalBlendController implements Serializable {
         if (forecastDetails.isEmpty()) {
             return null;
         }
-        Double availabilitySum = forecastDetails.stream()
+        Double availabilitySum = forecastEntitlements.stream()
                 .mapToDouble(p -> p.getAvailability())
                 .sum();
 

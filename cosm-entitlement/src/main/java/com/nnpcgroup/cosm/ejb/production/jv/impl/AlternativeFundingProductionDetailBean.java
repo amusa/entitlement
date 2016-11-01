@@ -30,4 +30,9 @@ public class AlternativeFundingProductionDetailBean extends AlternativeFundingPr
         super(entityClass);
     }
 
+    @Override
+    public AlternativeFundingProductionDetail openingStockChanged(AlternativeFundingProductionDetail production) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }

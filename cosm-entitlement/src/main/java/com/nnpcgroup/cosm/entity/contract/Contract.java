@@ -7,6 +7,7 @@ package com.nnpcgroup.cosm.entity.contract;
 
 import com.nnpcgroup.cosm.entity.*;
 import com.nnpcgroup.cosm.entity.forecast.jv.ForecastDetail;
+import com.nnpcgroup.cosm.entity.forecast.jv.JvForecastDetail;
 
 import java.io.Serializable;
 import java.util.List;
@@ -19,7 +20,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "CONTRACT")
 @DiscriminatorColumn(name = "DTYPE")
-public abstract class Contract   implements Auditable, Serializable {
+public abstract class Contract implements Auditable, Serializable {
 
     private static final long serialVersionUID = 4374185291370537475L;
 
@@ -29,7 +30,7 @@ public abstract class Contract   implements Auditable, Serializable {
     private AuditInfo auditInfo = new AuditInfo();
 
     private String title;
-    private List<ForecastDetail> forecastDetails;
+    private List<JvForecastDetail> forecastDetails;
 
     public Contract() {
     }
@@ -59,7 +60,6 @@ public abstract class Contract   implements Auditable, Serializable {
         this.fiscalArrangement = fiscalArrangement;
     }
 
-
     @ManyToOne
     @MapsId("crudeTypeCode")
     @JoinColumn(name = "CRUDETYPECODE")
@@ -81,11 +81,11 @@ public abstract class Contract   implements Auditable, Serializable {
     }
 
     @OneToMany(mappedBy = "contract")
-    public List<ForecastDetail> getForecastDetails() {
+    public List<JvForecastDetail> getForecastDetails() {
         return forecastDetails;
     }
 
-    public void setForecastDetails(List<ForecastDetail> forecastDetails) {
+    public void setForecastDetails(List<JvForecastDetail> forecastDetails) {
         this.forecastDetails = forecastDetails;
     }
 
@@ -96,9 +96,10 @@ public abstract class Contract   implements Auditable, Serializable {
         auditInfo.setLastModifiedBy(user);
     }
 
-
     @Embedded
-    public AuditInfo getAuditInfo() { return auditInfo; }
+    public AuditInfo getAuditInfo() {
+        return auditInfo;
+    }
 
     public void setAuditInfo(AuditInfo auditInfo) {
         this.auditInfo = auditInfo;
@@ -111,8 +112,12 @@ public abstract class Contract   implements Auditable, Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         Contract contract = (Contract) o;
 

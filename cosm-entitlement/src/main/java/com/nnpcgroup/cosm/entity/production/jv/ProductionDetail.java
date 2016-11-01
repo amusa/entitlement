@@ -94,7 +94,7 @@ public abstract class ProductionDetail<E extends Production> implements Auditabl
     }
 
     public void duplicate(ForecastDetail forecastDetail) {
-        this.setContract(forecastDetail.getContract());
+       // this.setContract(forecastDetail.getContract());
         this.setPeriodYear(forecastDetail.getPeriodYear());
         this.setPeriodMonth(forecastDetail.getPeriodMonth());
         this.setProductionDetailPK(forecastDetail.makeProductionDetailPK());

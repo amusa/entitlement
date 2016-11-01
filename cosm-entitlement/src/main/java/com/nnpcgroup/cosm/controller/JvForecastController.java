@@ -6,7 +6,6 @@
 package com.nnpcgroup.cosm.controller;
 
 import com.nnpcgroup.cosm.controller.util.JsfUtil;
-import com.nnpcgroup.cosm.ejb.FiscalArrangementBean;
 import com.nnpcgroup.cosm.ejb.contract.ContractServices;
 import com.nnpcgroup.cosm.ejb.forecast.jv.*;
 import com.nnpcgroup.cosm.entity.contract.CarryContract;
@@ -51,16 +50,16 @@ public class JvForecastController implements Serializable {
     private JvForecastDetailServices forecastBean;
 
     @EJB
-    private CarryForecastDetailServices caForecastBean;
+    private JvForecastEntitlementServices entitlementBean;
 
     @EJB
-    private ModifiedCarryForecastDetailServices mcaForecastBean;
+    private CarryForecastEntitlementServices caEntitlementBean;
+
+    @EJB
+    private ModifiedCarryForecastEntitlementServices mcaEntitlementBean;
 
     @Inject
     private ContractServices contractBean;
-
-    @EJB
-    private FiscalArrangementBean fiscalBean;
 
     @Inject
     Principal principal;
@@ -70,6 +69,8 @@ public class JvForecastController implements Serializable {
     private List<JvForecastDetail> forecastDetails;
     private List<JvForecastDetail> editDetails;
     private JvForecastDetail currentForecastDetail;
+    private List<JvForecastEntitlement> forecastEntitlements;
+    private JvForecastEntitlement currentEntitlement;
     private Integer periodYear;
     private Integer periodMonth;
     private FiscalArrangement currentFiscalArrangement;
@@ -90,14 +91,18 @@ public class JvForecastController implements Serializable {
     }
 
     public JvForecastDetailServices getForecastDetailBean() {
+        return forecastBean;
+    }
+
+    public JvForecastEntitlementServices getEntitlementBean() {
         if (currentContract instanceof CarryContract) {
-            return caForecastBean;
+            return caEntitlementBean;
         } else if (currentContract instanceof ModifiedCarryContract) {
-            return mcaForecastBean;
+            return mcaEntitlementBean;
         } else if (currentContract instanceof JvContract) {
-            return forecastBean;
+            return entitlementBean;
         } else {
-            return forecastBean;
+            return entitlementBean;
         }
     }
 
@@ -117,6 +122,13 @@ public class JvForecastController implements Serializable {
     public AlternativeFundingForecastDetail getCurrentAfProduction() {
         if (currentForecastDetail instanceof AlternativeFundingForecastDetail) {
             return (AlternativeFundingForecastDetail) currentForecastDetail;
+        }
+        return null;
+    }
+
+    public AlternativeFundingForecastEntitlement getCurrentAfEntitlement() {
+        if (currentEntitlement instanceof AlternativeFundingForecastEntitlement) {
+            return (AlternativeFundingForecastEntitlement) currentEntitlement;
         }
         return null;
     }
@@ -142,6 +154,22 @@ public class JvForecastController implements Serializable {
 
     public void setCurrentForecastDetail(JvForecastDetail currentForecastDetail) {
         this.currentForecastDetail = currentForecastDetail;
+    }
+
+    public List<JvForecastEntitlement> getForecastEntitlements() {
+        return forecastEntitlements;
+    }
+
+    public void setForecastEntitlements(List<JvForecastEntitlement> forecastEntitlements) {
+        this.forecastEntitlements = forecastEntitlements;
+    }
+
+    public JvForecastEntitlement getCurrentEntitlement() {
+        return currentEntitlement;
+    }
+
+    public void setCurrentEntitlement(JvForecastEntitlement currentEntitlement) {
+        this.currentEntitlement = currentEntitlement;
     }
 
     public void prepareEditForecastDetail(JvForecastDetail jvDetail) {
@@ -212,12 +240,9 @@ public class JvForecastController implements Serializable {
 
     public void destroy() {
         persist(JsfUtil.PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("ProductionDeleted"));
-//        getForecastDetailBean().delete(currentProduction.getPeriodYear(), currentProduction.getPeriodMonth(), currentProduction.getFiscalArrangement());
-//        getForecastDetailBean().delete(currentProduction.getForecastDetails());
-//        JvForecast forecast = getForecastBean().findByContractPeriod(periodYear, periodMonth, currentFiscalArrangement);
-//        if (forecast != null) {
-//            getForecastBean().delete(currentProduction.getPeriodYear(), currentProduction.getPeriodMonth(), currentProduction.getFiscalArrangement());
-//        }
+        if (!JsfUtil.isValidationFailed()) {
+            reset();
+        }
 
     }
 
@@ -236,6 +261,8 @@ public class JvForecastController implements Serializable {
 //        destroyForecastDetail();
         if (currentProduction != null) {
             removeForecastDetail(prod);
+
+            removeEntitlement(prod);
             try {
                 getForecastBean().edit(currentProduction);
                 JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("ProductionDeleted"));
@@ -271,6 +298,31 @@ public class JvForecastController implements Serializable {
         }
     }
 
+    public void removeEntitlement(JvForecastDetail detail) {
+        List<JvForecastEntitlement> entitlements;
+        if (currentProduction != null) {
+            entitlements = currentProduction.getEntitlements();
+
+            for (JvForecastEntitlement ent : entitlements) {
+                if (isEqualKeys(detail, ent)) {
+                    entitlements.remove(ent);
+                }
+            }
+
+        }
+    }
+
+    private boolean isEqualKeys(JvForecastDetail detail, JvForecastEntitlement ent) {
+        JvForecastDetailPK detailPK = detail.getForecastDetailPK();
+        JvForecastEntitlementPK entitlementPK = ent.getEntitlementPK();
+
+        if (!detailPK.getForecastPK().equals(entitlementPK.getForecastPK())) {
+            return false;
+        }
+
+        return detailPK.getContractPK().equals(entitlementPK.getContractPK());
+    }
+
     public void create() {
         persistForecastDetail(JsfUtil.PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("ProductionCreated"));
         if (!JsfUtil.isValidationFailed()) {
@@ -287,6 +339,7 @@ public class JvForecastController implements Serializable {
 //        }
 //        forecastDetails.add(currentForecastDetail);
         addForecastDetail(currentForecastDetail);
+        addEntitlement(currentEntitlement);
 
         return "forecast-create2";
     }
@@ -298,12 +351,19 @@ public class JvForecastController implements Serializable {
 
     }
 
+    public void addEntitlement(JvForecastEntitlement entitlement) {
+        if (currentProduction != null) {
+            currentProduction.addEntitlement(entitlement);
+        }
+
+    }
+
     public String editForecastDetail() {
         if (!isNewDetail()) {
             if (editDetails == null) {
                 editDetails = new ArrayList<>();
             }
-            editDetails.add(currentForecastDetail);            
+            editDetails.add(currentForecastDetail);
         } else {
             addForecastDetail(currentForecastDetail);
             setNewDetail(false);
@@ -359,24 +419,49 @@ public class JvForecastController implements Serializable {
 
     }
 
-    public void performAutomaticStockAdjustment(JvForecastDetail detailToAdjust) {
+    public void performAutomaticStockAdjustment(JvForecastEntitlement entitlementToAdjust) {
         LOG.log(Level.INFO, "Performing automatic stock adjustment...");
-        JvForecastDetail thisForecastDetail = detailToAdjust;
-        JvForecastDetail nextForecastDetail;
-        while ((nextForecastDetail = (JvForecastDetail) getForecastDetailBean().getNextMonthProduction(thisForecastDetail)) != null) {
+        JvForecastEntitlement thisEntitlement = entitlementToAdjust;
+        JvForecastEntitlement nextEntitlement;
+        while ((nextEntitlement = (JvForecastEntitlement) getEntitlementBean().getNextMonthProduction(thisEntitlement)) != null) {
             try {
                 LOG.log(Level.INFO, "Adjusting {0} {1}/{2}...",
-                        new Object[]{nextForecastDetail.getContract(),
-                            nextForecastDetail.getPeriodYear(),
-                            nextForecastDetail.getPeriodMonth()});
+                        new Object[]{nextEntitlement.getContract(),
+                            nextEntitlement.getPeriodYear(),
+                            nextEntitlement.getPeriodMonth()});
 
-                getForecastDetailBean().enrich(nextForecastDetail);
-                getForecastDetailBean().edit(nextForecastDetail);
+                getEntitlementBean().enrich(nextEntitlement);
+                getEntitlementBean().edit(nextEntitlement);
                 // adjforecasts.add(nextForecast);
-                thisForecastDetail = nextForecastDetail;
-            } catch (NoRealizablePriceException rpe) {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, rpe);
-                JsfUtil.addErrorMessage(rpe, ResourceBundle.getBundle("/Bundle").getString("RealizablePriceErrorOccured"));
+                thisEntitlement = nextEntitlement;
+            } catch (Exception ex) {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+                JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/Bundle").getString("RealizablePriceErrorOccured"));
+            }
+        }
+
+        // getForecastDetailBean().edit(adjforecasts);
+        JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("StockAdjustmentSuccess"));
+    }
+
+    public void performAutomaticStockAdjustment(JvForecastEntitlement entitlementToAdjust, Double grossProd) {
+        LOG.log(Level.INFO, "Performing automatic stock adjustment...");
+        JvForecastEntitlement thisEntitlement = entitlementToAdjust;
+        JvForecastEntitlement nextEntitlement;
+        while ((nextEntitlement = (JvForecastEntitlement) getEntitlementBean().getNextMonthProduction(thisEntitlement)) != null) {
+            try {
+                LOG.log(Level.INFO, "Adjusting {0} {1}/{2}...",
+                        new Object[]{nextEntitlement.getContract(),
+                            nextEntitlement.getPeriodYear(),
+                            nextEntitlement.getPeriodMonth()});
+
+                getEntitlementBean().enrich(nextEntitlement, grossProd);
+                getEntitlementBean().edit(nextEntitlement);
+                // adjforecasts.add(nextForecast);
+                thisEntitlement = nextEntitlement;
+            } catch (Exception ex) {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+                JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/Bundle").getString("RealizablePriceErrorOccured"));
             }
         }
 
@@ -405,9 +490,24 @@ public class JvForecastController implements Serializable {
         return null;
     }
 
+    public void performAutomaticStockAdjustment(JvForecastDetail jvDetail) {
+        JvForecastEntitlement entitlement = getForecastEntitlement(jvDetail);
+        performAutomaticStockAdjustment(entitlement, jvDetail.getGrossProduction());
+    }
+
     public void performAutomaticStockAdjustment(List<JvForecastDetail> detailsToAdjust) {
         for (JvForecastDetail jvDetail : detailsToAdjust) {
             performAutomaticStockAdjustment(jvDetail);
+        }
+    }
+
+    public JvForecastEntitlement getForecastEntitlement(JvForecastDetail jvDetail) {
+        return new JvForecastEntitlement();//TODO:Implement
+    }
+
+    public void performAutomaticEntitlementAdjustment(List<JvForecastEntitlement> entitlementsToAdjust) {
+        for (JvForecastEntitlement jvEntitlement : entitlementsToAdjust) {
+            performAutomaticStockAdjustment(jvEntitlement);
         }
     }
 
@@ -505,27 +605,32 @@ public class JvForecastController implements Serializable {
         }
     }
 
-    private List<JvForecastDetail> handleAnnualProduction() {
+    private void handleAnnualProduction() {
         if (currentFiscalArrangement != null) {
             if (currentContract == null) {
                 forecastDetails = getForecastDetailBean().findAnnualProduction(periodYear, currentFiscalArrangement);
+                forecastEntitlements = getEntitlementBean().findAnnualProduction(periodYear, currentFiscalArrangement);
             } else {
                 forecastDetails = getForecastDetailBean().findByContractPeriod(periodYear, currentContract);
+                forecastEntitlements = getEntitlementBean().findByContractPeriod(periodYear, currentContract);
             }
         }
-        return forecastDetails;
+        //return forecastDetails;
     }
 
     private List<JvForecastDetail> handleMonthlyProduction() {
         if (currentFiscalArrangement != null) {
             if (currentContract == null) {
                 forecastDetails = getForecastDetailBean().findByContractPeriod(periodYear, periodMonth, currentFiscalArrangement);
+                forecastEntitlements = getEntitlementBean().findByContractPeriod(periodYear, periodMonth, currentFiscalArrangement);
             } else {
                 forecastDetails = getForecastDetailBean().findByContractPeriod(periodYear, periodMonth, currentContract);
+                forecastEntitlements = getEntitlementBean().findByContractPeriod(periodYear, periodMonth, currentContract);
             }
 
         } else {
             forecastDetails = getForecastDetailBean().findByYearAndMonth(periodYear, periodMonth);
+            forecastEntitlements = getEntitlementBean().findByYearAndMonth(periodYear, periodMonth);
         }
 
         return forecastDetails;
@@ -564,7 +669,7 @@ public class JvForecastController implements Serializable {
 
     public void enableEditMode() {
         setEditMode(true);
-        productionVolumeChanged();
+        dailyProductionChanged();
     }
 
     public void disableEditMode() {
@@ -577,13 +682,14 @@ public class JvForecastController implements Serializable {
         }
     }
 
-    public void productionVolumeChanged() {
+    public void dailyProductionChanged() {
         LOG.log(Level.INFO,
                 "Daily production volume changed {0}",
-                new Object[]{currentForecastDetail.getProductionVolume()});
+                new Object[]{currentForecastDetail.getDailyProduction()});
         try {
             checkNull();
             getForecastDetailBean().enrich(currentForecastDetail);
+            getEntitlementBean().enrich(currentEntitlement, currentForecastDetail.getGrossProduction());
         } catch (NoRealizablePriceException rpe) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, rpe);
             JsfUtil.addErrorMessage(rpe, ResourceBundle.getBundle("/Bundle").getString("RealizablePriceErrorOccured"));
@@ -595,31 +701,31 @@ public class JvForecastController implements Serializable {
     }
 
     public void alternativeFundingCostListener() {
-        AlternativeFundingForecastDetailServices afBean = (AlternativeFundingForecastDetailServices) getForecastDetailBean();
+        AlternativeFundingForecastEntitlementServices afBean = (AlternativeFundingForecastEntitlementServices) getEntitlementBean();
         try {
-            afBean.computeAlternativeFunding(getCurrentAfProduction());
-        } catch (NoRealizablePriceException rpe) {
+            afBean.computeAlternativeFunding(getCurrentAfEntitlement());
+        } catch (Exception rpe) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, rpe);
             JsfUtil.addErrorMessage(rpe, ResourceBundle.getBundle("/Bundle").getString("RealizablePriceErrorOccured"));
         }
     }
 
     public void openingStockChanged() {
-        LOG.log(Level.INFO, "Opening Stock changed {0}...", currentForecastDetail);
-        getForecastDetailBean().openingStockChanged(currentForecastDetail);
+        LOG.log(Level.INFO, "Opening Stock changed {0}...", currentEntitlement);
+        getEntitlementBean().openingStockChanged(currentEntitlement);
     }
 
     public void liftingChanged() {
         LOG.log(Level.INFO, "Exportable volume changed: NNPC {0}, Partner {1}",
-                new Object[]{currentForecastDetail.getLifting(), currentForecastDetail.getPartnerLifting()});
-        getForecastDetailBean().computeClosingStock(currentForecastDetail);
+                new Object[]{currentEntitlement.getLifting(), currentEntitlement.getPartnerLifting()});
+        getEntitlementBean().computeClosingStock(currentEntitlement);
     }
 
     public void resetDefaults() {
         LOG.log(Level.INFO, "Resetting to default...");
         try {
             getForecastDetailBean().enrich(currentForecastDetail);
-        } catch (NoRealizablePriceException rpe) {
+        } catch (Exception rpe) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, rpe);
             JsfUtil.addErrorMessage(rpe, ResourceBundle.getBundle("/Bundle").getString("RealizablePriceErrorOccured"));
         }
@@ -628,8 +734,10 @@ public class JvForecastController implements Serializable {
     private void reset() {
         currentProduction = null;
         currentForecastDetail = null;
+        currentEntitlement = null;
         productions = null;
         forecastDetails = null;
+        forecastEntitlements = null;
 //        currentContract = null;
     }
 
@@ -698,7 +806,7 @@ public class JvForecastController implements Serializable {
 
     public Double getDailySum() {
         Double dailySum = forecastDetails.stream()
-                .mapToDouble(p -> p.getProductionVolume())
+                .mapToDouble(p -> p.getDailyProduction())
                 .sum();
         return dailySum;
     }
@@ -711,28 +819,28 @@ public class JvForecastController implements Serializable {
     }
 
     public Double getOwnEntitlementSum() {
-        Double ownEntitlement = forecastDetails.stream()
+        Double ownEntitlement = forecastEntitlements.stream()
                 .mapToDouble(p -> p.getOwnShareEntitlement())
                 .sum();
         return ownEntitlement;
     }
 
     public Double getPartnerEntitlementSum() {
-        Double partnerEntitlement = forecastDetails.stream()
+        Double partnerEntitlement = forecastEntitlements.stream()
                 .mapToDouble(p -> p.getPartnerShareEntitlement())
                 .sum();
         return partnerEntitlement;
     }
 
     public Double getOpeningStockSum() {
-        Double openingStockSum = forecastDetails.stream()
+        Double openingStockSum = forecastEntitlements.stream()
                 .mapToDouble(p -> p.getOpeningStock())
                 .sum();
         return openingStockSum;
     }
 
     public Double getAvailabilitySum() {
-        Double availabilitySum = forecastDetails.stream()
+        Double availabilitySum = forecastEntitlements.stream()
                 .mapToDouble(p -> p.getAvailability())
                 .sum();
 
@@ -756,28 +864,33 @@ public class JvForecastController implements Serializable {
     }
 
     public boolean isFiscalArrangementAfContract() {
-        return (getCurrentForecastDetail() instanceof AlternativeFundingForecastDetail);
+        return (getCurrentEntitlement() instanceof AlternativeFundingForecastEntitlement);
     }
 
     public void currentContractChanged() {// throws Exception {
         if (currentContract instanceof CarryContract) {
             currentForecastDetail = new CarryForecastDetail();
+            currentEntitlement = new CarryForecastEntitlement();
             setNewForecast(true);
         } else if (currentContract instanceof ModifiedCarryContract) {
             currentForecastDetail = new ModifiedCarryForecastDetail();
+            currentEntitlement = new ModifiedCarryForecastEntitlement();
             setNewForecast(true);
         } else if (currentContract instanceof JvContract) {
             currentForecastDetail = new JvForecastDetail();
+            currentEntitlement = new JvForecastEntitlement();
             setNewForecast(true);
         } else {
             LOG.fine("Undefined contract selection...");
             currentForecastDetail = null;
+            currentEntitlement = null;
         }
 
-        if (currentForecastDetail != null) {
+        if (currentForecastDetail != null && currentEntitlement != null) {
 
             if (periodYear != null && periodMonth != null && currentContract != null) {
                 setForecastDetailEmbeddableKeys();
+                setEntitlementEmbeddableKeys();
             }
         }
     }
@@ -786,15 +899,27 @@ public class JvForecastController implements Serializable {
         return (JvForecast) getForecastDetailBean().find(fPK);
     }
 
-    private void setForecastDetailEmbeddableKeys() {
-        ForecastDetailPK fPK = new ForecastDetailPK(currentProduction.getForecastPK(), currentContract.getContractPK());
-//        fPK.setForecast(currentProduction.getForecastPK());
-//        fPK.setContract(currentContract.getContractPK());
+    private void setEntitlementEmbeddableKeys() {
+        JvForecastEntitlementPK fPK = new JvForecastEntitlementPK(currentProduction.getForecastPK(), currentContract.getContractPK());
+        currentEntitlement.setEntitlementPK(fPK);
 
+        currentEntitlement.setPeriodYear(periodYear);
+        currentEntitlement.setPeriodMonth(periodMonth);
+        currentEntitlement.setFiscalArrangement(currentFiscalArrangement);
+        currentEntitlement.setContract(currentContract);
+
+        currentEntitlement.setForecast(currentProduction);
+
+        currentEntitlement.setCurrentUser(principal.getName());
+    }
+
+    private void setForecastDetailEmbeddableKeys() {
+        JvForecastDetailPK fPK = new JvForecastDetailPK(currentProduction.getForecastPK(), currentContract.getContractPK());
         currentForecastDetail.setForecastDetailPK(fPK);
 
         currentForecastDetail.setPeriodYear(periodYear);
         currentForecastDetail.setPeriodMonth(periodMonth);
+        currentForecastDetail.setFiscalArrangement(currentFiscalArrangement);
         currentForecastDetail.setContract(currentContract);
 
         currentForecastDetail.setForecast(currentProduction);

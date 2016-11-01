@@ -6,6 +6,8 @@ import com.nnpcgroup.cosm.ejb.FiscalArrangementBean;
 import com.nnpcgroup.cosm.ejb.contract.ContractServices;
 import com.nnpcgroup.cosm.entity.contract.Contract;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
+import com.nnpcgroup.cosm.entity.JointVenture;
+import com.nnpcgroup.cosm.entity.ProductionSharingContract;
 import java.io.Serializable;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -30,6 +32,8 @@ public class FiscalArrangementController implements Serializable {
 
     private FiscalArrangement currentFiscal;
     private List<FiscalArrangement> fiscalArrangements;
+    private List<ProductionSharingContract> pscFiscalArrangements;
+    private List<JointVenture> jvFiscalArrangements;
 
     @EJB
     private FiscalArrangementBean fiscalBean;
@@ -71,6 +75,20 @@ public class FiscalArrangementController implements Serializable {
         return fiscalArrangements;
     }
 
+    public List<ProductionSharingContract> getPscFiscalArrangements() {
+        if (pscFiscalArrangements == null) {
+            pscFiscalArrangements = getFiscalBean().findPscFiscalArrangements();
+        }
+        return pscFiscalArrangements;
+    }
+
+    public List<JointVenture> getJvFiscalArrangements() {
+        if (jvFiscalArrangements == null) {
+            jvFiscalArrangements = getFiscalBean().findJvFiscalArrangements();
+        }
+        return jvFiscalArrangements;
+    }
+
     public void setFiscalArrangements(List<FiscalArrangement> fiscalArrangements) {
 
         this.fiscalArrangements = fiscalArrangements;
@@ -81,6 +99,14 @@ public class FiscalArrangementController implements Serializable {
 //    }
     public SelectItem[] getFiscalSelectOptions() {
         return JsfUtil.getSelectItems(fiscalBean.findAll(), false);
+    }
+
+    public SelectItem[] getJvFiscalSelectOptions() {
+        return JsfUtil.getSelectItems(fiscalBean.findJvFiscalArrangements(), false);
+    }
+
+    public SelectItem[] getPscFiscalSelectOptions() {
+        return JsfUtil.getSelectItems(fiscalBean.findPscFiscalArrangements(), false);
     }
 
     public List<FiscalArrangement> getFiscalList() {

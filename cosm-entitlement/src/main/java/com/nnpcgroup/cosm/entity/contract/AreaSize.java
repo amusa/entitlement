@@ -2,12 +2,14 @@ package com.nnpcgroup.cosm.entity.contract;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.Transient;
 
 /**
  * Created by maliska on 8/24/16.
  */
 @Embeddable
 public class AreaSize {
+
     private Double oplContractArea;
     private Double omlContractArea;
     private Double oplRentalRate;
@@ -47,5 +49,11 @@ public class AreaSize {
 
     public void setOmlConcessionRentalRate(Double omlConcessionRentalRate) {
         this.omlConcessionRentalRate = omlConcessionRentalRate;
+    }
+
+    @Transient
+    public Double getTotalConcessionRental() {
+        return (oplContractArea == null || oplRentalRate == null)
+                ? null : oplContractArea * oplRentalRate * 4;
     }
 }

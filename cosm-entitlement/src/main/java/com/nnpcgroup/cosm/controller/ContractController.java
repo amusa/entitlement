@@ -8,7 +8,6 @@ import com.nnpcgroup.cosm.ejb.contract.ContractServices;
 import com.nnpcgroup.cosm.entity.CrudeType;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
 import com.nnpcgroup.cosm.entity.JointVenture;
-import com.nnpcgroup.cosm.entity.ProductionSharingContract;
 import com.nnpcgroup.cosm.entity.contract.*;
 
 import javax.ejb.EJB;
@@ -87,8 +86,6 @@ public class ContractController implements Serializable {
             contractType = "CA";
         } else if (selected instanceof ModifiedCarryContract) {
             contractType = "MCA";
-        } else if (selected instanceof PscContract) {
-            contractType = "PSC";
         }
         //this.selected.setFiscalArrangement(fiscalArrangement);
     }
@@ -138,8 +135,11 @@ public class ContractController implements Serializable {
             selected.setContractPK(cPK);
             selected.setCrudeType(crudeType);
             selected.setFiscalArrangement(fiscalArrangement);
-            fiscalArrangement.addContract(selected);
-            //crudeType.addContract(selected);
+
+            if (fiscalArrangement instanceof JointVenture) {
+                ((JointVenture) fiscalArrangement).addContract(selected);
+            }
+            //fiscalArrangement.addContract(selected);           
         }
     }
 
@@ -256,9 +256,6 @@ public class ContractController implements Serializable {
                 case "CA":
                     selected = new CarryContract();
                     break;
-                case "PSC":
-                    selected = new PscContract();
-                    break;
                 default:
                     break;
             }
@@ -272,8 +269,6 @@ public class ContractController implements Serializable {
         LOG.log(Level.INFO, "Adding Contract for fiscal arrangement {0}...", fa);
         if (fa instanceof JointVenture) {
             setSelected(new JvContract());
-        } else if (fa instanceof ProductionSharingContract) {
-            setSelected(new PscContract());
         }
 
         initializeEmbeddableKey();

@@ -297,16 +297,18 @@ public class JvProductionDetail extends ProductionDetail<JvProduction> {
         super.duplicate(forecastDetail);
         JvForecastDetail jvDetail = (JvForecastDetail) forecastDetail;
 
-        this.openingStock = jvDetail.getOpeningStock();
-        this.partnerOpeningStock = jvDetail.getPartnerOpeningStock();
-        this.closingStock = jvDetail.getClosingStock();
-        this.partnerClosingStock = jvDetail.getPartnerClosingStock();
         this.grossProduction = jvDetail.getGrossProduction();
-        this.lifting = jvDetail.getLifting();
-        this.partnerLifting = jvDetail.getPartnerLifting();
-        this.cargos = jvDetail.getCargos();
-        this.partnerCargos = jvDetail.getPartnerCargos();
-
+        
+        
+//         this.openingStock = jvDetail.getOpeningStock();
+//        this.partnerOpeningStock = jvDetail.getPartnerOpeningStock();
+//        this.closingStock = jvDetail.getClosingStock();
+//        this.partnerClosingStock = jvDetail.getPartnerClosingStock();
+//        this.grossProduction = jvDetail.getGrossProduction();
+//        this.lifting = jvDetail.getLifting();
+//        this.partnerLifting = jvDetail.getPartnerLifting();
+//        this.cargos = jvDetail.getCargos();
+//        this.partnerCargos = jvDetail.getPartnerCargos();
     }
 
 }

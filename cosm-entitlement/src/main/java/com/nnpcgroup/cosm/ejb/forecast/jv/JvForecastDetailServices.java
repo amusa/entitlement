@@ -5,10 +5,8 @@
  */
 package com.nnpcgroup.cosm.ejb.forecast.jv;
 
-import com.nnpcgroup.cosm.entity.FiscalArrangement;
 import com.nnpcgroup.cosm.entity.contract.Contract;
 import com.nnpcgroup.cosm.entity.forecast.jv.JvForecastDetail;
-import java.util.List;
 
 /**
  *
@@ -17,10 +15,7 @@ import java.util.List;
  */
 public interface JvForecastDetailServices<T extends JvForecastDetail> extends ForecastDetailServices<T> {
 
+    public T find(int year, int month, Contract contract);
+
     public void delete(int year, int month, Contract contract);
-
-    public void delete(int year, int month, FiscalArrangement fa);
-
-    public void delete(List<T> jvDetails);
-
 }

@@ -20,6 +20,14 @@ import java.util.List;
  */
 public interface JvProductionDetailServices<T extends JvProductionDetail, E extends JvContract> extends ProductionDetailServices<T, E> {
 
+    public T computeClosingStock(T production);
+
+    public T openingStockChanged(T production);
+
+    public T computeAvailability(T production);
+
+    public T computeLifting(T production);
+
     public void delete(int year, int month, Contract contract);
 
     public void delete(int year, int month, FiscalArrangement fa);

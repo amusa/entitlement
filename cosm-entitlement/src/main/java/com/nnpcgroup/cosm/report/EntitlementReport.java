@@ -189,9 +189,9 @@ public class EntitlementReport extends HttpServlet {
                         count++;
                         cell = new PdfPCell(new Phrase(forecastDetail.getContract().getCrudeType().getCrudeType()));
                         table.addCell(cell);
-                        cell = new PdfPCell(new Phrase(String.format("%,.2f", forecastDetail.getLifting())));
+                       // cell = new PdfPCell(new Phrase(String.format("%,.2f", forecastDetail.getLifting())));
                         table.addCell(cell);
-                        cell = new PdfPCell(new Phrase(String.format("%,.2f", forecastDetail.getPartnerLifting())));
+                       // cell = new PdfPCell(new Phrase(String.format("%,.2f", forecastDetail.getPartnerLifting())));
                         table.addCell(cell);
 
                         if (count == 1) {

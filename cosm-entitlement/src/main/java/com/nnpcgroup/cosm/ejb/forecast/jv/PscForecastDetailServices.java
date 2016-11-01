@@ -5,14 +5,16 @@
  */
 package com.nnpcgroup.cosm.ejb.forecast.jv;
 
-import com.nnpcgroup.cosm.entity.forecast.jv.PscForecast;
+import com.nnpcgroup.cosm.entity.contract.OilField;
+import com.nnpcgroup.cosm.entity.forecast.jv.PscForecastDetail;
 
 /**
  *
  * @author 18359
  */
-public interface PscForecastDetailServices extends ForecastDetailServices<PscForecast> {
+public interface PscForecastDetailServices extends ForecastDetailServices<PscForecastDetail> {
 
-    
-   
+    public PscForecastDetail find(int year, int month, OilField oilField);
+
+    public void delete(int year, int month, OilField oilField);
 }

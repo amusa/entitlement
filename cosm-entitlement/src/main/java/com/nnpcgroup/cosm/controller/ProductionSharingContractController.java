@@ -4,6 +4,7 @@ import com.nnpcgroup.cosm.entity.ProductionSharingContract;
 import com.nnpcgroup.cosm.controller.util.JsfUtil;
 import com.nnpcgroup.cosm.controller.util.JsfUtil.PersistAction;
 import com.nnpcgroup.cosm.ejb.ProductionSharingContractBean;
+import com.nnpcgroup.cosm.entity.contract.OilField;
 
 import java.io.Serializable;
 import java.util.List;
@@ -29,6 +30,7 @@ public class ProductionSharingContractController implements Serializable {
     private ProductionSharingContractBean ejbFacade;
     private List<ProductionSharingContract> pscItems = null;
     private ProductionSharingContract selected;
+    private OilField currentOilField = null;
 
     public ProductionSharingContractController() {
     }
@@ -41,6 +43,14 @@ public class ProductionSharingContractController implements Serializable {
         this.selected = selected;
     }
 
+    public OilField getCurrentOilField() {
+        return currentOilField;
+    }
+
+    public void setCurrentOilField(OilField currentOilField) {
+        this.currentOilField = currentOilField;
+    }
+
     protected void setEmbeddableKeys() {
     }
 
@@ -51,17 +61,28 @@ public class ProductionSharingContractController implements Serializable {
         return ejbFacade;
     }
 
-    public ProductionSharingContract prepareCreate() {
-        selected = new ProductionSharingContract();
-        initializeEmbeddableKey();
-        return selected;
+    public void prepareAddOilField() {
+        currentOilField = new OilField();
     }
 
-    public void create() {
+    public void addOilField() {
+        currentOilField.setContract(selected);
+        selected.addOilField(currentOilField);
+    }
+
+    public String prepareCreate() {
+        selected = new ProductionSharingContract();
+        initializeEmbeddableKey();
+        return "psc-create";
+    }
+
+    public String create() {
         persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("ProductionSharingContractCreated"));
         if (!JsfUtil.isValidationFailed()) {
             pscItems = null;    // Invalidate list of pscItems to trigger re-query.
         }
+
+        return "psc-list";
     }
 
     public void update() {
@@ -81,8 +102,19 @@ public class ProductionSharingContractController implements Serializable {
         }
     }
 
-    public void cancel() {
+    public String cancel() {
         pscItems = null;
+        return "psc-list";
+    }
+
+    public void cancelOilField() {
+        currentOilField = null;
+    }
+
+    public void remove(OilField field) {
+        if (selected != null) {
+            selected.getOilFields().remove(field);
+        }
     }
 
     public List<ProductionSharingContract> getPscItems() {

@@ -1,5 +1,6 @@
 package com.nnpcgroup.cosm.entity.contract;
 
+import com.nnpcgroup.cosm.entity.ProductionSharingContract;
 import java.io.Serializable;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -7,13 +8,14 @@ import javax.validation.constraints.NotNull;
 /**
  * Created by maliska on 8/24/16.
  */
-
 @Entity
 @Table(name = "OIL_FIELD")
 public class OilField implements Serializable {
+
     private Long id;
     private String title;
-    private PscContract contract;
+    private Double royaltyRate;
+    private ProductionSharingContract contract;
 
     public OilField() {
     }
@@ -39,28 +41,40 @@ public class OilField implements Serializable {
         this.title = title;
     }
 
+    @NotNull
+    @Column(name = "ROYALTY_RATE")
+    public Double getRoyaltyRate() {
+        return royaltyRate;
+    }
+
+    public void setRoyaltyRate(Double royaltyRate) {
+        this.royaltyRate = royaltyRate;
+    }
+
     @ManyToOne
-    @JoinColumns({
-        @JoinColumn(name = "CONTRACT_ID", referencedColumnName = "ID"),
-        @JoinColumn(name = "CONTRACT_FISCAL_ID", referencedColumnName = "FISCALARRANGEMENTID"),
-        @JoinColumn(name = "CRUDETYPE_CODE", referencedColumnName = "CRUDETYPECODE")
-    })
-    public PscContract getContract() {
+    @JoinColumn(name = "PSC_ID", referencedColumnName = "ID")
+    public ProductionSharingContract getContract() {
         return contract;
     }
 
-    public void setContract(PscContract contract) {
+    public void setContract(ProductionSharingContract contract) {
         this.contract = contract;
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         OilField oilField = (OilField) o;
 
-        if (id != null ? !id.equals(oilField.id) : oilField.id != null) return false;
+        if (id != null ? !id.equals(oilField.id) : oilField.id != null) {
+            return false;
+        }
         return title != null ? title.equals(oilField.title) : oilField.title == null;
 
     }

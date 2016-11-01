@@ -20,6 +20,7 @@ import javax.persistence.criteria.Root;
 import com.nnpcgroup.cosm.ejb.CommonServices;
 import com.nnpcgroup.cosm.entity.FiscalPeriod;
 import com.nnpcgroup.cosm.util.COSMPersistence;
+import javax.persistence.criteria.CriteriaDelete;
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -200,14 +201,6 @@ public abstract class CommonServicesImpl<T> extends AbstractCrudServicesImpl<T> 
     }
 
     @Override
-    public abstract T computeEntitlement(T production);
-
-//    @Override
-//    public abstract T createInstance();
-    @Override
-    public abstract T computeOpeningStock(T production);
-
-    @Override
     public FiscalPeriod getPreviousFiscalPeriod(FiscalPeriod fp) {
         int month = fp.getMonth();
         int year = fp.getYear();
@@ -239,15 +232,15 @@ public abstract class CommonServicesImpl<T> extends AbstractCrudServicesImpl<T> 
         return new FiscalPeriod(yr, mt);
     }
 
-    @Override
-    public T openingStockChanged(T production) {
-        LOG.log(Level.INFO, "Opening Stock changed {0}...");
-        return computeClosingStock(
-                computeLifting(
-                        computeAvailability(production)
-                )
-        );
-    }
+//    @Override
+//    public T openingStockChanged(T production) {
+//        LOG.log(Level.INFO, "Opening Stock changed {0}...");
+//        return computeClosingStock(
+//                computeLifting(
+//                        computeAvailability(production)
+//                )
+//        );
+//    }
 
     @Override
     public List<T> getTerminalProduction(int year, int month, Terminal terminal) {
@@ -281,6 +274,67 @@ public abstract class CommonServicesImpl<T> extends AbstractCrudServicesImpl<T> 
 //
 //        List<T> productions = query.getResultList();
         return productions;
+    }
+
+    
+    @Override
+    public List<T> find(int year, int month, FiscalArrangement fa) {
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+
+        List<T> forecastDetails;
+
+        CriteriaQuery cq = cb.createQuery();
+        Root<T> e = cq.from(entityClass);
+        try {
+
+            cq.select(e).where(
+                    cb.and(cb.equal(e.get("periodYear"), year),
+                            cb.equal(e.get("periodMonth"), month),
+                            cb.equal(e.get("fiscalArrangement"), fa)
+                    ));
+            Query query = getEntityManager().createQuery(cq);
+
+            forecastDetails = query.getResultList();
+        } catch (NoResultException nre) {
+            return null;
+        }
+
+        return forecastDetails;
+    }
+    
+    @Override
+    public void delete(int year, int month, FiscalArrangement fa) {
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+
+        CriteriaDelete<T> delete = cb.
+                createCriteriaDelete(entityClass);
+
+        Root e = delete.from(entityClass);
+
+        delete.where(
+                cb.and(cb.equal(e.get("periodYear"), year),
+                        cb.equal(e.get("periodMonth"), month),
+                        cb.equal(e.get("fiscalArrangement"), fa)
+                ));
+
+        getEntityManager().createQuery(delete).executeUpdate();
+
+        // perform update
+//        Query query = getEntityManager().createQuery(
+//                "DELETE "
+//                + "FROM ForecastDetail f WHERE f.periodYear = :year AND f.periodMonth = :month AND f.contract.fiscalArrangement = :fa ");
+//        query.setParameter("year", year)
+//                .setParameter("month", month)
+//                .setParameter("fa", fa);
+//
+//        query.executeUpdate();
+    }
+
+    @Override
+    public void delete(List<T> jvDetails) {
+        jvDetails.stream().forEach((fd) -> {
+            delete(fd);
+        });
     }
 
 }

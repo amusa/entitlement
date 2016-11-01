@@ -26,4 +26,9 @@ public class CarryProductionDetailServicesImpl extends AlternativeFundingProduct
         super(CarryProductionDetail.class);
     }
 
+    @Override
+    public CarryProductionDetail openingStockChanged(CarryProductionDetail production) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }

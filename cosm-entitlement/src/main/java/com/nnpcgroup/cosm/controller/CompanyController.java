@@ -4,6 +4,7 @@ import com.nnpcgroup.cosm.entity.Company;
 import com.nnpcgroup.cosm.controller.util.JsfUtil;
 import com.nnpcgroup.cosm.controller.util.JsfUtil.PersistAction;
 import com.nnpcgroup.cosm.ejb.CompanyBean;
+import com.nnpcgroup.cosm.entity.JvCompany;
 
 import java.io.Serializable;
 import java.util.List;
@@ -27,7 +28,7 @@ public class CompanyController implements Serializable {
 
     @EJB
     private CompanyBean ejbFacade;
-    private List<Company> items = null;
+    private List<? extends Company> items = null;
     private Company selected;
 
     public CompanyController() {
@@ -52,7 +53,7 @@ public class CompanyController implements Serializable {
     }
 
     public Company prepareCreate() {
-        selected = new Company();
+        selected = new JvCompany();
         initializeEmbeddableKey();
         return selected;
     }
@@ -86,7 +87,7 @@ public class CompanyController implements Serializable {
         }
     }
 
-    public List<Company> getItems() {
+    public List<? extends Company> getItems() {
         if (items == null) {
             items = getFacade().findAll();
         }

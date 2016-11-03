@@ -5,11 +5,8 @@
  */
 package com.nnpcgroup.cosm.ejb.production.jv;
 
-import com.nnpcgroup.cosm.entity.FiscalArrangement;
-import com.nnpcgroup.cosm.entity.contract.Contract;
 import com.nnpcgroup.cosm.entity.contract.JvContract;
 import com.nnpcgroup.cosm.entity.production.jv.JvProductionDetail;
-import java.util.List;
 
 /**
  *
@@ -18,19 +15,10 @@ import java.util.List;
  * @param <E>
  *
  */
-public interface JvProductionDetailServices<T extends JvProductionDetail, E extends JvContract> extends ProductionDetailServices<T, E> {
+public interface JvProductionDetailServices<T extends JvProductionDetail, E extends JvContract> extends ProductionDetailServices<T> {
 
-    public T computeClosingStock(T production);
+    public T find(int year, int month, E contract);
 
-    public T openingStockChanged(T production);
+    public void delete(int year, int month, E contract);
 
-    public T computeAvailability(T production);
-
-    public T computeLifting(T production);
-
-    public void delete(int year, int month, Contract contract);
-
-    public void delete(int year, int month, FiscalArrangement fa);
-
-    public void delete(List<T> jvDetails);
 }

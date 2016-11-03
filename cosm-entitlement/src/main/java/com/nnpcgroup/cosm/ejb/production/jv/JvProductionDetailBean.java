@@ -5,14 +5,12 @@
  */
 package com.nnpcgroup.cosm.ejb.production.jv;
 
-import com.nnpcgroup.cosm.entity.contract.JvContract;
 import com.nnpcgroup.cosm.entity.production.jv.JvProductionDetail;
 
 /**
  *
  * @author 18359
  */
-public interface JvProductionDetailBean extends ProductionDetailServices<JvProductionDetail, JvContract>{
+public interface JvProductionDetailBean extends ProductionDetailServices<JvProductionDetail> {
 
-   
 }

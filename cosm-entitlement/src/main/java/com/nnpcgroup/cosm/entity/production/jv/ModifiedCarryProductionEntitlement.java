@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.nnpcgroup.cosm.entity;
+package com.nnpcgroup.cosm.entity.production.jv;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -13,12 +13,9 @@ import javax.persistence.Entity;
  * @author 18359
  */
 @Entity
-@DiscriminatorValue("PSC_FORECAST")
-public class PscForecastProduction extends PscProduction {
+@DiscriminatorValue("MCA")
+public class ModifiedCarryProductionEntitlement extends AlternativeFundingProductionEntitlement {
 
-    private static final long serialVersionUID = -5206065666784730417L;
-
-    public PscForecastProduction() {
-    }
+    private static final long serialVersionUID = 4881837273578907336L;
 
 }

@@ -42,7 +42,7 @@ public abstract class JvForecastEntitlementServicesImpl<T extends JvForecastEnti
 
     @Override
     public T computeOpeningStock(T entitlement) {
-        JvForecastEntitlement prod = getPreviousMonthProduction(entitlement);
+        T prod = getPreviousMonthProduction(entitlement);
         if (prod != null) {
             Double openingStock = prod.getClosingStock();
             Double partnerOpeningStock = prod.getPartnerClosingStock();

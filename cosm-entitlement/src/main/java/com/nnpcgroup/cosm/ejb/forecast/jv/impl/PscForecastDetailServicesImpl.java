@@ -90,4 +90,9 @@ public class PscForecastDetailServicesImpl extends ForecastDetailServicesImpl<Ps
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    @Override
+    public PscForecastDetail computeDailyProduction(PscForecastDetail forecast) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }

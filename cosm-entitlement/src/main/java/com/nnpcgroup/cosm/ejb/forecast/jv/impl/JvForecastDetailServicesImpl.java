@@ -53,6 +53,20 @@ public class JvForecastDetailServicesImpl<T extends JvForecastDetail> extends Fo
     }
 
     @Override
+    public T computeDailyProduction(T forecast) {
+        Double grossProd = forecast.getGrossProduction();
+        int periodYear = forecast.getPeriodYear();
+        int periodMonth = forecast.getPeriodMonth();
+        int days = genController.daysOfMonth(periodYear, periodMonth);
+        Double dailyProd = grossProd / days;
+
+        LOG.log(Level.INFO, String.format("Daily Production = GrossProd / Days => %f / %d = %f", new Object[]{grossProd, days, dailyProd}));
+
+        forecast.setDailyProduction(dailyProd);
+        return forecast;
+    }
+
+    @Override
     public T getPreviousMonthProduction(T forecast) {
         int month = forecast.getPeriodMonth();
         int year = forecast.getPeriodYear();

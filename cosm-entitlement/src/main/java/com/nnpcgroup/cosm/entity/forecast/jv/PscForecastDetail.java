@@ -14,9 +14,6 @@ import javax.persistence.*;
  * @author 18359
  */
 @Entity(name = "PSC_FORECAST_DETAIL")
-//@Table(uniqueConstraints = {
-//    @UniqueConstraint(columnNames = {"PERIOD_YEAR", "PERIOD_MONTH", "FISCALARRANGEMENT_ID", "OIL_FIELD_ID"})
-//})
 public class PscForecastDetail extends ForecastDetail {
 
     private static final long serialVersionUID = 2917191116735019064L;
@@ -36,7 +33,7 @@ public class PscForecastDetail extends ForecastDetail {
     public void setForecasstDetailPK(PscForecastDetailPK forecasstDetailPK) {
         this.forecasstDetailPK = forecasstDetailPK;
     }
-        
+
     @ManyToOne
     @MapsId("oilField")
     @JoinColumn(name = "OIL_FIELD_ID", referencedColumnName = "ID", insertable = false, updatable = false)

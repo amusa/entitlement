@@ -3,14 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.nnpcgroup.cosm.ejb;
+package com.nnpcgroup.cosm.ejb.production.jv;
 
-import com.nnpcgroup.cosm.entity.PscActualProduction;
+import com.nnpcgroup.cosm.entity.production.jv.PscProduction;
 
 /**
  *
  * @author 18359
  */
-public interface PscActualProductionServices extends PscProductionServices<PscActualProduction> {
+public interface PscProductionServices extends ProductionServices<PscProduction> {
+
+    
 
 }

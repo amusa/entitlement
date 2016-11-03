@@ -16,32 +16,4 @@ import com.nnpcgroup.cosm.entity.production.jv.AlternativeFundingProductionDetai
  */
 public interface AlternativeFundingProductionDetailServices<T extends AlternativeFundingProductionDetail, E extends AlternativeFundingContract> extends JvProductionDetailServices<T, E> {
 
-    public T computeCarryOil(T production);
-
-    public T computeSharedOil(T production);
-
-    public T computeGuaranteedNotionalMargin(T production);
-
-    public T computeResidualCarryExpenditure(T production);
-
-    public T computeCarryTaxRelief(T production);
-
-    public T computeCarryTaxExpenditure(T production);
-
-    public T computeCapitalCarryCostAmortized(T production);
-
-    public T computeAlternativeFunding(T production);
-
-    public Double computeCarryOilCum(E cs);
-
-    public Double computeSharedOilCum(E cs);
-
-    public Double computeResidualCarryExpenditureCum(E cs);
-
-    public Double computeCarryTaxReliefCum(E cs);
-
-    public Double computeCarryTaxExpenditureCum(E cs);
-
-    public Double computeCapitalCarryCostAmortizedCum(E cs);
-
 }

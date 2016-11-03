@@ -54,7 +54,7 @@
                         <label>Fiscal Arrangement</label>
                         <h:selectOneMenu id="contract" value="#{jvActualController.currentFiscalArrangement}" class="form-control input-sm m-b-10">                                              
                             <f:selectItem itemValue="#{null}" itemLabel="--select--" />
-                            <f:selectItems value="#{fiscalController.fiscalSelectOptions}" />
+                            <f:selectItems value="#{fiscalController.jvFiscalSelectOptions}" />
                             <f:ajax event="change" render="prodTable executeButton"/>
                         </h:selectOneMenu>
                     </div>
@@ -76,146 +76,232 @@
                     </div>
                 </div>
 
-                <h:panelGroup id="actual_panel">
+                <div jsf:id="actual_panel" class="row">
+                    <div  class="panel panel-default tile">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">PRODUCTION</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <h:dataTable id="prodTable" var="prod" value="#{jvActualController.currentProduction.productionDetails}" 
+                                             class="table table-bordered table-hover tile">                                                 
+                                    <h:column>                                                        
+                                        <f:facet name="header">
+                                            <h:outputText value="Asset Stream/Crude Type"/>
+                                        </f:facet>
+                                        <h:outputText value="#{prod.contract.fiscalArrangement.title}/#{prod.contract.crudeType.code}"/>                                                        
+                                    </h:column>                            
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Gross Prod" />
+                                        </f:facet>                                                            
+                                        <h:outputText value="#{prod.grossProduction}">
+                                            <f:convertNumber pattern="###,###,###.####" />
+                                        </h:outputText>
+                                    </h:column>
+                                    <h:column>
+                                        <div class="btn-group">
+                                            <button jsf:id="action" type="button" class="btn btn-sm dropdown-toggle" data-toggle="dropdown">
+                                                Action <span class="caret"></span>
+                                            </button>
+                                            <ul class="dropdown-menu" jsf:id="btnList"> 
+                                                <li>
+                                                    <h:commandLink  pt:data-target="#JvActualCreateDlg" pt:look="warning" pt:data-toggle="modal" >
+                                                        <span class="icon">&#61943;</span>
+                                                        #{bundle.Create}
+                                                        <f:ajax event="click" render="JvActualCreateForm" listener="#{jvActualController.prepareCreate}" />
+                                                    </h:commandLink>                                       
+                                                </li>
 
-                    <h:dataTable id="prodTable" var="prod" value="#{jvActualController.currentProduction.productionDetails}" 
-                                 class="table table-bordered table-hover tile">                                                 
-                        <h:column>                                                        
-                            <f:facet name="header">
-                                <h:outputText value="Asset Stream/Crude Type"/>
-                            </f:facet>
-                            <h:outputText value="#{prod.contract.fiscalArrangement.title}/#{prod.contract.crudeType.code}"/>                                                        
-                        </h:column>                            
-                        <h:column>
-                            <f:facet name="header">
-                                <h:outputText value="Gross Prod" />
-                            </f:facet>                                                            
-                            <h:outputText value="#{prod.grossProduction}">
-                                <f:convertNumber pattern="###,###,###.####" />
-                            </h:outputText>
-                        </h:column>                            
-                        <h:column>
-                            <f:facet name="header">
-                                <h:outputText value="Own Entitlement" />
-                            </f:facet>                                                            
-                            <h:outputText value="#{prod.ownShareEntitlement}" >
-                                <f:convertNumber maxFractionDigits="2" groupingUsed="true" />
-                            </h:outputText>
-                        </h:column>
-                        <h:column>
-                            <f:facet name="header">
-                                <h:outputText value="Partner Entitlement" />
-                            </f:facet>                                                            
-                            <h:outputText value="#{prod.partnerShareEntitlement}">
-                                <f:convertNumber pattern="###,###,###.####" />
-                            </h:outputText>
-                        </h:column>
-                        <h:column>
-                            <f:facet name="header">
-                                <h:outputText value="Opening Stock" />
-                            </f:facet>                                                            
-                            <h:outputText value="#{prod.openingStock}">
-                                <f:convertNumber pattern="###,###,###.####" />
-                            </h:outputText>
-                        </h:column>
-                        <h:column>
-                            <f:facet name="header">
-                                <h:outputText value="Availability" />
-                            </f:facet>                                                            
-                            <h:outputText value="#{prod.availability}">
-                                <f:convertNumber pattern="###,###,###.####" />
-                            </h:outputText>
-                        </h:column>
-                        <h:column>
-                            <f:facet name="header">
-                                <h:outputText value="Lifting (Nom)" />
-                            </f:facet>                                                            
-                            <h:outputText value="#{prod.lifting}">
-                                <f:convertNumber pattern="###,###,###.####" />
-                            </h:outputText>
-                        </h:column>
-                        <h:column>
-                            <f:facet name="header">
-                                <h:outputText value="Lifting Cargoes" />
-                            </f:facet>                                                            
-                            <h:outputText value="#{prod.cargos}">
-                                <f:convertNumber pattern="###,###,###.####" />
-                            </h:outputText>
-                        </h:column>
-                        <h:column>
-                            <f:facet name="header">
-                                <h:outputText value="Closing Stock" />
-                            </f:facet>                                                            
-                            <h:outputText value="#{prod.closingStock}">
-                                <f:convertNumber pattern="###,###,###.####" />
-                            </h:outputText>
-                        </h:column>
-                        <h:column>
-                            <div class="btn-group">
-                                <button jsf:id="action" type="button" class="btn btn-sm dropdown-toggle" data-toggle="dropdown">
-                                    Action <span class="caret"></span>
-                                </button>
-                                <ul class="dropdown-menu" jsf:id="btnList"> 
-                                    <li>
-                                        <h:commandLink  pt:data-target="#JvActualCreateDlg" pt:look="warning" pt:data-toggle="modal" >
+                                                <li>
+                                                    <h:commandLink pt:data-target="#JvViewDlg" pt:look="warning" pt:data-toggle="modal">
+                                                        <span class="icon">&#61698;</span>
+                                                        #{bundle.View}
+                                                        <f:ajax event="click" render="JvViewForm" listener="#{jvActualController.setCurrentProductionDetail(prod)}"/>
+                                                    </h:commandLink>
+                                                </li>
+                                                <li>
+                                                    <h:commandLink pt:data-target="#JvEditDlg" pt:look="warning" pt:data-toggle="modal">
+                                                        <span class="icon">&#61952;</span>
+                                                        #{bundle.Edit}
+                                                        <f:ajax event="click" render="JvEditForm" listener="#{jvActualController.setCurrentProductionDetail(prod)}"/>
+                                                    </h:commandLink>
+                                                </li> 
+                                                <li class="divider"></li>
+                                                <li>
+                                                    <h:commandLink>
+                                                        <span class="icon">&#61918;</span>
+                                                        #{bundle.Delete}
+                                                        <f:ajax render="jvProdListForm prodTable msgs" listener="#{jvActualController.destroyProductionDetail(prod)}"/>
+                                                    </h:commandLink>
+                                                </li> 
+                                            </ul>
+                                        </div>
+                                    </h:column>
+
+                                    <f:facet name="footer">                                                       
+                                        <button jsf:id="createButton" jsf:action="#{jvActualController.prepareCreateProduction}"  class="btn m-r-5"
+                                                jsf:disabled="${not jvActualController.enableControlButton}">
                                             <span class="icon">&#61943;</span>
                                             #{bundle.Create}
-                                            <f:ajax event="click" render="JvActualCreateForm" listener="#{jvActualController.prepareCreate}" />
-                                        </h:commandLink>                                       
-                                    </li>
-
-                                    <li>
-                                        <h:commandLink pt:data-target="#JvViewDlg" pt:look="warning" pt:data-toggle="modal">
+                                        </button>
+                                        <button jsf:id="viewButton" action="actual-view2"
+                                                class="btn m-r-5" jsf:disabled="${not jvActualController.enableControlButton}">
                                             <span class="icon">&#61698;</span>
-                                            #{bundle.View}
-                                            <f:ajax event="click" render="JvViewForm" listener="#{jvActualController.setCurrentProductionDetail(prod)}"/>
-                                        </h:commandLink>
-                                    </li>
-                                    <li>
-                                        <h:commandLink pt:data-target="#JvEditDlg" pt:look="warning" pt:data-toggle="modal">
+                                            #{bundle.View}                               
+                                        </button>
+                                        <button jsf:id="editButton" jsf:action="#{jvActualController.prepareUpdateProduction}"
+                                                class="btn m-r-5" jsf:disabled="${not jvActualController.enableControlButton}">
                                             <span class="icon">&#61952;</span>
                                             #{bundle.Edit}
-                                            <f:ajax event="click" render="JvEditForm" listener="#{jvActualController.setCurrentProductionDetail(prod)}"/>
-                                        </h:commandLink>
-                                    </li> 
-                                    <li class="divider"></li>
-                                    <li>
-                                        <h:commandLink>
+                                        </button>
+                                        <button jsf:id="deleteButton" class="btn m-r-5" jsf:disabled="${not jvActualController.enableControlButton}">
                                             <span class="icon">&#61918;</span>
                                             #{bundle.Delete}
-                                            <f:ajax render="jvProdListForm prodTable msgs" listener="#{jvActualController.destroyProductionDetail(prod)}"/>
-                                        </h:commandLink>
-                                    </li> 
-                                </ul>
+                                            <f:ajax render="jvProdListForm prodTable msgs" listener="#{jvActualController.destroy}"/>
+                                        </button>
+                                    </f:facet>
+                                </h:dataTable>
+
                             </div>
-                        </h:column>
+                        </div>
+                    </div>
 
-                        <f:facet name="footer">                                                       
-                            <button jsf:id="createButton" jsf:action="#{jvActualController.prepareCreateProduction}"  class="btn m-r-5"
-                                    jsf:disabled="${not jvActualController.enableControlButton}">
-                                <span class="icon">&#61943;</span>
-                                #{bundle.Create}
-                            </button>
-                            <button jsf:id="viewButton" action="actual-view2"
-                                    class="btn m-r-5" jsf:disabled="${not jvActualController.enableControlButton}">
-                                <span class="icon">&#61698;</span>
-                                #{bundle.View}                               
-                            </button>
-                            <button jsf:id="editButton" jsf:action="#{jvActualController.prepareUpdateProduction}"
-                                    class="btn m-r-5" jsf:disabled="${not jvActualController.enableControlButton}">
-                                <span class="icon">&#61952;</span>
-                                #{bundle.Edit}
-                            </button>
-                            <button jsf:id="deleteButton" class="btn m-r-5" jsf:disabled="${not jvActualController.enableControlButton}">
-                                <span class="icon">&#61918;</span>
-                                #{bundle.Delete}
-                                <f:ajax render="jvProdListForm prodTable msgs" listener="#{jvActualController.destroy}"/>
-                            </button>
-                        </f:facet>
-                    </h:dataTable>
 
-                </h:panelGroup>
+                    <div  class="panel panel-default tile">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">NNPC ENTITLEMENT</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <h:dataTable id="entlmtTable" var="entitlement" value="#{jvActualController.currentProduction.entitlements}" 
+                                             class="table table-bordered table-hover tile">                                                 
+                                    <h:column>                                                        
+                                        <f:facet name="header">
+                                            <h:outputText value="Asset Stream/Crude Type"/>
+                                        </f:facet>
+                                        <h:outputText value="#{entitlement.contract.fiscalArrangement.title}/#{entitlement.contract.crudeType.code}"/>                                                        
+                                    </h:column>             
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Equity" />
+                                        </f:facet>                                                            
+                                        <h:outputText value="#{entitlement.ownShareEntitlement}" >
+                                            <f:convertNumber maxFractionDigits="2" groupingUsed="true" />
+                                        </h:outputText>
+                                    </h:column>                                    
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Opening Stock" />
+                                        </f:facet>                                                            
+                                        <h:outputText value="#{entitlement.openingStock}">
+                                            <f:convertNumber pattern="###,###,###.####" />
+                                        </h:outputText>
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Availability" />
+                                        </f:facet>                                                            
+                                        <h:outputText value="#{entitlement.availability}">
+                                            <f:convertNumber pattern="###,###,###.####" />
+                                        </h:outputText>
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Exportable Volume (Actual)" />
+                                        </f:facet>                                                            
+                                        <h:outputText value="#{entitlement.lifting}">
+                                            <f:convertNumber pattern="###,###,###.####" />
+                                        </h:outputText>
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Cargoes Lifted" />
+                                        </f:facet>                                                            
+                                        <h:outputText value="#{entitlement.cargoes}">
+                                            <f:convertNumber pattern="###,###,###.####" />
+                                        </h:outputText>
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Closing Stock" />
+                                        </f:facet>                                                            
+                                        <h:outputText value="#{entitlement.closingStock}">
+                                            <f:convertNumber pattern="###,###,###.####" />
+                                        </h:outputText>
+                                    </h:column>
+                                </h:dataTable>
+                            </div>
+                        </div>
+                    </div>
 
+                    <div  class="panel panel-default tile">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">PARTNER ENTITLEMENT</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <h:dataTable id="entlmtTable2" var="entitlement" value="#{jvActualController.currentProduction.entitlements}" 
+                                             class="table table-bordered table-hover tile">                                                 
+                                    <h:column>                                                        
+                                        <f:facet name="header">
+                                            <h:outputText value="Asset Stream/Crude Type"/>
+                                        </f:facet>
+                                        <h:outputText value="#{entitlement.contract.fiscalArrangement.title}/#{entitlement.contract.crudeType.code}"/>                                                        
+                                    </h:column>                            
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Equity" />
+                                        </f:facet>                                                            
+                                        <h:outputText value="#{entitlement.partnerShareEntitlement}">
+                                            <f:convertNumber pattern="###,###,###.####" />
+                                        </h:outputText>
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Opening Stock" />
+                                        </f:facet>                                                            
+                                        <h:outputText value="#{entitlement.partnerOpeningStock}">
+                                            <f:convertNumber pattern="###,###,###.####" />
+                                        </h:outputText>
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Availability" />
+                                        </f:facet>                                                            
+                                        <h:outputText value="#{entitlement.partnerAvailability}">
+                                            <f:convertNumber pattern="###,###,###.####" />
+                                        </h:outputText>
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Exportable Volume (Actual)" />
+                                        </f:facet>                                                            
+                                        <h:outputText value="#{entitlement.partnerLifting}">
+                                            <f:convertNumber pattern="###,###,###.####" />
+                                        </h:outputText>
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Cargoes Lifted" />
+                                        </f:facet>                                                            
+                                        <h:outputText value="#{entitlement.partnerCargoes}">
+                                            <f:convertNumber pattern="###,###,###.####" />
+                                        </h:outputText>
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Closing Stock" />
+                                        </f:facet>                                                            
+                                        <h:outputText value="#{entitlement.partnerClosingStock}">
+                                            <f:convertNumber pattern="###,###,###.####" />
+                                        </h:outputText>
+                                    </h:column>
+                                </h:dataTable>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </h:form>
 
             <ui:include src="_actualize-create.xhtml"/>            

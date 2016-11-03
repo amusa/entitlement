@@ -13,14 +13,12 @@ import com.nnpcgroup.cosm.entity.forecast.jv.ForecastEntitlement;
 
 import java.io.Serializable;
 import javax.ejb.EJB;
-import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
 /**
  * @param <T>
  * @author 18359
  */
-@Dependent
 public abstract class ForecastEntitlementServicesImpl<T extends ForecastEntitlement> extends CommonServicesImpl<T> implements ForecastEntitlementServices<T>, Serializable {
 
     @Inject

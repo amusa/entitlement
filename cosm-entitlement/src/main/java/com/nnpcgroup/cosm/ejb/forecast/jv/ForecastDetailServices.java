@@ -18,5 +18,7 @@ import java.io.Serializable;
 public interface ForecastDetailServices<T extends ForecastDetail> extends CommonServices<T>, Serializable {
 
     public T computeGrossProduction(T forecast);
+    
+    public T computeDailyProduction(T forecast);
 
 }

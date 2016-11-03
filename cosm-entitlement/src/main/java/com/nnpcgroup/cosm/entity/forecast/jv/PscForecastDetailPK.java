@@ -8,7 +8,6 @@ package com.nnpcgroup.cosm.entity.forecast.jv;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
-import java.util.logging.Logger;
 
 /**
  * @author 18359
@@ -16,7 +15,6 @@ import java.util.logging.Logger;
 @Embeddable
 public class PscForecastDetailPK extends ForecastDetailPK implements Serializable {
 
-    private static final Logger LOG = Logger.getLogger(PscForecastDetailPK.class.getName());
     private static final long serialVersionUID = -5632726719147425922L;
 
     private Long oilField;

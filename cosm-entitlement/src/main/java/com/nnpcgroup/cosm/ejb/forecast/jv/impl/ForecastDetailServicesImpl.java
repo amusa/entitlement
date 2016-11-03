@@ -8,6 +8,7 @@ package com.nnpcgroup.cosm.ejb.forecast.jv.impl;
 import com.nnpcgroup.cosm.controller.GeneralController;
 import com.nnpcgroup.cosm.ejb.FiscalArrangementBean;
 import com.nnpcgroup.cosm.ejb.forecast.jv.ForecastDetailServices;
+import com.nnpcgroup.cosm.ejb.impl.CommonServicesImpl;
 import com.nnpcgroup.cosm.entity.forecast.jv.ForecastDetail;
 
 import java.io.Serializable;
@@ -18,7 +19,7 @@ import javax.inject.Inject;
  * @param <T>
  * @author 18359
  */
-public abstract class ForecastDetailServicesImpl<T extends ForecastDetail> extends JvCommonServicesImpl<T> implements ForecastDetailServices<T>, Serializable {
+public abstract class ForecastDetailServicesImpl<T extends ForecastDetail> extends CommonServicesImpl<T> implements ForecastDetailServices<T>, Serializable {
 
     @Inject
     GeneralController genController;

@@ -6,6 +6,7 @@
 package com.nnpcgroup.cosm.entity.forecast.jv;
 
 import com.nnpcgroup.cosm.entity.contract.Contract;
+import com.nnpcgroup.cosm.entity.production.jv.JvProductionDetailPK;
 import com.nnpcgroup.cosm.entity.production.jv.ProductionDetailPK;
 import com.nnpcgroup.cosm.entity.production.jv.ProductionPK;
 import java.util.Objects;
@@ -79,7 +80,7 @@ public class JvForecastDetail extends ForecastDetail {
     }
 
     public ProductionDetailPK makeProductionDetailPK() {
-        ProductionDetailPK pPK = new ProductionDetailPK(
+        ProductionDetailPK pPK = new JvProductionDetailPK(
                 new ProductionPK(this.getPeriodYear(), this.getPeriodMonth(), this.getForecast().getFiscalArrangement().getId()),
                 this.getContract().getContractPK()
         );

@@ -40,6 +40,14 @@
     <class>com.nnpcgroup.cosm.entity.production.jv.ProductionDetail</class>
     <class>com.nnpcgroup.cosm.entity.production.jv.ProductionEntitlement</class>
     <class>com.nnpcgroup.cosm.entity.production.jv.PscProduction</class>
+    <class>com.nnpcgroup.cosm.entity.PscProduction</class>
+    <class>com.nnpcgroup.cosm.entity.forecast.jv.AlternativeFundingForecastDetail</class>
+    <class>com.nnpcgroup.cosm.entity.production.jv.AlternativeFundingProductionEntitlement</class>
+    <class>com.nnpcgroup.cosm.entity.production.jv.CarryProductionEntitlement</class>
+    <class>com.nnpcgroup.cosm.entity.production.jv.JvProductionEntitlement</class>
+    <class>com.nnpcgroup.cosm.entity.production.jv.ModifiedCarryProductionEntitlement</class>
+    <class>com.nnpcgroup.cosm.entity.production.jv.PscProductionDetail</class>
+    <class>com.nnpcgroup.cosm.entity.production.jv.PscProductionEntitlement</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <shared-cache-mode>NONE</shared-cache-mode>
     <properties>

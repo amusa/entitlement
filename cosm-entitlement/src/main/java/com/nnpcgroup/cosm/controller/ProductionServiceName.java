@@ -10,8 +10,6 @@ import com.nnpcgroup.cosm.ejb.production.jv.impl.ModifiedCarryProductionDetailSe
 import com.nnpcgroup.cosm.entity.contract.Contract;
 import com.nnpcgroup.cosm.entity.production.jv.ProductionDetail;
 import com.nnpcgroup.cosm.ejb.production.jv.ProductionDetailServices;
-import com.nnpcgroup.cosm.ejb.production.jv.impl.JvProductionDetailServicesImpl;
-import com.nnpcgroup.cosm.ejb.production.jv.impl.ProductionDetailServicesImpl;
 
 /**
  *
@@ -19,17 +17,17 @@ import com.nnpcgroup.cosm.ejb.production.jv.impl.ProductionDetailServicesImpl;
  */
 public enum ProductionServiceName {    
     //REGULAR(ProductionDetailServicesImpl.class),
-    CARRY(CarryProductionDetailServicesImpl.class),
-    MODIFIEDCARRY(ModifiedCarryProductionDetailServicesImpl.class);
+//    CARRY(CarryProductionDetailServicesImpl.class),
+//    MODIFIEDCARRY(ModifiedCarryProductionDetailServicesImpl.class);
         
-
-    private Class<? extends ProductionDetailServices<? extends ProductionDetail, ? extends Contract>> productionServiceType;
-
-    private ProductionServiceName(Class<? extends ProductionDetailServices<? extends ProductionDetail, ? extends Contract>> productionServiceType) {
-        this.productionServiceType = productionServiceType;
-    }
-
-    public Class<? extends ProductionDetailServices<? extends ProductionDetail, ? extends Contract>> getProductionServiceType() {
-        return productionServiceType;
-    }
+//
+//    private Class<? extends ProductionDetailServices<? extends ProductionDetail, ? extends Contract>> productionServiceType;
+//
+//    private ProductionServiceName(Class<? extends ProductionDetailServices<? extends ProductionDetail, ? extends Contract>> productionServiceType) {
+//        this.productionServiceType = productionServiceType;
+//    }
+//
+//    public Class<? extends ProductionDetailServices<? extends ProductionDetail, ? extends Contract>> getProductionServiceType() {
+//        return productionServiceType;
+//    }
 }

@@ -26,9 +26,4 @@ public class JvProductionDetailBean extends JvProductionDetailServicesImpl<JvPro
         super(JvProductionDetail.class);
     }
 
-    @Override
-    public JvProductionDetail openingStockChanged(JvProductionDetail production) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
 }

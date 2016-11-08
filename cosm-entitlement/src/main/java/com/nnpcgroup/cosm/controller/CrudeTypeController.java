@@ -1,9 +1,9 @@
 package com.nnpcgroup.cosm.controller;
 
-import com.nnpcgroup.cosm.entity.CrudeType;
+import com.nnpcgroup.cosm.entity.crude.CrudeType;
 import com.nnpcgroup.cosm.controller.util.JsfUtil;
 import com.nnpcgroup.cosm.controller.util.JsfUtil.PersistAction;
-import com.nnpcgroup.cosm.ejb.CrudeTypeBean;
+import com.nnpcgroup.cosm.ejb.crude.CrudeTypeBean;
 
 import java.io.Serializable;
 import java.util.List;
@@ -25,7 +25,7 @@ import javax.faces.model.SelectItem;
 public class CrudeTypeController implements Serializable {
 
     @EJB
-    private com.nnpcgroup.cosm.ejb.CrudeTypeBean ejbFacade;
+    private CrudeTypeBean ejbFacade;
     private List<CrudeType> items = null;
     private CrudeType selected;
 

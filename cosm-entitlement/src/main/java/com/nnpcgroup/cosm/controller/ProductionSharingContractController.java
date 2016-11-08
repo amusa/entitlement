@@ -173,7 +173,7 @@ public class ProductionSharingContractController implements Serializable {
                 return null;
             }
             ProductionSharingContractController controller = (ProductionSharingContractController) facesContext.getApplication().getELResolver().
-                    getValue(facesContext.getELContext(), null, "productionSharingContractController");
+                    getValue(facesContext.getELContext(), null, "pscController");
             return controller.getProductionSharingContract(getKey(value));
         }
 

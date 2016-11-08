@@ -5,6 +5,7 @@
  */
 package com.nnpcgroup.cosm.entity;
 
+import com.nnpcgroup.cosm.entity.crude.CrudeType;
 import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.Id;

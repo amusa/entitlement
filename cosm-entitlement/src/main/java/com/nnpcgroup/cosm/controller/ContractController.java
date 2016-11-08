@@ -2,10 +2,10 @@ package com.nnpcgroup.cosm.controller;
 
 import com.nnpcgroup.cosm.controller.util.JsfUtil;
 import com.nnpcgroup.cosm.controller.util.JsfUtil.PersistAction;
-import com.nnpcgroup.cosm.ejb.CrudeTypeBean;
+import com.nnpcgroup.cosm.ejb.crude.CrudeTypeBean;
 import com.nnpcgroup.cosm.ejb.FiscalArrangementBean;
 import com.nnpcgroup.cosm.ejb.contract.ContractServices;
-import com.nnpcgroup.cosm.entity.CrudeType;
+import com.nnpcgroup.cosm.entity.crude.CrudeType;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
 import com.nnpcgroup.cosm.entity.JointVenture;
 import com.nnpcgroup.cosm.entity.contract.*;

@@ -3,7 +3,7 @@ package com.nnpcgroup.cosm.controller;
 import com.nnpcgroup.cosm.controller.util.JsfUtil;
 import com.nnpcgroup.cosm.controller.util.JsfUtil.PersistAction;
 import com.nnpcgroup.cosm.ejb.cost.CostItemServices;
-import com.nnpcgroup.cosm.ejb.forecast.psc.ProductionCostServices;
+import com.nnpcgroup.cosm.ejb.cost.ProductionCostServices;
 import com.nnpcgroup.cosm.entity.FiscalPeriod;
 import com.nnpcgroup.cosm.entity.ProductionSharingContract;
 import com.nnpcgroup.cosm.entity.cost.CostItem;

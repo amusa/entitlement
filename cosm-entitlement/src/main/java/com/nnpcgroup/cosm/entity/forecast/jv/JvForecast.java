@@ -5,6 +5,8 @@
  */
 package com.nnpcgroup.cosm.entity.forecast.jv;
 
+import com.nnpcgroup.cosm.entity.forecast.Forecast;
+import com.nnpcgroup.cosm.entity.forecast.ForecastCustomizer;
 import com.nnpcgroup.cosm.entity.AuditListener;
 import java.util.ArrayList;
 import java.util.List;

@@ -5,6 +5,7 @@
  */
 package com.nnpcgroup.cosm.entity.forecast.jv;
 
+import com.nnpcgroup.cosm.entity.forecast.ForecastDetail;
 import com.nnpcgroup.cosm.entity.contract.Contract;
 import com.nnpcgroup.cosm.entity.production.jv.JvProductionDetailPK;
 import com.nnpcgroup.cosm.entity.production.jv.ProductionDetailPK;

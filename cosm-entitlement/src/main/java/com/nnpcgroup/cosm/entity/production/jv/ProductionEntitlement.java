@@ -7,7 +7,7 @@ package com.nnpcgroup.cosm.entity.production.jv;
 
 import com.nnpcgroup.cosm.entity.AuditInfo;
 import com.nnpcgroup.cosm.entity.Auditable;
-import com.nnpcgroup.cosm.entity.forecast.jv.ForecastDetail;
+import com.nnpcgroup.cosm.entity.forecast.ForecastDetail;
 
 import java.io.Serializable;
 import javax.persistence.*;

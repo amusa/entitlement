@@ -5,6 +5,8 @@
  */
 package com.nnpcgroup.cosm.entity.forecast.jv;
 
+import com.nnpcgroup.cosm.entity.forecast.ForecastPK;
+import com.nnpcgroup.cosm.entity.forecast.ForecastEntitlementPK;
 import com.nnpcgroup.cosm.entity.contract.ContractPK;
 import javax.persistence.*;
 import java.io.Serializable;

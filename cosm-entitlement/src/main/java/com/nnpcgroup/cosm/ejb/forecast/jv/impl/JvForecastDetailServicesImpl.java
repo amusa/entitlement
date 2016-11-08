@@ -5,6 +5,7 @@
  */
 package com.nnpcgroup.cosm.ejb.forecast.jv.impl;
 
+import com.nnpcgroup.cosm.ejb.forecast.impl.ForecastDetailServicesImpl;
 import com.nnpcgroup.cosm.ejb.forecast.jv.JvForecastDetailServices;
 import com.nnpcgroup.cosm.entity.FiscalPeriod;
 import com.nnpcgroup.cosm.entity.contract.Contract;
@@ -43,7 +44,7 @@ public class JvForecastDetailServicesImpl<T extends JvForecastDetail> extends Fo
         Double prodVolume = forecast.getDailyProduction();
         int periodYear = forecast.getPeriodYear();
         int periodMonth = forecast.getPeriodMonth();
-        int days = genController.daysOfMonth(periodYear, periodMonth);
+        int days = getGenController().daysOfMonth(periodYear, periodMonth);
         Double grossProd = prodVolume * days;
 
         LOG.log(Level.INFO, String.format("Gross Production = DailyProd * Days => %f * %d = %f", new Object[]{prodVolume, days, grossProd}));
@@ -57,7 +58,7 @@ public class JvForecastDetailServicesImpl<T extends JvForecastDetail> extends Fo
         Double grossProd = forecast.getGrossProduction();
         int periodYear = forecast.getPeriodYear();
         int periodMonth = forecast.getPeriodMonth();
-        int days = genController.daysOfMonth(periodYear, periodMonth);
+        int days = getGenController().daysOfMonth(periodYear, periodMonth);
         Double dailyProd = grossProd / days;
 
         LOG.log(Level.INFO, String.format("Daily Production = GrossProd / Days => %f / %d = %f", new Object[]{grossProd, days, dailyProd}));

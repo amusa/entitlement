@@ -8,7 +8,7 @@ package com.nnpcgroup.cosm.ejb.forecast.jv.impl;
 import com.nnpcgroup.cosm.ejb.impl.CommonServicesImpl;
 
 import java.io.Serializable;
-import com.nnpcgroup.cosm.ejb.forecast.jv.JvCommonServices;
+import com.nnpcgroup.cosm.ejb.forecast.impl.JvCommonServices;
 
 /**
  * @param <T>

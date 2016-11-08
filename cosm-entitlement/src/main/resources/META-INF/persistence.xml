@@ -27,9 +27,6 @@
     <class>com.nnpcgroup.cosm.entity.forecast.jv.JvForecastEntitlement</class>
     <class>com.nnpcgroup.cosm.entity.forecast.jv.ModifiedCarryForecastDetail</class>
     <class>com.nnpcgroup.cosm.entity.forecast.jv.ModifiedCarryForecastEntitlement</class>
-    <class>com.nnpcgroup.cosm.entity.forecast.jv.PscForecast</class>
-    <class>com.nnpcgroup.cosm.entity.forecast.jv.PscForecastDetail</class>
-    <class>com.nnpcgroup.cosm.entity.forecast.jv.PscForecastEntitlement</class>
     <class>com.nnpcgroup.cosm.entity.production.jv.AlternativeFundingProductionDetail</class>
     <class>com.nnpcgroup.cosm.entity.production.jv.CarryProductionDetail</class>
     <class>com.nnpcgroup.cosm.entity.production.jv.JvProduction</class>
@@ -55,6 +52,9 @@
     <class>com.nnpcgroup.cosm.entity.lifting.PscLifting</class>
     <class>com.nnpcgroup.cosm.entity.crude.CrudePrice</class>
     <class>com.nnpcgroup.cosm.entity.crude.CrudeType</class>
+    <class>com.nnpcgroup.cosm.entity.forecast.psc.PscForecastDetail</class>
+    <class>com.nnpcgroup.cosm.entity.forecast.psc.PscForecast</class>
+    <class>com.nnpcgroup.cosm.entity.forecast.psc.PscForecastEntitlement</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <shared-cache-mode>NONE</shared-cache-mode>
     <properties>

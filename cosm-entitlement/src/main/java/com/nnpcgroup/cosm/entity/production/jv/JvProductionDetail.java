@@ -6,7 +6,7 @@
 package com.nnpcgroup.cosm.entity.production.jv;
 
 import com.nnpcgroup.cosm.entity.contract.Contract;
-import com.nnpcgroup.cosm.entity.forecast.jv.ForecastDetail;
+import com.nnpcgroup.cosm.entity.forecast.ForecastDetail;
 import com.nnpcgroup.cosm.entity.forecast.jv.JvForecastDetail;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorValue;

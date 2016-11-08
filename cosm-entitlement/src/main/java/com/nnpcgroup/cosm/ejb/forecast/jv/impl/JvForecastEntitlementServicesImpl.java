@@ -5,6 +5,7 @@
  */
 package com.nnpcgroup.cosm.ejb.forecast.jv.impl;
 
+import com.nnpcgroup.cosm.ejb.forecast.impl.ForecastEntitlementServicesImpl;
 import com.nnpcgroup.cosm.ejb.forecast.jv.JvForecastEntitlementServices;
 import com.nnpcgroup.cosm.entity.EquityType;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;

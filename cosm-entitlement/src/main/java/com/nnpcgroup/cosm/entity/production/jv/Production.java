@@ -8,7 +8,7 @@ package com.nnpcgroup.cosm.entity.production.jv;
 import com.nnpcgroup.cosm.entity.AuditInfo;
 import com.nnpcgroup.cosm.entity.Auditable;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
-import com.nnpcgroup.cosm.entity.forecast.jv.Forecast;
+import com.nnpcgroup.cosm.entity.forecast.Forecast;
 
 import java.io.Serializable;
 import java.util.Objects;

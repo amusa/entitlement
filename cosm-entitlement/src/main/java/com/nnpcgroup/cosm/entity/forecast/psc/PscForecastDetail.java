@@ -19,20 +19,20 @@ public class PscForecastDetail extends ForecastDetail {
 
     private static final long serialVersionUID = 2917191116735019064L;
 
-    private PscForecastDetailPK forecasstDetailPK;
-    private PscForecast forecast;
+    private PscForecastDetailPK forecastDetailPK;
+//    private PscForecast forecast;
     private OilField oilField;
 
     public PscForecastDetail() {
     }
 
     @EmbeddedId
-    public PscForecastDetailPK getForecasstDetailPK() {
-        return forecasstDetailPK;
+    public PscForecastDetailPK getForecastDetailPK() {
+        return forecastDetailPK;
     }
 
-    public void setForecasstDetailPK(PscForecastDetailPK forecasstDetailPK) {
-        this.forecasstDetailPK = forecasstDetailPK;
+    public void setForecastDetailPK(PscForecastDetailPK forecastDetailPK) {
+        this.forecastDetailPK = forecastDetailPK;
     }
 
     @ManyToOne
@@ -46,19 +46,19 @@ public class PscForecastDetail extends ForecastDetail {
         this.oilField = oilField;
     }
 
-    @ManyToOne
-    @JoinColumns({
-        @JoinColumn(name = "PERIOD_YEAR", referencedColumnName = "PERIOD_YEAR", updatable = false, insertable = false),
-        @JoinColumn(name = "PERIOD_MONTH", referencedColumnName = "PERIOD_MONTH", updatable = false, insertable = false),
-        @JoinColumn(name = "FISCALARRANGEMENT_ID", referencedColumnName = "FISCALARRANGEMENT_ID", insertable = false, updatable = false)
-    })
-    public PscForecast getForecast() {
-        return forecast;
-    }
-
-    public void setForecast(PscForecast forecast) {
-        this.forecast = forecast;
-    }
+//    @ManyToOne
+//    @JoinColumns({
+//        @JoinColumn(name = "PERIOD_YEAR", referencedColumnName = "PERIOD_YEAR", updatable = false, insertable = false),
+//        @JoinColumn(name = "PERIOD_MONTH", referencedColumnName = "PERIOD_MONTH", updatable = false, insertable = false),
+//        @JoinColumn(name = "FISCALARRANGEMENT_ID", referencedColumnName = "FISCALARRANGEMENT_ID", insertable = false, updatable = false)
+//    })
+//    public PscForecast getForecast() {
+//        return forecast;
+//    }
+//
+//    public void setForecast(PscForecast forecast) {
+//        this.forecast = forecast;
+//    }
 
     @Override
     public ProductionDetailPK makeProductionDetailPK() {

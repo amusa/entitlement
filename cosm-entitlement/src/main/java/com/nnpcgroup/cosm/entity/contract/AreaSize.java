@@ -1,5 +1,6 @@
 package com.nnpcgroup.cosm.entity.contract;
 
+import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Transient;
@@ -8,7 +9,7 @@ import javax.persistence.Transient;
  * Created by maliska on 8/24/16.
  */
 @Embeddable
-public class AreaSize {
+public class AreaSize implements Serializable {
 
     private Double oplContractArea;
     private Double omlContractArea;

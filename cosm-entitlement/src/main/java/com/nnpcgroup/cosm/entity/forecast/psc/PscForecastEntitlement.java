@@ -23,7 +23,7 @@ public class PscForecastEntitlement extends ForecastEntitlement {
 
     private static final long serialVersionUID = 2917191116735019064L;
     private PscForecastEntitlementPK entitlementPK;
-    private PscForecast forecast;
+//    private PscForecast forecast;
     private OilField oilField;
     private Double royaltyOil;
     private Double costOil;
@@ -68,19 +68,19 @@ public class PscForecastEntitlement extends ForecastEntitlement {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @ManyToOne
-    @JoinColumns({
-        @JoinColumn(name = "PERIOD_YEAR", referencedColumnName = "PERIOD_YEAR", updatable = false, insertable = false),
-        @JoinColumn(name = "PERIOD_MONTH", referencedColumnName = "PERIOD_MONTH", updatable = false, insertable = false),
-        @JoinColumn(name = "FISCALARRANGEMENT_ID", referencedColumnName = "FISCALARRANGEMENT_ID", insertable = false, updatable = false)
-    })
-    public PscForecast getForecast() {
-        return forecast;
-    }
-
-    public void setForecast(PscForecast forecast) {
-        this.forecast = forecast;
-    }
+//    @ManyToOne
+//    @JoinColumns({
+//        @JoinColumn(name = "PERIOD_YEAR", referencedColumnName = "PERIOD_YEAR", updatable = false, insertable = false),
+//        @JoinColumn(name = "PERIOD_MONTH", referencedColumnName = "PERIOD_MONTH", updatable = false, insertable = false),
+//        @JoinColumn(name = "FISCALARRANGEMENT_ID", referencedColumnName = "FISCALARRANGEMENT_ID", insertable = false, updatable = false)
+//    })
+//    public PscForecast getForecast() {
+//        return forecast;
+//    }
+//
+//    public void setForecast(PscForecast forecast) {
+//        this.forecast = forecast;
+//    }
 
     @ManyToOne
     @MapsId("oilField")

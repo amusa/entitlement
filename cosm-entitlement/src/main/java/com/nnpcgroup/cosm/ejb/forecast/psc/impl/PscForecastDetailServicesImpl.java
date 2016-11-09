@@ -7,13 +7,14 @@ package com.nnpcgroup.cosm.ejb.forecast.psc.impl;
 
 import com.nnpcgroup.cosm.ejb.forecast.impl.ForecastDetailServicesImpl;
 import com.nnpcgroup.cosm.ejb.forecast.psc.PscForecastDetailServices;
+import com.nnpcgroup.cosm.entity.ProductionSharingContract;
 import com.nnpcgroup.cosm.entity.contract.OilField;
 import com.nnpcgroup.cosm.entity.forecast.psc.PscForecastDetail;
 
 import javax.ejb.Local;
 import javax.ejb.Stateless;
-import javax.enterprise.context.Dependent;
 import java.io.Serializable;
+import java.util.List;
 import java.util.logging.Logger;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
@@ -27,7 +28,6 @@ import javax.persistence.criteria.Root;
  */
 @Stateless
 @Local(PscForecastDetailServices.class)
-@Dependent
 public class PscForecastDetailServicesImpl extends ForecastDetailServicesImpl<PscForecastDetail> implements PscForecastDetailServices, Serializable {
 
     private static final Logger LOG = Logger.getLogger(PscForecastDetailServicesImpl.class.getName());
@@ -48,9 +48,9 @@ public class PscForecastDetailServicesImpl extends ForecastDetailServicesImpl<Ps
         PscForecastDetail forecastDetail;
 
         CriteriaQuery cq = cb.createQuery();
-        Root e = cq.from(entityClass);
+        Root<PscForecastDetail> e = cq.from(entityClass);
         try {
-            cq.where(
+            cq.select(e).where(
                     cb.and(cb.equal(e.get("periodYear"), year),
                             cb.equal(e.get("periodMonth"), month),
                             cb.equal(e.get("oilField"), oilField)
@@ -67,8 +67,51 @@ public class PscForecastDetailServicesImpl extends ForecastDetailServicesImpl<Ps
     }
 
     @Override
-    public void delete(int year, int month, OilField oilField) {
+    public List<PscForecastDetail> find(int year, ProductionSharingContract psc) {
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
 
+        List<PscForecastDetail> pscDetails;
+
+        CriteriaQuery cq = cb.createQuery();
+        Root<PscForecastDetail> e = cq.from(entityClass);
+        try {
+            cq.select(e).where(
+                    cb.and(cb.equal(e.get("periodYear"), year),
+                            cb.equal(e.get("psc"), psc)
+                    ));
+
+            Query query = getEntityManager().createQuery(cq);
+
+            pscDetails = query.getResultList();
+        } catch (NoResultException nre) {
+            return null;
+        }
+
+        return pscDetails;
+    }
+
+    @Override
+    public List<PscForecastDetail> find(int year, OilField oilField) {
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+
+        List<PscForecastDetail> pscDetails;
+
+        CriteriaQuery cq = cb.createQuery();
+        Root<PscForecastDetail> e = cq.from(entityClass);
+        try {
+            cq.select(e).where(
+                    cb.and(cb.equal(e.get("periodYear"), year),
+                            cb.equal(e.get("oilField"), oilField)
+                    ));
+
+            Query query = getEntityManager().createQuery(cq);
+
+            pscDetails = query.getResultList();
+        } catch (NoResultException nre) {
+            return null;
+        }
+
+        return pscDetails;
     }
 
     @Override
@@ -93,6 +136,11 @@ public class PscForecastDetailServicesImpl extends ForecastDetailServicesImpl<Ps
 
     @Override
     public PscForecastDetail computeDailyProduction(PscForecastDetail forecast) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void delete(int year, int month, OilField oilField) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

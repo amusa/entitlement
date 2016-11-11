@@ -18,6 +18,7 @@ import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 /**
  *
@@ -74,6 +75,11 @@ public abstract class Lifting implements Serializable {
 
     public void setPartnerLifting(Double partnerLifting) {
         this.partnerLifting = partnerLifting;
+    }
+
+    @Transient
+    public Double getTotalLifting() {
+        return ownLifting + partnerLifting;
     }
 
 }

@@ -18,6 +18,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import com.nnpcgroup.cosm.ejb.CommonServices;
+import com.nnpcgroup.cosm.ejb.FiscalPeriodService;
 import com.nnpcgroup.cosm.entity.FiscalPeriod;
 import com.nnpcgroup.cosm.util.COSMPersistence;
 import javax.persistence.criteria.CriteriaDelete;
@@ -40,6 +41,9 @@ public abstract class CommonServicesImpl<T> extends AbstractCrudServicesImpl<T> 
 
     @Inject
     GeneralController genController;
+
+    @Inject
+    FiscalPeriodService fiscalService;
 
     public CommonServicesImpl(Class<T> entityClass) {
         super(entityClass);
@@ -202,34 +206,17 @@ public abstract class CommonServicesImpl<T> extends AbstractCrudServicesImpl<T> 
 
     @Override
     public FiscalPeriod getPreviousFiscalPeriod(FiscalPeriod fp) {
-        int month = fp.getMonth();
-        int year = fp.getYear();
-
-        return getPreviousFiscalPeriod(year, month);
+        return fiscalService.getPreviousFiscalPeriod(fp);
     }
 
     @Override
     public FiscalPeriod getPreviousFiscalPeriod(int year, int month) {
-        if (month > 1) {
-            --month;
-        } else {
-            month = 12;
-            --year;
-        }
-
-        return new FiscalPeriod(year, month);
+        return fiscalService.getPreviousFiscalPeriod(year, month);
     }
 
     @Override
     public FiscalPeriod getNextFiscalPeriod(int year, int month) {
-        int mt = (month % 12) + 1;
-        int yr = year;
-
-        if (mt == 1) {
-            ++yr;
-        }
-
-        return new FiscalPeriod(yr, mt);
+        return fiscalService.getNextFiscalPeriod(year, month);
     }
 
 //    @Override
@@ -241,7 +228,6 @@ public abstract class CommonServicesImpl<T> extends AbstractCrudServicesImpl<T> 
 //                )
 //        );
 //    }
-
     @Override
     public List<T> getTerminalProduction(int year, int month, Terminal terminal) {
         CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
@@ -276,7 +262,6 @@ public abstract class CommonServicesImpl<T> extends AbstractCrudServicesImpl<T> 
         return productions;
     }
 
-    
     @Override
     public List<T> find(int year, int month, FiscalArrangement fa) {
         CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
@@ -301,7 +286,7 @@ public abstract class CommonServicesImpl<T> extends AbstractCrudServicesImpl<T> 
 
         return forecastDetails;
     }
-    
+
     @Override
     public void delete(int year, int month, FiscalArrangement fa) {
         CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();

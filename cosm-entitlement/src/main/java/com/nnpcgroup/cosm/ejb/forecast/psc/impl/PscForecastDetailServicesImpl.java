@@ -20,6 +20,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Root;
 
 /**
@@ -112,6 +113,35 @@ public class PscForecastDetailServicesImpl extends ForecastDetailServicesImpl<Ps
         }
 
         return pscDetails;
+    }
+
+    @Override
+    public double getGrossProduction(ProductionSharingContract psc, int year, int month) {
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+
+        Double grossProdCum;
+
+        CriteriaQuery<Double> cq = cb.createQuery(Double.class);
+        Root<PscForecastDetail> cost = cq.from(entityClass);
+
+        Expression<Double> sum = cb.sum(cost.<Double>get("grossProduction"));
+        cq.select(sum.alias("grossProduction"))
+                .where(
+                        cb.and(
+                                cb.equal(cost.get("fiscalArrangement"), psc),
+                                cb.equal(cost.get("periodYear"), year),
+                                cb.equal(cost.get("periodMonth"), month)
+                        )
+                );
+//TODO:should return cummulative gross production
+        grossProdCum = getEntityManager().createQuery(cq).getSingleResult();
+
+        if (grossProdCum == null) {
+            return 0;
+        }
+
+        return grossProdCum;
+
     }
 
     @Override

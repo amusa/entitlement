@@ -12,7 +12,6 @@ import com.nnpcgroup.cosm.entity.contract.OilField;
 import com.nnpcgroup.cosm.entity.forecast.ForecastPK;
 import com.nnpcgroup.cosm.entity.forecast.psc.PscForecastDetail;
 import com.nnpcgroup.cosm.entity.forecast.psc.PscForecastDetailPK;
-import com.nnpcgroup.cosm.entity.production.jv.PscProductionDetail;
 
 import javax.inject.Named;
 import java.io.Serializable;
@@ -35,45 +34,48 @@ import javax.inject.Inject;
 @Named(value = "pscProdController")
 @SessionScoped
 public class PscProductionController implements Serializable {
-    
+
     private static final long serialVersionUID = -7596150432081506756L;
     private static final Logger LOG = Logger.getLogger(PscProductionController.class.getName());
-    
+
     @EJB
     private PscForecastDetailServices productionDetail;
-    
+
     @Inject
     GeneralController genController;
-    
+
     @Inject
     Principal principal;
-    
+
+    @Inject
+    TaxController taxController;
+
     private List<PscForecastDetail> productionDetails;
-    
+
     private PscForecastDetail currentProductionDetail;
     private Integer periodYear;
     private Integer periodMonth;
     private ProductionSharingContract currentPsc;
     private OilField currentOilField;
-    
+
     public void prepareCreate() {
         if (periodYear != null && periodMonth != null && currentPsc != null) {
             prepareMonthlyCreate();
         } else if (periodYear != null && currentPsc != null && currentOilField != null) {
             prepareFieldCreate();
         }
-        
+
     }
-    
+
     private void prepareMonthlyCreate() {
-        
+
         if (currentPsc == null) {
             return;
         }
-        
+
         productionDetails = new ArrayList<>();
         List<OilField> oilFields = currentPsc.getOilFields();
-        
+
         for (OilField of : oilFields) {
             ForecastPK fPK = new ForecastPK(periodYear, periodMonth, currentPsc.getId());
             PscForecastDetailPK pPk = new PscForecastDetailPK(fPK, of.getId());
@@ -85,12 +87,12 @@ public class PscProductionController implements Serializable {
             currentProductionDetail.setOilField(of);
             productionDetails.add(currentProductionDetail);
         }
-        
+
     }
-    
+
     private void prepareFieldCreate() {
         productionDetails = new ArrayList<>();
-        
+
         for (int i = 1; i <= 3; i++) {
             ForecastPK fPK = new ForecastPK(periodYear, i, currentPsc.getId());
             PscForecastDetailPK pPk = new PscForecastDetailPK(fPK, currentOilField.getId());
@@ -101,22 +103,22 @@ public class PscProductionController implements Serializable {
             currentProductionDetail.setPeriodMonth(i);
             currentProductionDetail.setOilField(currentOilField);
             productionDetails.add(currentProductionDetail);
-            
+
         }
     }
-    
+
     public void destroy() {
         persist(JsfUtil.PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("ProductionDeleted"));
         if (!JsfUtil.isValidationFailed()) {
             reset();
         }
     }
-    
+
     public void destroy(PscForecastDetail prod) {
         setCurrentProductionDetail(prod);
         destroy();
     }
-    
+
     public void create() {
         persist(JsfUtil.PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("ProductionCreated"));
         if (!JsfUtil.isValidationFailed()) {
@@ -124,18 +126,18 @@ public class PscProductionController implements Serializable {
             loadProductions();
         }
     }
-    
+
     public void cancel() {
         reset();
     }
-    
+
     public void update() {
         persist(JsfUtil.PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("ProductionUpdated"));
         if (!JsfUtil.isValidationFailed()) {
-            
+
         }
     }
-    
+
     private void persist(JsfUtil.PersistAction persistAction, String successMessage) {
         if (productionDetails != null) {
             try {
@@ -145,7 +147,7 @@ public class PscProductionController implements Serializable {
                     getProductionDetailBean().remove(productionDetails);
                 }
                 JsfUtil.addSuccessMessage(successMessage);
-                
+
             } catch (EJBException ex) {
                 String msg = "";
                 Throwable cause = ex.getCause();
@@ -166,7 +168,7 @@ public class PscProductionController implements Serializable {
             }
         }
     }
-    
+
     public void loadProductions() {
         if (periodYear != null && periodMonth != null && currentPsc != null) {
             productionDetails = getProductionDetailBean().find(periodYear, periodMonth, currentPsc);
@@ -194,90 +196,93 @@ public class PscProductionController implements Serializable {
         Double dailyProd = grossProd / days;
         pscDetail.setDailyProduction(dailyProd);
     }
-    
+
     private void reset() {
         currentProductionDetail = null;
         productionDetails = null;
     }
-    
+
     public Integer getPeriodYear() {
         return periodYear;
     }
-    
+
     public void setPeriodYear(Integer periodYear) {
         this.periodYear = periodYear;
     }
-    
+
     public Integer getPeriodMonth() {
         return periodMonth;
     }
-    
+
     public void setPeriodMonth(Integer periodMonth) {
         this.periodMonth = periodMonth;
     }
-    
+
     private void setEmbeddableKeys() {
         PscForecastDetailPK fPK = new PscForecastDetailPK();
         fPK.setPeriodYear(periodYear);
         fPK.setPeriodMonth(periodMonth);
         fPK.setFiscalArrangementId(currentPsc.getId());
         fPK.setOilField(currentOilField.getId());
-        
+
         currentProductionDetail.setForecastDetailPK(fPK);
         currentProductionDetail.setPeriodYear(periodYear);
         currentProductionDetail.setPeriodMonth(periodMonth);
-        
+
         currentProductionDetail.setFiscalArrangement(currentPsc);
         currentProductionDetail.setOilField(currentOilField);
-        
+
         currentProductionDetail.setCurrentUser(principal.getName());
     }
-    
+
     public boolean isEnableControlButton() {
         return periodYear != null && currentPsc != null && currentPsc != null;
     }
-    
+
     public PscForecastDetail getCurrentProductionDetail() {
         return currentProductionDetail;
     }
-    
+
     public void setCurrentProductionDetail(PscForecastDetail currentProductionDetail) {
         this.currentProductionDetail = currentProductionDetail;
     }
-    
+
     public ProductionSharingContract getCurrentPsc() {
         return currentPsc;
     }
-    
+
     public void setCurrentPsc(ProductionSharingContract currentPsc) {
         this.currentPsc = currentPsc;
     }
-    
+
     public SelectItem[] getPscOilFieldSelectOptions() {
         if (currentPsc != null) {
             return JsfUtil.getSelectItems(currentPsc.getOilFields(), false);
         }
         return null;
     }
-    
+
     public OilField getCurrentOilField() {
         return currentOilField;
     }
-    
+
     public void setCurrentOilField(OilField currentOilField) {
         this.currentOilField = currentOilField;
     }
-    
+
     public List<PscForecastDetail> getProductionDetails() {
         return productionDetails;
     }
-    
+
     public void setProductionDetails(List<PscForecastDetail> productionDetails) {
         this.productionDetails = productionDetails;
     }
-    
+
     public PscForecastDetailServices getProductionDetailBean() {
         return productionDetail;
     }
-    
+
+    public void taxOilCalculationListener() {
+        taxController.calculationTaxOilDetail(currentPsc, periodYear, periodMonth);
+    }
 }

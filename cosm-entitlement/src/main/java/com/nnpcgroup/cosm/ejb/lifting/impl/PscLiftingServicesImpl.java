@@ -58,4 +58,33 @@ public class PscLiftingServicesImpl extends LiftingServicesImpl<PscLifting> impl
         return liftings;
     }
 
+    @Override
+    public List<PscLifting> find(ProductionSharingContract psc, int year, int month) {
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        Metamodel m = getEntityManager().getMetamodel();
+        EntityType<PscLifting> Lifting_ = m.entity(entityClass);
+
+        List<PscLifting> liftings;
+
+        CriteriaQuery<PscLifting> cq = cb.createQuery(entityClass);
+        Root<PscLifting> e = cq.from(entityClass);
+        try {
+            cq.select(e).where(
+                    cb.and(cb.equal(e.get("psc"), psc),
+                            cb.equal(cb.function("year", Integer.class, e.get("liftingDate")), year),
+                            cb.equal(cb.function("month", Integer.class, e.get("liftingDate")), month)
+                            )
+                    );
+
+            Query query = getEntityManager().createQuery(cq);
+
+            liftings = query.getResultList();
+        } catch (NoResultException nre) {
+            return null;
+        }
+
+        return liftings;
+
+    }
+
 }

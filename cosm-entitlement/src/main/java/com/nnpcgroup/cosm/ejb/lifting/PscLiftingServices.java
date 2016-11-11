@@ -17,4 +17,6 @@ import java.util.List;
 public interface PscLiftingServices extends LiftingServices<PscLifting> {
 
     List<PscLifting> find(ProductionSharingContract psc, Date from, Date to);
+    
+    List<PscLifting> find(ProductionSharingContract psc, int year, int month);
 }

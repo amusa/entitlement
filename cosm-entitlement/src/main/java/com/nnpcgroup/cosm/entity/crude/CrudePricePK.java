@@ -9,6 +9,8 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 import javax.persistence.Column;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  *
@@ -20,6 +22,7 @@ public class CrudePricePK implements Serializable {
     private String crudeTypeCode;
 
     @Column(name = "PRICE_DATE")
+    @Temporal(TemporalType.DATE)
     public Date getPriceDate() {
         return priceDate;
     }

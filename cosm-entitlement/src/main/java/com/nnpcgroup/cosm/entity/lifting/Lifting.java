@@ -49,7 +49,7 @@ public abstract class Lifting implements Serializable {
         this.id = id;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     @Column(name = "LIFTING_DATE")
     public Date getLiftingDate() {
         return liftingDate;
@@ -79,7 +79,7 @@ public abstract class Lifting implements Serializable {
 
     @Transient
     public Double getTotalLifting() {
-        return ownLifting + partnerLifting;
+        return ownLifting + partnerLifting; //TODO:handle NPE
     }
 
 }

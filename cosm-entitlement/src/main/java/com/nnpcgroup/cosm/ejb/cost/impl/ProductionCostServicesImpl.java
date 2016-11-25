@@ -225,7 +225,32 @@ public class ProductionCostServicesImpl extends CommonServicesImpl<ProductionCos
         return capitalAllowance;
     }
 
-    //TODO:refactor CommonServices interface
+    @Override
+    public Double getEducationTax(ProductionSharingContract psc, Integer year, Integer month) {
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+
+        Double eduTax;
+
+        CriteriaQuery<Double> cq = cb.createQuery(Double.class);
+        Root<ProductionCost> e = cq.from(ProductionCost.class);
+        Expression<Double> edTaxExpr = cb.toDouble(e.<Double>get("amount"));
+        try {
+            cq.select(edTaxExpr).where(
+                    cb.and(cb.equal(e.get("periodYear"), year),
+                            cb.equal(e.get("periodMonth"), month),
+                            cb.equal(e.get("psc"), psc),
+                            cb.equal(e.get("costItem").get("code"), "1006")//Education tax code: TODO:
+                    ));
+
+            eduTax = getEntityManager().createQuery(cq).getSingleResult();
+        } catch (NoResultException nre) {
+            return null;
+        }
+
+        return eduTax;
+    }
+
+//TODO:refactor CommonServices interface
     @Override
     public ProductionCost getPreviousMonthProduction(ProductionCost production) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.

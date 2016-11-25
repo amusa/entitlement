@@ -20,10 +20,10 @@
                             <h:panelGroup id="LiftCreatePanel">
                                 <div class="row">
                                     <div class="col-md-4 m-b-15">
-                                        <label>Lifting Date (dd/MM/yyyy) </label>
+                                        <label>Lifting Date (yyyy-MM-dd) </label>
                                         <div class="input-icon datetime-pick date-only">
                                             <input jsf:id="fromDate" jsf:value="#{liftingController.currentPscLifting.liftingDate}" data-format="dd/MM/yyyy" type="text" class="form-control input-sm" >
-                                                <f:convertDateTime pattern="dd/MM/yyyy" />
+                                                <f:convertDateTime pattern="yyyy-MM-dd" />
                                                 <f:ajax/>
                                             </input>
                                             <span class="add-on">
@@ -49,7 +49,7 @@
                                         </h:inputText>                                        
                                     </div>
                                     <div class="col-md-4 m-b-15">
-                                        <h:outputLabel value="Partner Lifting" for="partnerLifting"/>
+                                        <h:outputLabel value="Contractor Lifting" for="partnerLifting"/>
                                         <h:inputText id="partnerLifting" value="#{liftingController.currentPscLifting.partnerLifting}" class="form-control input-sm m-b-10">                                              
                                             <f:ajax />     
                                         </h:inputText>

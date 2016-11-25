@@ -12,6 +12,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
@@ -28,6 +29,7 @@ public class JointVenture extends FiscalArrangement {
     protected EquityType equityType;
 
     @OneToOne
+    @JoinColumn(name="EQUITY_TYPE_ID", referencedColumnName = "ID")
     public EquityType getEquityType() {
         return equityType;
     }

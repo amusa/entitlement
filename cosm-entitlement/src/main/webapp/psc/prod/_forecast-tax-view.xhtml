@@ -57,7 +57,9 @@
                                                     <div class="row">
                                                         <div class="col-md-12 m-b-15">
                                                             <label>Gross Income</label>
-                                                            <h:outputText id="grossIncome" value="#{taxController.taxOilDetail.grossIncome}" class="form-control input-sm m-b-10" />                                              
+                                                            <h:outputText id="grossIncome" value="#{taxController.taxOilDetail.grossIncome}" class="form-control input-sm m-b-10">
+                                                                <f:convertNumber pattern="###,###,###,###.####" />
+                                                            </h:outputText>
                                                         </div>                                                        
                                                     </div>
                                                 </div>                                                
@@ -91,7 +93,9 @@
                                                                 <h:outputText value="#{cost.costItem.description}"/>                                                        
                                                             </h:column> 
                                                             <h:column> 
-                                                                <h:outputText value="#{cost.amount}"/>                                                        
+                                                                <h:outputText value="#{cost.amount}">
+                                                                    <f:convertNumber pattern="###,###,###,###.####" />
+                                                                </h:outputText>
                                                             </h:column> 
                                                         </h:dataTable>
                                                     </div>
@@ -248,7 +252,9 @@
                                                     <div class="row">
                                                         <div class="col-md-12 m-b-15">
                                                             <label>Tax Oil</label>
-                                                            <h:outputText id="taxOil" value="#{taxController.taxOilDetail.taxOil}" class="form-control input-sm m-b-10" />                                              
+                                                            <h:outputText id="taxOil" value="#{taxController.taxOilDetail.taxOil}" class="form-control input-sm m-b-10" >
+                                                                <f:convertNumber pattern="###,###,###,###.####" />
+                                                            </h:outputText>
                                                         </div>                                                        
                                                     </div>
                                                 </div>
@@ -262,7 +268,9 @@
                                                     <div class="row">
                                                         <div class="col-md-12 m-b-15">
                                                             <label>Losses b/fwd - Section 14</label>
-                                                            <h:outputText id="lossBfwSec14" value="0.0" class="form-control input-sm m-b-10" />                                              
+                                                            <h:outputText id="lossBfwSec14" value="0.0" class="form-control input-sm m-b-10" >
+                                                                <f:convertNumber pattern="###,###,###,###.####" />
+                                                            </h:outputText>
                                                         </div>                                                        
                                                     </div>
                                                 </div>

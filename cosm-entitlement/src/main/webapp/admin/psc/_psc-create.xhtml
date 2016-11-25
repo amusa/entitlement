@@ -19,15 +19,26 @@
                         <div class="modal-body">
                             <h:panelGroup id="PscCreatePanel" rendered="#{pscController.selected != null}">
                                 <div class="row">
-                                    <div class="col-md-6 m-b-15">
+                                    <div class="col-md-4 m-b-15">
                                         <h:outputLabel value="Title" for="title" />
                                         <h:inputText id="title" value="#{pscController.selected.title}" title="#{bundle.CreateJointVentureTitle_title}" class="form-control input-sm m-b-10">
                                             <f:ajax/>
                                         </h:inputText>
                                     </div>
-                                    <div class="col-md-6 m-b-15">
+                                    <div class="col-md-4 m-b-15">                                        
+                                        <h:outputLabel value="Crude Type" for="crudeType" />
+                                        <h:selectOneMenu id="crudeType" value="#{pscController.selected.crudeType}" class="form-control input-sm m-b-10">
+                                            <f:selectItem itemValue="#{null}" itemLabel="--select--" />
+                                            <f:selectItems value="#{crudeTypeController.itemsAvailableSelectOne}"
+                                                           var="crudeTypeItem"
+                                                           itemValue="#{crudeTypeItem}"/>
+                                            <f:ajax />
+                                        </h:selectOneMenu>                                                                                                                  
+                                    </div>
+                                    <div class="col-md-4 m-b-15">
                                         <h:outputLabel value="Operator" for="operator" />
                                         <h:selectOneMenu id="operator" value="#{pscController.selected.operator}" class="form-control input-sm m-b-10">
+                                            <f:selectItem itemValue="#{null}" itemLabel="--select--"/>
                                             <f:selectItems value="#{companyController.itemsAvailableSelectOne}"
                                                            var="operatorItem"
                                                            itemValue="#{operatorItem}"/>
@@ -44,19 +55,22 @@
                                             <div class="col-md-4 m-b-15">
                                                 <h:outputLabel value="Cont Exec Date" for="contractExecDate" />
                                                 <h:inputText id="contractExecDate"  value="#{pscController.selected.contractExecutionDate}" class="form-control input-sm m-b-10">
-                                                    <f:ajax />
+                                                    <f:ajax event="change" render="petrProfTaxRate invTaxAllwCrd"/>
+                                                    <f:convertDateTime pattern="dd/MM/yyyy" />
                                                 </h:inputText>                                                                                                                  
                                             </div>
                                             <div class="col-md-4 m-b-15">
                                                 <h:outputLabel value="First Oil Date" for="firstOilDate" />
                                                 <h:inputText id="firstOilDate"  value="#{pscController.selected.firstOilDate}" class="form-control input-sm m-b-10">
                                                     <f:ajax />
+                                                    <f:convertDateTime pattern="dd/MM/yyyy" />
                                                 </h:inputText>                                                                                                                  
                                             </div>
                                             <div class="col-md-4 m-b-15">
                                                 <h:outputLabel value="Cost Recov Start Date" for="costRecovStartDate" />
                                                 <h:inputText id="costRecovStartDate"  value="#{pscController.selected.costRecoveryStartDate}" class="form-control input-sm m-b-10">
                                                     <f:ajax />
+                                                    <f:convertDateTime pattern="dd/MM/yyyy" />
                                                 </h:inputText>                                                                                                                  
                                             </div>
                                         </div>
@@ -75,10 +89,26 @@
                                             </div>
                                             <div class="col-md-4 m-b-15">
                                                 <h:outputLabel value="Royalty Rate" for="royaltyRate" />
-                                                <h:inputText id="royaltyRate"  value="#{pscController.selected.royaltyRate}" class="form-control input-sm m-b-10">
-                                                    <f:ajax />
-                                                </h:inputText>                                                                                                                  
+                                                <h:outputText id="royaltyRate"  value="#{pscController.selected.royaltyRate}" class="form-control input-sm m-b-10"/>
                                             </div>   
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-4 m-b-15">
+                                                <h:outputLabel value="Terrain" for="terrain" />
+                                                <h:selectOneMenu id="terrain" value="#{pscController.selected.terrain}" class="form-control input-sm m-b-10">
+                                                    <f:selectItem itemValue="#{null}" itemLabel="--select--"/>
+                                                    <f:selectItem itemValue="OFFSHORE" itemLabel="Off-Shore"/>
+                                                    <f:selectItem itemValue="ONSHORE" itemLabel="On-Shore"/>  
+                                                    <f:selectItem itemValue="INLAND BASIN" itemLabel="Inland Basin"/>  
+                                                    <f:ajax event="change" render=" petrProfTaxRate invTaxAllwCrd waterDepth royaltyRate"/>
+                                                </h:selectOneMenu>                                        
+                                            </div> 
+                                            <div class="col-md-4 m-b-15">
+                                                <h:outputLabel value="Water Depth" for="waterDepth" />
+                                                <h:inputText id="waterDepth"  value="#{pscController.selected.waterDepth}" disabled="#{not pscController.offshore}"  class="form-control input-sm m-b-10">
+                                                    <f:ajax event="change" render="petrProfTaxRate invTaxAllwCrd royaltyRate"/>
+                                                </h:inputText>                                                                                                                  
+                                            </div> 
                                         </div>
                                     </div>
                                 </div>
@@ -90,10 +120,8 @@
                                     <div class="panel-body">
                                         <div class="row">
                                             <div class="col-md-4 m-b-15">
-                                                <h:outputLabel value="Inv. Tax Allw" for="invTaxAllow" />
-                                                <h:inputText id="invTaxAllow"  value="#{pscController.selected.taxAndAllowance.investmentTaxAllowance}" class="form-control input-sm m-b-10">
-                                                    <f:ajax />
-                                                </h:inputText>                                                                                                                  
+                                                <h:outputLabel value="Investment Tax Allowance/Credit (ITA/ITC)" for="invTaxAllwCrd" />
+                                                <h:outputText id="invTaxAllwCrd"  value="#{pscController.selected.investmentTaxAllowanceCredit}" class="form-control input-sm m-b-10"/>
                                             </div>
                                             <div class="col-md-4 m-b-15">
                                                 <h:outputLabel value="Capital Allw Rate" for="capitalAllwRate" />
@@ -102,19 +130,11 @@
                                                 </h:inputText>                                                                                                                  
                                             </div>
                                             <div class="col-md-4 m-b-15">
-                                                <h:outputLabel value="Petr Prof. Tax Rate (> 5yrs)" for="petrProfTaxRateAfter5yrs" />
-                                                <h:inputText id="petrProfTaxRateAfter5yrs"  value="#{pscController.selected.taxAndAllowance.petroleumProfitTaxRateAferFiveYrs}" class="form-control input-sm m-b-10">
-                                                    <f:ajax />
-                                                </h:inputText>                                                                                                                  
+                                                <h:outputLabel value="Petr Prof. Tax Rate" for="petrProfTaxRate" />
+                                                <h:outputText id="petrProfTaxRate"  value="#{pscController.selected.petroleumProfitTaxRate}" class="form-control input-sm m-b-10"/>
                                             </div> 
                                         </div>
-                                        <div class="row">
-                                            <div class="col-md-4 m-b-15">
-                                                <h:outputLabel value="Petr Prof. Tax Rate (1-5yrs)" for="petrProfTaxRateFirst5yrs" />
-                                                <h:inputText id="petrProfTaxRateFirst5yrs"  value="#{pscController.selected.taxAndAllowance.petroleumProfitTaxRateFirstFiveYrs}" class="form-control input-sm m-b-10">
-                                                    <f:ajax />
-                                                </h:inputText>                                                                                                                  
-                                            </div>
+                                        <div class="row">                                    
                                             <div class="col-md-4 m-b-15">
                                                 <h:outputLabel value="Education Tax" for="educationTax" />
                                                 <h:inputText id="educationTax"  value="#{pscController.selected.taxAndAllowance.educationTax}" class="form-control input-sm m-b-10">
@@ -122,10 +142,13 @@
                                                 </h:inputText>                                                                                                                  
                                             </div>
                                             <div class="col-md-4 m-b-15">
-                                                <h:outputLabel value="Profit Oil Split Option" for="profitOilSplit" />
-                                                <h:inputText id="profitOilSplit"  value="#{pscController.selected.profitOilSplitOption}" class="form-control input-sm m-b-10">
+                                                <h:outputLabel value="Profit Oil Split Option" for="profitOilOption" />                                        
+                                                <h:selectOneMenu id="profitOilOption" value="#{pscController.selected.profitOilSplitOption}" class="form-control input-sm m-b-10">
+                                                    <f:selectItem itemValue="#{null}" itemLabel="--select--"/>
+                                                    <f:selectItem itemValue="R-FACTOR" itemLabel="R-Factor"/>
+                                                    <f:selectItem itemValue="CUMULATIVE" itemLabel="Cumulative"/>  
                                                     <f:ajax />
-                                                </h:inputText>                                                                                                                  
+                                                </h:selectOneMenu> 
                                             </div> 
                                         </div>
                                     </div>
@@ -165,13 +188,11 @@
                                             </div>
                                             <div class="col-md-4 m-b-15">
                                                 <h:outputLabel value="Total Concess Rental (OPL)" for="totalConcessRental" />
-                                                <h:inputText id="totalConcessRental"  value="#{pscController.selected.areaSize.totalConcessionRental}" class="form-control input-sm m-b-10">
-                                                    <f:ajax />
-                                                </h:inputText>                                                                                                                  
+                                                <h:outputLabel id="totalConcessRental"  value="#{pscController.selected.areaSize.totalConcessionRental}" class="form-control input-sm m-b-10"/>
                                             </div>
                                             <div class="col-md-4 m-b-15">
                                                 <h:outputLabel value="Concess Rental (OML)" for="omlConcessRental" />
-                                                <h:inputText id="omlConcessRental"  value="" class="form-control input-sm m-b-10">
+                                                <h:inputText id="omlConcessRental"  value="0" class="form-control input-sm m-b-10">
                                                     <f:ajax />
                                                 </h:inputText>                                                                                                                  
                                             </div> 
@@ -179,7 +200,7 @@
                                         <div class="row">
                                             <div class="col-md-4 m-b-15">
                                                 <h:outputLabel value="Concess Rental (OML) Annually" for="omlConcessRentalAnnual" />
-                                                <h:inputText id="omlConcessRentalAnnual"  value="" class="form-control input-sm m-b-10">
+                                                <h:inputText id="omlConcessRentalAnnual"  value="0" class="form-control input-sm m-b-10">
                                                     <f:ajax />
                                                 </h:inputText>                                                                                                                  
                                             </div>  
@@ -187,8 +208,57 @@
                                     </div>
                                 </div>       
 
-                            </h:panelGroup>
+                                <div jsf:id="oilField" class="panel panel-default tile">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">OIL FIELD</h3>
+                                    </div>
+                                    <div class="panel-body">                                
+                                        <div class="row">
+                                            <div class="col-md-4 m-b-15">
+                                                <button jsf:id="addButton" look="warning" data-target="#OilFieldAddDlg" data-toggle="modal" class="btn m-r-5">
+                                                    <span class="icon">&#61943;</span>
+                                                    Add
+                                                    <f:ajax event="click" listener="#{pscController.prepareAddOilField}"  render="OilFieldAddForm" />
+                                                </button>
+                                            </div>  
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-9 m-b-9">
+                                                <h:dataTable id="oilFieldTable" var="field" value="#{pscController.selected.oilFields}" 
+                                                             class="table table-bordered table-hover tile">
+                                                    <h:column>
+                                                        <f:facet name="header">
+                                                            <h:outputText value="Title"/>
+                                                        </f:facet>
+                                                        <h:outputText value="#{field.title}"/>
+                                                    </h:column>
 
+                                                    <h:column>
+                                                        <div class="btn-group">
+                                                            <button jsf:id="action" type="button" class="btn btn-sm dropdown-toggle" data-toggle="dropdown">
+                                                                Action <span class="caret"></span>
+                                                            </button>
+                                                            <ul class="dropdown-menu" jsf:id="btnList">
+                                                                <li>
+                                                                    <h:commandLink>
+                                                                        <span class="icon">&#61918;</span>
+                                                                        #{bundle.Remove}
+                                                                        <f:ajax render="PscCreateForm oilFieldTable msgs" listener="#{pscController.remove(field)}"/>
+                                                                    </h:commandLink>
+                                                                </li> 
+                                                            </ul>
+                                                        </div>
+                                                    </h:column>
+
+                                                    <f:facet name="footer"> 
+
+                                                    </f:facet>
+                                                </h:dataTable>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> 
+                            </h:panelGroup>
                         </div>
                         <div class="modal-footer">
                             <h:commandButton value="#{bundle.Save}" pt:data-dismiss="modal" class="btn btn-sm">
@@ -202,6 +272,6 @@
                 </div>
             </div>
         </div> 
-
+        <!--<ui:include src="_oil-field-add.xhtml"/>--> 
     </ui:composition>
 </html>

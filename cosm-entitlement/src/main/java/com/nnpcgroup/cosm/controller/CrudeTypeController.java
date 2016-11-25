@@ -129,7 +129,7 @@ public class CrudeTypeController implements Serializable {
     }
 
     public SelectItem[] getItemsAvailableSelectOne() {
-        return JsfUtil.getSelectItems(getFacade().findAll(), true);
+        return JsfUtil.getSelectItems(getFacade().findAll(), false);
     }
 
     @FacesConverter(forClass = CrudeType.class)

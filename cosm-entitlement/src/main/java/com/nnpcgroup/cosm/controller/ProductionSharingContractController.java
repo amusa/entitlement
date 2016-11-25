@@ -8,6 +8,7 @@ import com.nnpcgroup.cosm.entity.contract.OilField;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -122,6 +123,13 @@ public class ProductionSharingContractController implements Serializable {
             pscItems = getFacade().findAll();
         }
         return pscItems;
+    }
+
+    public boolean isOffshore() {
+        if (selected != null) {
+            return Objects.equals(selected.getTerrain(), "OFFSHORE");
+        }
+        return false;
     }
 
     private void persist(PersistAction persistAction, String successMessage) {

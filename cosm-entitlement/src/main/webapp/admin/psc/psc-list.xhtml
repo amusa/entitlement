@@ -34,7 +34,7 @@
             <h:form id="pscListForm"> 
                 <!-- Multi Column -->
                 <div jsf:id="pscPanel" class="row">
-                    <div class="col-md-9 m-b-9">
+                    <div class="col-md-12 m-b-9">
                         <h:dataTable id="pscTable" var="psc" value="#{pscController.pscItems}" 
                                      class="table table-bordered table-hover tile">
                             <h:column>
@@ -42,6 +42,12 @@
                                     <h:outputText value="#{bundle.PSCListTitle}"/>
                                 </f:facet>
                                 <h:outputText value="#{psc.title}"/>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">
+                                    <h:outputText value="#{bundle.CrudeType}"/>
+                                </f:facet>
+                                <h:outputText value="#{psc.crudeType}"/>
                             </h:column>
                             <h:column>
                                 <f:facet name="header">

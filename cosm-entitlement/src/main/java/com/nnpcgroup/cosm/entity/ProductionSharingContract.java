@@ -23,15 +23,22 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
+import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.NotNull;
 
 /**
  *
  * @author 18359
  */
 @Entity
+@Table(uniqueConstraints = {
+    @UniqueConstraint(columnNames = {"OPERATOR_ID"}),
+    @UniqueConstraint(columnNames = {"TITLE"})
+})
 @DiscriminatorValue("PSC")
 public class ProductionSharingContract extends FiscalArrangement {
 
@@ -43,7 +50,9 @@ public class ProductionSharingContract extends FiscalArrangement {
     private Date costRecoveryStartDate;
     private Double costRecoveryLimit;
     private Double costUplift;
-    private Double royaltyRate;
+//    private Double royaltyRate;
+    private String terrain;
+    private Double waterDepth;
 
     private TaxAndAllowance taxAndAllowance;
     private String profitOilSplitOption;
@@ -60,6 +69,7 @@ public class ProductionSharingContract extends FiscalArrangement {
         super(id);
     }
 
+    @NotNull
     @OneToOne
     @JoinColumn(name = "CRUDE_TYPE_CODE", referencedColumnName = "CODE")
     public CrudeType getCrudeType() {
@@ -70,6 +80,7 @@ public class ProductionSharingContract extends FiscalArrangement {
         this.crudeType = crudeType;
     }
 
+    @NotNull
     @Column(name = "CONTRACT_EXECUTION_DATE")
     @Temporal(TemporalType.DATE)
     public Date getContractExecutionDate() {
@@ -118,15 +129,34 @@ public class ProductionSharingContract extends FiscalArrangement {
         this.costUplift = costUplift;
     }
 
-    @Column(name = "ROYALTY_RATE")
+//    @Column(name = "ROYALTY_RATE")
+    @Transient
     public Double getRoyaltyRate() {
-        return royaltyRate;
+        if (terrain != null) {
+            if (terrain.equalsIgnoreCase("OFFSHORE")) {
+                if (waterDepth != null) {
+                    if (waterDepth <= 100.0) {
+                        return 0.185;
+                    } else if (waterDepth > 100.0 & waterDepth <= 200.0) {
+                        return 0.165;
+                    } else if (waterDepth > 200.0 & waterDepth <= 500.00) {
+                        return 0.12;
+                    } else if (waterDepth > 500.0) {
+                        return 0.08;
+                    }
+                }
+            } else if (terrain.equalsIgnoreCase("ONSHORE")) {
+                return 0.2;
+            } else if (terrain.equalsIgnoreCase("INLAND BASIN")) {
+                return 0.1;
+            }
+        }
+        return 0.0;
     }
 
-    public void setRoyaltyRate(Double royaltyRate) {
-        this.royaltyRate = royaltyRate;
-    }
-
+//    public void setRoyaltyRate(Double royaltyRate) {
+//        this.royaltyRate = royaltyRate;
+//    }
     @Embedded
     public TaxAndAllowance getTaxAndAllowance() {
         return taxAndAllowance;
@@ -136,6 +166,7 @@ public class ProductionSharingContract extends FiscalArrangement {
         this.taxAndAllowance = taxAndAllowance;
     }
 
+    @NotNull
     @Column(name = "PROFIT_OIL_SPLIT_OPTION")
     public String getProfitOilSplitOption() {
         return profitOilSplitOption;
@@ -159,6 +190,25 @@ public class ProductionSharingContract extends FiscalArrangement {
         return oilFields;
     }
 
+    @NotNull
+    @Column(name = "TERRAIN")
+    public String getTerrain() {
+        return terrain;
+    }
+
+    public void setTerrain(String terrain) {
+        this.terrain = terrain;
+    }
+
+    @Column(name = "WATER_DEPTH")
+    public Double getWaterDepth() {
+        return waterDepth;
+    }
+
+    public void setWaterDepth(Double waterDepth) {
+        this.waterDepth = waterDepth;
+    }
+
     public void setOilFields(List<OilField> oilFields) {
         this.oilFields = oilFields;
     }
@@ -171,7 +221,48 @@ public class ProductionSharingContract extends FiscalArrangement {
     }
 
     @Transient
+    public Double getInvestmentTaxAllowanceCredit() {
+        if (terrain != null) {
+            if (terrain.equalsIgnoreCase("OFFSHORE")) {
+                if (waterDepth != null) {
+                    if (waterDepth <= 100.0) {
+                        return 0.1;
+                    } else if (waterDepth > 100.0 & waterDepth <= 200.0) {
+                        return 0.15;
+                    } else if (waterDepth > 200.0) {
+                        return 0.5;
+                    }
+                }
+            } else if (terrain.equalsIgnoreCase("ONSHORE")) {
+                return 0.05;
+            } else if (terrain.equalsIgnoreCase("INLAND BASIN")) {
+                return 0.5;
+            }
+        }
+        return 0.0;
+    }
+
+    @Transient
     public double getPetroleumProfitTaxRate() {
+
+        if (terrain != null) {
+            if (terrain.equalsIgnoreCase("OFFSHORE")) {
+                if (waterDepth != null && waterDepth >= 201.0) {
+                    return 0.50;
+                }
+            }
+            int dateDiff = getContractDuration();
+            if (dateDiff <= 5) {
+                return 0.6575;//TODO:USE ENUM
+            }
+            return 0.85;
+        }
+
+        return 0;
+    }
+
+    @Transient
+    private int getContractDuration() {
         if (contractExecutionDate != null) {
             Calendar execDate = GregorianCalendar.getInstance();
             Calendar today = GregorianCalendar.getInstance();
@@ -179,13 +270,9 @@ public class ProductionSharingContract extends FiscalArrangement {
             execDate.setTime(contractExecutionDate);
             today.add(Calendar.DAY_OF_YEAR, -execDate.get(Calendar.DAY_OF_YEAR));
 
-            int dateDiff = today.get(Calendar.YEAR) - execDate.get(Calendar.YEAR);
-
-            if (dateDiff <= 5) {
-                return 0.6575;//TODO:USE ENUM
-            }
-            return 0.85;
+            return today.get(Calendar.YEAR) - execDate.get(Calendar.YEAR);
         }
+
         return 0;
     }
 }

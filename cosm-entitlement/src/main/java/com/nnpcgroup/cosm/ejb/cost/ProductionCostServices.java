@@ -28,5 +28,7 @@ public interface ProductionCostServices extends CommonServices<ProductionCost>, 
     double getCapex(ProductionSharingContract psc, Integer year, Integer month);
 
     double getCapitalAllowanceRecovery(ProductionSharingContract psc, Integer year, Integer month);
+    
+    Double getEducationTax(ProductionSharingContract psc, Integer year, Integer month);
 
 }

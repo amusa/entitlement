@@ -113,11 +113,20 @@ public class TaxServicesImpl implements TaxServices, Serializable {
 
     @Override
     public double computeEducationTax(ProductionSharingContract psc, int year, int month) {
+//if education tax exists in cost lineitem use it, else compute
+        Double eduTax = prodCostBean.getEducationTax(psc, year, month);
+
+        if (eduTax != null) {
+            return eduTax;
+        }
+
         double assessableProfit;
 
         assessableProfit = computeAssessableProfit(psc, year, month);
 
-        return Math.max(0, (2 / 102) * assessableProfit); //TODO: verify if rate should come from psc object
+//        return Math.max(0, (2 / 102) * assessableProfit); //TODO: verify if rate should come from psc object
+        double eduTaxRate = psc.getTaxAndAllowance().getEducationTax();
+        return Math.max(0, (eduTaxRate / 100) * assessableProfit);
     }
 
     @Override
@@ -132,7 +141,9 @@ public class TaxServicesImpl implements TaxServices, Serializable {
 
     @Override
     public double computeCurrentYearITA(ProductionSharingContract psc, int year, int month) {
-        return computeCapex(psc, year, month) * 0.05; //TODO:verify if rate should come from psc object
+//        return computeCapex(psc, year, month) * 0.05; //TODO:verify if rate should come from psc object
+        double itaRate = psc.getInvestmentTaxAllowanceCredit();
+        return computeCapex(psc, year, month) * (itaRate / 100.0);
     }
 
     @Override

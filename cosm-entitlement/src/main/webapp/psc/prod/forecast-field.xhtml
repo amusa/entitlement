@@ -102,7 +102,7 @@
                                         </h:column>
                                         <h:column>
                                             <f:facet name="header">
-                                                <h:outputText value="Gross Prod"/>
+                                                <h:outputText value="Net Montly Production"/>
                                             </f:facet>
                                             <h:outputText value="#{prod.grossProduction}">
                                                 <f:convertNumber pattern="###,###,###.####"/>
@@ -110,7 +110,7 @@
                                         </h:column>  
                                         <h:column>
                                             <f:facet name="header">
-                                                <h:outputText value="Daily Prod (bpd)"/>
+                                                <h:outputText value="Daily Production (bpd)"/>
                                             </f:facet>
                                             <h:outputText value="#{prod.dailyProduction}">
                                                 <f:convertNumber maxFractionDigits="2" groupingUsed="true"/>

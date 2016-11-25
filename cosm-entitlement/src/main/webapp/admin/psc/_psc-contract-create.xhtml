@@ -114,19 +114,13 @@
                                                 </h:inputText>                                                                                                                  
                                             </div>
                                             <div class="col-md-4 m-b-15">
-                                                <h:outputLabel value="Petr Prof. Tax Rate (> 5yrs)" for="petrProfTaxRateAfter5yrs" />
-                                                <h:inputText id="petrProfTaxRateAfter5yrs"  value="#{contractController.pscSelected.taxAndAllowance.petroleumProfitTaxRateAferFiveYrs}" class="form-control input-sm m-b-10">
+                                                <h:outputLabel value="Petr Prof. Tax Rate" for="petrProfTaxRate" />
+                                                <h:inputText id="petrProfTaxRate"  value="#{contractController.pscSelected.petroleumProfitTaxRate}" class="form-control input-sm m-b-10">
                                                     <f:ajax />
                                                 </h:inputText>                                                                                                                  
                                             </div> 
                                         </div>
                                         <div class="row">
-                                            <div class="col-md-4 m-b-15">
-                                                <h:outputLabel value="Petr Prof. Tax Rate (1-5yrs)" for="petrProfTaxRateFirst5yrs" />
-                                                <h:inputText id="petrProfTaxRateFirst5yrs"  value="#{contractController.pscSelected.taxAndAllowance.petroleumProfitTaxRateFirstFiveYrs}" class="form-control input-sm m-b-10">
-                                                    <f:ajax />
-                                                </h:inputText>                                                                                                                  
-                                            </div>
                                             <div class="col-md-4 m-b-15">
                                                 <h:outputLabel value="Education Tax" for="educationTax" />
                                                 <h:inputText id="educationTax"  value="#{contractController.pscSelected.taxAndAllowance.educationTax}" class="form-control input-sm m-b-10">

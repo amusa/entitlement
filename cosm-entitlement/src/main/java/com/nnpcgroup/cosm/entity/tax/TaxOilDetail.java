@@ -21,6 +21,7 @@ public class TaxOilDetail implements Serializable {
     private double currentCapitalAllowance;
     private double monthlyMinimumTax;
     private double petroleumProfitTaxRate;
+    private Double eduTaxCostItem;
 
     public double getAdjustedProfit() {
         return Math.max(0, grossIncome - totalDeduction);
@@ -31,6 +32,10 @@ public class TaxOilDetail implements Serializable {
     }
 
     public double getEducationTax() {
+        if (eduTaxCostItem != null) {
+            return eduTaxCostItem;
+        }
+        
         return Math.max(0, (2 / 102) * getAssessableProfit());
     }
 
@@ -136,6 +141,14 @@ public class TaxOilDetail implements Serializable {
 
     public void setPetroleumProfitTaxRate(double petroleumProfitTaxRate) {
         this.petroleumProfitTaxRate = petroleumProfitTaxRate;
+    }
+
+    public Double getEduTaxCostItem() {
+        return eduTaxCostItem;
+    }
+
+    public void setEduTaxCostItem(Double eduTaxCostItem) {
+        this.eduTaxCostItem = eduTaxCostItem;
     }
 
 }

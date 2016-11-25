@@ -36,7 +36,7 @@
                         </div>
                         <div class="modal-footer">
                             <h:commandButton value="#{bundle.OK}" pt:data-dismiss="modal" class="btn btn-sm">
-                                <f:ajax listener="#{pscController.addOilField}"  render="PscCreateForm2 oilFieldTable msgs" />
+                                <f:ajax listener="#{pscController.addOilField}"  render="PscCreateForm2 PscCreateForm PscEditForm oilFieldTable msgs" />
                             </h:commandButton>
                             <h:commandButton value="#{bundle.Cancel}" immediate="true" pt:data-dismiss="modal" class="btn btn-sm">
                                 <f:ajax listener="#{pscController.cancelOilField}" render="PscCreateForm2 oilFieldTable msgs"/>

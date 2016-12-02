@@ -7,10 +7,11 @@ package com.nnpcgroup.cosm.ejb.impl;
 
 import com.nnpcgroup.cosm.ejb.FiscalPeriodService;
 import com.nnpcgroup.cosm.entity.FiscalPeriod;
+import java.io.Serializable;
 import javax.enterprise.context.Dependent;
 
 @Dependent
-public class FiscalPeriodBeanImpl implements FiscalPeriodService {
+public class FiscalPeriodBeanImpl implements FiscalPeriodService, Serializable {
 
     @Override
     public FiscalPeriod getPreviousFiscalPeriod(FiscalPeriod fp) {

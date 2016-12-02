@@ -4,7 +4,7 @@ import com.nnpcgroup.cosm.entity.ProductionSharingContract;
 import com.nnpcgroup.cosm.controller.util.JsfUtil;
 import com.nnpcgroup.cosm.controller.util.JsfUtil.PersistAction;
 import com.nnpcgroup.cosm.ejb.ProductionSharingContractBean;
-import com.nnpcgroup.cosm.entity.contract.OilField;
+import com.nnpcgroup.cosm.entity.OilField;
 
 import java.io.Serializable;
 import java.util.List;

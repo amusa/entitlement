@@ -1,6 +1,5 @@
-package com.nnpcgroup.cosm.entity.contract;
+package com.nnpcgroup.cosm.entity;
 
-import com.nnpcgroup.cosm.entity.ProductionSharingContract;
 import java.io.Serializable;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -14,7 +13,9 @@ public class OilField implements Serializable {
 
     private Long id;
     private String title;
-    private Double royaltyRate;
+    private Boolean differentTerrain;
+    private String terrain;
+    private Double waterDepth;
     private ProductionSharingContract contract;
 
     public OilField() {
@@ -41,14 +42,55 @@ public class OilField implements Serializable {
         this.title = title;
     }
 
-    @NotNull
-    @Column(name = "ROYALTY_RATE")
-    public Double getRoyaltyRate() {
-        return royaltyRate;
+    @Column(name = "DIFF_TERRAIN")
+    public Boolean getDifferentTerrain() {
+        return differentTerrain;
     }
 
-    public void setRoyaltyRate(Double royaltyRate) {
-        this.royaltyRate = royaltyRate;
+    public void setDifferentTerrain(Boolean differentTerrain) {
+        this.differentTerrain = differentTerrain;
+    }
+
+    @Column(name = "TERRAIN")
+    public String getTerrain() {
+        return terrain;
+    }
+
+    public void setTerrain(String terrain) {
+        this.terrain = terrain;
+    }
+
+    @Column(name = "WATER_DEPTH")
+    public Double getWaterDepth() {
+        return waterDepth;
+    }
+
+    public void setWaterDepth(Double waterDepth) {
+        this.waterDepth = waterDepth;
+    }
+
+    @Transient
+    public Double getRoyaltyRate() {
+        if (terrain != null) {
+            if (terrain.equalsIgnoreCase("OFFSHORE")) {
+                if (waterDepth != null) {
+                    if (waterDepth <= 100.0) {
+                        return 18.5;
+                    } else if (waterDepth > 100.0 & waterDepth <= 200.0) {
+                        return 16.5;
+                    } else if (waterDepth > 200.0 & waterDepth <= 500.00) {
+                        return 12.0;
+                    } else if (waterDepth > 500.0) {
+                        return 8.0;
+                    }
+                }
+            } else if (terrain.equalsIgnoreCase("ONSHORE")) {
+                return 20.0;
+            } else if (terrain.equalsIgnoreCase("INLAND BASIN")) {
+                return 10.0;
+            }
+        }
+        return null;
     }
 
     @ManyToOne

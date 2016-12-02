@@ -3,7 +3,7 @@ package com.nnpcgroup.cosm.controller;
 import com.nnpcgroup.cosm.controller.util.JsfUtil;
 import com.nnpcgroup.cosm.ejb.forecast.psc.OilFieldServices;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
-import com.nnpcgroup.cosm.entity.contract.OilField;
+import com.nnpcgroup.cosm.entity.OilField;
 import java.io.Serializable;
 import java.util.List;
 import java.util.ResourceBundle;

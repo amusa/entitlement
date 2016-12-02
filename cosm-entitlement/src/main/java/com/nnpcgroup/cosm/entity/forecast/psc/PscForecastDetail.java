@@ -5,7 +5,7 @@
  */
 package com.nnpcgroup.cosm.entity.forecast.psc;
 
-import com.nnpcgroup.cosm.entity.contract.OilField;
+import com.nnpcgroup.cosm.entity.OilField;
 import com.nnpcgroup.cosm.entity.forecast.ForecastDetail;
 import com.nnpcgroup.cosm.entity.production.jv.ProductionDetailPK;
 import javax.persistence.*;

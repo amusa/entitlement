@@ -48,6 +48,11 @@ public class TaxServicesImpl implements TaxServices, Serializable {
     @Override
     public double computeGrossIncome(ProductionSharingContract psc, int year, int month) {
         //TODO:compute cummulative income
+
+        if (!prodCostBean.fiscalPeriodExists(psc, year, month)) {
+            return 0.0;
+        }
+
         List<PscLifting> pscLiftings = liftingBean.find(psc, year, month);
         double price;
         double grossIncome = 0;
@@ -67,7 +72,9 @@ public class TaxServicesImpl implements TaxServices, Serializable {
 
         }
 
-        return grossIncome;
+        FiscalPeriod prevFp = fiscalService.getPreviousFiscalPeriod(year, month);
+
+        return grossIncome + computeGrossIncome(psc, prevFp.getYear(), prevFp.getMonth());//recursively compute cummulative gross income
 
     }
 
@@ -82,12 +89,20 @@ public class TaxServicesImpl implements TaxServices, Serializable {
 
     @Override
     public double computeRoyalty(ProductionSharingContract psc, int year, int month) {
+
+        if (!prodCostBean.fiscalPeriodExists(psc, year, month)) {
+            return 0.0;
+        }
+
         double royalty, royRate, grossProdCum;
+
         royRate = getRoyaltyRate(psc);
         grossProdCum = productionBean.getGrossProduction(psc, year, month);
-        royalty = grossProdCum * royRate;
+        royalty = grossProdCum * (royRate / 100);
 
-        return royalty;
+        FiscalPeriod prevFp = fiscalService.getPreviousFiscalPeriod(year, month);
+
+        return royalty + computeRoyalty(psc, prevFp.getYear(), prevFp.getMonth());
     }
 
     @Override
@@ -117,7 +132,7 @@ public class TaxServicesImpl implements TaxServices, Serializable {
         Double eduTax = prodCostBean.getEducationTax(psc, year, month);
 
         if (eduTax != null) {
-            return eduTax;
+            return 0; //avoid double edu tax
         }
 
         double assessableProfit;
@@ -141,9 +156,13 @@ public class TaxServicesImpl implements TaxServices, Serializable {
 
     @Override
     public double computeCurrentYearITA(ProductionSharingContract psc, int year, int month) {
-//        return computeCapex(psc, year, month) * 0.05; //TODO:verify if rate should come from psc object
-        double itaRate = psc.getInvestmentTaxAllowanceCredit();
-        return computeCapex(psc, year, month) * (itaRate / 100.0);
+        if (!prodCostBean.fiscalPeriodExists(psc, year, month)) {
+            return 0.0;
+        }
+
+        double itaRate = psc.getInvestmentTaxAllowanceCredit(); //TODO:verify application of ITA rate
+        FiscalPeriod prevFp = fiscalService.getPreviousFiscalPeriod(year, month);
+        return computeCapex(psc, year, month) * (itaRate / 100.0) + computeCurrentYearITA(psc, prevFp.getYear(), prevFp.getMonth());
     }
 
     @Override
@@ -158,16 +177,28 @@ public class TaxServicesImpl implements TaxServices, Serializable {
 
     @Override
     public double computePriorYearAnnualAllowance(ProductionSharingContract psc, int year, int month) {
+        FiscalPeriod prevFp = fiscalService.getPreviousFiscalPeriod(year, month);
+
+        if (!prodCostBean.fiscalPeriodExists(psc, prevFp.getYear(), prevFp.getMonth())) {
+            return 0.0;
+        }
+
         double UAA;
 
-        UAA = computeUnrecoupedAnnualAllowance(psc, year, month);
+        UAA = computeUnrecoupedAnnualAllowance(psc, prevFp.getYear(), prevFp.getMonth());
         return -1 * UAA;
 
     }
 
     @Override
     public double computeCurrentYearCapitalAllowance(ProductionSharingContract psc, int year, int month) {
-        return prodCostBean.getCapitalAllowanceRecovery(psc, year, month);// Armotization
+        if (!prodCostBean.fiscalPeriodExists(psc, year, month)) {
+            return 0.0;
+        }
+        double currentCapitalAllw = prodCostBean.getCapitalAllowanceRecovery(psc, year, month);
+        FiscalPeriod prevFp = fiscalService.getPreviousFiscalPeriod(year, month);
+
+        return currentCapitalAllw + prodCostBean.getCapitalAllowanceRecovery(psc, prevFp.getYear(), prevFp.getMonth());// Armotization
     }
 
     @Override

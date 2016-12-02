@@ -21,7 +21,8 @@ public class TaxOilDetail implements Serializable {
     private double currentCapitalAllowance;
     private double monthlyMinimumTax;
     private double petroleumProfitTaxRate;
-    private Double eduTaxCostItem;
+    private double educationTax;
+    private double priorYearAnnualAllowance;
 
     public double getAdjustedProfit() {
         return Math.max(0, grossIncome - totalDeduction);
@@ -32,11 +33,11 @@ public class TaxOilDetail implements Serializable {
     }
 
     public double getEducationTax() {
-        if (eduTaxCostItem != null) {
-            return eduTaxCostItem;
-        }
-        
-        return Math.max(0, (2 / 102) * getAssessableProfit());
+        return educationTax;
+    }
+
+    public void setEducationTax(double eduTax) {
+        this.educationTax = eduTax;
     }
 
     public double getAdjustedAssessableProfit() {
@@ -72,7 +73,11 @@ public class TaxOilDetail implements Serializable {
     }
 
     public double getPriorYearAnnualAllowance() {
-        return -1 * getUnrecoupedAnnualAllowance();
+        return priorYearAnnualAllowance;
+    }
+
+    public void setPriorYearAnnualAllowance(double priorYrAnnualAllw) {
+        this.priorYearAnnualAllowance = priorYrAnnualAllw;
     }
 
     public double getTaxOil() {
@@ -141,14 +146,6 @@ public class TaxOilDetail implements Serializable {
 
     public void setPetroleumProfitTaxRate(double petroleumProfitTaxRate) {
         this.petroleumProfitTaxRate = petroleumProfitTaxRate;
-    }
-
-    public Double getEduTaxCostItem() {
-        return eduTaxCostItem;
-    }
-
-    public void setEduTaxCostItem(Double eduTaxCostItem) {
-        this.eduTaxCostItem = eduTaxCostItem;
     }
 
 }

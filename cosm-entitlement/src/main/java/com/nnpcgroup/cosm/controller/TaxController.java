@@ -88,7 +88,8 @@ public class TaxController implements Serializable {
         double currentCapitalAllowance = taxBean.computeCurrentYearCapitalAllowance(psc, year, month);
         double monthlyMinimumTax = taxBean.computeMonthlyMinimumTax(psc, year, month);
         double petroleumProfitTaxRate = psc.getPetroleumProfitTaxRate();
-        Double eduTax = prodCostBean.getEducationTax(psc, year, month);
+        double educationTax = taxBean.computeEducationTax(psc, year, month);
+        double priorYrAnnualAllw = taxBean.computePriorYearAnnualAllowance(psc, year, month);
         
         taxOilDetail = new TaxOilDetail();
         
@@ -100,7 +101,8 @@ public class TaxController implements Serializable {
         taxOilDetail.setCurrentCapitalAllowance(currentCapitalAllowance);
         taxOilDetail.setMonthlyMinimumTax(monthlyMinimumTax);
         taxOilDetail.setPetroleumProfitTaxRate(petroleumProfitTaxRate);
-        taxOilDetail.setEduTaxCostItem(eduTax);
+        taxOilDetail.setEducationTax(educationTax);
+        taxOilDetail.setPriorYearAnnualAllowance(priorYrAnnualAllw);
     }
     
     public List<ProductionCost> getProdOpexs() {

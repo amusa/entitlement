@@ -18,9 +18,9 @@ import java.util.List;
 public interface ProductionCostServices extends CommonServices<ProductionCost>, Serializable {
 
     List<ProductionCost> find(ProductionSharingContract psc, Integer year, Integer month);
-    
+
     List<ProductionCost> findOpex(ProductionSharingContract psc, Integer year, Integer month);
-    
+
     List<ProductionCost> findCapex(ProductionSharingContract psc, Integer year, Integer month);
 
     double getOpex(ProductionSharingContract psc, Integer year, Integer month);
@@ -28,7 +28,8 @@ public interface ProductionCostServices extends CommonServices<ProductionCost>, 
     double getCapex(ProductionSharingContract psc, Integer year, Integer month);
 
     double getCapitalAllowanceRecovery(ProductionSharingContract psc, Integer year, Integer month);
-    
+
     Double getEducationTax(ProductionSharingContract psc, Integer year, Integer month);
 
+    boolean fiscalPeriodExists(ProductionSharingContract psc, Integer year, Integer month);
 }

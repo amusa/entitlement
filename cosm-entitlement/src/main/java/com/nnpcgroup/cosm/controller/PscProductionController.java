@@ -8,7 +8,7 @@ package com.nnpcgroup.cosm.controller;
 import com.nnpcgroup.cosm.controller.util.JsfUtil;
 import com.nnpcgroup.cosm.ejb.forecast.psc.PscForecastDetailServices;
 import com.nnpcgroup.cosm.entity.ProductionSharingContract;
-import com.nnpcgroup.cosm.entity.contract.OilField;
+import com.nnpcgroup.cosm.entity.OilField;
 import com.nnpcgroup.cosm.entity.forecast.ForecastPK;
 import com.nnpcgroup.cosm.entity.forecast.psc.PscForecastDetail;
 import com.nnpcgroup.cosm.entity.forecast.psc.PscForecastDetailPK;
@@ -49,6 +49,9 @@ public class PscProductionController implements Serializable {
 
     @Inject
     TaxController taxController;
+    
+    @Inject
+    CostOilController costOilController;
 
     private List<PscForecastDetail> productionDetails;
 
@@ -93,7 +96,7 @@ public class PscProductionController implements Serializable {
     private void prepareFieldCreate() {
         productionDetails = new ArrayList<>();
 
-        for (int i = 1; i <= 3; i++) {
+        for (int i = 1; i <= 12; i++) {
             ForecastPK fPK = new ForecastPK(periodYear, i, currentPsc.getId());
             PscForecastDetailPK pPk = new PscForecastDetailPK(fPK, currentOilField.getId());
             currentProductionDetail = new PscForecastDetail();
@@ -284,5 +287,9 @@ public class PscProductionController implements Serializable {
 
     public void taxOilCalculationListener() {
         taxController.calculationTaxOilDetail(currentPsc, periodYear, periodMonth);
+    }
+    
+    public void costOilCalculationListener() {
+        costOilController.computeCostOilDetail(currentPsc, periodYear, periodMonth);
     }
 }

@@ -11,7 +11,7 @@ import java.io.Serializable;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Root;
 import com.nnpcgroup.cosm.ejb.forecast.psc.PscCommonServices;
-import com.nnpcgroup.cosm.entity.contract.OilField;
+import com.nnpcgroup.cosm.entity.OilField;
 import com.nnpcgroup.cosm.entity.forecast.psc.PscForecastDetail;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;

@@ -1,4 +1,4 @@
-package com.nnpcgroup.cosm.entity.contract;
+package com.nnpcgroup.cosm.entity;
 
 import java.io.Serializable;
 import javax.persistence.Column;

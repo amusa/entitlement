@@ -5,7 +5,7 @@
  */
 package com.nnpcgroup.cosm.ejb.production.jv;
 
-import com.nnpcgroup.cosm.entity.contract.OilField;
+import com.nnpcgroup.cosm.entity.OilField;
 import com.nnpcgroup.cosm.entity.production.jv.PscProductionDetail;
 
 /**

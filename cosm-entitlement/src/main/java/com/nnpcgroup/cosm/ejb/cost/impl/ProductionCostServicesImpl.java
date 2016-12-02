@@ -7,12 +7,14 @@ package com.nnpcgroup.cosm.ejb.cost.impl;
 
 import com.nnpcgroup.cosm.ejb.cost.ProductionCostServices;
 import com.nnpcgroup.cosm.ejb.impl.CommonServicesImpl;
+import com.nnpcgroup.cosm.ejb.tax.TaxServices;
 import com.nnpcgroup.cosm.entity.ProductionSharingContract;
 import com.nnpcgroup.cosm.entity.cost.ProductionCost;
 import java.io.Serializable;
 import java.util.List;
 import javax.ejb.Local;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -27,6 +29,9 @@ import javax.persistence.criteria.Root;
 @Stateless
 @Local(ProductionCostServices.class)
 public class ProductionCostServicesImpl extends CommonServicesImpl<ProductionCost> implements ProductionCostServices, Serializable {
+
+    @Inject
+    private TaxServices taxBean;
 
     public ProductionCostServicesImpl() {
         super(ProductionCost.class);
@@ -249,8 +254,13 @@ public class ProductionCostServicesImpl extends CommonServicesImpl<ProductionCos
 
         return eduTax;
     }
+    
+    public boolean fiscalPeriodExists(ProductionSharingContract psc, Integer year, Integer month) {
+        List<ProductionCost> prodCosts = find(psc, year, month);
+        return prodCosts != null && !prodCosts.isEmpty();
+    }
 
-//TODO:refactor CommonServices interface
+    //TODO:refactor CommonServices interface
     @Override
     public ProductionCost getPreviousMonthProduction(ProductionCost production) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.

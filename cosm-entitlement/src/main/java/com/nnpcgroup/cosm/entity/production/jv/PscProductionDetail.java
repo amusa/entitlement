@@ -5,7 +5,7 @@
  */
 package com.nnpcgroup.cosm.entity.production.jv;
 
-import com.nnpcgroup.cosm.entity.contract.OilField;
+import com.nnpcgroup.cosm.entity.OilField;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;

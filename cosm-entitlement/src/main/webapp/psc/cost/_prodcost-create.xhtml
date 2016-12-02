@@ -74,6 +74,11 @@
                                                                 <f:ajax event="change" listener="#{prodCostController.productionCostAmountChangeListener(cost)}" />
                                                             </h:inputText>
                                                         </h:column>
+                                                        <h:column>
+                                                            <h:commandLink  value="Remove" class="m-r-5">
+                                                                <f:ajax listener="#{prodCostController.remove(cost)}" render="ProdCostCreateForm"/>
+                                                            </h:commandLink>
+                                                        </h:column>                                                        
                                                         <f:facet name="footer">                                                       
 
                                                         </f:facet>
@@ -107,6 +112,11 @@
                                                                 <f:ajax event="change" listener="#{prodCostController.productionCostAmountChangeListener(cost)}" />
                                                             </h:inputText>
                                                         </h:column>
+                                                        <h:column>
+                                                            <h:commandLink  value="Remove" class="m-r-5">
+                                                                <f:ajax listener="#{prodCostController.remove(cost)}" render="ProdCostCreateForm"/>
+                                                            </h:commandLink>
+                                                        </h:column>     
                                                         <f:facet name="footer">                                                       
 
                                                         </f:facet>

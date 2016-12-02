@@ -255,6 +255,12 @@ public class ProductionCostController implements Serializable {
         }
     }
 
+     public void remove(ProductionCost pc) {
+        if (productionCosts != null) {
+            productionCosts.remove(pc);
+        }
+    }
+     
     private void persist(PersistAction persistAction, String successMessage) {
         if (productionCosts != null) {
             try {

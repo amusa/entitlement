@@ -6,7 +6,7 @@
 package com.nnpcgroup.cosm.ejb.forecast.psc;
 
 import com.nnpcgroup.cosm.ejb.AbstractCrudServices;
-import com.nnpcgroup.cosm.entity.contract.OilField;
+import com.nnpcgroup.cosm.entity.OilField;
 
 
 /**

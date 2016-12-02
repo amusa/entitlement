@@ -192,6 +192,13 @@
                                                 <f:ajax event="click" listener="#{pscProdController.taxOilCalculationListener}" 
                                                         render="TaxOilViewForm"/>
                                             </button>
+                                            <button jsf:id="costOilButton" pt:data-target="#CostOilViewDlg" pt:look="warning" pt:data-toggle="modal"  class="btn m-r-5"
+                                                    jsf:disabled="${not pscProdController.enableControlButton}">
+                                                <span class="icon">&#61943;</span>
+                                                #{bundle.CostOil}
+                                                <f:ajax event="click" listener="#{pscProdController.costOilCalculationListener}" 
+                                                        render="CostOilViewForm"/>
+                                            </button>
                                         </f:facet>
                                     </h:dataTable>
                                 </div>
@@ -205,6 +212,7 @@
             <ui:include src="_forecast-field-edit.xhtml"/>
             <ui:include src="_forecast-field-view.xhtml"/>
             <ui:include src="_forecast-tax-view.xhtml"/>
+            <ui:include src="_forecast-cost-oil-view.xhtml"/>
         </ui:define>
 
         <ui:define name="page-stat">

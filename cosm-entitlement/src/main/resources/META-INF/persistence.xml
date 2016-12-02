@@ -18,7 +18,6 @@
     <class>com.nnpcgroup.cosm.entity.contract.Contract</class>
     <class>com.nnpcgroup.cosm.entity.contract.JvContract</class>
     <class>com.nnpcgroup.cosm.entity.contract.ModifiedCarryContract</class>
-    <class>com.nnpcgroup.cosm.entity.contract.OilField</class>
     <class>com.nnpcgroup.cosm.entity.forecast.jv.CarryForecastDetail</class>
     <class>com.nnpcgroup.cosm.entity.forecast.jv.AlternativeFundingForecastEntitlement</class>
     <class>com.nnpcgroup.cosm.entity.forecast.jv.CarryForecastEntitlement</class>
@@ -55,6 +54,7 @@
     <class>com.nnpcgroup.cosm.entity.forecast.psc.PscForecastDetail</class>
     <class>com.nnpcgroup.cosm.entity.forecast.psc.PscForecast</class>
     <class>com.nnpcgroup.cosm.entity.forecast.psc.PscForecastEntitlement</class>
+    <class>com.nnpcgroup.cosm.entity.OilField</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <shared-cache-mode>NONE</shared-cache-mode>
     <properties>

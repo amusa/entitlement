@@ -8,7 +8,7 @@ package com.nnpcgroup.cosm.entity.forecast;
 import com.nnpcgroup.cosm.entity.AuditInfo;
 import com.nnpcgroup.cosm.entity.Auditable;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
-import com.nnpcgroup.cosm.entity.contract.OilField;
+import com.nnpcgroup.cosm.entity.OilField;
 
 import java.io.Serializable;
 import java.util.Objects;

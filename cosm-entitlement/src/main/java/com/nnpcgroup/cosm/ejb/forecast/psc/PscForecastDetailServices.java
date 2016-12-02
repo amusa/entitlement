@@ -7,7 +7,7 @@ package com.nnpcgroup.cosm.ejb.forecast.psc;
 
 import com.nnpcgroup.cosm.ejb.forecast.ForecastDetailServices;
 import com.nnpcgroup.cosm.entity.ProductionSharingContract;
-import com.nnpcgroup.cosm.entity.contract.OilField;
+import com.nnpcgroup.cosm.entity.OilField;
 import com.nnpcgroup.cosm.entity.forecast.psc.PscForecastDetail;
 import java.util.List;
 

@@ -9,7 +9,7 @@ import com.nnpcgroup.cosm.ejb.forecast.psc.OilFieldServices;
 import com.nnpcgroup.cosm.ejb.impl.AbstractCrudServicesImpl;
 
 import java.io.Serializable;
-import com.nnpcgroup.cosm.entity.contract.OilField;
+import com.nnpcgroup.cosm.entity.OilField;
 import com.nnpcgroup.cosm.util.COSMPersistence;
 import javax.ejb.Local;
 import javax.ejb.Stateless;

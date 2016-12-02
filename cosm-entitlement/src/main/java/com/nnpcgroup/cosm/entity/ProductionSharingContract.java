@@ -5,9 +5,6 @@
  */
 package com.nnpcgroup.cosm.entity;
 
-import com.nnpcgroup.cosm.entity.contract.AreaSize;
-import com.nnpcgroup.cosm.entity.contract.OilField;
-import com.nnpcgroup.cosm.entity.contract.TaxAndAllowance;
 import com.nnpcgroup.cosm.entity.crude.CrudeType;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -136,22 +133,22 @@ public class ProductionSharingContract extends FiscalArrangement {
             if (terrain.equalsIgnoreCase("OFFSHORE")) {
                 if (waterDepth != null) {
                     if (waterDepth <= 100.0) {
-                        return 0.185;
+                        return 18.5;
                     } else if (waterDepth > 100.0 & waterDepth <= 200.0) {
-                        return 0.165;
+                        return 16.5;
                     } else if (waterDepth > 200.0 & waterDepth <= 500.00) {
-                        return 0.12;
+                        return 12.0;
                     } else if (waterDepth > 500.0) {
-                        return 0.08;
+                        return 8.0;
                     }
                 }
             } else if (terrain.equalsIgnoreCase("ONSHORE")) {
-                return 0.2;
+                return 20.0;
             } else if (terrain.equalsIgnoreCase("INLAND BASIN")) {
-                return 0.1;
+                return 10.0;
             }
         }
-        return 0.0;
+        return null;
     }
 
 //    public void setRoyaltyRate(Double royaltyRate) {
@@ -226,20 +223,20 @@ public class ProductionSharingContract extends FiscalArrangement {
             if (terrain.equalsIgnoreCase("OFFSHORE")) {
                 if (waterDepth != null) {
                     if (waterDepth <= 100.0) {
-                        return 0.1;
+                        return 10.0;
                     } else if (waterDepth > 100.0 & waterDepth <= 200.0) {
-                        return 0.15;
+                        return 15.0;
                     } else if (waterDepth > 200.0) {
-                        return 0.5;
+                        return 50.0;
                     }
                 }
             } else if (terrain.equalsIgnoreCase("ONSHORE")) {
-                return 0.05;
+                return 5.0;
             } else if (terrain.equalsIgnoreCase("INLAND BASIN")) {
-                return 0.5;
+                return 50.0;
             }
         }
-        return 0.0;
+        return null;
     }
 
     @Transient
@@ -248,14 +245,14 @@ public class ProductionSharingContract extends FiscalArrangement {
         if (terrain != null) {
             if (terrain.equalsIgnoreCase("OFFSHORE")) {
                 if (waterDepth != null && waterDepth >= 201.0) {
-                    return 0.50;
+                    return 50.0;
                 }
             }
             int dateDiff = getContractDuration();
             if (dateDiff <= 5) {
-                return 0.6575;//TODO:USE ENUM
+                return 65.75;//TODO:USE ENUM
             }
-            return 0.85;
+            return 85.0;
         }
 
         return 0;

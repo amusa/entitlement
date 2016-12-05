@@ -9,6 +9,7 @@ import com.nnpcgroup.cosm.ejb.forecast.impl.ForecastDetailServicesImpl;
 import com.nnpcgroup.cosm.ejb.forecast.psc.PscForecastDetailServices;
 import com.nnpcgroup.cosm.entity.ProductionSharingContract;
 import com.nnpcgroup.cosm.entity.OilField;
+import com.nnpcgroup.cosm.entity.cost.ProductionCost;
 import com.nnpcgroup.cosm.entity.forecast.psc.PscForecastDetail;
 
 import javax.ejb.Local;
@@ -21,6 +22,7 @@ import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 /**
@@ -122,15 +124,15 @@ public class PscForecastDetailServicesImpl extends ForecastDetailServicesImpl<Ps
         Double grossProdCum;
 
         CriteriaQuery<Double> cq = cb.createQuery(Double.class);
-        Root<PscForecastDetail> cost = cq.from(entityClass);
+        Root<PscForecastDetail> production = cq.from(entityClass);
 
-        Expression<Double> sum = cb.sum(cost.<Double>get("grossProduction"));
+        Expression<Double> sum = cb.sum(production.<Double>get("grossProduction"));
         cq.select(sum.alias("grossProduction"))
                 .where(
                         cb.and(
-                                cb.equal(cost.get("fiscalArrangement"), psc),
-                                cb.equal(cost.get("periodYear"), year),
-                                cb.equal(cost.get("periodMonth"), month)
+                                cb.equal(production.get("fiscalArrangement"), psc),
+                                cb.equal(production.get("periodYear"), year),
+                                cb.equal(production.get("periodMonth"), month)
                         )
                 );
 //TODO:should return cummulative gross production
@@ -142,6 +144,47 @@ public class PscForecastDetailServicesImpl extends ForecastDetailServicesImpl<Ps
 
         return grossProdCum;
 
+    }
+
+    @Override
+    public double getGrossProductionToDate(ProductionSharingContract psc, int year, int month) {
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+
+        Double grossProdCum;
+
+        CriteriaQuery<Double> cq = cb.createQuery(Double.class);
+        Root<PscForecastDetail> production = cq.from(entityClass);
+
+        Expression<Double> sum = cb.sum(production.<Double>get("grossProduction"));
+
+        Predicate basePredicate
+                = cb.equal(production.get("fiscalArrangement"), psc);
+
+        Predicate currYrPredicate = cb.and(
+                cb.equal(production.get("periodYear"), year),
+                cb.lessThanOrEqualTo(production.get("periodMonth"), month)
+        );
+
+        Predicate priorYrPredicate = cb.and(
+                cb.lessThan(production.get("periodYear"), year)
+        );
+
+        Predicate yearsPredicate = cb.or(currYrPredicate, priorYrPredicate);
+
+        Predicate predicate=cb.and(basePredicate, yearsPredicate);
+        
+        cq.select(sum.alias("grossProduction"))
+                .where(predicate);
+
+        
+        grossProdCum = getEntityManager().createQuery(cq).getSingleResult();
+
+        if (grossProdCum == null) {
+            return 0;
+        }
+
+        return grossProdCum;
+       
     }
 
     @Override

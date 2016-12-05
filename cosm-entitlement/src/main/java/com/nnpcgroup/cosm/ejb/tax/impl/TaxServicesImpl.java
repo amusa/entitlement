@@ -89,20 +89,13 @@ public class TaxServicesImpl implements TaxServices, Serializable {
 
     @Override
     public double computeRoyalty(ProductionSharingContract psc, int year, int month) {
-
-        if (!prodCostBean.fiscalPeriodExists(psc, year, month)) {
-            return 0.0;
-        }
-
         double royalty, royRate, grossProdCum;
 
         royRate = getRoyaltyRate(psc);
-        grossProdCum = productionBean.getGrossProduction(psc, year, month);
+        grossProdCum = productionBean.getGrossProductionToDate(psc, year, month);//cummulative production
         royalty = grossProdCum * (royRate / 100);
 
-        FiscalPeriod prevFp = fiscalService.getPreviousFiscalPeriod(year, month);
-
-        return royalty + computeRoyalty(psc, prevFp.getYear(), prevFp.getMonth());
+        return royalty;
     }
 
     @Override

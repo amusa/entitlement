@@ -26,4 +26,6 @@ public interface PscForecastDetailServices extends ForecastDetailServices<PscFor
     public void delete(int year, int month, OilField oilField);
 
     public double getGrossProduction(ProductionSharingContract psc, int year, int month);
+    
+    public double getGrossProductionToDate(ProductionSharingContract psc, int year, int month);
 }

@@ -20,6 +20,9 @@ import com.nnpcgroup.cosm.controller.PeriodMonth;
 import com.nnpcgroup.cosm.ejb.forecast.jv.JvForecastServices;
 import com.nnpcgroup.cosm.entity.forecast.jv.JvForecast;
 import com.nnpcgroup.cosm.entity.forecast.jv.JvForecastDetail;
+import com.nnpcgroup.cosm.entity.forecast.jv.JvForecastDetailPK;
+import com.nnpcgroup.cosm.entity.forecast.jv.JvForecastEntitlement;
+import com.nnpcgroup.cosm.entity.forecast.jv.JvForecastEntitlementPK;
 
 import javax.inject.Inject;
 import javax.servlet.ServletException;
@@ -177,6 +180,7 @@ public class EntitlementReport extends HttpServlet {
 
             for (JvForecast forecast : productions) {
                 java.util.List<JvForecastDetail> forecastDetails = forecast.getForecastDetails();
+                java.util.List<JvForecastEntitlement> entitlements = forecast.getEntitlements();
                 int fcount = forecastDetails.size();
                 cell = new PdfPCell(new Phrase(forecast.getFiscalArrangement().getOperator().getName()));
 
@@ -187,11 +191,12 @@ public class EntitlementReport extends HttpServlet {
                     int count = 0;
                     for (JvForecastDetail forecastDetail : forecastDetails) {
                         count++;
+                        JvForecastEntitlement entitlement = getEntitlement(forecastDetail, entitlements);
                         cell = new PdfPCell(new Phrase(forecastDetail.getContract().getCrudeType().getCrudeType()));
                         table.addCell(cell);
-                       // cell = new PdfPCell(new Phrase(String.format("%,.2f", forecastDetail.getLifting())));
+                        cell = new PdfPCell(new Phrase(String.format("%,.2f", entitlement.getLifting())));
                         table.addCell(cell);
-                       // cell = new PdfPCell(new Phrase(String.format("%,.2f", forecastDetail.getPartnerLifting())));
+                        cell = new PdfPCell(new Phrase(String.format("%,.2f", entitlement.getPartnerLifting())));
                         table.addCell(cell);
 
                         if (count == 1) {
@@ -207,6 +212,30 @@ public class EntitlementReport extends HttpServlet {
         }
     }
 
+    public JvForecastEntitlement getEntitlement(JvForecastDetail detail, java.util.List<JvForecastEntitlement> entitlements) {
+        if (detail == null) {
+            return null;
+        }
+
+        for (JvForecastEntitlement ent : entitlements) {
+            if (isEqualKeys(detail, ent)) {
+                return ent;
+            }
+        }
+        return null;
+    }
+
+    private boolean isEqualKeys(JvForecastDetail detail, JvForecastEntitlement ent) {
+        JvForecastDetailPK detailPK = detail.getForecastDetailPK();
+        JvForecastEntitlementPK entitlementPK = ent.getEntitlementPK();
+
+        if (!detailPK.getForecastPK().equals(entitlementPK.getForecastPK())) {
+            return false;
+        }
+
+        return detailPK.getContractPK().equals(entitlementPK.getContractPK());
+    }
+
     private void addMetaData(Document document) {
         document.addTitle("JV Entitlement Advice");
         document.addSubject("JV Entitlement Advice");
@@ -218,12 +247,12 @@ public class EntitlementReport extends HttpServlet {
 
     private void addTitlePage(Document document) throws DocumentException {
         Paragraph preface = new Paragraph();
-        addEmptyLine(preface, 1);
         preface.add(new Paragraph("ENTITLEMENT ADVICE", catFont));
         addEmptyLine(preface, 1);
         PeriodMonth pm = monthGen.find(periodMonth);
-        preface.add(new Paragraph(String.format("NNPC %s %d JV & AF ENTITLEMENT", pm.getMonthStr(), periodYear), subFont));
+        preface.add(new Paragraph(String.format("NNPC %s %d JV & AF ENTITLEMENT", pm.getMonthStr().toUpperCase(), periodYear), subFont));
         addEmptyLine(preface, 3);
+        preface.setAlignment(Element.ALIGN_CENTER);
         document.add(preface);
     }
 

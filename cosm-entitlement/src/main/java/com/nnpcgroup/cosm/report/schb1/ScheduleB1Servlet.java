@@ -455,7 +455,7 @@ public class ScheduleB1Servlet extends HttpServlet {
         toPa.setMonthlyChargeBfw(taxOilAlloc.getChargeBfw());
         toPa.setMonthlyCharge(taxOilAlloc.getMonthlyCharge());
         toPa.setRecoverable(taxOilAlloc.getRecoverable());
-        toPa.setContractorProceed(taxOilAlloc.getReceived());
+        toPa.setCorporationProceed(taxOilAlloc.getReceived());
         toPa.setMonthlyChargeCfw(taxOilAlloc.getChargeCfw());
 
         proceedAllocationList.add(toPa);

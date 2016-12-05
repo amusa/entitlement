@@ -83,6 +83,8 @@ public class ScheduleB1Servlet extends HttpServlet {
     private static final Font MID_BOLD = new Font(Font.FontFamily.TIMES_ROMAN, 14, Font.BOLD);
     private static final Font SUB_FONT = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
     private static final Font SMALL_BOLD = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD);
+    private static final Font NORM_FONT = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.NORMAL);
+    private static final Font NORM_BOLD = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.BOLD);
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, DocumentException {
@@ -202,17 +204,17 @@ public class ScheduleB1Servlet extends HttpServlet {
         if (!liftingSummaryList.isEmpty()) {
             for (LiftingSummary ls : liftingSummaryList) {
 
-                cell = new PdfPCell(new Phrase(ls.getLiftingDate().toUpperCase(), SMALL_BOLD));
+                cell = new PdfPCell(new Phrase(ls.getLiftingDate().toUpperCase(), NORM_BOLD));
                 table.addCell(cell);
-                cell = new PdfPCell(new Phrase(String.format("%,.2f", ls.getLiftingVolume())));
+                cell = new PdfPCell(new Phrase(String.format("%,.2f", ls.getLiftingVolume()), NORM_FONT));
                 table.addCell(cell);
-                cell = new PdfPCell(new Phrase(String.format("%.2f", ls.getOsPrice())));
+                cell = new PdfPCell(new Phrase(String.format("%.2f", ls.getOsPrice()), NORM_FONT));
                 table.addCell(cell);
-                cell = new PdfPCell(new Phrase(String.format("%,.2f", ls.getProceed())));
+                cell = new PdfPCell(new Phrase(String.format("%,.2f", ls.getProceed()), NORM_FONT));
                 table.addCell(cell);
-                cell = new PdfPCell(new Phrase(String.format("%,.2f", ls.getCorporationProceed())));
+                cell = new PdfPCell(new Phrase(String.format("%,.2f", ls.getCorporationProceed()), NORM_FONT));
                 table.addCell(cell);
-                cell = new PdfPCell(new Phrase(String.format("%,.2f", ls.getContractorProceed())));
+                cell = new PdfPCell(new Phrase(String.format("%,.2f", ls.getContractorProceed()), NORM_FONT));
                 table.addCell(cell);
 
             }
@@ -229,7 +231,7 @@ public class ScheduleB1Servlet extends HttpServlet {
     }
 
     private void addAllocationTableHeader(PdfPTable table) throws DocumentException {
-        table.setWidths(new float[]{4.0f, 3.0f, 3.0f, 4.0f, 4.0f, 4.0f, 4.0f});
+        table.setWidths(new float[]{3.5f, 4.0f, 4.0f, 4.0f, 4.0f, 4.0f, 4.0f});
         table.setWidthPercentage(100);
 
         PdfPCell c1 = new PdfPCell(new Phrase("CATEGORY (US$)", SMALL_BOLD));
@@ -282,11 +284,11 @@ public class ScheduleB1Servlet extends HttpServlet {
 
         if (!proceedAllocationList.isEmpty()) {
             for (ProceedAllocation pa : proceedAllocationList) {
-                cell = new PdfPCell(new Phrase(pa.getCategoryTitle(), SMALL_BOLD));
+                cell = new PdfPCell(new Phrase(pa.getCategoryTitle(), NORM_BOLD));
                 table.addCell(cell);
 
                 if (pa.getMonthlyChargeBfw() != null) {
-                    cell = new PdfPCell(new Phrase(String.format("%,.2f", pa.getMonthlyChargeBfw())));
+                    cell = new PdfPCell(new Phrase(String.format("%,.2f", pa.getMonthlyChargeBfw()), NORM_FONT));
                 } else {
                     cell = new PdfPCell(new Phrase(""));
                 }
@@ -294,7 +296,7 @@ public class ScheduleB1Servlet extends HttpServlet {
                 table.addCell(cell);
 
                 if (pa.getMonthlyCharge() != null) {
-                    cell = new PdfPCell(new Phrase(String.format("%,.2f", pa.getMonthlyCharge())));
+                    cell = new PdfPCell(new Phrase(String.format("%,.2f", pa.getMonthlyCharge()), NORM_FONT));
                 } else {
                     cell = new PdfPCell(new Phrase(""));
                 }
@@ -302,14 +304,14 @@ public class ScheduleB1Servlet extends HttpServlet {
                 table.addCell(cell);
 
                 if (pa.getRecoverable() != null) {
-                    cell = new PdfPCell(new Phrase(String.format("%,.2f", pa.getRecoverable())));
+                    cell = new PdfPCell(new Phrase(String.format("%,.2f", pa.getRecoverable()), NORM_FONT));
                 } else {
                     cell = new PdfPCell(new Phrase(""));
                 }
                 table.addCell(cell);
 
                 if (pa.getCorporationProceed() != null) {
-                    cell = new PdfPCell(new Phrase(String.format("%,.2f", pa.getCorporationProceed())));
+                    cell = new PdfPCell(new Phrase(String.format("%,.2f", pa.getCorporationProceed()), NORM_FONT));
                 } else {
                     cell = new PdfPCell(new Phrase(""));
                 }
@@ -317,7 +319,7 @@ public class ScheduleB1Servlet extends HttpServlet {
                 table.addCell(cell);
 
                 if (pa.getContractorProceed() != null) {
-                    cell = new PdfPCell(new Phrase(String.format("%,.2f", pa.getContractorProceed())));
+                    cell = new PdfPCell(new Phrase(String.format("%,.2f", pa.getContractorProceed()), NORM_FONT));
                 } else {
                     cell = new PdfPCell(new Phrase(""));
                 }
@@ -325,7 +327,7 @@ public class ScheduleB1Servlet extends HttpServlet {
                 table.addCell(cell);
 
                 if (pa.getMonthlyChargeCfw() != null) {
-                    cell = new PdfPCell(new Phrase(String.format("%,.2f", pa.getMonthlyChargeCfw())));
+                    cell = new PdfPCell(new Phrase(String.format("%,.2f", pa.getMonthlyChargeCfw()), NORM_FONT));
                 } else {
                     cell = new PdfPCell(new Phrase(""));
                 }
@@ -627,13 +629,14 @@ public class ScheduleB1Servlet extends HttpServlet {
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+
     /**
      * Handles the HTTP <code>GET</code> method.
      *
-     * @param request servlet request
+     * @param request  servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @throws IOException      if an I/O error occurs
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -648,10 +651,10 @@ public class ScheduleB1Servlet extends HttpServlet {
     /**
      * Handles the HTTP <code>POST</code> method.
      *
-     * @param request servlet request
+     * @param request  servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @throws IOException      if an I/O error occurs
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)

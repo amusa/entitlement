@@ -6,8 +6,8 @@
 package com.nnpcgroup.cosm.controller;
 
 import com.nnpcgroup.cosm.ejb.production.jv.JvProductionDetailServices;
+import com.nnpcgroup.cosm.ejb.production.jv.JvProductionEntitlementServices;
 import com.nnpcgroup.cosm.entity.Terminal;
-import com.nnpcgroup.cosm.entity.production.jv.ProductionDetail;
 
 import javax.inject.Named;
 import java.io.Serializable;
@@ -17,8 +17,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
-import com.nnpcgroup.cosm.ejb.production.jv.ProductionDetailServices;
 import com.nnpcgroup.cosm.entity.production.jv.JvProductionDetail;
+import com.nnpcgroup.cosm.entity.production.jv.JvProductionEntitlement;
+import javax.ejb.EJB;
 
 /**
  *
@@ -34,9 +35,14 @@ public class JvActualTerminalBlendController implements Serializable {
     @Inject
     private JvProductionDetailServices productionBean;
 
+    @EJB
+    private JvProductionEntitlementServices entitlementBean;
+
     private JvProductionDetail currentProductionDetail;
+    private JvProductionEntitlement currentEntitlement;
 
     private List<JvProductionDetail> productionDetails;
+    private List<JvProductionEntitlement> productionEntitlements;
 
     private Integer periodYear;
     private Integer periodMonth;
@@ -67,6 +73,14 @@ public class JvActualTerminalBlendController implements Serializable {
     public void setProductionDetails(List<JvProductionDetail> productionDetails) {
         log.info("ProductionController::setProductions called...");
         this.productionDetails = productionDetails;
+    }
+
+    public List<JvProductionEntitlement> getProductionEntitlements() {
+        return productionEntitlements;
+    }
+
+    public void setProductionEntitlements(List<JvProductionEntitlement> productionEntitlements) {
+        this.productionEntitlements = productionEntitlements;
     }
 
 //    public void prepareCreate() {
@@ -132,11 +146,8 @@ public class JvActualTerminalBlendController implements Serializable {
     public void loadProductions() {
         if (periodYear != null && periodMonth != null && currentTerminal != null) {
             productionDetails = productionBean.getTerminalProduction(periodYear, periodMonth, currentTerminal);
+            productionEntitlements = entitlementBean.getTerminalProduction(periodYear, periodMonth, currentTerminal);
         }
-    }
-
-    private void reset() {
-        currentProductionDetail = null;
     }
 
     public Integer getPeriodYear() {
@@ -182,7 +193,7 @@ public class JvActualTerminalBlendController implements Serializable {
         if (productionDetails.isEmpty()) {
             return null;
         }
-        Double ownEntitlement = productionDetails.stream()
+        Double ownEntitlement = productionEntitlements.stream()
                 .mapToDouble(p -> p.getOwnShareEntitlement())
                 .sum();
         return ownEntitlement;
@@ -192,7 +203,7 @@ public class JvActualTerminalBlendController implements Serializable {
         if (productionDetails.isEmpty()) {
             return null;
         }
-        Double partnerEntitlement = productionDetails.stream()
+        Double partnerEntitlement = productionEntitlements.stream()
                 .mapToDouble(p -> p.getPartnerShareEntitlement())
                 .sum();
         return partnerEntitlement;
@@ -202,7 +213,7 @@ public class JvActualTerminalBlendController implements Serializable {
         if (productionDetails.isEmpty()) {
             return null;
         }
-        Double openingStockSum = productionDetails.stream()
+        Double openingStockSum = productionEntitlements.stream()
                 .mapToDouble(p -> p.getOpeningStock())
                 .sum();
         return openingStockSum;
@@ -212,7 +223,7 @@ public class JvActualTerminalBlendController implements Serializable {
         if (productionDetails.isEmpty()) {
             return null;
         }
-        Double availabilitySum = productionDetails.stream()
+        Double availabilitySum = productionEntitlements.stream()
                 .mapToDouble(p -> p.getAvailability())
                 .sum();
 

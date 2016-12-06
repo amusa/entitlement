@@ -5,9 +5,7 @@
  */
 package com.nnpcgroup.cosm.ejb.forecast.jv;
 
-import com.nnpcgroup.cosm.entity.contract.Contract;
 import com.nnpcgroup.cosm.entity.forecast.jv.AlternativeFundingForecastDetail;
-import com.nnpcgroup.cosm.exceptions.NoRealizablePriceException;
 
 /**
  *
@@ -15,33 +13,4 @@ import com.nnpcgroup.cosm.exceptions.NoRealizablePriceException;
  * @param <T>
  */
 public interface AlternativeFundingForecastDetailServices<T extends AlternativeFundingForecastDetail> extends JvForecastDetailServices<T> {
-
-    public T computeCarryOil(T forecast);
-
-    public T computeSharedOil(T forecast);
-    
-    public T computeResidualCarryExpenditure(T forecast);
-    
-    public T computeNotionalMargin(T forecast) throws NoRealizablePriceException;
-
-    public T computeCarryTaxRelief(T forecast);
-
-    public T computeCarryTaxExpenditure(T forecast);
-
-    public T computeCapitalCarryCostAmortized(T forecast);
-
-    public T computeAlternativeFunding(T production) throws NoRealizablePriceException;
-
-    public Double computeCarryOilCum(Contract cs);
-
-    public Double computeSharedOilCum(Contract cs);
-
-    public Double computeResidualCarryExpenditureCum(Contract cs);
-
-    public Double computeCarryTaxReliefCum(Contract cs);
-
-    public Double computeCarryTaxExpenditureCum(Contract cs);
-
-    public Double computeCapitalCarryCostAmortizedCum(Contract cs);
-
 }

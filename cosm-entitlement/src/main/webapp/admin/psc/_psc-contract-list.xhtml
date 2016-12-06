@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:jsf="http://xmlns.jcp.org/jsf">
+
+    <ui:composition>
+        <div class="modal fade" id="AssetListDlg" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title"><h:outputLabel id="contractListFiscalTitle"  value="Contracts for Fiscal Arrangement: #{fiscalController.currentFiscal.title}"/></h4>
+                    </div>
+                    <h:form id="AssetListForm">
+                        <div class="modal-body">
+                            <h:panelGroup id="AssetListPanel">
+                                <h:dataTable id="assetTable" var="asset" value="#{fiscalController.contracts}" 
+                                             class="table table-bordered table-hover tile">
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="#{bundle.CrudeType}"/>
+                                        </f:facet>
+                                        <h:outputText value="#{asset.crudeType.crudeType}(#{asset.crudeType.code})"/>
+                                    </h:column>
+                                </h:dataTable>
+                            </h:panelGroup>
+                        </div>
+                        <div class="modal-footer">
+                            <h:commandButton value="#{bundle.Close}" pt:data-dismiss="modal" class="btn btn-sm"/>                              
+                        </div>
+                    </h:form>
+                </div>
+            </div>
+        </div> 
+
+    </ui:composition>
+</html>

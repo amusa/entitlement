@@ -5,7 +5,7 @@
  */
 package com.nnpcgroup.cosm.entity.contract;
 
-import com.nnpcgroup.cosm.entity.CrudeType;
+import com.nnpcgroup.cosm.entity.crude.CrudeType;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;

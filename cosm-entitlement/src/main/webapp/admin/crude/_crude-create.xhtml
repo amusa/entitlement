@@ -26,13 +26,17 @@
                                         <h:outputLabel value="#{bundle.CrudeType}" for="crudeType" />
                                         <h:inputText id="crudeType" value="#{crudeTypeController.selected.crudeType}" title="#{bundle.CrudeType}" class="form-control input-sm m-b-10"/>
                                     </div>
+                                    <div class="col-md-6 m-b-15">
+                                        <h:outputLabel value="#{bundle.CrudeTypeAPIGravity}" for="apiGravity" />
+                                        <h:inputText id="apiGravity" value="#{crudeTypeController.selected.apiGravity}" title="#{bundle.CrudeTypeAPIGravity}" class="form-control input-sm m-b-10"/>
+                                    </div>
                                 </div>
                             </h:panelGroup>
 
                         </div>
                         <div class="modal-footer">
                             <h:commandButton value="#{bundle.Save}" pt:data-dismiss="modal" class="btn btn-sm">
-                                <f:ajax listener="#{crudeTypeController.create}" execute="code crudeType" render="crudeTypeListForm crudeTypeTable msgs"/>
+                                <f:ajax listener="#{crudeTypeController.create}" execute="code crudeType apiGravity" render="crudeTypeListForm crudeTypeTable msgs"/>
                             </h:commandButton>
                             <h:commandButton value="#{bundle.Cancel}" immediate="true" pt:data-dismiss="modal" class="btn btn-sm">
                                 <f:ajax listener="#{crudeTypeController.cancel}" render="crudeTypeListForm crudeTypeTable msgs"/>

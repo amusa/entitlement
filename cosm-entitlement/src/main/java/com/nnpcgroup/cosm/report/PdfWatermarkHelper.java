@@ -28,18 +28,16 @@ public class PdfWatermarkHelper extends PdfPageEventHelper {
         //super.onEndPage(writer, document);
         try {
             Image img = Image.getInstance(getResource("/nnpc-logo-bg.jpg"));
-            img.setAbsolutePosition(95, 230);
+
+            img.scaleAbsolute(400.0f, 400.0f);
+
+            float width = document.getPageSize().getWidth();
+            float height = document.getPageSize().getHeight();
             float w = img.getScaledWidth();
             float h = img.getScaledHeight();
 
-            img.scaleAbsolute(400.0f, 400.0f);
-          
-
-            //img.setTransparency(new int[]{1});
-            // This scales the image to the page,
-            // use the image's width & height if you don't want to scale.
-            float width = document.getPageSize().getWidth();
-            float height = document.getPageSize().getHeight();
+            //            img.setAbsolutePosition(95, 230);
+            img.setAbsolutePosition((width - w) / 2, (height - h) / 2); //centralize watermark logo
 
             // transparency
             PdfGState gs1 = new PdfGState();

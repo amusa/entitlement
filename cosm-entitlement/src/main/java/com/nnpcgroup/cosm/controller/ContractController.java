@@ -2,11 +2,12 @@ package com.nnpcgroup.cosm.controller;
 
 import com.nnpcgroup.cosm.controller.util.JsfUtil;
 import com.nnpcgroup.cosm.controller.util.JsfUtil.PersistAction;
-import com.nnpcgroup.cosm.ejb.CrudeTypeBean;
+import com.nnpcgroup.cosm.ejb.crude.CrudeTypeBean;
 import com.nnpcgroup.cosm.ejb.FiscalArrangementBean;
 import com.nnpcgroup.cosm.ejb.contract.ContractServices;
-import com.nnpcgroup.cosm.entity.CrudeType;
+import com.nnpcgroup.cosm.entity.crude.CrudeType;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
+import com.nnpcgroup.cosm.entity.JointVenture;
 import com.nnpcgroup.cosm.entity.contract.*;
 
 import javax.ejb.EJB;
@@ -80,7 +81,7 @@ public class ContractController implements Serializable {
     public void setSelected(Contract selected) {
         this.selected = selected;
         if (selected instanceof JvContract) {
-            contractType = "REG";
+            contractType = "JV";
         } else if (selected instanceof CarryContract) {
             contractType = "CA";
         } else if (selected instanceof ModifiedCarryContract) {
@@ -134,8 +135,11 @@ public class ContractController implements Serializable {
             selected.setContractPK(cPK);
             selected.setCrudeType(crudeType);
             selected.setFiscalArrangement(fiscalArrangement);
-            fiscalArrangement.addContract(selected);
-            //crudeType.addContract(selected);
+
+            if (fiscalArrangement instanceof JointVenture) {
+                ((JointVenture) fiscalArrangement).addContract(selected);
+            }
+            //fiscalArrangement.addContract(selected);           
         }
     }
 
@@ -243,7 +247,7 @@ public class ContractController implements Serializable {
         LOG.log(Level.INFO, "Contract Type Selected...{0}", contractType);
         if (null != contractType) {
             switch (contractType) {
-                case "REG":
+                case "JV":
                     selected = new JvContract();
                     break;
                 case "MCA":
@@ -263,7 +267,10 @@ public class ContractController implements Serializable {
 
     public void addContractFiscalArrangement(FiscalArrangement fa) {
         LOG.log(Level.INFO, "Adding Contract for fiscal arrangement {0}...", fa);
-        setSelected(new JvContract()); //Default contract
+        if (fa instanceof JointVenture) {
+            setSelected(new JvContract());
+        }
+
         initializeEmbeddableKey();
 //        FiscalArrangement freshFiscal=  fiscalBean.find(fa.getId());
         setFiscalArrangement(fa);

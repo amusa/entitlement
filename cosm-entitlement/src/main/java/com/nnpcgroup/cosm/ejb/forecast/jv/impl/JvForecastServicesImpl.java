@@ -5,6 +5,7 @@
  */
 package com.nnpcgroup.cosm.ejb.forecast.jv.impl;
 
+import com.nnpcgroup.cosm.ejb.forecast.impl.ForecastServicesImpl;
 import com.nnpcgroup.cosm.ejb.forecast.jv.JvForecastServices;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
 import com.nnpcgroup.cosm.entity.contract.Contract;

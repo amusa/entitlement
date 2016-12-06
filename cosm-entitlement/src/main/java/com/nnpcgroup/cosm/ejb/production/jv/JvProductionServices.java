@@ -5,7 +5,6 @@
  */
 package com.nnpcgroup.cosm.ejb.production.jv;
 
-import com.nnpcgroup.cosm.entity.FiscalArrangement;
 import com.nnpcgroup.cosm.entity.production.jv.JvProduction;
 
 /**
@@ -13,9 +12,5 @@ import com.nnpcgroup.cosm.entity.production.jv.JvProduction;
  * @author 18359
  */
 public interface JvProductionServices extends ProductionServices<JvProduction> {
-
-    public JvProduction findByContractPeriod(int year, int month, FiscalArrangement fa);
-    
-    public void delete(int year, int month, FiscalArrangement fa);
 
 }

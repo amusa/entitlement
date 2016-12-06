@@ -7,12 +7,17 @@ package com.nnpcgroup.cosm.entity.forecast.jv;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 /**
  *
  * @author 18359
  */
 @Entity
+//@Table(uniqueConstraints = {
+//    @UniqueConstraint(columnNames = {"PERIOD_YEAR", "PERIOD_MONTH", "FISCALARRANGEMENT_ID", "CONTRACT_ID", "CONTRACT_FISCAL_ID", "CRUDETYPE_CODE"})
+//})
 @DiscriminatorValue("CA")
 public class CarryForecastDetail extends AlternativeFundingForecastDetail {
 

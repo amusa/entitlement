@@ -50,6 +50,12 @@
                                 <h:outputText value="#{crude.crudeType}"/>
                             </h:column>
                             <h:column>
+                                <f:facet name="header">
+                                    <h:outputText value="#{bundle.CrudeTypeAPIGravity}"/>
+                                </f:facet>
+                                <h:outputText value="#{crude.apiGravity}"/>
+                            </h:column>
+                            <h:column>
                                 <div class="btn-group">
                                     <button jsf:id="action" type="button" class="btn btn-sm dropdown-toggle" data-toggle="dropdown">
                                         Action <span class="caret"></span>

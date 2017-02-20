@@ -7,18 +7,19 @@ package com.nnpcgroup.cosm.ejb.lifting.impl;
 
 import com.nnpcgroup.cosm.ejb.lifting.PscLiftingServices;
 import com.nnpcgroup.cosm.entity.ProductionSharingContract;
+import com.nnpcgroup.cosm.entity.forecast.psc.PscForecastDetail;
 import com.nnpcgroup.cosm.entity.lifting.PscLifting;
-import java.text.SimpleDateFormat;
+
 import java.util.Date;
+import java.text.SimpleDateFormat;
+
 import java.util.List;
 import javax.ejb.Local;
 import javax.ejb.Stateless;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Expression;
-import javax.persistence.criteria.Root;
+import javax.persistence.TemporalType;
+import javax.persistence.criteria.*;
 import javax.persistence.metamodel.EntityType;
 import javax.persistence.metamodel.Metamodel;
 
@@ -35,6 +36,9 @@ public class PscLiftingServicesImpl extends LiftingServicesImpl<PscLifting> impl
 
     @Override
     public List<PscLifting> find(ProductionSharingContract psc, Date fromDate, Date toDate) {
+        java.sql.Date fDate = new java.sql.Date(fromDate.getTime());
+        java.sql.Date tDate = new java.sql.Date(toDate.getTime());
+
         CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
         Metamodel m = getEntityManager().getMetamodel();
         EntityType<PscLifting> Lifting_ = m.entity(entityClass);
@@ -44,28 +48,30 @@ public class PscLiftingServicesImpl extends LiftingServicesImpl<PscLifting> impl
         CriteriaQuery<PscLifting> cq = cb.createQuery(entityClass);
         Root<PscLifting> e = cq.from(entityClass);
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        Predicate pscPredicate = cb.equal(e.get("psc"), psc);
+        Predicate btwPredicate = cb.between(e.get("liftingDate"), fDate, tDate);
+        Predicate and = cb.and(pscPredicate, btwPredicate);
 
-        String dFrom = dateFormat.format(fromDate);
-        String dTo = dateFormat.format(toDate);
 
         try {
+
+            cq.where(and);
+
+            liftings = getEntityManager().createQuery(cq)
+                    .getResultList();
+
+
 //            cq.select(e).where(
 //                    cb.and(cb.equal(e.get("psc"), psc),
-//                            cb.between(e.<Date>get("liftingDate"), fromDate, toDate)
+//                            cb.between(e.get("liftingDate"), fDate, tDate)
 //                    )
 //            );
+//
+//
+//            Query query = getEntityManager().createQuery(cq);
+//
+//            liftings = query.getResultList();
 
-            cq.select(e).where(
-                    cb.and(
-                            cb.equal(e.get("psc"), psc),
-                            cb.between(e.get("liftingDate").as(String.class), dFrom, dTo)
-                    )
-            );
-
-            Query query = getEntityManager().createQuery(cq);
-
-            liftings = query.getResultList();
 
         } catch (NoResultException nre) {
             return null;
@@ -73,6 +79,7 @@ public class PscLiftingServicesImpl extends LiftingServicesImpl<PscLifting> impl
 
         return liftings;
     }
+
 
     @Override
     public List<PscLifting> find(ProductionSharingContract psc, int year, int month) {
@@ -101,6 +108,40 @@ public class PscLiftingServicesImpl extends LiftingServicesImpl<PscLifting> impl
 
         return liftings;
 
+    }
+
+    @Override
+    public double computeWeightedAvePrice(ProductionSharingContract psc, int year, int month) {
+
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+
+        CriteriaQuery<Number> cq = cb.createQuery(Number.class);
+        Root<PscLifting> liftingRoot = cq.from(entityClass);
+
+        Expression<Double> liftingSum = cb.sum(liftingRoot.get("ownLifting"), liftingRoot.<Double>get("partnerLifting"));
+
+        Expression<Double> revenueSum = cb.prod(liftingRoot.get("price"), liftingSum);
+
+        Expression<Number> wapQuot = cb.quot(revenueSum,liftingSum);
+
+        Predicate predicate = cb.and (
+                cb.equal(liftingRoot.get("psc"), psc),
+                cb.equal(cb.function("year", Integer.class, liftingRoot.get("liftingDate")), year),
+                cb.equal(cb.function("month", Integer.class, liftingRoot.get("liftingDate")), month)
+        );
+
+        cq.select(wapQuot.alias("grossProduction"))
+                .where(predicate);
+
+        Number wap = null;//weighted average price
+        try {
+            wap = getEntityManager().createQuery(cq).getSingleResult();
+            return wap.doubleValue();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return 0.0;
     }
 
 }

@@ -7,6 +7,7 @@ package com.nnpcgroup.cosm.entity.lifting;
 
 import java.io.Serializable;
 import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
@@ -21,7 +22,6 @@ import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 /**
- *
  * @author Ayemi
  */
 @Entity
@@ -34,6 +34,7 @@ public abstract class Lifting implements Serializable {
     private Date liftingDate;
     private Double ownLifting;
     private Double partnerLifting;
+    private Double price;
 
     public Lifting() {
     }
@@ -79,7 +80,25 @@ public abstract class Lifting implements Serializable {
 
     @Transient
     public Double getTotalLifting() {
-        return ownLifting + partnerLifting; //TODO:handle NPE
+        double own, partner;
+        own = ownLifting!=null?ownLifting:0;
+        partner=partnerLifting!=null?partnerLifting:0;
+        return own + partner;
     }
 
+    @Column(name = "PRICE")
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
+    @Transient
+    public Double getRevenue() {
+        double totalLifting = getTotalLifting() != null ? getTotalLifting() : 0;
+        double price = getPrice() != null ? getPrice() : 0;
+        return totalLifting * price;
+    }
 }

@@ -135,7 +135,7 @@ public class PscForecastDetailServicesImpl extends ForecastDetailServicesImpl<Ps
                                 cb.equal(production.get("periodMonth"), month)
                         )
                 );
-//TODO:should return cummulative gross production
+
         grossProdCum = getEntityManager().createQuery(cq).getSingleResult();
 
         if (grossProdCum == null) {

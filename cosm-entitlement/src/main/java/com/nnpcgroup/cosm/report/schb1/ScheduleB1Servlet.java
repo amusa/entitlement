@@ -391,29 +391,33 @@ public class ScheduleB1Servlet extends HttpServlet {
             double proceed = 0;
 
             for (PscLifting lifting : pscLiftings) {
-                CrudePricePK pricePK = new CrudePricePK();
-                pricePK.setCrudeTypeCode(psc.getCrudeType().getCode());
-                pricePK.setPriceDate(lifting.getLiftingDate());
-                CrudePrice crudePrice = priceBean.find(pricePK);
+//                CrudePricePK pricePK = new CrudePricePK();
+//                pricePK.setCrudeTypeCode(psc.getCrudeType().getCode());
+//                pricePK.setPriceDate(lifting.getLiftingDate());
+//                CrudePrice crudePrice = priceBean.find(pricePK);
+//
+//                if (crudePrice != null) {
+//                    price = crudePrice.getOsPrice();
+//                } else {
+//                    price = 0;
+//                }
 
-                if (crudePrice != null) {
-                    price = crudePrice.getOsPrice();
-                } else {
-                    price = 0;
-                }
-
-                proceed += (lifting.getTotalLifting() * price);
+//                proceed += (lifting.getTotalLifting() * price);
+                proceed += lifting.getRevenue();
 
                 LiftingSummary liftSumm = new LiftingSummary();
 
                 SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM");
                 String liftingDate = dateFormat.format(lifting.getLiftingDate());
-                double corpProceed = lifting.getOwnLifting() * price;
-                double contProceed = lifting.getPartnerLifting() * price;
+//                double corpProceed = lifting.getOwnLifting() * price;
+                double corpProceed = lifting.getOwnLifting() * lifting.getPrice();
+//                double contProceed = lifting.getPartnerLifting() * price;
+                double contProceed = lifting.getPartnerLifting() * lifting.getPrice();
 
                 liftSumm.setLiftingDate(liftingDate);
                 liftSumm.setLiftingVolume(lifting.getTotalLifting());
-                liftSumm.setOsPrice(price);
+//                liftSumm.setOsPrice(price);
+                liftSumm.setOsPrice(lifting.getPrice());
                 liftSumm.setProceed(proceed);
                 liftSumm.setCorporationProceed(corpProceed);
                 liftSumm.setContractorProceed(contProceed);
@@ -558,18 +562,19 @@ public class ScheduleB1Servlet extends HttpServlet {
             double corpProceed = 0;
 
             for (PscLifting lifting : pscLiftings) {
-                CrudePricePK pricePK = new CrudePricePK();
-                pricePK.setCrudeTypeCode(psc.getCrudeType().getCode());
-                pricePK.setPriceDate(lifting.getLiftingDate());
-                CrudePrice crudePrice = priceBean.find(pricePK);
+//                CrudePricePK pricePK = new CrudePricePK();
+//                pricePK.setCrudeTypeCode(psc.getCrudeType().getCode());
+//                pricePK.setPriceDate(lifting.getLiftingDate());
+//                CrudePrice crudePrice = priceBean.find(pricePK);
+//
+//                if (crudePrice != null) {
+//                    price = crudePrice.getOsPrice();
+//                } else {
+//                    price = 0;
+//                }
 
-                if (crudePrice != null) {
-                    price = crudePrice.getOsPrice();
-                } else {
-                    price = 0;
-                }
-
-                corpProceed += lifting.getOwnLifting() * price;
+//                corpProceed += lifting.getOwnLifting() * price;
+                corpProceed += lifting.getOwnLifting() * lifting.getPrice();
             }
             return corpProceed;
         }
@@ -584,18 +589,19 @@ public class ScheduleB1Servlet extends HttpServlet {
             double contProceed = 0;
 
             for (PscLifting lifting : pscLiftings) {
-                CrudePricePK pricePK = new CrudePricePK();
-                pricePK.setCrudeTypeCode(psc.getCrudeType().getCode());
-                pricePK.setPriceDate(lifting.getLiftingDate());
-                CrudePrice crudePrice = priceBean.find(pricePK);
+//                CrudePricePK pricePK = new CrudePricePK();
+//                pricePK.setCrudeTypeCode(psc.getCrudeType().getCode());
+//                pricePK.setPriceDate(lifting.getLiftingDate());
+//                CrudePrice crudePrice = priceBean.find(pricePK);
+//
+//                if (crudePrice != null) {
+//                    price = crudePrice.getOsPrice();
+//                } else {
+//                    price = 0;
+//                }
 
-                if (crudePrice != null) {
-                    price = crudePrice.getOsPrice();
-                } else {
-                    price = 0;
-                }
-
-                contProceed += lifting.getPartnerLifting() * price;
+//                contProceed += lifting.getPartnerLifting() * price;
+                contProceed += lifting.getPartnerLifting() * lifting.getPrice();
             }
             return contProceed;
         }
@@ -610,18 +616,19 @@ public class ScheduleB1Servlet extends HttpServlet {
             double proceed = 0;
 
             for (PscLifting lifting : pscLiftings) {
-                CrudePricePK pricePK = new CrudePricePK();
-                pricePK.setCrudeTypeCode(psc.getCrudeType().getCode());
-                pricePK.setPriceDate(lifting.getLiftingDate());
-                CrudePrice crudePrice = priceBean.find(pricePK);
+//                CrudePricePK pricePK = new CrudePricePK();
+//                pricePK.setCrudeTypeCode(psc.getCrudeType().getCode());
+//                pricePK.setPriceDate(lifting.getLiftingDate());
+//                CrudePrice crudePrice = priceBean.find(pricePK);
+//
+//                if (crudePrice != null) {
+//                    price = crudePrice.getOsPrice();
+//                } else {
+//                    price = 0;
+//                }
 
-                if (crudePrice != null) {
-                    price = crudePrice.getOsPrice();
-                } else {
-                    price = 0;
-                }
-
-                proceed += lifting.getTotalLifting() * price;
+//                proceed += lifting.getTotalLifting() * price;
+                proceed += lifting.getRevenue();
             }
             return proceed;
         }

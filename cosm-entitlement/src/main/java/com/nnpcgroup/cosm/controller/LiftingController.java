@@ -62,7 +62,7 @@ public class LiftingController implements Serializable {
         this.pscLiftings = pscLiftings;
     }
 
-    @Temporal(TemporalType.DATE)
+   @Temporal(TemporalType.DATE)
     public Date getLiftingFromDate() {
         return liftingFromDate;
     }

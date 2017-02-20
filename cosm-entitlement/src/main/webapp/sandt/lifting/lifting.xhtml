@@ -42,10 +42,10 @@
                         </h:selectOneMenu>
                     </div>
                     <div class="col-md-4 m-b-15">
-                        <label>From (yyyy-mm-dd)</label>
+                        <label>From (yyyy-MM-dd)</label>
                         <div class="input-icon datetime-pick date-only">
-                            <input jsf:id="fromDate" jsf:value="#{liftingController.liftingFromDate}" data-format="dd/MM/yyyy" type="text" class="form-control input-sm" >
-                                <f:convertDateTime pattern="yyyy-mm-dd" />
+                            <input jsf:id="fromDate" jsf:value="#{liftingController.liftingFromDate}" data-format="yyy-MM-dd" type="text" class="form-control input-sm" >
+                                <f:convertDateTime pattern="yyyy-MM-dd" />
                                 <f:ajax/>
                             </input>
                             <span class="add-on">
@@ -54,10 +54,10 @@
                         </div>
                     </div>
                     <div class="col-md-4 m-b-15">
-                        <label>To (dd/MM/yyyy)</label>
+                        <label>To (yyyy-MM-dd)</label>
                         <div class="input-icon datetime-pick date-only">
-                            <input jsf:id="toDate"  jsf:value="#{liftingController.liftingToDate}" data-format="yyyy-mm-dd" type="text" class="form-control input-sm" >
-                                <f:convertDateTime pattern="yyyy-mm-dd" />
+                            <input jsf:id="toDate"  jsf:value="#{liftingController.liftingToDate}" data-format="yyyy-MM-dd" type="text" class="form-control input-sm" >
+                                <f:convertDateTime pattern="yyyy-MM-dd" />
                                 <f:ajax/>
                             </input>
                             <span class="add-on">
@@ -107,7 +107,23 @@
                                             <h:outputText value="#{lifting.partnerLifting}">
                                                 <f:convertNumber pattern="###,###,###.####"/>
                                             </h:outputText>
-                                        </h:column> 
+                                        </h:column>
+                                        <h:column>
+                                            <f:facet name="header">
+                                                <h:outputText value="Price"/>
+                                            </f:facet>
+                                            <h:outputText value="#{lifting.price}">
+                                                <f:convertNumber pattern="###,###,###.####"/>
+                                            </h:outputText>
+                                        </h:column>
+                                        <h:column>
+                                            <f:facet name="header">
+                                                <h:outputText value="Revenue"/>
+                                            </f:facet>
+                                            <h:outputText value="#{lifting.revenue}">
+                                                <f:convertNumber pattern="###,###,###.####"/>
+                                            </h:outputText>
+                                        </h:column>
                                     </h:dataTable>
                                 </div>
                             </div>

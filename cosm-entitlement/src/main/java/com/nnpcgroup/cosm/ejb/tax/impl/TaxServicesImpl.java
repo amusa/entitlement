@@ -5,6 +5,7 @@
  */
 package com.nnpcgroup.cosm.ejb.tax.impl;
 
+import com.nnpcgroup.cosm.controller.GeneralController;
 import com.nnpcgroup.cosm.ejb.FiscalPeriodService;
 import com.nnpcgroup.cosm.ejb.cost.ProductionCostServices;
 import com.nnpcgroup.cosm.ejb.crude.CrudePriceBean;
@@ -16,6 +17,7 @@ import com.nnpcgroup.cosm.entity.ProductionSharingContract;
 import com.nnpcgroup.cosm.entity.crude.CrudePrice;
 import com.nnpcgroup.cosm.entity.crude.CrudePricePK;
 import com.nnpcgroup.cosm.entity.lifting.PscLifting;
+
 import java.io.Serializable;
 import java.util.List;
 import javax.ejb.EJB;
@@ -40,6 +42,9 @@ public class TaxServicesImpl implements TaxServices, Serializable {
     @Inject
     private FiscalPeriodService fiscalService;
 
+    @Inject
+    GeneralController genController;
+
     @Override
     public double computeTaxOil(ProductionSharingContract psc, int year, int month) {
         return Math.max(0, computePayableTaxToDate(psc, year, month));
@@ -57,18 +62,19 @@ public class TaxServicesImpl implements TaxServices, Serializable {
         double price;
         double grossIncome = 0;
         for (PscLifting lifting : pscLiftings) {
-            CrudePricePK pricePK = new CrudePricePK();
-            pricePK.setCrudeTypeCode(psc.getCrudeType().getCode());
-            pricePK.setPriceDate(lifting.getLiftingDate());
-            CrudePrice crudePrice = priceBean.find(pricePK);
-
-            if (crudePrice != null) {
-                price = crudePrice.getOsPrice();
-            } else {
-                price = 0;
-            }
-
-            grossIncome += (lifting.getTotalLifting() * price);
+//            CrudePricePK pricePK = new CrudePricePK();
+//            pricePK.setCrudeTypeCode(psc.getCrudeType().getCode());
+//            pricePK.setPriceDate(lifting.getLiftingDate());
+//            CrudePrice crudePrice = priceBean.find(pricePK);
+//
+//            if (crudePrice != null) {
+//                price = crudePrice.getOsPrice();
+//            } else {
+//                price = 0;
+//            }
+//
+//            grossIncome += (lifting.getTotalLifting() * price);
+            grossIncome += lifting.getRevenue();
 
         }
 
@@ -89,13 +95,32 @@ public class TaxServicesImpl implements TaxServices, Serializable {
 
     @Override
     public double computeRoyalty(ProductionSharingContract psc, int year, int month) {
-        double royalty, royRate, grossProdCum;
+        double royalty, royRate, grossProd;
 
-        royRate = getRoyaltyRate(psc);
-        grossProdCum = productionBean.getGrossProductionToDate(psc, year, month);//cummulative production
-        royalty = grossProdCum * (royRate / 100);
+        //royRate = getRoyaltyRate(psc);
+        grossProd = productionBean.getGrossProduction(psc, year, month);
+        int days = genController.daysOfMonth(year, month);
+        Double dailyProd = grossProd / days;
+        royRate = computeRoyaltyRate(dailyProd);
+        double weightedAvePrice = liftingBean.computeWeightedAvePrice(psc, year, month);
+
+//        grossProdCum = productionBean.getGrossProductionToDate(psc, year, month);//cummulative production
+
+        royalty = grossProd * (royRate / 100) * weightedAvePrice;
 
         return royalty;
+    }
+
+    public double computeRoyaltyRate(double dailyProd) {
+        if (dailyProd < 2000.0) {
+            return 5.0;
+        } else if (dailyProd >= 2000.0 && dailyProd < 5000.0) {
+            return 7.5;
+        } else if (dailyProd >= 5000.0 && dailyProd < 10000.0) {
+            return 15.0;
+        }
+        return 20.0;
+
     }
 
     @Override

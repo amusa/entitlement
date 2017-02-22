@@ -6,6 +6,7 @@
 package com.nnpcgroup.cosm.entity;
 
 import com.nnpcgroup.cosm.entity.crude.CrudeType;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -28,13 +29,12 @@ import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 
 /**
- *
  * @author 18359
  */
 @Entity
 @Table(uniqueConstraints = {
-    @UniqueConstraint(columnNames = {"OPERATOR_ID"}),
-    @UniqueConstraint(columnNames = {"TITLE"})
+        @UniqueConstraint(columnNames = {"OPERATOR_ID"}),
+        @UniqueConstraint(columnNames = {"TITLE"})
 })
 @DiscriminatorValue("PSC")
 public class ProductionSharingContract extends FiscalArrangement {
@@ -47,7 +47,7 @@ public class ProductionSharingContract extends FiscalArrangement {
     private Date costRecoveryStartDate;
     private Double costRecoveryLimit;
     private Double costUplift;
-//    private Double royaltyRate;
+    //    private Double royaltyRate;
     private String terrain;
     private Double waterDepth;
 
@@ -126,7 +126,7 @@ public class ProductionSharingContract extends FiscalArrangement {
         this.costUplift = costUplift;
     }
 
-//    @Column(name = "ROYALTY_RATE")
+    //    @Column(name = "ROYALTY_RATE")
     @Transient
     public Double getRoyaltyRate() {
         if (terrain != null) {
@@ -151,7 +151,7 @@ public class ProductionSharingContract extends FiscalArrangement {
         return null;
     }
 
-//    public void setRoyaltyRate(Double royaltyRate) {
+    //    public void setRoyaltyRate(Double royaltyRate) {
 //        this.royaltyRate = royaltyRate;
 //    }
     @Embedded
@@ -271,5 +271,30 @@ public class ProductionSharingContract extends FiscalArrangement {
         }
 
         return 0;
+    }
+
+    @Transient
+    public Double getOplTotalConcessionRental() {
+        return (areaSize.getOplContractArea() == null || areaSize.getOplRentalRate() == null)
+                ? null : areaSize.getOplContractArea() * areaSize.getOplRentalRate() * getOplToOmlDuration();
+    }
+
+    @Transient
+    public double getOmlAnnualConcessionRental(){
+        return (areaSize.getOmlContractArea() == null || areaSize.getOmlRentalRate() == null)
+                ? null : areaSize.getOmlContractArea() * areaSize.getOmlRentalRate();
+    }
+
+    @Transient
+    private int getOplToOmlDuration (){
+        Calendar execDate = GregorianCalendar.getInstance();
+        Calendar omlDate = GregorianCalendar.getInstance();
+
+        execDate.setTime(contractExecutionDate);
+        omlDate.setTime(firstOilDate);
+
+        int yearDiff = omlDate.get(Calendar.YEAR) - execDate.get(Calendar.YEAR);
+
+        return yearDiff;
     }
 }

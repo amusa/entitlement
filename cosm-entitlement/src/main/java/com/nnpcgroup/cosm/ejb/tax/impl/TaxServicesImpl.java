@@ -19,6 +19,8 @@ import com.nnpcgroup.cosm.entity.crude.CrudePricePK;
 import com.nnpcgroup.cosm.entity.lifting.PscLifting;
 
 import java.io.Serializable;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.enterprise.context.Dependent;
@@ -87,8 +89,8 @@ public class TaxServicesImpl implements TaxServices, Serializable {
     @Override
     public double computeTotalDeduction(ProductionSharingContract psc, int year, int month) {
         double royalty, opex;
-        opex = computeOpex(psc, year, month);
-        royalty = computeRoyalty(psc, year, month);
+        opex = computeOpexCum(psc, year, month);
+        royalty = computeRoyaltyCum(psc, year, month);
 
         return royalty + opex;
     }
@@ -106,9 +108,35 @@ public class TaxServicesImpl implements TaxServices, Serializable {
 
 //        grossProdCum = productionBean.getGrossProductionToDate(psc, year, month);//cummulative production
 
-        royalty = grossProd * (royRate / 100) * weightedAvePrice;
+        double consessionRental = 0;
+
+        if (productionBean.isFirstProductionOfYear(psc, year, month)) {
+            consessionRental = psc.getOmlAnnualConcessionRental();
+            if (getYearOfDate(psc.getFirstOilDate()) == year) {
+                consessionRental += psc.getOplTotalConcessionRental();
+            }
+        }
+
+        royalty = (grossProd * (royRate / 100) * weightedAvePrice) + consessionRental;
 
         return royalty;
+    }
+
+    private int getYearOfDate(Date date) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        return cal.get(Calendar.YEAR);
+    }
+
+    @Override
+    public double computeRoyaltyCum(ProductionSharingContract psc, int year, int month) {
+        if (!prodCostBean.fiscalPeriodExists(psc, year, month)) {
+            return 0;
+        }
+        FiscalPeriod prevFp = fiscalService.getPreviousFiscalPeriod(year, month);
+        return computeRoyalty(psc, year, month)
+                + computeRoyaltyCum(psc, prevFp.getYear(), prevFp.getMonth());
+
     }
 
     public double computeRoyaltyRate(double dailyProd) {
@@ -159,7 +187,7 @@ public class TaxServicesImpl implements TaxServices, Serializable {
 
 //        return Math.max(0, (2 / 102) * assessableProfit); //TODO: verify if rate should come from psc object
         double eduTaxRate = psc.getTaxAndAllowance().getEducationTax();
-        return Math.max(0, (eduTaxRate / 100) * assessableProfit);
+        return Math.max(0, (eduTaxRate / 102) * assessableProfit);
     }
 
     @Override
@@ -307,8 +335,16 @@ public class TaxServicesImpl implements TaxServices, Serializable {
         return prodCostBean.getOpex(psc, year, month);
     }
 
+    private double computeOpexCum(ProductionSharingContract psc, int year, int month) {
+        return prodCostBean.getOpexToDate(psc, year, month);
+    }
+
     private double computeCapex(ProductionSharingContract psc, int year, int month) {
         return prodCostBean.getCapex(psc, year, month);
+    }
+
+    private double computeCapexCum(ProductionSharingContract psc, int year, int month) {
+        return prodCostBean.getCapexToDate(psc, year, month);
     }
 
     private double getRoyaltyRate(ProductionSharingContract psc) {

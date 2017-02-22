@@ -64,7 +64,8 @@
                                             <h:column>
                                                 <h:inputText value="#{prod.grossProduction}" class="form-control input-sm m-b-10">
                                                     <f:convertNumber pattern="###,###,###.####" />
-                                                    <f:ajax />
+                                                    <f:ajax event="change" listener="#{pscProdController.grossProductionChangeListener(prod)}"
+                                                            render="PscEditForm"/>
                                                 </h:inputText>
                                             </h:column>
                                             <h:column>

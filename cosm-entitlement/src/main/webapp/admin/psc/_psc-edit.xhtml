@@ -182,27 +182,25 @@
                                         <div class="row">
                                             <div class="col-md-4 m-b-15">
                                                 <h:outputLabel value="OML Concess Rental Rate" for="omlRentalRate" />
-                                                <h:inputText id="omlRentalRate"  value="#{pscController.selected.areaSize.omlConcessionRentalRate}" class="form-control input-sm m-b-10">
-                                                    <f:ajax />
+                                                <h:inputText id="omlRentalRate"  value="#{pscController.selected.areaSize.omlRentalRate}" class="form-control input-sm m-b-10">
+                                                    <f:ajax event="change" render="omlConcessRental omlConcessRentalAnnual" />
                                                 </h:inputText>                                                                                                                  
                                             </div>
                                             <div class="col-md-4 m-b-15">
                                                 <h:outputLabel value="Total Concess Rental (OPL)" for="totalConcessRental" />
-                                                <h:outputLabel id="totalConcessRental"  value="#{pscController.selected.areaSize.totalConcessionRental}" class="form-control input-sm m-b-10"/>
+                                                <h:outputLabel id="totalConcessRental"  value="#{pscController.selected.oplTotalConcessionRental}" class="form-control input-sm m-b-10"/>
                                             </div>
                                             <div class="col-md-4 m-b-15">
                                                 <h:outputLabel value="Concess Rental (OML)" for="omlConcessRental" />
-                                                <h:inputText id="omlConcessRental"  value="0" class="form-control input-sm m-b-10">
-                                                    <f:ajax />
-                                                </h:inputText>                                                                                                                  
+                                                <h:outputText id="omlConcessRental"  value="#{pscController.selected.omlAnnualConcessionRental}" class="form-control input-sm m-b-10"/>
+
                                             </div> 
                                         </div>
                                         <div class="row">
                                             <div class="col-md-4 m-b-15">
                                                 <h:outputLabel value="Concess Rental (OML) Annually" for="omlConcessRentalAnnual" />
-                                                <h:inputText id="omlConcessRentalAnnual"  value="0" class="form-control input-sm m-b-10">
-                                                    <f:ajax />
-                                                </h:inputText>                                                                                                                  
+                                                <h:outputText id="omlConcessRentalAnnual"  value="#{pscController.selected.omlAnnualConcessionRental}" class="form-control input-sm m-b-10"/>
+
                                             </div>  
                                         </div>
                                     </div>

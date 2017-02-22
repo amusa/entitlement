@@ -10,6 +10,7 @@ import com.nnpcgroup.cosm.ejb.impl.CommonServicesImpl;
 import com.nnpcgroup.cosm.ejb.tax.TaxServices;
 import com.nnpcgroup.cosm.entity.ProductionSharingContract;
 import com.nnpcgroup.cosm.entity.cost.ProductionCost;
+
 import java.io.Serializable;
 import java.util.List;
 import javax.ejb.Local;
@@ -147,6 +148,48 @@ public class ProductionCostServicesImpl extends CommonServicesImpl<ProductionCos
     }
 
     @Override
+    public double getOpexToDate(ProductionSharingContract psc, Integer year, Integer month) {
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+
+        Double opex;
+
+        CriteriaQuery<Double> cq = cb.createQuery(Double.class);
+        Root<ProductionCost> cost = cq.from(entityClass);
+
+        Expression<Double> sum = cb.sum(cost.<Double>get("amount"));
+
+        Predicate basePredicate
+                = cb.equal(cost.get("psc"), psc);
+
+        Predicate currYrPredicate = cb.and(
+                cb.equal(cost.get("periodYear"), year),
+                cb.lessThanOrEqualTo(cost.get("periodMonth"), month)
+        );
+
+        Predicate priorYrPredicate = cb.and(
+                cb.lessThan(cost.get("periodYear"), year)
+        );
+
+        Predicate yearsPredicate = cb.or(currYrPredicate, priorYrPredicate);
+
+        Predicate opexPredicate = cb.equal(cost.get("costItem").get("costCategory").get("code"), "OPEX");
+
+        Predicate predicate = cb.and(basePredicate, yearsPredicate, opexPredicate);
+
+        cq.select(sum.alias("amountCum"))
+                .where(predicate
+                );
+
+        opex = getEntityManager().createQuery(cq).getSingleResult();
+
+        if (opex == null) {
+            return 0;
+        }
+
+        return opex;
+    }
+
+    @Override
     public double getCapex(ProductionSharingContract psc, Integer year, Integer month) {
         CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
 
@@ -164,6 +207,47 @@ public class ProductionCostServicesImpl extends CommonServicesImpl<ProductionCos
                                 cb.equal(cost.get("periodMonth"), month),
                                 cb.equal(cost.get("costItem").get("costCategory").get("code"), "CAPEX")
                         )
+                );
+
+        capex = getEntityManager().createQuery(cq).getSingleResult();
+
+        if (capex == null) {
+            return 0;
+        }
+
+        return capex;
+    }
+
+    @Override
+    public double getCapexToDate(ProductionSharingContract psc, Integer year, Integer month) {
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+
+        Double capex;
+
+        CriteriaQuery<Double> cq = cb.createQuery(Double.class);
+        Root<ProductionCost> cost = cq.from(entityClass);
+
+        Expression<Double> sum = cb.sum(cost.<Double>get("amount"));
+
+        Predicate basePredicate
+                = cb.equal(cost.get("psc"), psc);
+
+        Predicate currYrPredicate = cb.and(
+                cb.equal(cost.get("periodYear"), year),
+                cb.lessThanOrEqualTo(cost.get("periodMonth"), month)
+        );
+
+        Predicate priorYrPredicate = cb.and(
+                cb.lessThan(cost.get("periodYear"), year)
+        );
+
+        Predicate yearsPredicate = cb.or(currYrPredicate, priorYrPredicate);
+
+        Predicate opexPredicate = cb.equal(cost.get("costItem").get("costCategory").get("code"), "CAPEX");
+
+        Predicate predicate = cb.and(basePredicate, yearsPredicate, opexPredicate);
+        cq.select(sum.alias("amountCum"))
+                .where(predicate
                 );
 
         capex = getEntityManager().createQuery(cq).getSingleResult();
@@ -194,7 +278,7 @@ public class ProductionCostServicesImpl extends CommonServicesImpl<ProductionCos
 
         Predicate fullYearPredicate = cb.between(cost.get("periodYear"), (year - 4), year);
 
-        Predicate righPredicate = cb.and(
+        Predicate rightPredicate = cb.and(
                 cb.equal(cost.get("periodYear"), year),
                 cb.lessThanOrEqualTo(cost.get("periodMonth"), month)
         );
@@ -209,7 +293,7 @@ public class ProductionCostServicesImpl extends CommonServicesImpl<ProductionCos
                 cb.greaterThan(cost.get("periodMonth"), (month + 1) % 12)
         );
 
-        Predicate lessYearPredicate = cb.or(righPredicate, midPredicate, leftPredicate);
+        Predicate lessYearPredicate = cb.or(rightPredicate, midPredicate, leftPredicate);
 
         Predicate predicate;
         if (month == 12) {
@@ -254,7 +338,7 @@ public class ProductionCostServicesImpl extends CommonServicesImpl<ProductionCos
 
         return eduTax;
     }
-    
+
     public boolean fiscalPeriodExists(ProductionSharingContract psc, Integer year, Integer month) {
         List<ProductionCost> prodCosts = find(psc, year, month);
         return prodCosts != null && !prodCosts.isEmpty();

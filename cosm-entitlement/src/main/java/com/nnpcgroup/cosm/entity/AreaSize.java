@@ -14,7 +14,7 @@ public class AreaSize implements Serializable {
     private Double oplContractArea;
     private Double omlContractArea;
     private Double oplRentalRate;
-    private Double omlConcessionRentalRate;
+    private Double omlRentalRate;
 
     @Column(name = "OPL_CONTRACT_AREA")
     public Double getOplContractArea() {
@@ -43,18 +43,12 @@ public class AreaSize implements Serializable {
         this.oplRentalRate = oplRentalRate;
     }
 
-    @Column(name = "OML_CONCESSION_RENTAL_RATE")
-    public Double getOmlConcessionRentalRate() {
-        return omlConcessionRentalRate;
+    @Column(name = "OML_RENTAL_RATE")
+    public Double getOmlRentalRate() {
+        return omlRentalRate;
     }
 
-    public void setOmlConcessionRentalRate(Double omlConcessionRentalRate) {
-        this.omlConcessionRentalRate = omlConcessionRentalRate;
-    }
-
-    @Transient
-    public Double getTotalConcessionRental() {
-        return (oplContractArea == null || oplRentalRate == null)
-                ? null : oplContractArea * oplRentalRate * 4;
+    public void setOmlRentalRate(Double omlRentalRate) {
+        this.omlRentalRate = omlRentalRate;
     }
 }

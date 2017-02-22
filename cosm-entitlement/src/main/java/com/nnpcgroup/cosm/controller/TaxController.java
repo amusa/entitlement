@@ -80,7 +80,7 @@ public class TaxController implements Serializable {
     public void calculationTaxOilDetail(ProductionSharingContract psc, int year, int month) {
         initialize(psc, year, month);
         
-        double royalty = taxBean.computeRoyalty(psc, year, month);
+        double royalty = taxBean.computeRoyaltyCum(psc, year, month);
         double grossIncome = taxBean.computeGrossIncome(psc, year, month);
         double totalDeduction = taxBean.computeTotalDeduction(psc, year, month);
         double lossBfw = 0;

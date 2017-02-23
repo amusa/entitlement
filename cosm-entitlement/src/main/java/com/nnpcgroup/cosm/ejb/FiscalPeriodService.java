@@ -18,4 +18,6 @@ public interface FiscalPeriodService {
     public FiscalPeriod getPreviousFiscalPeriod(int year, int month);
 
     public FiscalPeriod getNextFiscalPeriod(int year, int month);
+
+    public FiscalPeriod getPreviousFiscalPeriod(int year);
 }

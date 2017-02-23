@@ -208,7 +208,8 @@ public class TaxServicesImpl implements TaxServices, Serializable {
 
         double itaRate = psc.getInvestmentTaxAllowanceCredit(); //TODO:verify application of ITA rate
         FiscalPeriod prevFp = fiscalService.getPreviousFiscalPeriod(year, month);
-        return computeCapex(psc, year, month) * (itaRate / 100.0) + computeCurrentYearITA(psc, prevFp.getYear(), prevFp.getMonth());
+        return computeCapex(psc, year, month) * (itaRate / 100.0);
+        //+ computeCurrentYearITA(psc, prevFp.getYear(), prevFp.getMonth());//TODO:double counting!
     }
 
     @Override
@@ -223,7 +224,7 @@ public class TaxServicesImpl implements TaxServices, Serializable {
 
     @Override
     public double computePriorYearAnnualAllowance(ProductionSharingContract psc, int year, int month) {
-        FiscalPeriod prevFp = fiscalService.getPreviousFiscalPeriod(year, month);
+        FiscalPeriod prevFp = fiscalService.getPreviousFiscalPeriod(year);
 
         if (!prodCostBean.fiscalPeriodExists(psc, prevFp.getYear(), prevFp.getMonth())) {
             return 0.0;
@@ -241,10 +242,10 @@ public class TaxServicesImpl implements TaxServices, Serializable {
         if (!prodCostBean.fiscalPeriodExists(psc, year, month)) {
             return 0.0;
         }
-        double currentCapitalAllw = prodCostBean.getCapitalAllowanceRecovery(psc, year, month);
+        double currentCapitalAllw = prodCostBean.getCapitalAllowanceRecovery(psc, year, month);// Armotization
         FiscalPeriod prevFp = fiscalService.getPreviousFiscalPeriod(year, month);
 
-        return currentCapitalAllw + prodCostBean.getCapitalAllowanceRecovery(psc, prevFp.getYear(), prevFp.getMonth());// Armotization
+        return currentCapitalAllw + computeCurrentYearCapitalAllowance(psc, prevFp.getYear(), prevFp.getMonth());//cummulative
     }
 
     @Override

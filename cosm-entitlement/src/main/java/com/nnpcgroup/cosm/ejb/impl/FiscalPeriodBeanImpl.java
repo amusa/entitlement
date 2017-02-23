@@ -44,4 +44,9 @@ public class FiscalPeriodBeanImpl implements FiscalPeriodService, Serializable {
 
         return new FiscalPeriod(yr, mt);
     }
+
+    @Override
+    public FiscalPeriod getPreviousFiscalPeriod(int year) {
+        return new FiscalPeriod(year-1,12);
+    }
 }

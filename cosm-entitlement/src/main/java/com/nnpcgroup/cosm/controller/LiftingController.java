@@ -104,6 +104,10 @@ public class LiftingController implements Serializable {
         currentPscLifting = new PscLifting();//TODO:
     }
 
+    public void prepareUpdate(PscLifting lifting) {
+        this.currentPscLifting = lifting;
+    }
+
     public void create() {
         persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("LiftingCreated"));
         if (!JsfUtil.isValidationFailed()) {
@@ -144,6 +148,7 @@ public class LiftingController implements Serializable {
         persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("LiftingDeleted"));
         if (!JsfUtil.isValidationFailed()) {
             reset();
+            loadLiftings();
         }
     }
 

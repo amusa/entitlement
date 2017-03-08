@@ -20,6 +20,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
+import javax.validation.constraints.NotNull;
 
 /**
  * @author Ayemi
@@ -50,6 +51,7 @@ public abstract class Lifting implements Serializable {
         this.id = id;
     }
 
+    @NotNull
     @Temporal(TemporalType.DATE)
     @Column(name = "LIFTING_DATE")
     public Date getLiftingDate() {
@@ -60,6 +62,7 @@ public abstract class Lifting implements Serializable {
         this.liftingDate = liftingDate;
     }
 
+    //@NotNull
     @Column(name = "OWN_LIFTING")
     public Double getOwnLifting() {
         return ownLifting;
@@ -69,6 +72,7 @@ public abstract class Lifting implements Serializable {
         this.ownLifting = ownLifting;
     }
 
+    //@NotNull
     @Column(name = "PARTNER_LIFTING")
     public Double getPartnerLifting() {
         return partnerLifting;
@@ -81,11 +85,12 @@ public abstract class Lifting implements Serializable {
     @Transient
     public Double getTotalLifting() {
         double own, partner;
-        own = ownLifting!=null?ownLifting:0;
-        partner=partnerLifting!=null?partnerLifting:0;
+        own = ownLifting != null ? ownLifting : 0;
+        partner = partnerLifting != null ? partnerLifting : 0;
         return own + partner;
     }
 
+    @NotNull
     @Column(name = "PRICE")
     public Double getPrice() {
         return price;

@@ -44,14 +44,16 @@
                                 <div class="row">                                    
                                     <div class="col-md-4 m-b-15">
                                         <h:outputLabel value="NNPC Lifting" for="ownLifting"/>
-                                        <h:inputText id="ownLifting" value="#{liftingController.currentPscLifting.ownLifting}" class="form-control input-sm m-b-10" >                                              
-                                            <f:ajax />     
+                                        <h:inputText id="ownLifting" value="#{liftingController.currentPscLifting.ownLifting}" class="form-control input-sm m-b-10" >
+                                            <f:convertNumber pattern="###,###,###.####" />
+                                            <f:ajax />
                                         </h:inputText>                                        
                                     </div>
                                     <div class="col-md-4 m-b-15">
                                         <h:outputLabel value="Contractor Lifting" for="partnerLifting"/>
-                                        <h:inputText id="partnerLifting" value="#{liftingController.currentPscLifting.partnerLifting}" class="form-control input-sm m-b-10">                                              
-                                            <f:ajax />     
+                                        <h:inputText id="partnerLifting" value="#{liftingController.currentPscLifting.partnerLifting}" class="form-control input-sm m-b-10">
+                                            <f:convertNumber pattern="###,###,###.####" />
+                                            <f:ajax />
                                         </h:inputText>
                                     </div>                                    
                                 </div>
@@ -59,6 +61,7 @@
                                     <div class="col-md-4 m-b-15">
                                         <h:outputLabel value="Price" for="price"/>
                                         <h:inputText id="price" value="#{liftingController.currentPscLifting.price}" class="form-control input-sm m-b-10" >
+                                            <f:convertNumber pattern="###.####" />
                                             <f:ajax />
                                         </h:inputText>
                                     </div>

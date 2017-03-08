@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
@@ -7,150 +8,171 @@
       xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
       xmlns:jsf="http://xmlns.jcp.org/jsf">
 
-    <ui:composition template="/cosm-template.xhtml">
+<ui:composition template="/cosm-template.xhtml">
 
-        <ui:define name="title">
-            <h:outputText value="LIFTING"></h:outputText>
-        </ui:define>
+    <ui:define name="title">
+        <h:outputText value="LIFTING"></h:outputText>
+    </ui:define>
 
-        <ui:define name="breadcrumb">
-            <ol class="breadcrumb hidden-xs">
-                <li><a href="#">Home</a></li>
-                <li><a href="#">Lifting</a></li>
-                <li class="active">Lifting</li>
-            </ol>
-        </ui:define>
+    <ui:define name="breadcrumb">
+        <ol class="breadcrumb hidden-xs">
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Lifting</a></li>
+            <li class="active">Lifting</li>
+        </ol>
+    </ui:define>
 
-        <ui:define name="page-title">
-            <h:outputText value="Lifting"></h:outputText>
-        </ui:define>
+    <ui:define name="page-title">
+        <h:outputText value="Lifting"></h:outputText>
+    </ui:define>
 
-        <ui:define name="side-menu">
-            <ui:include src="_lifting-menu.xhtml"/>
-        </ui:define>
+    <ui:define name="side-menu">
+        <ui:include src="_lifting-menu.xhtml"/>
+    </ui:define>
 
-        <ui:define name="content-area">            
-            <h:form id="liftingListForm"> 
-                <div class="row">
-                    <div class="col-md-4 m-b-15">
-                        <label>PSC</label>
-                        <h:selectOneMenu id="contract" value="#{liftingController.currentPsc}"
-                                         class="form-control input-sm m-b-10">
-                            <f:selectItem itemValue="#{null}" itemLabel="--select--"/>
-                            <f:selectItems value="#{fiscalController.pscFiscalSelectOptions}"/>
-                            <f:ajax />
-                        </h:selectOneMenu>
-                    </div>
-                    <div class="col-md-4 m-b-15">
-                        <label>From (yyyy-MM-dd)</label>
-                        <div class="input-icon datetime-pick date-only">
-                            <input jsf:id="fromDate" jsf:value="#{liftingController.liftingFromDate}" data-format="yyy-MM-dd" type="text" class="form-control input-sm" >
-                                <f:convertDateTime pattern="yyyy-MM-dd" />
-                                <f:ajax/>
-                            </input>
-                            <span class="add-on">
-                                <i class="sa-plus"></i>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="col-md-4 m-b-15">
-                        <label>To (yyyy-MM-dd)</label>
-                        <div class="input-icon datetime-pick date-only">
-                            <input jsf:id="toDate"  jsf:value="#{liftingController.liftingToDate}" data-format="yyyy-MM-dd" type="text" class="form-control input-sm" >
-                                <f:convertDateTime pattern="yyyy-MM-dd" />
-                                <f:ajax/>
-                            </input>
-                            <span class="add-on">
-                                <i class="sa-plus"></i>
-                            </span>
-                        </div>
-                    </div>                                
-                </div>  
-                <div class="row">
-                    <div class="col-md-4 m-b-15">
-                        <h:commandButton  value="Submit"  class="btn" >
-                            <f:ajax listener="#{liftingController.loadLiftings}" event="click"
-                                    execute="fromDate toDate" render="liftingTable msgs"/>
-                        </h:commandButton>
-                    </div> 
+    <ui:define name="content-area">
+        <h:form id="liftingListForm">
+            <div class="row">
+                <div class="col-md-4 m-b-15">
+                    <label>PSC</label>
+                    <h:selectOneMenu id="contract" value="#{liftingController.currentPsc}"
+                                     class="form-control input-sm m-b-10">
+                        <f:selectItem itemValue="#{null}" itemLabel="--select--"/>
+                        <f:selectItems value="#{fiscalController.pscFiscalSelectOptions}"/>
+                        <f:ajax/>
+                    </h:selectOneMenu>
                 </div>
-                <div class="row">
-                    <div  class="panel panel-default tile">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">LIFTING</h3>
-                        </div>
-                        <div class="panel-body">
-                            <div class="row">
-                                <div class="col-md-12 m-b-12">
-                                    <h:dataTable id="liftingTable" var="lifting" value="#{liftingController.pscLiftings}"
-                                                 class="table table-bordered table-hover tile">
-                                        <h:column>
-                                            <f:facet name="header">
-                                                <h:outputText value="Lifting Date"/>                                                
-                                            </f:facet>
-                                            <h:outputText value="#{lifting.liftingDate}">
-                                                <!--<f:convertDateTime pattern="yyyy-MM-dd"/>-->
-                                            </h:outputText>
-                                        </h:column>
-                                        <h:column>
-                                            <f:facet name="header">
-                                                <h:outputText value="NNPC Lifting (BBLS)"/>
-                                            </f:facet>
-                                            <h:outputText value="#{lifting.ownLifting}">
-                                                <f:convertNumber maxFractionDigits="2" groupingUsed="true"/>
-                                            </h:outputText>
-                                        </h:column>
-                                        <h:column>
-                                            <f:facet name="header">
-                                                <h:outputText value="Contractor Lifting (BBLS)"/>
-                                            </f:facet>
-                                            <h:outputText value="#{lifting.partnerLifting}">
-                                                <f:convertNumber pattern="###,###,###.####"/>
-                                            </h:outputText>
-                                        </h:column>
-                                        <h:column>
-                                            <f:facet name="header">
-                                                <h:outputText value="Price"/>
-                                            </f:facet>
-                                            <h:outputText value="#{lifting.price}">
-                                                <f:convertNumber pattern="###,###,###.####"/>
-                                            </h:outputText>
-                                        </h:column>
-                                        <h:column>
-                                            <f:facet name="header">
-                                                <h:outputText value="Revenue"/>
-                                            </f:facet>
-                                            <h:outputText value="#{lifting.revenue}">
-                                                <f:convertNumber pattern="###,###,###.####"/>
-                                            </h:outputText>
-                                        </h:column>
-                                    </h:dataTable>
-                                </div>
+                <div class="col-md-4 m-b-15">
+                    <label>From (yyyy-MM-dd)</label>
+                    <div class="input-icon datetime-pick date-only">
+                        <input jsf:id="fromDate" jsf:value="#{liftingController.liftingFromDate}"
+                               data-format="yyy-MM-dd" type="text" class="form-control input-sm">
+                            <f:convertDateTime pattern="yyyy-MM-dd"/>
+                            <f:ajax/>
+                        </input>
+                        <span class="add-on">
+                                <i class="sa-plus"></i>
+                            </span>
+                    </div>
+                </div>
+                <div class="col-md-4 m-b-15">
+                    <label>To (yyyy-MM-dd)</label>
+                    <div class="input-icon datetime-pick date-only">
+                        <input jsf:id="toDate" jsf:value="#{liftingController.liftingToDate}" data-format="yyyy-MM-dd"
+                               type="text" class="form-control input-sm">
+                            <f:convertDateTime pattern="yyyy-MM-dd"/>
+                            <f:ajax/>
+                        </input>
+                        <span class="add-on">
+                                <i class="sa-plus"></i>
+                            </span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 m-b-15">
+                    <h:commandButton value="Submit" class="btn">
+                        <f:ajax listener="#{liftingController.loadLiftings}" event="click"
+                                execute="fromDate toDate" render="liftingTable msgs"/>
+                    </h:commandButton>
+                </div>
+            </div>
+            <div class="row">
+                <div class="panel panel-default tile">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">LIFTING</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-12 m-b-12">
+                                <h:dataTable id="liftingTable" var="lifting" value="#{liftingController.pscLiftings}"
+                                             class="table table-bordered table-hover tile">
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Lifting Date"/>
+                                        </f:facet>
+                                        <h:outputText value="#{lifting.liftingDate}">
+                                            <!--<f:convertDateTime pattern="yyyy-MM-dd"/>-->
+                                        </h:outputText>
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="NNPC Lifting (BBLS)"/>
+                                        </f:facet>
+                                        <h:outputText value="#{lifting.ownLifting}">
+                                            <f:convertNumber maxFractionDigits="2" groupingUsed="true"/>
+                                        </h:outputText>
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Contractor Lifting (BBLS)"/>
+                                        </f:facet>
+                                        <h:outputText value="#{lifting.partnerLifting}">
+                                            <f:convertNumber pattern="###,###,###.####"/>
+                                        </h:outputText>
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Price"/>
+                                        </f:facet>
+                                        <h:outputText value="#{lifting.price}">
+                                            <f:convertNumber pattern="###,###,###.####"/>
+                                        </h:outputText>
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Revenue"/>
+                                        </f:facet>
+                                        <h:outputText value="#{lifting.revenue}">
+                                            <f:convertNumber pattern="###,###,###.####"/>
+                                        </h:outputText>
+                                    </h:column>
+                                    <h:column>
+                                        <div class="col-md-3 m-b-9">
+                                            <h:commandLink pt:data-target="#LiftEditDlg" pt:look="warning"
+                                                           pt:data-toggle="modal">
+
+                                                #{bundle.Edit}
+                                                <f:ajax event="click" render="LiftEditForm"
+                                                        listener="#{liftingController.prepareUpdate(lifting)}"/>
+                                            </h:commandLink>
+                                        </div>
+                                        <div class="col-md-3 m-b-9">
+                                            <h:commandLink>
+                                                #{bundle.Delete}
+                                                <f:ajax event="click" render="liftingListForm"
+                                                        listener="#{liftingController.destroy(lifting)}"/>
+                                            </h:commandLink>
+                                        </div>
+                                    </h:column>
+                                </h:dataTable>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-4 m-b-15">
-                        <h:commandLink  pt:data-target="#LiftCreateDlg" pt:look="warning" pt:data-toggle="modal" class="btn m-r-5">
-                            <span class="icon">&#61943;</span>
-                            #{bundle.Create}
-                            <f:ajax event="click" execute="fromDate toDate" render="LiftCreateForm" listener="#{liftingController.prepareCreate}" />
-                        </h:commandLink> 
-                    </div>     
+            </div>
+            <div class="row">
+                <div class="col-md-4 m-b-15">
+                    <h:commandLink pt:data-target="#LiftCreateDlg" pt:look="warning" pt:data-toggle="modal"
+                                   class="btn m-r-5">
+                        <span class="icon">&#61943;</span>
+                        #{bundle.Create}
+                        <f:ajax event="click" execute="fromDate toDate" render="LiftCreateForm"
+                                listener="#{liftingController.prepareCreate}"/>
+                    </h:commandLink>
                 </div>
-            </h:form>
-            <ui:include src="_lifting-create.xhtml"/>
-            <ui:include src="_lifting-edit.xhtml"/>
-            <ui:include src="_lifting-view.xhtml"/>
-        </ui:define>
+            </div>
+        </h:form>
+        <ui:include src="_lifting-create.xhtml"/>
+        <ui:include src="_lifting-edit.xhtml"/>
+        <ui:include src="_lifting-view.xhtml"/>
+    </ui:define>
 
-        <ui:define name="page-stat"> 
-            <ui:include src="_lifting-stat.xhtml"/>
-        </ui:define>
+    <ui:define name="page-stat">
+        <ui:include src="_lifting-stat.xhtml"/>
+    </ui:define>
 
-    </ui:composition>
-
+</ui:composition>
 
 
 </html>

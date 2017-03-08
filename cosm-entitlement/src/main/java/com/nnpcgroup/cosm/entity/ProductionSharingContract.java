@@ -248,7 +248,7 @@ public class ProductionSharingContract extends FiscalArrangement {
                     return 50.0;
                 }
             }
-            int dateDiff = getContractDuration();
+            int dateDiff = getFirstOilDuration();
             if (dateDiff <= 5) {
                 return 65.75;//TODO:USE ENUM
             }
@@ -261,13 +261,30 @@ public class ProductionSharingContract extends FiscalArrangement {
     @Transient
     private int getContractDuration() {
         if (contractExecutionDate != null) {
-            Calendar execDate = GregorianCalendar.getInstance();
+            return computeDateDiff(contractExecutionDate);
+        }
+
+        return 0;
+    }
+
+    @Transient
+    private int getFirstOilDuration() {
+        if (firstOilDate != null) {
+            return computeDateDiff(firstOilDate);
+        }
+        return 0;
+    }
+
+    @Transient
+    private int computeDateDiff(Date date) {
+        if (date != null) {
+            Calendar refDate = GregorianCalendar.getInstance();
             Calendar today = GregorianCalendar.getInstance();
 
-            execDate.setTime(contractExecutionDate);
-            today.add(Calendar.DAY_OF_YEAR, -execDate.get(Calendar.DAY_OF_YEAR));
+            refDate.setTime(date);
+            today.add(Calendar.DAY_OF_YEAR, -refDate.get(Calendar.DAY_OF_YEAR));
 
-            return today.get(Calendar.YEAR) - execDate.get(Calendar.YEAR);
+            return today.get(Calendar.YEAR) - refDate.get(Calendar.YEAR);
         }
 
         return 0;
@@ -280,13 +297,13 @@ public class ProductionSharingContract extends FiscalArrangement {
     }
 
     @Transient
-    public double getOmlAnnualConcessionRental(){
+    public double getOmlAnnualConcessionRental() {
         return (areaSize.getOmlContractArea() == null || areaSize.getOmlRentalRate() == null)
                 ? null : areaSize.getOmlContractArea() * areaSize.getOmlRentalRate();
     }
 
     @Transient
-    private int getOplToOmlDuration (){
+    private int getOplToOmlDuration() {
         Calendar execDate = GregorianCalendar.getInstance();
         Calendar omlDate = GregorianCalendar.getInstance();
 

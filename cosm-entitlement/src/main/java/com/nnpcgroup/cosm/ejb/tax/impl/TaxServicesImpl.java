@@ -54,13 +54,19 @@ public class TaxServicesImpl implements TaxServices, Serializable {
 
     @Override
     public double computeGrossIncome(ProductionSharingContract psc, int year, int month) {
-        //TODO:compute cummulative income
+        return computeGrossIncome(psc, new FiscalPeriod(year, month));
+    }
 
-        if (!prodCostBean.fiscalPeriodExists(psc, year, month)) {
+    private double computeGrossIncome(ProductionSharingContract psc, FiscalPeriod fp) {
+        if (!fp.isCurrentYear()) {
+            return 0;
+        }
+
+        if (!prodCostBean.fiscalPeriodExists(psc, fp)) {
             return 0.0;
         }
 
-        List<PscLifting> pscLiftings = liftingBean.find(psc, year, month);
+        List<PscLifting> pscLiftings = liftingBean.find(psc, fp.getYear(), fp.getMonth());
         double price;
         double grossIncome = 0;
         for (PscLifting lifting : pscLiftings) {
@@ -80,16 +86,14 @@ public class TaxServicesImpl implements TaxServices, Serializable {
 
         }
 
-        FiscalPeriod prevFp = fiscalService.getPreviousFiscalPeriod(year, month);
 
-        return grossIncome + computeGrossIncome(psc, prevFp.getYear(), prevFp.getMonth());//recursively compute cummulative gross income
-
+        return grossIncome + computeGrossIncome(psc, fp.getPreviousFiscalPeriod());//recursively compute cummulative gross income
     }
 
     @Override
     public double computeTotalDeduction(ProductionSharingContract psc, int year, int month) {
         double royalty, opex;
-        opex = computeOpexCum(psc, year, month);
+        opex = computeCurrentYearOpex(psc, year, month);
         royalty = computeRoyaltyCum(psc, year, month);
 
         return royalty + opex;
@@ -130,12 +134,22 @@ public class TaxServicesImpl implements TaxServices, Serializable {
 
     @Override
     public double computeRoyaltyCum(ProductionSharingContract psc, int year, int month) {
-        if (!prodCostBean.fiscalPeriodExists(psc, year, month)) {
+        return computeRoyaltyCum(psc, new FiscalPeriod(year, month));
+    }
+
+    private double computeRoyaltyCum(ProductionSharingContract psc, FiscalPeriod fp) {
+
+        if (!fp.isCurrentYear()) {
             return 0;
         }
-        FiscalPeriod prevFp = fiscalService.getPreviousFiscalPeriod(year, month);
-        return computeRoyalty(psc, year, month)
-                + computeRoyaltyCum(psc, prevFp.getYear(), prevFp.getMonth());
+
+        if (!prodCostBean.fiscalPeriodExists(psc, fp)) {
+            return 0;
+        }
+
+        double currentYearRoyalty = computeRoyalty(psc, fp.getYear(), fp.getMonth());
+        return currentYearRoyalty
+                + computeRoyaltyCum(psc, fp.getPreviousFiscalPeriod());
 
     }
 
@@ -202,15 +216,11 @@ public class TaxServicesImpl implements TaxServices, Serializable {
 
     @Override
     public double computeCurrentYearITA(ProductionSharingContract psc, int year, int month) {
-        if (!prodCostBean.fiscalPeriodExists(psc, year, month)) {
-            return 0.0;
-        }
-
         double itaRate = psc.getInvestmentTaxAllowanceCredit(); //TODO:verify application of ITA rate
-        FiscalPeriod prevFp = fiscalService.getPreviousFiscalPeriod(year, month);
-        return computeCapex(psc, year, month) * (itaRate / 100.0);
-        //+ computeCurrentYearITA(psc, prevFp.getYear(), prevFp.getMonth());//TODO:double counting!
+
+        return computeCurrentYearCapex(psc, year, month) * (itaRate / 100.0);
     }
+
 
     @Override
     public double computeUnrecoupedAnnualAllowance(ProductionSharingContract psc, int year, int month) {
@@ -226,7 +236,7 @@ public class TaxServicesImpl implements TaxServices, Serializable {
     public double computePriorYearAnnualAllowance(ProductionSharingContract psc, int year, int month) {
         FiscalPeriod prevFp = fiscalService.getPreviousFiscalPeriod(year);
 
-        if (!prodCostBean.fiscalPeriodExists(psc, prevFp.getYear(), prevFp.getMonth())) {
+        if (!prodCostBean.fiscalPeriodExists(psc, prevFp)) {
             return 0.0;
         }
 
@@ -239,13 +249,22 @@ public class TaxServicesImpl implements TaxServices, Serializable {
 
     @Override
     public double computeCurrentYearCapitalAllowance(ProductionSharingContract psc, int year, int month) {
-        if (!prodCostBean.fiscalPeriodExists(psc, year, month)) {
-            return 0.0;
-        }
-        double currentCapitalAllw = prodCostBean.getCapitalAllowanceRecovery(psc, year, month);// Armotization
-        FiscalPeriod prevFp = fiscalService.getPreviousFiscalPeriod(year, month);
+        return computeCurrentYearCapitalAllowance(psc, new FiscalPeriod(year, month));
+    }
 
-        return currentCapitalAllw + computeCurrentYearCapitalAllowance(psc, prevFp.getYear(), prevFp.getMonth());//cummulative
+    private double computeCurrentYearCapitalAllowance(ProductionSharingContract psc, FiscalPeriod fp) {
+        if (!fp.isCurrentYear()) {
+            return 0;
+        }
+
+        if (!prodCostBean.fiscalPeriodExists(psc, fp)) {
+            return 0;
+        }
+
+        double currentCapitalAllw = prodCostBean.getCapitalAllowanceRecovery(psc, fp.getYear(), fp.getMonth());// Armotization
+
+
+        return currentCapitalAllw + computeCurrentYearCapitalAllowance(psc, fp.getPreviousFiscalPeriod());//cummulative
     }
 
     @Override
@@ -336,16 +355,16 @@ public class TaxServicesImpl implements TaxServices, Serializable {
         return prodCostBean.getOpex(psc, year, month);
     }
 
-    private double computeOpexCum(ProductionSharingContract psc, int year, int month) {
-        return prodCostBean.getOpexToDate(psc, year, month);
+    private double computeCurrentYearOpex(ProductionSharingContract psc, int year, int month) {
+        return prodCostBean.getCurrentYearOpex(psc, year, month);
     }
 
     private double computeCapex(ProductionSharingContract psc, int year, int month) {
         return prodCostBean.getCapex(psc, year, month);
     }
 
-    private double computeCapexCum(ProductionSharingContract psc, int year, int month) {
-        return prodCostBean.getCapexToDate(psc, year, month);
+    private double computeCurrentYearCapex(ProductionSharingContract psc, int year, int month) {
+        return prodCostBean.getCurrentYearCapex(psc, year, month);
     }
 
     private double getRoyaltyRate(ProductionSharingContract psc) {

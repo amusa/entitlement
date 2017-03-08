@@ -6,6 +6,7 @@
 package com.nnpcgroup.cosm.ejb.cost;
 
 import com.nnpcgroup.cosm.ejb.CommonServices;
+import com.nnpcgroup.cosm.entity.FiscalPeriod;
 import com.nnpcgroup.cosm.entity.ProductionSharingContract;
 import com.nnpcgroup.cosm.entity.cost.ProductionCost;
 import java.io.Serializable;
@@ -25,15 +26,17 @@ public interface ProductionCostServices extends CommonServices<ProductionCost>, 
 
     double getOpex(ProductionSharingContract psc, Integer year, Integer month);
 
-    double getOpexToDate(ProductionSharingContract psc, Integer year, Integer month);
+    double getCurrentYearOpex(ProductionSharingContract psc, Integer year, Integer month);
 
     double getCapex(ProductionSharingContract psc, Integer year, Integer month);
 
-    double getCapexToDate(ProductionSharingContract psc, Integer year, Integer month);
+    double getCurrentYearCapex(ProductionSharingContract psc, Integer year, Integer month);
 
     double getCapitalAllowanceRecovery(ProductionSharingContract psc, Integer year, Integer month);
 
     Double getEducationTax(ProductionSharingContract psc, Integer year, Integer month);
 
     boolean fiscalPeriodExists(ProductionSharingContract psc, Integer year, Integer month);
+
+    boolean fiscalPeriodExists(ProductionSharingContract psc, FiscalPeriod fp);
 }

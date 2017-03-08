@@ -59,8 +59,13 @@ public class ProductionCostController implements Serializable {
 
     public void loadPreviousProductionCosts() {
         if (currentYear != null && currentMonth != null && currentPsc != null) {
-            FiscalPeriod fp = getProdCostBean().getPreviousFiscalPeriod(currentYear, currentMonth);
-            prevProductionCosts = getProdCostBean().find(currentPsc, fp.getYear(), fp.getMonth());
+            FiscalPeriod fp = new FiscalPeriod(currentYear, currentMonth);// getProdCostBean().getPreviousFiscalPeriod(currentYear, currentMonth);
+
+            if (fp.getPreviousFiscalPeriod().isCurrentYear()) {
+                prevProductionCosts = getProdCostBean().find(currentPsc, fp.getYear(), fp.getMonth());
+            } else {
+                prevProductionCosts = new ArrayList<>();
+            }
         }
 
     }
@@ -255,12 +260,12 @@ public class ProductionCostController implements Serializable {
         }
     }
 
-     public void remove(ProductionCost pc) {
+    public void remove(ProductionCost pc) {
         if (productionCosts != null) {
             productionCosts.remove(pc);
         }
     }
-     
+
     private void persist(PersistAction persistAction, String successMessage) {
         if (productionCosts != null) {
             try {

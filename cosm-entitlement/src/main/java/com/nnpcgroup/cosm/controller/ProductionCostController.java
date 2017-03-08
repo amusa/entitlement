@@ -226,11 +226,15 @@ public class ProductionCostController implements Serializable {
 
     }
 
+    public void prepareUpdate() {
+        loadPreviousProductionCosts();
+    }
+
     public void create() {
         persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("ProdCostCreated"));
         if (!JsfUtil.isValidationFailed()) {
             reset();
-            loadProductionCosts();
+
         }
     }
 
@@ -245,7 +249,7 @@ public class ProductionCostController implements Serializable {
     public void reset() {
         currentProdCost = null;
         productionCosts = null;
-
+        loadProductionCosts();
     }
 
     public void destroy(ProductionCost pc) {

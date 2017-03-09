@@ -10,20 +10,21 @@ import com.nnpcgroup.cosm.ejb.impl.CommonServicesImpl;
 import com.nnpcgroup.cosm.ejb.tax.TaxServices;
 import com.nnpcgroup.cosm.entity.FiscalPeriod;
 import com.nnpcgroup.cosm.entity.ProductionSharingContract;
+import com.nnpcgroup.cosm.entity.cost.CostItem;
 import com.nnpcgroup.cosm.entity.cost.ProductionCost;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.ejb.Local;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Expression;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.Tuple;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.*;
 
 /**
  * @author 18359
@@ -344,6 +345,47 @@ public class ProductionCostServicesImpl extends CommonServicesImpl<ProductionCos
     public boolean fiscalPeriodExists(ProductionSharingContract psc, Integer year, Integer month) {
         List<ProductionCost> prodCosts = find(psc, year, month);
         return prodCosts != null && !prodCosts.isEmpty();
+    }
+
+    @Override
+    public Map<CostItem, Double> getProdCostItemCosts(ProductionSharingContract psc, Integer year, Integer month) {
+
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery<Tuple> cq = cb.createTupleQuery();
+        Root<ProductionCost> cost = cq.from(ProductionCost.class);
+
+        Predicate basePredicate
+                = cb.equal(cost.get("psc"), psc);
+
+        Predicate currYrPredicate = cb.and(
+                cb.equal(cost.get("periodYear"), year),
+                cb.lessThanOrEqualTo(cost.get("periodMonth"), month)
+        );
+
+        Predicate predicate = cb.and(basePredicate, currYrPredicate);
+
+        Path<CostItem> costItemPath = cost.get("costItem");
+        costItemPath.alias("costItem");
+        Selection<Number> amountSelection = cb.sum(cost.get("amount")).alias("amountCum");
+
+        cq.multiselect(
+                costItemPath,
+                amountSelection)
+                .groupBy(costItemPath)
+                .where(predicate);
+
+        TypedQuery<Tuple> tq = getEntityManager().createQuery(cq);
+        List<Tuple> tupleResult = tq.getResultList();
+
+        Map<CostItem, Double> costItemMap = new HashMap<>();
+
+        for (Tuple result : tupleResult) {
+            CostItem costItem = result.get("costItem", CostItem.class);
+            Double amountCum = result.get("amountCum", Double.class);
+            costItemMap.put(costItem, amountCum);
+        }
+
+        return costItemMap;
     }
 
     @Override

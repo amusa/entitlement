@@ -7,26 +7,11 @@ package com.nnpcgroup.cosm.entity;
 
 import com.nnpcgroup.cosm.entity.crude.CrudeType;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.persistence.Transient;
-import javax.persistence.UniqueConstraint;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
+import java.time.Period;
+import java.util.*;
 
 /**
  * @author 18359
@@ -47,7 +32,6 @@ public class ProductionSharingContract extends FiscalArrangement {
     private Date costRecoveryStartDate;
     private Double costRecoveryLimit;
     private Double costUplift;
-    //    private Double royaltyRate;
     private String terrain;
     private Double waterDepth;
 
@@ -241,6 +225,11 @@ public class ProductionSharingContract extends FiscalArrangement {
 
     @Transient
     public double getPetroleumProfitTaxRate() {
+        return getPetroleumProfitTaxRate(new Date());
+    }
+
+    @Transient
+    public double getPetroleumProfitTaxRate(Date refDate) {
 
         if (terrain != null) {
             if (terrain.equalsIgnoreCase("OFFSHORE")) {
@@ -248,7 +237,7 @@ public class ProductionSharingContract extends FiscalArrangement {
                     return 50.0;
                 }
             }
-            int dateDiff = getFirstOilDuration();
+            int dateDiff = getFirstOilDuration(refDate);
             if (dateDiff <= 5) {
                 return 65.75;//TODO:USE ENUM
             }
@@ -259,35 +248,45 @@ public class ProductionSharingContract extends FiscalArrangement {
     }
 
     @Transient
-    private int getContractDuration() {
+    private int getContractDuration(Date refDate) {
         if (contractExecutionDate != null) {
-            return computeDateDiff(contractExecutionDate);
+            return computeDateDiff(contractExecutionDate, refDate);
         }
 
         return 0;
     }
 
     @Transient
-    private int getFirstOilDuration() {
+    private int getFirstOilDuration(Date refDate) {
         if (firstOilDate != null) {
-            return computeDateDiff(firstOilDate);
+            return computeDateDiff(firstOilDate, refDate);
         }
         return 0;
     }
 
     @Transient
-    private int computeDateDiff(Date date) {
-        if (date != null) {
-            Calendar refDate = GregorianCalendar.getInstance();
-            Calendar today = GregorianCalendar.getInstance();
+    public int computeDateDiff(Date date1, Date date2) {
+        if (date1 != null && date2 != null) {
+            LocalDate ld1 = getLocalDate(date1);
+            LocalDate ld2 = getLocalDate(date2);
 
-            refDate.setTime(date);
-            today.add(Calendar.DAY_OF_YEAR, -refDate.get(Calendar.DAY_OF_YEAR));
-
-            return today.get(Calendar.YEAR) - refDate.get(Calendar.YEAR);
+            Period diff = Period.between(ld1, ld2);
+            return diff.getYears();
         }
 
         return 0;
+    }
+
+    private LocalDate getLocalDate(Date date) {
+        Calendar cal = new GregorianCalendar();
+        cal.setTime(date);
+
+        int year = cal.get(Calendar.YEAR);
+        int month = cal.get(Calendar.MONTH) + 1; //MONTH is zero-based
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+
+        return LocalDate.of(year, month, day);
+
     }
 
     @Transient
@@ -304,14 +303,8 @@ public class ProductionSharingContract extends FiscalArrangement {
 
     @Transient
     private int getOplToOmlDuration() {
-        Calendar execDate = GregorianCalendar.getInstance();
-        Calendar omlDate = GregorianCalendar.getInstance();
-
-        execDate.setTime(contractExecutionDate);
-        omlDate.setTime(firstOilDate);
-
-        int yearDiff = omlDate.get(Calendar.YEAR) - execDate.get(Calendar.YEAR);
-
+        int yearDiff = computeDateDiff(contractExecutionDate, firstOilDate);
+        
         return yearDiff;
     }
 }

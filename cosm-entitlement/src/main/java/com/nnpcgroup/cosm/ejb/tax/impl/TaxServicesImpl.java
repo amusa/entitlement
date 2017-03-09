@@ -14,17 +14,15 @@ import com.nnpcgroup.cosm.ejb.lifting.PscLiftingServices;
 import com.nnpcgroup.cosm.ejb.tax.TaxServices;
 import com.nnpcgroup.cosm.entity.FiscalPeriod;
 import com.nnpcgroup.cosm.entity.ProductionSharingContract;
-import com.nnpcgroup.cosm.entity.crude.CrudePrice;
-import com.nnpcgroup.cosm.entity.crude.CrudePricePK;
 import com.nnpcgroup.cosm.entity.lifting.PscLifting;
 
+import javax.ejb.EJB;
+import javax.enterprise.context.Dependent;
+import javax.inject.Inject;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import javax.ejb.EJB;
-import javax.enterprise.context.Dependent;
-import javax.inject.Inject;
 
 @Dependent
 public class TaxServicesImpl implements TaxServices, Serializable {

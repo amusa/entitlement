@@ -127,6 +127,7 @@ public class LiftingController implements Serializable {
     public void reset() {
         currentPscLifting = null;
         pscLiftings = null;
+        loadLiftings();
     }
 
     public void loadLiftings() {

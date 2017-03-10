@@ -298,7 +298,7 @@ public class ProductionSharingContract extends FiscalArrangement {
     @Transient
     public double getOmlAnnualConcessionRental() {
         return (areaSize.getOmlContractArea() == null || areaSize.getOmlRentalRate() == null)
-                ? null : areaSize.getOmlContractArea() * areaSize.getOmlRentalRate();
+                ? 0 : areaSize.getOmlContractArea() * areaSize.getOmlRentalRate();
     }
 
     @Transient

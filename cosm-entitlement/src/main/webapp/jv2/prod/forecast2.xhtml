@@ -127,7 +127,7 @@
                                                     <ul class="dropdown-menu" jsf:id="btnList">
                                                         <li>
                                                             <h:commandLink pt:data-target="#JvActualCreateDlg" pt:look="warning"
-                                                                           pt:data-toggle="modal">
+                                                                           pt:data-toggle="modal"  pt:data-backdrop="static" pt:data-keyboard="false" >
                                                                 <span class="icon">&#61845;</span>
                                                                 #{bundle.Actualize}
                                                                 <f:ajax event="click" render="JvActualCreateForm ActualizePanel"
@@ -137,7 +137,7 @@
                                                         <li class="divider"></li>
                                                         <li>
                                                             <h:commandLink pt:data-target="#JvCreateDlg" pt:look="warning"
-                                                                           pt:data-toggle="modal">
+                                                                           pt:data-toggle="modal"  pt:data-backdrop="static" pt:data-keyboard="false" >
                                                                 <span class="icon">&#61943;</span>
                                                                 #{bundle.Create}
 
@@ -145,7 +145,7 @@
                                                         </li>
                                                         <li>
                                                             <h:commandLink pt:data-target="#JvViewDlg" pt:look="warning"
-                                                                           pt:data-toggle="modal">
+                                                                           pt:data-toggle="modal"  pt:data-backdrop="static" pt:data-keyboard="false" >
                                                                 <span class="icon">&#61698;</span>
                                                                 #{bundle.View}
                                                                 <f:ajax event="click" render="JvViewForm"
@@ -153,7 +153,8 @@
                                                             </h:commandLink>
                                                         </li>
                                                         <li>
-                                                            <h:commandLink pt:data-target="#JvEditDlg" pt:look="warning" pt:data-toggle="modal">
+                                                            <h:commandLink pt:data-target="#JvEditDlg" pt:look="warning" pt:data-toggle="modal"
+                                                                           pt:data-backdrop="static" pt:data-keyboard="false" >
                                                                 <span class="icon">&#61698;</span>
                                                                 #{bundle.Edit}
                                                                 <f:ajax event="click" render="JvEditForm msgs" listener="#{jvProdController.prepareEditForecastDetail(prod)}"/>

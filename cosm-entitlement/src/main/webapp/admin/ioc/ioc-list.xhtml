@@ -82,18 +82,21 @@
                             </h:column>
 
                             <f:facet name="footer">                                                                
-                                <button jsf:id="createButton" look="warning" data-target="#IocCreateDlg" data-toggle="modal" class="btn m-r-5">
+                                <button jsf:id="createButton" look="warning" data-target="#IocCreateDlg" data-toggle="modal" class="btn m-r-5"
+                                        pt:data-backdrop="static" pt:data-keyboard="false" >
                                     <span class="icon">&#61943;</span>
                                     #{bundle.Create}
                                     <f:ajax event="click" render="IocCreateForm" listener="#{companyController.prepareCreate}" />                                    
                                 </button>
 
-                                <button jsf:id="viewButton" look="warning" data-target="#IocViewDlg" data-toggle="modal" class="btn m-r-5">
+                                <button jsf:id="viewButton" look="warning" data-target="#IocViewDlg" data-toggle="modal" class="btn m-r-5"
+                                        pt:data-backdrop="static" pt:data-keyboard="false" >
                                     <span class="icon">&#61698;</span>
                                     #{bundle.View}
                                     <f:ajax event="click" render="IocViewForm" />
                                 </button>
-                                <button jsf:id="editButton" look="warning" data-target="#IocEditDlg" data-toggle="modal" class="btn m-r-5">
+                                <button jsf:id="editButton" look="warning" data-target="#IocEditDlg" data-toggle="modal" class="btn m-r-5"
+                                        pt:data-backdrop="static" pt:data-keyboard="false" >
                                     <span class="icon">&#61952;</span>                                    
                                     #{bundle.Edit}
                                     <f:ajax event="click" render="IocEditForm" />

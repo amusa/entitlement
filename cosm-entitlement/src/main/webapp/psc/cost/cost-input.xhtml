@@ -178,19 +178,19 @@
                 </div>
 
                 <div class="row">
-                    <h:commandLink id="createButton" pt:data-target="#ProdCostCreateDlg" pt:look="warning" pt:data-toggle="modal" class="btn m-r-5"
+                    <h:commandLink id="createButton" pt:data-target="#ProdCostCreateDlg" pt:look="warning" pt:data-toggle="modal" pt:data-backdrop="static" pt:data-keyboard="false" class="btn m-r-5"
                                    disabled="${not prodCostController.enableControlButton}">
                         <span class="icon">&#61943;</span>
                         #{bundle.Create}
                         <f:ajax event="click" listener="#{prodCostController.prepareCreate}" render="ProdCostCreateForm"/>
                     </h:commandLink>
-                    <h:commandLink id="viewButton" pt:data-target="#ProdCostViewDlg" pt:look="warning" pt:data-toggle="modal"
+                    <h:commandLink id="viewButton" pt:data-target="#ProdCostViewDlg" pt:look="warning" pt:data-toggle="modal"  pt:data-backdrop="static" pt:data-keyboard="false"
                                    class="btn m-r-5" disabled="${not prodCostController.enableControlButton}">
                         <span class="icon">&#61698;</span>
                         #{bundle.View}    
                         <f:ajax event="click"  render="ProdCostViewForm"/>
                     </h:commandLink>
-                    <h:commandLink id="editButton" pt:data-target="#ProdCostEditDlg" pt:look="warning" pt:data-toggle="modal"
+                    <h:commandLink id="editButton" pt:data-target="#ProdCostEditDlg" pt:look="warning" pt:data-toggle="modal"  pt:data-backdrop="static" pt:data-keyboard="false"
                                    class="btn m-r-5" disabled="${not prodCostController.enableControlButton}">
                         <span class="icon">&#61952;</span>
                         #{bundle.Edit}

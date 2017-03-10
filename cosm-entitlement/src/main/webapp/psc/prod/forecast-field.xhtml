@@ -126,7 +126,7 @@
                                                 <ul class="dropdown-menu" jsf:id="btnList">  
                                                     <li>
                                                         <h:commandLink pt:data-target="#PscCreateDlg" pt:look="warning"
-                                                                       pt:data-toggle="modal">
+                                                                       pt:data-toggle="modal"  pt:data-backdrop="static" pt:data-keyboard="false" >
                                                             <span class="icon">&#61943;</span>
                                                             #{bundle.Create}
 
@@ -134,7 +134,7 @@
                                                     </li>
                                                     <li>
                                                         <h:commandLink pt:data-target="#PscViewDlg" pt:look="warning"
-                                                                       pt:data-toggle="modal">
+                                                                       pt:data-toggle="modal"  pt:data-backdrop="static" pt:data-keyboard="false" >
                                                             <span class="icon">&#61698;</span>
                                                             #{bundle.View}
                                                             <f:ajax event="click" render="PscViewForm"
@@ -142,7 +142,8 @@
                                                         </h:commandLink>
                                                     </li>
                                                     <li>
-                                                        <h:commandLink pt:data-target="#PscEditDlg" pt:look="warning" pt:data-toggle="modal">
+                                                        <h:commandLink pt:data-target="#PscEditDlg" pt:look="warning" pt:data-toggle="modal"
+                                                                       pt:data-backdrop="static" pt:data-keyboard="false" >
                                                             <span class="icon">&#61698;</span>
                                                             #{bundle.Edit}
                                                             <f:ajax event="click" render="PscEditForm msgs" />
@@ -163,7 +164,7 @@
 
                                         <f:facet name="footer">                                             
                                             <button jsf:id="createButton" pt:data-target="#PscCreateDlg" pt:look="warning" pt:data-toggle="modal"  class="btn m-r-5"
-                                                    jsf:disabled="${not pscProdController.enableControlButton}">
+                                                    pt:data-backdrop="static" pt:data-keyboard="false"   jsf:disabled="${not pscProdController.enableControlButton}">
                                                 <span class="icon">&#61943;</span>
                                                 #{bundle.Create}
                                                 <f:ajax event="click" listener="#{pscProdController.prepareCreate}" render="PscCreateForm"/>

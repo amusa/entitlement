@@ -62,7 +62,7 @@ public class LiftingController implements Serializable {
         this.pscLiftings = pscLiftings;
     }
 
-    @Temporal(TemporalType.DATE)
+   @Temporal(TemporalType.DATE)
     public Date getLiftingFromDate() {
         return liftingFromDate;
     }
@@ -102,6 +102,10 @@ public class LiftingController implements Serializable {
 
     public void prepareCreate() {
         currentPscLifting = new PscLifting();//TODO:
+    }
+
+    public void prepareUpdate(PscLifting lifting) {
+        this.currentPscLifting = lifting;
     }
 
     public void create() {
@@ -144,6 +148,7 @@ public class LiftingController implements Serializable {
         persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("LiftingDeleted"));
         if (!JsfUtil.isValidationFailed()) {
             reset();
+            loadLiftings();
         }
     }
 

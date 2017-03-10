@@ -20,6 +20,8 @@ public interface TaxServices {
     public double computeTotalDeduction(ProductionSharingContract psc, int year, int month);
 
     public double computeRoyalty(ProductionSharingContract psc, int year, int month);
+    
+    public double computeRoyaltyCum(ProductionSharingContract psc, int year, int month);
 
     public double computeAdjustedProfit(ProductionSharingContract psc, int year, int month);
 

@@ -7,6 +7,7 @@ package com.nnpcgroup.cosm.ejb.impl;
 
 import com.nnpcgroup.cosm.ejb.FiscalPeriodService;
 import com.nnpcgroup.cosm.entity.FiscalPeriod;
+
 import java.io.Serializable;
 import javax.enterprise.context.Dependent;
 
@@ -43,5 +44,15 @@ public class FiscalPeriodBeanImpl implements FiscalPeriodService, Serializable {
         }
 
         return new FiscalPeriod(yr, mt);
+    }
+
+    @Override
+    public FiscalPeriod getPreviousFiscalPeriod(int year) {
+        return new FiscalPeriod(year - 1, 12);
+    }
+
+    @Override
+    public boolean isCurrentYear(int year, int month) {
+        return getNextFiscalPeriod(year, month).getYear() == year;
     }
 }

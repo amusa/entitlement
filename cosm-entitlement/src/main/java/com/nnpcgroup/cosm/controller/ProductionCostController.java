@@ -17,10 +17,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -44,6 +41,7 @@ public class ProductionCostController implements Serializable {
     private ProductionCost currentProdCost;
     private List<ProductionCost> productionCosts;
     private List<ProductionCost> prevProductionCosts;
+    private Map<CostItem, Double> prevCumProdCosts;
     private Integer currentYear;
     private Integer currentMonth;
     private ProductionSharingContract currentPsc;
@@ -57,12 +55,14 @@ public class ProductionCostController implements Serializable {
         }
     }
 
-    public void loadPreviousProductionCosts() {
+    public void loadCurrentYearCumulativeProductionCosts() {
         if (currentYear != null && currentMonth != null && currentPsc != null) {
-            FiscalPeriod fp = getProdCostBean().getPreviousFiscalPeriod(currentYear, currentMonth);
-            prevProductionCosts = getProdCostBean().find(currentPsc, fp.getYear(), fp.getMonth());
-        }
+            FiscalPeriod fp = new FiscalPeriod(currentYear, currentMonth);
 
+            if (fp.getPreviousFiscalPeriod().isCurrentYear()) { //Current year cumulation only!
+                prevCumProdCosts = getProdCostBean().getProdCostItemCosts(currentPsc, fp.getYear(), fp.getMonth());
+            }
+        }
     }
 
     public boolean isEnableControlButton() {
@@ -169,19 +169,19 @@ public class ProductionCostController implements Serializable {
 
     public void productionCostAmountChangeListener(ProductionCost prodCost) {
         //update cummulative cost
-        boolean found = false;
-        Iterator<ProductionCost> it = prevProductionCosts.iterator();
-        ProductionCost prevCost = null;
-        while (it.hasNext() && !found) {
-            prevCost = it.next();
-            if (prevCost.getCostItem().equals(prodCost.getCostItem())) {
-                prodCost.totalCummulativeAmount(prevCost.getAmountCum());
-                found = true;
-            }
+        if (prevCumProdCosts == null || prevCumProdCosts.isEmpty()) {
+            prodCost.totalCummulativeAmount(new Double(0));
+            return;
         }
-        if (!found) {
+
+        Double cumulativeCost = prevCumProdCosts.get(prodCost.getCostItem());
+
+        if (cumulativeCost != null) {
+            prodCost.totalCummulativeAmount(cumulativeCost);
+        } else {
             prodCost.totalCummulativeAmount(new Double(0));
         }
+
     }
 
     private void prepareProdCostItems(CostItem costItem) {
@@ -213,7 +213,7 @@ public class ProductionCostController implements Serializable {
         List<CostItem> costItems = costBean.findAll();
         productionCosts = new ArrayList<>();
 
-        loadPreviousProductionCosts();
+        loadCurrentYearCumulativeProductionCosts();
 
         for (CostItem costItem : costItems) {
             prepareProdCostItems(costItem);
@@ -221,11 +221,15 @@ public class ProductionCostController implements Serializable {
 
     }
 
+    public void prepareUpdate() {
+        loadCurrentYearCumulativeProductionCosts();
+    }
+
     public void create() {
         persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("ProdCostCreated"));
         if (!JsfUtil.isValidationFailed()) {
             reset();
-            loadProductionCosts();
+
         }
     }
 
@@ -240,7 +244,8 @@ public class ProductionCostController implements Serializable {
     public void reset() {
         currentProdCost = null;
         productionCosts = null;
-
+        prevCumProdCosts = null;
+        loadProductionCosts();
     }
 
     public void destroy(ProductionCost pc) {
@@ -255,12 +260,12 @@ public class ProductionCostController implements Serializable {
         }
     }
 
-     public void remove(ProductionCost pc) {
+    public void remove(ProductionCost pc) {
         if (productionCosts != null) {
             productionCosts.remove(pc);
         }
     }
-     
+
     private void persist(PersistAction persistAction, String successMessage) {
         if (productionCosts != null) {
             try {

@@ -26,7 +26,6 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 /**
- *
  * @author 18359
  */
 @Stateless
@@ -42,6 +41,75 @@ public class PscForecastDetailServicesImpl extends ForecastDetailServicesImpl<Ps
 
     public PscForecastDetailServicesImpl(Class<PscForecastDetail> entityClass) {
         super(entityClass);
+    }
+
+    @Override
+    public boolean productionExits(ProductionSharingContract psc, int year, int month) {
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+
+        CriteriaQuery cq = cb.createQuery();
+        Root<PscForecastDetail> e = cq.from(entityClass);
+        try {
+            cq.select(e).where(
+                    cb.and(
+                            cb.equal(e.get("fiscalArrangement"), psc),
+                            cb.equal(e.get("periodYear"), year),
+                            cb.equal(e.get("periodMonth"), month)
+                    ));
+
+            Query query = getEntityManager().createQuery(cq);
+
+            return !query.getResultList().isEmpty();
+
+        } catch (NoResultException nre) {
+
+        }
+
+        return false;
+
+    }
+
+    @Override
+    public boolean isFirstProductionOfYear(ProductionSharingContract psc, int year, int month) {
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+
+        CriteriaQuery<Integer> cq = cb.createQuery(Integer.class);
+        Root<PscForecastDetail> production = cq.from(entityClass);
+
+        Expression<Integer> min = cb.min(production.<Integer>get("periodMonth"));
+
+        Integer firstMonth;
+
+        try {
+            cq.select(min.alias("firstProdMonth"))
+                    .where(
+                            cb.and(
+                                    cb.equal(production.get("fiscalArrangement"), psc),
+                                    cb.equal(production.get("periodYear"), year)
+
+                            )
+                    );
+
+            Query query = getEntityManager().createQuery(cq);
+
+            firstMonth = (Integer) query.getSingleResult();
+
+            if (firstMonth == null) {
+                return false;
+            }
+            return firstMonth.intValue() == month;
+
+        } catch (NoResultException nre) {
+
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean isFirstOmlProduction(ProductionSharingContract psc, int year, int month) {
+        //TODO:implement
+        return false;
     }
 
     @Override
@@ -135,7 +203,7 @@ public class PscForecastDetailServicesImpl extends ForecastDetailServicesImpl<Ps
                                 cb.equal(production.get("periodMonth"), month)
                         )
                 );
-//TODO:should return cummulative gross production
+
         grossProdCum = getEntityManager().createQuery(cq).getSingleResult();
 
         if (grossProdCum == null) {
@@ -171,12 +239,11 @@ public class PscForecastDetailServicesImpl extends ForecastDetailServicesImpl<Ps
 
         Predicate yearsPredicate = cb.or(currYrPredicate, priorYrPredicate);
 
-        Predicate predicate=cb.and(basePredicate, yearsPredicate);
-        
+        Predicate predicate = cb.and(basePredicate, yearsPredicate);
+
         cq.select(sum.alias("grossProduction"))
                 .where(predicate);
 
-        
         grossProdCum = getEntityManager().createQuery(cq).getSingleResult();
 
         if (grossProdCum == null) {
@@ -184,7 +251,7 @@ public class PscForecastDetailServicesImpl extends ForecastDetailServicesImpl<Ps
         }
 
         return grossProdCum;
-       
+
     }
 
     @Override

@@ -7,6 +7,7 @@ package com.nnpcgroup.cosm.entity.lifting;
 
 import java.io.Serializable;
 import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
@@ -19,9 +20,9 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
+import javax.validation.constraints.NotNull;
 
 /**
- *
  * @author Ayemi
  */
 @Entity
@@ -34,6 +35,7 @@ public abstract class Lifting implements Serializable {
     private Date liftingDate;
     private Double ownLifting;
     private Double partnerLifting;
+    private Double price;
 
     public Lifting() {
     }
@@ -49,6 +51,7 @@ public abstract class Lifting implements Serializable {
         this.id = id;
     }
 
+    @NotNull
     @Temporal(TemporalType.DATE)
     @Column(name = "LIFTING_DATE")
     public Date getLiftingDate() {
@@ -59,6 +62,7 @@ public abstract class Lifting implements Serializable {
         this.liftingDate = liftingDate;
     }
 
+    //@NotNull
     @Column(name = "OWN_LIFTING")
     public Double getOwnLifting() {
         return ownLifting;
@@ -68,6 +72,7 @@ public abstract class Lifting implements Serializable {
         this.ownLifting = ownLifting;
     }
 
+    //@NotNull
     @Column(name = "PARTNER_LIFTING")
     public Double getPartnerLifting() {
         return partnerLifting;
@@ -79,7 +84,26 @@ public abstract class Lifting implements Serializable {
 
     @Transient
     public Double getTotalLifting() {
-        return ownLifting + partnerLifting; //TODO:handle NPE
+        double own, partner;
+        own = ownLifting != null ? ownLifting : 0;
+        partner = partnerLifting != null ? partnerLifting : 0;
+        return own + partner;
     }
 
+    @NotNull
+    @Column(name = "PRICE")
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
+    @Transient
+    public Double getRevenue() {
+        double totalLifting = getTotalLifting() != null ? getTotalLifting() : 0;
+        double price = getPrice() != null ? getPrice() : 0;
+        return totalLifting * price;
+    }
 }

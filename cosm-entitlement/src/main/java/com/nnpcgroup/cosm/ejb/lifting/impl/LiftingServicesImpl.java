@@ -9,6 +9,7 @@ import com.nnpcgroup.cosm.ejb.impl.AbstractCrudServicesImpl;
 import com.nnpcgroup.cosm.ejb.lifting.LiftingServices;
 import com.nnpcgroup.cosm.entity.lifting.Lifting;
 import com.nnpcgroup.cosm.util.COSMPersistence;
+
 import java.util.Date;
 import java.util.List;
 import javax.inject.Inject;
@@ -43,6 +44,10 @@ public abstract class LiftingServicesImpl<T extends Lifting> extends AbstractCru
     @Override
     public List<T> find(Date fromDate, Date toDate) {
 
+        java.sql.Date fDate = new java.sql.Date(fromDate.getTime());
+        java.sql.Date tDate = new java.sql.Date(toDate.getTime());
+
+
         CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
         Metamodel m = getEntityManager().getMetamodel();
         EntityType<T> Lifting_ = m.entity(entityClass);
@@ -53,7 +58,7 @@ public abstract class LiftingServicesImpl<T extends Lifting> extends AbstractCru
         Root<T> e = cq.from(entityClass);
         try {
             cq.select(e).where(
-                    cb.between(e.get("liftingDate"), fromDate, toDate)
+                    cb.between(e.get("liftingDate"), fDate, tDate)
             );
 
             Query query = getEntityManager().createQuery(cq);

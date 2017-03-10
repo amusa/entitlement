@@ -8,7 +8,6 @@ package com.nnpcgroup.cosm.entity.tax;
 import java.io.Serializable;
 
 /**
- *
  * @author Ayemi
  */
 public class TaxOilDetail implements Serializable {
@@ -49,7 +48,7 @@ public class TaxOilDetail implements Serializable {
     }
 
     public double getTotalAnnualAllowance() {
-        return currentITA + currentCapitalAllowance;//TODO: +priorYearAnnualAllowance
+        return currentITA + currentCapitalAllowance + priorYearAnnualAllowance;
     }
 
     public double getSection18DeductionLower() {
@@ -61,7 +60,7 @@ public class TaxOilDetail implements Serializable {
     }
 
     public double getChargeableTaxToDate() {
-        return petroleumProfitTaxRate * getChargeableProfitToDate();
+        return getChargeableProfitToDate() * (petroleumProfitTaxRate / 100);
     }
 
     public double getPayableTaxToDate() {

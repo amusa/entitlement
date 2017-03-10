@@ -43,11 +43,11 @@
                     </h:selectOneMenu>
                 </div>
                 <div class="col-md-4 m-b-15">
-                    <label>From (yyyy-MM-dd)</label>
+                    <label>From (dd/MM/yyyy)</label>
                     <div class="input-icon datetime-pick date-only">
                         <input jsf:id="fromDate" jsf:value="#{liftingController.liftingFromDate}"
-                               data-format="yyy-MM-dd" type="text" class="form-control input-sm">
-                            <f:convertDateTime pattern="yyyy-MM-dd"/>
+                               data-format="dd/MM/yyyy" type="text" class="form-control input-sm">
+                            <f:convertDateTime pattern="dd/MM/yyyy"/>
                             <f:ajax/>
                         </input>
                         <span class="add-on">
@@ -56,11 +56,11 @@
                     </div>
                 </div>
                 <div class="col-md-4 m-b-15">
-                    <label>To (yyyy-MM-dd)</label>
+                    <label>To (dd/MM/yyyy)</label>
                     <div class="input-icon datetime-pick date-only">
-                        <input jsf:id="toDate" jsf:value="#{liftingController.liftingToDate}" data-format="yyyy-MM-dd"
+                        <input jsf:id="toDate" jsf:value="#{liftingController.liftingToDate}" data-format="dd/MM/yyyy"
                                type="text" class="form-control input-sm">
-                            <f:convertDateTime pattern="yyyy-MM-dd"/>
+                            <f:convertDateTime pattern="dd/MM/yyyy"/>
                             <f:ajax/>
                         </input>
                         <span class="add-on">
@@ -92,7 +92,7 @@
                                             <h:outputText value="Lifting Date"/>
                                         </f:facet>
                                         <h:outputText value="#{lifting.liftingDate}">
-                                            <!--<f:convertDateTime pattern="yyyy-MM-dd"/>-->
+                                            <!--<f:convertDateTime pattern="dd/MM/yyyy"/>-->
                                         </h:outputText>
                                     </h:column>
                                     <h:column>

@@ -34,29 +34,67 @@
             <h:form id="pscListForm"> 
                 <!-- Multi Column -->
                 <div jsf:id="pscPanel" class="row">
-                    <div class="col-md-9 m-b-9">
+                    <div class="col-md-12 m-b-9">
                         <h:dataTable id="pscTable" var="psc" value="#{pscController.pscItems}" 
                                      class="table table-bordered table-hover tile">
                             <h:column>
                                 <f:facet name="header">
-                                    <h:outputText value="#{bundle.JointVentureListTitle}"/>
+                                    <h:outputText value="#{bundle.PSCListTitle}"/>
                                 </f:facet>
                                 <h:outputText value="#{psc.title}"/>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">
+                                    <h:outputText value="#{bundle.CrudeType}"/>
+                                </f:facet>
+                                <h:outputText value="#{psc.crudeType}"/>
                             </h:column>
                             <h:column>
                                 <f:facet name="header">
                                     <h:outputText value="#{bundle.Operator}"/>
                                 </f:facet>
                                 <h:outputText value="#{psc.operator.name}"/>
-                            </h:column>                            
+                            </h:column> 
+                            <h:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Contract Exec. Date"/>
+                                </f:facet>
+                                <h:outputText value="#{psc.contractExecutionDate}"/>
+                            </h:column>   
+                            <h:column>
+                                <f:facet name="header">
+                                    <h:outputText value="First Oil Date"/>
+                                </f:facet>
+                                <h:outputText value="#{psc.firstOilDate}"/>
+                            </h:column>   
+                            <h:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Cost Recovery Limit"/>
+                                </f:facet>
+                                <h:outputText value="#{psc.costRecoveryLimit}"/>
+                            </h:column> 
+                            <h:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Cost Uplift"/>
+                                </f:facet>
+                                <h:outputText value="#{psc.costUplift}"/>
+                            </h:column> 
+                            <h:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Royalty Rate"/>
+                                </f:facet>
+                                <h:outputText value="#{psc.royaltyRate}"/>
+                            </h:column>   
                             <h:column>
                                 <div class="btn-group">
-                                    <button jsf:id="action" type="button" class="btn btn-sm dropdown-toggle" data-toggle="dropdown">
+                                    <button jsf:id="action" type="button" class="btn btn-sm dropdown-toggle" data-toggle="dropdown"
+                                            data-backdrop="static" data-keyboard="false" >
                                         Action <span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu" jsf:id="btnList">
                                         <li>
-                                            <h:commandLink  pt:data-target="#PscCreateDlg" pt:look="warning" pt:data-toggle="modal" >
+                                            <h:commandLink  pt:data-target="#PscCreateDlg" pt:look="warning" pt:data-toggle="modal"
+                                                            pt:data-backdrop="static" pt:data-keyboard="false" >
                                                 <span class="icon">&#61943;</span>
                                                 #{bundle.Create}
                                                 <f:ajax event="click" render="PscCreateForm" listener="#{pscController.prepareCreate}" />
@@ -64,13 +102,15 @@
                                         </li>
 
                                         <li>
-                                            <h:commandLink pt:data-target="#PscViewDlg" pt:look="warning" pt:data-toggle="modal">
+                                            <h:commandLink pt:data-target="#PscViewDlg" pt:look="warning" pt:data-toggle="modal"
+                                                           pt:data-backdrop="static" pt:data-keyboard="false" >
                                                 <span class="icon">&#61698;</span>
                                                 #{bundle.View}
                                                 <f:ajax event="click" render="PscViewForm" listener="#{pscController.setSelected(psc)}"/>
                                             </h:commandLink>
                                         </li>
-                                        <li><h:commandLink pt:data-target="#PscEditDlg" pt:look="warning" pt:data-toggle="modal">
+                                        <li><h:commandLink pt:data-target="#PscEditDlg" pt:look="warning" pt:data-toggle="modal"
+                                                           pt:data-backdrop="static" pt:data-keyboard="false" >
                                                 <span class="icon">&#61952;</span>
                                                 #{bundle.Edit}
                                                 <f:ajax event="click" render="PscEditForm" listener="#{pscController.setSelected(psc)}"/>
@@ -87,19 +127,19 @@
                                 </div>
                             </h:column>
 
-                            <f:facet name="footer">                                                                
-                                <button jsf:id="createButton" look="warning" data-target="#PscCreateDlg" data-toggle="modal" class="btn m-r-5">
+                            <f:facet name="footer"> 
+                                <button jsf:id="createButton" jsf:action="#{pscController.prepareCreate}"  class="btn m-r-5">                                       
                                     <span class="icon">&#61943;</span>
                                     #{bundle.Create}
-                                    <f:ajax event="click" render="PscCreateForm" listener="#{pscController.prepareCreate}" />                                    
                                 </button>
-
-                                <button jsf:id="viewButton" look="warning" data-target="#PscViewDlg" data-toggle="modal" class="btn m-r-5">
+                                <button jsf:id="viewButton" look="warning" data-target="#PscViewDlg" data-toggle="modal" class="btn m-r-5"
+                                        pt:data-backdrop="static" pt:data-keyboard="false" >
                                     <span class="icon">&#61698;</span>
                                     #{bundle.View}
                                     <f:ajax event="click" render="PscViewForm" />
                                 </button>
-                                <button jsf:id="editButton" look="warning" data-target="#PscEditDlg" data-toggle="modal" class="btn m-r-5">
+                                <button jsf:id="editButton" look="warning" data-target="#PscEditDlg" data-toggle="modal" class="btn m-r-5"
+                                        pt:data-backdrop="static" pt:data-keyboard="false" >
                                     <span class="icon">&#61952;</span>                                    
                                     #{bundle.Edit}
                                     <f:ajax event="click" render="PscEditForm" />
@@ -118,15 +158,7 @@
             </h:form>
             <ui:include src="_psc-create.xhtml"/>           
             <ui:include src="_psc-edit.xhtml"/>
-            <ui:include src="_psc-view.xhtml"/>
+            <ui:include src="_psc-view.xhtml"/>            
         </ui:define>
-
-<!--        <ui:define name="page-stat"> 
-            <ui:include src="_psc-stat.xhtml"/>
-        </ui:define>-->
-
     </ui:composition>
-
-
-
 </html>

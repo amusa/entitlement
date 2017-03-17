@@ -41,6 +41,9 @@ public class MonthGeneratorImpl implements MonthGenerator, Serializable {
             months = month + 3 % 12;
         }
 
+//QUICKFIX: Override months regardless of logic above
+        months = 12;
+//TODO: Remove
         DateFormatSymbols dfs = new DateFormatSymbols();
         String[] monthSymbols = dfs.getMonths();
 

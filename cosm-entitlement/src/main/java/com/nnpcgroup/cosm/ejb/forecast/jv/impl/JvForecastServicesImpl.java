@@ -5,209 +5,128 @@
  */
 package com.nnpcgroup.cosm.ejb.forecast.jv.impl;
 
+import com.nnpcgroup.cosm.ejb.forecast.impl.ForecastServicesImpl;
 import com.nnpcgroup.cosm.ejb.forecast.jv.JvForecastServices;
-import com.nnpcgroup.cosm.entity.EquityType;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
-import com.nnpcgroup.cosm.entity.FiscalPeriod;
-import com.nnpcgroup.cosm.entity.JointVenture;
-import com.nnpcgroup.cosm.entity.contract.ContractPK;
-import com.nnpcgroup.cosm.entity.forecast.jv.ForecastPK;
+import com.nnpcgroup.cosm.entity.contract.Contract;
 import com.nnpcgroup.cosm.entity.forecast.jv.JvForecast;
-import com.nnpcgroup.cosm.exceptions.NoRealizablePriceException;
+import com.nnpcgroup.cosm.util.COSMPersistence;
 
+import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.io.Serializable;
-import org.apache.log4j.Level;
-
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.ejb.Local;
+import javax.ejb.Stateless;
+import javax.persistence.criteria.CriteriaDelete;
 
 /**
- *
  * @author 18359
  */
-public abstract class JvForecastServicesImpl<T extends JvForecast> extends ForecastServicesImpl<T> implements JvForecastServices<T>, Serializable {
+@Stateless
+@Local(JvForecastServices.class)
+public class JvForecastServicesImpl extends ForecastServicesImpl<JvForecast> implements JvForecastServices, Serializable {
 
-    //private static final Logger LOG = Logger.getLogger(JvForecastServicesImpl.class.getName());
-    private static final Logger LOG = LogManager.getRootLogger();
+    private static final Logger LOG = Logger.getLogger(JvForecastServicesImpl.class.getName());
+
     private static final long serialVersionUID = 8993596753945847377L;
 
-    public JvForecastServicesImpl(Class<T> entityClass) {
+    public JvForecastServicesImpl() {
+        super(JvForecast.class);
+    }
+
+    public JvForecastServicesImpl(Class<JvForecast> entityClass) {
         super(entityClass);
     }
 
+    @Inject
+    @COSMPersistence
+    private EntityManager em;
+
     @Override
-    public T computeOpeningStock(T forecast) {
-        JvForecast prod = getPreviousMonthProduction(forecast);
-        if (prod != null) {
-            Double openingStock = prod.getClosingStock();
-            Double partnerOpeningStock = prod.getPartnerClosingStock();
-            forecast.setOpeningStock(openingStock);
-            forecast.setPartnerOpeningStock(partnerOpeningStock);
-        } else {
-            forecast.setOpeningStock(0.0);
-            forecast.setPartnerOpeningStock(0.0);
-        }
-        return forecast;
+    protected EntityManager getEntityManager() {
+        return em;
     }
 
     @Override
-    public T computeGrossProduction(T forecast) {
-        Double prodVolume = forecast.getProductionVolume();
-        int periodYear = forecast.getPeriodYear();
-        int periodMonth = forecast.getPeriodMonth();
-        int days = genController.daysOfMonth(periodYear, periodMonth);
-        Double grossProd = prodVolume * days;
+    public List<JvForecast> findByYearAndMonth(int year, int month) {
+        LOG.log(Level.INFO, "Parameters: year={0}, month={1}", new Object[]{year, month});
 
-        LOG.log(Level.INFO, String.format("Gross Production = DailyProd * Days => %f * %d = %f", new Object[]{prodVolume, days, grossProd}));
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
 
-        forecast.setGrossProduction(grossProd);
-        return forecast;
-    }
+        List<JvForecast> productions;
 
-    @Override
-    public T openingStockChanged(T forecast) {
-        LOG.log(Level.INFO, "Opening Stock changed:");
-        return computeClosingStock(
-                computeLifting(
-                        computeAvailability(forecast)
-                )
-        );
-    }
+        CriteriaQuery cq = cb.createQuery();
+        Root e = cq.from(JvForecast.class);
+        try {
+            cq.select(e).where(
+                    cb.and(cb.equal(e.get("periodYear"), year),
+                            cb.equal(e.get("periodMonth"), month)
+                    ));
 
-    @Override
-    public T computeLifting(T forecast) {
-        Double liftableVolume, partnerLiftableVolume;
-        Integer cargoes, partnerCargoes;
-        Double availability = forecast.getAvailability();
-        Double partnerAvailability = forecast.getPartnerAvailability();
+            Query query = getEntityManager().createQuery(cq);
 
-        if (forecast.getLifting() == null) {
-            cargoes = (int) (availability / 950000.0);
-            liftableVolume = cargoes * 950000.0;
-            forecast.setCargos(cargoes);
-            forecast.setLifting(liftableVolume);
+            productions = query.getResultList();
+        } catch (NoResultException nre) {
+            return null;
         }
 
-        if (forecast.getPartnerLifting() == null) {
-            partnerCargoes = (int) (partnerAvailability / 950000.0);
-            partnerLiftableVolume = partnerCargoes * 950000.0;
-            forecast.setPartnerCargos(partnerCargoes);
-            forecast.setPartnerLifting(partnerLiftableVolume);
+        return productions;
+    }
+
+    @Override
+    public JvForecast findByContractPeriod(int year, int month, FiscalArrangement fa) {
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+
+        JvForecast forecast;
+
+        CriteriaQuery cq = cb.createQuery();
+        Root<JvForecast> e = cq.from(entityClass);
+        try {
+
+            cq.select(e).where(
+                    cb.and(cb.equal(e.get("periodYear"), year),
+                            cb.equal(e.get("periodMonth"), month),
+                            cb.equal(e.get("fiscalArrangement"), fa)
+                    ));
+            Query query = getEntityManager().createQuery(cq);
+
+            forecast = (JvForecast) query.getSingleResult();
+        } catch (NoResultException nre) {
+            return null;
         }
 
         return forecast;
+
     }
 
     @Override
-    public T enrich(T production) throws NoRealizablePriceException {
-        LOG.log(Level.INFO, "Enriching production:");
-        return computeClosingStock(
-                computeLifting(
-                        computeAvailability(
-                                computeEntitlement(
-                                        computeGrossProduction(
-                                                computeOpeningStock(production)
-                                        )
-                                )
-                        )
-                )
-        );
-    }
+    public void delete(int year, int month, FiscalArrangement fa) {
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
 
-    @Override
-    public T computeEntitlement(T production) {
-        LOG.info("computing Entitlement...");
-        FiscalArrangement fa;
-        JointVenture jv;
+        // create delete
+        CriteriaDelete<JvForecast> delete = cb.
+                createCriteriaDelete(JvForecast.class);
 
-        fa = production.getContract().getFiscalArrangement();
-        //fa = fiscalBean.find(production.getContract().getFiscalArrangementId());
+        // set the root class
+        Root e = delete.from(JvForecast.class);
 
-        assert (fa instanceof JointVenture);
+        // set where clause
+        delete.where(
+                cb.and(cb.equal(e.get("periodYear"), year),
+                        cb.equal(e.get("periodMonth"), month),
+                        cb.equal(e.get("fiscalArrangement"), fa)
+                ));
 
-        jv = (JointVenture) fa;
-        EquityType et = jv.getEquityType();
-
-        Double ownEntitlement;
-        Double partnerEntitlement;
-        Double grossProd = production.getGrossProduction();
-
-        grossProd = grossProd == null ? 0 : grossProd;
-
-        ownEntitlement = (grossProd
-                * et.getOwnEquity() * 0.01);
-        LOG.log(Level.INFO, String.format("Own Entitlement=>%f * %f * 0.01 = %f", new Object[]{grossProd, et.getOwnEquity(), ownEntitlement}));
-
-        partnerEntitlement = (grossProd
-                * et.getPartnerEquity() * 0.01);
-        LOG.log(Level.INFO, String.format("Partner Entitlement=>%f * %f * 0.01 = %f", new Object[]{grossProd, et.getPartnerEquity(), partnerEntitlement}));
-
-        production.setOwnShareEntitlement(ownEntitlement);
-        production.setPartnerShareEntitlement(partnerEntitlement);
-
-        return production;
-    }
-
-    @Override
-    public T computeAvailability(T production) {
-        Double availability, partnerAvailability;
-        Double ownEntitlement = production.getOwnShareEntitlement();
-        Double partnerEntitlement = production.getPartnerShareEntitlement();
-        Double openingStock = production.getOpeningStock();
-        Double partnerOpeningStock = production.getPartnerOpeningStock();
-        availability = ownEntitlement + openingStock;
-        partnerAvailability = partnerEntitlement + partnerOpeningStock;
-
-        production.setAvailability(availability);
-        production.setPartnerAvailability(partnerAvailability);
-        LOG.log(Level.INFO, String.format("Own Availability=entitlement + openingStock => %f + %f = %f", new Object[]{ownEntitlement, openingStock, availability}));
-        LOG.log(Level.INFO, String.format("Partner Availability=entitlement + openingStock => %f + %f = %f", new Object[]{partnerEntitlement, partnerOpeningStock, partnerAvailability}));
-
-        return production;
-    }
-
-    @Override
-    public T computeClosingStock(T production) {
-        Double closingStock, partnerClosingStock;
-        Double availability = production.getAvailability();
-        Double partnerAvailability = production.getPartnerAvailability();
-        Double lifting = production.getLifting();
-        Double partnerLifting = production.getPartnerLifting();
-
-        closingStock = availability - lifting;
-        partnerClosingStock = partnerAvailability - partnerLifting;
-        production.setClosingStock(closingStock);
-        production.setPartnerClosingStock(partnerClosingStock);
-        LOG.log(Level.INFO, String.format("ClosingStock=availability - lifting => %f - %f = %f", new Object[]{availability, lifting, closingStock}));
-        LOG.log(Level.INFO, String.format("Partner ClosingStock=availability - lifting => %f - %f = %f", new Object[]{partnerAvailability, partnerLifting, partnerClosingStock}));
-
-        return production;
-    }
-
-    @Override
-    public T getPreviousMonthProduction(T forecast) {
-        int month = forecast.getPeriodMonth();
-        int year = forecast.getPeriodYear();
-        FiscalPeriod prevFp = getPreviousFiscalPeriod(year, month);
-        ContractPK cPK = forecast.getContract().getContractPK();
-
-        T f = find(new ForecastPK(prevFp.getYear(), prevFp.getMonth(), cPK));
-        //T f = findByContractPeriod(prevFp.getYear(), prevFp.getMonth(), cs);
-
-        return f;
-    }
-
-    @Override
-    public T getNextMonthProduction(T forecast) {
-        int month = forecast.getPeriodMonth();
-        int year = forecast.getPeriodYear();
-        FiscalPeriod nextFp = getNextFiscalPeriod(year, month);
-        ContractPK cPK = forecast.getContract().getContractPK();
-
-        T f = find(new ForecastPK(nextFp.getYear(), nextFp.getMonth(), cPK));
-        //T f = findByContractPeriod(prevFp.getYear(), prevFp.getMonth(), cs);
-
-        return f;
+        // perform update
+        getEntityManager().createQuery(delete).executeUpdate();
     }
 
 }

@@ -5,32 +5,33 @@
  */
 package com.nnpcgroup.cosm.entity.contract;
 
-import com.nnpcgroup.cosm.entity.CrudeType;
-import com.nnpcgroup.cosm.entity.FiscalArrangement;
-import com.nnpcgroup.cosm.entity.forecast.jv.Forecast;
+import com.nnpcgroup.cosm.entity.crude.CrudeType;
+import com.nnpcgroup.cosm.entity.*;
+import com.nnpcgroup.cosm.entity.forecast.ForecastDetail;
+import com.nnpcgroup.cosm.entity.forecast.jv.JvForecastDetail;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import javax.persistence.*;
 
 /**
  * @author 18359
  */
+@EntityListeners(AuditListener.class)
 @Entity
 @Table(name = "CONTRACT")
 @DiscriminatorColumn(name = "DTYPE")
-public abstract class Contract implements Serializable {
+public abstract class Contract implements Auditable, Serializable {
 
     private static final long serialVersionUID = 4374185291370537475L;
 
     private ContractPK contractPK;
     private FiscalArrangement fiscalArrangement;
     private CrudeType crudeType;
+    private AuditInfo auditInfo = new AuditInfo();
 
     private String title;
-    private List<Forecast> forecasts;
+    private List<JvForecastDetail> forecastDetails;
 
     public Contract() {
     }
@@ -60,7 +61,6 @@ public abstract class Contract implements Serializable {
         this.fiscalArrangement = fiscalArrangement;
     }
 
-
     @ManyToOne
     @MapsId("crudeTypeCode")
     @JoinColumn(name = "CRUDETYPECODE")
@@ -82,22 +82,29 @@ public abstract class Contract implements Serializable {
     }
 
     @OneToMany(mappedBy = "contract")
-    public List<Forecast> getForecasts() {
-        return forecasts;
+    public List<JvForecastDetail> getForecastDetails() {
+        return forecastDetails;
     }
 
-    public void setForecasts(List<Forecast> forecasts) {
-        this.forecasts = forecasts;
-    }
-
-    public void addForecast(Forecast forecast) {
-        if (forecasts == null) {
-            forecasts = new ArrayList<>();
-        }
-        forecasts.add(forecast);
+    public void setForecastDetails(List<JvForecastDetail> forecastDetails) {
+        this.forecastDetails = forecastDetails;
     }
 
     public abstract String discriminatorValue();
+
+    public void setCurrentUser(String user) {
+//        auditInfo.setCurrentUser(user);
+        auditInfo.setLastModifiedBy(user);
+    }
+
+    @Embedded
+    public AuditInfo getAuditInfo() {
+        return auditInfo;
+    }
+
+    public void setAuditInfo(AuditInfo auditInfo) {
+        this.auditInfo = auditInfo;
+    }
 
     @Override
     public String toString() {
@@ -106,8 +113,12 @@ public abstract class Contract implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         Contract contract = (Contract) o;
 

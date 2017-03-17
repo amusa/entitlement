@@ -5,26 +5,34 @@
  */
 package com.nnpcgroup.cosm.report;
 
-import javax.ejb.EJB;
+import com.itextpdf.text.*;
+import com.itextpdf.text.Font.FontFamily;
+import com.itextpdf.text.pdf.ColumnText;
+import com.itextpdf.text.pdf.PdfContentByte;
+import com.itextpdf.text.pdf.PdfGState;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfReader;
+import com.itextpdf.text.pdf.PdfStamper;
+import com.itextpdf.text.pdf.PdfWriter;
+import com.nnpcgroup.cosm.controller.MonthGenerator;
+import com.nnpcgroup.cosm.controller.PeriodMonth;
+import com.nnpcgroup.cosm.ejb.forecast.jv.JvForecastServices;
+import com.nnpcgroup.cosm.entity.forecast.jv.JvForecast;
+import com.nnpcgroup.cosm.entity.forecast.jv.JvForecastDetail;
+import com.nnpcgroup.cosm.entity.forecast.jv.JvForecastDetailPK;
+import com.nnpcgroup.cosm.entity.forecast.jv.JvForecastEntitlement;
+import com.nnpcgroup.cosm.entity.forecast.jv.JvForecastEntitlementPK;
+
 import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import java.io.IOException;
-
-import com.itextpdf.text.*;
-import com.itextpdf.text.pdf.PdfPCell;
-import com.itextpdf.text.pdf.PdfPTable;
-import com.itextpdf.text.pdf.PdfWriter;
-import com.nnpcgroup.cosm.controller.MonthGenerator;
-import com.nnpcgroup.cosm.controller.PeriodMonth;
-import com.nnpcgroup.cosm.ejb.forecast.jv.JvForecastServices;
-import com.nnpcgroup.cosm.entity.forecast.jv.JvForecast;
-
 import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 
 /**
@@ -33,8 +41,9 @@ import java.io.OutputStream;
 @WebServlet(name = "EntitlementReport", urlPatterns = {"/faces/reports/EntitlementReport"})
 public class EntitlementReport extends HttpServlet {
 
-    @EJB
+    @Inject
     private JvForecastServices forecastBean;
+
     @Inject
     MonthGenerator monthGen;
 
@@ -46,11 +55,12 @@ public class EntitlementReport extends HttpServlet {
 
     private static Font catFont = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLD);
     private static Font redFont = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.NORMAL, BaseColor.RED);
+    private static Font midBold = new Font(Font.FontFamily.TIMES_ROMAN, 14, Font.BOLD);
     private static Font subFont = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
     private static Font smallBold = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD);
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException, DocumentException {
         response.setContentType("text/html;charset=UTF-8");
 
         try {
@@ -60,23 +70,60 @@ public class EntitlementReport extends HttpServlet {
             periodYear = Integer.parseInt(year);
             periodMonth = Integer.parseInt(month);
 
-            Document document = new Document();
+            Document document = new Document(PageSize.A4);
             baos = new ByteArrayOutputStream();
-            PdfWriter.getInstance(document, baos);
-            
+            //PdfWriter.getInstance(document, baos);
+            PdfWriter writer = PdfWriter.getInstance(document, baos);
+            writer.setPageEvent(new PdfWatermarkHelper());
+
             document.open();
             addMetaData(document);
             addTitlePage(document);
             addContent(document);
-            
+
             document.close();
-            
+
             setResponseHeaders(response);
 
             OutputStream os = response.getOutputStream();
             baos.writeTo(os);
             os.flush();
             os.close();
+
+//            PdfReader reader = new PdfReader(src);
+//            int n = reader.getNumberOfPages();
+//            PdfStamper stamper = new PdfStamper(reader, new FileOutputStream(dest));
+//            // text watermark
+//            Font f = new Font(FontFamily.HELVETICA, 30);
+//            Phrase p = new Phrase("My watermark (text)", f);
+//            // image watermark
+//            Image img = Image.getInstance(IMG);
+//            float w = img.getScaledWidth();
+//            float h = img.getScaledHeight();
+//            // transparency
+//            PdfGState gs1 = new PdfGState();
+//            gs1.setFillOpacity(0.5f);
+//            // properties
+//            PdfContentByte over;
+//            Rectangle pagesize;
+//            float x, y;
+//            // loop over every page
+//            for (int i = 1; i <= n; i++) {
+//                pagesize = reader.getPageSizeWithRotation(i);
+//                x = (pagesize.getLeft() + pagesize.getRight()) / 2;
+//                y = (pagesize.getTop() + pagesize.getBottom()) / 2;
+//                over = stamper.getOverContent(i);
+//                over.saveState();
+//                over.setGState(gs1);
+//                if (i % 2 == 1) {
+//                    ColumnText.showTextAligned(over, Element.ALIGN_CENTER, p, x, y, 0);
+//                } else {
+//                    over.addImage(img, w, 0, 0, h, x - (w / 2), y - (h / 2));
+//                }
+//                over.restoreState();
+//            }
+//            stamper.close();
+//            reader.close();
         } catch (DocumentException e) {
             throw new IOException(e.getMessage());
         }
@@ -86,31 +133,35 @@ public class EntitlementReport extends HttpServlet {
         response.setHeader("Expires", "0");
         response.setHeader("Cache-Control",
                 "must-revalidate, post-check=0, pre-check=0");
-        response.setHeader("Pragma", "public");        
+        response.setHeader("Pragma", "public");
         response.setContentType("application/pdf");
         response.setContentLength(baos.size());
     }
 
     private void addContent(Document document) throws DocumentException {
         loadProductions();
+
         PdfPTable table = new PdfPTable(5);
-        PdfPCell c1 = new PdfPCell(new Phrase("JV COMPANY"));
+        table.setWidths(new float[]{3.5f, 3.0f, 3.0f, 3.0f, 4.0f});
+        table.setWidthPercentage(100);
+
+        PdfPCell c1 = new PdfPCell(new Phrase("JV COMPANY", midBold));
         c1.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(c1);
 
-        c1 = new PdfPCell(new Phrase("CRUDE TYPE"));
+        c1 = new PdfPCell(new Phrase("CRUDE TYPE", midBold));
         c1.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(c1);
 
-        c1 = new PdfPCell(new Phrase("NNPC (BBLS)"));
+        c1 = new PdfPCell(new Phrase("NNPC (BBLS)", midBold));
         c1.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(c1);
 
-        c1 = new PdfPCell(new Phrase("COMPANY (BBLS)"));
+        c1 = new PdfPCell(new Phrase("COMPANY (BBLS)", midBold));
         c1.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(c1);
 
-        c1 = new PdfPCell(new Phrase("REMARKS"));
+        c1 = new PdfPCell(new Phrase("REMARKS", midBold));
         c1.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(c1);
 
@@ -119,18 +170,70 @@ public class EntitlementReport extends HttpServlet {
         addTableContent(table);
 
         document.add(table);
+
     }
 
     private void addTableContent(PdfPTable table) {
+        PdfPCell cell;
+
         if (productions != null) {
+
             for (JvForecast forecast : productions) {
-                table.addCell(forecast.getContract().getFiscalArrangement().getOperator().getName());
-                table.addCell(forecast.getContract().getCrudeType().getCode());
-                table.addCell(String.valueOf(forecast.getLifting()));
-                table.addCell(String.valueOf(forecast.getPartnerLifting()));
-                table.addCell("");
+                java.util.List<JvForecastDetail> forecastDetails = forecast.getForecastDetails();
+                java.util.List<JvForecastEntitlement> entitlements = forecast.getEntitlements();
+                int fcount = forecastDetails.size();
+                cell = new PdfPCell(new Phrase(forecast.getFiscalArrangement().getOperator().getName()));
+
+                if (fcount > 0) {
+                    cell.setRowspan(fcount);
+                    table.addCell(cell);
+
+                    int count = 0;
+                    for (JvForecastDetail forecastDetail : forecastDetails) {
+                        count++;
+                        JvForecastEntitlement entitlement = getEntitlement(forecastDetail, entitlements);
+                        cell = new PdfPCell(new Phrase(forecastDetail.getContract().getCrudeType().getCrudeType()));
+                        table.addCell(cell);
+                        cell = new PdfPCell(new Phrase(String.format("%,.2f", entitlement.getLifting())));
+                        table.addCell(cell);
+                        cell = new PdfPCell(new Phrase(String.format("%,.2f", entitlement.getPartnerLifting())));
+                        table.addCell(cell);
+
+                        if (count == 1) {
+                            cell = new PdfPCell(new Phrase(forecast.getRemark()));
+                            cell.setRowspan(fcount);
+                            table.addCell(cell);
+                        }
+                    }
+
+                }
+
             }
         }
+    }
+
+    public JvForecastEntitlement getEntitlement(JvForecastDetail detail, java.util.List<JvForecastEntitlement> entitlements) {
+        if (detail == null) {
+            return null;
+        }
+
+        for (JvForecastEntitlement ent : entitlements) {
+            if (isEqualKeys(detail, ent)) {
+                return ent;
+            }
+        }
+        return null;
+    }
+
+    private boolean isEqualKeys(JvForecastDetail detail, JvForecastEntitlement ent) {
+        JvForecastDetailPK detailPK = detail.getForecastDetailPK();
+        JvForecastEntitlementPK entitlementPK = ent.getEntitlementPK();
+
+        if (!detailPK.getForecastPK().equals(entitlementPK.getForecastPK())) {
+            return false;
+        }
+
+        return detailPK.getContractPK().equals(entitlementPK.getContractPK());
     }
 
     private void addMetaData(Document document) {
@@ -144,12 +247,12 @@ public class EntitlementReport extends HttpServlet {
 
     private void addTitlePage(Document document) throws DocumentException {
         Paragraph preface = new Paragraph();
-        addEmptyLine(preface, 1);
         preface.add(new Paragraph("ENTITLEMENT ADVICE", catFont));
         addEmptyLine(preface, 1);
         PeriodMonth pm = monthGen.find(periodMonth);
-        preface.add(new Paragraph(String.format("NNPC %s %d JV & AF ENTITLEMENT", pm.getMonthStr(), periodYear), smallBold));
+        preface.add(new Paragraph(String.format("NNPC %s %d JV & AF ENTITLEMENT", pm.getMonthStr().toUpperCase(), periodYear), subFont));
         addEmptyLine(preface, 3);
+        preface.setAlignment(Element.ALIGN_CENTER);
         document.add(preface);
     }
 
@@ -161,8 +264,12 @@ public class EntitlementReport extends HttpServlet {
 
     public void loadProductions() {
         if (periodYear != null && periodMonth != null) {
-            productions = forecastBean.findByYearAndMonth(periodYear, periodMonth);
+            productions = getForecastBean().findByYearAndMonth(periodYear, periodMonth);
         }
+    }
+
+    public JvForecastServices getForecastBean() {
+        return forecastBean;
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -177,7 +284,11 @@ public class EntitlementReport extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -191,7 +302,11 @@ public class EntitlementReport extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        }
     }
 
     /**

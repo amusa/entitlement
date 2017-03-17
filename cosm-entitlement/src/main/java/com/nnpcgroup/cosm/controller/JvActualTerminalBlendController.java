@@ -5,9 +5,9 @@
  */
 package com.nnpcgroup.cosm.controller;
 
-import com.nnpcgroup.cosm.ejb.production.jv.JvProductionServices;
+import com.nnpcgroup.cosm.ejb.production.jv.JvProductionDetailServices;
+import com.nnpcgroup.cosm.ejb.production.jv.JvProductionEntitlementServices;
 import com.nnpcgroup.cosm.entity.Terminal;
-import com.nnpcgroup.cosm.entity.production.jv.Production;
 
 import javax.inject.Named;
 import java.io.Serializable;
@@ -17,6 +17,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
+import com.nnpcgroup.cosm.entity.production.jv.JvProductionDetail;
+import com.nnpcgroup.cosm.entity.production.jv.JvProductionEntitlement;
+import javax.ejb.EJB;
 
 /**
  *
@@ -30,11 +33,16 @@ public class JvActualTerminalBlendController implements Serializable {
     private static final Logger log = Logger.getLogger(JvActualTerminalBlendController.class.getName());
 
     @Inject
-    private JvProductionServices productionBean;
+    private JvProductionDetailServices productionBean;
 
-    private Production currentProduction;
+    @EJB
+    private JvProductionEntitlementServices entitlementBean;
 
-    private List<Production> productions;
+    private JvProductionDetail currentProductionDetail;
+    private JvProductionEntitlement currentEntitlement;
+
+    private List<JvProductionDetail> productionDetails;
+    private List<JvProductionEntitlement> productionEntitlements;
 
     private Integer periodYear;
     private Integer periodMonth;
@@ -44,44 +52,52 @@ public class JvActualTerminalBlendController implements Serializable {
      * Creates a new instance of JvController
      */
     public JvActualTerminalBlendController() {
-        productions = new ArrayList<>();
+        productionDetails = new ArrayList<>();
     }
 
-    public Production getCurrentProduction() {
-        return currentProduction;
+    public JvProductionDetail getCurrentProduction() {
+        return currentProductionDetail;
     }
 
-    public void setCurrentProduction(Production currentProduction) {
+    public void setCurrentProduction(JvProductionDetail productionDetail) {
         log.info("ProductionController::setProduction called...");
-        this.currentProduction = currentProduction;
+        this.currentProductionDetail = productionDetail;
     }
 
-    public List<Production> getProductions() {
+    public List<JvProductionDetail> getProductionDetails() {
         log.info("ProductionController::getProductions called...");
         loadProductions();
-        return productions;
+        return productionDetails;
     }
 
-    public void setProductions(List<Production> productions) {
+    public void setProductionDetails(List<JvProductionDetail> productionDetails) {
         log.info("ProductionController::setProductions called...");
-        this.productions = productions;
+        this.productionDetails = productionDetails;
+    }
+
+    public List<JvProductionEntitlement> getProductionEntitlements() {
+        return productionEntitlements;
+    }
+
+    public void setProductionEntitlements(List<JvProductionEntitlement> productionEntitlements) {
+        this.productionEntitlements = productionEntitlements;
     }
 
 //    public void prepareCreate() {
 //        log.info("prepareCreate called...");
-//        currentProduction = productionBean.createInstance();
+//        currentProductionDetail = productionBean.createInstance();
 //        if (periodYear != null && periodMonth != null) {
-//            currentProduction.setPeriodYear(periodYear);
-//            currentProduction.setPeriodMonth(periodMonth);
+//            currentProductionDetail.setPeriodYear(periodYear);
+//            currentProductionDetail.setPeriodMonth(periodMonth);
 //        }
-//        //return currentProduction;
+//        //return currentProductionDetail;
 //    }
 //    public void destroy() {
-//        log.log(Level.INFO, "Deleting {0}...", currentProduction);
+//        log.log(Level.INFO, "Deleting {0}...", currentProductionDetail);
 //        persist(JsfUtil.PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("ProductionDeleted"));
 //        if (!JsfUtil.isValidationFailed()) {
-//            dataModel.removeItem(currentProduction);
-//            currentProduction = null;
+//            dataModel.removeItem(currentProductionDetail);
+//            currentProductionDetail = null;
 //        }
 //    }
 //    public void create() {
@@ -101,13 +117,13 @@ public class JvActualTerminalBlendController implements Serializable {
 //    }
 //
 //    private void persist(JsfUtil.PersistAction persistAction, String successMessage) {
-//        if (currentProduction != null) {
+//        if (currentProductionDetail != null) {
 //            //setEmbeddableKeys();
 //            try {
 //                if (persistAction != JsfUtil.PersistAction.DELETE) {
-//                    productionBean.edit(currentProduction);
+//                    productionBean.edit(currentProductionDetail);
 //                } else {
-//                    productionBean.remove(currentProduction);
+//                    productionBean.remove(currentProductionDetail);
 //                }
 //                JsfUtil.addSuccessMessage(successMessage);
 //            } catch (EJBException ex) {
@@ -129,12 +145,9 @@ public class JvActualTerminalBlendController implements Serializable {
 //    }
     public void loadProductions() {
         if (periodYear != null && periodMonth != null && currentTerminal != null) {
-            productions = productionBean.getTerminalProduction(periodYear, periodMonth, currentTerminal);
+            productionDetails = productionBean.getTerminalProduction(periodYear, periodMonth, currentTerminal);
+            productionEntitlements = entitlementBean.getTerminalProduction(periodYear, periodMonth, currentTerminal);
         }
-    }
-
-    private void reset() {
-        currentProduction = null;
     }
 
     public Integer getPeriodYear() {
@@ -166,51 +179,51 @@ public class JvActualTerminalBlendController implements Serializable {
     }
 
     public Double getGrossSum() {
-        log.log(Level.INFO, "productions is not empty {0}", productions);
-        if (productions.isEmpty()) {
+        log.log(Level.INFO, "productionDetails is not empty {0}", productionDetails);
+        if (productionDetails.isEmpty()) {
             return null;
         }
-        Double grossProd = productions.stream()
+        Double grossProd = productionDetails.stream()
                 .mapToDouble(p -> p.getGrossProduction())
                 .sum();
         return grossProd;
     }
 
     public Double getOwnEntitlementSum() {
-        if (productions.isEmpty()) {
+        if (productionDetails.isEmpty()) {
             return null;
         }
-        Double ownEntitlement = productions.stream()
+        Double ownEntitlement = productionEntitlements.stream()
                 .mapToDouble(p -> p.getOwnShareEntitlement())
                 .sum();
         return ownEntitlement;
     }
 
     public Double getPartnerEntitlementSum() {
-        if (productions.isEmpty()) {
+        if (productionDetails.isEmpty()) {
             return null;
         }
-        Double partnerEntitlement = productions.stream()
+        Double partnerEntitlement = productionEntitlements.stream()
                 .mapToDouble(p -> p.getPartnerShareEntitlement())
                 .sum();
         return partnerEntitlement;
     }
 
     public Double getOpeningStockSum() {
-        if (productions.isEmpty()) {
+        if (productionDetails.isEmpty()) {
             return null;
         }
-        Double openingStockSum = productions.stream()
+        Double openingStockSum = productionEntitlements.stream()
                 .mapToDouble(p -> p.getOpeningStock())
                 .sum();
         return openingStockSum;
     }
 
     public Double getAvailabilitySum() {
-        if (productions.isEmpty()) {
+        if (productionDetails.isEmpty()) {
             return null;
         }
-        Double availabilitySum = productions.stream()
+        Double availabilitySum = productionEntitlements.stream()
                 .mapToDouble(p -> p.getAvailability())
                 .sum();
 

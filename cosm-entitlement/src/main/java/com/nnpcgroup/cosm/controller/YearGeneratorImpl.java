@@ -26,7 +26,7 @@ public class YearGeneratorImpl implements YearGenerator, Serializable {
 
     @Override
     public List<Integer> generateYears(int level) {
-        log.log(Level.INFO, "generateYears with level {0}", level);
+        log.log(Level.FINE, "generateYears with level {0}", level);
         Calendar c = new GregorianCalendar();
         int year = c.get(Calendar.YEAR);
         int month = c.get(Calendar.MONTH);

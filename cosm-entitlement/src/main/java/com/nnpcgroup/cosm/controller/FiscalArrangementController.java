@@ -1,11 +1,12 @@
 package com.nnpcgroup.cosm.controller;
 
 import com.nnpcgroup.cosm.controller.util.JsfUtil;
-import com.nnpcgroup.cosm.ejb.contract.ContractBaseServices;
 import com.nnpcgroup.cosm.ejb.FiscalArrangementBean;
 import com.nnpcgroup.cosm.ejb.contract.ContractServices;
 import com.nnpcgroup.cosm.entity.contract.Contract;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
+import com.nnpcgroup.cosm.entity.JointVenture;
+import com.nnpcgroup.cosm.entity.ProductionSharingContract;
 import java.io.Serializable;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -30,6 +31,8 @@ public class FiscalArrangementController implements Serializable {
 
     private FiscalArrangement currentFiscal;
     private List<FiscalArrangement> fiscalArrangements;
+    private List<ProductionSharingContract> pscFiscalArrangements;
+    private List<JointVenture> jvFiscalArrangements;
 
     @EJB
     private FiscalArrangementBean fiscalBean;
@@ -57,8 +60,10 @@ public class FiscalArrangementController implements Serializable {
         try {
             getFiscalBean().remove(currentFiscal);
             JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("FiscalArrangementDeleted"));
+            LOG.log(Level.INFO, "Fiscal Arrangement deleted successfully {0}...", currentFiscal);
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
+            LOG.log(Level.INFO, "Failed to delete Fiscal Arrangement {0}...", currentFiscal);
         }
     }
 
@@ -67,6 +72,20 @@ public class FiscalArrangementController implements Serializable {
             fiscalArrangements = getFiscalBean().findAll();
         }
         return fiscalArrangements;
+    }
+
+    public List<ProductionSharingContract> getPscFiscalArrangements() {
+        if (pscFiscalArrangements == null) {
+            pscFiscalArrangements = getFiscalBean().findPscFiscalArrangements();
+        }
+        return pscFiscalArrangements;
+    }
+
+    public List<JointVenture> getJvFiscalArrangements() {
+        if (jvFiscalArrangements == null) {
+            jvFiscalArrangements = getFiscalBean().findJvFiscalArrangements();
+        }
+        return jvFiscalArrangements;
     }
 
     public void setFiscalArrangements(List<FiscalArrangement> fiscalArrangements) {
@@ -81,6 +100,14 @@ public class FiscalArrangementController implements Serializable {
         return JsfUtil.getSelectItems(fiscalBean.findAll(), false);
     }
 
+    public SelectItem[] getJvFiscalSelectOptions() {
+        return JsfUtil.getSelectItems(fiscalBean.findJvFiscalArrangements(), false);
+    }
+
+    public SelectItem[] getPscFiscalSelectOptions() {
+        return JsfUtil.getSelectItems(fiscalBean.findPscFiscalArrangements(), false);
+    }
+
     public List<FiscalArrangement> getFiscalList() {
         return fiscalBean.findAll();
     }
@@ -90,16 +117,15 @@ public class FiscalArrangementController implements Serializable {
 
         if (null != currentFiscal) {
             contracts = contractBean.findFiscalArrangementContracts(currentFiscal);
-            LOG.log(Level.INFO, "getting contracts for {0}. {1}...", new Object[]{currentFiscal, contracts});
         } else {
-            LOG.log(Level.INFO, "Fiscal Arrangement is null {0}...", currentFiscal);
+            LOG.log(Level.FINE, "Fiscal Arrangement is null {0}...", currentFiscal);
         }
 
         return contracts;
     }
 
     public SelectItem[] getContractSelectOptions() {
-        LOG.log(Level.INFO, "getting currentFiscal = {0}...", currentFiscal);
+        LOG.log(Level.FINE, "getting currentFiscal = {0}...", currentFiscal);
         if (null != currentFiscal) {
             return JsfUtil.getSelectItems(contractBean.findFiscalArrangementContracts(currentFiscal), true);
         }
@@ -107,7 +133,6 @@ public class FiscalArrangementController implements Serializable {
     }
 
     public void fiscalListChanged(AjaxBehaviorEvent event) {
-        LOG.info("fiscalController::fiscalListChanged called...");
 
     }
 
@@ -125,8 +150,6 @@ public class FiscalArrangementController implements Serializable {
             }
             FiscalArrangementController controller = (FiscalArrangementController) facesContext.getApplication().getELResolver().
                     getValue(facesContext.getELContext(), null, "fiscalController");
-
-            LOG.log(Level.INFO, "FiscalController::FiscalArrangementConverter::value = {0}", value);
             return controller.getFiscalArrangement(getKey(value));
         }
 

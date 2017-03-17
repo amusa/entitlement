@@ -13,7 +13,6 @@ import java.io.Serializable;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 
@@ -22,7 +21,6 @@ import javax.faces.component.UIInput;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ComponentSystemEvent;
-import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -71,11 +69,11 @@ public class UserAuth implements Serializable {
         ExternalContext externalContext = context.getExternalContext();
 
         HttpServletRequest request = (HttpServletRequest) externalContext.getRequest();
-        
+
         try {
             request.login(username, password);
-            LOG.log(Level.INFO, "Login successful {0}", username);
-            LOG.log(Level.INFO, "Redirecting to original url... {0}", originalURL);
+            LOG.log(Level.INFO, "User {0} logged in successfully", username);
+            LOG.log(Level.FINE, "Redirecting to original url... {0}", originalURL);
             loggedUser = userController.getUser(username);
             username = null;
             password = null;
@@ -90,9 +88,9 @@ public class UserAuth implements Serializable {
     public void logout() throws IOException {
         ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
         externalContext.invalidateSession();
+        LOG.log(Level.INFO, "User {0} logged out!", username);
         loggedUser = null;
         externalContext.redirect(externalContext.getRequestContextPath() + "/faces/login.xhtml");
-        LOG.info("Logged out!");
     }
 
     public void changePassword() {

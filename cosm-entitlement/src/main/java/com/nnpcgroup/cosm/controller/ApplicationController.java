@@ -7,6 +7,7 @@ package com.nnpcgroup.cosm.controller;
 
 import com.nnpcgroup.cosm.ejb.CompanyBean;
 import com.nnpcgroup.cosm.entity.Company;
+import com.nnpcgroup.cosm.entity.JvCompany;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.ApplicationScoped;
@@ -36,7 +37,7 @@ public class ApplicationController {
         company = companyBean.findByCompanyName(defaultCompany);
 
         if (company == null) {
-            company = new Company();
+            company = new JvCompany();
             company.setName(defaultCompany);
             companyBean.create(company);
         }

@@ -22,7 +22,7 @@
                                     <div class="col-md-6 m-b-15">
                                         <h:outputLabel value="Contract Type" for="contractType" />
                                         <h:selectOneMenu id="contractType" value="#{contractController.contractType}" class="form-control input-sm m-b-10">
-                                            <f:selectItem  itemLabel="Regular" itemValue="REG"/>
+                                            <f:selectItem  itemLabel="Regular JV" itemValue="JV"/>
                                             <f:selectItem  itemLabel="Carry Agreement" itemValue="CA"/>
                                             <f:selectItem  itemLabel="Modified Carry Agreement" itemValue="MCA"/>
                                             <f:ajax event="change" render="AssetCreateForm carryContractInfo sharedOilRatio crudeType" listener="#{contractController.contractTypeSelected}"/>

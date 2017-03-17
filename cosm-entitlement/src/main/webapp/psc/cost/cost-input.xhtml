@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:jsf="http://xmlns.jcp.org/jsf">
+
+
+    <ui:composition template="/cosm-template.xhtml">
+
+        <ui:define name="title">
+            <h:outputText value="Production Cost Input"></h:outputText>
+        </ui:define>
+
+        <ui:define name="breadcrumb">
+            <ol class="breadcrumb hidden-xs">
+                <li><a href="#">Home</a></li>
+                <li><a href="#">PSC</a></li>
+                <li class="active">Cost Input</li>
+            </ol>
+        </ui:define>
+
+
+        <ui:define name="page-title">
+            <h:outputText value="COST INPUT"></h:outputText>
+        </ui:define>
+
+        <ui:define name="side-menu">
+            <ui:include src="_psc-menu.xhtml"/>
+        </ui:define>
+
+        <ui:define name="content-area">  
+            <h:form id="prodCostListForm">                 
+                <div class="row">
+                    <div class="col-md-4 m-b-10">
+                        <label>Year</label>
+                        <h:selectOneMenu id="periodYear" value="#{prodCostController.currentYear}" class="form-control input-sm m-b-10" >  
+                            <f:selectItem itemValue="#{null}" itemLabel="--select--" />
+                            <f:selectItems value="#{generalController.yearsAvailableSelectOne}" var="year" itemValue="#{year.value}"/>   
+                            <f:ajax listener="#{generalController.yearChanged}" event="change" render="periodMonth prodTable executeButton"/>
+                        </h:selectOneMenu>
+                    </div>
+                    <div class="col-md-4 m-b-10">
+                        <label>Month</label>
+                        <h:selectOneMenu id="periodMonth" value="#{prodCostController.currentMonth}" class="form-control input-sm m-b-10">                                              
+                            <f:selectItem itemValue="#{null}" itemLabel="--select--" />
+                            <f:selectItems value="#{generalController.months}" var="mth" itemValue="#{mth.month}" itemLabel="#{mth.monthStr}" />   
+                            <f:ajax event="change" render="prodTable executeButton"/>
+                        </h:selectOneMenu>
+                    </div>
+                    <div class="col-md-4 m-b-10">
+                        <label>PSC</label>
+                        <h:selectOneMenu id="contract" value="#{prodCostController.currentPsc}" class="form-control input-sm m-b-10">                                              
+                            <f:selectItem itemValue="#{null}" itemLabel="--select--" />
+                            <f:selectItems value="#{fiscalController.pscFiscalSelectOptions}" />
+                            <f:ajax event="change" render="prodTable executeButton"/>
+                        </h:selectOneMenu>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-md-10 m-b-20">
+                        <h:commandButton value="Get Cost From SAP" class="btn m-r-10" disabled="true">
+                            <f:ajax event="click" render="nonCapitalTable capitalTable msgs"/>
+                        </h:commandButton>
+
+                        <button jsf:id="executeButton" class="btn m-r-10">
+                            <span class="icon">&#61952;</span>
+                            Get Cost
+                            <f:ajax listener="#{prodCostController.loadProductionCosts}" event="click"
+                                    render="nonCapitalTable capitalTable msgs" disabled="${not prodCostController.enableControlButton}"/>
+
+                        </button>
+                    </div>
+                </div>
+                <!-- Pies -->
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="tile">
+                            <h2 class="tile-title">NON CAPITAL</h2>
+                            <div class="tile-config dropdown">
+                                <a data-toggle="dropdown" href="" class="tooltips tile-menu" title="Options"></a>
+                                <ul class="dropdown-menu pull-right text-right">
+                                    <li><a href="">Refresh</a></li>
+                                    <li><a href="">Settings</a></li>
+                                </ul>
+                            </div>
+                            <div class="p-10">
+                                <div class="row">
+                                    <h:dataTable id="nonCapitalTable" var="cost" value="#{prodCostController.nonCapitalCosts}" 
+                                                 class="table table-bordered table-hover tile">                                                 
+                                        <h:column> 
+                                            <f:facet name="header">
+                                                <h:outputText value="Expenditure"/>
+                                            </f:facet>
+                                            <h:outputText value="#{cost.costItem.description}"/>                                                        
+                                        </h:column>                            
+                                        <h:column>
+                                            <f:facet name="header">
+                                                <h:outputText value="Cost"/>
+                                            </f:facet>
+                                            <h:outputText value="#{cost.amount}">
+                                                <f:convertNumber pattern="###,###,###.####" />
+                                            </h:outputText>
+                                        </h:column>
+                                        <h:column>
+                                            <f:facet name="header">
+                                                <h:outputText value="Cummulative Cost"/>
+                                            </f:facet>
+                                            <h:outputText value="#{cost.amountCum}">
+                                                <f:convertNumber pattern="###,###,###.####" />
+                                            </h:outputText>
+                                        </h:column>
+                                        <f:facet name="footer">   
+                                            <h:outputText value="Total Non-Capital: "/>
+                                            <h:outputText value="#{prodCostController.totalNonCapitalCost}">
+                                                <f:convertNumber pattern="###,###,###.####" />
+                                            </h:outputText>
+                                        </f:facet>
+                                    </h:dataTable>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-6">
+                        <div class="tile">
+                            <h2 class="tile-title">CAPITAL</h2>
+                            <div class="tile-config dropdown">
+                                <a data-toggle="dropdown" href="" class="tooltips tile-menu" title="Options"></a>
+                                <ul class="dropdown-menu pull-right text-right">
+                                    <li><a href="">Refresh</a></li>
+                                    <li><a href="">Settings</a></li>
+                                </ul>
+                            </div>
+                            <div class="p-10">
+                                <div class="row">
+                                    <h:dataTable id="capitalTable" var="cost" value="#{prodCostController.capitalCosts}" 
+                                                 class="table table-bordered table-hover tile">                                                 
+                                        <h:column> 
+                                            <f:facet name="header">
+                                                <h:outputText value="Expenditure"/>
+                                            </f:facet>
+                                            <h:outputText value="#{cost.costItem.description}"/>                                                        
+                                        </h:column>                            
+                                        <h:column>
+                                            <f:facet name="header">
+                                                <h:outputText value="Cost"/>
+                                            </f:facet>
+                                            <h:outputText value="#{cost.amount}">
+                                                <f:convertNumber pattern="###,###,###.####" />
+                                            </h:outputText>
+                                        </h:column>
+                                        <h:column>
+                                            <f:facet name="header">
+                                                <h:outputText value="Cummulative Cost"/>
+                                            </f:facet>
+                                            <h:outputText value="#{cost.amountCum}">
+                                                <f:convertNumber pattern="###,###,###.####" />
+                                            </h:outputText>
+                                        </h:column>
+                                        <f:facet name="footer">                                                       
+                                            <h:outputText value="Total Capital: "/>
+                                            <h:outputText value="#{prodCostController.totalCapitalCost}">
+                                                <f:convertNumber pattern="###,###,###.####" />
+                                            </h:outputText>
+                                        </f:facet>
+                                    </h:dataTable>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <h:commandLink id="createButton" pt:data-target="#ProdCostCreateDlg" pt:look="warning" pt:data-toggle="modal" pt:data-backdrop="static" pt:data-keyboard="false" class="btn m-r-5"
+                                   disabled="${not prodCostController.enableControlButton}">
+                        <span class="icon">&#61943;</span>
+                        #{bundle.Create}
+                        <f:ajax event="click" listener="#{prodCostController.prepareCreate}" render="ProdCostCreateForm"/>
+                    </h:commandLink>
+                    <h:commandLink id="viewButton" pt:data-target="#ProdCostViewDlg" pt:look="warning" pt:data-toggle="modal"  pt:data-backdrop="static" pt:data-keyboard="false"
+                                   class="btn m-r-5" disabled="${not prodCostController.enableControlButton}">
+                        <span class="icon">&#61698;</span>
+                        #{bundle.View}    
+                        <f:ajax event="click"  render="ProdCostViewForm"/>
+                    </h:commandLink>
+                    <h:commandLink id="editButton" pt:data-target="#ProdCostEditDlg" pt:look="warning" pt:data-toggle="modal"  pt:data-backdrop="static" pt:data-keyboard="false"
+                                   class="btn m-r-5" disabled="${not prodCostController.enableControlButton}">
+                        <span class="icon">&#61952;</span>
+                        #{bundle.Edit}
+                        <f:ajax listener="#{prodCostController.prepareUpdate}" render="ProdCostEditForm"/>
+                    </h:commandLink>
+                    <h:commandLink id="deleteButton" class="btn m-r-5" disabled="${not prodCostController.enableControlButton}">
+                        <span class="icon">&#61918;</span>
+                        #{bundle.Delete}
+                        <f:ajax render="prodCostListForm msgs" listener="#{prodCostController.destroy}"/>
+                    </h:commandLink>
+                </div>
+            </h:form>
+
+            <ui:include src="_prodcost-create.xhtml"/>            
+            <ui:include src="_prodcost-edit.xhtml"/>
+            <ui:include src="_prodcost-view.xhtml"/>
+        </ui:define>
+
+        <ui:define name="page-stat"> 
+            <ui:include src="_psc-stat.xhtml"/>
+        </ui:define>
+
+    </ui:composition>
+
+
+
+</html>

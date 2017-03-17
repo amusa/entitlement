@@ -6,13 +6,15 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
-      xmlns:jsf="http://xmlns.jcp.org/jsf">
+      xmlns:jsf="http://xmlns.jcp.org/jsf"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
 
 <ui:composition>
     <form jsf:id="menuForm" class="margin-clear">
+        <c:set var="root" value="#{request.contextPath}/" />
         <ul class="list-unstyled side-menu">
             <li>
-                <a class="sa-side-home" href="/cosm-entitlement/faces/index.xhtml">
+                <a class="sa-side-home" href="#{root}faces/index.xhtml">
                     <span class="menu-item">Dashboard</span>
                 </a>
             </li>

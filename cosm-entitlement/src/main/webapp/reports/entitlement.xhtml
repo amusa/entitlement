@@ -65,25 +65,25 @@
                 <!-- Multi Column -->
                 <div jsf:id="forecast_panel" class="row">
                     <div class="col-md-12 m-b-12">
-                        <h:dataTable id="prodTable" var="prod" value="#{reportController.productions}" 
+                        <h:dataTable id="prodTable" var="prod" value="#{reportController.entitlementDetails}"
                                      class="table table-bordered table-hover tile"> 
                             <h:column>                                                        
                                 <f:facet name="header">
                                     <h:outputText value="JV COMPANY"/>
                                 </f:facet>
-                                <h:outputText value="#{prod.contract.fiscalArrangement.operator.name}"/>
+                                <h:outputText value="#{prod.company}"/>
                             </h:column>    
                             <h:column>                                                        
                                 <f:facet name="header">
                                     <h:outputText value="CRUDE TYPE"/>
                                 </f:facet>
-                                <h:outputText value="#{prod.contract.crudeType.code}"/>
+                                <h:outputText value="#{prod.crudeType}"/>
                             </h:column> 
                             <h:column>
                                 <f:facet name="header">
                                     <h:outputText value="NNPC (BBLS)" />
                                 </f:facet>                                                            
-                                <h:outputText value="#{prod.lifting}">
+                                <h:outputText value="#{prod.ownLift}">
                                     <f:convertNumber pattern="###,###,###.####" />
                                 </h:outputText>
                             </h:column>
@@ -91,7 +91,7 @@
                                 <f:facet name="header">
                                     <h:outputText value="COMPANY (BBLS)" />
                                 </f:facet>                                                            
-                                <h:outputText value="#{prod.partnerLifting}">
+                                <h:outputText value="#{prod.partnerLift}">
                                     <f:convertNumber pattern="###,###,###.####" />
                                 </h:outputText>
                             </h:column>
@@ -99,7 +99,7 @@
                                 <f:facet name="header">
                                     <h:outputText value="REMARK" />
                                 </f:facet>                                                            
-                                <h:outputText value=""/>
+                                <h:outputText value="#{prod.remark}"/>
                             </h:column>
                             <f:facet name="footer">                                                                
                                 <button jsf:id="printButton" class="btn m-r-5" >

@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:jsf="http://xmlns.jcp.org/jsf">
+
+    <ui:composition>
+        <div class="modal fade" id="TaxOilViewDlg" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">Tax Oil</h4>
+                    </div>
+                    <h:form id="TaxOilViewForm">
+                        <div class="modal-body">
+                            <h:panelGroup id="TaxOilViewPanel">
+                                <div class="row">
+                                    <div class="col-md-4 m-b-15">
+                                        <h:outputLabel value="Year" for="periodYear"/>
+                                        <h:selectOneMenu id="periodYear" value="#{taxController.periodYear}" class="form-control input-sm m-b-10" >                                              
+                                            <f:selectItems value="#{generalController.yearsAvailableSelectOne}" var="year" itemValue="#{year.value}"/>   
+                                            <f:ajax listener="#{generalController.yearChanged}" event="change" render="periodMonth"/>     
+                                        </h:selectOneMenu>                                        
+                                    </div>
+                                    <div class="col-md-4 m-b-15">
+                                        <h:outputLabel value="Month" for="periodMonth"/>
+                                        <h:selectOneMenu id="periodMonth" value="#{taxController.periodMonth}" class="form-control input-sm m-b-10">                                              
+                                            <f:selectItem itemValue="#{null}" itemLabel="--select--" />
+                                            <f:selectItems value="#{generalController.months}" var="mth" itemValue="#{mth.month}" itemLabel="#{mth.monthStr}" />   
+                                            <f:ajax />     
+                                        </h:selectOneMenu>
+                                    </div>
+                                    <div class="col-md-4 m-b-15">
+                                        <label>Fiscal Arrangement</label>
+                                        <h:selectOneMenu id="fiscalArrangement" value="#{taxController.currentPsc}" class="form-control input-sm m-b-10">                                              
+                                            <f:selectItems value="#{fiscalController.pscFiscalSelectOptions}" />   
+                                            <f:ajax />        
+                                        </h:selectOneMenu>
+                                    </div>
+                                </div>
+
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="block-area" id="Panel">
+                                            <h3 class="block-title">SECTION 9</h3>
+
+                                            <div class="panel panel-default tile">
+                                                <div class="panel-heading">
+                                                    <h3 class="panel-title">Gross Income</h3>
+                                                </div>
+                                                <div class="panel-body">
+                                                    <div class="row">
+                                                        <div class="col-md-12 m-b-15">
+                                                            <label>Gross Income</label>
+                                                            <h:outputText id="grossIncome" value="#{taxController.taxOilDetail.grossIncome}" class="form-control input-sm m-b-10">
+                                                                <f:convertNumber pattern="###,###,###,###.####" />
+                                                            </h:outputText>
+                                                        </div>                                                        
+                                                    </div>
+                                                </div>                                                
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="block-area" id="Panel">
+                                            <h3 class="block-title">DEDUCTIONS</h3>
+                                            <div class="panel panel-default tile">
+                                                <div class="panel-heading">
+                                                    <h3 class="panel-title">Section 10(1)</h3>
+                                                </div>
+                                                <div class="panel-body">
+                                                    <div class="row">
+                                                        <div class="col-md-12 m-b-15">
+                                                            <label>Royalty</label>
+                                                            <h:outputText id="royalty" value="#{taxController.taxOilDetail.royalty}" class="form-control input-sm m-b-10" >
+                                                                <f:convertNumber pattern="###,###,###.####" />
+                                                            </h:outputText>
+                                                        </div>                                                    
+                                                    </div>
+                                                    <div class="row">
+                                                        <h:dataTable id="nonTangibleTable" var="cost" value="#{taxController.prodOpexs}" 
+                                                                     class="table table-bordered table-hover tile">                                                 
+                                                            <h:column> 
+                                                                <h:outputText value="#{cost.costItem.description}"/>                                                        
+                                                            </h:column> 
+                                                            <h:column> 
+                                                                <h:outputText value="#{cost.amountCum}">
+                                                                    <f:convertNumber pattern="###,###,###,###.####" />
+                                                                </h:outputText>
+                                                            </h:column> 
+                                                        </h:dataTable>
+                                                    </div>
+                                                    <div class="panel-footer">
+                                                        Total Section 10(1) Deductions: 
+                                                        <h:outputText value="#{taxController.taxOilDetail.totalDeduction}">
+                                                            <f:convertNumber pattern="###,###,###.####" />
+                                                        </h:outputText>
+                                                    </div>
+                                                    <br/>
+                                                    <div class="row">
+                                                        <div class="col-md-6 m-b-15">
+                                                            <h:outputLabel value="Adjusted Profit/(Loss) - Section 9(3)" for="adjProfit" />
+                                                            <h:inputText id="adjProfit" value="#{taxController.taxOilDetail.adjustedProfit}" class="form-control input-sm m-b-10">
+                                                                <f:convertNumber pattern="###,###,###.####" />
+                                                            </h:inputText>
+                                                        </div>
+                                                        <div class="col-md-6 m-b-15">
+                                                            <h:outputLabel value="Losses B/Fwd - Section 14" for="lossBfw" />
+                                                            <h:inputText id="lossBfw" value="#{taxController.taxOilDetail.lossBfw}" class="form-control input-sm m-b-10">
+                                                                <f:convertNumber pattern="###,###,###.####" />
+                                                            </h:inputText>
+                                                        </div>                                                        
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <div class="col-md-6 m-b-15">
+                                                            <h:outputLabel value="Assessable Profit/(Loss)" for="assessableProfit" />
+                                                            <h:inputText id="assessableProfit" value="#{taxController.taxOilDetail.assessableProfit}" class="form-control input-sm m-b-10">
+                                                                <f:convertNumber pattern="###,###,###.####" />
+                                                            </h:inputText>
+                                                        </div>
+                                                        <div class="col-md-6 m-b-15">
+                                                            <h:outputLabel value="Education Tax @ 2%" for="eduTax" />
+                                                            <h:inputText id="eduTax" value="#{taxController.taxOilDetail.educationTax}" class="form-control input-sm m-b-10">
+                                                                <f:convertNumber pattern="###,###,###.####" />
+                                                            </h:inputText>
+                                                        </div>                                                        
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-6 m-b-15">
+                                                            <h:outputLabel value="(Adjusted)/Assessable Profit (Loss) - Section 9(4)" for="adjAssProf" />
+                                                            <h:inputText id="adjAssProf" value="#{taxController.taxOilDetail.adjustedAssessableProfit}" class="form-control input-sm m-b-10">
+                                                                <f:convertNumber pattern="###,###,###.####" />
+                                                            </h:inputText>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="panel-footer">
+                                                        <h3 class="panel-title">Section 18 Deductions</h3>
+                                                    </div>
+
+                                                    <br/>
+
+                                                    <div class="row">
+                                                        <div class="col-md-6 m-b-15">
+                                                            <h:outputLabel value="Current Year ITA" for="currentYearITA" />
+                                                            <h:inputText id="currentYearITA" value="#{taxController.taxOilDetail.currentITA}" class="form-control input-sm m-b-10">
+                                                                <f:convertNumber pattern="###,###,###.####" />
+                                                            </h:inputText>
+                                                        </div>
+                                                        <div class="col-md-6 m-b-15">
+                                                            <h:outputLabel value="Prior Year Annual Allowance" for="priorYrAnnAllw" />
+                                                            <h:inputText id="priorYrAnnAllw" value="#{taxController.taxOilDetail.priorYearAnnualAllowance}" class="form-control input-sm m-b-10">
+                                                                <f:convertNumber pattern="###,###,###.####" />
+                                                            </h:inputText>
+                                                        </div>                                                                                                                              
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-6 m-b-15">
+                                                            <h:outputLabel value="Current Year Capital Allowance" for="currentYrCapAllw" />
+                                                            <h:inputText id="currentYrCapAllw" value="#{taxController.taxOilDetail.currentCapitalAllowance}" class="form-control input-sm m-b-10">
+                                                                <f:convertNumber pattern="###,###,###.####" />
+                                                            </h:inputText>
+                                                        </div>
+                                                        <div class="col-md-6 m-b-15">
+                                                            <h:outputLabel value="Total Annual Allowance" for="totalAnnualAllw" />
+                                                            <h:inputText id="totalAnnualAllw" value="#{taxController.taxOilDetail.totalAnnualAllowance}" class="form-control input-sm m-b-10">
+                                                                <f:convertNumber pattern="###,###,###.####" />
+                                                            </h:inputText>
+                                                        </div> 
+                                                    </div>
+
+
+                                                    <hr class="whiter m-t-10" />
+                                                    <br/>
+                                                    <br/>
+
+                                                    <div class="row">
+                                                        <div class="col-md-6 m-b-15">
+                                                            <h:outputLabel value="Unrecouped Annual Allowance" for="unrecoupedAnnAllw" />
+                                                            <h:inputText id="unrecoupedAnnAllw" value="#{taxController.taxOilDetail.unrecoupedAnnualAllowance}" class="form-control input-sm m-b-10">
+                                                                <f:convertNumber pattern="###,###,###.####" />
+                                                            </h:inputText>
+                                                        </div>
+                                                        <div class="col-md-6 m-b-15">
+                                                            <h:outputLabel value="85% of Assessable Profit less 170% of ITA" for="assProfLessITA" />
+                                                            <h:inputText id="assProfLessITA" value="#{taxController.taxOilDetail.adjustedProfitLessITA}" class="form-control input-sm m-b-10">
+                                                                <f:convertNumber pattern="###,###,###.####" />
+                                                            </h:inputText>
+                                                        </div>                                                                                                                   
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-6 m-b-15">
+                                                            <h:outputLabel value="Lower of Sect. 18 Ded. OR 85% of Assess. Profit less 170% of ITA" for="sect18DedLower" />
+                                                            <h:inputText id="sect18DedLower" value="#{taxController.taxOilDetail.section18DeductionLower}" class="form-control input-sm m-b-10">
+                                                                <f:convertNumber pattern="###,###,###.####" />
+                                                            </h:inputText>
+                                                        </div>
+                                                        <div class="col-md-6 m-b-15">
+                                                            <h:outputLabel value="Chargeable Profit To Date - Section 9(5)" for="chargeableProf2Date" />
+                                                            <h:inputText id="chargeableProf2Date" value="#{taxController.taxOilDetail.chargeableProfitToDate}" class="form-control input-sm m-b-10">
+                                                                <f:convertNumber pattern="###,###,###.####" />
+                                                            </h:inputText>
+                                                        </div> 
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-6 m-b-15">
+                                                            <h:outputLabel value="Chargeable/(Assessable) Tax To date - Section 21" for="chargeableTax2Date" />
+                                                            <h:inputText id="chargeableTax2Date" value="#{taxController.taxOilDetail.chargeableTaxToDate}" class="form-control input-sm m-b-10">
+                                                                <f:convertNumber pattern="###,###,###.####" />
+                                                            </h:inputText>
+                                                        </div>
+                                                        <div class="col-md-6 m-b-15">
+                                                            <h:outputLabel value="Payable Tax to Date" for="payableTax2Date" />
+                                                            <h:inputText id="payableTax2Date" value="#{taxController.taxOilDetail.payableTaxToDate}" class="form-control input-sm m-b-10">
+                                                                <f:convertNumber pattern="###,###,###.####" />
+                                                            </h:inputText>
+                                                        </div> 
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <div class="col-md-6 m-b-15">
+                                                            <h:outputLabel value="Monthly Minimum Tax" for="monthlyMinTax" />
+                                                            <h:inputText id="monthlyMinTax" value="#{taxController.taxOilDetail.monthlyMinimumTax}" class="form-control input-sm m-b-10">
+                                                                <f:convertNumber pattern="###,###,###.####" />
+                                                            </h:inputText>
+                                                        </div>
+                                                        <div class="col-md-6 m-b-15">
+                                                            <h:outputLabel value="Min. Tax:15% of Adjusted/Assess Profit" for="minTaxAdjProf" />
+                                                            <h:inputText id="minTaxAdjProf" value="0.0" class="form-control input-sm m-b-10">
+                                                                <f:convertNumber pattern="###,###,###.####" />
+                                                            </h:inputText>
+                                                        </div>                                             
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="panel panel-default tile">
+                                                <div class="panel-heading">
+                                                    <h3 class="panel-title">Monthly Tax</h3>
+                                                </div>
+                                                <div class="panel-body">
+                                                    <div class="row">
+                                                        <div class="col-md-12 m-b-15">
+                                                            <label>Tax Oil</label>
+                                                            <h:outputText id="taxOil" value="#{taxController.taxOilDetail.taxOil}" class="form-control input-sm m-b-10" >
+                                                                <f:convertNumber pattern="###,###,###,###.####" />
+                                                            </h:outputText>
+                                                        </div>                                                        
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="panel panel-default tile">
+                                                <div class="panel-heading">
+                                                    <h3 class="panel-title">TAX ADJUSTMENT</h3>
+                                                </div>
+                                                <div class="panel-body">
+                                                    <div class="row">
+                                                        <div class="col-md-12 m-b-15">
+                                                            <label>Losses b/fwd - Section 14</label>
+                                                            <h:outputText id="lossBfwSec14" value="0.0" class="form-control input-sm m-b-10" >
+                                                                <f:convertNumber pattern="###,###,###,###.####" />
+                                                            </h:outputText>
+                                                        </div>                                                        
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </h:panelGroup>
+                        </div>
+                        <div class="modal-footer">
+                            <h:commandButton  value="#{bundle.Close}" pt:data-dismiss="modal" class="btn btn-sm"/>
+                        </div>
+                    </h:form>
+                </div>
+            </div>
+        </div>
+    </ui:composition>
+</html>

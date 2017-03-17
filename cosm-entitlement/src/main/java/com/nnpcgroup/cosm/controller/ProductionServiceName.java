@@ -5,30 +5,29 @@
  */
 package com.nnpcgroup.cosm.controller;
 
-import com.nnpcgroup.cosm.ejb.production.jv.JvProductionServices;
-import com.nnpcgroup.cosm.ejb.production.jv.impl.CarryProductionServicesImpl;
-import com.nnpcgroup.cosm.ejb.production.jv.impl.ModifiedCarryProductionServicesImpl;
-import com.nnpcgroup.cosm.ejb.production.jv.impl.RegularProductionServicesImpl;
+import com.nnpcgroup.cosm.ejb.production.jv.impl.CarryProductionDetailServicesImpl;
+import com.nnpcgroup.cosm.ejb.production.jv.impl.ModifiedCarryProductionDetailServicesImpl;
 import com.nnpcgroup.cosm.entity.contract.Contract;
-import com.nnpcgroup.cosm.entity.production.jv.Production;
+import com.nnpcgroup.cosm.entity.production.jv.ProductionDetail;
+import com.nnpcgroup.cosm.ejb.production.jv.ProductionDetailServices;
 
 /**
  *
  * @author 18359
  */
 public enum ProductionServiceName {    
-    REGULAR(RegularProductionServicesImpl.class),
-    CARRY(CarryProductionServicesImpl.class),
-    MODIFIEDCARRY(ModifiedCarryProductionServicesImpl.class);
+    //REGULAR(ProductionDetailServicesImpl.class),
+//    CARRY(CarryProductionDetailServicesImpl.class),
+//    MODIFIEDCARRY(ModifiedCarryProductionDetailServicesImpl.class);
         
-
-    private Class<? extends JvProductionServices<? extends Production, ? extends Contract>> productionServiceType;
-
-    private ProductionServiceName(Class<? extends JvProductionServices<? extends Production, ? extends Contract>> productionServiceType) {
-        this.productionServiceType = productionServiceType;
-    }
-
-    public Class<? extends JvProductionServices<? extends Production, ? extends Contract>> getProductionServiceType() {
-        return productionServiceType;
-    }
+//
+//    private Class<? extends ProductionDetailServices<? extends ProductionDetail, ? extends Contract>> productionServiceType;
+//
+//    private ProductionServiceName(Class<? extends ProductionDetailServices<? extends ProductionDetail, ? extends Contract>> productionServiceType) {
+//        this.productionServiceType = productionServiceType;
+//    }
+//
+//    public Class<? extends ProductionDetailServices<? extends ProductionDetail, ? extends Contract>> getProductionServiceType() {
+//        return productionServiceType;
+//    }
 }

@@ -6,6 +6,7 @@
 package com.nnpcgroup.cosm.ejb.tax;
 
 import com.nnpcgroup.cosm.entity.ProductionSharingContract;
+import com.nnpcgroup.cosm.entity.tax.TaxOilDetail;
 
 /**
  *
@@ -54,4 +55,12 @@ public interface TaxServices {
     public double computePayableTaxToDate(ProductionSharingContract psc, int year, int month);
 
     public double computeCurrentYearCapitalAllowance(ProductionSharingContract psc, int year, int month);
+
+    public TaxOilDetail computeTaxOilDetail(ProductionSharingContract psc, int year, int month);
+
+    public TaxOilDetail getPriorYearTaxOilDetail(ProductionSharingContract psc, int year, int month);
+
+    public TaxOilDetail getPriorMonthTaxOilDetail(ProductionSharingContract psc, int year, int month);
+
+    public TaxOilDetail buildTaxOil(ProductionSharingContract psc, int year, int month);
 }

@@ -14,7 +14,6 @@ public class TaxOilDetail implements Serializable {
 
     private double royalty;
     private double grossIncome;
-    private double totalDeduction;
     private double lossBfw;
     private double currentITA;
     private double currentCapitalAllowance;
@@ -22,9 +21,11 @@ public class TaxOilDetail implements Serializable {
     private double petroleumProfitTaxRate;
     private double educationTax;
     private double priorYearAnnualAllowance;
+    private double opex;
+
 
     public double getAdjustedProfit() {
-        return Math.max(0, grossIncome - totalDeduction);
+        return Math.max(0, grossIncome - getTotalDeduction());
     }
 
     public double getAssessableProfit() {
@@ -100,11 +101,7 @@ public class TaxOilDetail implements Serializable {
     }
 
     public double getTotalDeduction() {
-        return totalDeduction;
-    }
-
-    public void setTotalDeduction(double totalDeduction) {
-        this.totalDeduction = totalDeduction;
+        return opex + royalty;
     }
 
     public double getLossBfw() {
@@ -147,4 +144,15 @@ public class TaxOilDetail implements Serializable {
         this.petroleumProfitTaxRate = petroleumProfitTaxRate;
     }
 
+    public double getMinimumTax() {
+        return getAdjustedAssessableProfit() * 0.15;
+    }
+
+    public double getOpex() {
+        return opex;
+    }
+
+    public void setOpex(double opex) {
+        this.opex = opex;
+    }
 }

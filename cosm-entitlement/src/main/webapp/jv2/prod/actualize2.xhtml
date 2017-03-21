@@ -106,7 +106,8 @@
                                             </button>
                                             <ul class="dropdown-menu" jsf:id="btnList"> 
                                                 <li>
-                                                    <h:commandLink  pt:data-target="#JvActualCreateDlg" pt:look="warning" pt:data-toggle="modal" >
+                                                    <h:commandLink  pt:data-target="#JvActualCreateDlg" pt:look="warning" pt:data-toggle="modal"
+                                                                    pt:data-backdrop="static" pt:data-keyboard="false" >
                                                         <span class="icon">&#61943;</span>
                                                         #{bundle.Create}
                                                         <f:ajax event="click" render="JvActualCreateForm" listener="#{jvActualController.prepareCreate}" />
@@ -114,14 +115,16 @@
                                                 </li>
 
                                                 <li>
-                                                    <h:commandLink pt:data-target="#JvViewDlg" pt:look="warning" pt:data-toggle="modal">
+                                                    <h:commandLink pt:data-target="#JvViewDlg" pt:look="warning" pt:data-toggle="modal"
+                                                                   pt:data-backdrop="static" pt:data-keyboard="false" >
                                                         <span class="icon">&#61698;</span>
                                                         #{bundle.View}
                                                         <f:ajax event="click" render="JvViewForm" listener="#{jvActualController.setCurrentProductionDetail(prod)}"/>
                                                     </h:commandLink>
                                                 </li>
                                                 <li>
-                                                    <h:commandLink pt:data-target="#JvEditDlg" pt:look="warning" pt:data-toggle="modal">
+                                                    <h:commandLink pt:data-target="#JvEditDlg" pt:look="warning" pt:data-toggle="modal"
+                                                                   pt:data-backdrop="static" pt:data-keyboard="false" >
                                                         <span class="icon">&#61952;</span>
                                                         #{bundle.Edit}
                                                         <f:ajax event="click" render="JvEditForm" listener="#{jvActualController.setCurrentProductionDetail(prod)}"/>

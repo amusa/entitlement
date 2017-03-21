@@ -11,6 +11,7 @@ import com.nnpcgroup.cosm.entity.ProductionSharingContract;
 import com.nnpcgroup.cosm.entity.cost.CostItem;
 import com.nnpcgroup.cosm.entity.cost.ProductionCost;
 import com.nnpcgroup.cosm.entity.tax.TaxOilDetail;
+import com.nnpcgroup.cosm.util.TimeMachine;
 
 import javax.inject.Named;
 import java.io.Serializable;
@@ -34,6 +35,9 @@ public class TaxController implements Serializable {
 
     @Inject
     private TaxServices taxBean;
+
+    @Inject
+    private TimeMachine timeMachine;
 
     @EJB
     private ProductionCostServices prodCostBean;
@@ -77,40 +81,27 @@ public class TaxController implements Serializable {
         this.taxOilDetail = taxOilDetail;
     }
 
-    public void calculationTaxOilDetail(ProductionSharingContract psc, int year, int month) {
+    public void calculateTaxOilDetail(ProductionSharingContract psc, int year, int month) {
         initialize(psc, year, month);
-
-        double royalty = taxBean.computeRoyaltyCum(psc, year, month);
-        double grossIncome = taxBean.computeGrossIncome(psc, year, month);
-        double totalDeduction = taxBean.computeTotalDeduction(psc, year, month);
-        double lossBfw = 0;
-        double currentITA = taxBean.computeCurrentYearITA(psc, year, month);
-        double currentCapitalAllowance = taxBean.computeCurrentYearCapitalAllowance(psc, year, month);
-        double monthlyMinimumTax = taxBean.computeMonthlyMinimumTax(psc, year, month);
-        double petroleumProfitTaxRate = psc.getPetroleumProfitTaxRate(makeDate(year, month));
-        double educationTax = taxBean.computeEducationTax(psc, year, month);
-        double priorYrAnnualAllw = taxBean.computePriorYearAnnualAllowance(psc, year, month);
-
         taxOilDetail = new TaxOilDetail();
-
-        taxOilDetail.setRoyalty(royalty);
-        taxOilDetail.setGrossIncome(grossIncome);
-        taxOilDetail.setTotalDeduction(totalDeduction);
-        taxOilDetail.setLossBfw(lossBfw);
-        taxOilDetail.setCurrentITA(currentITA);
-        taxOilDetail.setCurrentCapitalAllowance(currentCapitalAllowance);
-        taxOilDetail.setMonthlyMinimumTax(monthlyMinimumTax);
-        taxOilDetail.setPetroleumProfitTaxRate(petroleumProfitTaxRate);
-        taxOilDetail.setEducationTax(educationTax);
-        taxOilDetail.setPriorYearAnnualAllowance(priorYrAnnualAllw);
+        timeMachine.start();
+        taxOilDetail = taxBean.computeTaxOilDetail(psc, year, month);
+        timeMachine.finish();
     }
 
-    private Date makeDate(int year, int month) {
-        //Return date af the last day of a given year and month
+    public long getExecTimeSeconds() {
+        return timeMachine.duration() % 60;
+    }
 
-        YearMonth yearMonthObject = YearMonth.of(year, month);
-        int daysInMonth = yearMonthObject.lengthOfMonth();
-        return new GregorianCalendar(year, month - 1, daysInMonth).getTime();
+    public long getExecTimeMinutes() {
+        return timeMachine.duration() / 60;
+    }
+
+    public void refreshTaxOil() {
+        taxOilDetail = new TaxOilDetail();
+        timeMachine.start();
+        taxOilDetail = taxBean.buildTaxOil(this.currentPsc, this.periodYear, this.periodMonth);
+        timeMachine.finish();
     }
 
     public List<ProductionCost> getProdOpexs() {

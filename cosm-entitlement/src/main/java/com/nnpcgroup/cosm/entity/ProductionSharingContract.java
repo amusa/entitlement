@@ -6,6 +6,7 @@
 package com.nnpcgroup.cosm.entity;
 
 import com.nnpcgroup.cosm.entity.crude.CrudeType;
+import com.nnpcgroup.cosm.util.DateUtil;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -250,7 +251,7 @@ public class ProductionSharingContract extends FiscalArrangement {
     @Transient
     private int getContractDuration(Date refDate) {
         if (contractExecutionDate != null) {
-            return computeDateDiff(contractExecutionDate, refDate);
+            return DateUtil.yearsDiff(contractExecutionDate, refDate);
         }
 
         return 0;
@@ -259,35 +260,11 @@ public class ProductionSharingContract extends FiscalArrangement {
     @Transient
     private int getFirstOilDuration(Date refDate) {
         if (firstOilDate != null) {
-            return computeDateDiff(firstOilDate, refDate);
+            return DateUtil.yearsDiff(firstOilDate, refDate);
         }
         return 0;
     }
 
-    @Transient
-    public int computeDateDiff(Date date1, Date date2) {
-        if (date1 != null && date2 != null) {
-            LocalDate ld1 = getLocalDate(date1);
-            LocalDate ld2 = getLocalDate(date2);
-
-            Period diff = Period.between(ld1, ld2);
-            return diff.getYears();
-        }
-
-        return 0;
-    }
-
-    private LocalDate getLocalDate(Date date) {
-        Calendar cal = new GregorianCalendar();
-        cal.setTime(date);
-
-        int year = cal.get(Calendar.YEAR);
-        int month = cal.get(Calendar.MONTH) + 1; //MONTH is zero-based
-        int day = cal.get(Calendar.DAY_OF_MONTH);
-
-        return LocalDate.of(year, month, day);
-
-    }
 
     @Transient
     public Double getOplTotalConcessionRental() {
@@ -298,12 +275,12 @@ public class ProductionSharingContract extends FiscalArrangement {
     @Transient
     public double getOmlAnnualConcessionRental() {
         return (areaSize.getOmlContractArea() == null || areaSize.getOmlRentalRate() == null)
-                ? null : areaSize.getOmlContractArea() * areaSize.getOmlRentalRate();
+                ? 0 : areaSize.getOmlContractArea() * areaSize.getOmlRentalRate();
     }
 
     @Transient
     private int getOplToOmlDuration() {
-        int yearDiff = computeDateDiff(contractExecutionDate, firstOilDate);
+        int yearDiff = DateUtil.yearsDiff(contractExecutionDate, firstOilDate);
         
         return yearDiff;
     }

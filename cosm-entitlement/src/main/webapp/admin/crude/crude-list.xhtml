@@ -62,7 +62,8 @@
                                     </button>
                                     <ul class="dropdown-menu" jsf:id="btnList">
                                         <li>
-                                            <h:commandLink  pt:data-target="#CrudeTypeCreateDlg" pt:look="warning" pt:data-toggle="modal" >
+                                            <h:commandLink  pt:data-target="#CrudeTypeCreateDlg" pt:look="warning" pt:data-toggle="modal"
+                                                            pt:data-backdrop="static" pt:data-keyboard="false" >
                                                 <span class="icon">&#61943;</span>
                                                 #{bundle.Create}
                                                 <f:ajax event="click" render="CrudeTypeCreateForm" listener="#{crudeTypeController.prepareCreate}" />
@@ -70,13 +71,15 @@
                                         </li>
 
                                         <li>
-                                            <h:commandLink pt:data-target="#CrudeTypeViewDlg" pt:look="warning" pt:data-toggle="modal">
+                                            <h:commandLink pt:data-target="#CrudeTypeViewDlg" pt:look="warning" pt:data-toggle="modal"
+                                                           pt:data-backdrop="static" pt:data-keyboard="false" >
                                                 <span class="icon">&#61698;</span>
                                                 #{bundle.View}
                                                 <f:ajax event="click" render="CrudeTypeViewForm" listener="#{crudeTypeController.setSelected(crude)}"/>
                                             </h:commandLink>
                                         </li>
-                                        <li><h:commandLink pt:data-target="#CrudeTypeEditDlg" pt:look="warning" pt:data-toggle="modal">
+                                        <li><h:commandLink pt:data-target="#CrudeTypeEditDlg" pt:look="warning" pt:data-toggle="modal"
+                                                           pt:data-backdrop="static" pt:data-keyboard="false" >
                                                 <span class="icon">&#61952;</span>
                                                 #{bundle.Edit}
                                                 <f:ajax event="click" render="CrudeTypeEditForm" listener="#{crudeTypeController.setSelected(crude)}"/>
@@ -94,18 +97,21 @@
                             </h:column>
 
                             <f:facet name="footer">                                                                
-                                <button jsf:id="createButton" look="warning" data-target="#CrudeTypeCreateDlg" data-toggle="modal" class="btn m-r-5">
+                                <button jsf:id="createButton" look="warning" data-target="#CrudeTypeCreateDlg" data-toggle="modal" class="btn m-r-5"
+                                        pt:data-backdrop="static" pt:data-keyboard="false" >
                                     <span class="icon">&#61943;</span>
                                     #{bundle.Create}
                                     <f:ajax event="click" render="CrudeTypeCreateForm" listener="#{crudeTypeController.prepareCreate}" />
                                 </button>
 
-                                <button jsf:id="viewButton" look="warning" data-target="#CrudeTypeViewDlg" data-toggle="modal" class="btn m-r-5">
+                                <button jsf:id="viewButton" look="warning" data-target="#CrudeTypeViewDlg" data-toggle="modal" class="btn m-r-5"
+                                        pt:data-backdrop="static" pt:data-keyboard="false" >
                                     <span class="icon">&#61698;</span>
                                     #{bundle.View}
                                     <f:ajax event="click" render="CrudeTypeViewForm" />
                                 </button>
-                                <button jsf:id="editButton" look="warning" data-target="#CrudeTypeEditDlg" data-toggle="modal" class="btn m-r-5">
+                                <button jsf:id="editButton" look="warning" data-target="#CrudeTypeEditDlg" data-toggle="modal" class="btn m-r-5"
+                                        pt:data-backdrop="static" pt:data-keyboard="false" >
                                     <span class="icon">&#61952;</span>                                    
                                     #{bundle.Edit}
                                     <f:ajax event="click" render="CrudeTypeEditForm" />

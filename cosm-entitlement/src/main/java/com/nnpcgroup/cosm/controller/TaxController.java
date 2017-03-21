@@ -83,6 +83,7 @@ public class TaxController implements Serializable {
 
     public void calculateTaxOilDetail(ProductionSharingContract psc, int year, int month) {
         initialize(psc, year, month);
+        taxOilDetail = new TaxOilDetail();
         timeMachine.start();
         taxOilDetail = taxBean.computeTaxOilDetail(psc, year, month);
         timeMachine.finish();
@@ -96,8 +97,11 @@ public class TaxController implements Serializable {
         return timeMachine.duration() / 60;
     }
 
-    public void refreshTaxOil(){
+    public void refreshTaxOil() {
+        taxOilDetail = new TaxOilDetail();
+        timeMachine.start();
         taxOilDetail = taxBean.buildTaxOil(this.currentPsc, this.periodYear, this.periodMonth);
+        timeMachine.finish();
     }
 
     public List<ProductionCost> getProdOpexs() {

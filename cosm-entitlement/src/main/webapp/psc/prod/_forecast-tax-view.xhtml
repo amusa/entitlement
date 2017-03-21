@@ -11,11 +11,34 @@
 <ui:composition>
     <div class="modal fade" id="TaxOilViewDlg" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-lg">
+
             <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">Tax Oil</h4>
-                </div>
+                <h:form>
+                    <div class="modal-header">
+                        <!--<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>-->
+                        <h4 class="modal-title">Tax Oil</h4>
+                        <div class="tile-config dropdown">
+                            <a data-toggle="dropdown" href="" class="tooltips tile-menu" title="Options"></a>
+
+                            <ul class="dropdown-menu pull-right text-right">
+                                <li>
+
+                                    <h:commandLink>
+                                        Refresh
+                                        <f:ajax event="click"
+                                                listener="#{pscProdController.refreshTaxOilListener}"
+                                                render="TaxOilViewForm"/>
+                                    </h:commandLink>
+
+                                </li>
+                                <li><a href="">Settings</a></li>
+                                <li><a href="" data-dismiss="modal" aria-hidden="true">Close</a></li>
+
+                            </ul>
+
+                        </div>
+                    </div>
+                </h:form>
                 <h:form id="TaxOilViewForm">
                     <div class="modal-body">
                         <h:panelGroup id="TaxOilViewPanel">

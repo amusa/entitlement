@@ -285,8 +285,12 @@ public class PscProductionController implements Serializable {
         return productionDetail;
     }
 
+    public void refreshTaxOilListener() {
+        taxController.refreshTaxOil();
+    }
+
     public void taxOilCalculationListener() {
-        taxController.calculationTaxOilDetail(currentPsc, periodYear, periodMonth);
+        taxController.calculateTaxOilDetail(currentPsc, periodYear, periodMonth);
     }
     
     public void costOilCalculationListener() {

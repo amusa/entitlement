@@ -47,6 +47,10 @@ public class TaxServicesImpl implements TaxServices, Serializable {
     GeneralController genController;
 
     private Map<TaxOilKey, TaxOilDetail> taxOilCache;
+    private Map<TaxOilKey, Double> royaltyCache;
+    private Map<TaxOilKey, Double> incomeCache;
+    private Map<TaxOilKey, Double> unrecoupedAnnualAllowanceCache;
+    private Map<TaxOilKey, Double> amortizationCache;
 
 
     @Override
@@ -56,7 +60,23 @@ public class TaxServicesImpl implements TaxServices, Serializable {
 
     @Override
     public double computeGrossIncome(ProductionSharingContract psc, int year, int month) {
-        return computeGrossIncome(psc, new FiscalPeriod(year, month));
+        TaxOilKey taxOilKey = new TaxOilKey(psc, year, month);
+        Double grossIncome;
+
+        if (incomeCache != null) {
+            grossIncome = incomeCache.get(taxOilKey);
+            if (grossIncome != null) {
+                return grossIncome;
+            }
+        } else {
+            incomeCache = new HashMap<>();
+        }
+
+        grossIncome = computeGrossIncome(psc, new FiscalPeriod(year, month));
+
+        incomeCache.put(taxOilKey, grossIncome);
+
+        return grossIncome;
     }
 
     private double computeGrossIncome(ProductionSharingContract psc, FiscalPeriod fp) {
@@ -136,7 +156,23 @@ public class TaxServicesImpl implements TaxServices, Serializable {
 
     @Override
     public double computeRoyaltyCum(ProductionSharingContract psc, int year, int month) {
-        return computeRoyaltyCum(psc, new FiscalPeriod(year, month));
+        TaxOilKey taxOilKey = new TaxOilKey(psc, year, month);
+        Double royalty;
+
+        if (royaltyCache != null) {
+            royalty = royaltyCache.get(taxOilKey);
+            if (royalty != null) {
+                return royalty;
+            }
+        } else {
+            royaltyCache = new HashMap<>();
+        }
+
+        royalty = computeRoyaltyCum(psc, new FiscalPeriod(year, month));
+
+        royaltyCache.put(taxOilKey, royalty);
+
+        return royalty;
     }
 
     private double computeRoyaltyCum(ProductionSharingContract psc, FiscalPeriod fp) {
@@ -226,16 +262,33 @@ public class TaxServicesImpl implements TaxServices, Serializable {
 
     @Override
     public double computeUnrecoupedAnnualAllowance(ProductionSharingContract psc, int year, int month) {
+        TaxOilKey taxOilKey = new TaxOilKey(psc, year, month);
+        Double UAA;
+
+        if (unrecoupedAnnualAllowanceCache != null) {
+            UAA = unrecoupedAnnualAllowanceCache.get(taxOilKey);
+            if (UAA != null) {
+                return UAA;
+            }
+        } else {
+            unrecoupedAnnualAllowanceCache = new HashMap<>();
+        }
+
         double adjAssProfit, totalAnnualAllw;
 
         adjAssProfit = computeAdjustedAssessableProfit(psc, year, month);
         totalAnnualAllw = computeTotalAnnualAllowance(psc, year, month);
 
-        return Math.min(0, adjAssProfit - totalAnnualAllw);
+        UAA = Math.min(0, adjAssProfit - totalAnnualAllw);
+
+        unrecoupedAnnualAllowanceCache.put(taxOilKey, UAA);
+
+        return UAA;
     }
 
     @Override
     public double computePriorYearAnnualAllowance(ProductionSharingContract psc, int year, int month) {
+
         FiscalPeriod prevFp = fiscalService.getPreviousFiscalPeriod(year);
 
         if (!prodCostBean.fiscalPeriodExists(psc, prevFp)) {
@@ -245,13 +298,28 @@ public class TaxServicesImpl implements TaxServices, Serializable {
         double UAA;
 
         UAA = computeUnrecoupedAnnualAllowance(psc, prevFp.getYear(), prevFp.getMonth());
-        return -1 * UAA;
 
+        return -1 * UAA;
     }
 
     @Override
     public double computeCurrentYearCapitalAllowance(ProductionSharingContract psc, int year, int month) {
-        return computeCurrentYearCapitalAllowance(psc, new FiscalPeriod(year, month));
+        TaxOilKey taxOilKey = new TaxOilKey(psc, year, month);
+        Double capitalAllowance;
+
+        if (amortizationCache != null) {
+            capitalAllowance = amortizationCache.get(taxOilKey);
+            if (capitalAllowance != null) {
+                return capitalAllowance;
+            }
+        } else {
+            amortizationCache = new HashMap<>();
+        }
+
+        capitalAllowance = computeCurrentYearCapitalAllowance(psc, new FiscalPeriod(year, month));
+        amortizationCache.put(taxOilKey, capitalAllowance);
+
+        return capitalAllowance;
     }
 
     @Override
@@ -294,12 +362,10 @@ public class TaxServicesImpl implements TaxServices, Serializable {
         double educationTax = computeEducationTax(psc, year, month);
         taxOilDetail.setEducationTax(educationTax);
 
-        TaxOilDetail priorMonthTaxOil = getPriorMonthTaxOilDetail(psc, year, month);
-        double monthlyMinimumTax = taxOilDetail.getMinimumTax() - priorMonthTaxOil.getMinimumTax();
+        double monthlyMinimumTax = computeMonthlyMinimumTax(psc, year, month);
         taxOilDetail.setMonthlyMinimumTax(monthlyMinimumTax);
 
-        TaxOilDetail priorYrTaxOil = getPriorYearTaxOilDetail(psc, year, month);
-        double priorYrAnnualAllw = priorYrTaxOil.getUnrecoupedAnnualAllowance() * -1;
+        double priorYrAnnualAllw = computePriorYearAnnualAllowance(psc, year, month);
         taxOilDetail.setPriorYearAnnualAllowance(priorYrAnnualAllw);
 
         taxOilCache.put(taxOilKey, taxOilDetail);
@@ -335,6 +401,11 @@ public class TaxServicesImpl implements TaxServices, Serializable {
     @Override
     public TaxOilDetail buildTaxOil(ProductionSharingContract psc, int year, int month) {
         taxOilCache = new HashMap<>();
+        royaltyCache = new HashMap<>();
+        incomeCache = new HashMap<>();
+        unrecoupedAnnualAllowanceCache = new HashMap<>();
+        amortizationCache = new HashMap<>();
+
         return computeTaxOilDetail(psc, year, month);
     }
 

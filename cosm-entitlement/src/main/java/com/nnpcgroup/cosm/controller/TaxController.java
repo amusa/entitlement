@@ -11,6 +11,7 @@ import com.nnpcgroup.cosm.entity.ProductionSharingContract;
 import com.nnpcgroup.cosm.entity.cost.CostItem;
 import com.nnpcgroup.cosm.entity.cost.ProductionCost;
 import com.nnpcgroup.cosm.entity.tax.TaxOilDetail;
+import com.nnpcgroup.cosm.util.TimeMachine;
 
 import javax.inject.Named;
 import java.io.Serializable;
@@ -34,6 +35,9 @@ public class TaxController implements Serializable {
 
     @Inject
     private TaxServices taxBean;
+
+    @Inject
+    private TimeMachine timeMachine;
 
     @EJB
     private ProductionCostServices prodCostBean;
@@ -79,6 +83,7 @@ public class TaxController implements Serializable {
 
     public void calculationTaxOilDetail(ProductionSharingContract psc, int year, int month) {
         initialize(psc, year, month);
+        timeMachine.start();
 
         double royalty = taxBean.computeRoyaltyCum(psc, year, month);
         double grossIncome = taxBean.computeGrossIncome(psc, year, month);
@@ -103,6 +108,15 @@ public class TaxController implements Serializable {
         taxOilDetail.setPetroleumProfitTaxRate(petroleumProfitTaxRate);
         taxOilDetail.setEducationTax(educationTax);
         taxOilDetail.setPriorYearAnnualAllowance(priorYrAnnualAllw);
+        timeMachine.finish();
+    }
+
+    public long getExecTimeSeconds() {
+        return timeMachine.duration() % 60;
+    }
+
+    public long getExecTimeMinutes() {
+        return timeMachine.duration() / 60;
     }
 
     private Date makeDate(int year, int month) {

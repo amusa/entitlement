@@ -2,10 +2,10 @@ package com.nnpcgroup.cosm.cdi.impl;
 
 import com.nnpcgroup.cosm.cdi.ScheduleB1Service;
 import com.nnpcgroup.cosm.controller.CostOilController;
-import com.nnpcgroup.cosm.ejb.FiscalPeriodService;
+import com.nnpcgroup.cosm.cdi.FiscalPeriodService;
 import com.nnpcgroup.cosm.ejb.cost.ProductionCostServices;
 import com.nnpcgroup.cosm.ejb.lifting.PscLiftingServices;
-import com.nnpcgroup.cosm.ejb.tax.TaxServices;
+import com.nnpcgroup.cosm.cdi.TaxServices;
 import com.nnpcgroup.cosm.entity.FiscalPeriod;
 import com.nnpcgroup.cosm.entity.ProductionSharingContract;
 import com.nnpcgroup.cosm.entity.lifting.PscLifting;

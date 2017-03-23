@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.nnpcgroup.cosm.ejb.impl;
+package com.nnpcgroup.cosm.cdi.impl;
 
-import com.nnpcgroup.cosm.ejb.FiscalPeriodService;
+import com.nnpcgroup.cosm.cdi.FiscalPeriodService;
 import com.nnpcgroup.cosm.entity.FiscalPeriod;
 
 import java.io.Serializable;

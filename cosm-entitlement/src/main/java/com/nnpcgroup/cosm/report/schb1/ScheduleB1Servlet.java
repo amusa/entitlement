@@ -11,20 +11,10 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-import com.nnpcgroup.cosm.controller.CostOilController;
 import com.nnpcgroup.cosm.controller.MonthGenerator;
 import com.nnpcgroup.cosm.controller.PeriodMonth;
-import com.nnpcgroup.cosm.ejb.FiscalPeriodService;
 import com.nnpcgroup.cosm.ejb.ProductionSharingContractBean;
-import com.nnpcgroup.cosm.ejb.cost.ProductionCostServices;
-import com.nnpcgroup.cosm.ejb.crude.CrudePriceBean;
-import com.nnpcgroup.cosm.ejb.lifting.PscLiftingServices;
-import com.nnpcgroup.cosm.ejb.tax.TaxServices;
-import com.nnpcgroup.cosm.entity.FiscalPeriod;
 import com.nnpcgroup.cosm.entity.ProductionSharingContract;
-import com.nnpcgroup.cosm.entity.crude.CrudePrice;
-import com.nnpcgroup.cosm.entity.crude.CrudePricePK;
-import com.nnpcgroup.cosm.entity.lifting.PscLifting;
 
 import javax.inject.Inject;
 import javax.servlet.ServletException;
@@ -35,8 +25,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.text.SimpleDateFormat;
-import java.util.*;
 import javax.ejb.EJB;
 
 /**

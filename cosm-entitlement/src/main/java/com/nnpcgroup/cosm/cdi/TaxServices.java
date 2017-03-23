@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.nnpcgroup.cosm.ejb.tax;
+package com.nnpcgroup.cosm.cdi;
 
 import com.nnpcgroup.cosm.entity.ProductionSharingContract;
 import com.nnpcgroup.cosm.entity.tax.TaxOilDetail;

@@ -3,15 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.nnpcgroup.cosm.ejb.tax.impl;
+package com.nnpcgroup.cosm.cdi.impl;
 
 import com.nnpcgroup.cosm.controller.GeneralController;
-import com.nnpcgroup.cosm.ejb.FiscalPeriodService;
+import com.nnpcgroup.cosm.cdi.FiscalPeriodService;
 import com.nnpcgroup.cosm.ejb.cost.ProductionCostServices;
 import com.nnpcgroup.cosm.ejb.crude.CrudePriceBean;
 import com.nnpcgroup.cosm.ejb.forecast.psc.PscForecastDetailServices;
 import com.nnpcgroup.cosm.ejb.lifting.PscLiftingServices;
-import com.nnpcgroup.cosm.ejb.tax.TaxServices;
+import com.nnpcgroup.cosm.cdi.TaxServices;
 import com.nnpcgroup.cosm.entity.FiscalPeriod;
 import com.nnpcgroup.cosm.entity.ProductionSharingContract;
 import com.nnpcgroup.cosm.entity.tax.TaxOilDetail;

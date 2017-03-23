@@ -12,14 +12,21 @@ import java.util.Date;
 import java.util.List;
 
 /**
- *
  * @author 18359
  */
 public interface PscLiftingServices extends LiftingServices<PscLifting> {
 
     List<PscLifting> find(ProductionSharingContract psc, Date from, Date to);
-    
+
     List<PscLifting> find(ProductionSharingContract psc, int year, int month);
 
     double computeWeightedAvePrice(ProductionSharingContract psc, int year, int month);
+
+    double getCorporationProceed(ProductionSharingContract psc, int year, int month);
+
+    double getContractorProceed(ProductionSharingContract psc, int year, int month);
+
+    double getTotalProceed(ProductionSharingContract psc, int year, int month);
+
+    double getGrossIncome(ProductionSharingContract psc, int year, int month);
 }

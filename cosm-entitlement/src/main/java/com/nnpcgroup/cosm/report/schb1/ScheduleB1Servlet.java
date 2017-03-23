@@ -5,6 +5,7 @@
  */
 package com.nnpcgroup.cosm.report.schb1;
 
+import com.nnpcgroup.cosm.cdi.ScheduleB1Service;
 import com.nnpcgroup.cosm.report.*;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPCell;
@@ -35,7 +36,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
+import java.util.*;
 import javax.ejb.EJB;
 
 /**
@@ -46,31 +47,14 @@ import javax.ejb.EJB;
 public class ScheduleB1Servlet extends HttpServlet {
 
     @Inject
-    MonthGenerator monthGen;
+    private MonthGenerator monthGen;
 
     @Inject
-    TaxServices taxBean;
-
-    @Inject
-    private FiscalPeriodService fiscalService;
-
-    @Inject
-    CostOilController costOilController;
-
-    @EJB
-    private PscLiftingServices liftingBean;
-
-    @EJB
-    private CrudePriceBean priceBean;
+    private ScheduleB1Service scheduleB1Service;
 
     @EJB
     private ProductionSharingContractBean pscBean;
 
-    @EJB
-    private ProductionCostServices prodCostBean;
-
-    private java.util.List<LiftingSummary> liftingSummaryList;
-    private java.util.List<ProceedAllocation> proceedAllocationList;
 
     Long pscId;
     Integer periodYear;
@@ -199,7 +183,7 @@ public class ScheduleB1Servlet extends HttpServlet {
     private void addLiftingSummaryTableContent(PdfPTable table) {
         PdfPCell cell;
 
-        processLiftingSummary();
+        java.util.List<LiftingSummary> liftingSummaryList = scheduleB1Service.getLiftingSummary(this.psc, this.periodYear, this.periodMonth);
 
         if (!liftingSummaryList.isEmpty()) {
             for (LiftingSummary ls : liftingSummaryList) {
@@ -279,8 +263,7 @@ public class ScheduleB1Servlet extends HttpServlet {
 
     private void addAllocationTableContent(PdfPTable table) {
         PdfPCell cell;
-
-        processAllocation();
+        java.util.List<ProceedAllocation> proceedAllocationList = scheduleB1Service.processProceedAllocation(this.psc, this.periodYear, this.periodMonth);
 
         if (!proceedAllocationList.isEmpty()) {
             for (ProceedAllocation pa : proceedAllocationList) {
@@ -380,259 +363,6 @@ public class ScheduleB1Servlet extends HttpServlet {
         for (int i = 0; i < number; i++) {
             paragraph.add(new Paragraph(" "));
         }
-    }
-
-    public void processLiftingSummary() {
-        if (this.psc != null && this.periodYear != null && this.periodMonth != null) {
-            java.util.List<PscLifting> pscLiftings = liftingBean.find(this.psc, this.periodYear, this.periodMonth);
-            liftingSummaryList = new ArrayList<>();
-
-            double price;
-            double proceed = 0;
-
-            for (PscLifting lifting : pscLiftings) {
-//                CrudePricePK pricePK = new CrudePricePK();
-//                pricePK.setCrudeTypeCode(psc.getCrudeType().getCode());
-//                pricePK.setPriceDate(lifting.getLiftingDate());
-//                CrudePrice crudePrice = priceBean.find(pricePK);
-//
-//                if (crudePrice != null) {
-//                    price = crudePrice.getOsPrice();
-//                } else {
-//                    price = 0;
-//                }
-
-//                proceed += (lifting.getTotalLifting() * price);
-                proceed += lifting.getRevenue();
-
-                LiftingSummary liftSumm = new LiftingSummary();
-
-                SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM");
-                String liftingDate = dateFormat.format(lifting.getLiftingDate());
-//                double corpProceed = lifting.getOwnLifting() * price;
-                double corpProceed = lifting.getOwnLifting() * lifting.getPrice();
-//                double contProceed = lifting.getPartnerLifting() * price;
-                double contProceed = lifting.getPartnerLifting() * lifting.getPrice();
-
-                liftSumm.setLiftingDate(liftingDate);
-                liftSumm.setLiftingVolume(lifting.getTotalLifting());
-//                liftSumm.setOsPrice(price);
-                liftSumm.setOsPrice(lifting.getPrice());
-                liftSumm.setProceed(proceed);
-                liftSumm.setCorporationProceed(corpProceed);
-                liftSumm.setContractorProceed(contProceed);
-
-                liftingSummaryList.add(liftSumm);
-
-            }
-
-        }
-
-    }
-
-    private void processAllocation() {
-        proceedAllocationList = new ArrayList<>();
-
-        ProceedAllocation royPa = new ProceedAllocation();
-        Allocation royAlloc = processRoyalty(this.psc, this.periodYear, this.periodMonth);
-        royPa.setCategoryTitle("ROYALTY OIL");
-        royPa.setMonthlyChargeBfw(royAlloc.getChargeBfw());
-        royPa.setMonthlyCharge(royAlloc.getMonthlyCharge());
-        royPa.setRecoverable(royAlloc.getRecoverable());
-        royPa.setCorporationProceed(royAlloc.getReceived());
-        royPa.setMonthlyChargeCfw(royAlloc.getChargeCfw());
-
-        proceedAllocationList.add(royPa);
-
-        ProceedAllocation coPa = new ProceedAllocation();
-        Allocation costOilAlloc = processCostOil(this.psc, this.periodYear, this.periodMonth);
-        coPa.setCategoryTitle("COST OIL");
-        coPa.setMonthlyChargeBfw(costOilAlloc.getChargeBfw());
-        coPa.setMonthlyCharge(costOilAlloc.getMonthlyCharge());
-        coPa.setRecoverable(costOilAlloc.getRecoverable());
-        coPa.setContractorProceed(costOilAlloc.getReceived());
-        coPa.setMonthlyChargeCfw(costOilAlloc.getChargeCfw());
-
-        proceedAllocationList.add(coPa);
-
-        ProceedAllocation toPa = new ProceedAllocation();
-        Allocation taxOilAlloc = processTaxOil(this.psc, this.periodYear, this.periodMonth);
-        toPa.setCategoryTitle("TAX OIL");
-        toPa.setMonthlyChargeBfw(taxOilAlloc.getChargeBfw());
-        toPa.setMonthlyCharge(taxOilAlloc.getMonthlyCharge());
-        toPa.setRecoverable(taxOilAlloc.getRecoverable());
-        toPa.setCorporationProceed(taxOilAlloc.getReceived());
-        toPa.setMonthlyChargeCfw(taxOilAlloc.getChargeCfw());
-
-        proceedAllocationList.add(toPa);
-
-        ProceedAllocation corpPoPa = new ProceedAllocation();
-        // Allocation profOilAlloc = processProfitOil(this.psc, this.periodYear, this.periodMonth);
-        corpPoPa.setCategoryTitle("CORP PROFIT OIL");
-//        corpPoPa.setMonthlyChargeBfw(taxOilAlloc.getChargeBfw());
-//        corpPoPa.setMonthlyCharge(taxOilAlloc.getMonthlyCharge());
-//        corpPoPa.setRecoverable(taxOilAlloc.getRecoverable());
-//        corpPoPa.setContractorProceed(taxOilAlloc.getReceived());
-//        corpPoPa.setMonthlyChargeCfw(taxOilAlloc.getChargeCfw());
-
-        proceedAllocationList.add(corpPoPa);
-
-        ProceedAllocation contPoPa = new ProceedAllocation();
-        // Allocation profOilAlloc = processProfitOil(this.psc, this.periodYear, this.periodMonth);
-        contPoPa.setCategoryTitle("CONT PROFIT OIL");
-//        contPoPa.setMonthlyChargeBfw(taxOilAlloc.getChargeBfw());
-//        contPoPa.setMonthlyCharge(taxOilAlloc.getMonthlyCharge());
-//        contPoPa.setRecoverable(taxOilAlloc.getRecoverable());
-//        contPoPa.setContractorProceed(taxOilAlloc.getReceived());
-//        contPoPa.setMonthlyChargeCfw(taxOilAlloc.getChargeCfw());
-
-        proceedAllocationList.add(contPoPa);
-
-    }
-
-    private RoyaltyAllocation processRoyalty(ProductionSharingContract lpsc, Integer year, Integer month) {
-        if (!prodCostBean.fiscalPeriodExists(lpsc, year, month)) {
-            return new RoyaltyAllocation();
-        }
-
-        RoyaltyAllocation allocation = new RoyaltyAllocation();
-
-        double royalty = taxBean.computeRoyalty(lpsc, year, month);
-        double corpLiftProceed = getCorporationProceed(lpsc, year, month);
-
-        FiscalPeriod prevFp = fiscalService.getPreviousFiscalPeriod(year, month);
-
-        Allocation prevAlloc = processRoyalty(lpsc, prevFp.getYear(), prevFp.getMonth());
-
-        allocation.setMonthlyCharge(royalty);
-        allocation.setLiftingProceed(corpLiftProceed);
-        allocation.setChargeBfw(prevAlloc.getChargeCfw());
-
-        return allocation;
-    }
-
-    private CostOilAllocation processCostOil(ProductionSharingContract lpsc, Integer year, Integer month) {
-        if (!prodCostBean.fiscalPeriodExists(lpsc, year, month)) {
-            return new CostOilAllocation();
-        }
-
-        CostOilAllocation allocation = new CostOilAllocation();
-
-        double costOil = costOilController.computeCostOilCum(lpsc, year, month);
-        double contractorLiftProceed = getContractorProceed(lpsc, year, month);
-        double proceed = getProceed(lpsc, year, month);
-
-        costOil = Math.max(0, Math.min(proceed * lpsc.getCostRecoveryLimit(), costOil));
-        FiscalPeriod prevFp = fiscalService.getPreviousFiscalPeriod(year, month);
-        Allocation prevAlloc = processCostOil(lpsc, prevFp.getYear(), prevFp.getMonth());
-//        double costOilBfw = costOilController.computeCostOilBfw(lpsc, prevFp.getYear(), prevFp.getMonth());
-
-        allocation.setMonthlyCharge(costOil);
-        allocation.setLiftingProceed(contractorLiftProceed);
-        allocation.setChargeBfw(prevAlloc.getChargeCfw());
-
-        return allocation;
-    }
-
-    private TaxOilAllocation processTaxOil(ProductionSharingContract lpsc, Integer year, Integer month) {
-        if (!prodCostBean.fiscalPeriodExists(lpsc, year, month)) {
-            return new TaxOilAllocation();
-        }
-
-        TaxOilAllocation allocation = new TaxOilAllocation();
-
-        double taxOil = taxBean.computeTaxOil(lpsc, year, month);
-        double corpLiftProceed = getCorporationProceed(lpsc, year, month);
-        FiscalPeriod prevFp = fiscalService.getPreviousFiscalPeriod(year, month);
-        Allocation prevAlloc = processTaxOil(lpsc, prevFp.getYear(), prevFp.getMonth());
-        Allocation royAlloc = processRoyalty(this.psc, this.periodYear, this.periodMonth);
-        allocation.setMonthlyCharge(taxOil);
-        allocation.setLiftingProceed(corpLiftProceed);
-        allocation.setRoyalty(royAlloc.getReceived());
-        allocation.setChargeBfw(prevAlloc.getChargeCfw());
-
-        return allocation;
-    }
-
-    private double getCorporationProceed(ProductionSharingContract lpsc, Integer year, Integer month) {
-        if (lpsc != null && year != null && month != null) {
-            java.util.List<PscLifting> pscLiftings = liftingBean.find(lpsc, year, month);
-
-            double price;
-            double corpProceed = 0;
-
-            for (PscLifting lifting : pscLiftings) {
-//                CrudePricePK pricePK = new CrudePricePK();
-//                pricePK.setCrudeTypeCode(psc.getCrudeType().getCode());
-//                pricePK.setPriceDate(lifting.getLiftingDate());
-//                CrudePrice crudePrice = priceBean.find(pricePK);
-//
-//                if (crudePrice != null) {
-//                    price = crudePrice.getOsPrice();
-//                } else {
-//                    price = 0;
-//                }
-
-//                corpProceed += lifting.getOwnLifting() * price;
-                corpProceed += lifting.getOwnLifting() * lifting.getPrice();
-            }
-            return corpProceed;
-        }
-        return 0;
-    }
-
-    private double getContractorProceed(ProductionSharingContract lpsc, Integer year, Integer month) {
-        if (lpsc != null && year != null && month != null) {
-            java.util.List<PscLifting> pscLiftings = liftingBean.find(lpsc, year, month);
-
-            double price;
-            double contProceed = 0;
-
-            for (PscLifting lifting : pscLiftings) {
-//                CrudePricePK pricePK = new CrudePricePK();
-//                pricePK.setCrudeTypeCode(psc.getCrudeType().getCode());
-//                pricePK.setPriceDate(lifting.getLiftingDate());
-//                CrudePrice crudePrice = priceBean.find(pricePK);
-//
-//                if (crudePrice != null) {
-//                    price = crudePrice.getOsPrice();
-//                } else {
-//                    price = 0;
-//                }
-
-//                contProceed += lifting.getPartnerLifting() * price;
-                contProceed += lifting.getPartnerLifting() * lifting.getPrice();
-            }
-            return contProceed;
-        }
-        return 0;
-    }
-
-    private double getProceed(ProductionSharingContract lpsc, Integer year, Integer month) {
-        if (lpsc != null && year != null && month != null) {
-            java.util.List<PscLifting> pscLiftings = liftingBean.find(lpsc, year, month);
-
-            double price;
-            double proceed = 0;
-
-            for (PscLifting lifting : pscLiftings) {
-//                CrudePricePK pricePK = new CrudePricePK();
-//                pricePK.setCrudeTypeCode(psc.getCrudeType().getCode());
-//                pricePK.setPriceDate(lifting.getLiftingDate());
-//                CrudePrice crudePrice = priceBean.find(pricePK);
-//
-//                if (crudePrice != null) {
-//                    price = crudePrice.getOsPrice();
-//                } else {
-//                    price = 0;
-//                }
-
-//                proceed += lifting.getTotalLifting() * price;
-                proceed += lifting.getRevenue();
-            }
-            return proceed;
-        }
-        return 0;
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

@@ -14,7 +14,6 @@ import com.nnpcgroup.cosm.ejb.lifting.PscLiftingServices;
 import com.nnpcgroup.cosm.ejb.tax.TaxServices;
 import com.nnpcgroup.cosm.entity.FiscalPeriod;
 import com.nnpcgroup.cosm.entity.ProductionSharingContract;
-import com.nnpcgroup.cosm.entity.lifting.PscLifting;
 import com.nnpcgroup.cosm.entity.tax.TaxOilDetail;
 import com.nnpcgroup.cosm.entity.tax.TaxOilKey;
 import com.nnpcgroup.cosm.util.CacheUtil;
@@ -24,7 +23,9 @@ import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import java.io.Serializable;
 import java.time.YearMonth;
-import java.util.*;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 @Dependent
 public class TaxServicesImpl implements TaxServices, Serializable {
@@ -64,45 +65,7 @@ public class TaxServicesImpl implements TaxServices, Serializable {
             return cache.getIncomeCache().get(taxOilKey);
         }
 
-        grossIncome = computeGrossIncome(psc, new FiscalPeriod(year, month));
-
-        return grossIncome;
-    }
-
-    private double computeGrossIncome(ProductionSharingContract psc, FiscalPeriod fp) {
-        if (!fp.isCurrentYear()) {
-            return 0;
-        }
-
-        if (!prodCostBean.fiscalPeriodExists(psc, fp)) {
-            return 0.0;
-        }
-        double currentMonthIncome = 0;
-        List<PscLifting> pscLiftings = liftingBean.find(psc, fp.getYear(), fp.getMonth());
-        double price;
-
-
-        for (PscLifting lifting : pscLiftings) {
-//            CrudePricePK pricePK = new CrudePricePK();
-//            pricePK.setCrudeTypeCode(psc.getCrudeType().getCode());
-//            pricePK.setPriceDate(lifting.getLiftingDate());
-//            CrudePrice crudePrice = priceBean.find(pricePK);
-//
-//            if (crudePrice != null) {
-//                price = crudePrice.getOsPrice();
-//            } else {
-//                price = 0;
-//            }
-//
-//            grossIncome += (lifting.getTotalLifting() * price);
-            currentMonthIncome += lifting.getRevenue();
-
-        }
-
-        TaxOilKey taxOilKey = new TaxOilKey(psc, fp.getYear(), fp.getMonth());
-        double grossIncome =
-                currentMonthIncome + computeGrossIncome(psc, fp.getPreviousFiscalPeriod());//recursively compute cummulative gross income;
-
+        grossIncome = liftingBean.getGrossIncome(psc, year, month);
         cache.getIncomeCache().put(taxOilKey, grossIncome);
 
         return grossIncome;

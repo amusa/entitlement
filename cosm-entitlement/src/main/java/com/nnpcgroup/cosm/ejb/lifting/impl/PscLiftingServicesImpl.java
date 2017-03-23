@@ -122,9 +122,9 @@ public class PscLiftingServicesImpl extends LiftingServicesImpl<PscLifting> impl
 
         Expression<Double> revenueSum = cb.prod(liftingRoot.get("price"), liftingSum);
 
-        Expression<Number> wapQuot = cb.quot(revenueSum,liftingSum);
+        Expression<Number> wapQuot = cb.quot(revenueSum, liftingSum);
 
-        Predicate predicate = cb.and (
+        Predicate predicate = cb.and(
                 cb.equal(liftingRoot.get("psc"), psc),
                 cb.equal(cb.function("year", Integer.class, liftingRoot.get("liftingDate")), year),
                 cb.equal(cb.function("month", Integer.class, liftingRoot.get("liftingDate")), month)
@@ -137,6 +137,124 @@ public class PscLiftingServicesImpl extends LiftingServicesImpl<PscLifting> impl
         try {
             wap = getEntityManager().createQuery(cq).getSingleResult();
             return wap.doubleValue();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return 0.0;
+    }
+
+    @Override
+    public double getCorporationProceed(ProductionSharingContract psc, int year, int month) {
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery<Number> cq = cb.createQuery(Number.class);
+        Root<PscLifting> liftingRoot = cq.from(entityClass);
+
+        Expression<Double> prod = cb.prod(liftingRoot.get("price"), liftingRoot.get("ownLifting"));
+        Expression<Double> sum = cb.sum(prod);
+
+        Predicate predicate = cb.and(
+                cb.equal(liftingRoot.get("psc"), psc),
+                cb.equal(cb.function("year", Integer.class, liftingRoot.get("liftingDate")), year),
+                cb.equal(cb.function("month", Integer.class, liftingRoot.get("liftingDate")), month)
+        );
+
+        cq.select(sum.alias("corpProceed"))
+                .where(predicate);
+
+        Number proceed;
+        try {
+            proceed = getEntityManager().createQuery(cq).getSingleResult();
+            return proceed.doubleValue();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return 0.0;
+    }
+
+    @Override
+    public double getContractorProceed(ProductionSharingContract psc, int year, int month) {
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery<Number> cq = cb.createQuery(Number.class);
+        Root<PscLifting> liftingRoot = cq.from(entityClass);
+
+        Expression<Double> prod = cb.prod(liftingRoot.get("price"), liftingRoot.<Double>get("partnerLifting"));
+        Expression<Double> sum = cb.sum(prod);
+
+        Predicate predicate = cb.and(
+                cb.equal(liftingRoot.get("psc"), psc),
+                cb.equal(cb.function("year", Integer.class, liftingRoot.get("liftingDate")), year),
+                cb.equal(cb.function("month", Integer.class, liftingRoot.get("liftingDate")), month)
+        );
+
+        cq.select(sum.alias("contractorProceed"))
+                .where(predicate);
+
+        Number proceed;
+        try {
+            proceed = getEntityManager().createQuery(cq).getSingleResult();
+            return proceed.doubleValue();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return 0.0;
+    }
+
+    @Override
+    public double getTotalProceed(ProductionSharingContract psc, int year, int month) {
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery<Number> cq = cb.createQuery(Number.class);
+        Root<PscLifting> liftingRoot = cq.from(entityClass);
+
+        Expression<Double> liftingSum = cb.sum(liftingRoot.get("ownLifting"), liftingRoot.<Double>get("partnerLifting"));
+        Expression<Double> prod = cb.prod(liftingRoot.get("price"), liftingSum);
+        Expression<Double> sum = cb.sum(prod);
+
+        Predicate predicate = cb.and(
+                cb.equal(liftingRoot.get("psc"), psc),
+                cb.equal(cb.function("year", Integer.class, liftingRoot.get("liftingDate")), year),
+                cb.equal(cb.function("month", Integer.class, liftingRoot.get("liftingDate")), month)
+        );
+
+        cq.select(sum.alias("proceed"))
+                .where(predicate);
+
+        Number proceed;
+        try {
+            proceed = getEntityManager().createQuery(cq).getSingleResult();
+            return proceed.doubleValue();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return 0.0;
+    }
+
+    @Override
+    public double getGrossIncome(ProductionSharingContract psc, int year, int month) {
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery<Number> cq = cb.createQuery(Number.class);
+        Root<PscLifting> liftingRoot = cq.from(entityClass);
+
+        Expression<Double> liftingSum = cb.sum(liftingRoot.get("ownLifting"), liftingRoot.<Double>get("partnerLifting"));
+        Expression<Double> prod = cb.prod(liftingRoot.get("price"), liftingSum);
+        Expression<Double> sum = cb.sum(prod);
+
+        Predicate predicate = cb.and(
+                cb.equal(liftingRoot.get("psc"), psc),
+                cb.equal(cb.function("year", Integer.class, liftingRoot.get("liftingDate")), year),
+                cb.lessThanOrEqualTo(cb.function("month", Integer.class, liftingRoot.get("liftingDate")), month)
+        );
+
+        cq.select(sum.alias("proceed"))
+                .where(predicate);
+
+        Number proceed;
+        try {
+            proceed = getEntityManager().createQuery(cq).getSingleResult();
+            return proceed.doubleValue();
         } catch (Exception e) {
             e.printStackTrace();
         }

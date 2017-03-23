@@ -11,15 +11,4 @@ package com.nnpcgroup.cosm.report.schb1;
  */
 public class CostOilAllocation extends Allocation {
 
-    @Override
-    public Double getReceived() {
-        if (getRecoverable() <= 0) {
-            return 0.0;
-        } else if (getRecoverable() <= getLiftingProceed()) {
-            return getRecoverable();
-        } else {
-            return getLiftingProceed();
-        }
-    }
-
 }

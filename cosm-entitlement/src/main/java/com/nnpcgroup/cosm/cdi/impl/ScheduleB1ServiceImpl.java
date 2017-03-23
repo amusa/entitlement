@@ -10,6 +10,8 @@ import com.nnpcgroup.cosm.entity.FiscalPeriod;
 import com.nnpcgroup.cosm.entity.ProductionSharingContract;
 import com.nnpcgroup.cosm.entity.lifting.PscLifting;
 import com.nnpcgroup.cosm.report.schb1.*;
+import com.nnpcgroup.cosm.util.CacheKey;
+import com.nnpcgroup.cosm.util.CacheUtil;
 
 import javax.ejb.EJB;
 import javax.enterprise.context.Dependent;
@@ -24,7 +26,10 @@ import java.util.List;
 @Dependent
 public class ScheduleB1ServiceImpl implements ScheduleB1Service {
     @Inject
-    TaxServices taxBean;
+    private CacheUtil cache;
+
+    @Inject
+    private TaxServices taxBean;
 
     @Inject
     private FiscalPeriodService fiscalService;
@@ -104,6 +109,12 @@ public class ScheduleB1ServiceImpl implements ScheduleB1Service {
 
     @Override
     public RoyaltyAllocation processRoyaltyAllocation(ProductionSharingContract psc, int year, int month) {
+        CacheKey cacheKey = new CacheKey(psc, year, month);
+
+        if (cache.getRoyaltyAllocationCache().containsKey(cacheKey)) {
+            return cache.getRoyaltyAllocationCache().get(cacheKey);
+        }
+
         if (!prodCostBean.fiscalPeriodExists(psc, year, month)) {
             return new RoyaltyAllocation();
         }
@@ -119,11 +130,19 @@ public class ScheduleB1ServiceImpl implements ScheduleB1Service {
         allocation.setLiftingProceed(corpLiftProceed);
         allocation.setChargeBfw(prevAlloc.getChargeCfw());
 
+        cache.getRoyaltyAllocationCache().put(cacheKey, allocation);
+
         return allocation;
     }
 
     @Override
     public CostOilAllocation processCostOilAllocation(ProductionSharingContract psc, int year, int month) {
+        CacheKey cacheKey = new CacheKey(psc, year, month);
+
+        if (cache.getCostOilAllocationCache().containsKey(cacheKey)) {
+            return cache.getCostOilAllocationCache().get(cacheKey);
+        }
+
         if (!prodCostBean.fiscalPeriodExists(psc, year, month)) {
             return new CostOilAllocation();
         }
@@ -143,11 +162,19 @@ public class ScheduleB1ServiceImpl implements ScheduleB1Service {
         allocation.setLiftingProceed(contractorLiftProceed);
         allocation.setChargeBfw(prevAlloc.getChargeCfw());
 
+        cache.getCostOilAllocationCache().put(cacheKey, allocation);
+
         return allocation;
     }
 
     @Override
     public TaxOilAllocation processTaxOilAllocation(ProductionSharingContract psc, Integer year, Integer month) {
+        CacheKey cacheKey = new CacheKey(psc, year, month);
+
+        if (cache.getTaxOilAllocationCache().containsKey(cacheKey)) {
+            return cache.getTaxOilAllocationCache().get(cacheKey);
+        }
+
         if (!prodCostBean.fiscalPeriodExists(psc, year, month)) {
             return new TaxOilAllocation();
         }
@@ -164,6 +191,8 @@ public class ScheduleB1ServiceImpl implements ScheduleB1Service {
         allocation.setLiftingProceed(corpLiftProceed);
         allocation.setRoyalty(royAlloc.getReceived());
         allocation.setChargeBfw(prevAlloc.getChargeCfw());
+
+        cache.getTaxOilAllocationCache().put(cacheKey, allocation);
 
         return allocation;
     }

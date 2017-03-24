@@ -6,8 +6,10 @@
 package com.nnpcgroup.cosm.ejb.production.jv;
 
 import com.nnpcgroup.cosm.ejb.*;
+import com.nnpcgroup.cosm.entity.FiscalArrangement;
 import com.nnpcgroup.cosm.entity.production.jv.Production;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  *
@@ -16,5 +18,10 @@ import java.io.Serializable;
  */
 public interface ProductionServices<T extends Production> extends AbstractCrudServices<T>, Serializable {
 
-    
+    public T findByContractPeriod(int year, int month, FiscalArrangement fa);
+
+    public void delete(int year, int month, FiscalArrangement fa);
+
+    public List<T> findByYearAndMonth(int year, int month);
+
 }

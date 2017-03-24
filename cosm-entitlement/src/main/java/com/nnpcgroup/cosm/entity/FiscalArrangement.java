@@ -5,11 +5,7 @@
  */
 package com.nnpcgroup.cosm.entity;
 
-import com.nnpcgroup.cosm.entity.contract.Contract;
-
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import javax.persistence.*;
 import javax.persistence.Entity;
@@ -28,9 +24,8 @@ public abstract class FiscalArrangement implements Auditable, Serializable {
     private Long id;
     private String title;
     private Company operator;
-    private List<Contract> contracts;
-    private AuditInfo auditInfo = new AuditInfo();
 
+    private AuditInfo auditInfo = new AuditInfo();
 
     public FiscalArrangement() {
     }
@@ -71,29 +66,15 @@ public abstract class FiscalArrangement implements Auditable, Serializable {
         this.operator = operator;
     }
 
-    @OneToMany(mappedBy = "fiscalArrangement", fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.REMOVE})
-    public List<Contract> getContracts() {
-        return contracts;
-    }
-
-    public void setContracts(List<Contract> contracts) {
-        this.contracts = contracts;
-    }
-
-    public void addContract(Contract contract) {
-        if (contracts == null) {
-            contracts = new ArrayList<>();
-        }
-        contracts.add(contract);
-    }
-
     public void setCurrentUser(String user) {
 //        auditInfo.setCurrentUser(user);
         auditInfo.setLastModifiedBy(user);
     }
 
     @Embedded
-    public AuditInfo getAuditInfo() { return auditInfo; }
+    public AuditInfo getAuditInfo() {
+        return auditInfo;
+    }
 
     public void setAuditInfo(AuditInfo auditInfo) {
         this.auditInfo = auditInfo;
@@ -132,6 +113,5 @@ public abstract class FiscalArrangement implements Auditable, Serializable {
         }
         return true;
     }
-
 
 }

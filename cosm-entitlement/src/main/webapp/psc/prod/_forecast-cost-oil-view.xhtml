@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:jsf="http://xmlns.jcp.org/jsf">
+
+    <ui:composition>
+        <div class="modal fade" id="CostOilViewDlg" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">Cost Oil</h4>
+                    </div>
+                    <h:form id="CostOilViewForm">
+                        <div class="modal-body">
+                            <h:panelGroup id="CostOilViewPanel">
+                                <div class="row">
+                                    <div class="col-md-4 m-b-15">
+                                        <h:outputLabel value="Year" for="periodYear"/>
+                                        <h:selectOneMenu id="periodYear" value="#{costOilController.periodYear}" class="form-control input-sm m-b-10" >                                              
+                                            <f:selectItems value="#{generalController.yearsAvailableSelectOne}" var="year" itemValue="#{year.value}"/>   
+                                            <f:ajax listener="#{generalController.yearChanged}" event="change" render="periodMonth"/>     
+                                        </h:selectOneMenu>                                        
+                                    </div>
+                                    <div class="col-md-4 m-b-15">
+                                        <h:outputLabel value="Month" for="periodMonth"/>
+                                        <h:selectOneMenu id="periodMonth" value="#{costOilController.periodMonth}" class="form-control input-sm m-b-10">                                              
+                                            <f:selectItem itemValue="#{null}" itemLabel="--select--" />
+                                            <f:selectItems value="#{generalController.months}" var="mth" itemValue="#{mth.month}" itemLabel="#{mth.monthStr}" />   
+                                            <f:ajax />     
+                                        </h:selectOneMenu>
+                                    </div>
+                                    <div class="col-md-4 m-b-15">
+                                        <label>Fiscal Arrangement</label>
+                                        <h:selectOneMenu id="fiscalArrangement" value="#{costOilController.currentPsc}" class="form-control input-sm m-b-10">                                              
+                                            <f:selectItems value="#{fiscalController.pscFiscalSelectOptions}" />   
+                                            <f:ajax />        
+                                        </h:selectOneMenu>
+                                    </div>
+                                </div>
+                                <div class="panel panel-default tile">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">Cost Oil</h3>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <div class="col-md-12 m-b-15">
+                                                <label>Amortized Capex</label>
+                                                <h:outputText id="amortizedCapex" value="#{costOilController.costOilDetail.armotizedCapex}" class="form-control input-sm m-b-10" >
+                                                    <f:convertNumber pattern="###,###,###,###.####" />
+                                                </h:outputText>
+                                            </div>                                                        
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12 m-b-15">
+                                                <label>Operating Cost</label>
+                                                <h:outputText id="opex" value="#{costOilController.costOilDetail.opex}" class="form-control input-sm m-b-10" >
+                                                    <f:convertNumber pattern="###,###,###,###.####" />
+                                                </h:outputText>
+                                            </div>                                                        
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12 m-b-15">
+                                                <label>Education Tax</label>
+                                                <h:outputText id="eduTax" value="#{costOilController.costOilDetail.educationTax}" class="form-control input-sm m-b-10" >
+                                                    <f:convertNumber pattern="###,###,###,###.####" />
+                                                </h:outputText>
+                                            </div>                                                        
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12 m-b-15">
+                                                <label>Cost Oil</label>
+                                                <h:outputText id="costOil" value="#{costOilController.costOilDetail.costOil}" class="form-control input-sm m-b-10" >
+                                                    <f:convertNumber pattern="###,###,###,###.####" />
+                                                </h:outputText>
+                                            </div>                                                        
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12 m-b-15">
+                                                <label>Cost Oil Bfw</label>
+                                                <h:outputText id="costOilBfw" value="#{costOilController.costOilDetail.costOilBfw}" class="form-control input-sm m-b-10" >
+                                                    <f:convertNumber pattern="###,###,###,###.####" />
+                                                </h:outputText>
+                                            </div>                                                        
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12 m-b-15">
+                                                <label>Cost Oil To Date</label>
+                                                <h:outputText id="costOilCum" value="#{costOilController.costOilDetail.costOilCum}" class="form-control input-sm m-b-10" >
+                                                    <f:convertNumber pattern="###,###,###,###.####" />
+                                                </h:outputText>
+                                            </div>                                                        
+                                        </div>
+                                    </div>
+                                </div>
+                            </h:panelGroup>
+                        </div>
+                        <div class="modal-footer">
+                            <h:commandButton  value="#{bundle.Close}" pt:data-dismiss="modal" class="btn btn-sm"/>
+                        </div>
+                    </h:form>
+                </div>
+            </div>
+        </div>
+    </ui:composition>
+</html>

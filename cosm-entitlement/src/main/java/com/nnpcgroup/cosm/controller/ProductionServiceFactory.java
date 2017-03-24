@@ -22,12 +22,12 @@ import com.nnpcgroup.cosm.ejb.production.jv.ProductionDetailServices;
 @Dependent
 public class ProductionServiceFactory {
     
-    @Produces
-    @ProductionServiceProducer
-    public ProductionDetailServices createProductionService(@Any Instance<ProductionDetailServices<? extends ProductionDetail, ? extends Contract>> instance, InjectionPoint injectionPoint) {
-        Annotated annotated = injectionPoint.getAnnotated();
-        ProductionServiceType contractTypeAnnotation = annotated.getAnnotation(ProductionServiceType.class);
-        Class<? extends ProductionDetailServices<? extends ProductionDetail, ? extends Contract>> contractType = contractTypeAnnotation.value().getProductionServiceType();
-        return instance.select(contractType).get();
-    }
+//    @Produces
+//    @ProductionServiceProducer
+//    public ProductionDetailServices createProductionService(@Any Instance<ProductionDetailServices<? extends ProductionDetail, ? extends Contract>> instance, InjectionPoint injectionPoint) {
+//        Annotated annotated = injectionPoint.getAnnotated();
+//        ProductionServiceType contractTypeAnnotation = annotated.getAnnotation(ProductionServiceType.class);
+//        Class<? extends ProductionDetailServices<? extends ProductionDetail, ? extends Contract>> contractType = contractTypeAnnotation.value().getProductionServiceType();
+//        return instance.select(contractType).get();
+//    }
 }

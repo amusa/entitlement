@@ -7,7 +7,7 @@ package com.nnpcgroup.cosm.ejb.contract.impl;
 
 import com.nnpcgroup.cosm.ejb.contract.ContractBaseServices;
 import com.nnpcgroup.cosm.ejb.impl.AbstractCrudServicesImpl;
-import com.nnpcgroup.cosm.entity.CrudeType;
+import com.nnpcgroup.cosm.entity.crude.CrudeType;
 import com.nnpcgroup.cosm.entity.FiscalArrangement;
 import com.nnpcgroup.cosm.entity.contract.Contract;
 import com.nnpcgroup.cosm.entity.contract.ContractPK;

@@ -5,164 +5,115 @@
  */
 package com.nnpcgroup.cosm.entity.forecast.jv;
 
+import com.nnpcgroup.cosm.entity.forecast.ForecastDetail;
+import com.nnpcgroup.cosm.entity.contract.Contract;
+import com.nnpcgroup.cosm.entity.production.jv.JvProductionDetailPK;
+import com.nnpcgroup.cosm.entity.production.jv.ProductionDetailPK;
+import com.nnpcgroup.cosm.entity.production.jv.ProductionPK;
+import java.util.Objects;
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 
 /**
  *
  * @author 18359
  */
-@Entity
+@Entity(name = "JV_FORECAST_DETAIL")
+//@Table(uniqueConstraints = {
+//    @UniqueConstraint(columnNames = {"PERIOD_YEAR", "PERIOD_MONTH", "FISCALARRANGEMENT_ID", "CONTRACT_ID", "CONTRACT_FISCAL_ID", "CRUDETYPE_CODE"})
+//})
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "FTYPE")
 @DiscriminatorValue("JV")
-public class JvForecastDetail extends ForecastDetail<JvForecast> {
+public class JvForecastDetail extends ForecastDetail {
 
     private static final long serialVersionUID = 2917191116735019064L;
+    
+    private JvForecastDetailPK forecastDetailPK;
 
-    private Double grossProduction;
-    private Double productionVolume;
-    private Double openingStock;
-    private Double partnerOpeningStock;
-    private Double closingStock;
-    private Double partnerClosingStock;
-    private Double ownShareEntitlement;
-    private Double partnerShareEntitlement;
-    private Double lifting;
-    private Double partnerLifting;
-    private Integer cargos;
-    private Integer partnerCargos;
-    private Double availability;
-    private Double partnerAvailability;
+    private Contract contract;
+    private JvForecast forecast;
 
     public JvForecastDetail() {
     }
 
-    @NotNull
-    @Column(name = "PRODUCTION_VOLUME")
-    public Double getProductionVolume() {
-        return productionVolume;
+    @EmbeddedId
+    public JvForecastDetailPK getForecastDetailPK() {
+        return forecastDetailPK;
     }
 
-    public void setProductionVolume(Double productionVolume) {
-        this.productionVolume = productionVolume;
+    public void setForecastDetailPK(JvForecastDetailPK forecastDetailPK) {
+        this.forecastDetailPK = forecastDetailPK;
     }
 
-    @Column(name = "GROSS_PRODUCTION")
-    public Double getGrossProduction() {
-        return grossProduction;
+    
+    
+    @ManyToOne
+    @JoinColumns({
+        @JoinColumn(name = "CONTRACT_ID", referencedColumnName = "ID", insertable = false, updatable = false),
+        @JoinColumn(name = "CONTRACT_FISCAL_ID", referencedColumnName = "FISCALARRANGEMENTID", insertable = false, updatable = false),
+        @JoinColumn(name = "CRUDETYPE_CODE", referencedColumnName = "CRUDETYPECODE", insertable = false, updatable = false)
+    })
+    public Contract getContract() {
+        return contract;
     }
 
-    public void setGrossProduction(Double grossProduction) {
-        this.grossProduction = grossProduction;
+    public void setContract(Contract contract) {
+        this.contract = contract;
     }
 
-    @NotNull
-    @Column(name = "OPENING_STOCK")
-    public Double getOpeningStock() {
-        return openingStock;
+    @ManyToOne
+    @JoinColumns({
+        @JoinColumn(name = "PERIOD_YEAR", referencedColumnName = "PERIOD_YEAR", insertable = false, updatable = false),
+        @JoinColumn(name = "PERIOD_MONTH", referencedColumnName = "PERIOD_MONTH", insertable = false, updatable = false),
+        @JoinColumn(name = "FISCALARRANGEMENT_ID", referencedColumnName = "FISCALARRANGEMENT_ID", insertable = false, updatable = false)
+    })
+    public JvForecast getForecast() {
+        return forecast;
     }
 
-    public void setOpeningStock(Double openingStock) {
-        this.openingStock = openingStock;
+//    @ManyToOne
+//    @JoinColumn(name = "FORECAST_ID", referencedColumnName = "ID")
+//    public JvForecast getForecast() {
+//        return forecast;
+//    }
+    public void setForecast(JvForecast forecast) {
+        this.forecast = forecast;
     }
 
-    @Column(name = "CLOSING_STOCK")
-    public Double getClosingStock() {
-        return closingStock;
+    public ProductionDetailPK makeProductionDetailPK() {
+        ProductionDetailPK pPK = new JvProductionDetailPK(
+                new ProductionPK(this.getPeriodYear(), this.getPeriodMonth(), this.getForecast().getFiscalArrangement().getId()),
+                this.getContract().getContractPK()
+        );
+
+        return pPK;
     }
 
-    public void setClosingStock(Double closingStock) {
-        this.closingStock = closingStock;
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 17 * hash + Objects.hashCode(this.forecastDetailPK);
+        return hash;
     }
 
-    @NotNull
-    @Column(name = "OWN_SHARE_ENTITLEMENT")
-    public Double getOwnShareEntitlement() {
-        return ownShareEntitlement;
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final JvForecastDetail other = (JvForecastDetail) obj;
+        if (!Objects.equals(this.forecastDetailPK, other.forecastDetailPK)) {
+            return false;
+        }
+        return true;
     }
-
-    public void setOwnShareEntitlement(Double ownShareEntitlement) {
-        this.ownShareEntitlement = ownShareEntitlement;
-    }
-
-    @Column(name = "PARTNER_SHARE_ENTITLEMENT")
-    public Double getPartnerShareEntitlement() {
-        return partnerShareEntitlement;
-    }
-
-    public void setPartnerShareEntitlement(Double partnerShareEntitlement) {
-        this.partnerShareEntitlement = partnerShareEntitlement;
-    }
-
-    @Column(name = "LIFTING")
-    public Double getLifting() {
-        return lifting;
-    }
-
-    public void setLifting(Double lifting) {
-        this.lifting = lifting;
-    }
-
-    @Column(name = "CARGOES")
-    public Integer getCargos() {
-        return cargos;
-    }
-
-    public void setCargos(Integer cargos) {
-        this.cargos = cargos;
-    }
-
-    @Column(name = "AVAILABILITY")
-    public Double getAvailability() {
-        return availability;
-    }
-
-    public void setAvailability(Double availability) {
-        this.availability = availability;
-    }
-
-    @Column(name = "PARTNER_OPENING_STOCK")
-    public Double getPartnerOpeningStock() {
-        return partnerOpeningStock;
-    }
-
-    public void setPartnerOpeningStock(Double partnerOpeningStock) {
-        this.partnerOpeningStock = partnerOpeningStock;
-    }
-
-    @Column(name = "PARTNER_CLOSING_STOCK")
-    public Double getPartnerClosingStock() {
-        return partnerClosingStock;
-    }
-
-    public void setPartnerClosingStock(Double partnerClosingStock) {
-        this.partnerClosingStock = partnerClosingStock;
-    }
-
-    @Column(name = "PARTNER_AVAILABILITY")
-    public Double getPartnerAvailability() {
-        return partnerAvailability;
-    }
-
-    public void setPartnerAvailability(Double partnerAvailability) {
-        this.partnerAvailability = partnerAvailability;
-    }
-
-    @Column(name = "PARTNER_LIFTING")
-    public Double getPartnerLifting() {
-        return partnerLifting;
-    }
-
-    public void setPartnerLifting(Double partnerLifting) {
-        this.partnerLifting = partnerLifting;
-    }
-
-    @Column(name = "PARTNER_CARGOES")
-    public Integer getPartnerCargos() {
-        return partnerCargos;
-    }
-
-    public void setPartnerCargos(Integer partnerCargos) {
-        this.partnerCargos = partnerCargos;
-    }
+    
+    
 
 }

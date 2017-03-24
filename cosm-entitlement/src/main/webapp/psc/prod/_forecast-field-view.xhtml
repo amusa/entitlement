@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:jsf="http://xmlns.jcp.org/jsf">
+
+    <ui:composition>
+        <div class="modal fade" id="PscViewDlg" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">View PSC Forecast</h4>
+                    </div>
+                    <h:form id="PscViewForm">
+                        <div class="modal-body">
+                            <h:panelGroup id="PscViewPanel">
+                                <div class="row">
+                                    <div class="col-md-4 m-b-10">
+                                        <label>Year</label>
+                                        <h:selectOneMenu id="periodYear" value="#{pscProdController.periodYear}"
+                                                         class="form-control input-sm m-b-10">
+                                            <f:selectItem itemValue="#{null}" itemLabel="--select--"/>
+                                            <f:selectItems value="#{generalController.yearsAvailableSelectOne}" var="year"
+                                                           itemValue="#{year.value}"/>
+                                            <f:ajax event="change" render="prodTable executeButton"/>
+                                        </h:selectOneMenu>
+                                    </div>                        
+                                    <div class="col-md-4 m-b-10">
+                                        <label>PSC</label>
+                                        <h:selectOneMenu id="pscFa" value="#{pscProdController.currentPsc}"
+                                                         class="form-control input-sm m-b-10">
+                                            <f:selectItem itemValue="#{null}" itemLabel="--select--"/>
+                                            <f:selectItems value="#{fiscalController.pscFiscalSelectOptions}"/>
+                                            <f:ajax event="change"  render="prodTable executeButton"/>
+                                        </h:selectOneMenu>
+                                    </div>
+                                    <div class="col-md-4 m-b-10">
+                                        <label>Oil Field</label>
+                                        <h:selectOneMenu id="oilField" value="#{pscProdController.currentOilField}"
+                                                         class="form-control input-sm m-b-10">
+                                            <f:selectItem itemValue="#{null}" itemLabel="--select--"/>
+                                            <f:selectItems value="#{pscProdController.pscOilFieldSelectOptions}"/>
+                                            <f:ajax event="change"  render="prodTable executeButton"/>
+                                        </h:selectOneMenu>
+                                    </div>
+                                </div>
+
+                                <div class="panel panel-default tile">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">PRODUCTION</h3>
+                                    </div>
+                                    <div class="panel-body">
+                                        <h:dataTable id="pscProdTable" var="prod" value="#{pscProdController.productionDetails}" 
+                                                     class="table table-bordered table-hover tile">                                                 
+                                            <h:column>                                                        
+                                                <h:outputText value="#{prod.periodMonth}">
+
+                                                </h:outputText>
+                                            </h:column>                            
+                                            <h:column>
+                                                <h:inputText value="#{prod.grossProduction}" class="form-control input-sm m-b-10">
+                                                    <f:convertNumber pattern="###,###,###.####" />
+                                                    <f:ajax />
+                                                </h:inputText>
+                                            </h:column>
+                                            <h:column>
+                                                <h:inputText value="#{prod.dailyProduction}" class="form-control input-sm m-b-10">
+                                                    <f:convertNumber pattern="###,###,###.####" />
+                                                    <f:ajax />
+                                                </h:inputText>
+                                            </h:column>
+                                            <f:facet name="footer">                                                       
+
+                                            </f:facet>
+                                        </h:dataTable>
+                                    </div>
+                                    <div class="panel-footer">
+
+                                    </div>
+                                </div>
+                            </h:panelGroup>
+                        </div>
+                        <div class="modal-footer">
+                            <h:commandButton  value="#{bundle.Ok}" pt:data-dismiss="modal" class="btn btn-sm"/>                          
+                        </div>
+                    </h:form>
+                </div>
+            </div>
+        </div> 
+
+    </ui:composition>
+</html>

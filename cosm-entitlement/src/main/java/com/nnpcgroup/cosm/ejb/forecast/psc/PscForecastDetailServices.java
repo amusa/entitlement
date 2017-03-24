@@ -1,0 +1,37 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package com.nnpcgroup.cosm.ejb.forecast.psc;
+
+import com.nnpcgroup.cosm.ejb.forecast.ForecastDetailServices;
+import com.nnpcgroup.cosm.entity.ProductionSharingContract;
+import com.nnpcgroup.cosm.entity.OilField;
+import com.nnpcgroup.cosm.entity.forecast.psc.PscForecastDetail;
+import java.util.List;
+
+/**
+ *
+ * @author 18359
+ */
+public interface PscForecastDetailServices extends ForecastDetailServices<PscForecastDetail> {
+
+    public PscForecastDetail find(int year, int month, OilField oilField);
+
+    public List<PscForecastDetail> find(int year, ProductionSharingContract psc);
+
+    public List<PscForecastDetail> find(int year, OilField oilField);
+
+    public void delete(int year, int month, OilField oilField);
+
+    public double getGrossProduction(ProductionSharingContract psc, int year, int month);
+
+    public double getGrossProductionToDate(ProductionSharingContract psc, int year, int month);
+
+    public boolean productionExits(ProductionSharingContract psc, int year, int month);
+
+    public boolean isFirstProductionOfYear(ProductionSharingContract psc, int year, int month);
+
+    public boolean isFirstOmlProduction(ProductionSharingContract psc, int year, int month);
+}

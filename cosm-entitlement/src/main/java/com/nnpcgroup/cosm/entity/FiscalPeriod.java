@@ -5,22 +5,25 @@
  */
 package com.nnpcgroup.cosm.entity;
 
+import com.nnpcgroup.cosm.ejb.FiscalPeriodIf;
+
 /**
- *
  * @author 18359
  */
-public class FiscalPeriod {
+public class FiscalPeriod implements FiscalPeriodIf {
     private int year;
     private int month;
+    private int refYear;
 
     public FiscalPeriod() {
     }
-       
+
     public FiscalPeriod(int year, int month) {
         this.year = year;
         this.month = month;
+        this.refYear = year;
     }
-        
+
     public int getYear() {
         return year;
     }
@@ -36,6 +39,46 @@ public class FiscalPeriod {
     public void setMonth(int month) {
         this.month = month;
     }
-    
-    
+
+    public int getRefYear() {
+        return refYear;
+    }
+
+    public void setRefYear(int refYear) {
+        this.refYear = refYear;
+    }
+
+
+    @Override
+    public FiscalPeriod getPreviousFiscalPeriod() {
+        if (month > 1) {
+            --month;
+        } else {
+            month = 12;
+            --year;
+        }
+
+        return this;
+    }
+
+    @Override
+    public FiscalPeriod getNextFiscalPeriod() {
+        month = (month % 12) + 1;
+
+        if (year == 1) {
+            ++year;
+        }
+
+        return this;
+    }
+
+    @Override
+    public FiscalPeriod getPreviousYearFiscalPeriod() {
+        return new FiscalPeriod(year - 1, 12);
+    }
+
+    @Override
+    public boolean isCurrentYear() {
+        return year == refYear;
+    }
 }

@@ -5,7 +5,7 @@
  */
 package com.nnpcgroup.cosm.entity.production.jv;
 
-import com.nnpcgroup.cosm.entity.forecast.jv.ForecastDetail;
+import com.nnpcgroup.cosm.entity.forecast.ForecastDetail;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 

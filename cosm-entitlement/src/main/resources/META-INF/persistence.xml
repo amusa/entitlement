@@ -1,41 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
   <persistence-unit name="entitlementPU" transaction-type="JTA">
-    <jta-data-source>java:/jboss/datasources/EntitlementDS</jta-data-source>
+    <jta-data-source>java:/jboss/datasources/EntitlementDS</jta-data-source>    
     <class>com.nnpcgroup.cosm.entity.Company</class>
-    <class>com.nnpcgroup.cosm.entity.CrudeType</class>
     <class>com.nnpcgroup.cosm.entity.EquityType</class>
     <class>com.nnpcgroup.cosm.entity.FiscalArrangement</class>
     <class>com.nnpcgroup.cosm.entity.JointVenture</class>
+    <class>com.nnpcgroup.cosm.entity.JvCompany</class>
+    <class>com.nnpcgroup.cosm.entity.OilField</class>
     <class>com.nnpcgroup.cosm.entity.Price</class>
     <class>com.nnpcgroup.cosm.entity.ProductionSharingContract</class>
-    <class>com.nnpcgroup.cosm.entity.PscActualProduction</class>
-    <class>com.nnpcgroup.cosm.entity.PscForecastProduction</class>
+    <class>com.nnpcgroup.cosm.entity.PscCompany</class>
     <class>com.nnpcgroup.cosm.entity.Terminal</class>
     <class>com.nnpcgroup.cosm.entity.contract.AlternativeFundingContract</class>
     <class>com.nnpcgroup.cosm.entity.contract.CarryContract</class>
     <class>com.nnpcgroup.cosm.entity.contract.Contract</class>
-    <class>com.nnpcgroup.cosm.entity.contract.ModifiedCarryContract</class>
     <class>com.nnpcgroup.cosm.entity.contract.JvContract</class>
-    <class>com.nnpcgroup.cosm.entity.contract.PscContract</class>
+    <class>com.nnpcgroup.cosm.entity.contract.ModifiedCarryContract</class>
+    <class>com.nnpcgroup.cosm.entity.cost.CostCategory</class>
+    <class>com.nnpcgroup.cosm.entity.cost.CostItem</class>
+    <class>com.nnpcgroup.cosm.entity.cost.ProductionCost</class>
+    <class>com.nnpcgroup.cosm.entity.crude.CrudePrice</class>
+    <class>com.nnpcgroup.cosm.entity.crude.CrudeType</class>
     <class>com.nnpcgroup.cosm.entity.forecast.jv.AlternativeFundingForecastDetail</class>
+    <class>com.nnpcgroup.cosm.entity.forecast.jv.AlternativeFundingForecastEntitlement</class>
     <class>com.nnpcgroup.cosm.entity.forecast.jv.CarryForecastDetail</class>
-    <class>com.nnpcgroup.cosm.entity.forecast.jv.Forecast</class>
-    <class>com.nnpcgroup.cosm.entity.forecast.jv.ForecastDetail</class>
-    <class>com.nnpcgroup.cosm.entity.forecast.jv.ModifiedCarryForecastDetail</class>
+    <class>com.nnpcgroup.cosm.entity.forecast.jv.CarryForecastEntitlement</class>
     <class>com.nnpcgroup.cosm.entity.forecast.jv.JvForecast</class>
     <class>com.nnpcgroup.cosm.entity.forecast.jv.JvForecastDetail</class>
-    <class>com.nnpcgroup.cosm.entity.forecast.jv.PscForecast</class>
-    <class>com.nnpcgroup.cosm.entity.production.jv.ProductionDetail</class>
-    <class>com.nnpcgroup.cosm.entity.production.jv.Production</class>
+    <class>com.nnpcgroup.cosm.entity.forecast.jv.JvForecastEntitlement</class>
+    <class>com.nnpcgroup.cosm.entity.forecast.jv.ModifiedCarryForecastDetail</class>
+    <class>com.nnpcgroup.cosm.entity.forecast.jv.ModifiedCarryForecastEntitlement</class>
+    <class>com.nnpcgroup.cosm.entity.forecast.psc.PscForecast</class>
+    <class>com.nnpcgroup.cosm.entity.forecast.psc.PscForecastDetail</class>
+    <class>com.nnpcgroup.cosm.entity.forecast.psc.PscForecastEntitlement</class>
+    <class>com.nnpcgroup.cosm.entity.lifting.JvLifting</class>
+    <class>com.nnpcgroup.cosm.entity.lifting.Lifting</class>
+    <class>com.nnpcgroup.cosm.entity.lifting.PscLifting</class>
     <class>com.nnpcgroup.cosm.entity.production.jv.AlternativeFundingProductionDetail</class>
+    <class>com.nnpcgroup.cosm.entity.production.jv.AlternativeFundingProductionEntitlement</class>
     <class>com.nnpcgroup.cosm.entity.production.jv.CarryProductionDetail</class>
-    <class>com.nnpcgroup.cosm.entity.production.jv.ModifiedCarryProductionDetail</class>
+    <class>com.nnpcgroup.cosm.entity.production.jv.CarryProductionEntitlement</class>
     <class>com.nnpcgroup.cosm.entity.production.jv.JvProduction</class>
+    <class>com.nnpcgroup.cosm.entity.production.jv.JvProductionDetail</class>
+    <class>com.nnpcgroup.cosm.entity.production.jv.JvProductionEntitlement</class>
+    <class>com.nnpcgroup.cosm.entity.production.jv.ModifiedCarryProductionDetail</class>
+    <class>com.nnpcgroup.cosm.entity.production.jv.ModifiedCarryProductionEntitlement</class>
+    <class>com.nnpcgroup.cosm.entity.production.jv.PscProduction</class>
+    <class>com.nnpcgroup.cosm.entity.production.jv.PscProductionDetail</class>
+    <class>com.nnpcgroup.cosm.entity.production.jv.PscProductionEntitlement</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
+    <shared-cache-mode>NONE</shared-cache-mode>
     <properties>
-<!--      <property name="javax.persistence.schema-generation.database.action"  value="drop-and-create"/>-->
-      <!--<property name="javax.persistence.schema-generation.database.action" value="create"/>-->
+      <!--<property name="javax.persistence.schema-generation.database.action"  value="create"/>-->
+      <!--<property name="javax.persistence.schema-generation.database.action" value="drop-and-create"/>-->
     </properties>
   </persistence-unit>
   <persistence-unit name="userPU" transaction-type="JTA">

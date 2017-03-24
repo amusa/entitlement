@@ -5,41 +5,32 @@
  */
 package com.nnpcgroup.cosm.entity.production.jv;
 
-import com.nnpcgroup.cosm.entity.contract.ContractPK;
-import javax.persistence.Embeddable;
 import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Column;
+import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
 
 /**
  *
  * @author 18359
  */
-@Embeddable
+@MappedSuperclass
 public class ProductionDetailPK implements Serializable {
 
     private static final long serialVersionUID = 2983325339937581443L;
 
-    private Integer periodYear;
-    private Integer periodMonth;
-    private Long fiscalArrangementId;
-
-    private Long contractId;
-    private Long contractFiscalArrangementId;
-    private String crudeTypeCode;
+    protected Integer periodYear;
+    protected Integer periodMonth;
+    protected Long fiscalArrangementId;
 
     public ProductionDetailPK() {
     }
 
-    public ProductionDetailPK(ProductionPK productionPK, ContractPK contractPK) {
+    public ProductionDetailPK(ProductionPK productionPK) {
         this.periodYear = productionPK.getPeriodYear();
         this.periodMonth = productionPK.getPeriodMonth();
         this.fiscalArrangementId = productionPK.getFiscalArrangementId();
-
-        this.contractId = contractPK.getId();
-        this.contractFiscalArrangementId = contractPK.getFiscalArrangementId();
-        this.crudeTypeCode = contractPK.getCrudeTypeCode();
     }
 
     @Column(name = "PERIOD_YEAR")
@@ -69,38 +60,6 @@ public class ProductionDetailPK implements Serializable {
         this.fiscalArrangementId = fiscalArrangementId;
     }
 
-    @Column(name = "CONTRACT_ID")
-    public Long getContractId() {
-        return contractId;
-    }
-
-    public void setContractId(Long contractId) {
-        this.contractId = contractId;
-    }
-
-    @Column(name = "CONTRACT_FISCAL_ID")
-    public Long getContractFiscalArrangementId() {
-        return contractFiscalArrangementId;
-    }
-
-    public void setContractFiscalArrangementId(Long contractFiscalArrangementId) {
-        this.contractFiscalArrangementId = contractFiscalArrangementId;
-    }
-
-    @Column(name = "CRUDETYPE_CODE")
-    public String getCrudeTypeCode() {
-        return crudeTypeCode;
-    }
-
-    public void setCrudeTypeCode(String crudeTypeCode) {
-        this.crudeTypeCode = crudeTypeCode;
-    }
-
-    @Transient
-    public ContractPK getContractPK() {
-        return new ContractPK(contractId, contractFiscalArrangementId, crudeTypeCode);
-    }
-
     @Transient
     public ProductionPK getProductionPK() {
         return new ProductionPK(periodYear, periodMonth, fiscalArrangementId);
@@ -109,12 +68,9 @@ public class ProductionDetailPK implements Serializable {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 73 * hash + Objects.hashCode(this.periodYear);
-        hash = 73 * hash + Objects.hashCode(this.periodMonth);
-        hash = 73 * hash + Objects.hashCode(this.fiscalArrangementId);
-        hash = 73 * hash + Objects.hashCode(this.contractId);
-        hash = 73 * hash + Objects.hashCode(this.contractFiscalArrangementId);
-        hash = 73 * hash + Objects.hashCode(this.crudeTypeCode);
+        hash = 79 * hash + Objects.hashCode(this.periodYear);
+        hash = 79 * hash + Objects.hashCode(this.periodMonth);
+        hash = 79 * hash + Objects.hashCode(this.fiscalArrangementId);
         return hash;
     }
 
@@ -130,9 +86,6 @@ public class ProductionDetailPK implements Serializable {
             return false;
         }
         final ProductionDetailPK other = (ProductionDetailPK) obj;
-        if (!Objects.equals(this.crudeTypeCode, other.crudeTypeCode)) {
-            return false;
-        }
         if (!Objects.equals(this.periodYear, other.periodYear)) {
             return false;
         }
@@ -140,12 +93,6 @@ public class ProductionDetailPK implements Serializable {
             return false;
         }
         if (!Objects.equals(this.fiscalArrangementId, other.fiscalArrangementId)) {
-            return false;
-        }
-        if (!Objects.equals(this.contractId, other.contractId)) {
-            return false;
-        }
-        if (!Objects.equals(this.contractFiscalArrangementId, other.contractFiscalArrangementId)) {
             return false;
         }
         return true;

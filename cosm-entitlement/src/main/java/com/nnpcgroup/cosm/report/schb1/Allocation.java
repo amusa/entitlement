@@ -5,12 +5,14 @@
  */
 package com.nnpcgroup.cosm.report.schb1;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Ayemi
  * @date 04.12.2016
  */
-public abstract class Allocation {
+public abstract class Allocation implements Serializable{
 
     private Double chargeBfw;
     private Double monthlyCharge;
@@ -50,7 +52,15 @@ public abstract class Allocation {
         return chargeBfw + monthlyCharge;
     }
 
-    public abstract Double getReceived();
+    public Double getReceived(){
+        if (getRecoverable() <= 0) {
+            return 0.0;
+        } else if (getRecoverable() <= getLiftingProceed()) {
+            return getRecoverable();
+        } else {
+            return getLiftingProceed();
+        }
+    }
 
     public Double getChargeCfw() {
         return getRecoverable() - getReceived();

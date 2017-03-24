@@ -7,7 +7,7 @@ package com.nnpcgroup.cosm.ejb.cost.impl;
 
 import com.nnpcgroup.cosm.ejb.cost.ProductionCostServices;
 import com.nnpcgroup.cosm.ejb.impl.CommonServicesImpl;
-import com.nnpcgroup.cosm.ejb.tax.TaxServices;
+import com.nnpcgroup.cosm.cdi.TaxServices;
 import com.nnpcgroup.cosm.entity.FiscalPeriod;
 import com.nnpcgroup.cosm.entity.ProductionSharingContract;
 import com.nnpcgroup.cosm.entity.cost.CostItem;

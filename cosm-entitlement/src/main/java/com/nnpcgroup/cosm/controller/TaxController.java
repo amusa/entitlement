@@ -6,7 +6,7 @@
 package com.nnpcgroup.cosm.controller;
 
 import com.nnpcgroup.cosm.ejb.cost.ProductionCostServices;
-import com.nnpcgroup.cosm.ejb.tax.TaxServices;
+import com.nnpcgroup.cosm.cdi.TaxServices;
 import com.nnpcgroup.cosm.entity.ProductionSharingContract;
 import com.nnpcgroup.cosm.entity.cost.CostItem;
 import com.nnpcgroup.cosm.entity.cost.ProductionCost;
@@ -15,7 +15,6 @@ import com.nnpcgroup.cosm.util.TimeMachine;
 
 import javax.inject.Named;
 import java.io.Serializable;
-import java.time.YearMonth;
 import java.util.*;
 
 import java.util.logging.Logger;

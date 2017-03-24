@@ -5,17 +5,15 @@
  */
 package com.nnpcgroup.cosm.controller;
 
-import com.nnpcgroup.cosm.ejb.FiscalPeriodService;
+import com.nnpcgroup.cosm.cdi.FiscalPeriodService;
 import com.nnpcgroup.cosm.ejb.cost.ProductionCostServices;
-import com.nnpcgroup.cosm.ejb.tax.TaxServices;
+import com.nnpcgroup.cosm.cdi.TaxServices;
 import com.nnpcgroup.cosm.entity.FiscalPeriod;
 import com.nnpcgroup.cosm.entity.ProductionSharingContract;
 import com.nnpcgroup.cosm.entity.cost.CostOilDetail;
-import com.nnpcgroup.cosm.entity.cost.ProductionCost;
 
 import javax.inject.Named;
 import java.io.Serializable;
-import java.util.List;
 
 import java.util.logging.Logger;
 import javax.ejb.EJB;

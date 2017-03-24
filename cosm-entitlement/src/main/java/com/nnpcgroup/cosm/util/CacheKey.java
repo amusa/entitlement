@@ -1,19 +1,21 @@
-package com.nnpcgroup.cosm.entity.tax;
+package com.nnpcgroup.cosm.util;
 
 import com.nnpcgroup.cosm.entity.ProductionSharingContract;
+
+import java.io.Serializable;
 
 /**
  * Created by Ayemi on 20/03/2017.
  */
-public class TaxOilKey {
+public class CacheKey implements Serializable {
     private ProductionSharingContract psc;
     private int year;
     private int month;
 
-    public TaxOilKey() {
+    public CacheKey() {
     }
 
-    public TaxOilKey(ProductionSharingContract psc, int year, int month) {
+    public CacheKey(ProductionSharingContract psc, int year, int month) {
         this.psc = psc;
         this.year = year;
         this.month = month;
@@ -48,11 +50,11 @@ public class TaxOilKey {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        TaxOilKey taxOilKey = (TaxOilKey) o;
+        CacheKey cacheKey = (CacheKey) o;
 
-        if (year != taxOilKey.year) return false;
-        if (month != taxOilKey.month) return false;
-        return psc != null ? psc.equals(taxOilKey.psc) : taxOilKey.psc == null;
+        if (year != cacheKey.year) return false;
+        if (month != cacheKey.month) return false;
+        return psc != null ? psc.equals(cacheKey.psc) : cacheKey.psc == null;
     }
 
     @Override

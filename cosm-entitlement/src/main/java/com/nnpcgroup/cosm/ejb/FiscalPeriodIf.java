@@ -12,11 +12,11 @@ import com.nnpcgroup.cosm.entity.FiscalPeriod;
  */
 public interface FiscalPeriodIf {
 
-    public FiscalPeriod getPreviousFiscalPeriod();
+    FiscalPeriod getPreviousFiscalPeriod();
 
-    public FiscalPeriod getNextFiscalPeriod();
+    FiscalPeriod getNextFiscalPeriod();
 
-    public FiscalPeriod getPreviousYearFiscalPeriod();
+    FiscalPeriod getPreviousYearFiscalPeriod();
 
-    public boolean isCurrentYear();
+    boolean isCurrentYear();
 }

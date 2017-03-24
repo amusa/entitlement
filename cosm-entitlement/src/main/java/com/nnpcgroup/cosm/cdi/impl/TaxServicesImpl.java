@@ -3,20 +3,19 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.nnpcgroup.cosm.ejb.tax.impl;
+package com.nnpcgroup.cosm.cdi.impl;
 
 import com.nnpcgroup.cosm.controller.GeneralController;
-import com.nnpcgroup.cosm.ejb.FiscalPeriodService;
+import com.nnpcgroup.cosm.cdi.FiscalPeriodService;
 import com.nnpcgroup.cosm.ejb.cost.ProductionCostServices;
 import com.nnpcgroup.cosm.ejb.crude.CrudePriceBean;
 import com.nnpcgroup.cosm.ejb.forecast.psc.PscForecastDetailServices;
 import com.nnpcgroup.cosm.ejb.lifting.PscLiftingServices;
-import com.nnpcgroup.cosm.ejb.tax.TaxServices;
+import com.nnpcgroup.cosm.cdi.TaxServices;
 import com.nnpcgroup.cosm.entity.FiscalPeriod;
 import com.nnpcgroup.cosm.entity.ProductionSharingContract;
-import com.nnpcgroup.cosm.entity.lifting.PscLifting;
 import com.nnpcgroup.cosm.entity.tax.TaxOilDetail;
-import com.nnpcgroup.cosm.entity.tax.TaxOilKey;
+import com.nnpcgroup.cosm.util.CacheKey;
 import com.nnpcgroup.cosm.util.CacheUtil;
 
 import javax.ejb.EJB;
@@ -24,7 +23,9 @@ import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import java.io.Serializable;
 import java.time.YearMonth;
-import java.util.*;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 @Dependent
 public class TaxServicesImpl implements TaxServices, Serializable {
@@ -57,53 +58,15 @@ public class TaxServicesImpl implements TaxServices, Serializable {
 
     @Override
     public double computeGrossIncome(ProductionSharingContract psc, int year, int month) {
-        TaxOilKey taxOilKey = new TaxOilKey(psc, year, month);
+        CacheKey cacheKey = new CacheKey(psc, year, month);
         Double grossIncome;
 
-        if (cache.getIncomeCache().containsKey(taxOilKey)) {
-            return cache.getIncomeCache().get(taxOilKey);
+        if (cache.getIncomeCache().containsKey(cacheKey)) {
+            return cache.getIncomeCache().get(cacheKey);
         }
 
-        grossIncome = computeGrossIncome(psc, new FiscalPeriod(year, month));
-
-        return grossIncome;
-    }
-
-    private double computeGrossIncome(ProductionSharingContract psc, FiscalPeriod fp) {
-        if (!fp.isCurrentYear()) {
-            return 0;
-        }
-
-        if (!prodCostBean.fiscalPeriodExists(psc, fp)) {
-            return 0.0;
-        }
-        double currentMonthIncome = 0;
-        List<PscLifting> pscLiftings = liftingBean.find(psc, fp.getYear(), fp.getMonth());
-        double price;
-
-
-        for (PscLifting lifting : pscLiftings) {
-//            CrudePricePK pricePK = new CrudePricePK();
-//            pricePK.setCrudeTypeCode(psc.getCrudeType().getCode());
-//            pricePK.setPriceDate(lifting.getLiftingDate());
-//            CrudePrice crudePrice = priceBean.find(pricePK);
-//
-//            if (crudePrice != null) {
-//                price = crudePrice.getOsPrice();
-//            } else {
-//                price = 0;
-//            }
-//
-//            grossIncome += (lifting.getTotalLifting() * price);
-            currentMonthIncome += lifting.getRevenue();
-
-        }
-
-        TaxOilKey taxOilKey = new TaxOilKey(psc, fp.getYear(), fp.getMonth());
-        double grossIncome =
-                currentMonthIncome + computeGrossIncome(psc, fp.getPreviousFiscalPeriod());//recursively compute cummulative gross income;
-
-        cache.getIncomeCache().put(taxOilKey, grossIncome);
+        grossIncome = liftingBean.getGrossIncome(psc, year, month);
+        cache.getIncomeCache().put(cacheKey, grossIncome);
 
         return grossIncome;
     }
@@ -152,11 +115,11 @@ public class TaxServicesImpl implements TaxServices, Serializable {
 
     @Override
     public double computeRoyaltyCum(ProductionSharingContract psc, int year, int month) {
-        TaxOilKey taxOilKey = new TaxOilKey(psc, year, month);
+        CacheKey cacheKey = new CacheKey(psc, year, month);
         Double royalty;
 
-        if (cache.getRoyaltyCache().containsKey(taxOilKey)) {
-            return cache.getRoyaltyCache().get(taxOilKey);
+        if (cache.getRoyaltyCache().containsKey(cacheKey)) {
+            return cache.getRoyaltyCache().get(cacheKey);
         }
 
         royalty = computeRoyaltyCum(psc, new FiscalPeriod(year, month));
@@ -174,12 +137,12 @@ public class TaxServicesImpl implements TaxServices, Serializable {
             return 0;
         }
 
-        TaxOilKey taxOilKey = new TaxOilKey(psc, fp.getYear(), fp.getMonth());
+        CacheKey cacheKey = new CacheKey(psc, fp.getYear(), fp.getMonth());
         double currentMonthRoyalty = computeRoyalty(psc, fp.getYear(), fp.getMonth());
         double previousMonthRoyalty = computeRoyaltyCum(psc, fp.getPreviousFiscalPeriod());
         double royalty = currentMonthRoyalty + previousMonthRoyalty;
 
-        cache.getRoyaltyCache().put(taxOilKey, royalty);
+        cache.getRoyaltyCache().put(cacheKey, royalty);
 
         return royalty;
 
@@ -256,11 +219,11 @@ public class TaxServicesImpl implements TaxServices, Serializable {
 
     @Override
     public double computeUnrecoupedAnnualAllowance(ProductionSharingContract psc, int year, int month) {
-        TaxOilKey taxOilKey = new TaxOilKey(psc, year, month);
+        CacheKey cacheKey = new CacheKey(psc, year, month);
         Double UAA;
 
-        if (cache.getUAACache().containsKey(taxOilKey)) {
-            return cache.getUAACache().get(taxOilKey);
+        if (cache.getUAACache().containsKey(cacheKey)) {
+            return cache.getUAACache().get(cacheKey);
         }
 
         double adjAssProfit, totalAnnualAllw;
@@ -270,7 +233,7 @@ public class TaxServicesImpl implements TaxServices, Serializable {
 
         UAA = Math.min(0, adjAssProfit - totalAnnualAllw);
 
-        cache.getUAACache().put(taxOilKey, UAA);
+        cache.getUAACache().put(cacheKey, UAA);
 
         return UAA;
     }
@@ -293,11 +256,11 @@ public class TaxServicesImpl implements TaxServices, Serializable {
 
     @Override
     public double computeCurrentYearCapitalAllowance(ProductionSharingContract psc, int year, int month) {
-        TaxOilKey taxOilKey = new TaxOilKey(psc, year, month);
+        CacheKey cacheKey = new CacheKey(psc, year, month);
         Double capitalAllowance;
 
-        if (cache.getAmortizationCache().containsKey(taxOilKey)) {
-            return cache.getAmortizationCache().get(taxOilKey);
+        if (cache.getAmortizationCache().containsKey(cacheKey)) {
+            return cache.getAmortizationCache().get(cacheKey);
         }
 
         capitalAllowance = computeCurrentYearCapitalAllowance(psc, new FiscalPeriod(year, month));
@@ -307,11 +270,11 @@ public class TaxServicesImpl implements TaxServices, Serializable {
 
     @Override
     public TaxOilDetail computeTaxOilDetail(ProductionSharingContract psc, int year, int month) {
-        TaxOilKey taxOilKey = new TaxOilKey(psc, year, month);
+        CacheKey cacheKey = new CacheKey(psc, year, month);
         TaxOilDetail taxOilDetail = null;
 
-        if (cache.getTaxOilCache().containsKey(taxOilKey)) {
-            return cache.getTaxOilCache().get(taxOilKey);
+        if (cache.getTaxOilCache().containsKey(cacheKey)) {
+            return cache.getTaxOilCache().get(cacheKey);
         }
 
         taxOilDetail = new TaxOilDetail();
@@ -346,7 +309,7 @@ public class TaxServicesImpl implements TaxServices, Serializable {
         double priorYrAnnualAllw = computePriorYearAnnualAllowance(psc, year, month);
         taxOilDetail.setPriorYearAnnualAllowance(priorYrAnnualAllw);
 
-        cache.getTaxOilCache().put(taxOilKey, taxOilDetail);
+        cache.getTaxOilCache().put(cacheKey, taxOilDetail);
 
         return taxOilDetail;
     }
@@ -392,12 +355,12 @@ public class TaxServicesImpl implements TaxServices, Serializable {
             return 0;
         }
 
-        TaxOilKey taxOilKey = new TaxOilKey(psc, fp.getYear(), fp.getMonth());
+        CacheKey cacheKey = new CacheKey(psc, fp.getYear(), fp.getMonth());
 
         double currMonthCapitalAllw = prodCostBean.getCapitalAllowanceRecovery(psc, fp.getYear(), fp.getMonth());// Armotization
         double currentYearCapitalAllw = currMonthCapitalAllw + computeCurrentYearCapitalAllowance(psc, fp.getPreviousFiscalPeriod());//cummulative
 
-        cache.getAmortizationCache().put(taxOilKey, currentYearCapitalAllw);
+        cache.getAmortizationCache().put(cacheKey, currentYearCapitalAllw);
 
         return currentYearCapitalAllw;
     }

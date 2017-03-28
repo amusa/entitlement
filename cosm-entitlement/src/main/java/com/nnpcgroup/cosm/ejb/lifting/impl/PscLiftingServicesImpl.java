@@ -7,6 +7,7 @@ package com.nnpcgroup.cosm.ejb.lifting.impl;
 
 import com.nnpcgroup.cosm.ejb.lifting.PscLiftingServices;
 import com.nnpcgroup.cosm.entity.ProductionSharingContract;
+import com.nnpcgroup.cosm.entity.cost.CostItem;
 import com.nnpcgroup.cosm.entity.forecast.psc.PscForecastDetail;
 import com.nnpcgroup.cosm.entity.lifting.PscLifting;
 
@@ -16,9 +17,7 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import javax.ejb.Local;
 import javax.ejb.Stateless;
-import javax.persistence.NoResultException;
-import javax.persistence.Query;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 import javax.persistence.criteria.*;
 import javax.persistence.metamodel.EntityType;
 import javax.persistence.metamodel.Metamodel;
@@ -118,11 +117,21 @@ public class PscLiftingServicesImpl extends LiftingServicesImpl<PscLifting> impl
         CriteriaQuery<Number> cq = cb.createQuery(Number.class);
         Root<PscLifting> liftingRoot = cq.from(entityClass);
 
-        Expression<Double> liftingSum = cb.sum(liftingRoot.get("ownLifting"), liftingRoot.<Double>get("partnerLifting"));
+        Path<Number> ownLiftPath = liftingRoot.get("ownLifting");
+        Path<Number> partnerLiftPath = liftingRoot.get("partnerLifting");
+        Path<Number> pricePath = liftingRoot.get("price");
+        Expression<Number> zero = cb.literal(0.0);
 
-        Expression<Double> revenueSum = cb.prod(liftingRoot.get("price"), liftingSum);
+        //ignore null
+        Expression<Number> totalLift =
+                cb.sum(cb.<Number>selectCase().when(ownLiftPath.isNull(), zero).otherwise(ownLiftPath),
+                        cb.<Number>selectCase().when(partnerLiftPath.isNull(), zero).otherwise(partnerLiftPath));
 
-        Expression<Number> wapQuot = cb.quot(revenueSum, liftingSum);
+        Expression<Number> totalRevenue = cb.sum(cb.prod(pricePath, totalLift));
+        Expression<Number> liftingSum = cb.sum(totalLift);
+
+        Selection<Number> wapQuot = cb.quot(totalRevenue, liftingSum);
+        wapQuot.alias("wap");
 
         Predicate predicate = cb.and(
                 cb.equal(liftingRoot.get("psc"), psc),
@@ -130,10 +139,10 @@ public class PscLiftingServicesImpl extends LiftingServicesImpl<PscLifting> impl
                 cb.equal(cb.function("month", Integer.class, liftingRoot.get("liftingDate")), month)
         );
 
-        cq.select(wapQuot.alias("grossProduction"))
+        cq.select(wapQuot)
                 .where(predicate);
 
-        Number wap = null;//weighted average price
+        Number wap;//weighted average price
         try {
             wap = getEntityManager().createQuery(cq).getSingleResult();
             return wap.doubleValue();
@@ -238,7 +247,7 @@ public class PscLiftingServicesImpl extends LiftingServicesImpl<PscLifting> impl
         CriteriaQuery<Number> cq = cb.createQuery(Number.class);
         Root<PscLifting> liftingRoot = cq.from(entityClass);
 
-        Expression<Double> liftingSum = cb.sum(liftingRoot.get("ownLifting"), liftingRoot.<Double>get("partnerLifting"));
+        Expression<Double> liftingSum = cb.sum(liftingRoot.<Double>get("ownLifting"), liftingRoot.<Double>get("partnerLifting"));
         Expression<Double> prod = cb.prod(liftingRoot.get("price"), liftingSum);
         Expression<Double> sum = cb.sum(prod);
 

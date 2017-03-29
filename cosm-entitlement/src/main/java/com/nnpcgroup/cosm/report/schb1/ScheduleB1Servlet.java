@@ -251,7 +251,7 @@ public class ScheduleB1Servlet extends HttpServlet {
 
     private void addAllocationTableContent(PdfPTable table) {
         PdfPCell cell;
-        java.util.List<ProceedAllocation> proceedAllocationList = scheduleB1Service.processProceedAllocation(this.psc, this.periodYear, this.periodMonth);
+        java.util.List<ProceedAllocation> proceedAllocationList = scheduleB1Service.computeProceedAllocation(this.psc, this.periodYear, this.periodMonth);
 
         if (!proceedAllocationList.isEmpty()) {
             for (ProceedAllocation pa : proceedAllocationList) {

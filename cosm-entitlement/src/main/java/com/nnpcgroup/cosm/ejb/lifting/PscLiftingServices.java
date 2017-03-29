@@ -26,7 +26,7 @@ public interface PscLiftingServices extends LiftingServices<PscLifting> {
 
     double getContractorProceed(ProductionSharingContract psc, int year, int month);
 
-    double getTotalProceed(ProductionSharingContract psc, int year, int month);
+    double getMonthlyIncome(ProductionSharingContract psc, int year, int month);
 
     double getGrossIncome(ProductionSharingContract psc, int year, int month);
 }

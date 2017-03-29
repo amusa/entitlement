@@ -1,5 +1,6 @@
 package com.nnpcgroup.cosm.util;
 
+import com.nnpcgroup.cosm.entity.cost.CostOilDetail;
 import com.nnpcgroup.cosm.entity.tax.TaxOilDetail;
 import com.nnpcgroup.cosm.report.schb1.CostOilAllocation;
 import com.nnpcgroup.cosm.report.schb1.RoyaltyAllocation;
@@ -26,6 +27,7 @@ public class CacheUtil {
     private Cache<CacheKey, RoyaltyAllocation> royaltyAllocationCache;
     private Cache<CacheKey, CostOilAllocation> costOilAllocationCache;
     private Cache<CacheKey, TaxOilAllocation> taxOilAllocationCache;
+    private Cache<CacheKey, CostOilDetail> costOilDetailCache;
 
     public CacheUtil() {
         cacheManager = CacheManagerBuilder
@@ -75,6 +77,12 @@ public class CacheUtil {
                                 CacheKey.class, TaxOilAllocation.class,
                                 ResourcePoolsBuilder.heap(100)));
 
+        costOilDetailCache = cacheManager
+                .createCache("costOilDetailCache", CacheConfigurationBuilder
+                        .newCacheConfigurationBuilder(
+                                CacheKey.class, CostOilDetail.class,
+                                ResourcePoolsBuilder.heap(100)));
+
     }
 
     public Cache<CacheKey, TaxOilDetail> getTaxOilCache() {
@@ -109,6 +117,10 @@ public class CacheUtil {
         return taxOilAllocationCache;
     }
 
+    public Cache<CacheKey, CostOilDetail> getCostOilDetailCache() {
+        return costOilDetailCache;
+    }
+
     public void clearAll() {
         taxOilCache.clear();
         royaltyCache.clear();
@@ -118,6 +130,7 @@ public class CacheUtil {
         royaltyAllocationCache.clear();
         costOilAllocationCache.clear();
         taxOilAllocationCache.clear();
+        costOilDetailCache.clear();
     }
 
     public void close() {

@@ -212,14 +212,23 @@ public class PscLiftingServicesImpl extends LiftingServicesImpl<PscLifting> impl
     }
 
     @Override
-    public double getTotalProceed(ProductionSharingContract psc, int year, int month) {
+    public double getMonthlyIncome(ProductionSharingContract psc, int year, int month) {
         CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
         CriteriaQuery<Number> cq = cb.createQuery(Number.class);
         Root<PscLifting> liftingRoot = cq.from(entityClass);
 
-        Expression<Double> liftingSum = cb.sum(liftingRoot.get("ownLifting"), liftingRoot.<Double>get("partnerLifting"));
-        Expression<Double> prod = cb.prod(liftingRoot.get("price"), liftingSum);
-        Expression<Double> sum = cb.sum(prod);
+        Path<Number> ownLiftPath = liftingRoot.get("ownLifting");
+        Path<Number> partnerLiftPath = liftingRoot.get("partnerLifting");
+        Path<Number> pricePath = liftingRoot.get("price");
+        Expression<Number> zero = cb.literal(0.0);
+
+        //ignore null
+        Expression<Number> totalLift =
+                cb.sum(cb.<Number>selectCase().when(ownLiftPath.isNull(), zero).otherwise(ownLiftPath),
+                        cb.<Number>selectCase().when(partnerLiftPath.isNull(), zero).otherwise(partnerLiftPath));
+        Expression<Number> totalRevenue = cb.sum(cb.prod(pricePath, totalLift));
+
+//
 
         Predicate predicate = cb.and(
                 cb.equal(liftingRoot.get("psc"), psc),
@@ -227,7 +236,7 @@ public class PscLiftingServicesImpl extends LiftingServicesImpl<PscLifting> impl
                 cb.equal(cb.function("month", Integer.class, liftingRoot.get("liftingDate")), month)
         );
 
-        cq.select(sum.alias("proceed"))
+        cq.select(totalRevenue.alias("proceed"))
                 .where(predicate);
 
         Number proceed;

@@ -5,10 +5,7 @@
  */
 package com.nnpcgroup.cosm.controller;
 
-import com.nnpcgroup.cosm.cdi.FiscalPeriodService;
-import com.nnpcgroup.cosm.ejb.cost.ProductionCostServices;
-import com.nnpcgroup.cosm.cdi.TaxServices;
-import com.nnpcgroup.cosm.entity.FiscalPeriod;
+import com.nnpcgroup.cosm.cdi.CostOilService;
 import com.nnpcgroup.cosm.entity.ProductionSharingContract;
 import com.nnpcgroup.cosm.entity.cost.CostOilDetail;
 
@@ -16,7 +13,6 @@ import javax.inject.Named;
 import java.io.Serializable;
 
 import java.util.logging.Logger;
-import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 
@@ -31,13 +27,7 @@ public class CostOilController implements Serializable {
     private static final Logger LOG = Logger.getLogger(CostOilController.class.getName());
 
     @Inject
-    private TaxServices taxBean;
-
-    @Inject
-    private FiscalPeriodService fiscalService;
-
-    @EJB
-    private ProductionCostServices prodCostBean;
+    private CostOilService costOilService;
 
     private Integer periodYear;
     private Integer periodMonth;
@@ -78,60 +68,7 @@ public class CostOilController implements Serializable {
 
     public void computeCostOilDetail(ProductionSharingContract psc, Integer year, Integer month) {
         initialize(psc, year, month);
-        Double armotizedCapex = prodCostBean.getCapitalAllowanceRecovery(psc, year, month);
-        Double opex = prodCostBean.getOpex(psc, year, month);
-        Double eduTax = taxBean.computeEducationTax(psc, year, month);
-
-        FiscalPeriod prevFp = fiscalService.getPreviousFiscalPeriod(year, month);
-
-        Double costOilBfw = computeCostOilBfw(psc, prevFp.getYear(), prevFp.getMonth());
-
-        costOilDetail = new CostOilDetail();
-        costOilDetail.setArmotizedCapex(armotizedCapex);
-        costOilDetail.setOpex(opex);
-        costOilDetail.setEducationTax(eduTax);
-        costOilDetail.setCostOilBfw(costOilBfw);
-
-    }
-
-    public Double computeCostOilCum(ProductionSharingContract psc, Integer year, Integer month) {
-        Double costOil, costOilBfw;
-        costOil = computeCostOil(psc, year, month);
-
-        FiscalPeriod prevFp = fiscalService.getPreviousFiscalPeriod(year, month);
-
-        costOilBfw = computeCostOilBfw(psc, prevFp.getYear(), prevFp.getMonth());
-
-        return costOil + costOilBfw;
-    }
-
-    public Double computeCostOil(ProductionSharingContract psc, Integer year, Integer month) {
-        Double armotizedCapex, opex, eduTax;
-
-        armotizedCapex = prodCostBean.getCapitalAllowanceRecovery(psc, year, month);
-        opex = prodCostBean.getOpex(psc, year, month);
-        eduTax = taxBean.computeEducationTax(psc, year, month);
-
-        return armotizedCapex + opex + eduTax;
-
-    }
-
-    public Double computeCostOilBfw(ProductionSharingContract psc, Integer year, Integer month) {
-        Double costOilCum, monthlyCurrentCharge;
-        if (!prodCostBean.fiscalPeriodExists(psc, year, month)) {
-            return 0.0;
-        }
-        costOilCum = computeCostOilCum(psc, year, month);
-        monthlyCurrentCharge = computeMontlyCurrentCharge(psc, year, month, costOilCum);
-
-        return Math.max(0, costOilCum - monthlyCurrentCharge);
-    }
-
-    public Double computeMontlyCurrentCharge(ProductionSharingContract psc, Integer year, Integer month, Double costOilCum) {
-        Double proceed = taxBean.computeGrossIncome(psc, year, month);
-        Double costUplift = psc.getCostUplift();
-
-        return Math.max(0, Math.min(proceed * costUplift, costOilCum));
+        costOilDetail = costOilService.buildCostOilDetail(psc, year, month);
     }
 
     private void initialize(ProductionSharingContract psc, int year, int month) {
@@ -139,7 +76,4 @@ public class CostOilController implements Serializable {
         this.periodMonth = month;
         this.currentPsc = psc;
     }
-
-    
-
 }

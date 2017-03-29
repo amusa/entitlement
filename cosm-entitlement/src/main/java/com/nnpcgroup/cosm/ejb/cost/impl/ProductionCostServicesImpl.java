@@ -7,7 +7,7 @@ package com.nnpcgroup.cosm.ejb.cost.impl;
 
 import com.nnpcgroup.cosm.ejb.cost.ProductionCostServices;
 import com.nnpcgroup.cosm.ejb.impl.CommonServicesImpl;
-import com.nnpcgroup.cosm.cdi.TaxServices;
+import com.nnpcgroup.cosm.cdi.TaxOilService;
 import com.nnpcgroup.cosm.entity.FiscalPeriod;
 import com.nnpcgroup.cosm.entity.ProductionSharingContract;
 import com.nnpcgroup.cosm.entity.cost.CostItem;
@@ -34,7 +34,7 @@ import javax.persistence.criteria.*;
 public class ProductionCostServicesImpl extends CommonServicesImpl<ProductionCost> implements ProductionCostServices, Serializable {
 
     @Inject
-    private TaxServices taxBean;
+    private TaxOilService taxBean;
 
     public ProductionCostServicesImpl() {
         super(ProductionCost.class);

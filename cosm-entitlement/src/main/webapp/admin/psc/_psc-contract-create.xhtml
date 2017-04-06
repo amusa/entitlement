@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
@@ -7,206 +8,256 @@
       xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
       xmlns:jsf="http://xmlns.jcp.org/jsf">
 
-    <ui:composition>
-        <div class="modal fade" id="AssetCreateDlg" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title"><h:outputLabel id="contractCreateFiscalTitle" value ="Create Contract for PSC Fiscal Arrangement: #{contractController.fiscalArrangement.title}"/></h4>
-                    </div>
-                    <h:form id="AssetCreateForm">
-                        <div class="modal-body">
-                            <h:panelGroup id="AssetCreatePanel">
-                                <div class="row">                                    
-                                    <div class="col-md-12 m-b-15">
-                                        <h:outputLabel value="Contract Title" for="contractTitle" />
-                                        <h:inputText id="contractTitle"  value="#{contractController.selected.title}" class="form-control input-sm m-b-10">
-                                            <f:ajax />
-                                        </h:inputText> 
-                                    </div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-md-6 m-b-15">
-                                        <h:outputLabel value="Contract Type" for="contractType" />
-                                        <h:selectOneMenu id="contractType" value="#{contractController.contractType}" class="form-control input-sm m-b-10">
-                                            <f:selectItem  itemLabel="---Select---" itemValue="#{null}"/>
-                                            <f:selectItem  itemLabel="Regular PSC" itemValue="PSC"/>
-                                            <f:ajax event="change" render="AssetCreateForm regPscContractInfo" listener="#{contractController.contractTypeSelected}"/>
-                                        </h:selectOneMenu> 
-                                    </div>
-                                    <div class="col-md-6 m-b-15">                                        
-                                        <h:outputLabel value="Crude Type" for="crudeType" />
-                                        <h:selectOneMenu id="crudeType" value="#{contractController.crudeType}" class="form-control input-sm m-b-10">
-                                            <f:selectItems value="#{crudeTypeController.itemsAvailableSelectOne}"
-                                                           var="crudeTypeItem"
-                                                           itemValue="#{crudeTypeItem}"/>
-                                            <f:ajax />
-                                        </h:selectOneMenu>                                                                                                                  
-                                    </div>
-                                </div>
-
-                                <div jsf:id="regPscContractInfo" jsf:rendered="#{contractController.contractType eq 'PSC'}" class="panel panel-default tile">
-                                    <div class="panel-heading">
-                                        <h3 class="panel-title"></h3>
-                                    </div>
-                                    <div class="panel-body">
-                                        <div class="row">
-                                            <div class="col-md-4 m-b-15">
-                                                <h:outputLabel value="Cont Exec Date" for="contractExecDate" />
-                                                <h:inputText id="contractExecDate"  value="#{contractController.pscSelected.contractExecutionDate}" class="form-control input-sm m-b-10">
-                                                    <f:ajax />
-                                                </h:inputText>                                                                                                                  
-                                            </div>
-                                            <div class="col-md-4 m-b-15">
-                                                <h:outputLabel value="First Oil Date" for="firstOilDate" />
-                                                <h:inputText id="firstOilDate"  value="#{contractController.pscSelected.firstOilDate}" class="form-control input-sm m-b-10">
-                                                    <f:ajax />
-                                                </h:inputText>                                                                                                                  
-                                            </div>
-                                            <div class="col-md-4 m-b-15">
-                                                <h:outputLabel value="Cost Recov Start Date" for="costRecovStartDate" />
-                                                <h:inputText id="costRecovStartDate"  value="#{contractController.pscSelected.costRecoveryStartDate}" class="form-control input-sm m-b-10">
-                                                    <f:ajax />
-                                                </h:inputText>                                                                                                                  
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-4 m-b-15">
-                                                <h:outputLabel value="Cost Recov Limit" for="costRecovLimit" />
-                                                <h:inputText id="costRecovLimit"  value="#{contractController.pscSelected.costRecoveryLimit}" class="form-control input-sm m-b-10">
-                                                    <f:ajax />
-                                                </h:inputText>                                                                                                                  
-                                            </div>
-                                            <div class="col-md-4 m-b-15">
-                                                <h:outputLabel value="Cost Uplift" for="costUplift" />
-                                                <h:inputText id="costUplift"  value="#{contractController.pscSelected.costUplift}" class="form-control input-sm m-b-10">
-                                                    <f:ajax />
-                                                </h:inputText>                                                                                                                  
-                                            </div>
-                                            <div class="col-md-4 m-b-15">
-                                                <h:outputLabel value="Royalty Rate" for="royaltyRate" />
-                                                <h:inputText id="royaltyRate"  value="#{contractController.pscSelected.pscRoyaltyRate}" class="form-control input-sm m-b-10">
-                                                    <f:ajax />
-                                                </h:inputText>                                                                                                                  
-                                            </div>   
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div jsf:id="taxAndAllowanceInfo" jsf:rendered="#{contractController.contractType eq 'PSC'}" class="panel panel-default tile">
-                                    <div class="panel-heading">
-                                        <h3 class="panel-title">TAX AND ALLOWANCES</h3>
-                                    </div>
-                                    <div class="panel-body">
-                                        <div class="row">
-                                            <div class="col-md-4 m-b-15">
-                                                <h:outputLabel value="Inv. Tax Allw" for="invTaxAllow" />
-                                                <h:inputText id="invTaxAllow"  value="#{contractController.pscSelected.taxAndAllowance.investmentTaxAllowance}" class="form-control input-sm m-b-10">
-                                                    <f:ajax />
-                                                </h:inputText>                                                                                                                  
-                                            </div>
-                                            <div class="col-md-4 m-b-15">
-                                                <h:outputLabel value="Capital Allw Rate" for="capitalAllwRate" />
-                                                <h:inputText id="capitalAllwRate"  value="#{contractController.pscSelected.taxAndAllowance.capitalAllowanceRate}" class="form-control input-sm m-b-10">
-                                                    <f:ajax />
-                                                </h:inputText>                                                                                                                  
-                                            </div>
-                                            <div class="col-md-4 m-b-15">
-                                                <h:outputLabel value="Petr Prof. Tax Rate" for="petrProfTaxRate" />
-                                                <h:inputText id="petrProfTaxRate"  value="#{contractController.pscSelected.petroleumProfitTaxRate}" class="form-control input-sm m-b-10">
-                                                    <f:ajax />
-                                                </h:inputText>                                                                                                                  
-                                            </div> 
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-4 m-b-15">
-                                                <h:outputLabel value="Education Tax" for="educationTax" />
-                                                <h:inputText id="educationTax"  value="#{contractController.pscSelected.taxAndAllowance.educationTax}" class="form-control input-sm m-b-10">
-                                                    <f:ajax />
-                                                </h:inputText>                                                                                                                  
-                                            </div>
-                                            <div class="col-md-4 m-b-15">
-                                                <h:outputLabel value="Profit Oil Split Option" for="profitOilSplit" />
-                                                <h:inputText id="profitOilSplit"  value="#{contractController.pscSelected.profitOilSplitOption}" class="form-control input-sm m-b-10">
-                                                    <f:ajax />
-                                                </h:inputText>                                                                                                                  
-                                            </div> 
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div jsf:id="contractAreaSizeInfo" jsf:rendered="#{contractController.contractType eq 'PSC'}" class="panel panel-default tile">
-                                    <div class="panel-heading">
-                                        <h3 class="panel-title">CONTRACT AREA SIZE</h3>
-                                    </div>
-                                    <div class="panel-body">
-                                        <div class="row">
-                                            <div class="col-md-4 m-b-15">
-                                                <h:outputLabel value="OPL Area Size" for="oplAreaSize" />
-                                                <h:inputText id="oplAreaSize"  value="#{contractController.pscSelected.areaSize.oplContractArea}" class="form-control input-sm m-b-10">
-                                                    <f:ajax event="change" render="totalConcessRental" />
-                                                </h:inputText>                                                                                                                  
-                                            </div>
-                                            <div class="col-md-4 m-b-15">
-                                                <h:outputLabel value="OML Area Size" for="omlAreaSize" />
-                                                <h:inputText id="omlAreaSize"  value="#{contractController.pscSelected.areaSize.omlContractArea}" class="form-control input-sm m-b-10">
-                                                    <f:ajax />
-                                                </h:inputText>                                                                                                                  
-                                            </div>
-                                            <div class="col-md-4 m-b-15">
-                                                <h:outputLabel value="OPL Rental Rate" for="oplRentalRate" />
-                                                <h:inputText id="oplRentalRate"  value="#{contractController.pscSelected.areaSize.oplRentalRate}" class="form-control input-sm m-b-10">
-                                                    <f:ajax event="change" render="totalConcessRental" />
-                                                </h:inputText>                                                                                                                  
-                                            </div> 
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-4 m-b-15">
-                                                <h:outputLabel value="OML Concess Rental Rate" for="omlRentalRate" />
-                                                <h:inputText id="omlRentalRate"  value="#{contractController.pscSelected.areaSize.omlConcessionRentalRate}" class="form-control input-sm m-b-10">
-                                                    <f:ajax />
-                                                </h:inputText>                                                                                                                  
-                                            </div>
-                                            <div class="col-md-4 m-b-15">
-                                                <h:outputLabel value="Total Concess Rental (OPL)" for="totalConcessRental" />
-                                                <h:inputText id="totalConcessRental"  value="#{contractController.pscSelected.areaSize.totalConcessionRental}" class="form-control input-sm m-b-10">
-                                                    <f:ajax />
-                                                </h:inputText>                                                                                                                  
-                                            </div>
-                                            <div class="col-md-4 m-b-15">
-                                                <h:outputLabel value="Concess Rental (OML)" for="omlConcessRental" />
-                                                <h:inputText id="omlConcessRental"  value="" class="form-control input-sm m-b-10">
-                                                    <f:ajax />
-                                                </h:inputText>                                                                                                                  
-                                            </div> 
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-4 m-b-15">
-                                                <h:outputLabel value="Concess Rental (OML) Annually" for="omlConcessRentalAnnual" />
-                                                <h:inputText id="omlConcessRentalAnnual"  value="" class="form-control input-sm m-b-10">
-                                                    <f:ajax />
-                                                </h:inputText>                                                                                                                  
-                                            </div>  
-                                        </div>
-                                    </div>
-                                </div>                                
-                            </h:panelGroup>
-
-                        </div>
-                        <div class="modal-footer">
-                            <h:commandButton value="#{bundle.Save}" pt:data-dismiss="modal" class="btn btn-sm">
-                                <f:ajax listener="#{contractController.create}" render="jvListForm jvTable msgs"/>
-                            </h:commandButton>
-                            <h:commandButton value="#{bundle.Cancel}" immediate="true" pt:data-dismiss="modal" class="btn btn-sm">
-                                <f:ajax listener="#{contractController.cancel}" render="jvListForm jvTable msgs"/>
-                            </h:commandButton>
-                        </div>
-                    </h:form>
+<ui:composition>
+    <div class="modal fade" id="AssetCreateDlg" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title"><h:outputLabel id="contractCreateFiscalTitle"
+                                                           value="Create Contract for PSC Fiscal Arrangement: #{contractController.fiscalArrangement.title}"/>
+                    </h4>
                 </div>
-            </div>
-        </div> 
+                <h:form id="AssetCreateForm">
+                    <div class="modal-body">
+                        <h:panelGroup id="AssetCreatePanel">
+                            <div class="row">
+                                <div class="col-md-12 m-b-15">
+                                    <h:outputLabel value="Contract Title" for="contractTitle"/>
+                                    <h:inputText id="contractTitle" value="#{contractController.selected.title}"
+                                                 class="form-control input-sm m-b-10">
+                                        <f:ajax/>
+                                    </h:inputText>
+                                </div>
+                            </div>
 
-    </ui:composition>
+                            <div class="row">
+                                <div class="col-md-6 m-b-15">
+                                    <h:outputLabel value="Contract Type" for="contractType"/>
+                                    <h:selectOneMenu id="contractType" value="#{contractController.contractType}"
+                                                     class="form-control input-sm m-b-10">
+                                        <f:selectItem itemLabel="---Select---" itemValue="#{null}"/>
+                                        <f:selectItem itemLabel="Regular PSC" itemValue="PSC"/>
+                                        <f:ajax event="change" render="AssetCreateForm regPscContractInfo"
+                                                listener="#{contractController.contractTypeSelected}"/>
+                                    </h:selectOneMenu>
+                                </div>
+                                <div class="col-md-6 m-b-15">
+                                    <h:outputLabel value="Crude Type" for="crudeType"/>
+                                    <h:selectOneMenu id="crudeType" value="#{contractController.crudeType}"
+                                                     class="form-control input-sm m-b-10">
+                                        <f:selectItems value="#{crudeTypeController.itemsAvailableSelectOne}"
+                                                       var="crudeTypeItem"
+                                                       itemValue="#{crudeTypeItem}"/>
+                                        <f:ajax/>
+                                    </h:selectOneMenu>
+                                </div>
+                            </div>
+
+                            <div jsf:id="regPscContractInfo" jsf:rendered="#{contractController.contractType eq 'PSC'}"
+                                 class="panel panel-default tile">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title"></h3>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-md-4 m-b-15">
+                                            <h:outputLabel value="Cont Exec Date (dd/MM/yyyy)" for="contractExecDate"/>
+                                            <h:inputText id="contractExecDate"
+                                                         value="#{contractController.pscSelected.contractExecutionDate}"
+                                                         class="form-control input-sm m-b-10">
+                                                <f:ajax/>
+                                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                            </h:inputText>
+                                        </div>
+                                        <div class="col-md-4 m-b-15">
+                                            <h:outputLabel value="First Oil Date (dd/MM/yyyy)" for="firstOilDate"/>
+                                            <h:inputText id="firstOilDate"
+                                                         value="#{contractController.pscSelected.firstOilDate}"
+                                                         class="form-control input-sm m-b-10">
+                                                <f:ajax/>
+                                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                            </h:inputText>
+                                        </div>
+                                        <div class="col-md-4 m-b-15">
+                                            <h:outputLabel value="Cost Recov Start Date (dd/MM/yyyy)"
+                                                           for="costRecovStartDate"/>
+                                            <h:inputText id="costRecovStartDate"
+                                                         value="#{contractController.pscSelected.costRecoveryStartDate}"
+                                                         class="form-control input-sm m-b-10">
+                                                <f:ajax/>
+                                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                            </h:inputText>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4 m-b-15">
+                                            <h:outputLabel value="Cost Recov Limit" for="costRecovLimit"/>
+                                            <h:inputText id="costRecovLimit"
+                                                         value="#{contractController.pscSelected.costRecoveryLimit}"
+                                                         class="form-control input-sm m-b-10">
+                                                <f:ajax/>
+                                            </h:inputText>
+                                        </div>
+                                        <div class="col-md-4 m-b-15">
+                                            <h:outputLabel value="Cost Uplift" for="costUplift"/>
+                                            <h:inputText id="costUplift"
+                                                         value="#{contractController.pscSelected.costUplift}"
+                                                         class="form-control input-sm m-b-10">
+                                                <f:ajax/>
+                                            </h:inputText>
+                                        </div>
+                                        <div class="col-md-4 m-b-15">
+                                            <h:outputLabel value="Royalty Rate" for="royaltyRate"/>
+                                            <h:inputText id="royaltyRate"
+                                                         value="#{contractController.pscSelected.pscRoyaltyRate}"
+                                                         class="form-control input-sm m-b-10">
+                                                <f:ajax/>
+                                            </h:inputText>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div jsf:id="taxAndAllowanceInfo" jsf:rendered="#{contractController.contractType eq 'PSC'}"
+                                 class="panel panel-default tile">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">TAX AND ALLOWANCES</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-md-4 m-b-15">
+                                            <h:outputLabel value="Inv. Tax Allw" for="invTaxAllow"/>
+                                            <h:inputText id="invTaxAllow"
+                                                         value="#{contractController.pscSelected.taxAndAllowance.investmentTaxAllowance}"
+                                                         class="form-control input-sm m-b-10">
+                                                <f:ajax/>
+                                            </h:inputText>
+                                        </div>
+                                        <div class="col-md-4 m-b-15">
+                                            <h:outputLabel value="Capital Allw Rate" for="capitalAllwRate"/>
+                                            <h:inputText id="capitalAllwRate"
+                                                         value="#{contractController.pscSelected.taxAndAllowance.capitalAllowanceRate}"
+                                                         class="form-control input-sm m-b-10">
+                                                <f:ajax/>
+                                            </h:inputText>
+                                        </div>
+                                        <div class="col-md-4 m-b-15">
+                                            <h:outputLabel value="Petr Prof. Tax Rate" for="petrProfTaxRate"/>
+                                            <h:inputText id="petrProfTaxRate"
+                                                         value="#{contractController.pscSelected.petroleumProfitTaxRate}"
+                                                         class="form-control input-sm m-b-10">
+                                                <f:ajax/>
+                                            </h:inputText>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4 m-b-15">
+                                            <h:outputLabel value="Education Tax" for="educationTax"/>
+                                            <h:inputText id="educationTax"
+                                                         value="#{contractController.pscSelected.taxAndAllowance.educationTax}"
+                                                         class="form-control input-sm m-b-10">
+                                                <f:ajax/>
+                                            </h:inputText>
+                                        </div>
+                                        <div class="col-md-4 m-b-15">
+                                            <h:outputLabel value="Profit Oil Split Option" for="profitOilSplit"/>
+                                            <h:inputText id="profitOilSplit"
+                                                         value="#{contractController.pscSelected.profitOilSplitOption}"
+                                                         class="form-control input-sm m-b-10">
+                                                <f:ajax/>
+                                            </h:inputText>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div jsf:id="contractAreaSizeInfo"
+                                 jsf:rendered="#{contractController.contractType eq 'PSC'}"
+                                 class="panel panel-default tile">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">CONTRACT AREA SIZE</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-md-4 m-b-15">
+                                            <h:outputLabel value="OPL Area Size" for="oplAreaSize"/>
+                                            <h:inputText id="oplAreaSize"
+                                                         value="#{contractController.pscSelected.areaSize.oplContractArea}"
+                                                         class="form-control input-sm m-b-10">
+                                                <f:ajax event="change" render="totalConcessRental"/>
+                                            </h:inputText>
+                                        </div>
+                                        <div class="col-md-4 m-b-15">
+                                            <h:outputLabel value="OML Area Size" for="omlAreaSize"/>
+                                            <h:inputText id="omlAreaSize"
+                                                         value="#{contractController.pscSelected.areaSize.omlContractArea}"
+                                                         class="form-control input-sm m-b-10">
+                                                <f:ajax/>
+                                            </h:inputText>
+                                        </div>
+                                        <div class="col-md-4 m-b-15">
+                                            <h:outputLabel value="OPL Rental Rate" for="oplRentalRate"/>
+                                            <h:inputText id="oplRentalRate"
+                                                         value="#{contractController.pscSelected.areaSize.oplRentalRate}"
+                                                         class="form-control input-sm m-b-10">
+                                                <f:ajax event="change" render="totalConcessRental"/>
+                                            </h:inputText>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4 m-b-15">
+                                            <h:outputLabel value="OML Concess Rental Rate" for="omlRentalRate"/>
+                                            <h:inputText id="omlRentalRate"
+                                                         value="#{contractController.pscSelected.areaSize.omlConcessionRentalRate}"
+                                                         class="form-control input-sm m-b-10">
+                                                <f:ajax/>
+                                            </h:inputText>
+                                        </div>
+                                        <div class="col-md-4 m-b-15">
+                                            <h:outputLabel value="Total Concess Rental (OPL)" for="totalConcessRental"/>
+                                            <h:inputText id="totalConcessRental"
+                                                         value="#{contractController.pscSelected.areaSize.totalConcessionRental}"
+                                                         class="form-control input-sm m-b-10">
+                                                <f:ajax/>
+                                            </h:inputText>
+                                        </div>
+                                        <div class="col-md-4 m-b-15">
+                                            <h:outputLabel value="Concess Rental (OML)" for="omlConcessRental"/>
+                                            <h:inputText id="omlConcessRental" value=""
+                                                         class="form-control input-sm m-b-10">
+                                                <f:ajax/>
+                                            </h:inputText>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4 m-b-15">
+                                            <h:outputLabel value="Concess Rental (OML) Annually"
+                                                           for="omlConcessRentalAnnual"/>
+                                            <h:inputText id="omlConcessRentalAnnual" value=""
+                                                         class="form-control input-sm m-b-10">
+                                                <f:ajax/>
+                                            </h:inputText>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </h:panelGroup>
+
+                    </div>
+                    <div class="modal-footer">
+                        <h:commandButton value="#{bundle.Save}" pt:data-dismiss="modal" class="btn btn-sm">
+                            <f:ajax listener="#{contractController.create}" render="jvListForm jvTable msgs"/>
+                        </h:commandButton>
+                        <h:commandButton value="#{bundle.Cancel}" immediate="true" pt:data-dismiss="modal"
+                                         class="btn btn-sm">
+                            <f:ajax listener="#{contractController.cancel}" render="jvListForm jvTable msgs"/>
+                        </h:commandButton>
+                    </div>
+                </h:form>
+            </div>
+        </div>
+    </div>
+
+</ui:composition>
 </html>

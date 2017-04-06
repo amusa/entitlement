@@ -70,21 +70,21 @@
                             <div class="panel-body">
                                 <div class="row">
                                     <div class="col-md-4 m-b-15">
-                                        <h:outputLabel value="Cont Exec Date" for="contractExecDate" />
+                                        <h:outputLabel value="Cont Exec Date (dd/MM/yyyy)" for="contractExecDate" />
                                         <h:inputText id="contractExecDate"  value="#{pscController.selected.contractExecutionDate}" class="form-control input-sm m-b-10">
                                             <f:ajax event="change" render="petrProfTaxRate invTaxAllwCrd"/>
                                             <f:convertDateTime pattern="dd/MM/yyyy" />
                                         </h:inputText>                                                                                                                  
                                     </div>
                                     <div class="col-md-4 m-b-15">
-                                        <h:outputLabel value="First Oil Date" for="firstOilDate" />
+                                        <h:outputLabel value="First Oil Date (dd/MM/yyyy)" for="firstOilDate" />
                                         <h:inputText id="firstOilDate"  value="#{pscController.selected.firstOilDate}" class="form-control input-sm m-b-10">
                                             <f:ajax />
                                             <f:convertDateTime pattern="dd/MM/yyyy" />
                                         </h:inputText>                                                                                                                  
                                     </div>
                                     <div class="col-md-4 m-b-15">
-                                        <h:outputLabel value="Cost Recov Start Date" for="costRecovStartDate" />
+                                        <h:outputLabel value="Cost Recov Start Date (dd/MM/yyyy)" for="costRecovStartDate" />
                                         <h:inputText id="costRecovStartDate"  value="#{pscController.selected.costRecoveryStartDate}" class="form-control input-sm m-b-10">
                                             <f:ajax />
                                             <f:convertDateTime pattern="dd/MM/yyyy" />

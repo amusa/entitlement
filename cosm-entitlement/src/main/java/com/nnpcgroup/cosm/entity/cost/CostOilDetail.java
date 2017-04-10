@@ -50,7 +50,7 @@ public class CostOilDetail implements Serializable {
     }
 
     public double getCostOil() {
-        return armotizedCapex + opex + educationTax;
+        return armotizedCapex + opex + Math.max(0, educationTax);
     }
 
     public double getCostOilCum() {

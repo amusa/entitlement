@@ -103,6 +103,14 @@ public class CostOilServiceImpl implements CostOilService {
         }
 
         Double eduTax = taxBean.computeEducationTax(psc, year, month);
+
+        if (month == 1) {
+            if (eduTax != null) {
+                return eduTax;
+            }
+            return 0;
+        }
+
         FiscalPeriod prevFp = fiscalService.getPreviousFiscalPeriod(year, month);
 
         return eduTax - computeEducationTaxDiff(psc, prevFp.getYear(), prevFp.getMonth());

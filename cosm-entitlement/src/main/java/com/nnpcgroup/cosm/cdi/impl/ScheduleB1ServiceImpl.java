@@ -109,7 +109,7 @@ public class ScheduleB1ServiceImpl implements ScheduleB1Service {
 
             for (PscLifting lifting : pscLiftings) {
 
-                proceed += lifting.getRevenue();
+                proceed = lifting.getRevenue();
 
                 LiftingSummary liftSumm = new LiftingSummary();
 

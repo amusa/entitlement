@@ -280,4 +280,32 @@ public class PscLiftingServicesImpl extends LiftingServicesImpl<PscLifting> impl
         return 0.0;
     }
 
+    @Override
+    public double getCashPayment(ProductionSharingContract psc, int year, int month) {
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery<Number> cq = cb.createQuery(Number.class);
+        Root<PscLifting> liftingRoot = cq.from(entityClass);
+
+        Expression<Double> cashSum = cb.sum(liftingRoot.<Double>get("cashPayment"));
+
+        Predicate predicate = cb.and(
+                cb.equal(liftingRoot.get("psc"), psc),
+                cb.equal(cb.function("year", Integer.class, liftingRoot.get("liftingDate")), year),
+                cb.lessThanOrEqualTo(cb.function("month", Integer.class, liftingRoot.get("liftingDate")), month)
+        );
+
+        cq.select(cashSum.alias("cashPayment"))
+                .where(predicate);
+
+        Number cashPayment;
+        try {
+            cashPayment = getEntityManager().createQuery(cq).getSingleResult();
+            return cashPayment.doubleValue();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return 0.0;
+    }
+
 }

@@ -68,6 +68,12 @@
                                         <f:convertNumber pattern="###.####"/>
                                     </h:inputText>
                                 </div>
+                                <div class="col-md-4 m-b-15">
+                                    <h:outputLabel value="Cash Payment" for="cashPayment"/>
+                                    <h:inputText id="cashPayment" value="#{liftingController.currentPscLifting.cashPayment}" class="form-control input-sm m-b-10" >
+                                        <f:convertNumber pattern="###,###,###.####" />
+                                    </h:inputText>
+                                </div>
                             </div>
                         </h:panelGroup>
 

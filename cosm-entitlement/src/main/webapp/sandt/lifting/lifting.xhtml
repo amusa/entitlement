@@ -128,6 +128,14 @@
                                         </h:outputText>
                                     </h:column>
                                     <h:column>
+                                        <f:facet name="header">
+                                            <h:outputLabel value="Cash Payment"/>
+                                        </f:facet>
+                                        <h:outputText value="#{lifting.cashPayment}">
+                                            <f:convertNumber pattern="###,###,###.####"/>
+                                        </h:outputText>
+                                    </h:column>
+                                    <h:column>
                                         <div class="col-md-3 m-b-9">
                                             <h:commandLink pt:data-target="#LiftEditDlg" pt:look="warning"
                                                            pt:data-toggle="modal">

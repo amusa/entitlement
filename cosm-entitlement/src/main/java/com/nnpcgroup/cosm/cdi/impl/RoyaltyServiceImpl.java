@@ -126,12 +126,15 @@ public class RoyaltyServiceImpl implements RoyaltyService {
 
         double royalty = computeRoyalty(psc, year, month);
         double corpLiftProceed = liftingBean.getCorporationProceed(psc, year, month);
+        //handling cash payment
+        double cashPayment = liftingBean.getCashPayment(psc, year, month);
         FiscalPeriod prevFp = fiscalService.getPreviousFiscalPeriod(year, month);
         Allocation prevAlloc = computeRoyaltyAllocation(psc, prevFp.getYear(), prevFp.getMonth());
 
         allocation.setMonthlyCharge(royalty);
         allocation.setLiftingProceed(corpLiftProceed);
         allocation.setChargeBfw(prevAlloc.getChargeCfw());
+        allocation.setCashPayment(cashPayment);
 
         cache.getRoyaltyAllocationCache().put(cacheKey, allocation);
 

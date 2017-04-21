@@ -122,7 +122,8 @@ public class CostOilServiceImpl implements CostOilService {
         double costOil = computeCostOil(psc, year, month);
         double costOilCharge = Math.max(0, Math.min(proceed * costRecoveryLimitRate, costOil));
 
-        return Math.max(0, Math.min(proceed * costRecoveryLimitRate, costOilCharge));
+//        return Math.max(0, Math.min(proceed * costRecoveryLimitRate, costOilCharge));
+        return costOilCharge;
     }
 
     @Override

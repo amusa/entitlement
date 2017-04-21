@@ -57,11 +57,10 @@ public class TaxOilServiceImpl implements TaxOilService {
 
     @Override
     public double computeTaxOil(ProductionSharingContract psc, int year, int month) {
-        return Math.max(0, computePayableTaxToDate(psc, year, month));
+        return computeTaxOilDetail(psc, year, month).getTaxOil();
     }
 
-    @Override
-    public double computeGrossIncome(ProductionSharingContract psc, int year, int month) {
+    private double computeGrossIncome(ProductionSharingContract psc, int year, int month) {
         CacheKey cacheKey = new CacheKey(psc, year, month);
         Double grossIncome;
 
@@ -75,8 +74,7 @@ public class TaxOilServiceImpl implements TaxOilService {
         return grossIncome;
     }
 
-    @Override
-    public double computeTotalDeduction(ProductionSharingContract psc, int year, int month) {
+    private double computeTotalDeduction(ProductionSharingContract psc, int year, int month) {
         double royalty, opex;
         opex = computeCurrentYearOpex(psc, year, month);
         royalty = royaltyService.computeRoyaltyCum(psc, year, month);
@@ -84,8 +82,7 @@ public class TaxOilServiceImpl implements TaxOilService {
         return royalty + opex;
     }
 
-    @Override
-    public double computeAdjustedProfit(ProductionSharingContract psc, int year, int month) {
+    private double computeAdjustedProfit(ProductionSharingContract psc, int year, int month) {
         double totalDeduction, grossIncome, adjustedProfit;
         totalDeduction = computeTotalDeduction(psc, year, month);
         grossIncome = computeGrossIncome(psc, year, month);
@@ -94,8 +91,8 @@ public class TaxOilServiceImpl implements TaxOilService {
         return adjustedProfit;
     }
 
-    @Override
-    public double computeAssessableProfit(ProductionSharingContract psc, int year, int month) {
+
+    private double computeAssessableProfit(ProductionSharingContract psc, int year, int month) {
         double adjProfit, lossBf;
 
         adjProfit = computeAdjustedProfit(psc, year, month);
@@ -123,8 +120,7 @@ public class TaxOilServiceImpl implements TaxOilService {
         return Math.max(0, (eduTaxRate / 102) * assessableProfit);
     }
 
-    @Override
-    public double computeAdjustedAssessableProfit(ProductionSharingContract psc, int year, int month) {
+    private double computeAdjustedAssessableProfit(ProductionSharingContract psc, int year, int month) {
         double assessableProfit, educationTax;
 
         assessableProfit = computeAssessableProfit(psc, year, month);
@@ -133,16 +129,14 @@ public class TaxOilServiceImpl implements TaxOilService {
         return assessableProfit - educationTax;
     }
 
-    @Override
-    public double computeCurrentYearITA(ProductionSharingContract psc, int year, int month) {
+    private double computeCurrentYearITA(ProductionSharingContract psc, int year, int month) {
         double itaRate = psc.getInvestmentTaxAllowanceCredit(); //TODO:verify application of ITA rate
 
         return computeCurrentYearCapex(psc, year, month) * (itaRate / 100.0);
     }
 
 
-    @Override
-    public double computeUnrecoupedAnnualAllowance(ProductionSharingContract psc, int year, int month) {
+    private double computeUnrecoupedAnnualAllowance(ProductionSharingContract psc, int year, int month) {
         CacheKey cacheKey = new CacheKey(psc, year, month);
         Double UAA;
 
@@ -162,8 +156,7 @@ public class TaxOilServiceImpl implements TaxOilService {
         return UAA;
     }
 
-    @Override
-    public double computePriorYearAnnualAllowance(ProductionSharingContract psc, int year, int month) {
+    private double computePriorYearAnnualAllowance(ProductionSharingContract psc, int year, int month) {
 
         FiscalPeriod prevFp = fiscalService.getPreviousFiscalPeriod(year);
 
@@ -178,8 +171,7 @@ public class TaxOilServiceImpl implements TaxOilService {
         return -1 * UAA;
     }
 
-    @Override
-    public double computeCurrentYearCapitalAllowance(ProductionSharingContract psc, int year, int month) {
+    private double computeCurrentYearCapitalAllowance(ProductionSharingContract psc, int year, int month) {
         CacheKey cacheKey = new CacheKey(psc, year, month);
         Double capitalAllowance;
 
@@ -289,8 +281,7 @@ public class TaxOilServiceImpl implements TaxOilService {
         return currentYearCapitalAllw;
     }
 
-    @Override
-    public double computeTotalAnnualAllowance(ProductionSharingContract psc, int year, int month) {
+    private double computeTotalAnnualAllowance(ProductionSharingContract psc, int year, int month) {
         double currYrITA, priorYrAnnualAllw, currYrCapAllw;
 
         currYrITA = computeCurrentYearITA(psc, year, month);
@@ -319,79 +310,16 @@ public class TaxOilServiceImpl implements TaxOilService {
         return minTaxCurrent - minTaxPrev;
     }
 
-    @Override
-    public double computeAdjustedProfitLessITA(ProductionSharingContract psc, int year, int month) {
-        double AAP, currYrITA;
-
-        currYrITA = computeCurrentYearITA(psc, year, month);
-        AAP = computeAdjustedAssessableProfit(psc, year, month);
-
-        return (AAP * 0.85) - (currYrITA * 1.7);
-    }
-
-    @Override
-    public double computeSection18DeductionLower(ProductionSharingContract psc, int year, int month) {
-        double totalAnnualAllw, adjProfitLessITA;
-
-        totalAnnualAllw = computeTotalAnnualAllowance(psc, year, month);
-        adjProfitLessITA = computeAdjustedProfitLessITA(psc, year, month);
-
-        return Math.max(0, Math.min(adjProfitLessITA, totalAnnualAllw));
-    }
-
-    @Override
-    public double computeChargeableTaxToDate(ProductionSharingContract psc, int year, int month) {
-        double chargeProfit2Date, petProfTaxRate;
-        petProfTaxRate = psc.getPetroleumProfitTaxRate();
-        chargeProfit2Date = computeChargeableProfitToDate(psc, year, month);
-
-        return chargeProfit2Date * petProfTaxRate;
-
-    }
-
-    @Override
-    public double computeChargeableProfitToDate(ProductionSharingContract psc, int year, int month) {
-        double AAP, sect18DeductLower;
-
-        AAP = computeAdjustedAssessableProfit(psc, year, month);
-        sect18DeductLower = computeSection18DeductionLower(psc, year, month);
-
-        return Math.max(0, AAP - sect18DeductLower);
-    }
-
-    @Override
-    public double computePayableTaxToDate(ProductionSharingContract psc, int year, int month) {
-        double taxMin, chargeableTaxToDate;
-
-        taxMin = computeMonthlyMinimumTax(psc, year, month);
-        chargeableTaxToDate = computeChargeableTaxToDate(psc, year, month);
-
-        return Math.max(taxMin, ((taxMin < 0 && chargeableTaxToDate < 0) ? 0 : chargeableTaxToDate));
-    }
-
     private double computeLossBf() {
         return 0;
-    }
-
-    private double computeOpex(ProductionSharingContract psc, int year, int month) {
-        return prodCostBean.getOpex(psc, year, month);
     }
 
     private double computeCurrentYearOpex(ProductionSharingContract psc, int year, int month) {
         return prodCostBean.getCurrentYearOpex(psc, year, month);
     }
 
-    private double computeCapex(ProductionSharingContract psc, int year, int month) {
-        return prodCostBean.getCapex(psc, year, month);
-    }
-
     private double computeCurrentYearCapex(ProductionSharingContract psc, int year, int month) {
         return prodCostBean.getCurrentYearCapex(psc, year, month);
-    }
-
-    private double getRoyaltyRate(ProductionSharingContract psc) {
-        return psc.getRoyaltyRate();
-
     }
 
     private Date makeDate(int year, int month) {

@@ -120,6 +120,41 @@ public class ProductionCostServicesImpl extends CommonServicesImpl<ProductionCos
     }
 
     @Override
+    public double getCostToDate(ProductionSharingContract psc, Integer year, Integer month) {
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+
+        Double costToDate;
+
+        CriteriaQuery<Double> cq = cb.createQuery(Double.class);
+        Root<ProductionCost> cost = cq.from(entityClass);
+
+        Expression<Double> sum = cb.sum(cost.<Double>get("amount"));
+
+        Predicate basePredicate = cb.equal(cost.get("psc"), psc);
+
+        Predicate curYrPredicate = cb.and(
+                cb.equal(cost.get("periodYear"), year),
+                cb.lessThanOrEqualTo(cost.get("periodMonth"), month)
+        );
+
+        Predicate prevYrPredicate =
+                cb.lessThan(cost.get("periodYear"), year);
+
+        Predicate predicate = cb.and(basePredicate, curYrPredicate, prevYrPredicate);
+
+        cq.select(sum.alias("costToDate"))
+                .where(predicate);
+
+        costToDate = getEntityManager().createQuery(cq).getSingleResult();
+
+        if (costToDate == null) {
+            return 0;
+        }
+
+        return costToDate;
+    }
+
+    @Override
     public double getOpex(ProductionSharingContract psc, Integer year, Integer month) {
 
         CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();

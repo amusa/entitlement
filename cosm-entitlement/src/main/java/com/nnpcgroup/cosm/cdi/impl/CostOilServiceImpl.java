@@ -153,9 +153,31 @@ public class CostOilServiceImpl implements CostOilService {
         allocation.setMonthlyCharge(costOilCharge);
         allocation.setLiftingProceed(contractorLiftProceed);
         allocation.setChargeBfw(prevAlloc.getChargeCfw());
+        allocation.setPrevCumMonthlyCharge(prevAlloc.getCumMonthlyCharge());
 
         cache.getCostOilAllocationCache().put(cacheKey, allocation);
 
         return allocation;
+    }
+
+    @Override
+    public Allocation computePreviousAllocation(ProductionSharingContract psc, int year, int month) {
+        FiscalPeriod prevFp = fiscalService.getPreviousFiscalPeriod(year, month);
+        return computeCostOilAllocation(psc, prevFp.getYear(), prevFp.getMonth());
+    }
+
+    @Override
+    public double computeMonthlyCharge(ProductionSharingContract psc, int year, int month) {
+        return computeCostOilAllocation(psc, year, month).getMonthlyCharge();
+    }
+
+    @Override
+    public double computeCumMonthlyCharge(ProductionSharingContract psc, int year, int month) {
+        return computeCostOilAllocation(psc, year, month).getCumMonthlyCharge();
+    }
+
+    @Override
+    public double computeReceived(ProductionSharingContract psc, int year, int month) {
+        return computeCostOilAllocation(psc, year, month).getReceived();
     }
 }

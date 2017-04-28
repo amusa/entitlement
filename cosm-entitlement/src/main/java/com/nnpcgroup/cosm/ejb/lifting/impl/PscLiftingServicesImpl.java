@@ -251,6 +251,50 @@ public class PscLiftingServicesImpl extends LiftingServicesImpl<PscLifting> impl
     }
 
     @Override
+    public double getProceedToDate(ProductionSharingContract psc, int year, int month) {
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery<Number> cq = cb.createQuery(Number.class);
+        Root<PscLifting> liftingRoot = cq.from(entityClass);
+
+        Path<Number> ownLiftPath = liftingRoot.get("ownLifting");
+        Path<Number> partnerLiftPath = liftingRoot.get("partnerLifting");
+        Path<Number> pricePath = liftingRoot.get("price");
+        Expression<Number> zero = cb.literal(0.0);
+
+        //ignore null
+        Expression<Number> totalLift =
+                cb.sum(cb.<Number>selectCase().when(ownLiftPath.isNull(), zero).otherwise(ownLiftPath),
+                        cb.<Number>selectCase().when(partnerLiftPath.isNull(), zero).otherwise(partnerLiftPath));
+        Expression<Number> totalRevenue = cb.sum(cb.prod(pricePath, totalLift));
+
+
+        Predicate basePredicate = cb.equal(liftingRoot.get("psc"), psc);
+
+        Predicate curYrPredicate = cb.and(
+                cb.equal(liftingRoot.get("periodYear"), year),
+                cb.lessThanOrEqualTo(liftingRoot.get("periodMonth"), month)
+        );
+
+        Predicate prevYrPredicate =
+                cb.lessThan(liftingRoot.get("periodYear"), year);
+
+        Predicate predicate = cb.and(basePredicate, curYrPredicate, prevYrPredicate);
+
+        cq.select(totalRevenue.alias("proceed"))
+                .where(predicate);
+
+        Number proceed;
+        try {
+            proceed = getEntityManager().createQuery(cq).getSingleResult();
+            return proceed.doubleValue();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return 0.0;
+    }
+
+    @Override
     public double getGrossIncome(ProductionSharingContract psc, int year, int month) {
         CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
         CriteriaQuery<Number> cq = cb.createQuery(Number.class);

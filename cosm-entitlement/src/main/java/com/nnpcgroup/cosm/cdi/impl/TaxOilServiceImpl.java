@@ -17,6 +17,7 @@ import com.nnpcgroup.cosm.entity.FiscalPeriod;
 import com.nnpcgroup.cosm.entity.ProductionSharingContract;
 import com.nnpcgroup.cosm.entity.tax.TaxOilDetail;
 import com.nnpcgroup.cosm.report.schb1.Allocation;
+import com.nnpcgroup.cosm.report.schb1.RoyaltyAllocation;
 import com.nnpcgroup.cosm.report.schb1.TaxOilAllocation;
 import com.nnpcgroup.cosm.util.CacheKey;
 import com.nnpcgroup.cosm.util.CacheUtil;
@@ -348,16 +349,38 @@ public class TaxOilServiceImpl implements TaxOilService {
         double corpLiftProceed = liftingBean.getCorporationProceed(psc, year, month);
         FiscalPeriod prevFp = fiscalService.getPreviousFiscalPeriod(year, month);
         Allocation prevAlloc = computeTaxOilAllocation(psc, prevFp.getYear(), prevFp.getMonth());
-        Allocation royAlloc = royaltyService.computeRoyaltyAllocation(psc, year, month);//(this.psc, this.periodYear, this.periodMonth)
+        RoyaltyAllocation royAlloc = (RoyaltyAllocation) royaltyService.computeRoyaltyAllocation(psc, year, month);//(this.psc, this.periodYear, this.periodMonth)
 
         allocation.setMonthlyCharge(taxOil);
         allocation.setLiftingProceed(corpLiftProceed);
-        allocation.setRoyalty(royAlloc.getReceived());
+        allocation.setRoyalty(royAlloc.getRoyaltyReceived());
         allocation.setChargeBfw(prevAlloc.getChargeCfw());
+        allocation.setPrevCumMonthlyCharge(prevAlloc.getCumMonthlyCharge());
 
         cache.getTaxOilAllocationCache().put(cacheKey, allocation);
 
         return allocation;
+    }
+
+    @Override
+    public Allocation computePreviousAllocation(ProductionSharingContract psc, int year, int month) {
+        FiscalPeriod prevFp = fiscalService.getPreviousFiscalPeriod(year, month);
+        return computeTaxOilAllocation(psc, prevFp.getYear(), prevFp.getMonth());
+    }
+
+    @Override
+    public double computeMonthlyCharge(ProductionSharingContract psc, int year, int month) {
+        return computeTaxOilAllocation(psc, year, month).getMonthlyCharge();
+    }
+
+    @Override
+    public double computeCumMonthlyCharge(ProductionSharingContract psc, int year, int month) {
+        return computeTaxOilAllocation(psc, year, month).getCumMonthlyCharge();
+    }
+
+    @Override
+    public double computeReceived(ProductionSharingContract psc, int year, int month) {
+        return computeTaxOilAllocation(psc, year, month).getReceived();
     }
 
 }

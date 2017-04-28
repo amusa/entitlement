@@ -27,4 +27,8 @@ public class RoyaltyAllocation extends Allocation {
 
         return super.getReceived();
     }
+
+    public Double getRoyaltyReceived() {
+        return super.getReceived();
+    }
 }

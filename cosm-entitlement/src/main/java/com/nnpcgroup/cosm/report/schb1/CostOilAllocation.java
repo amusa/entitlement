@@ -6,9 +6,7 @@
 package com.nnpcgroup.cosm.report.schb1;
 
 /**
- *
  * @author Ayemi
  */
 public class CostOilAllocation extends Allocation {
-
 }

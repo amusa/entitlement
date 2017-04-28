@@ -7,6 +7,7 @@ package com.nnpcgroup.cosm.cdi;
 
 import com.nnpcgroup.cosm.entity.ProductionSharingContract;
 import com.nnpcgroup.cosm.entity.tax.TaxOilDetail;
+import com.nnpcgroup.cosm.report.schb1.Allocation;
 import com.nnpcgroup.cosm.report.schb1.TaxOilAllocation;
 
 import java.io.Serializable;
@@ -33,4 +34,12 @@ public interface TaxOilService extends Serializable {
     TaxOilDetail buildTaxOil(ProductionSharingContract psc, int year, int month);
 
     TaxOilAllocation computeTaxOilAllocation(ProductionSharingContract psc, Integer year, Integer month);
+
+    Allocation computePreviousAllocation(ProductionSharingContract psc, int year, int month);
+
+    double computeMonthlyCharge(ProductionSharingContract psc, int year, int month);
+
+    double computeCumMonthlyCharge(ProductionSharingContract psc, int year, int month);
+
+    double computeReceived(ProductionSharingContract psc, int year, int month);
 }

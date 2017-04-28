@@ -8,20 +8,21 @@ package com.nnpcgroup.cosm.report.schb1;
 import java.io.Serializable;
 
 /**
- *
  * @author Ayemi
  * @date 04.12.2016
  */
-public abstract class Allocation implements Serializable{
+public abstract class Allocation implements Serializable {
 
     private Double chargeBfw;
     private Double monthlyCharge;
     private Double liftingProceed;
+    private double prevCumMonthlyCharge;
 
     public Allocation() {
         this.chargeBfw = 0.0;
         this.monthlyCharge = 0.0;
         this.liftingProceed = 0.0;
+        this.prevCumMonthlyCharge = 0.0;
     }
 
     public Double getChargeBfw() {
@@ -48,11 +49,23 @@ public abstract class Allocation implements Serializable{
         this.liftingProceed = liftingProceed;
     }
 
+    public double getPrevCumMonthlyCharge() {
+        return prevCumMonthlyCharge;
+    }
+
+    public void setPrevCumMonthlyCharge(double prevCumMonthlyCharge) {
+        this.prevCumMonthlyCharge = prevCumMonthlyCharge;
+    }
+
+    public double getCumMonthlyCharge() {
+        return getPrevCumMonthlyCharge() + getMonthlyCharge();
+    }
+
     public Double getRecoverable() {
         return chargeBfw + monthlyCharge;
     }
 
-    public Double getReceived(){
+    public Double getReceived() {
         if (getRecoverable() <= 0) {
             return 0.0;
         } else if (getRecoverable() <= getLiftingProceed()) {

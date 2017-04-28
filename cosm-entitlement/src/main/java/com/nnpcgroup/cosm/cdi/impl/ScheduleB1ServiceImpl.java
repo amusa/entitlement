@@ -31,6 +31,9 @@ public class ScheduleB1ServiceImpl implements ScheduleB1Service {
     @Inject
     private TaxOilService taxBean;
 
+    @Inject
+    private ProfitOilService profitOilService;
+
     @EJB
     private PscLiftingServices liftingBean;
 
@@ -73,24 +76,24 @@ public class ScheduleB1ServiceImpl implements ScheduleB1Service {
         proceedAllocationList.add(toPa);
 
         ProceedAllocation corpPoPa = new ProceedAllocation();
-        // Allocation profOilAlloc = processProfitOil(this.psc, this.periodYear, this.periodMonth);
+        Allocation corpProfOilAlloc = profitOilService.computeCorporationProfitOilAllocation(psc, year, month);
         corpPoPa.setCategoryTitle("CORP PROFIT OIL");
-//        corpPoPa.setMonthlyChargeBfw(taxOilAlloc.getChargeBfw());
-//        corpPoPa.setMonthlyCharge(taxOilAlloc.getMonthlyCharge());
-//        corpPoPa.setRecoverable(taxOilAlloc.getRecoverable());
-//        corpPoPa.setContractorProceed(taxOilAlloc.getReceived());
-//        corpPoPa.setMonthlyChargeCfw(taxOilAlloc.getChargeCfw());
+        corpPoPa.setMonthlyChargeBfw(corpProfOilAlloc.getChargeBfw());
+        corpPoPa.setMonthlyCharge(corpProfOilAlloc.getMonthlyCharge());
+        corpPoPa.setRecoverable(corpProfOilAlloc.getRecoverable());
+        corpPoPa.setCorporationProceed(corpProfOilAlloc.getReceived());
+        corpPoPa.setMonthlyChargeCfw(corpProfOilAlloc.getChargeCfw());
 
         proceedAllocationList.add(corpPoPa);
 
         ProceedAllocation contPoPa = new ProceedAllocation();
-        // Allocation profOilAlloc = processProfitOil(this.psc, this.periodYear, this.periodMonth);
+        Allocation contProfOilAlloc = profitOilService.computeContractorProfitOilAllocation(psc, year, month);
         contPoPa.setCategoryTitle("CONT PROFIT OIL");
-//        contPoPa.setMonthlyChargeBfw(taxOilAlloc.getChargeBfw());
-//        contPoPa.setMonthlyCharge(taxOilAlloc.getMonthlyCharge());
-//        contPoPa.setRecoverable(taxOilAlloc.getRecoverable());
-//        contPoPa.setContractorProceed(taxOilAlloc.getReceived());
-//        contPoPa.setMonthlyChargeCfw(taxOilAlloc.getChargeCfw());
+        contPoPa.setMonthlyChargeBfw(contProfOilAlloc.getChargeBfw());
+        contPoPa.setMonthlyCharge(contProfOilAlloc.getMonthlyCharge());
+        contPoPa.setRecoverable(contProfOilAlloc.getRecoverable());
+        contPoPa.setContractorProceed(contProfOilAlloc.getReceived());
+        contPoPa.setMonthlyChargeCfw(contProfOilAlloc.getChargeCfw());
 
         proceedAllocationList.add(contPoPa);
 

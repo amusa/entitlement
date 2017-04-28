@@ -111,7 +111,7 @@ public class RoyaltyServiceImpl implements RoyaltyService {
 
 
     @Override
-    public RoyaltyAllocation computeRoyaltyAllocation(ProductionSharingContract psc, int year, int month) {
+    public Allocation computeRoyaltyAllocation(ProductionSharingContract psc, int year, int month) {
         CacheKey cacheKey = new CacheKey(psc, year, month);
 
         if (cache.getRoyaltyAllocationCache().containsKey(cacheKey)) {
@@ -135,10 +135,32 @@ public class RoyaltyServiceImpl implements RoyaltyService {
         allocation.setLiftingProceed(corpLiftProceed);
         allocation.setChargeBfw(prevAlloc.getChargeCfw());
         allocation.setCashPayment(cashPayment);
+        allocation.setPrevCumMonthlyCharge(prevAlloc.getCumMonthlyCharge());
 
         cache.getRoyaltyAllocationCache().put(cacheKey, allocation);
 
         return allocation;
+    }
+
+    @Override
+    public Allocation computePreviousAllocation(ProductionSharingContract psc, int year, int month) {
+        FiscalPeriod prevFp = fiscalService.getPreviousFiscalPeriod(year, month);
+        return computeRoyaltyAllocation(psc, prevFp.getYear(), prevFp.getMonth());
+    }
+
+    @Override
+    public double computeMonthlyCharge(ProductionSharingContract psc, int year, int month) {
+        return computeRoyaltyAllocation(psc, year, month).getMonthlyCharge();
+    }
+
+    @Override
+    public double computeCumMonthlyCharge(ProductionSharingContract psc, int year, int month) {
+        return computeRoyaltyAllocation(psc, year, month).getCumMonthlyCharge();
+    }
+
+    @Override
+    public double computeReceived(ProductionSharingContract psc, int year, int month) {
+        return computeRoyaltyAllocation(psc, year, month).getReceived();
     }
 
     private int getYearOfDate(Date date) {

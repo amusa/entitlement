@@ -6,9 +6,7 @@
 package com.nnpcgroup.cosm.cdi;
 
 import com.nnpcgroup.cosm.entity.ProductionSharingContract;
-import com.nnpcgroup.cosm.entity.cost.CostOilDetail;
-import com.nnpcgroup.cosm.report.schb1.CostOilAllocation;
-import com.nnpcgroup.cosm.report.schb1.RoyaltyAllocation;
+import com.nnpcgroup.cosm.report.schb1.Allocation;
 
 import java.io.Serializable;
 
@@ -21,6 +19,14 @@ public interface RoyaltyService extends Serializable {
 
     double computeRoyaltyCum(ProductionSharingContract psc, int year, int month);
 
-    RoyaltyAllocation computeRoyaltyAllocation(ProductionSharingContract psc, int year, int month);
+    Allocation computeRoyaltyAllocation(ProductionSharingContract psc, int year, int month);
+
+    Allocation computePreviousAllocation(ProductionSharingContract psc, int year, int month);
+
+    double computeMonthlyCharge(ProductionSharingContract psc, int year, int month);
+
+    double computeCumMonthlyCharge(ProductionSharingContract psc, int year, int month);
+
+    double computeReceived(ProductionSharingContract psc, int year, int month);
 
 }

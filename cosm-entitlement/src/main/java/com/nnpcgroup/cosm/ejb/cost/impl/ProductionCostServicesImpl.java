@@ -140,7 +140,9 @@ public class ProductionCostServicesImpl extends CommonServicesImpl<ProductionCos
         Predicate prevYrPredicate =
                 cb.lessThan(cost.get("periodYear"), year);
 
-        Predicate predicate = cb.and(basePredicate, curYrPredicate, prevYrPredicate);
+        Predicate yearPredicate = cb.or(curYrPredicate, prevYrPredicate);
+
+        Predicate predicate = cb.and(basePredicate, yearPredicate);
 
         cq.select(sum.alias("costToDate"))
                 .where(predicate);

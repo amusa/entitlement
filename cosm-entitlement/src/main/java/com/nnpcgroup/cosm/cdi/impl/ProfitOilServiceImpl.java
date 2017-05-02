@@ -54,7 +54,7 @@ public class ProfitOilServiceImpl implements ProfitOilService {
         double profitOil = computeCumContractorMonthlyCharge(psc, prevFp.getYear(), prevFp.getMonth());
         double cost = prodCostBean.getCostToDate(psc, prevFp.getYear(), prevFp.getMonth());
 
-        double rfactor = (costOil + profitOil) / cost;
+        double rfactor = (cost != 0) ? (costOil + profitOil) / cost : 0;
 
         cache.getRfactorCache().put(cacheKey, rfactor);
 
@@ -195,7 +195,7 @@ public class ProfitOilServiceImpl implements ProfitOilService {
             return 0.7;
         } else if (rfactor > 2.5) {
             return 0.25;
-        } else if (rfactor > 1.2 && rfactor < 2.5) {
+        } else if (rfactor >= 1.2 && rfactor <= 2.5) {
             return 0.25 + ((2.5 - rfactor) / (2.5 - 1.2)) * 0.45;
         }
         return 0;

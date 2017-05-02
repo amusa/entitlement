@@ -278,7 +278,9 @@ public class PscLiftingServicesImpl extends LiftingServicesImpl<PscLifting> impl
         Predicate prevYrPredicate =
                 cb.lessThan(liftingRoot.get("periodYear"), year);
 
-        Predicate predicate = cb.and(basePredicate, curYrPredicate, prevYrPredicate);
+        Predicate yearPredicate = cb.or(curYrPredicate, prevYrPredicate);
+
+        Predicate predicate = cb.and(basePredicate, yearPredicate);
 
         cq.select(totalRevenue.alias("proceed"))
                 .where(predicate);

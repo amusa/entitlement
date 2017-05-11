@@ -93,6 +93,13 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-md-4 m-b-15">
+                                        <h:outputLabel value="OML Conv. Date (dd/MM/yyyy)" for="omlConversionDate" />
+                                        <h:inputText id="omlConversionDate"  value="#{pscController.selected.omlConversionDate}" class="form-control input-sm m-b-10">
+                                            <f:ajax />
+                                            <f:convertDateTime pattern="dd/MM/yyyy" />
+                                        </h:inputText>
+                                    </div>
+                                    <div class="col-md-4 m-b-15">
                                         <h:outputLabel value="Cost Recov Limit (%)" for="costRecovLimit" />
                                         <h:inputText id="costRecovLimit"  value="#{pscController.selected.costRecoveryLimit}" class="form-control input-sm m-b-10">
                                             <f:ajax />
@@ -106,10 +113,6 @@
                                             <f:validateDoubleRange minimum="0.0" maximum="100.0" />
                                         </h:inputText>                                                                                                                  
                                     </div>
-                                    <div class="col-md-4 m-b-15">
-                                        <h:outputLabel value="Royalty Rate (%)" for="royaltyRate" />
-                                        <h:outputText id="royaltyRate"  value="#{pscController.selected.royaltyRate}" class="form-control input-sm m-b-10"/>
-                                    </div>   
                                 </div>
                                 <div class="row">
                                     <div class="col-md-4 m-b-15">
@@ -127,16 +130,11 @@
                                         <h:inputText id="waterDepth"  value="#{pscController.selected.waterDepth}" disabled="#{not pscController.offshore}"  class="form-control input-sm m-b-10">
                                             <f:ajax event="change" render="petrProfTaxRate invTaxAllwCrd royaltyRate"/>
                                         </h:inputText>                                                                                                                  
-                                    </div> 
+                                    </div>
                                     <div class="col-md-4 m-b-15">
-                                        <h:outputLabel value="Profit Oil Split Option" for="profitOilOption" />                                        
-                                        <h:selectOneMenu id="profitOilOption" value="#{pscController.selected.profitOilSplitOption}" class="form-control input-sm m-b-10">
-                                            <f:selectItem itemValue="#{null}" itemLabel="--select--"/>
-                                            <f:selectItem itemValue="R-FACTOR" itemLabel="R-Factor"/>
-                                            <f:selectItem itemValue="CUMULATIVE" itemLabel="Cumulative"/>  
-                                            <f:ajax />
-                                        </h:selectOneMenu> 
-                                    </div> 
+                                        <h:outputLabel value="Royalty Rate (%)" for="royaltyRate" />
+                                        <h:outputText id="royaltyRate"  value="#{pscController.selected.royaltyRate}" class="form-control input-sm m-b-10"/>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -166,7 +164,16 @@
                                     <div class="col-md-4 m-b-15">
                                         <h:outputLabel value="Education Tax (%)" for="educationTax" />
                                         <h:outputText id="educationTax"  value="#{pscController.selected.taxAndAllowance.educationTax}" class="form-control input-sm m-b-10"/>
-                                    </div>                                    
+                                    </div>
+                                    <div class="col-md-4 m-b-15">
+                                        <h:outputLabel value="Profit Oil Split Option" for="profitOilOption" />
+                                        <h:selectOneMenu id="profitOilOption" value="#{pscController.selected.profitOilSplitOption}" class="form-control input-sm m-b-10">
+                                            <f:selectItem itemValue="#{null}" itemLabel="--select--"/>
+                                            <f:selectItem itemValue="R-FACTOR" itemLabel="R-Factor"/>
+                                            <f:selectItem itemValue="CUMULATIVE" itemLabel="Cumulative"/>
+                                            <f:ajax />
+                                        </h:selectOneMenu>
+                                    </div>
                                 </div>
                             </div>
                         </div>

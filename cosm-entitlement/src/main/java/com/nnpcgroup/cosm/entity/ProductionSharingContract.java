@@ -12,6 +12,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.Period;
+import java.time.ZoneId;
 import java.util.*;
 
 /**
@@ -30,6 +31,7 @@ public class ProductionSharingContract extends FiscalArrangement {
     private CrudeType crudeType;
     private Date contractExecutionDate;
     private Date firstOilDate;
+    private Date omlConversionDate;
     private Date costRecoveryStartDate;
     private Double costRecoveryLimit;
     private Double costUplift;
@@ -77,6 +79,17 @@ public class ProductionSharingContract extends FiscalArrangement {
     @Temporal(TemporalType.DATE)
     public Date getFirstOilDate() {
         return firstOilDate;
+    }
+
+    @NotNull
+    @Column(name = "OML_CONVERSION_DATE")
+    @Temporal(TemporalType.DATE)
+    public Date getOmlConversionDate() {
+        return omlConversionDate;
+    }
+
+    public void setOmlConversionDate(Date omlConversionDate) {
+        this.omlConversionDate = omlConversionDate;
     }
 
     public void setFirstOilDate(Date firstOilDate) {
@@ -268,20 +281,35 @@ public class ProductionSharingContract extends FiscalArrangement {
 
     @Transient
     public Double getOplTotalConcessionRental() {
-        return (areaSize.getOplContractArea() == null || areaSize.getOplRentalRate() == null)
-                ? null : areaSize.getOplContractArea() * areaSize.getOplRentalRate() * getOplToOmlDuration();
+        return (areaSize.getOplContractArea() * areaSize.getOplRentalRate() * getOplDuration())
+                + (areaSize.getOmlContractArea() * areaSize.getOmlRentalRate() * getOmlDuration());
     }
 
     @Transient
     public double getOmlAnnualConcessionRental() {
-        return (areaSize.getOmlContractArea() == null || areaSize.getOmlRentalRate() == null)
-                ? 0 : areaSize.getOmlContractArea() * areaSize.getOmlRentalRate();
+        return areaSize.getOmlContractArea() * areaSize.getOmlRentalRate();
     }
 
     @Transient
-    private int getOplToOmlDuration() {
-        int yearDiff = DateUtil.yearsDiff(contractExecutionDate, firstOilDate);
-        
-        return yearDiff;
+    private int getOplDuration() {
+        int contractExecutionYear = DateUtil.getLocalDate(contractExecutionDate).getYear();
+        int omlConversionYear = DateUtil.getLocalDate(omlConversionDate).getYear();
+
+        return omlConversionYear - contractExecutionYear + 1;
+//        int yearDiff = DateUtil.yearsDiff(contractExecutionDate, omlConversionDate);
+//        return yearDiff;
+    }
+
+    @Transient
+    private int getOmlDuration() {
+
+        int omlConversionYear = DateUtil.getLocalDate(omlConversionDate).getYear();
+        int firstOilYear = DateUtil.getLocalDate(firstOilDate).getYear();
+
+        return firstOilYear - omlConversionYear;
+
+//        int yearDiff = DateUtil.yearsDiff(omlConversionDate, firstOilDate);
+//
+//        return yearDiff;
     }
 }

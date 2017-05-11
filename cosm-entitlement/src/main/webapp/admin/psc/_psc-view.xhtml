@@ -82,6 +82,14 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-md-4 m-b-15">
+                                            <h:outputLabel value="OML Conv. Date (dd/MM/yyyy)" for="omlConversionDate"/>
+                                            <h:outputText id="omlConversionDate"
+                                                          value="#{pscController.selected.omlConversionDate}"
+                                                          class="form-control input-sm m-b-10">
+                                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                            </h:outputText>
+                                        </div>
+                                        <div class="col-md-4 m-b-15">
                                             <h:outputLabel value="Cost Recov Limit" for="costRecovLimit"/>
                                             <h:outputText id="costRecovLimit"
                                                           value="#{pscController.selected.costRecoveryLimit}"
@@ -93,11 +101,6 @@
                                             <h:outputText id="costUplift" value="#{pscController.selected.costUplift}"
                                                           class="form-control input-sm m-b-10">
                                             </h:outputText>
-                                        </div>
-                                        <div class="col-md-4 m-b-15">
-                                            <h:outputLabel value="Royalty Rate" for="royaltyRate"/>
-                                            <h:outputText id="royaltyRate" value="#{pscController.selected.royaltyRate}"
-                                                          class="form-control input-sm m-b-10"/>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -116,6 +119,11 @@
                                         <div class="col-md-4 m-b-15">
                                             <h:outputLabel value="Water Depth" for="waterDepth"/>
                                             <h:outputText id="waterDepth" value="#{pscController.selected.waterDepth}"
+                                                          class="form-control input-sm m-b-10"/>
+                                        </div>
+                                        <div class="col-md-4 m-b-15">
+                                            <h:outputLabel value="Royalty Rate" for="royaltyRate"/>
+                                            <h:outputText id="royaltyRate" value="#{pscController.selected.royaltyRate}"
                                                           class="form-control input-sm m-b-10"/>
                                         </div>
                                     </div>

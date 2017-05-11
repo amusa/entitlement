@@ -103,6 +103,13 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-4 m-b-15">
+                                    <h:outputLabel value="OML Conv. Date (dd/MM/yyyy)" for="omlConversionDate" />
+                                    <h:inputText id="omlConversionDate"  value="#{pscController.selected.omlConversionDate}" class="form-control input-sm m-b-10">
+                                        <f:ajax />
+                                        <f:convertDateTime pattern="dd/MM/yyyy" />
+                                    </h:inputText>
+                                </div>
+                                <div class="col-md-4 m-b-15">
                                     <h:outputLabel value="Cost Recov Limit" for="costRecovLimit"/>
                                     <h:inputText id="costRecovLimit" value="#{pscController.selected.costRecoveryLimit}"
                                                  class="form-control input-sm m-b-10">
@@ -115,11 +122,6 @@
                                                  class="form-control input-sm m-b-10">
                                         <f:ajax/>
                                     </h:inputText>
-                                </div>
-                                <div class="col-md-4 m-b-15">
-                                    <h:outputLabel value="Royalty Rate" for="royaltyRate"/>
-                                    <h:outputText id="royaltyRate" value="#{pscController.selected.royaltyRate}"
-                                                  class="form-control input-sm m-b-10"/>
                                 </div>
                             </div>
                             <div class="row">
@@ -142,6 +144,11 @@
                                                  class="form-control input-sm m-b-10">
                                         <f:ajax event="change" render="petrProfTaxRate invTaxAllwCrd royaltyRate"/>
                                     </h:inputText>
+                                </div>
+                                <div class="col-md-4 m-b-15">
+                                    <h:outputLabel value="Royalty Rate" for="royaltyRate"/>
+                                    <h:outputText id="royaltyRate" value="#{pscController.selected.royaltyRate}"
+                                                  class="form-control input-sm m-b-10"/>
                                 </div>
                             </div>
                         </div>

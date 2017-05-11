@@ -51,7 +51,7 @@ public class DateUtil {
         return 0;
     }
 
-    private static LocalDate getLocalDate(Date date) {
+    public static LocalDate getLocalDate(Date date) {
         Calendar cal = new GregorianCalendar();
         cal.setTime(date);
 

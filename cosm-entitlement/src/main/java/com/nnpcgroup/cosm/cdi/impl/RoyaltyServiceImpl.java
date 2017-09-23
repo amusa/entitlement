@@ -8,6 +8,8 @@ import com.nnpcgroup.cosm.ejb.crude.CrudePriceBean;
 import com.nnpcgroup.cosm.ejb.forecast.psc.PscForecastDetailServices;
 import com.nnpcgroup.cosm.ejb.lifting.PscLiftingServices;
 import com.nnpcgroup.cosm.entity.FiscalPeriod;
+import com.nnpcgroup.cosm.entity.Model1993Psc;
+import com.nnpcgroup.cosm.entity.Model2005Psc;
 import com.nnpcgroup.cosm.entity.ProductionSharingContract;
 import com.nnpcgroup.cosm.report.schb1.Allocation;
 import com.nnpcgroup.cosm.report.schb1.RoyaltyAllocation;
@@ -53,9 +55,7 @@ public class RoyaltyServiceImpl implements RoyaltyService {
 
         //royRate = getRoyaltyRate(psc);
         grossProd = productionBean.getGrossProduction(psc, year, month);
-        int days = genController.daysOfMonth(year, month);
-        Double dailyProd = grossProd / days;
-        royRate = computeRoyaltyRate(dailyProd);
+        royRate = computeRoyaltyRate(psc, year, month, grossProd);
         double weightedAvePrice = liftingBean.computeWeightedAvePrice(psc, year, month);
 
 //        grossProdCum = productionBean.getGrossProductionToDate(psc, year, month);//cummulative production
@@ -170,15 +170,23 @@ public class RoyaltyServiceImpl implements RoyaltyService {
     }
 
 
-    public double computeRoyaltyRate(double dailyProd) {
-        if (dailyProd < 2000.0) {
-            return 5.0;
-        } else if (dailyProd >= 2000.0 && dailyProd < 5000.0) {
-            return 7.5;
-        } else if (dailyProd >= 5000.0 && dailyProd < 10000.0) {
-            return 15.0;
-        }
-        return 20.0;
+    public double computeRoyaltyRate(ProductionSharingContract psc, int year, int month, double grossProd) {
+        //TODO:candidate for subclass
+        int days = genController.daysOfMonth(year, month);
+        Double dailyProd = grossProd / days;
 
+        if (psc instanceof Model2005Psc) {
+            if (dailyProd < 2000.0) {
+                return 5.0;
+            } else if (dailyProd >= 2000.0 && dailyProd < 5000.0) {
+                return 7.5;
+            } else if (dailyProd >= 5000.0 && dailyProd < 10000.0) {
+                return 15.0;
+            }
+            return 20.0;
+        } else if (psc instanceof Model1993Psc) {
+            return psc.getRoyaltyRate();
+        }
+        return 0;
     }
 }

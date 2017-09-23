@@ -10,6 +10,8 @@ import com.nnpcgroup.cosm.util.DateUtil;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.ZoneId;
@@ -24,7 +26,7 @@ import java.util.*;
         @UniqueConstraint(columnNames = {"TITLE"})
 })
 @DiscriminatorValue("PSC")
-public class ProductionSharingContract extends FiscalArrangement {
+public abstract class ProductionSharingContract extends FiscalArrangement {
 
     private static final long serialVersionUID = -165902073936311783L;
 
@@ -312,4 +314,28 @@ public class ProductionSharingContract extends FiscalArrangement {
 //
 //        return yearDiff;
     }
+
+    @Transient
+    public boolean isITC() {
+        return contractExecutionDate.before(getInvestmentTaxReliefDate());
+    }
+
+    @Transient
+    public boolean isITA() {
+        return contractExecutionDate.after(getInvestmentTaxReliefDate());
+    }
+
+    @Transient
+    public Date getInvestmentTaxReliefDate() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+        try {
+            Date date = sdf.parse("1998-07-01");
+            return date;
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }

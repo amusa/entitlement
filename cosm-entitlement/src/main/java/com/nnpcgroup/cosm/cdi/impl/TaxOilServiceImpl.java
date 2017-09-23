@@ -383,4 +383,35 @@ public class TaxOilServiceImpl implements TaxOilService {
         return computeTaxOilAllocation(psc, year, month).getReceived();
     }
 
+    public ProductionCostServices getProdCostBean() {
+        return prodCostBean;
+    }
+
+    public PscLiftingServices getLiftingBean() {
+        return liftingBean;
+    }
+
+    public CrudePriceBean getPriceBean() {
+        return priceBean;
+    }
+
+    public PscForecastDetailServices getProductionBean() {
+        return productionBean;
+    }
+
+    public RoyaltyService getRoyaltyService() {
+        return royaltyService;
+    }
+
+    public FiscalPeriodService getFiscalService() {
+        return fiscalService;
+    }
+
+    public GeneralController getGenController() {
+        return genController;
+    }
+
+    public CacheUtil getCache() {
+        return cache;
+    }
 }

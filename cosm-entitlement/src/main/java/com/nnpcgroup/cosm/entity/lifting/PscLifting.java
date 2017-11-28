@@ -6,13 +6,10 @@
 package com.nnpcgroup.cosm.entity.lifting;
 
 import com.nnpcgroup.cosm.entity.ProductionSharingContract;
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+
+import javax.persistence.*;
 
 /**
- *
  * @author Ayemi
  */
 @Entity
@@ -20,6 +17,7 @@ import javax.persistence.ManyToOne;
 public class PscLifting extends Lifting {
 
     private ProductionSharingContract psc;
+    private Double cashPayment;
 
     public PscLifting() {
     }
@@ -34,4 +32,12 @@ public class PscLifting extends Lifting {
         this.psc = psc;
     }
 
+    @Column(name = "CASH_PAYMENT")
+    public Double getCashPayment() {
+        return cashPayment;
+    }
+
+    public void setCashPayment(Double cashPayment) {
+        this.cashPayment = cashPayment;
+    }
 }

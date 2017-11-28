@@ -26,6 +26,8 @@ public interface ProductionCostServices extends CommonServices<ProductionCost>, 
 
     List<ProductionCost> findCapex(ProductionSharingContract psc, Integer year, Integer month);
 
+    double getCostToDate(ProductionSharingContract psc, Integer year, Integer month);
+
     double getOpex(ProductionSharingContract psc, Integer year, Integer month);
 
     double getCurrentYearOpex(ProductionSharingContract psc, Integer year, Integer month);

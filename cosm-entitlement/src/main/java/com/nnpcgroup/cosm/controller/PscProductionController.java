@@ -48,7 +48,7 @@ public class PscProductionController implements Serializable {
     Principal principal;
 
     @Inject
-    TaxController taxController;
+    TaxOilController taxOilController;
     
     @Inject
     CostOilController costOilController;
@@ -286,11 +286,11 @@ public class PscProductionController implements Serializable {
     }
 
     public void refreshTaxOilListener() {
-        taxController.refreshTaxOil();
+        taxOilController.refreshTaxOil();
     }
 
     public void taxOilCalculationListener() {
-        taxController.calculateTaxOilDetail(currentPsc, periodYear, periodMonth);
+        taxOilController.calculateTaxOilDetail(currentPsc, periodYear, periodMonth);
     }
     
     public void costOilCalculationListener() {

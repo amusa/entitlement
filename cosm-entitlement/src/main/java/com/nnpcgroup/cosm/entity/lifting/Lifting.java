@@ -65,7 +65,7 @@ public abstract class Lifting implements Serializable {
     //@NotNull
     @Column(name = "OWN_LIFTING")
     public Double getOwnLifting() {
-        return ownLifting;
+        return ownLifting != null ? ownLifting : 0;
     }
 
     public void setOwnLifting(Double ownLifting) {
@@ -75,7 +75,7 @@ public abstract class Lifting implements Serializable {
     //@NotNull
     @Column(name = "PARTNER_LIFTING")
     public Double getPartnerLifting() {
-        return partnerLifting;
+        return partnerLifting != null ? partnerLifting : 0;
     }
 
     public void setPartnerLifting(Double partnerLifting) {
@@ -85,20 +85,31 @@ public abstract class Lifting implements Serializable {
     @Transient
     public Double getTotalLifting() {
         double own, partner;
-        own = ownLifting != null ? ownLifting : 0;
-        partner = partnerLifting != null ? partnerLifting : 0;
+        own = getOwnLifting();
+        partner = getPartnerLifting();
         return own + partner;
     }
 
     @NotNull
     @Column(name = "PRICE")
     public Double getPrice() {
-        return price;
+        return price != null ? price : 0;
     }
 
     public void setPrice(Double price) {
         this.price = price;
     }
+
+    @Transient
+    public Double getOwnProceed() {
+        return getOwnLifting() * getPrice();
+    }
+
+    @Transient
+    public Double getPartnerProceed() {
+        return getPartnerLifting() * getPrice();
+    }
+
 
     @Transient
     public Double getRevenue() {

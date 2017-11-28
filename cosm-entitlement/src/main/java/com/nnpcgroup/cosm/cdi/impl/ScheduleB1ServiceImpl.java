@@ -1,16 +1,10 @@
 package com.nnpcgroup.cosm.cdi.impl;
 
-import com.nnpcgroup.cosm.cdi.ScheduleB1Service;
-import com.nnpcgroup.cosm.controller.CostOilController;
-import com.nnpcgroup.cosm.cdi.FiscalPeriodService;
-import com.nnpcgroup.cosm.ejb.cost.ProductionCostServices;
+import com.nnpcgroup.cosm.cdi.*;
 import com.nnpcgroup.cosm.ejb.lifting.PscLiftingServices;
-import com.nnpcgroup.cosm.cdi.TaxServices;
-import com.nnpcgroup.cosm.entity.FiscalPeriod;
 import com.nnpcgroup.cosm.entity.ProductionSharingContract;
 import com.nnpcgroup.cosm.entity.lifting.PscLifting;
 import com.nnpcgroup.cosm.report.schb1.*;
-import com.nnpcgroup.cosm.util.CacheKey;
 import com.nnpcgroup.cosm.util.CacheUtil;
 
 import javax.ejb.EJB;
@@ -29,27 +23,27 @@ public class ScheduleB1ServiceImpl implements ScheduleB1Service {
     private CacheUtil cache;
 
     @Inject
-    private TaxServices taxBean;
+    private RoyaltyService royaltyService;
 
     @Inject
-    private FiscalPeriodService fiscalService;
+    private CostOilService costOilService;
 
     @Inject
-    private CostOilController costOilController;
+    private TaxOilService taxBean;
 
-    @EJB
-    private ProductionCostServices prodCostBean;
+    @Inject
+    private ProfitOilService profitOilService;
 
     @EJB
     private PscLiftingServices liftingBean;
 
 
     @Override
-    public List<ProceedAllocation> processProceedAllocation(ProductionSharingContract psc, int year, int month) {
+    public List<ProceedAllocation> computeProceedAllocation(ProductionSharingContract psc, int year, int month) {
         List<ProceedAllocation> proceedAllocationList = new ArrayList<>();
 
         ProceedAllocation royPa = new ProceedAllocation();
-        Allocation royAlloc = processRoyaltyAllocation(psc, year, month);
+        Allocation royAlloc = royaltyService.computeRoyaltyAllocation(psc, year, month);
         royPa.setCategoryTitle("ROYALTY OIL");
         royPa.setMonthlyChargeBfw(royAlloc.getChargeBfw());
         royPa.setMonthlyCharge(royAlloc.getMonthlyCharge());
@@ -60,7 +54,7 @@ public class ScheduleB1ServiceImpl implements ScheduleB1Service {
         proceedAllocationList.add(royPa);
 
         ProceedAllocation coPa = new ProceedAllocation();
-        Allocation costOilAlloc = processCostOilAllocation(psc, year, month);
+        Allocation costOilAlloc = costOilService.computeCostOilAllocation(psc, year, month);
         coPa.setCategoryTitle("COST OIL");
         coPa.setMonthlyChargeBfw(costOilAlloc.getChargeBfw());
         coPa.setMonthlyCharge(costOilAlloc.getMonthlyCharge());
@@ -71,7 +65,7 @@ public class ScheduleB1ServiceImpl implements ScheduleB1Service {
         proceedAllocationList.add(coPa);
 
         ProceedAllocation toPa = new ProceedAllocation();
-        Allocation taxOilAlloc = processTaxOilAllocation(psc, year, month);
+        Allocation taxOilAlloc = taxBean.computeTaxOilAllocation(psc, year, month);
         toPa.setCategoryTitle("TAX OIL");
         toPa.setMonthlyChargeBfw(taxOilAlloc.getChargeBfw());
         toPa.setMonthlyCharge(taxOilAlloc.getMonthlyCharge());
@@ -82,119 +76,29 @@ public class ScheduleB1ServiceImpl implements ScheduleB1Service {
         proceedAllocationList.add(toPa);
 
         ProceedAllocation corpPoPa = new ProceedAllocation();
-        // Allocation profOilAlloc = processProfitOil(this.psc, this.periodYear, this.periodMonth);
+        Allocation corpProfOilAlloc = profitOilService.computeCorporationProfitOilAllocation(psc, year, month);
         corpPoPa.setCategoryTitle("CORP PROFIT OIL");
-//        corpPoPa.setMonthlyChargeBfw(taxOilAlloc.getChargeBfw());
-//        corpPoPa.setMonthlyCharge(taxOilAlloc.getMonthlyCharge());
-//        corpPoPa.setRecoverable(taxOilAlloc.getRecoverable());
-//        corpPoPa.setContractorProceed(taxOilAlloc.getReceived());
-//        corpPoPa.setMonthlyChargeCfw(taxOilAlloc.getChargeCfw());
+        corpPoPa.setMonthlyChargeBfw(corpProfOilAlloc.getChargeBfw());
+        corpPoPa.setMonthlyCharge(corpProfOilAlloc.getMonthlyCharge());
+        corpPoPa.setRecoverable(corpProfOilAlloc.getRecoverable());
+        corpPoPa.setCorporationProceed(corpProfOilAlloc.getReceived());
+        corpPoPa.setMonthlyChargeCfw(corpProfOilAlloc.getChargeCfw());
 
         proceedAllocationList.add(corpPoPa);
 
         ProceedAllocation contPoPa = new ProceedAllocation();
-        // Allocation profOilAlloc = processProfitOil(this.psc, this.periodYear, this.periodMonth);
+        Allocation contProfOilAlloc = profitOilService.computeContractorProfitOilAllocation(psc, year, month);
         contPoPa.setCategoryTitle("CONT PROFIT OIL");
-//        contPoPa.setMonthlyChargeBfw(taxOilAlloc.getChargeBfw());
-//        contPoPa.setMonthlyCharge(taxOilAlloc.getMonthlyCharge());
-//        contPoPa.setRecoverable(taxOilAlloc.getRecoverable());
-//        contPoPa.setContractorProceed(taxOilAlloc.getReceived());
-//        contPoPa.setMonthlyChargeCfw(taxOilAlloc.getChargeCfw());
+        contPoPa.setMonthlyChargeBfw(contProfOilAlloc.getChargeBfw());
+        contPoPa.setMonthlyCharge(contProfOilAlloc.getMonthlyCharge());
+        contPoPa.setRecoverable(contProfOilAlloc.getRecoverable());
+        contPoPa.setContractorProceed(contProfOilAlloc.getReceived());
+        contPoPa.setMonthlyChargeCfw(contProfOilAlloc.getChargeCfw());
 
         proceedAllocationList.add(contPoPa);
 
         return proceedAllocationList;
 
-    }
-
-    @Override
-    public RoyaltyAllocation processRoyaltyAllocation(ProductionSharingContract psc, int year, int month) {
-        CacheKey cacheKey = new CacheKey(psc, year, month);
-
-        if (cache.getRoyaltyAllocationCache().containsKey(cacheKey)) {
-            return cache.getRoyaltyAllocationCache().get(cacheKey);
-        }
-
-        if (!prodCostBean.fiscalPeriodExists(psc, year, month)) {
-            return new RoyaltyAllocation();
-        }
-
-        RoyaltyAllocation allocation = new RoyaltyAllocation();
-
-        double royalty = taxBean.computeRoyalty(psc, year, month);
-        double corpLiftProceed = liftingBean.getCorporationProceed(psc, year, month);
-        FiscalPeriod prevFp = fiscalService.getPreviousFiscalPeriod(year, month);
-        Allocation prevAlloc = processRoyaltyAllocation(psc, prevFp.getYear(), prevFp.getMonth());
-
-        allocation.setMonthlyCharge(royalty);
-        allocation.setLiftingProceed(corpLiftProceed);
-        allocation.setChargeBfw(prevAlloc.getChargeCfw());
-
-        cache.getRoyaltyAllocationCache().put(cacheKey, allocation);
-
-        return allocation;
-    }
-
-    @Override
-    public CostOilAllocation processCostOilAllocation(ProductionSharingContract psc, int year, int month) {
-        CacheKey cacheKey = new CacheKey(psc, year, month);
-
-        if (cache.getCostOilAllocationCache().containsKey(cacheKey)) {
-            return cache.getCostOilAllocationCache().get(cacheKey);
-        }
-
-        if (!prodCostBean.fiscalPeriodExists(psc, year, month)) {
-            return new CostOilAllocation();
-        }
-
-        CostOilAllocation allocation = new CostOilAllocation();
-
-        double costOil = costOilController.computeCostOilCum(psc, year, month);
-        double contractorLiftProceed = liftingBean.getContractorProceed(psc, year, month);
-        double proceed = liftingBean.getTotalProceed(psc, year, month);
-
-        costOil = Math.max(0, Math.min(proceed * psc.getCostRecoveryLimit(), costOil));
-        FiscalPeriod prevFp = fiscalService.getPreviousFiscalPeriod(year, month);
-        Allocation prevAlloc = processCostOilAllocation(psc, prevFp.getYear(), prevFp.getMonth());
-//        double costOilBfw = costOilController.computeCostOilBfw(lpsc, prevFp.getYear(), prevFp.getMonth());
-
-        allocation.setMonthlyCharge(costOil);
-        allocation.setLiftingProceed(contractorLiftProceed);
-        allocation.setChargeBfw(prevAlloc.getChargeCfw());
-
-        cache.getCostOilAllocationCache().put(cacheKey, allocation);
-
-        return allocation;
-    }
-
-    @Override
-    public TaxOilAllocation processTaxOilAllocation(ProductionSharingContract psc, Integer year, Integer month) {
-        CacheKey cacheKey = new CacheKey(psc, year, month);
-
-        if (cache.getTaxOilAllocationCache().containsKey(cacheKey)) {
-            return cache.getTaxOilAllocationCache().get(cacheKey);
-        }
-
-        if (!prodCostBean.fiscalPeriodExists(psc, year, month)) {
-            return new TaxOilAllocation();
-        }
-
-        TaxOilAllocation allocation = new TaxOilAllocation();
-
-        double taxOil = taxBean.computeTaxOil(psc, year, month);
-        double corpLiftProceed = liftingBean.getCorporationProceed(psc, year, month);
-        FiscalPeriod prevFp = fiscalService.getPreviousFiscalPeriod(year, month);
-        Allocation prevAlloc = processTaxOilAllocation(psc, prevFp.getYear(), prevFp.getMonth());
-        Allocation royAlloc = processRoyaltyAllocation(psc, year, month);//(this.psc, this.periodYear, this.periodMonth)
-
-        allocation.setMonthlyCharge(taxOil);
-        allocation.setLiftingProceed(corpLiftProceed);
-        allocation.setRoyalty(royAlloc.getReceived());
-        allocation.setChargeBfw(prevAlloc.getChargeCfw());
-
-        cache.getTaxOilAllocationCache().put(cacheKey, allocation);
-
-        return allocation;
     }
 
     @Override
@@ -208,14 +112,14 @@ public class ScheduleB1ServiceImpl implements ScheduleB1Service {
 
             for (PscLifting lifting : pscLiftings) {
 
-                proceed += lifting.getRevenue();
+                proceed = lifting.getRevenue();
 
                 LiftingSummary liftSumm = new LiftingSummary();
 
                 SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM");
                 String liftingDate = dateFormat.format(lifting.getLiftingDate());
-                double corpProceed = lifting.getOwnLifting() * lifting.getPrice();
-                double contProceed = lifting.getPartnerLifting() * lifting.getPrice();
+                double corpProceed = lifting.getOwnProceed();
+                double contProceed = lifting.getPartnerProceed();
 
                 liftSumm.setLiftingDate(liftingDate);
                 liftSumm.setLiftingVolume(lifting.getTotalLifting());

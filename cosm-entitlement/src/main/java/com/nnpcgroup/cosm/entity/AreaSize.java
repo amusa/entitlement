@@ -18,7 +18,7 @@ public class AreaSize implements Serializable {
 
     @Column(name = "OPL_CONTRACT_AREA")
     public Double getOplContractArea() {
-        return oplContractArea;
+        return oplContractArea != null ? oplContractArea : 0;
     }
 
     public void setOplContractArea(Double oplContractArea) {
@@ -27,7 +27,7 @@ public class AreaSize implements Serializable {
 
     @Column(name = "OML_CONTRACT_AREA")
     public Double getOmlContractArea() {
-        return omlContractArea;
+        return omlContractArea != null ? omlContractArea : 0;
     }
 
     public void setOmlContractArea(Double omlContractArea) {
@@ -36,7 +36,7 @@ public class AreaSize implements Serializable {
 
     @Column(name = "OPL_RENTAL_RATE")
     public Double getOplRentalRate() {
-        return oplRentalRate;
+        return oplRentalRate != null ? oplRentalRate : 0;
     }
 
     public void setOplRentalRate(Double oplRentalRate) {
@@ -45,7 +45,7 @@ public class AreaSize implements Serializable {
 
     @Column(name = "OML_RENTAL_RATE")
     public Double getOmlRentalRate() {
-        return omlRentalRate;
+        return omlRentalRate != null ? omlRentalRate : 0;
     }
 
     public void setOmlRentalRate(Double omlRentalRate) {

@@ -8,25 +8,24 @@ package com.nnpcgroup.cosm.entity.cost;
 import java.io.Serializable;
 
 /**
- *
  * @author Ayemi
  */
 public class CostOilDetail implements Serializable {
 
-    private Double armotizedCapex;
-    private Double opex;
-    private Double educationTax;
-    private Double costOilBfw;
+    private double armotizedCapex;
+    private double opex;
+    private double educationTax;
+    private double costOilBfw;
 
-    public Double getArmotizedCapex() {
+    public double getArmotizedCapex() {
         return armotizedCapex;
     }
 
-    public void setArmotizedCapex(Double armotizedCapex) {
+    public void setArmotizedCapex(double armotizedCapex) {
         this.armotizedCapex = armotizedCapex;
     }
 
-    public Double getOpex() {
+    public double getOpex() {
         return opex;
     }
 
@@ -34,27 +33,27 @@ public class CostOilDetail implements Serializable {
         this.opex = opex;
     }
 
-    public Double getEducationTax() {
+    public double getEducationTax() {
         return educationTax;
     }
 
-    public void setEducationTax(Double educationTax) {
+    public void setEducationTax(double educationTax) {
         this.educationTax = educationTax;
     }
 
-    public Double getCostOilBfw() {
+    public double getCostOilBfw() {
         return costOilBfw;
     }
 
-    public void setCostOilBfw(Double costOilBfw) {
+    public void setCostOilBfw(double costOilBfw) {
         this.costOilBfw = costOilBfw;
     }
 
-    public Double getCostOil() {
-        return armotizedCapex + opex + educationTax;
+    public double getCostOil() {
+        return armotizedCapex + opex + Math.max(0, educationTax);
     }
 
-    public Double getCostOilCum() {
+    public double getCostOilCum() {
         return getCostOil() + costOilBfw;
     }
 }

@@ -9,5 +9,26 @@ package com.nnpcgroup.cosm.report.schb1;
  * @author Ayemi
  */
 public class RoyaltyAllocation extends Allocation {
+    private Double cashPayment;
 
+    public Double getCashPayment() {
+        return cashPayment != null ? cashPayment : 0;
+    }
+
+    public void setCashPayment(Double cashPayment) {
+        this.cashPayment = cashPayment;
+    }
+
+    @Override
+    public Double getReceived() {
+        if (getCashPayment() > 0) {
+            return getCashPayment();
+        }
+
+        return super.getReceived();
+    }
+
+    public Double getRoyaltyReceived() {
+        return super.getReceived();
+    }
 }

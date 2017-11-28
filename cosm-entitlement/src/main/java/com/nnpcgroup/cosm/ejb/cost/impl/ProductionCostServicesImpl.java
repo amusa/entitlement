@@ -7,7 +7,7 @@ package com.nnpcgroup.cosm.ejb.cost.impl;
 
 import com.nnpcgroup.cosm.ejb.cost.ProductionCostServices;
 import com.nnpcgroup.cosm.ejb.impl.CommonServicesImpl;
-import com.nnpcgroup.cosm.cdi.TaxServices;
+import com.nnpcgroup.cosm.cdi.TaxOilService;
 import com.nnpcgroup.cosm.entity.FiscalPeriod;
 import com.nnpcgroup.cosm.entity.ProductionSharingContract;
 import com.nnpcgroup.cosm.entity.cost.CostItem;
@@ -34,7 +34,7 @@ import javax.persistence.criteria.*;
 public class ProductionCostServicesImpl extends CommonServicesImpl<ProductionCost> implements ProductionCostServices, Serializable {
 
     @Inject
-    private TaxServices taxBean;
+    private TaxOilService taxBean;
 
     public ProductionCostServicesImpl() {
         super(ProductionCost.class);
@@ -117,6 +117,43 @@ public class ProductionCostServicesImpl extends CommonServicesImpl<ProductionCos
         }
 
         return prodCosts;
+    }
+
+    @Override
+    public double getCostToDate(ProductionSharingContract psc, Integer year, Integer month) {
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+
+        Double costToDate;
+
+        CriteriaQuery<Double> cq = cb.createQuery(Double.class);
+        Root<ProductionCost> cost = cq.from(entityClass);
+
+        Expression<Double> sum = cb.sum(cost.<Double>get("amount"));
+
+        Predicate basePredicate = cb.equal(cost.get("psc"), psc);
+
+        Predicate curYrPredicate = cb.and(
+                cb.equal(cost.get("periodYear"), year),
+                cb.lessThanOrEqualTo(cost.get("periodMonth"), month)
+        );
+
+        Predicate prevYrPredicate =
+                cb.lessThan(cost.get("periodYear"), year);
+
+        Predicate yearPredicate = cb.or(curYrPredicate, prevYrPredicate);
+
+        Predicate predicate = cb.and(basePredicate, yearPredicate);
+
+        cq.select(sum.alias("costToDate"))
+                .where(predicate);
+
+        costToDate = getEntityManager().createQuery(cq).getSingleResult();
+
+        if (costToDate == null) {
+            return 0;
+        }
+
+        return costToDate;
     }
 
     @Override

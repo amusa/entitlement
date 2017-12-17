@@ -295,15 +295,15 @@
                                 <div class="row">
                                     <div class="col-md-4 m-b-15">
                                         <h:outputLabel value="Exportable Vol (Nom)" for="lifting" />
-                                        <h:inputText id="lifting" value="#{jvProdController.currentForecastDetail.lifting}" title="Lifting (Actual)"
+                                        <h:inputText id="lifting" value="#{jvProdController.currentForecastDetail.lifting}" title="com.nnpcgroup.cosm.psc.model.Lifting (Actual)"
                                                      class="form-control input-sm">
                                             <f:convertNumber pattern="###,###,###.####" />
                                             <f:ajax event="change" listener="#{jvProdController.liftingChanged}" render="@form"/>
                                         </h:inputText>
                                     </div>
                                     <div class="col-md-4 m-b-15">
-                                        <h:outputLabel value="Lifting Cargoes" for="cargoes" />
-                                        <h:inputText id="cargoes" value="#{jvProdController.currentForecastDetail.cargos}" title="Lifting Cargoes" class="form-control input-sm"/>
+                                        <h:outputLabel value="com.nnpcgroup.cosm.psc.model.Lifting Cargoes" for="cargoes" />
+                                        <h:inputText id="cargoes" value="#{jvProdController.currentForecastDetail.cargos}" title="com.nnpcgroup.cosm.psc.model.Lifting Cargoes" class="form-control input-sm"/>
                                     </div>
                                 </div>
                             </div>
@@ -350,15 +350,15 @@
                                 <div class="row">
                                     <div class="col-md-4 m-b-15">
                                         <h:outputLabel value="Liftable Vol (Nom)" for="ptnrLifting" />
-                                        <h:inputText id="ptnrLifting" value="#{jvProdController.currentForecastDetail.partnerLifting}" title="Lifting (Actual)"
+                                        <h:inputText id="ptnrLifting" value="#{jvProdController.currentForecastDetail.partnerLifting}" title="com.nnpcgroup.cosm.psc.model.Lifting (Actual)"
                                                      class="form-control input-sm">
                                             <f:convertNumber pattern="###,###,###.####" />
                                             <f:ajax event="change" listener="#{jvProdController.liftingChanged}" render="@form"/>
                                         </h:inputText>
                                     </div>
                                     <div class="col-md-4 m-b-15">
-                                        <h:outputLabel value="Lifting Cargoes" for="ptnrCargoes" />
-                                        <h:inputText id="ptnrCargoes" value="#{jvProdController.currentForecastDetail.partnerCargos}" title="Lifting Cargoes" class="form-control input-sm"/>
+                                        <h:outputLabel value="com.nnpcgroup.cosm.psc.model.Lifting Cargoes" for="ptnrCargoes" />
+                                        <h:inputText id="ptnrCargoes" value="#{jvProdController.currentForecastDetail.partnerCargos}" title="com.nnpcgroup.cosm.psc.model.Lifting Cargoes" class="form-control input-sm"/>
                                     </div>
                                 </div>
                             </div>

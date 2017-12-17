@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+
+    <ui:composition>
+        <div class="modal fade" id="JvEditDlg" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">Edit JV Contract</h4>
+                    </div>
+                    <h:form id="JvEditForm">
+                        <div class="modal-body">
+                            <h:panelGroup id="JvEditPanel" rendered="#{jvController.selected != null}">
+                                <div class="row">
+                                    <div class="col-md-6 m-b-15">
+                                        <h:outputLabel value="Equity Type" for="equityType" />
+                                        <h:selectOneMenu id="equityType" value="#{jvController.selected.equityType}" class="form-control input-sm m-b-10">
+                                            <f:selectItems value="#{equityTypeController.itemsAvailableSelectOne}"
+                                                           var="equityTypeItem"
+                                                           itemValue="#{equityTypeItem}"/>
+                                        </h:selectOneMenu>                                                                              
+                                    </div>
+
+                                    <div class="col-md-6 m-b-15">
+                                        <h:outputLabel value="Title" for="title" />
+                                        <h:inputText id="title" value="#{jvController.selected.title}" title="#{bundle.CreateJointVentureTitle_title}" class="form-control input-sm m-b-10"/>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 m-b-15">
+                                        <h:outputLabel value="Operator" for="operator" />
+                                        <h:selectOneMenu id="operator" value="#{jvController.selected.operator}" class="form-control input-sm m-b-10">
+                                            <f:selectItems value="#{companyController.itemsAvailableSelectOne}"
+                                                           var="operatorItem"
+                                                           itemValue="#{operatorItem}"/>
+                                        </h:selectOneMenu>                                        
+                                    </div>                                    
+                                </div>
+
+                            </h:panelGroup>
+
+                        </div>
+                        <div class="modal-footer">
+                            <h:commandButton value="#{bundle.Save}" pt:data-dismiss="modal" class="btn btn-sm">
+                                <f:ajax listener="#{jvController.update}" execute="title operator equityType" render="jvListForm jvTable msgs" />
+                            </h:commandButton>
+                            <h:commandButton value="#{bundle.Cancel}" immediate="true" pt:data-dismiss="modal" class="btn btn-sm">
+                                <f:ajax listener="#{jvController.cancel}" render="jvListForm jvTable msgs"/>
+                            </h:commandButton>
+                        </div>
+                    </h:form>
+                </div>
+            </div>
+        </div> 
+
+    </ui:composition>
+</html>

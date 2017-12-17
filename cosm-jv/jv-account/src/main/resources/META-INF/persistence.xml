@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+    <persistence-unit name="userPU" transaction-type="JTA">
+        <jta-data-source>java:/jboss/datasources/JvAccountDS</jta-data-source>
+        <class>com.cosm.jv.account.domain.model.JointVenture</class>
+        <class>com.cosm.jv.account.domain.model.Contract</class>
+        <class>com.cosm.jv.account.domain.model.RegularContract</class>
+        <class>com.cosm.jv.account.domain.model.AlternativeFundingContract</class>
+        <class>com.cosm.jv.account.domain.model.ModifiedCarryContract</class>
+        <class>com.cosm.jv.account.domain.model.CarryContract</class>
+        <class>com.cosm.jv.account.domain.model.Company</class>
+        <class>com.cosm.jv.account.domain.model.CrudePrice</class>
+        <class>com.cosm.jv.account.domain.model.CrudeType</class>
+        <class>com.cosm.jv.account.domain.model.EquityType</class>
+        <class>com.cosm.jv.account.domain.model.Terminal</class>
+        <exclude-unlisted-classes>true</exclude-unlisted-classes>
+        <properties>
+            <!--<property name="javax.persistence.schema-generation.database.action" value="create"/>-->
+        </properties>
+    </persistence-unit>
+</persistence>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:jsf="http://xmlns.jcp.org/jsf">
+
+    <ui:composition>
+        <div class="modal fade" id="OilFieldAddDlg" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">Add Oil Field</h4>
+                    </div>
+                    <h:form id="OilFieldAddForm">
+                        <div class="modal-body">
+                            <h:panelGroup id="OilFieldAddPanel" rendered="#{pscController.selected != null}">
+                                <div class="row">
+                                    <div class="col-md-12 m-b-15">
+                                        <h:outputLabel value="Title" for="title" />
+                                        <h:inputText id="title" value="#{pscController.currentOilField.title}"  class="form-control input-sm m-b-10">
+                                            <f:ajax/>
+                                        </h:inputText>
+                                    </div>                                    
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 m-b-15">
+                                        <h:outputLabel value="Terrain" for="terrain" />
+                                        <h:selectOneMenu id="terrain" value="#{pscController.currentOilField.terrain}" class="form-control input-sm m-b-10">
+                                            <f:selectItem itemValue="#{null}" itemLabel="--select--"/>
+                                            <f:selectItem itemValue="OFFSHORE" itemLabel="Off-Shore"/>
+                                            <f:selectItem itemValue="ONSHORE" itemLabel="On-Shore"/>  
+                                            <f:selectItem itemValue="INLAND BASIN" itemLabel="Inland Basin"/>  
+                                            <f:ajax event="change" render="waterDepth royaltyRate"/>
+                                        </h:selectOneMenu>                                        
+                                    </div> 
+                                    <div class="col-md-6 m-b-15">
+                                        <h:outputLabel value="Water Depth (meters)" for="waterDepth" />
+                                        <h:inputText id="waterDepth"  value="#{pscController.currentOilField.waterDepth}" disabled="#{pscController.currentOilField.terrain ne 'OFFSHORE'}"  class="form-control input-sm m-b-10">
+                                            <f:ajax event="change" render="royaltyRate"/>
+                                        </h:inputText>                                                                                                                  
+                                    </div> 
+                                </div> 
+                                <div class="row"> 
+                                    <div class="col-md-6 m-b-15">
+                                        <h:outputLabel value="Royalty Rate" for="royaltyRate" />
+                                        <h:outputText id="royaltyRate" value="#{pscController.currentOilField.royaltyRate}" class="form-control input-sm m-b-10"/>
+                                    </div>       
+                                </div>
+                            </h:panelGroup>
+                        </div>
+                        <div class="modal-footer">
+                            <h:commandButton value="#{bundle.OK}" pt:data-dismiss="modal" class="btn btn-sm">
+                                <f:ajax listener="#{pscController.addOilField}"  render="PscCreateForm2 PscCreateForm PscEditForm oilFieldTable msgs" />
+                            </h:commandButton>
+                            <h:commandButton value="#{bundle.Cancel}" immediate="true" pt:data-dismiss="modal" class="btn btn-sm">
+                                <f:ajax listener="#{pscController.cancelOilField}" render="PscCreateForm2 oilFieldTable msgs"/>
+                            </h:commandButton>
+                        </div>
+                    </h:form>
+                </div>
+            </div>
+        </div> 
+
+    </ui:composition>
+</html>

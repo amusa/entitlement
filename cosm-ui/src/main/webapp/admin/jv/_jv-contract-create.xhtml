@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:jsf="http://xmlns.jcp.org/jsf">
+
+    <ui:composition>
+        <div class="modal fade" id="AssetCreateDlg" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title"><h:outputLabel id="contractCreateFiscalTitle" value ="Create Contract for JV Fiscal Arrangement: #{contractController.fiscalArrangement.title}"/></h4>
+                    </div>
+                    <h:form id="AssetCreateForm">
+                        <div class="modal-body">
+                            <h:panelGroup id="AssetCreatePanel">
+                                <div class="row">                                    
+                                    <div class="col-md-6 m-b-15">
+                                        <h:outputLabel value="Contract Type" for="contractType" />
+                                        <h:selectOneMenu id="contractType" value="#{contractController.contractType}" class="form-control input-sm m-b-10">
+                                            <f:selectItem  itemLabel="Regular JV" itemValue="JV"/>
+                                            <f:selectItem  itemLabel="Carry Agreement" itemValue="CA"/>
+                                            <f:selectItem  itemLabel="Modified Carry Agreement" itemValue="MCA"/>
+                                            <f:ajax event="change" render="AssetCreateForm carryContractInfo sharedOilRatio crudeType" listener="#{contractController.contractTypeSelected}"/>
+                                        </h:selectOneMenu> 
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6 m-b-15">                                        
+                                        <h:outputLabel value="Crude Type" for="crudeType" />
+                                        <h:selectOneMenu id="crudeType" value="#{contractController.crudeType}" class="form-control input-sm m-b-10">
+                                            <f:selectItems value="#{crudeTypeController.itemsAvailableSelectOne}"
+                                                           var="crudeTypeItem"
+                                                           itemValue="#{crudeTypeItem}"/>
+                                            <f:ajax />
+                                        </h:selectOneMenu>                                                                                                                  
+                                    </div>
+                                </div>
+
+                                <div class="row" jsf:id="carryContractInfo" jsf:rendered="#{contractController.contractType eq 'CA' or contractController.contractType eq 'MCA'}">
+                                    <div class="col-md-6 m-b-15">
+                                        <h:outputLabel value="Shared Oil Ratio" for="sharedOilRatio" />
+                                        <h:inputText id="sharedOilRatio"  value="#{contractController.afSelected.sharedOilRatio}" class="form-control input-sm m-b-10">
+                                            <f:ajax />
+                                        </h:inputText>                                                                                                                  
+                                    </div>
+                                    <div class="col-md-6 m-b-15">
+                                        <h:outputLabel value="Terminal Period" for="terminalPeriod" />
+                                        <h:inputText id="terminalPeriod"  value="#{contractController.afSelected.terminalPeriod}" class="form-control input-sm m-b-10">
+                                            <f:ajax />
+                                        </h:inputText>                                                                                                                  
+                                    </div>
+                                    <div class="col-md-6 m-b-15">
+                                        <h:outputLabel value="Terminal Shared Oil" for="terminalSharedOil" />
+                                        <h:inputText id="terminalSharedOil"  value="#{contractController.afSelected.terminalSharedOil}" class="form-control input-sm m-b-10">
+                                            <f:ajax />
+                                        </h:inputText>                                                                                                                  
+                                    </div>
+                                </div>
+
+                                <div class="row" jsf:id="mcaContractInfo" jsf:rendered="#{contractController.contractType eq 'MCA'}">
+                                    <div class="col-md-6 m-b-15">
+                                        <h:outputLabel value="Tax Rate" for="taxRate" />
+                                        <h:inputText id="taxRate"  value="#{contractController.mcaSelected.taxRate}" class="form-control input-sm m-b-10">
+                                            <f:ajax />
+                                        </h:inputText>                                                                                                                  
+                                    </div>
+                                    <div class="col-md-6 m-b-15">
+                                        <h:outputLabel value="Royalty Rate" for="royaltyRate" />
+                                        <h:inputText id="royaltyRate"  value="#{contractController.mcaSelected.royaltyRate}" class="form-control input-sm m-b-10">
+                                            <f:ajax />
+                                        </h:inputText>                                                                                                                  
+                                    </div>                                   
+                                </div>
+                            </h:panelGroup>
+
+                        </div>
+                        <div class="modal-footer">
+                            <h:commandButton value="#{bundle.Save}" pt:data-dismiss="modal" class="btn btn-sm">
+                                <f:ajax listener="#{contractController.create}" render="jvListForm jvTable msgs"/>
+                            </h:commandButton>
+                            <h:commandButton value="#{bundle.Cancel}" immediate="true" pt:data-dismiss="modal" class="btn btn-sm">
+                                <f:ajax listener="#{contractController.cancel}" render="jvListForm jvTable msgs"/>
+                            </h:commandButton>
+                        </div>
+                    </h:form>
+                </div>
+            </div>
+        </div> 
+
+    </ui:composition>
+</html>

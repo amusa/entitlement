@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+
+    <ui:composition>
+        <div class="modal fade" id="TerminalCreateDlg" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">Create Terminal</h4>
+                    </div>
+                    <h:form id="TerminalCreateForm">
+                        <div class="modal-body">
+                            <h:panelGroup id="TerminalCreatePanel" rendered="#{terminalController.selected != null}">
+                                <div class="row">
+                                    <div class="col-md-6 m-b-15">
+                                        <h:outputLabel value="#{bundle.TerminalCode}" for="code" />
+                                        <h:inputText id="code" value="#{terminalController.selected.code}" title="#{bundle.CreateTerminalTitle_code}" class="form-control input-sm m-b-10"/>
+                                        <h:outputLabel value="#{bundle.TerminalName}" for="name" />
+                                        <h:inputText id="name" value="#{terminalController.selected.name}" title="#{bundle.CreateTerminalTitle_name}" class="form-control input-sm m-b-10"/>
+                                    </div>
+
+                                    <div class="col-md-6 m-b-15">
+                                        <h:outputLabel value="#{bundle.LineFillVolume}" for="lineFillVolume" />
+                                        <h:inputText id="lineFillVolume" value="#{terminalController.selected.lineFillVolume}" title="#{bundle.CreateTerminalTitle_lineFillVolume}" class="form-control input-sm m-b-10"/>
+                                        <h:outputLabel value="#{bundle.DeadStockVolume}" for="deadStockVolume" />
+                                        <h:inputText id="deadStockVolume" value="#{terminalController.selected.deadStockVolume}" title="#{bundle.CreateTerminalTitle_deadStockVolume}" class="form-control input-sm m-b-10"/>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 m-b-15">
+                                        <h:outputLabel value="#{bundle.CrudeType}" for="crudeType" />
+                                        <h:selectOneMenu id="crudeType" value="#{terminalController.selected.crudeType}" class="form-control input-sm m-b-10">
+                                            <f:selectItems value="#{crudeTypeController.itemsAvailableSelectOne}"
+                                                           var="crudeTypeItem"
+                                                           itemValue="#{crudeTypeItem}"/>
+                                        </h:selectOneMenu>                                           
+                                    </div>                                    
+                                </div>
+
+                            </h:panelGroup>
+
+                        </div>
+                        <div class="modal-footer">
+                            <h:commandButton value="#{bundle.Save}" pt:data-dismiss="modal" class="btn btn-sm">
+                                <f:ajax listener="#{terminalController.create}" execute="code name lineFillVolume deadStockVolume crudeType"  render="terminalListForm terminalTable msgs"/>
+                            </h:commandButton>
+                            <h:commandButton value="#{bundle.Cancel}" immediate="true" pt:data-dismiss="modal" class="btn btn-sm">
+                                <f:ajax listener="#{terminalController.cancel}" render="terminalListForm terminalTable msgs"/>
+                            </h:commandButton>
+                        </div>
+                    </h:form>
+                </div>
+            </div>
+        </div> 
+
+    </ui:composition>
+</html>

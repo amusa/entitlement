@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+
+    <ui:composition>
+        <div class="modal fade" id="EquityCreateDlg" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">Create Equity Type</h4>
+                    </div>
+                    <h:form id="EquityCreateForm">
+                        <div class="modal-body">
+                            <h:panelGroup id="EquityCreatePanel" rendered="#{equityTypeController.selected != null}">
+                                <div class="row">
+                                    <div class="col-md-6 m-b-15">
+                                        <h:outputLabel value="#{bundle.EquityTypeDesc}" for="desc" />
+                                        <h:inputText id="desc" value="#{equityTypeController.selected.description}" title="#{bundle.EquityTypeDesc}" class="form-control input-sm m-b-10">
+                                        <f:ajax render="ownEquity partnerEquity msgs" listener="#{equityTypeController.equityDescriptionListener}" event="keyup"/>
+                                        </h:inputText>
+                                    </div>
+                                    <div class="col-md-6 m-b-15">
+                                        <h:outputLabel value="#{bundle.EquityTypeOwn}" for="ownEquity" />
+                                        <h:inputText id="ownEquity" value="#{equityTypeController.selected.ownEquity}" title="#{bundle.EquityTypeOwn}" class="form-control input-sm m-b-10"
+                                        />
+
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 m-b-15">
+                                        <h:outputLabel value="#{bundle.EquityTypePartner}" for="partnerEquity" />
+                                        <h:inputText id="partnerEquity" value="#{equityTypeController.selected.partnerEquity}"
+                                                     validator="#{equityTypeController.equityRatioValidator}" title="#{bundle.EquityTypePartner}" class="form-control input-sm m-b-10"/>
+                                    </div>
+                                </div>
+                            </h:panelGroup>
+
+                        </div>
+                        <div class="modal-footer">
+                            <h:commandButton value="#{bundle.Save}" pt:data-dismiss="modal" class="btn btn-sm">
+                                <f:ajax listener="#{equityTypeController.create}" execute="desc ownEquity partnerEquity" render="equityListForm equityTable msgs"/>
+                            </h:commandButton>
+                            <h:commandButton value="#{bundle.Cancel}" immediate="true" pt:data-dismiss="modal" class="btn btn-sm">
+                                <f:ajax listener="#{equityTypeController.cancel}" render="equityListForm equityTable msgs"/>
+                            </h:commandButton>
+                        </div>
+                    </h:form>
+                </div>
+            </div>
+        </div> 
+
+    </ui:composition>
+</html>

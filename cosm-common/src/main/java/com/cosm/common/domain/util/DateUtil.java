@@ -63,4 +63,9 @@ public class DateUtil {
 
     }
 
+    public static Integer daysOfMonth(int year, int month) {
+        YearMonth yearMonthObject = YearMonth.of(year, month);
+        return yearMonthObject.lengthOfMonth();
+    }
+
 }

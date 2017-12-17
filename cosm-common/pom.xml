@@ -12,24 +12,6 @@
     <packaging>jar</packaging>
 
     <artifactId>cosm-common</artifactId>
-    <dependencies>
-        <dependency>
-            <groupId>javax</groupId>
-            <artifactId>javaee-api</artifactId>
-            <version>7.0</version>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/org.ehcache/ehcache -->
-        <dependency>
-            <groupId>org.ehcache</groupId>
-            <artifactId>ehcache</artifactId>
-            <version>3.3.0</version>
-        </dependency>
-        <dependency>
-            <groupId>javax.cache</groupId>
-            <artifactId>cache-api</artifactId>
-            <version>1.0.0</version>
-        </dependency>
-    </dependencies>
 
 
 </project>

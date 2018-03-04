@@ -6,7 +6,7 @@
 package com.cosm.common.domain.service;
 
 
-import com.cosm.common.domain.service.internal.FiscalPeriod;
+import com.cosm.common.domain.model.FiscalPeriod;
 
 /**
  * @author Ayemi

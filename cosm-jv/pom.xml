@@ -12,10 +12,12 @@
     <artifactId>cosm-jv</artifactId>
     <packaging>pom</packaging>
 
+
+
+    <groupId>com.cosm.jv</groupId>
+    <version>1.0-SNAPSHOT</version>
     <modules>
-        <module>jv-account</module>
-        <module>jv-production</module>
+    	<module>jv-account</module>
+    	<module>jv-production</module>
     </modules>
-
-
 </project>

@@ -5,6 +5,7 @@
  */
 package com.cosm.common.domain.service.internal;
 
+import com.cosm.common.domain.model.FiscalPeriod;
 import com.cosm.common.domain.service.FiscalPeriodService;
 
 import javax.enterprise.context.Dependent;

@@ -33,8 +33,8 @@ import javax.persistence.criteria.*;
 @Local(ProductionCostServices.class)
 public class ProductionCostServicesImpl extends CommonServicesImpl<ProductionCost> implements ProductionCostServices, Serializable {
 
-    @Inject
-    private TaxOilService taxBean;
+    /*@Inject
+    private TaxOilService taxBean;*/
 
     public ProductionCostServicesImpl() {
         super(ProductionCost.class);

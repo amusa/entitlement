@@ -4,16 +4,16 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>cosm-jv</artifactId>
-        <groupId>com.cosm</groupId>
+        <groupId>com.cosm.jv</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>jv-account</artifactId>
+    <artifactId>cosm-joint-venture</artifactId>
 
     <packaging>war</packaging>
 
-    <name>jv-account</name>
+    <name>cosm-joint-venture</name>
 
 
     <!--<dependencies>-->
@@ -32,4 +32,6 @@
 
 
 
+    <groupId>com.cosm.jv.joint-venture</groupId>
+    <version>1.0-SNAPSHOT</version>
 </project>

@@ -90,7 +90,8 @@ public class DefaultTaxOilBrokerService implements TaxOilBrokerService {
 				.withCurrentYearOpex(doc.getDouble("currentYearOpex"))
 				.withEducationTax(doc.getDouble("educationTax"))
 				.withGrossIncome(doc.getDouble("grossIncome"))
-				.withCorporationProceed(doc.getDouble("corporationProceed"))								
+				.withCorporationProceed(doc.getDouble("corporationProceed"))	
+				.withRoyalty(doc.getDouble("montlyCharge"))
 				.build();
 		
 	}

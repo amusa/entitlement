@@ -52,10 +52,13 @@ public class RoyaltyView implements Serializable {
 		this.pscId = royAlloc.getPscId();
 		this.royalty = royAlloc.getMonthlyCharge();
 		this.royaltyToDate = royAlloc.getCumMonthlyCharge();
+		this.cashPayment = royAlloc.getCashPayment();
+		this.proceed = royAlloc.getLiftingProceed();
 		this.allocation = new Allocation( 
 				royAlloc.getChargeBfw(),  
 				royAlloc.getReceived(),  
 				royAlloc.getChargeCfw());
+		
 	}
 
 	@EmbeddedId
@@ -113,6 +116,29 @@ public class RoyaltyView implements Serializable {
 	private void setAllocation(Allocation allocation) {
 		this.allocation = allocation;
 	}
+	
+	
+	@NotNull
+	@Column(name = "PROCEED")
+	public double getProceed() {
+		return proceed;
+	}
+
+	private void setProceed(double proceed) {
+		this.proceed = proceed;
+	}
+
+	@NotNull
+	@Column(name = "CASH_PAYMENT")
+	public double getCashPayment() {
+		return cashPayment;
+	}
+
+	private void setCashPayment(double cashPayment) {
+		this.cashPayment = cashPayment;
+	}
+
+
 
 	public static class RoyaltyBuilder {
 		private RoyaltyViewId royaltyViewId;

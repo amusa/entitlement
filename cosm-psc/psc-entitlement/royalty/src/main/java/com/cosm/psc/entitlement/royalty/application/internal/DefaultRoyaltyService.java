@@ -1,6 +1,7 @@
 package com.cosm.psc.entitlement.royalty.application.internal;
 
-import javax.ejb.Stateless;
+
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 import com.cosm.common.domain.model.FiscalPeriod;
@@ -24,8 +25,13 @@ import com.cosm.psc.entitlement.royalty.event.kafka.EventProducer;
  * Created by Ayemi on 23/02/2018.
  */
 
-@Stateless
+@ApplicationScoped
 public class DefaultRoyaltyService implements RoyaltyService {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	@Inject
 	private FiscalPeriodService fiscalService;

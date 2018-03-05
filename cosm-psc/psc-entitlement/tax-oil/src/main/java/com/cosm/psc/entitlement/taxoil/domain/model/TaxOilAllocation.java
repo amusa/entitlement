@@ -15,10 +15,11 @@ import com.cosm.common.domain.model.ProductionSharingContractId;
  */
 public class TaxOilAllocation extends Allocation {
 
-    private Double royalty;
+    private double royalty;
     
-    protected TaxOilAllocation(FiscalPeriod fiscalPeriod, ProductionSharingContractId pscId, double chargeBfw, double monthlyCharge, double liftingProceed, double prevCumMonthlyCharge) {
+    protected TaxOilAllocation(FiscalPeriod fiscalPeriod, ProductionSharingContractId pscId, double chargeBfw, double monthlyCharge, double liftingProceed, double prevCumMonthlyCharge, double royalty) {
 		super(fiscalPeriod, pscId, chargeBfw, monthlyCharge, liftingProceed, prevCumMonthlyCharge);
+		this.royalty = royalty;
 	}
 
     @Override

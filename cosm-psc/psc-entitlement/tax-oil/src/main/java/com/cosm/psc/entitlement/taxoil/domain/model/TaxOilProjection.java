@@ -6,12 +6,11 @@
 package com.cosm.psc.entitlement.taxoil.domain.model;
 
 import java.io.Serializable;
-
 import javax.persistence.EmbeddedId;
 
+import com.cosm.common.domain.model.Allocation;
 import com.cosm.common.domain.model.FiscalPeriod;
 import com.cosm.common.domain.model.ProductionSharingContractId;
-
 
 /**
  * @author Ayemi
@@ -19,7 +18,7 @@ import com.cosm.common.domain.model.ProductionSharingContractId;
 public class TaxOilProjection implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	private TaxOilProjectionId taxOilProjectionId;
 	private FiscalPeriod fiscalPeriod;
 	private ProductionSharingContractId pscId;
@@ -27,19 +26,63 @@ public class TaxOilProjection implements Serializable {
 	private double taxOilToDate;
 	private Allocation allocation;
 	private double royalty;
-    private double grossIncome;
-    private double lossBfw;    
-    private double currentCapitalAllowance;     
-    private double educationTax;
-    private double priorYearAnnualAllowance;
-    private double opex;
+	private double grossIncome;
+	private double lossBfw;
+	private double currentCapitalAllowance;
+	private double educationTax;
+	private double opex;
+	private double currentYearCapex;
+	private double corporationProceed;
+	private double totalDeduction;
+	private double adjustedProfit;
+	private double assessableProfit;
+	private double adjustedAssessableProfit;
+	private double currentYearITA;
+	private double adjustedProfitLessITA;
+	private double totalAnnualAllowance;
+	private double section18DeductionLower;
+	private double chargeableProfitToDate;
+	private double chargeableTaxToDate;
+	private double payableTaxToDate;
+	private double unrecoupedAnnualAllowance;
+	private double monthlyMinimumTax;
+	private double minimumTax;
 
-    
-    
-    
-    
-    @EmbeddedId
-    public TaxOilProjectionId getTaxOilProjectionId() {
+	
+	
+
+	public TaxOilProjection(TaxOilProjectionId id, TaxOilCalculator taxCalculator) {
+		this.taxOilProjectionId = id;
+		this.fiscalPeriod = taxCalculator.getFiscalPeriod();
+		this.pscId = taxCalculator.getPscId();
+		this.taxOil = taxCalculator.getTaxOil();
+		this.taxOilToDate = taxCalculator.getTaxOilToDate();
+		this.allocation = taxCalculator.getTaxOilAllocation();
+		this.royalty = taxCalculator.getRoyalty();
+		this.grossIncome = taxCalculator.getGrossIncome();
+		this.lossBfw = taxCalculator.getLossBfw();
+		this.currentCapitalAllowance = taxCalculator.getCurrentCapitalAllowance();
+		this.educationTax = taxCalculator.getEducationTax();
+		this.opex = taxCalculator.getOpex();
+		this.currentYearCapex = taxCalculator.getCurrentYearCapex();
+		this.corporationProceed = taxCalculator.getCorporationProceed();
+		this.totalDeduction = taxCalculator.getTotalDeduction();
+		this.adjustedProfit = taxCalculator.getAdjustedProfit();
+		this.assessableProfit = taxCalculator.getAssessableProfit();
+		this.adjustedAssessableProfit = taxCalculator.getAdjustedAssessableProfit();
+		this.currentYearITA = taxCalculator.getCurrentYearITA();
+		this.adjustedProfitLessITA = taxCalculator.getAdjustedProfitLessITA();
+		this.totalAnnualAllowance = taxCalculator.getTotalAnnualAllowance();
+		this.section18DeductionLower = taxCalculator.getSection18DeductionLower();
+		this.chargeableProfitToDate = taxCalculator.getChargeableProfitToDate();
+		this.chargeableTaxToDate = taxCalculator.getChargeableTaxToDate();
+		this.payableTaxToDate = taxCalculator.getPayableTaxToDate();
+		this.unrecoupedAnnualAllowance = taxCalculator.getUnrecoupedAnnualAllowance();
+		this.monthlyMinimumTax = taxCalculator.getMonthlyMinimumTax();
+		this.minimumTax = taxCalculator.getMinimumTax();
+	}
+	
+	public TaxOilProjectionId getTaxOilProjectionId() {
 		return taxOilProjectionId;
 	}
 
@@ -63,6 +106,14 @@ public class TaxOilProjection implements Serializable {
 		this.pscId = pscId;
 	}
 
+	public double getTaxOil() {
+		return taxOil;
+	}
+
+	public void setTaxOil(double taxOil) {
+		this.taxOil = taxOil;
+	}
+
 	public double getTaxOilToDate() {
 		return taxOilToDate;
 	}
@@ -79,139 +130,180 @@ public class TaxOilProjection implements Serializable {
 		this.allocation = allocation;
 	}
 
-	public void setTaxOil(double taxOil) {
-		this.taxOil = taxOil;
+	public double getRoyalty() {
+		return royalty;
+	}
+
+	public void setRoyalty(double royalty) {
+		this.royalty = royalty;
+	}
+
+	public double getGrossIncome() {
+		return grossIncome;
+	}
+
+	public void setGrossIncome(double grossIncome) {
+		this.grossIncome = grossIncome;
+	}
+
+	public double getLossBfw() {
+		return lossBfw;
+	}
+
+	public void setLossBfw(double lossBfw) {
+		this.lossBfw = lossBfw;
+	}
+
+	public double getCurrentCapitalAllowance() {
+		return currentCapitalAllowance;
+	}
+
+	public void setCurrentCapitalAllowance(double currentCapitalAllowance) {
+		this.currentCapitalAllowance = currentCapitalAllowance;
+	}
+
+	public double getEducationTax() {
+		return educationTax;
+	}
+
+	public void setEducationTax(double educationTax) {
+		this.educationTax = educationTax;
+	}
+
+	public double getOpex() {
+		return opex;
+	}
+
+	public void setOpex(double opex) {
+		this.opex = opex;
+	}
+
+	public double getCurrentYearCapex() {
+		return currentYearCapex;
+	}
+
+	public void setCurrentYearCapex(double currentYearCapex) {
+		this.currentYearCapex = currentYearCapex;
+	}
+
+	public double getCorporationProceed() {
+		return corporationProceed;
+	}
+
+	public void setCorporationProceed(double corporationProceed) {
+		this.corporationProceed = corporationProceed;
+	}
+
+	public double getTotalDeduction() {
+		return totalDeduction;
+	}
+
+	public void setTotalDeduction(double totalDeduction) {
+		this.totalDeduction = totalDeduction;
 	}
 
 	public double getAdjustedProfit() {
-        return Math.max(0, grossIncome - getTotalDeduction());
-    }
+		return adjustedProfit;
+	}
 
-    public double getAssessableProfit() {
-        return getAdjustedProfit() - lossBfw;
-    }
+	public void setAdjustedProfit(double adjustedProfit) {
+		this.adjustedProfit = adjustedProfit;
+	}
 
-    public double getEducationTax() {
-        return educationTax;
-    }
+	public double getAssessableProfit() {
+		return assessableProfit;
+	}
 
-    public void setEducationTax(double eduTax) {
-        this.educationTax = eduTax;
-    }
+	public void setAssessableProfit(double assessableProfit) {
+		this.assessableProfit = assessableProfit;
+	}
 
-    public double getAdjustedAssessableProfit() {
-        return getAssessableProfit() - getEducationTax();
-    }
+	public double getAdjustedAssessableProfit() {
+		return adjustedAssessableProfit;
+	}
 
-    public double getAdjustedProfitLessITA() {
-        return (0.85 * getAdjustedAssessableProfit() - (1.7 * currentITA));
-    }
+	public void setAdjustedAssessableProfit(double adjustedAssessableProfit) {
+		this.adjustedAssessableProfit = adjustedAssessableProfit;
+	}
 
-    public double getTotalAnnualAllowance() {
-        return currentITA + currentCapitalAllowance + priorYearAnnualAllowance;
-    }
+	public double getCurrentYearITA() {
+		return currentYearITA;
+	}
 
-    public double getSection18DeductionLower() {
-        return Math.max(0, Math.min(getAdjustedProfitLessITA(), getTotalAnnualAllowance()));
-    }
+	public void setCurrentYearITA(double currentYearITA) {
+		this.currentYearITA = currentYearITA;
+	}
 
-    public double getChargeableProfitToDate() {
-        return Math.max(0, getAdjustedAssessableProfit() - getSection18DeductionLower());
-    }
+	public double getAdjustedProfitLessITA() {
+		return adjustedProfitLessITA;
+	}
 
-    public double getChargeableTaxToDate() {
-        return getChargeableProfitToDate() * (petroleumProfitTaxRate / 100);
-    }
+	public void setAdjustedProfitLessITA(double adjustedProfitLessITA) {
+		this.adjustedProfitLessITA = adjustedProfitLessITA;
+	}
 
-    public double getPayableTaxToDate() {
-        return Math.max(monthlyMinimumTax, (monthlyMinimumTax < 0 && getChargeableTaxToDate() < 0) ? 0 : getChargeableTaxToDate());
-    }
+	public double getTotalAnnualAllowance() {
+		return totalAnnualAllowance;
+	}
 
-    public double getUnrecoupedAnnualAllowance() {
-        return Math.min(0, getAdjustedAssessableProfit() - getTotalAnnualAllowance());
-    }
+	public void setTotalAnnualAllowance(double totalAnnualAllowance) {
+		this.totalAnnualAllowance = totalAnnualAllowance;
+	}
 
-    public double getPriorYearAnnualAllowance() {
-        return priorYearAnnualAllowance;
-    }
+	public double getSection18DeductionLower() {
+		return section18DeductionLower;
+	}
 
-    public void setPriorYearAnnualAllowance(double priorYrAnnualAllw) {
-        this.priorYearAnnualAllowance = priorYrAnnualAllw;
-    }
+	public void setSection18DeductionLower(double section18DeductionLower) {
+		this.section18DeductionLower = section18DeductionLower;
+	}
 
-    public double getTaxOil() {
-        return Math.max(0, getPayableTaxToDate());
-    }
+	public double getChargeableProfitToDate() {
+		return chargeableProfitToDate;
+	}
 
-    public double getRoyalty() {
-        return royalty;
-    }
+	public void setChargeableProfitToDate(double chargeableProfitToDate) {
+		this.chargeableProfitToDate = chargeableProfitToDate;
+	}
 
-    public void setRoyalty(double royalty) {
-        this.royalty = royalty;
-    }
+	public double getChargeableTaxToDate() {
+		return chargeableTaxToDate;
+	}
 
-    public double getGrossIncome() {
-        return grossIncome;
-    }
+	public void setChargeableTaxToDate(double chargeableTaxToDate) {
+		this.chargeableTaxToDate = chargeableTaxToDate;
+	}
 
-    public void setGrossIncome(double grossIncome) {
-        this.grossIncome = grossIncome;
-    }
+	public double getPayableTaxToDate() {
+		return payableTaxToDate;
+	}
 
-    public double getTotalDeduction() {
-        return opex + royalty;
-    }
+	public void setPayableTaxToDate(double payableTaxToDate) {
+		this.payableTaxToDate = payableTaxToDate;
+	}
 
-    public double getLossBfw() {
-        return lossBfw;
-    }
+	public double getUnrecoupedAnnualAllowance() {
+		return unrecoupedAnnualAllowance;
+	}
 
-    public void setLossBfw(double lossBfw) {
-        this.lossBfw = lossBfw;
-    }
+	public void setUnrecoupedAnnualAllowance(double unrecoupedAnnualAllowance) {
+		this.unrecoupedAnnualAllowance = unrecoupedAnnualAllowance;
+	}
 
-    public double getCurrentITA() {
-        return currentITA;
-    }
+	public double getMonthlyMinimumTax() {
+		return monthlyMinimumTax;
+	}
 
-    public void setCurrentITA(double currentITA) {
-        this.currentITA = currentITA;
-    }
+	public void setMonthlyMinimumTax(double monthlyMinimumTax) {
+		this.monthlyMinimumTax = monthlyMinimumTax;
+	}
 
-    public double getCurrentCapitalAllowance() {
-        return currentCapitalAllowance;
-    }
+	public double getMinimumTax() {
+		return minimumTax;
+	}
 
-    public void setCurrentCapitalAllowance(double currentCapitalAllowance) {
-        this.currentCapitalAllowance = currentCapitalAllowance;
-    }
+	public void setMinimumTax(double minimumTax) {
+		this.minimumTax = minimumTax;
+	}
 
-    public double getMonthlyMinimumTax() {
-        return monthlyMinimumTax;
-    }
-
-    public void setMonthlyMinimumTax(double monthlyMinimumTax) {
-        this.monthlyMinimumTax = monthlyMinimumTax;
-    }
-
-    public double getPetroleumProfitTaxRate() {
-        return petroleumProfitTaxRate;
-    }
-
-    public void setPetroleumProfitTaxRate(double petroleumProfitTaxRate) {
-        this.petroleumProfitTaxRate = petroleumProfitTaxRate;
-    }
-
-    public double getMinimumTax() {
-        return getAdjustedAssessableProfit() * 0.15;
-    }
-
-    public double getOpex() {
-        return opex;
-    }
-
-    public void setOpex(double opex) {
-        this.opex = opex;
-    }
 }

@@ -11,9 +11,12 @@ public class TaxOilReady extends CosmEvent {
 	// lifting
 	private double grossIncome;
 	private double corporationProceed;
+	
+	//royalty
+	private double royalty;
 
 	private TaxOilReady(EventPeriod period, String pscId, double amortizedCapex, double currentYearCapex,
-			double currentYearOpex, double educationTax, double grossIncome, double corporationProceed) {
+			double currentYearOpex, double educationTax, double grossIncome, double corporationProceed, double royalty) {
 
 		super(period, pscId);
 
@@ -23,6 +26,7 @@ public class TaxOilReady extends CosmEvent {
 		this.educationTax = educationTax;
 		this.grossIncome = grossIncome;
 		this.corporationProceed = corporationProceed;
+		this.royalty = royalty;
 
 	}
 
@@ -63,6 +67,9 @@ public class TaxOilReady extends CosmEvent {
 	}
 
 
+	public double getRoyalty() {
+		return royalty;
+	}
 
 	public static class Builder {
 		private EventPeriod newPeriod;
@@ -77,6 +84,9 @@ public class TaxOilReady extends CosmEvent {
 		// lifting
 		private double newGrossIncome;
 		private double newCorporationProceed;
+		
+		//Royalty
+		private double newRoyalty;
 
 		public Builder withPeriod(EventPeriod period) {
 			this.newPeriod = period;
@@ -118,9 +128,14 @@ public class TaxOilReady extends CosmEvent {
 			return this;
 		}
 
+		public Builder withRoyalty(double roy) {
+			this.newRoyalty = roy;
+			return this;
+		}
+		
 		public TaxOilReady build() {
 			return new TaxOilReady(newPeriod, newPscId, newAmortizedCapex, newCurrentYearCapex,
-					newCurrentYearOpex, newEducationTax, newGrossIncome, newCorporationProceed);
+					newCurrentYearOpex, newEducationTax, newGrossIncome, newCorporationProceed, newRoyalty);
 		}
 	}
 

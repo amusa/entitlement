@@ -61,15 +61,17 @@ public class ProfitOilEventHandler {
 
 	@PostConstruct
 	private void initConsumer() {
-		kafkaProperties.put("group.id", "royaltyborker-handler");
-		String productions = kafkaProperties.getProperty("productions.topic"); 
-		String liftings = kafkaProperties.getProperty("liftings.topic"); 
-		String costs = kafkaProperties.getProperty("costs.topic"); 
+		kafkaProperties.put("group.id", "royalty-borker");
+		String royalties = kafkaProperties.getProperty("royalty.topic"); 
+		String liftings = kafkaProperties.getProperty("lifting.topic"); 
+		String costs = kafkaProperties.getProperty("cost.topic"); 
+		String costoil = kafkaProperties.getProperty("costoil.topic"); 
+		String taxoil = kafkaProperties.getProperty("taxoil.topic"); 
 
 		eventConsumer = new EventConsumer(kafkaProperties, ev -> {
 			logger.info("firing = " + ev);
 			events.fire(ev);
-		}, productions, liftings, costs);
+		}, royalties, liftings, costs, costoil, taxoil);
 
 		mes.execute(eventConsumer);
 	}

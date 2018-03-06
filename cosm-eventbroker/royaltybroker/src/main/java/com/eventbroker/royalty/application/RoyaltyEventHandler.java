@@ -53,7 +53,7 @@ public class RoyaltyEventHandler {
 
 	@PostConstruct
 	private void initConsumer() {
-		kafkaProperties.put("group.id", "royaltyborker-handler");
+		kafkaProperties.put("group.id", "royalty-borker");
 		String productions = kafkaProperties.getProperty("productions.topic"); 
 		String liftings = kafkaProperties.getProperty("liftings.topic"); 		
 

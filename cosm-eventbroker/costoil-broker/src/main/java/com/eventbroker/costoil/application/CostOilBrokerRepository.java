@@ -14,16 +14,16 @@ public interface CostOilBrokerRepository {
 	Document addProductionCostEvent(EventPeriod period, String pscId, double currentYearCapex, double amortizedCapex,
 			double currentYearOpex, double currentMonthOpex, double costToDate, double educationTax);
 
-	Document addProductionEvent(EventPeriod period, String pscId, double grossProduction);
-
+	Document addTaxOilEvent(EventPeriod period, String pscId, double taxOil, double taxOilToDate, double taxOilReceived);
+	
 	void updateLiftingEvent(EventPeriod period, String pscId, double grossIncome, double monthlyIncome,
 			double corpProceed, double contProceed, double weightedAvePrice, double cashPayment);
 
 	void updateProductionCostEvent(EventPeriod period, String pscId, double currentYearCapex, double amortizedCapex,
 			double currentYearOpex, double currentMonthOpex, double costToDate, double educationTax);
 
-	void updateProductionEvent(EventPeriod period, String pscId, double grossProduction);
+	void updateTaxOilEvent(EventPeriod period, String pscId, double taxOil, double taxOilToDate, double taxOilReceived);
 
-	Optional<Document> royaltyEventOfPeriod(EventPeriod period, String pscId);
+	Optional<Document> costOilEventOfPeriod(EventPeriod period, String pscId);
 
 }

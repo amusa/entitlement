@@ -62,7 +62,7 @@ public class TaxOilEventHandler {
 
 	@PostConstruct
 	private void initConsumer() {
-		kafkaProperties.put("group.id", "royaltyborker-handler");
+		kafkaProperties.put("group.id", "royalty-broker");
 		String royalties = kafkaProperties.getProperty("royalties.topic"); 
 		String liftings = kafkaProperties.getProperty("liftings.topic"); 
 		String costs = kafkaProperties.getProperty("costs.topic"); 

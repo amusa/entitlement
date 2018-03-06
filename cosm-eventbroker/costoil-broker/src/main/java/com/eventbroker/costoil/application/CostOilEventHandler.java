@@ -14,7 +14,7 @@ import org.bson.Document;
 import com.cosm.common.event.CosmEvent;
 import com.cosm.common.event.CostPosted;
 import com.cosm.common.event.LiftingPosted;
-import com.cosm.common.event.ProductionPosted;
+import com.cosm.common.event.TaxOilDue;
 import com.eventbroker.costoil.event.kafka.EventConsumer;
 
 import java.util.Optional;
@@ -43,7 +43,7 @@ public class CostOilEventHandler {
 	CostOilBrokerService broker;
 	
 	
-	public void handle(@Observes ProductionPosted event) {
+	public void handle(@Observes TaxOilDue event) {
 		logger.info("Handling event " + event);
 		broker.when(event);
 
@@ -61,15 +61,15 @@ public class CostOilEventHandler {
 
 	@PostConstruct
 	private void initConsumer() {
-		kafkaProperties.put("group.id", "royaltyborker-handler");
-		String productions = kafkaProperties.getProperty("productions.topic"); 
+		kafkaProperties.put("group.id", "costoil-broker");
+		String taxoil = kafkaProperties.getProperty("taxoil.topic"); 
 		String liftings = kafkaProperties.getProperty("liftings.topic"); 
 		String costs = kafkaProperties.getProperty("costs.topic"); 
 
 		eventConsumer = new EventConsumer(kafkaProperties, ev -> {
 			logger.info("firing = " + ev);
 			events.fire(ev);
-		}, productions, liftings, costs);
+		}, taxoil, liftings, costs);
 
 		mes.execute(eventConsumer);
 	}

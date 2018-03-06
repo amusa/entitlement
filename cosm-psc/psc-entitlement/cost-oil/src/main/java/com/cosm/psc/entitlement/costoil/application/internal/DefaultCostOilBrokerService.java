@@ -1,4 +1,4 @@
-package com.eventbroker.costoil.application;
+package com.cosm.psc.entitlement.costoil.application.internal;
 
 import java.util.Optional;
 
@@ -6,30 +6,32 @@ import javax.inject.Inject;
 
 import org.bson.Document;
 
+import com.cosm.common.event.CostOilReady;
 import com.cosm.common.event.CostPosted;
 import com.cosm.common.event.LiftingPosted;
-import com.cosm.common.event.ProductionPosted;
-import com.cosm.common.event.RoyaltyDue;
+import com.cosm.common.event.TaxOilDue;
+import com.cosm.psc.entitlement.costoil.application.CostOilBrokerService;
+import com.cosm.psc.entitlement.costoil.domain.model.CostOilRepository;
 import com.eventbroker.costoil.event.kafka.EventProducer;
 
 public class DefaultCostOilBrokerService implements CostOilBrokerService {
 
 	@Inject
-	CostOilBrokerRepository brokerRepository;
+	CostOilRepository brokerRepository;
 
 	@Inject
 	EventProducer eventProducer;
 
-	public void when(ProductionPosted event) {
+	public void when(TaxOilDue event) {
 
-		Optional<Document> eventDoc = brokerRepository.royaltyEventOfPeriod(event.getEventPeriod(), event.getPscId());
+		Optional<Document> eventDoc = brokerRepository.costOilEventOfPeriod(event.getEventPeriod(), event.getPscId());
 
 		if (eventDoc.isPresent()) {
-			brokerRepository.updateProductionEvent(event.getEventPeriod(), event.getPscId(),
-					event.getGrossProduction());
+			brokerRepository.updateTaxOilEvent(event.getEventPeriod(), event.getPscId(),
+					event.getTaxOilMonthlyCharge(), event.getTaxOilMontlyChargeToDate(), event.getTaxOilReceived());
 		} else {
-			Document doc = brokerRepository.addProductionEvent(event.getEventPeriod(), event.getPscId(),
-					event.getGrossProduction());
+			Document doc = brokerRepository.addTaxOilEvent(event.getEventPeriod(), event.getPscId(),
+					event.getTaxOilMonthlyCharge(), event.getTaxOilMontlyChargeToDate(), event.getTaxOilReceived());
 
 			fireOnEventCompleted(doc);
 		}
@@ -37,7 +39,7 @@ public class DefaultCostOilBrokerService implements CostOilBrokerService {
 	}
 
 	public void when(CostPosted event) {
-		Optional<Document> eventDoc = brokerRepository.royaltyEventOfPeriod(event.getEventPeriod(), event.getPscId());
+		Optional<Document> eventDoc = brokerRepository.costOilEventOfPeriod(event.getEventPeriod(), event.getPscId());
 
 		if (eventDoc.isPresent()) {
 			brokerRepository.updateProductionCostEvent(event.getEventPeriod(), event.getPscId(),
@@ -55,7 +57,7 @@ public class DefaultCostOilBrokerService implements CostOilBrokerService {
 
 	public void when(LiftingPosted event) {
 
-		Optional<Document> eventDoc = brokerRepository.royaltyEventOfPeriod(event.getEventPeriod(), event.getPscId());
+		Optional<Document> eventDoc = brokerRepository.costOilEventOfPeriod(event.getEventPeriod(), event.getPscId());
 
 		if (eventDoc.isPresent()) {
 			brokerRepository.updateProductionCostEvent(event.getEventPeriod(), event.getPscId(), event.getGrossIncome(),
@@ -71,7 +73,7 @@ public class DefaultCostOilBrokerService implements CostOilBrokerService {
 	}
 
 	private void fireOnEventCompleted(Document doc) {
-		if (!doc.containsKey("production"))
+		if (!doc.containsKey("taxoil"))
 			return;
 
 		if (!doc.containsKey("lifting"))
@@ -80,27 +82,18 @@ public class DefaultCostOilBrokerService implements CostOilBrokerService {
 		if (!doc.containsKey("cost"))
 			return;
 
-		eventProducer.publish(royaltyDueEvent(doc));
+		eventProducer.publish(costOilReadyEvent(doc));
 	}
 
-	private RoyaltyDue royaltyDueEvent(Document doc) {
+	private CostOilReady costOilReadyEvent(Document doc) {
 
-		RoyaltyDue.RoyaltyEventBuilder builder = new RoyaltyDue.RoyaltyEventBuilder();
+		CostOilReady.Builder builder = new CostOilReady.Builder();
 	
-
-		return builder.withCurrentYearCapex(doc.getDouble("currentYearCapex"))
-				.withAmortizedCapex(doc.getDouble("armotizedCapex"))
-				.withCurrentYearOpex(doc.getDouble("currentYearOpex"))
-				.withCurrentMonthOpex(doc.getDouble("currentMonthlyOpex"))
-				.withCostToDate(doc.getDouble("costToDate"))
+		return builder.withAmortizedCapex(doc.getDouble("armotizedCapex"))				
+				.withCurrentMonthOpex(doc.getDouble("currentMonthlyOpex"))				
 				.withEducationTax(doc.getDouble("educationTax"))
-				.withCorporationProceed(doc.getDouble("corporationProceed"))
-				.withCashPayment(doc.getDouble("cashPayment"))
-				.withWeightedAveragePrice(doc.getDouble("weightedAveragePrice"))
-				.withContractorProceed(doc.getDouble("contractorProceed"))
+				.withCorporationProceed(doc.getDouble("corporationProceed"))				
 				.withGrossIncome(doc.getDouble("grossIncome"))
-				.withMonthlyIncome(doc.getDouble("monthlyIncome"))
-				.withGrossProduction(doc.getDouble("grossProduction"))
 				.build();
 		
 	}

@@ -5,8 +5,18 @@
  */
 package com.cosm.psc.entitlement.costoil.domain.model;
 
+import com.cosm.common.domain.model.Allocation;
+import com.cosm.common.domain.model.FiscalPeriod;
+import com.cosm.common.domain.model.ProductionSharingContractId;
+
 /**
  * @author Ayemi
  */
 public class CostOilAllocation extends Allocation {
+
+	protected CostOilAllocation(FiscalPeriod fiscalPeriod, ProductionSharingContractId pscId, double chargeBfw,
+			double monthlyCharge, double liftingProceed, double prevCumMonthlyCharge) {
+		super(fiscalPeriod, pscId, chargeBfw, monthlyCharge, liftingProceed, prevCumMonthlyCharge);
+		// TODO Auto-generated constructor stub
+	}
 }

@@ -3,11 +3,11 @@ package com.eventbroker.costoil.application;
 
 import com.cosm.common.event.CostPosted;
 import com.cosm.common.event.LiftingPosted;
-import com.cosm.common.event.ProductionPosted;
+import com.cosm.common.event.TaxOilDue;
 
 public interface CostOilBrokerService {
 
-	 void when(ProductionPosted event);
+	 void when(TaxOilDue event);
 
 	 void when(CostPosted event);
 

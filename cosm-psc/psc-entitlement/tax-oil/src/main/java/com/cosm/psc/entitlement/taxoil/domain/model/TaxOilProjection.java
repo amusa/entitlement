@@ -7,14 +7,15 @@ package com.cosm.psc.entitlement.taxoil.domain.model;
 
 import java.io.Serializable;
 import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
 
-import com.cosm.common.domain.model.Allocation;
 import com.cosm.common.domain.model.FiscalPeriod;
 import com.cosm.common.domain.model.ProductionSharingContractId;
 
 /**
  * @author Ayemi
  */
+@Entity(name="TAX_OIL_PROJECTION")
 public class TaxOilProjection implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -56,8 +57,7 @@ public class TaxOilProjection implements Serializable {
 		this.fiscalPeriod = taxCalculator.getFiscalPeriod();
 		this.pscId = taxCalculator.getPscId();
 		this.taxOil = taxCalculator.getTaxOil();
-		this.taxOilToDate = taxCalculator.getTaxOilToDate();
-		this.allocation = taxCalculator.getTaxOilAllocation();
+		this.taxOilToDate = taxCalculator.getTaxOilToDate();		
 		this.royalty = taxCalculator.getRoyalty();
 		this.grossIncome = taxCalculator.getGrossIncome();
 		this.lossBfw = taxCalculator.getLossBfw();
@@ -80,8 +80,15 @@ public class TaxOilProjection implements Serializable {
 		this.unrecoupedAnnualAllowance = taxCalculator.getUnrecoupedAnnualAllowance();
 		this.monthlyMinimumTax = taxCalculator.getMonthlyMinimumTax();
 		this.minimumTax = taxCalculator.getMinimumTax();
+		
+		this.allocation =  new Allocation(
+				taxCalculator.getTaxOilAllocation().getChargeBfw(),
+				taxCalculator.getTaxOilAllocation().getReceived(),
+				taxCalculator.getTaxOilAllocation().getChargeCfw()
+				);
 	}
 	
+	@EmbeddedId
 	public TaxOilProjectionId getTaxOilProjectionId() {
 		return taxOilProjectionId;
 	}

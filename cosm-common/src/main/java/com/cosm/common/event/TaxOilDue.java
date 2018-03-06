@@ -5,16 +5,18 @@ public class TaxOilDue extends CosmEvent {
 	private double taxOilMonthlyCharge;
 	private double taxOilMontlyChargeToDate;	
 	private double taxOilReceived;
+	private double educationTax;
 
 
 	
-	private TaxOilDue(EventPeriod period, String pscId, double toMonthlyCharge, double toMontlyChargeToDate, double toReceived) {
+	private TaxOilDue(EventPeriod period, String pscId, double toMonthlyCharge, double toMontlyChargeToDate, double toReceived, double eduTax) {
 		
 		super(period, pscId);
 				
 		this.taxOilMonthlyCharge = toMonthlyCharge;
 		this.taxOilMontlyChargeToDate = toMontlyChargeToDate;
 		this.taxOilReceived = toReceived;	
+		this.educationTax = eduTax;
 		
 	}
 	
@@ -47,9 +49,12 @@ public class TaxOilDue extends CosmEvent {
 		return taxOilReceived;
 	}
 
+	
 
 
-
+	public double getEductionTax() {
+		return educationTax;
+	}
 
 
 
@@ -59,6 +64,7 @@ public class TaxOilDue extends CosmEvent {
 		private double newTaxOilMonthlyCharge;
 		private double newTaxOilMontlyChargeToDate;	
 		private double newTaxOilReceived;
+		private double newEducationTax;
 
 		
 
@@ -88,10 +94,15 @@ public class TaxOilDue extends CosmEvent {
 			return this;
 		}
 
+
+		public Builder withEducationTax(double eduTax) {
+			this.newEducationTax = eduTax;
+			return this;
+		}
 		
 		
 		public TaxOilDue build() {
-			return new TaxOilDue(newPeriod, newPscId,  newTaxOilMonthlyCharge, newTaxOilMontlyChargeToDate, newTaxOilReceived);
+			return new TaxOilDue(newPeriod, newPscId,  newTaxOilMonthlyCharge, newTaxOilMontlyChargeToDate, newTaxOilReceived, newEducationTax);
 		}
 	}
 

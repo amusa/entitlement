@@ -32,7 +32,7 @@ public class EventProducer {
     private void init() {
         kafkaProperties.put("transactional.id", UUID.randomUUID().toString());
         producer = new KafkaProducer<>(kafkaProperties);
-        topic = kafkaProperties.getProperty("royalties.topic");
+        topic = kafkaProperties.getProperty("taxoil.topic");
         producer.initTransactions();
     }
 

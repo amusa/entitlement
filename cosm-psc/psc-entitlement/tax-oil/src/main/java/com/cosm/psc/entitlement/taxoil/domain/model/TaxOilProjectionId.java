@@ -9,14 +9,14 @@ import javax.validation.constraints.NotNull;
 @Embeddable
 public class TaxOilProjectionId {
 
-private UUID id;
-	
+	private UUID id;
+
 	public TaxOilProjectionId(String id) {
 		setId(UUID.fromString(id));
 	}
-	
+
 	@NotNull
-	@Column(name="ID")
+	@Column(name = "ID")
 	public UUID getId() {
 		return id;
 	}

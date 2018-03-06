@@ -10,7 +10,6 @@ import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
 import com.cosm.common.event.CosmEvent;
-import com.cosm.common.event.RoyaltyReady;
 import com.cosm.common.event.TaxOilReady;
 import com.cosm.common.event.kafka.EventConsumer;
 

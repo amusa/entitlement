@@ -76,9 +76,10 @@ public class DefaultTaxOilService implements TaxOilService {
 		
         TaxOilDue taxOilDueEvent = builder.withPeriod(event.getEventPeriod())
 				.withContract(event.getPscId())
-				.withMonthlyCharge(taxOilProjection.getAllocation().getMonthlyCharge())
-				.withMonthlyChargeToDate(taxOilProjection.getAllocation().getCumMonthlyCharge())
-				.withRecieved(taxOilProjection.getAllocation().getReceived())
+				.withMonthlyCharge(taxOilProjection.getTaxOil())
+				.withMonthlyChargeToDate(taxOilProjection.getTaxOilToDate())
+				.withRecieved(taxOilProjection.getAllocation().getTaxOilReceived())
+				.withEducationTax(taxOilProjection.getEducationTax())
 				.build();
 		
 				

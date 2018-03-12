@@ -14,10 +14,13 @@ import com.cosm.common.domain.model.ProductionSharingContractId;
  */
 public class RoyaltyAllocation extends Allocation {
     
-	protected RoyaltyAllocation(FiscalPeriod fiscalPeriod, ProductionSharingContractId pscId, double chargeBfw,
-			double monthlyCharge, double liftingProceed, double prevCumMonthlyCharge) {
+	public RoyaltyAllocation(FiscalPeriod fiscalPeriod, ProductionSharingContractId pscId, double chargeBfw,
+			double monthlyCharge, double liftingProceed, double prevCumMonthlyCharge, double cashPayment) {
+
 		super(fiscalPeriod, pscId, chargeBfw, monthlyCharge, liftingProceed, prevCumMonthlyCharge);
-		// TODO Auto-generated constructor stub
+
+		setCashPayment(cashPayment);
+
 	}
 
 	private Double cashPayment;

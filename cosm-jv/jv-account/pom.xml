@@ -34,4 +34,11 @@
 
     <groupId>com.cosm.jv.joint-venture</groupId>
     <version>1.0-SNAPSHOT</version>
+    <dependencies>
+    	<dependency>
+    		<groupId>com.cosm.common</groupId>
+    		<artifactId>cosm-common</artifactId>
+    		<version>1.0-SNAPSHOT</version>
+    	</dependency>
+    </dependencies>
 </project>

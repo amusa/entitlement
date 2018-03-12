@@ -5,10 +5,6 @@
  */
 package com.cosm.jv.account.domain.model;
 
-import com.nnpcgroup.cosm.common.util.AuditInfo;
-import com.nnpcgroup.cosm.common.util.Auditable;
-
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -30,7 +26,7 @@ public class JointVenture implements Auditable {
     private List<Contract> contracts;
     protected EquityType equityType;
 
-    private AuditInfo auditInfo = new AuditInfo();
+//    private AuditInfo auditInfo = new AuditInfo();
 
     @Id
     @Column(name = "ID")
@@ -96,10 +92,10 @@ public class JointVenture implements Auditable {
         contracts.add(contract);
     }
 
-    @Embedded
-    public AuditInfo getAuditInfo() {
-        return auditInfo;
-    }
+//    @Embedded
+//    public AuditInfo getAuditInfo() {
+//        return auditInfo;
+//    }
 
     @Override
     public boolean equals(Object obj) {

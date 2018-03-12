@@ -1,8 +1,9 @@
 package com.cosm.account.domain.model;
 
+import com.cosm.common.domain.model.FiscalPeriod;
 import com.cosm.common.domain.model.ProductionSharingContractId;
 import com.cosm.common.domain.repository.QueryRepository;
-import com.cosm.common.domain.service.internal.FiscalPeriod;
+
 
 import java.util.List;
 import java.util.Map;

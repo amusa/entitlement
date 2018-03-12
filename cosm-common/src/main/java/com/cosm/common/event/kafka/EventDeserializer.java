@@ -4,7 +4,6 @@ import org.apache.kafka.common.errors.SerializationException;
 import org.apache.kafka.common.serialization.Deserializer;
 
 import com.cosm.common.event.CosmEvent;
-import com.cosm.psc.production.infrastructure.event.kafka.EventDeserializer;
 
 import javax.json.Json;
 import javax.json.JsonObject;

@@ -9,15 +9,14 @@ import javax.enterprise.event.Event;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
-import org.bson.Document;
-
 import com.cosm.common.event.CosmEvent;
+import com.cosm.common.event.CostOilDue;
 import com.cosm.common.event.CostPosted;
 import com.cosm.common.event.LiftingPosted;
-import com.cosm.common.event.ProductionPosted;
+import com.cosm.common.event.RoyaltyDue;
+import com.cosm.common.event.TaxOilDue;
 import com.eventbroker.profitoil.event.kafka.EventConsumer;
 
-import java.util.Optional;
 import java.util.Properties;
 import java.util.logging.Logger;
 
@@ -43,7 +42,19 @@ public class ProfitOilEventHandler {
 	ProfitOilBrokerService broker;
 	
 	
-	public void handle(@Observes ProductionPosted event) {
+	public void handle(@Observes RoyaltyDue event) {
+		logger.info("Handling event " + event);
+		broker.when(event);
+
+	}
+	
+	public void handle(@Observes CostOilDue event) {
+		logger.info("Handling event " + event);
+		broker.when(event);
+
+	}
+	
+	public void handle(@Observes TaxOilDue event) {
 		logger.info("Handling event " + event);
 		broker.when(event);
 

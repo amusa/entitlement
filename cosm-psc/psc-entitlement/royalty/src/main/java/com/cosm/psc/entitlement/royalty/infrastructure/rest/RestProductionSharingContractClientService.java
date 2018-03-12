@@ -7,7 +7,6 @@ import javax.ws.rs.core.MediaType;
 
 import com.cosm.common.domain.model.ProductionSharingContractId;
 import com.cosm.psc.entitlement.royalty.application.ProductionSharingContractClientService;
-import com.cosm.psc.entitlement.royalty.application.ProductionSharingContractService;
 
 public class RestProductionSharingContractClientService implements ProductionSharingContractClientService{
 

@@ -8,20 +8,44 @@ public interface ProfitOilBrokerRepository {
 
 	Document addLiftingEvent(EventPeriod period, String pscId, double grossIncome, double monthlyIncome,
 			double corpProceed, double contProceed, double weightedAvePrice, double cashPayment);
+	
+	
+	void updateLiftingEvent(EventPeriod period, String pscId, double grossIncome, double monthlyIncome,
+			double corpProceed, double contProceed, double weightedAvePrice, double cashPayment);
+	
 
 	Document addProductionCostEvent(EventPeriod period, String pscId, double currentYearCapex, double amortizedCapex,
 			double currentYearOpex, double currentMonthOpex, double costToDate, double educationTax);
-
-	Document addProductionEvent(EventPeriod period, String pscId, double grossProduction);
-
-	void updateLiftingEvent(EventPeriod period, String pscId, double grossIncome, double monthlyIncome,
-			double corpProceed, double contProceed, double weightedAvePrice, double cashPayment);
-
+	
+	
 	void updateProductionCostEvent(EventPeriod period, String pscId, double currentYearCapex, double amortizedCapex,
 			double currentYearOpex, double currentMonthOpex, double costToDate, double educationTax);
 
-	void updateProductionEvent(EventPeriod period, String pscId, double grossProduction);
 
-	Optional<Document> royaltyEventOfPeriod(EventPeriod period, String pscId);
+	Document addRoyaltyEvent(EventPeriod period, String pscId, double royaltyMonthlyCharge, double royaltyMontlyChargeToDate,	
+			double royaltyReceived);
+	
+	
+	void updateRoyaltyEvent(EventPeriod period, String pscId, double royaltyMonthlyCharge, double royaltyMontlyChargeToDate,	
+			double royaltyReceived);
+
+	
+	Document addTaxOilEvent(EventPeriod period, String pscId, double taxOilMonthlyCharge, double taxOilMontlyChargeToDate,	
+			double taxOilReceived, double educationTax);
+	
+	
+	void updateTaxOilEvent(EventPeriod period, String pscId, double taxOilMonthlyCharge, double taxOilMontlyChargeToDate,	
+	double taxOilReceived, double educationTax);
+	
+	
+	Document addCostOilEvent(EventPeriod period, String pscId, double costOilMonthlyCharge, double costOilMontlyChargeToDate,	
+			double costOilReceived);
+	
+	
+	void updateCostOilEvent(EventPeriod period, String pscId, double costOilMonthlyCharge, double costOilMontlyChargeToDate,	
+			double costOilReceived);
+	
+	
+	Optional<Document> profitOilEventOfPeriod(EventPeriod period, String pscId);
 
 }

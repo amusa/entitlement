@@ -15,8 +15,7 @@
     <groupId>com.cosm.psc</groupId>
     <version>1.0-SNAPSHOT</version>
     <modules>
-    	<module>psc-entitlement</module>
-    	
+    	<module>psc-entitlement</module>    	
     	<module>psc-psc</module>
     	<module>psc-account</module>
     	<module>psc-production</module>

@@ -14,7 +14,8 @@ public interface CostOilBrokerRepository {
 	Document addProductionCostEvent(EventPeriod period, String pscId, double currentYearCapex, double amortizedCapex,
 			double currentYearOpex, double currentMonthOpex, double costToDate, double educationTax);
 
-	Document addTaxOilEvent(EventPeriod period, String pscId, double taxOil, double taxOilToDate, double taxOilReceived);
+	Document addTaxOilEvent(EventPeriod period, String pscId, double taxOil, double taxOilToDate, double taxOilReceived,
+			double educationTax);
 	
 	void updateLiftingEvent(EventPeriod period, String pscId, double grossIncome, double monthlyIncome,
 			double corpProceed, double contProceed, double weightedAvePrice, double cashPayment);
@@ -22,7 +23,8 @@ public interface CostOilBrokerRepository {
 	void updateProductionCostEvent(EventPeriod period, String pscId, double currentYearCapex, double amortizedCapex,
 			double currentYearOpex, double currentMonthOpex, double costToDate, double educationTax);
 
-	void updateTaxOilEvent(EventPeriod period, String pscId, double taxOil, double taxOilToDate, double taxOilReceived);
+	void updateTaxOilEvent(EventPeriod period, String pscId, double taxOil, double taxOilToDate, double taxOilReceived,
+			double educationTax);
 
 	Optional<Document> costOilEventOfPeriod(EventPeriod period, String pscId);
 

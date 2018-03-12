@@ -4,10 +4,13 @@ import java.util.Calendar;
 import java.util.Date;
 
 import com.cosm.common.domain.model.Allocation;
+import com.cosm.common.domain.model.FiscalPeriod;
+import com.cosm.common.domain.model.ProductionSharingContractId;
 import com.cosm.psc.entitlement.royalty.domain.model.RoyaltyAllocation;
 
 public class RoyaltyBuilder {
-	
+	private FiscalPeriod fiscalPeriod;
+	private ProductionSharingContractId pscId;
 	private Allocation allocation;
 	
 	private double chargeBfw;    
@@ -16,15 +19,25 @@ public class RoyaltyBuilder {
     private double grossProduction;
     private double weightedAveragePrice;
     private double concessionRental;
-    private double royaltyToDate;
+    private double priorRoyaltyToDate;
    
+    RoyaltyBuilder withPeriod(FiscalPeriod fp) {
+    	this.fiscalPeriod = fp;
+    	return this;
+    }
+    
+    RoyaltyBuilder withContractId(ProductionSharingContractId pscId) {
+    	this.pscId = pscId;
+    	return this;
+    }
+    
     RoyaltyBuilder withCorporationProceed(double corpProceed) {
     	this.corporationProceed = corpProceed;
     	return this;
     }
     
-    RoyaltyBuilder withRoyaltyToDate(double royaltyToDate) {
-    	this.royaltyToDate = royaltyToDate;
+    RoyaltyBuilder withPriorRoyaltyToDate(double priorRoyaltyToDate) {
+    	this.priorRoyaltyToDate = priorRoyaltyToDate;
     	return this;
     }
    
@@ -79,14 +92,12 @@ public class RoyaltyBuilder {
     
   
     private Allocation buildAllocation(double royalty) { 
-        RoyaltyAllocation allocation = new RoyaltyAllocation();                
+//    	RoyaltyAllocation(FiscalPeriod fiscalPeriod, ProductionSharingContractId pscId, double chargeBfw,
+//    			double monthlyCharge, double liftingProceed, double prevCumMonthlyCharge)
+    	
+        RoyaltyAllocation allocation = new RoyaltyAllocation(fiscalPeriod, pscId, chargeBfw, royalty, corporationProceed, priorRoyaltyToDate, cashPayment);                
         //handling cash payment
-        allocation.setMonthlyCharge(royalty);
-        allocation.setLiftingProceed(corporationProceed);
-        allocation.setChargeBfw(chargeBfw);
-        allocation.setCashPayment(cashPayment);
-        allocation.setPrevCumMonthlyCharge(royaltyToDate);
-
+        
         return allocation;
     }
     

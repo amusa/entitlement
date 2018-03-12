@@ -28,10 +28,12 @@ public class DefaultCostOilBrokerService implements CostOilBrokerService {
 
 		if (eventDoc.isPresent()) {
 			brokerRepository.updateTaxOilEvent(event.getEventPeriod(), event.getPscId(),
-					event.getTaxOilMonthlyCharge(), event.getTaxOilMontlyChargeToDate(), event.getTaxOilReceived());
+					event.getTaxOilMonthlyCharge(), event.getTaxOilMontlyChargeToDate(), event.getTaxOilReceived(),
+					event.getEductionTax());
 		} else {
 			Document doc = brokerRepository.addTaxOilEvent(event.getEventPeriod(), event.getPscId(),
-					event.getTaxOilMonthlyCharge(), event.getTaxOilMontlyChargeToDate(), event.getTaxOilReceived());
+					event.getTaxOilMonthlyCharge(), event.getTaxOilMontlyChargeToDate(), event.getTaxOilReceived(), 
+					event.getEductionTax());
 
 			fireOnEventCompleted(doc);
 		}
@@ -92,7 +94,7 @@ public class DefaultCostOilBrokerService implements CostOilBrokerService {
 		return builder.withAmortizedCapex(doc.getDouble("armotizedCapex"))				
 				.withCurrentMonthOpex(doc.getDouble("currentMonthlyOpex"))				
 				.withEducationTax(doc.getDouble("educationTax"))
-				.withCorporationProceed(doc.getDouble("corporationProceed"))				
+				.withContractorProceed(doc.getDouble("contractorProceed"))				
 				.withMonthlyIncome(doc.getDouble("monthlyIncome"))
 				.build();
 		

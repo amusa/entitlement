@@ -6,9 +6,10 @@
 package com.cosm.jv.account.domain.model;
 
 
-import com.nnpcgroup.cosm.common.util.AuditInfo;
-
 import javax.persistence.*;
+
+import com.cosm.common.util.AuditInfo;
+
 import java.io.Serializable;
 
 /**
@@ -81,7 +82,7 @@ public abstract class Contract implements Serializable {
     public abstract String discriminatorValue();
 
     public void setCurrentUser(String user) {
-//        auditInfo.setCurrentUser(user);
+        auditInfo.setCurrentUser(user);
         auditInfo.setLastModifiedBy(user);
     }
 

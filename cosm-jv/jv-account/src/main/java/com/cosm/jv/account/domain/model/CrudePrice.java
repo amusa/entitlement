@@ -5,8 +5,6 @@
  */
 package com.cosm.jv.account.domain.model;
 
-import com.nnpcgroup.cosm.entity.crude.CrudePricePK;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;

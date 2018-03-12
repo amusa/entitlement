@@ -200,7 +200,7 @@ public class TaxOilCalculator {
 
 	public TaxOilAllocation getTaxOilAllocation() {
 		return new TaxOilAllocation(fiscalPeriod, pscId, 
-				getPriorTaxOilProjection().getAllocation().getChargeCfw(), 
+				getPriorTaxOilProjection().getAllocation().getTaxOilCarriedForward(), 
 				getTaxOil(), 
 				getCorporationProceed(), 
 				getPriorTaxOilProjection().getTaxOilToDate(),

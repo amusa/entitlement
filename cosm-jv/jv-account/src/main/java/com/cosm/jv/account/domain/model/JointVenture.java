@@ -11,6 +11,9 @@ import java.util.Objects;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
+import com.cosm.common.util.AuditInfo;
+import com.cosm.common.util.Auditable;
+
 /**
  *
  * @author 18359
@@ -26,7 +29,11 @@ public class JointVenture implements Auditable {
     private List<Contract> contracts;
     protected EquityType equityType;
 
-//    private AuditInfo auditInfo = new AuditInfo();
+    private AuditInfo auditInfo;
+    
+    public JointVenture() {
+    	auditInfo = new AuditInfo();
+    }
 
     @Id
     @Column(name = "ID")
@@ -92,10 +99,10 @@ public class JointVenture implements Auditable {
         contracts.add(contract);
     }
 
-//    @Embedded
-//    public AuditInfo getAuditInfo() {
-//        return auditInfo;
-//    }
+    @Embedded
+    public AuditInfo getAuditInfo() {
+        return auditInfo;
+    }
 
     @Override
     public boolean equals(Object obj) {
@@ -117,5 +124,6 @@ public class JointVenture implements Auditable {
         }
         return true;
     }
+
 
 }

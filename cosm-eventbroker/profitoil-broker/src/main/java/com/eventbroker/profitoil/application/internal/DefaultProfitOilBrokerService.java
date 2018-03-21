@@ -8,6 +8,7 @@ import org.bson.Document;
 
 import com.cosm.common.event.CostOilDue;
 import com.cosm.common.event.CostPosted;
+import com.cosm.common.event.FiscalPeriodAdapter;
 import com.cosm.common.event.LiftingPosted;
 import com.cosm.common.event.ProfitOilReady;
 import com.cosm.common.event.RoyaltyDue;
@@ -135,8 +136,10 @@ public class DefaultProfitOilBrokerService implements ProfitOilBrokerService {
 
 		ProfitOilReady.Builder builder = new ProfitOilReady.Builder();
 			
-		return builder.withPeriodYear(doc.getInteger("periodYear"))
-				.withPeriodMonth(doc.getInteger("periodMonth"))
+		return builder
+				//TODO:Fix EventPeriod
+//				.withPeriodYear(doc.getInteger("periodYear"))
+//				.withPeriodMonth(doc.getInteger("periodMonth"))
 				.withContractId(doc.getString("pscId"))
 				.withCostToDate(doc.getDouble("costToDate"))
 				.withMonthlyIncome(doc.getDouble("monthlyIncome"))

@@ -11,12 +11,12 @@
 
     <artifactId>cosm-user</artifactId>
     <packaging>war</packaging>
-    <dependencies>
-        <dependency>
-            <groupId>com.cosm</groupId>
-            <artifactId>cosm-common</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-    </dependencies>
 
+    <dependencies>
+    	<dependency>
+    		<groupId>com.cosm.common</groupId>
+    		<artifactId>cosm-common</artifactId>
+    		<version>1.0-SNAPSHOT</version>
+    	</dependency>
+    </dependencies>
 </project>

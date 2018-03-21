@@ -5,10 +5,11 @@
  */
 package com.cosm.jv.production.domain.model;
 
-import com.cosm.common.domain.util.AuditInfo;
-import com.cosm.common.domain.util.Auditable;
-
 import javax.persistence.*;
+
+import com.cosm.common.util.AuditInfo;
+import com.cosm.common.util.Auditable;
+
 import java.io.Serializable;
 
 /**
@@ -40,9 +41,10 @@ public class ProductionDetail implements Auditable, Serializable {
     private Long contractId;
     private String crudeTypeCode;
     private Production production;
-    protected AuditInfo auditInfo = new AuditInfo();
+    protected AuditInfo auditInfo;
 
     public ProductionDetail() {
+    	auditInfo = new AuditInfo();
     }
 
     @EmbeddedId

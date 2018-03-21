@@ -6,7 +6,6 @@ import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Produces;
 
 import com.cosm.common.event.kafka.KAFKA;
-import com.cosm.common.event.kafka.KafkaConfigurator;
 
 import java.io.IOException;
 import java.util.Properties;

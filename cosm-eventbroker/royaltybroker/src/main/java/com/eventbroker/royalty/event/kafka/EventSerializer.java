@@ -4,9 +4,6 @@ import org.apache.kafka.common.errors.SerializationException;
 import org.apache.kafka.common.serialization.Serializer;
 
 import com.cosm.common.event.CosmEvent;
-import com.cosm.psc.production.infrastructure.event.kafka.EventJsonbSerializer;
-import com.cosm.psc.production.infrastructure.event.kafka.EventSerializer;
-import com.cosm.psc.production.infrastructure.event.kafka.UUIDAdapter;
 
 import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;

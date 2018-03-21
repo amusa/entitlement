@@ -11,7 +11,6 @@ import javax.validation.constraints.NotNull;
 import com.cosm.common.domain.model.CrudeTypeId;
 
 import java.io.Serializable;
-import java.util.Objects;
 
 /**
  * @author 18359
@@ -26,7 +25,7 @@ public class CrudeType implements Serializable {
     private String crudeType;
     private Terminal terminal;
     private double apiGravity;
-    //private List<Contract> contracts;
+   
 
     public CrudeType() {
     }
@@ -72,56 +71,11 @@ public class CrudeType implements Serializable {
     public void setApiGravity(double apiGravity) {
         this.apiGravity = apiGravity;
     }
+
+	@Override
+	public String toString() {
+		return  crudeType;
+	}
         
-//    @OneToMany(mappedBy = "crudeType", fetch = FetchType.EAGER)
-//    public List<Contract> getContracts() {
-//        return contracts;
-//    }
-//
-//    public void setContracts(List<Contract> contracts) {
-//        this.contracts = contracts;
-//    }
-//
-//    public void addContract(Contract contract){
-//        if (contracts==null){
-//            contracts=new ArrayList<>();
-//
-//        }
-//        contracts.add(contract);
-//    }
-
-    @Override
-    public int hashCode() {
-        int hash = 3;
-        hash = 67 * hash + Objects.hashCode(this.code);
-        hash = 67 * hash + Objects.hashCode(this.crudeType);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final CrudeType other = (CrudeType) obj;
-        if (!Objects.equals(this.code, other.code)) {
-            return false;
-        }
-        if (!Objects.equals(this.crudeType, other.crudeType)) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return String.format("%s (%s)", getCrudeType(), getCode());
-    }
 
 }

@@ -17,7 +17,7 @@ import java.io.Serializable;
  * @author 18359
  * @since 23/02/2018
  */
-@Entity
+@Entity(name="ROYALTY_VIEW")
 public class RoyaltyView implements Serializable {
 	
 	/**

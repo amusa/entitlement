@@ -5,9 +5,6 @@
  */
 package com.cosm.jv.production.domain.model;
 
-import com.cosm.common.domain.util.AuditInfo;
-import com.cosm.common.domain.util.AuditListener;
-import com.cosm.common.domain.util.Auditable;
 import org.eclipse.persistence.annotations.Customizer;
 
 import javax.persistence.*;

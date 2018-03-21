@@ -65,19 +65,7 @@ public class MongoDbCostOilBrokerRepository implements CostOilBrokerRepository {
 
 	}
 
-	@Override
-	public Document addProductionEvent(EventPeriod period, String pscId, double grossProduction) {
-
-		Document prodDoc = new Document("periodYear", period.getYear())
-				.append("periodMonth", period.getMonth())
-				.append("pscId", pscId)
-				.append("production", new Document("grossProduction", grossProduction));
-
-		eventsCollection().insertOne(prodDoc);
-
-		return prodDoc;
-	}
-
+	
 	@Override
 	public void updateLiftingEvent(EventPeriod period, String pscId, double grossIncome, double monthlyIncome,
 			double corpProceed, double contProceed, double weightedAvePrice, double cashPayment) {
@@ -112,22 +100,51 @@ public class MongoDbCostOilBrokerRepository implements CostOilBrokerRepository {
 				new UpdateOptions().upsert(true));
 	}
 
-	@Override
-	public void updateProductionEvent(EventPeriod period, String pscId, double grossProduction) {
-		eventsCollection().updateOne(
-				and(eq("periodYear", period.getYear()), eq("periodMonth", period.getMonth()), eq("pscId", pscId),
-						exists("production")),
-				Updates.set("production", new Document("grossProduction", grossProduction)),
-				new UpdateOptions().upsert(true));
-
-	}
+	
 
 	@Override
-	public Optional<Document> royaltyEventOfPeriod(EventPeriod period, String pscId) {
+	public Optional<Document> costOilEventOfPeriod(EventPeriod period, String pscId) {
 		Document doc = eventsCollection()
 				.find(and(eq("periodYear", period.getYear()), eq("periodMonth", period.getMonth()), eq("pscId", pscId)))
 				.first();
 
 		return Optional.of(doc);
 	}
+
+	@Override
+	public Document addTaxOilEvent(EventPeriod period, String pscId, double taxOilMonthlyCharge, double taxOilMontlyChargeToDate,	
+			double taxOilReceived, double educationTax) {
+
+		Document doc = new Document("periodYear", period.getYear())
+				.append("periodMonth", period.getMonth())
+				.append("pscId", pscId)
+				.append("taxoil", 
+						new Document("monthlyCharge", taxOilMonthlyCharge))
+				.append("montlyChargeToDate", taxOilMontlyChargeToDate)
+				.append("received", taxOilReceived)
+				.append("educationTax", educationTax);
+
+		eventsCollection().insertOne(doc);
+
+		return doc;
+	}
+
+	
+	
+
+	@Override
+	public void updateTaxOilEvent(EventPeriod period, String pscId, double taxOilMonthlyCharge, double taxOilMontlyChargeToDate,	
+			double taxOilReceived, double educationTax) {
+		eventsCollection().updateOne(
+				and(eq("periodYear", period.getYear()), eq("periodMonth", period.getMonth()), eq("pscId", pscId),
+						exists("taxoil")),
+				Updates.set("taxoil", new Document("monthlyCharge", taxOilMonthlyCharge)
+						.append("montlyChargeToDate", taxOilMontlyChargeToDate)
+						.append("received", taxOilReceived)
+						.append("educationTax", educationTax)
+				),
+				new UpdateOptions().upsert(true));
+
+	}
+	
 }

@@ -6,8 +6,9 @@
 package com.cosm.shipping.crude.infrastructure.persistence.jpa;
 
 import com.cosm.common.infrastructure.persistence.jpa.JpaCommandRepository;
-import com.cosm.crude.domain.repository.CrudeCommandRepository;
+import com.cosm.shipping.crude.domain.model.CrudeCommandRepository;
 import com.cosm.shipping.crude.domain.model.CrudeType;
+
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.persistence.EntityManager;

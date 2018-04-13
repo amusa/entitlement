@@ -10,16 +10,16 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import com.cosm.account.domain.model.CostItem;
-import com.cosm.account.domain.model.CostItemRepository;
+//import com.cosm.account.domain.model.CostItemRepository;
 import com.cosm.common.infrastructure.persistence.jpa.JpaRepository;
 
 /**
  * @author 18359
  */
 @ApplicationScoped
-public class JpaCostItemRepository extends JpaRepository<CostItem> implements CostItemRepository {
+public class JpaCostItemRepository extends JpaRepository<CostItem> {//implements CostItemRepository {
 
-    @PersistenceContext   
+    @PersistenceContext  
     private EntityManager em;
 
     public JpaCostItemRepository() {

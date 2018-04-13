@@ -15,8 +15,8 @@ public class MongoDbConfigurator {
     @PostConstruct
     private void initProperties() {
         try {
-        	mongoDbProperties = new Properties();
-        	mongoDbProperties.load(MongoDbConfigurator.class.getResourceAsStream("/mongodb.properties"));
+            mongoDbProperties = new Properties();
+            mongoDbProperties.load(MongoDbConfigurator.class.getResourceAsStream("/mongodb.properties"));
         } catch (IOException e) {
             throw new IllegalStateException(e);
         }
@@ -24,7 +24,7 @@ public class MongoDbConfigurator {
 
     @MONGODB
     @Produces
-    @RequestScoped
+    // @RequestScoped
     public Properties exposeMongoDbProperties() throws IOException {
         final Properties properties = new Properties();
         properties.putAll(mongoDbProperties);

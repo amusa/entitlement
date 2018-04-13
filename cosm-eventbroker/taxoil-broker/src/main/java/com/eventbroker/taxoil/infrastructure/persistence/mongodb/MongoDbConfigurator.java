@@ -24,7 +24,7 @@ public class MongoDbConfigurator {
 
     @MONGODB
     @Produces
-    @RequestScoped
+    //@RequestScoped
     public Properties exposeMongoDbProperties() throws IOException {
         final Properties properties = new Properties();
         properties.putAll(mongoDbProperties);

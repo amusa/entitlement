@@ -13,45 +13,44 @@ import java.io.Serializable;
  */
 public abstract class Allocation implements Serializable {
 
-	private FiscalPeriod fiscalPeriod;
-	private ProductionSharingContractId pscId;
+    private FiscalPeriod fiscalPeriod;
+    private ProductionSharingContractId pscId;
     private Double chargeBfw;
     private Double monthlyCharge;
     private Double liftingProceed;
     private double prevCumMonthlyCharge;
-        
+
     protected Allocation(FiscalPeriod fiscalPeriod, ProductionSharingContractId pscId, double chargeBfw, double monthlyCharge, double liftingProceed, double prevCumMonthlyCharge) {
-		this.chargeBfw = chargeBfw;
-		this.monthlyCharge = monthlyCharge;
-		this.liftingProceed = liftingProceed;
-		this.prevCumMonthlyCharge = prevCumMonthlyCharge;
-	}
-    
+        this.chargeBfw = chargeBfw;
+        this.monthlyCharge = monthlyCharge;
+        this.liftingProceed = liftingProceed;
+        this.prevCumMonthlyCharge = prevCumMonthlyCharge;
+    }
+
     public FiscalPeriod getFiscalPeriod() {
-		return fiscalPeriod;
-	}
+        return fiscalPeriod;
+    }
 
     public ProductionSharingContractId getPscId() {
-		return pscId;
-	}
+        return pscId;
+    }
 
     public double getChargeBfw() {
         return chargeBfw;
     }
-  	
+
     public double getMonthlyCharge() {
         return monthlyCharge;
     }
-    
+
     public double getLiftingProceed() {
         return liftingProceed;
     }
-    
+
     public double getPrevCumMonthlyCharge() {
         return prevCumMonthlyCharge;
     }
 
-    
     public double getCumMonthlyCharge() {
         return getPrevCumMonthlyCharge() + getMonthlyCharge();
     }
@@ -73,6 +72,5 @@ public abstract class Allocation implements Serializable {
     public double getChargeCfw() {
         return getRecoverable() - getReceived();
     }
-    
-   
+
 }

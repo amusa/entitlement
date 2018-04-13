@@ -5,8 +5,6 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Produces;
 
-import com.cosm.common.event.kafka.KAFKA;
-
 import java.io.IOException;
 import java.util.Properties;
 
@@ -27,7 +25,7 @@ public class KafkaConfigurator {
 
     @KAFKA
     @Produces
-    @RequestScoped
+    //@RequestScoped
     public Properties exposeKafkaProperties() throws IOException {
         final Properties properties = new Properties();
         properties.putAll(kafkaProperties);

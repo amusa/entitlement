@@ -13,238 +13,259 @@ import javax.persistence.Entity;
 
 import com.cosm.common.domain.model.FiscalPeriod;
 import com.cosm.common.domain.model.ProductionSharingContractId;
+import javax.persistence.AttributeOverride;
+import javax.persistence.Column;
+import javax.persistence.Embedded;
 
 /**
  * @author Ayemi
  */
 @Entity(name = "COST_OIL_PROJECTION")
 public class CostOilProjection implements Serializable {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 
-	private CostOilProjectionId costOilProjectionId;
-	private FiscalPeriod fiscalPeriod;
-	private ProductionSharingContractId pscId;
-	private double amortizedCapex;
-	private double opex;
-	private double educationTax;
-	private double monthlyIncome;
-	private double contractorProceed;
-	private double costRecoveryLimitRate;
-	private Allocation allocation;
-	private Optional<CostOilProjection> priorCostOilProjection;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
 
-	private CostOilProjection(CostOilProjectionId aProjectionId, FiscalPeriod aFiscalPeriod,
-			ProductionSharingContractId aPscId, double amortizedCapex, double opex, double eduTax, double monthlyIncome,
-			double contProceed, double costRecovLimitRate, Optional<CostOilProjection> priorCostOilProj) {
+    private CostOilProjectionId costOilProjectionId;
+    private FiscalPeriod fiscalPeriod;
+    private ProductionSharingContractId pscId;
+    private double amortizedCapex;
+    private double opex;
+    private double educationTax;
+    private double monthlyIncome;
+    private double contractorProceed;
+    private double costRecoveryLimitRate;
+    private Allocation allocation;
+    private Optional<CostOilProjection> priorCostOilProjection;
 
-		this.costOilProjectionId = aProjectionId;
-		this.fiscalPeriod = aFiscalPeriod;
-		this.pscId = aPscId;
-		this.amortizedCapex = amortizedCapex;
-		this.opex = opex;
-		this.educationTax = eduTax;
-		this.monthlyIncome = monthlyIncome;
-		this.contractorProceed = contProceed;
-		this.costRecoveryLimitRate = costRecovLimitRate;
-		this.priorCostOilProjection = priorCostOilProj;
+    public CostOilProjection() {
+    }
 
-		populateAllocation();
-	}
+    private CostOilProjection(CostOilProjectionId aProjectionId, FiscalPeriod aFiscalPeriod,
+            ProductionSharingContractId aPscId, double amortizedCapex, double opex, double eduTax, double monthlyIncome,
+            double contProceed, double costRecovLimitRate, Optional<CostOilProjection> priorCostOilProj) {
 
-	@EmbeddedId
-	public CostOilProjectionId getCostOilProjectionId() {
-		return costOilProjectionId;
-	}
+        this.costOilProjectionId = aProjectionId;
+        this.fiscalPeriod = aFiscalPeriod;
+        this.pscId = aPscId;
+        this.amortizedCapex = amortizedCapex;
+        this.opex = opex;
+        this.educationTax = eduTax;
+        this.monthlyIncome = monthlyIncome;
+        this.contractorProceed = contProceed;
+        this.costRecoveryLimitRate = costRecovLimitRate;
+        this.priorCostOilProjection = priorCostOilProj;
 
-	public FiscalPeriod getFiscalPeriod() {
-		return fiscalPeriod;
-	}
+        populateAllocation();
+    }
 
-	public ProductionSharingContractId getPscId() {
-		return pscId;
-	}
+    @EmbeddedId
+    public CostOilProjectionId getCostOilProjectionId() {
+        return costOilProjectionId;
+    }
 
-	public double getArmotizedCapex() {
-		return amortizedCapex;
-	}
+    public void setCostOilProjectionId(CostOilProjectionId costOilProjectionId) {
+        this.costOilProjectionId = costOilProjectionId;
+    }
 
-	public void setArmotizedCapex(double armotizedCapex) {
-		this.amortizedCapex = armotizedCapex;
-	}
+    @Embedded
+    public FiscalPeriod getFiscalPeriod() {
+        return fiscalPeriod;
+    }
 
-	public double getOpex() {
-		return opex;
-	}
+    public void setFiscalPeriod(FiscalPeriod fiscalPeriod) {
+        this.fiscalPeriod = fiscalPeriod;
+    }
+    
+    
 
-	public void setOpex(Double opex) {
-		this.opex = opex;
-	}
+    @Embedded
+    @AttributeOverride(name = "id", column = @Column(name = "PSC_ID"))
+    public ProductionSharingContractId getPscId() {
+        return pscId;
+    }
 
-	public double getEducationTax() {
-		return educationTax;
-	}
+    public void setPscId(ProductionSharingContractId pscId) {
+        this.pscId = pscId;
+    }
 
-	public void setEducationTax(double educationTax) {
-		this.educationTax = educationTax;
-	}
+    
+    public double getArmotizedCapex() {
+        return amortizedCapex;
+    }
 
-	public double getCostOilBfw() {
-		if (priorCostOilProjection.isPresent()) {
-			return Math.max(0, getPriorCostOilProjection().get().getCostOilToDate()
-					- getPriorCostOilProjection().get().getAllocation().getCostOilReceived());
-		}
+    public void setArmotizedCapex(double armotizedCapex) {
+        this.amortizedCapex = armotizedCapex;
+    }
 
-		return 0;
-	}
+    public double getOpex() {
+        return opex;
+    }
 
-	public double getCostOil() {
-		return amortizedCapex + opex + Math.max(0, educationTax);
-	}
+    public void setOpex(Double opex) {
+        this.opex = opex;
+    }
 
-	public double getCostOilToDate() {
-		return getCostOil() + getCostOilBfw();
-	}
+    public double getEducationTax() {
+        return educationTax;
+    }
 
-	public double getEducationTaxVariance() {
+    public void setEducationTax(double educationTax) {
+        this.educationTax = educationTax;
+    }
 
-		if (fiscalPeriod.getMonth() == 1) {
-			return getEducationTax();
-		}
+    public double getCostOilBfw() {
+        if (priorCostOilProjection.isPresent()) {
+            return Math.max(0, getPriorCostOilProjection().get().getCostOilToDate()
+                    - getPriorCostOilProjection().get().getAllocation().getCostOilReceived());
+        }
 
-		return getEducationTax() - getPriorEducationTaxVariance();
-	}
+        return 0;
+    }
 
-	public double getPriorEducationTaxVariance() {
-		if (priorCostOilProjection.isPresent()) {
-			return getPriorCostOilProjection().get().getEducationTaxVariance();
-		}
-		return 0;
-	}
+    public double getCostOil() {
+        return amortizedCapex + opex + Math.max(0, educationTax);
+    }
 
-	public double getMonthlyCurrentCharge() {
-		double costOilCharge = Math.max(0,
-				Math.min(getMonthlyIncome() * getCostRecoveryLimitRate(), getCostOilToDate()));
+    public double getCostOilToDate() {
+        return getCostOil() + getCostOilBfw();
+    }
 
-		return costOilCharge;
-	}
+    public double getEducationTaxVariance() {
 
-	public double getMonthlyChargeToDate() {
-		return getMonthlyCurrentCharge() + getPriorMonthlyChargeToDate();
-	}
+        if (fiscalPeriod.getMonth() == 1) {
+            return getEducationTax();
+        }
 
-	public double getPriorMonthlyChargeToDate() {
-		if (priorCostOilProjection.isPresent()) {
-			return getPriorCostOilProjection().get().getMonthlyChargeToDate();
-		}
-		return 0;
-	}
+        return getEducationTax() - getPriorEducationTaxVariance();
+    }
 
-	public double getMonthlyIncome() {
-		return monthlyIncome;
-	}
+    public double getPriorEducationTaxVariance() {
+        if (priorCostOilProjection.isPresent()) {
+            return getPriorCostOilProjection().get().getEducationTaxVariance();
+        }
+        return 0;
+    }
 
-	public double getContractorProceed() {
-		return contractorProceed;
-	}
+    public double getMonthlyCurrentCharge() {
+        double costOilCharge = Math.max(0,
+                Math.min(getMonthlyIncome() * getCostRecoveryLimitRate(), getCostOilToDate()));
 
-	public double getCostRecoveryLimitRate() {
-		return costRecoveryLimitRate;
-	}
+        return costOilCharge;
+    }
 
-	public Optional<CostOilProjection> getPriorCostOilProjection() {
-		return priorCostOilProjection;
-	}
+    public double getMonthlyChargeToDate() {
+        return getMonthlyCurrentCharge() + getPriorMonthlyChargeToDate();
+    }
 
-	public Allocation getAllocation() {
-		return allocation;
-	}
+    public double getPriorMonthlyChargeToDate() {
+        if (priorCostOilProjection.isPresent()) {
+            return getPriorCostOilProjection().get().getMonthlyChargeToDate();
+        }
+        return 0;
+    }
 
-	private void populateAllocation() {
-		double costOilCfw = priorCostOilProjection.isPresent()
-				? getPriorCostOilProjection().get().getAllocation().getCostOilCarriedForward()
-				: 0;
+    public double getMonthlyIncome() {
+        return monthlyIncome;
+    }
 
-		CostOilAllocation coAlloc = new CostOilAllocation(getFiscalPeriod(), getPscId(), costOilCfw,
-				getMonthlyCurrentCharge(), getContractorProceed(), getPriorMonthlyChargeToDate());
+    public double getContractorProceed() {
+        return contractorProceed;
+    }
 
-		this.allocation = new Allocation(coAlloc.getChargeBfw(), coAlloc.getReceived(), coAlloc.getChargeCfw());
-	}
-	
-	public static class Builder {
-		
-		private CostOilProjectionId newProjectionId;
-		private FiscalPeriod newFiscalPeriod;
-		private ProductionSharingContractId newPscId;
-		private double newAmortizedCapex;
-		private double newOpex;
-		private double newEducationTax;
-		private double newMonthlyIncome;
-		private double newContractorProceed;
-		private double newCostRecoveryLimitRate;
-		private Optional<CostOilProjection> newPriorCostOilProjection;
-		
-		
-		public Builder withId(CostOilProjectionId aId) {
-			this.newProjectionId = aId;
-			return this;
-		}
-		
-		public Builder withFiscalPeriod(FiscalPeriod aFiscalPeriod) {
-			this.newFiscalPeriod = aFiscalPeriod;
-			return this;
-		}
+    public double getCostRecoveryLimitRate() {
+        return costRecoveryLimitRate;
+    }
 
-		public Builder withContractId(ProductionSharingContractId aPscId) {
-			this.newPscId = aPscId;
-			return this;
-		}
-		
-		public Builder withAmortizedCapex(double amortizedCapex) {
-			this.newAmortizedCapex = amortizedCapex;
-			return this;
-		}
-		
-		public Builder withOpex(double opex) {
-			this.newOpex = opex;
-			return this;
-		}
-		
-		public Builder withEducationTax(double eduTax) {
-			this.newEducationTax = eduTax;
-			return this;
-		}
-		
-		public Builder withMonthlyIncome(double monthlyIncome) {
-			this.newMonthlyIncome = monthlyIncome;
-			return this;
-		}
-		
-		public Builder withContractorProceed(double contProceed) {
-			this.newContractorProceed = contProceed;
-			return this;
-		}
-		
-		public Builder withCostRecoveryLimit(double costRecoveryLimit) {
-			this.newCostRecoveryLimitRate = costRecoveryLimit;
-			return this;
-		}
-		
-		
-		public Builder withPriorCostOilProjection(Optional<CostOilProjection>  coProjection) {
-			this.newPriorCostOilProjection = coProjection;
-			return this;
-		}
-		
-		
-		public CostOilProjection build() {
-			return new CostOilProjection(newProjectionId, newFiscalPeriod,
-					newPscId, newAmortizedCapex, newOpex, newEducationTax, newMonthlyIncome,
-					 newContractorProceed,  newCostRecoveryLimitRate,  newPriorCostOilProjection);
-		}
-	}
+    public Optional<CostOilProjection> getPriorCostOilProjection() {
+        return priorCostOilProjection;
+    }
 
+    public Allocation getAllocation() {
+        return allocation;
+    }
+
+    private void populateAllocation() {
+        double costOilCfw = priorCostOilProjection.isPresent()
+                ? getPriorCostOilProjection().get().getAllocation().getCostOilCarriedForward()
+                : 0;
+
+        CostOilAllocation coAlloc = new CostOilAllocation(getFiscalPeriod(), getPscId(), costOilCfw,
+                getMonthlyCurrentCharge(), getContractorProceed(), getPriorMonthlyChargeToDate());
+
+        this.allocation = new Allocation(coAlloc.getChargeBfw(), coAlloc.getReceived(), coAlloc.getChargeCfw());
+    }
+
+    public static class Builder {
+
+        private CostOilProjectionId newProjectionId;
+        private FiscalPeriod newFiscalPeriod;
+        private ProductionSharingContractId newPscId;
+        private double newAmortizedCapex;
+        private double newOpex;
+        private double newEducationTax;
+        private double newMonthlyIncome;
+        private double newContractorProceed;
+        private double newCostRecoveryLimitRate;
+        private Optional<CostOilProjection> newPriorCostOilProjection;
+
+        public Builder withId(CostOilProjectionId aId) {
+            this.newProjectionId = aId;
+            return this;
+        }
+
+        public Builder withFiscalPeriod(FiscalPeriod aFiscalPeriod) {
+            this.newFiscalPeriod = aFiscalPeriod;
+            return this;
+        }
+
+        public Builder withContractId(ProductionSharingContractId aPscId) {
+            this.newPscId = aPscId;
+            return this;
+        }
+
+        public Builder withAmortizedCapex(double amortizedCapex) {
+            this.newAmortizedCapex = amortizedCapex;
+            return this;
+        }
+
+        public Builder withOpex(double opex) {
+            this.newOpex = opex;
+            return this;
+        }
+
+        public Builder withEducationTax(double eduTax) {
+            this.newEducationTax = eduTax;
+            return this;
+        }
+
+        public Builder withMonthlyIncome(double monthlyIncome) {
+            this.newMonthlyIncome = monthlyIncome;
+            return this;
+        }
+
+        public Builder withContractorProceed(double contProceed) {
+            this.newContractorProceed = contProceed;
+            return this;
+        }
+
+        public Builder withCostRecoveryLimit(double costRecoveryLimit) {
+            this.newCostRecoveryLimitRate = costRecoveryLimit;
+            return this;
+        }
+
+        public Builder withPriorCostOilProjection(Optional<CostOilProjection> coProjection) {
+            this.newPriorCostOilProjection = coProjection;
+            return this;
+        }
+
+        public CostOilProjection build() {
+            return new CostOilProjection(newProjectionId, newFiscalPeriod,
+                    newPscId, newAmortizedCapex, newOpex, newEducationTax, newMonthlyIncome,
+                    newContractorProceed, newCostRecoveryLimitRate, newPriorCostOilProjection);
+        }
+    }
 
 }

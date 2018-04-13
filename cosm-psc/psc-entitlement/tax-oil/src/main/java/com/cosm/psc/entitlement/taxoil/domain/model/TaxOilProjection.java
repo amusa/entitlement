@@ -11,306 +11,337 @@ import javax.persistence.Entity;
 
 import com.cosm.common.domain.model.FiscalPeriod;
 import com.cosm.common.domain.model.ProductionSharingContractId;
+import javax.persistence.AttributeOverride;
+import javax.persistence.Column;
+import javax.persistence.Embedded;
 
 /**
  * @author Ayemi
  */
-@Entity(name="TAX_OIL_PROJECTION")
+@Entity(name = "TAX_OIL_PROJECTION")
 public class TaxOilProjection implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private TaxOilProjectionId taxOilProjectionId;
-	private FiscalPeriod fiscalPeriod;
-	private ProductionSharingContractId pscId;
-	private double taxOil;
-	private double taxOilToDate;
-	private Allocation allocation;
-	private double royalty;
-	private double grossIncome;
-	private double lossBfw;
-	private double currentCapitalAllowance;
-	private double educationTax;
-	private double opex;
-	private double currentYearCapex;
-	private double corporationProceed;
-	private double totalDeduction;
-	private double adjustedProfit;
-	private double assessableProfit;
-	private double adjustedAssessableProfit;
-	private double currentYearITA;
-	private double adjustedProfitLessITA;
-	private double totalAnnualAllowance;
-	private double section18DeductionLower;
-	private double chargeableProfitToDate;
-	private double chargeableTaxToDate;
-	private double payableTaxToDate;
-	private double unrecoupedAnnualAllowance;
-	private double monthlyMinimumTax;
-	private double minimumTax;
+    private TaxOilProjectionId taxOilProjectionId;
+    private FiscalPeriod fiscalPeriod;
+    private ProductionSharingContractId pscId;
+    private double taxOil;
+    private double taxOilToDate;
+    private Allocation allocation;
+    private double royalty;
+    private double grossIncome;
+    private double lossBfw;
+    private double currentCapitalAllowance;
+    private double educationTax;
+    private double opex;
+    private double currentYearCapex;
+    private double corporationProceed;
+    private double totalDeduction;
+    private double adjustedProfit;
+    private double assessableProfit;
+    private double adjustedAssessableProfit;
+    private double currentYearITA;
+    private double adjustedProfitLessITA;
+    private double totalAnnualAllowance;
+    private double section18DeductionLower;
+    private double chargeableProfitToDate;
+    private double chargeableTaxToDate;
+    private double payableTaxToDate;
+    private double unrecoupedAnnualAllowance;
+    private double monthlyMinimumTax;
+    private double minimumTax;
 
-	
-	
+    public TaxOilProjection() {
+    }
 
-	public TaxOilProjection(TaxOilProjectionId id, TaxOilCalculator taxCalculator) {
-		this.taxOilProjectionId = id;
-		this.fiscalPeriod = taxCalculator.getFiscalPeriod();
-		this.pscId = taxCalculator.getPscId();
-		this.taxOil = taxCalculator.getTaxOil();
-		this.taxOilToDate = taxCalculator.getTaxOilToDate();		
-		this.royalty = taxCalculator.getRoyalty();
-		this.grossIncome = taxCalculator.getGrossIncome();
-		this.lossBfw = taxCalculator.getLossBfw();
-		this.currentCapitalAllowance = taxCalculator.getCurrentCapitalAllowance();
-		this.educationTax = taxCalculator.getEducationTax();
-		this.opex = taxCalculator.getOpex();
-		this.currentYearCapex = taxCalculator.getCurrentYearCapex();
-		this.corporationProceed = taxCalculator.getCorporationProceed();
-		this.totalDeduction = taxCalculator.getTotalDeduction();
-		this.adjustedProfit = taxCalculator.getAdjustedProfit();
-		this.assessableProfit = taxCalculator.getAssessableProfit();
-		this.adjustedAssessableProfit = taxCalculator.getAdjustedAssessableProfit();
-		this.currentYearITA = taxCalculator.getCurrentYearITA();
-		this.adjustedProfitLessITA = taxCalculator.getAdjustedProfitLessITA();
-		this.totalAnnualAllowance = taxCalculator.getTotalAnnualAllowance();
-		this.section18DeductionLower = taxCalculator.getSection18DeductionLower();
-		this.chargeableProfitToDate = taxCalculator.getChargeableProfitToDate();
-		this.chargeableTaxToDate = taxCalculator.getChargeableTaxToDate();
-		this.payableTaxToDate = taxCalculator.getPayableTaxToDate();
-		this.unrecoupedAnnualAllowance = taxCalculator.getUnrecoupedAnnualAllowance();
-		this.monthlyMinimumTax = taxCalculator.getMonthlyMinimumTax();
-		this.minimumTax = taxCalculator.getMinimumTax();
-		
-		this.allocation =  new Allocation(
-				taxCalculator.getTaxOilAllocation().getChargeBfw(),
-				taxCalculator.getTaxOilAllocation().getReceived(),
-				taxCalculator.getTaxOilAllocation().getChargeCfw()
-				);
-	}
-	
-	@EmbeddedId
-	public TaxOilProjectionId getTaxOilProjectionId() {
-		return taxOilProjectionId;
-	}
+    public TaxOilProjection(TaxOilProjectionId id, TaxOilCalculator taxCalculator) {
+        this.taxOilProjectionId = id;
+        this.fiscalPeriod = taxCalculator.getFiscalPeriod();
+        this.pscId = taxCalculator.getPscId();
+        this.taxOil = taxCalculator.getTaxOil();
+        this.taxOilToDate = taxCalculator.getTaxOilToDate();
+        this.royalty = taxCalculator.getRoyalty();
+        this.grossIncome = taxCalculator.getGrossIncome();
+        this.lossBfw = taxCalculator.getLossBfw();
+        this.currentCapitalAllowance = taxCalculator.getCurrentCapitalAllowance();
+        this.educationTax = taxCalculator.getEducationTax();
+        this.opex = taxCalculator.getOpex();
+        this.currentYearCapex = taxCalculator.getCurrentYearCapex();
+        this.corporationProceed = taxCalculator.getCorporationProceed();
+        this.totalDeduction = taxCalculator.getTotalDeduction();
+        this.adjustedProfit = taxCalculator.getAdjustedProfit();
+        this.assessableProfit = taxCalculator.getAssessableProfit();
+        this.adjustedAssessableProfit = taxCalculator.getAdjustedAssessableProfit();
+        this.currentYearITA = taxCalculator.getCurrentYearITA();
+        this.adjustedProfitLessITA = taxCalculator.getAdjustedProfitLessITA();
+        this.totalAnnualAllowance = taxCalculator.getTotalAnnualAllowance();
+        this.section18DeductionLower = taxCalculator.getSection18DeductionLower();
+        this.chargeableProfitToDate = taxCalculator.getChargeableProfitToDate();
+        this.chargeableTaxToDate = taxCalculator.getChargeableTaxToDate();
+        this.payableTaxToDate = taxCalculator.getPayableTaxToDate();
+        this.unrecoupedAnnualAllowance = taxCalculator.getUnrecoupedAnnualAllowance();
+        this.monthlyMinimumTax = taxCalculator.getMonthlyMinimumTax();
+        this.minimumTax = taxCalculator.getMinimumTax();
 
-	public void setTaxOilProjectionId(TaxOilProjectionId taxOilProjectionId) {
-		this.taxOilProjectionId = taxOilProjectionId;
-	}
+        this.allocation = new Allocation(
+                taxCalculator.getTaxOilAllocation().getChargeBfw(),
+                taxCalculator.getTaxOilAllocation().getReceived(),
+                taxCalculator.getTaxOilAllocation().getChargeCfw()
+        );
+    }
 
-	public FiscalPeriod getFiscalPeriod() {
-		return fiscalPeriod;
-	}
+    @EmbeddedId
+    public TaxOilProjectionId getTaxOilProjectionId() {
+        return taxOilProjectionId;
+    }
 
-	public void setFiscalPeriod(FiscalPeriod fiscalPeriod) {
-		this.fiscalPeriod = fiscalPeriod;
-	}
+    public void setTaxOilProjectionId(TaxOilProjectionId taxOilProjectionId) {
+        this.taxOilProjectionId = taxOilProjectionId;
+    }
 
-	public ProductionSharingContractId getPscId() {
-		return pscId;
-	}
+    @Embedded
+    public FiscalPeriod getFiscalPeriod() {
+        return fiscalPeriod;
+    }
 
-	public void setPscId(ProductionSharingContractId pscId) {
-		this.pscId = pscId;
-	}
+    public void setFiscalPeriod(FiscalPeriod fiscalPeriod) {
+        this.fiscalPeriod = fiscalPeriod;
+    }
 
-	public double getTaxOil() {
-		return taxOil;
-	}
+    @Embedded
+    @AttributeOverride(name = "id", column = @Column(name = "PSC_ID"))
+    public ProductionSharingContractId getPscId() {
+        return pscId;
+    }
 
-	public void setTaxOil(double taxOil) {
-		this.taxOil = taxOil;
-	}
+    public void setPscId(ProductionSharingContractId pscId) {
+        this.pscId = pscId;
+    }
 
-	public double getTaxOilToDate() {
-		return taxOilToDate;
-	}
+    @Column(name = "TAX_OIL")
+    public double getTaxOil() {
+        return taxOil;
+    }
 
-	public void setTaxOilToDate(double taxOilToDate) {
-		this.taxOilToDate = taxOilToDate;
-	}
+    public void setTaxOil(double taxOil) {
+        this.taxOil = taxOil;
+    }
 
-	public Allocation getAllocation() {
-		return allocation;
-	}
+    @Column(name = "TAX_OIL_TO_DATE")
+    public double getTaxOilToDate() {
+        return taxOilToDate;
+    }
 
-	public void setAllocation(Allocation allocation) {
-		this.allocation = allocation;
-	}
+    public void setTaxOilToDate(double taxOilToDate) {
+        this.taxOilToDate = taxOilToDate;
+    }
 
-	public double getRoyalty() {
-		return royalty;
-	}
+    @Embedded
+    public Allocation getAllocation() {
+        return allocation;
+    }
 
-	public void setRoyalty(double royalty) {
-		this.royalty = royalty;
-	}
+    public void setAllocation(Allocation allocation) {
+        this.allocation = allocation;
+    }
 
-	public double getGrossIncome() {
-		return grossIncome;
-	}
+    @Column(name = "ROYALTY")
+    public double getRoyalty() {
+        return royalty;
+    }
 
-	public void setGrossIncome(double grossIncome) {
-		this.grossIncome = grossIncome;
-	}
+    public void setRoyalty(double royalty) {
+        this.royalty = royalty;
+    }
 
-	public double getLossBfw() {
-		return lossBfw;
-	}
+    @Column(name = "GROSS_INCOME")
+    public double getGrossIncome() {
+        return grossIncome;
+    }
 
-	public void setLossBfw(double lossBfw) {
-		this.lossBfw = lossBfw;
-	}
+    public void setGrossIncome(double grossIncome) {
+        this.grossIncome = grossIncome;
+    }
 
-	public double getCurrentCapitalAllowance() {
-		return currentCapitalAllowance;
-	}
+    @Column(name = "LOSS_BFW")
+    public double getLossBfw() {
+        return lossBfw;
+    }
 
-	public void setCurrentCapitalAllowance(double currentCapitalAllowance) {
-		this.currentCapitalAllowance = currentCapitalAllowance;
-	}
+    public void setLossBfw(double lossBfw) {
+        this.lossBfw = lossBfw;
+    }
 
-	public double getEducationTax() {
-		return educationTax;
-	}
+    @Column(name = "CURRENT_CAPITAL_ALLOWANCE")
+    public double getCurrentCapitalAllowance() {
+        return currentCapitalAllowance;
+    }
 
-	public void setEducationTax(double educationTax) {
-		this.educationTax = educationTax;
-	}
+    public void setCurrentCapitalAllowance(double currentCapitalAllowance) {
+        this.currentCapitalAllowance = currentCapitalAllowance;
+    }
 
-	public double getOpex() {
-		return opex;
-	}
+    @Column(name = "EDUCATION_TAX")
+    public double getEducationTax() {
+        return educationTax;
+    }
 
-	public void setOpex(double opex) {
-		this.opex = opex;
-	}
+    public void setEducationTax(double educationTax) {
+        this.educationTax = educationTax;
+    }
 
-	public double getCurrentYearCapex() {
-		return currentYearCapex;
-	}
+    @Column(name = "OPEX")
+    public double getOpex() {
+        return opex;
+    }
 
-	public void setCurrentYearCapex(double currentYearCapex) {
-		this.currentYearCapex = currentYearCapex;
-	}
+    public void setOpex(double opex) {
+        this.opex = opex;
+    }
 
-	public double getCorporationProceed() {
-		return corporationProceed;
-	}
+    @Column(name = "CURRENT_YEAR_CAPEX")
+    public double getCurrentYearCapex() {
+        return currentYearCapex;
+    }
 
-	public void setCorporationProceed(double corporationProceed) {
-		this.corporationProceed = corporationProceed;
-	}
+    public void setCurrentYearCapex(double currentYearCapex) {
+        this.currentYearCapex = currentYearCapex;
+    }
 
-	public double getTotalDeduction() {
-		return totalDeduction;
-	}
+    @Column(name = "CORPORATION_PROCEED")
+    public double getCorporationProceed() {
+        return corporationProceed;
+    }
 
-	public void setTotalDeduction(double totalDeduction) {
-		this.totalDeduction = totalDeduction;
-	}
+    public void setCorporationProceed(double corporationProceed) {
+        this.corporationProceed = corporationProceed;
+    }
 
-	public double getAdjustedProfit() {
-		return adjustedProfit;
-	}
+    @Column(name = "TOTAL_DEDUCTION")
+    public double getTotalDeduction() {
+        return totalDeduction;
+    }
 
-	public void setAdjustedProfit(double adjustedProfit) {
-		this.adjustedProfit = adjustedProfit;
-	}
+    public void setTotalDeduction(double totalDeduction) {
+        this.totalDeduction = totalDeduction;
+    }
 
-	public double getAssessableProfit() {
-		return assessableProfit;
-	}
+    @Column(name = "ADJUSTED_PROFIT")
+    public double getAdjustedProfit() {
+        return adjustedProfit;
+    }
 
-	public void setAssessableProfit(double assessableProfit) {
-		this.assessableProfit = assessableProfit;
-	}
+    public void setAdjustedProfit(double adjustedProfit) {
+        this.adjustedProfit = adjustedProfit;
+    }
 
-	public double getAdjustedAssessableProfit() {
-		return adjustedAssessableProfit;
-	}
+    @Column(name = "ASSESSABLE_PROFIT")
+    public double getAssessableProfit() {
+        return assessableProfit;
+    }
 
-	public void setAdjustedAssessableProfit(double adjustedAssessableProfit) {
-		this.adjustedAssessableProfit = adjustedAssessableProfit;
-	}
+    public void setAssessableProfit(double assessableProfit) {
+        this.assessableProfit = assessableProfit;
+    }
 
-	public double getCurrentYearITA() {
-		return currentYearITA;
-	}
+    @Column(name = "ADJUSTED_ASSESSABLE_PROFIT")
+    public double getAdjustedAssessableProfit() {
+        return adjustedAssessableProfit;
+    }
 
-	public void setCurrentYearITA(double currentYearITA) {
-		this.currentYearITA = currentYearITA;
-	}
+    public void setAdjustedAssessableProfit(double adjustedAssessableProfit) {
+        this.adjustedAssessableProfit = adjustedAssessableProfit;
+    }
 
-	public double getAdjustedProfitLessITA() {
-		return adjustedProfitLessITA;
-	}
+    @Column(name = "CURRENT_YEAR_ITA")
+    public double getCurrentYearITA() {
+        return currentYearITA;
+    }
 
-	public void setAdjustedProfitLessITA(double adjustedProfitLessITA) {
-		this.adjustedProfitLessITA = adjustedProfitLessITA;
-	}
+    public void setCurrentYearITA(double currentYearITA) {
+        this.currentYearITA = currentYearITA;
+    }
 
-	public double getTotalAnnualAllowance() {
-		return totalAnnualAllowance;
-	}
+    @Column(name = "ADJUSTED_PROFIT_LESS_ITA")
+    public double getAdjustedProfitLessITA() {
+        return adjustedProfitLessITA;
+    }
 
-	public void setTotalAnnualAllowance(double totalAnnualAllowance) {
-		this.totalAnnualAllowance = totalAnnualAllowance;
-	}
+    public void setAdjustedProfitLessITA(double adjustedProfitLessITA) {
+        this.adjustedProfitLessITA = adjustedProfitLessITA;
+    }
 
-	public double getSection18DeductionLower() {
-		return section18DeductionLower;
-	}
+    @Column(name = "TOTAL_ANNUAL_ALLOWANCE")
+    public double getTotalAnnualAllowance() {
+        return totalAnnualAllowance;
+    }
 
-	public void setSection18DeductionLower(double section18DeductionLower) {
-		this.section18DeductionLower = section18DeductionLower;
-	}
+    public void setTotalAnnualAllowance(double totalAnnualAllowance) {
+        this.totalAnnualAllowance = totalAnnualAllowance;
+    }
 
-	public double getChargeableProfitToDate() {
-		return chargeableProfitToDate;
-	}
+    @Column(name = "SECTION18_DEDUCTION_LOWER")
+    public double getSection18DeductionLower() {
+        return section18DeductionLower;
+    }
 
-	public void setChargeableProfitToDate(double chargeableProfitToDate) {
-		this.chargeableProfitToDate = chargeableProfitToDate;
-	}
+    public void setSection18DeductionLower(double section18DeductionLower) {
+        this.section18DeductionLower = section18DeductionLower;
+    }
 
-	public double getChargeableTaxToDate() {
-		return chargeableTaxToDate;
-	}
+    @Column(name = "CHARGEABLE_PROFIT_TO_DATE")
+    public double getChargeableProfitToDate() {
+        return chargeableProfitToDate;
+    }
 
-	public void setChargeableTaxToDate(double chargeableTaxToDate) {
-		this.chargeableTaxToDate = chargeableTaxToDate;
-	}
+    public void setChargeableProfitToDate(double chargeableProfitToDate) {
+        this.chargeableProfitToDate = chargeableProfitToDate;
+    }
 
-	public double getPayableTaxToDate() {
-		return payableTaxToDate;
-	}
+    @Column(name = "CHARGEABLE_TAX_TO_DATE")
+    public double getChargeableTaxToDate() {
+        return chargeableTaxToDate;
+    }
 
-	public void setPayableTaxToDate(double payableTaxToDate) {
-		this.payableTaxToDate = payableTaxToDate;
-	}
+    public void setChargeableTaxToDate(double chargeableTaxToDate) {
+        this.chargeableTaxToDate = chargeableTaxToDate;
+    }
 
-	public double getUnrecoupedAnnualAllowance() {
-		return unrecoupedAnnualAllowance;
-	}
+    @Column(name = "PAYABLE_TAX_TO_DATE")
+    public double getPayableTaxToDate() {
+        return payableTaxToDate;
+    }
 
-	public void setUnrecoupedAnnualAllowance(double unrecoupedAnnualAllowance) {
-		this.unrecoupedAnnualAllowance = unrecoupedAnnualAllowance;
-	}
+    public void setPayableTaxToDate(double payableTaxToDate) {
+        this.payableTaxToDate = payableTaxToDate;
+    }
 
-	public double getMonthlyMinimumTax() {
-		return monthlyMinimumTax;
-	}
+    @Column(name = "UNRECOUPED_ANNUAL_ALLOWANCE")
+    public double getUnrecoupedAnnualAllowance() {
+        return unrecoupedAnnualAllowance;
+    }
 
-	public void setMonthlyMinimumTax(double monthlyMinimumTax) {
-		this.monthlyMinimumTax = monthlyMinimumTax;
-	}
+    public void setUnrecoupedAnnualAllowance(double unrecoupedAnnualAllowance) {
+        this.unrecoupedAnnualAllowance = unrecoupedAnnualAllowance;
+    }
 
-	public double getMinimumTax() {
-		return minimumTax;
-	}
+    @Column(name = "MONTHLY_MINIMUM_TAX")
+    public double getMonthlyMinimumTax() {
+        return monthlyMinimumTax;
+    }
 
-	public void setMinimumTax(double minimumTax) {
-		this.minimumTax = minimumTax;
-	}
+    public void setMonthlyMinimumTax(double monthlyMinimumTax) {
+        this.monthlyMinimumTax = monthlyMinimumTax;
+    }
+
+    @Column(name = "MINIMUM_TAX")
+    public double getMinimumTax() {
+        return minimumTax;
+    }
+
+    public void setMinimumTax(double minimumTax) {
+        this.minimumTax = minimumTax;
+    }
 
 }

@@ -21,6 +21,10 @@ public class FiscalPeriod {
     private int month;
     private int refYear;
     
+    public FiscalPeriod() {
+    	
+    }
+    
     public FiscalPeriod(int year, int month) {
         setYear(year);
         setMonth( month);
@@ -68,7 +72,7 @@ public class FiscalPeriod {
         return this;
     }
 
-    
+    @Transient
     public FiscalPeriod getNextFiscalPeriod() {
         month = (month % 12) + 1;
 
@@ -79,12 +83,12 @@ public class FiscalPeriod {
         return this;
     }
 
-    
+    @Transient
     public FiscalPeriod getPreviousYearFiscalPeriod() {
         return new FiscalPeriod(year - 1, 12);
     }
 
-    
+    @Transient
     public boolean isCurrentYear() {
         return year == refYear;
     }

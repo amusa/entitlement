@@ -2,6 +2,9 @@ package com.cosm.psc.entitlement.profitoil.infrastructure.persistence.jpa;
 
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 import com.cosm.common.domain.model.FiscalPeriod;
 import com.cosm.common.domain.model.ProductionSharingContractId;
 import com.cosm.psc.entitlement.profitoil.domain.model.AllocationId;
@@ -10,6 +13,15 @@ import com.cosm.psc.entitlement.profitoil.domain.model.ProfitOilProjectionId;
 import com.cosm.psc.entitlement.profitoil.domain.model.ProfitOilProjectionRepository;
 
 public class JpaProfitOilProjectionRepository implements ProfitOilProjectionRepository {
+
+
+	@PersistenceContext 
+    private EntityManager em;
+    
+	
+	private EntityManager entityManager() {		
+		return em;
+	}
 
 	@Override
 	public ProfitOilProjection profitOilProjectionOfId(ProfitOilProjectionId poId) {
@@ -63,8 +75,9 @@ public class JpaProfitOilProjectionRepository implements ProfitOilProjectionRepo
 
 	@Override
 	public List<ProfitOilProjection> allProfitOilProjections() {
-		// TODO Auto-generated method stub
-		return null;
+		javax.persistence.criteria.CriteriaQuery cq = entityManager().getCriteriaBuilder().createQuery();
+        cq.select(cq.from(ProfitOilProjection.class));
+        return entityManager().createQuery(cq).getResultList();
 	}
 
 	@Override

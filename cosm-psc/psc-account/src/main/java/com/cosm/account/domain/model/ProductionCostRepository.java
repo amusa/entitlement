@@ -5,14 +5,21 @@ import java.util.Map;
 
 import com.cosm.common.domain.model.FiscalPeriod;
 import com.cosm.common.domain.model.ProductionSharingContractId;
-import com.cosm.common.domain.repository.Repository;
-
 
 /**
  * Created by maliska on 21/02/18.
  */
-public interface ProductionCostRepository extends Repository<ProductionCost> {
+public interface ProductionCostRepository {
 
+    void add(ProductionCost entity);
+
+    void save(ProductionCost entity);
+
+    void remove(ProductionCost entity);
+
+    ProductionCost productionCostOfId(Object id);
+
+    List<ProductionCost> productionCosts();
 
     List<ProductionCost> costItemsOfPeriod(FiscalPeriod fiscalPeriod, ProductionSharingContractId pscId);
 
@@ -22,7 +29,7 @@ public interface ProductionCostRepository extends Repository<ProductionCost> {
 
     double costToDate(FiscalPeriod fiscalPeriod, ProductionSharingContractId pscId);
 
-    double opexOfPeriod(FiscalPeriod fiscalPeriod, ProductionSharingContractId pscId) ;
+    double opexOfPeriod(FiscalPeriod fiscalPeriod, ProductionSharingContractId pscId);
 
     double opexOfYearToMonth(FiscalPeriod fiscalPeriod, ProductionSharingContractId pscId);
 
@@ -35,6 +42,6 @@ public interface ProductionCostRepository extends Repository<ProductionCost> {
     Double educationTaxOfCost(FiscalPeriod fiscalPeriod, ProductionSharingContractId pscId);
 
     Map<CostItem, Double> currentYearCostItems(FiscalPeriod fiscalPeriod, ProductionSharingContractId pscId);
-    
+
     ProductionCostId nextProductionCostId();
 }

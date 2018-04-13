@@ -11,11 +11,15 @@ import javax.inject.Inject;
 
 import com.cosm.common.event.CosmEvent;
 import com.cosm.common.event.RoyaltyReady;
-import com.cosm.common.event.kafka.EventConsumer;
 import com.cosm.psc.entitlement.royalty.domain.model.RoyaltyService;
+import com.cosm.psc.entitlement.royalty.event.kafka.EventConsumer;
+import com.cosm.psc.entitlement.royalty.event.kafka.KAFKA;
+import com.cosm.psc.entitlement.royalty.util.CosmLogger;
 
 import java.util.Properties;
+import java.util.UUID;
 import java.util.logging.Logger;
+import org.apache.kafka.clients.consumer.ConsumerConfig;
 
 @Singleton
 @Startup
@@ -26,6 +30,7 @@ public class RoyaltyEventHandler {
 	@Resource
 	ManagedExecutorService mes;
 
+        @KAFKA
 	@Inject
 	Properties kafkaProperties;
 
@@ -35,6 +40,7 @@ public class RoyaltyEventHandler {
 	@Inject
 	RoyaltyService royaltyService;
 
+        @CosmLogger
 	@Inject
 	Logger logger;
 
@@ -45,7 +51,8 @@ public class RoyaltyEventHandler {
 
 	@PostConstruct
 	private void initConsumer() {
-		kafkaProperties.put("group.id", "royalty-handler");
+		kafkaProperties.put(ConsumerConfig.GROUP_ID_CONFIG, "royalty");
+                kafkaProperties.put(ConsumerConfig.CLIENT_ID_CONFIG, UUID.randomUUID().toString());
 		String royaltiesStage = kafkaProperties.getProperty("royalties.stage.topic"); 
 
 		eventConsumer = new EventConsumer(kafkaProperties, ev -> {

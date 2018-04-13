@@ -19,26 +19,18 @@ import java.util.logging.Logger;
  * @author 18359
  */
 
-@Entity
-@Table(name = "PRODUCTION")
+@Entity(name = "PRODUCTION")
 public class Production implements Serializable {
 
 	private static final long serialVersionUID = -295843614383355072L;
 
 	private static final Logger LOG = Logger.getLogger(Production.class.getName());
 
-	@EmbeddedId
-	private ProductionId productionId;
-
-	@Embedded
-	private FiscalPeriod fiscalPeriod;
-
-	@Embedded
-	private ProductionSharingContractId pscId;
-
-	@Embedded
+	
+	private ProductionId productionId;	
+	private FiscalPeriod fiscalPeriod;	
+	private ProductionSharingContractId pscId;	
 	private OilFieldId oilFieldId;
-
 	private Double grossProduction;
 	private Double dailyProduction;
 
@@ -52,19 +44,45 @@ public class Production implements Serializable {
 		return productionId;
 	}
 
-	@Embedded
+	
+	
+	public void setProductionId(ProductionId productionId) {
+		this.productionId = productionId;
+	}
+
+	
+
+	@Embedded	
 	public FiscalPeriod getFiscalPeriod() {
 		return fiscalPeriod;
 	}
 
+	
+	public void setFiscalPeriod(FiscalPeriod fiscalPeriod) {
+		this.fiscalPeriod = fiscalPeriod;
+	}
+
+	
 	@Embedded
+	@AttributeOverride(name="id", column=@Column(name="PSC_ID"))
 	public ProductionSharingContractId getPscId() {
 		return pscId;
 	}
+	
+	public void setPscId(ProductionSharingContractId pscId) {
+		this.pscId = pscId;
+	}
+
+	
 
 	@Embedded
+	@AttributeOverride(name="id", column=@Column(name="OIL_FIELD_ID"))
 	public OilFieldId getOilFieldId() {
 		return oilFieldId;
+	}
+	
+	public void setOilFieldId(OilFieldId oilFieldId) {
+		this.oilFieldId = oilFieldId;
 	}
 
 	@NotNull

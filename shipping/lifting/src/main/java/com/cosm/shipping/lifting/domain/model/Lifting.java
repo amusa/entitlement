@@ -33,35 +33,45 @@ public abstract class Lifting implements Serializable {
 
     private Double cashPayment;
 
+    public Lifting() {
+    }
 
     public Lifting(LiftingId liftingId) {
-    	this.liftingId = liftingId;
+        this.liftingId = liftingId;
     }
 
     @EmbeddedId
     public LiftingId getLiftingId() {
-    	return liftingId;
+        return liftingId;
+    }
+
+    public void setLiftingId(LiftingId liftingId) {
+        this.liftingId = liftingId;
     }
     
+    
+
     @Embedded
+    @AttributeOverride(name = "id", column = @Column(name = "PSC_ID"))
     public ProductionSharingContractId getPscId() {
-		return pscId;
-	}
+        return pscId;
+    }
 
-	public void setPscId(ProductionSharingContractId pscId) {
-		this.pscId = pscId;
-	}
+    public void setPscId(ProductionSharingContractId pscId) {
+        this.pscId = pscId;
+    }
 
-	@Embedded
-	public OilFieldId getOilFieldId() {
-		return oilFieldId;
-	}
+    @Embedded
+    @AttributeOverride(name = "id", column = @Column(name = "OIL_FIELD_ID"))
+    public OilFieldId getOilFieldId() {
+        return oilFieldId;
+    }
 
-	public void setOilFieldId(OilFieldId oilFieldId) {
-		this.oilFieldId = oilFieldId;
-	}
+    public void setOilFieldId(OilFieldId oilFieldId) {
+        this.oilFieldId = oilFieldId;
+    }
 
-	@NotNull
+    @NotNull
     @Temporal(TemporalType.DATE)
     @Column(name = "EFFECTIVE_DATE")
     public Date getEffectiveDate() {
@@ -139,7 +149,6 @@ public abstract class Lifting implements Serializable {
     public Double getPartnerProceed() {
         return getPartnerLifting() * getPrice();
     }
-
 
     @Transient
     public Double getRevenue() {

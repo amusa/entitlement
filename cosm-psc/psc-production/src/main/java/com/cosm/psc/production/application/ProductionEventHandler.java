@@ -10,20 +10,25 @@ import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
 import com.cosm.common.event.CosmEvent;
-import com.cosm.common.event.kafka.EventConsumer;
+import com.cosm.psc.production.event.kafka.EventConsumer;
+import com.cosm.psc.production.event.kafka.KAFKA;
+import com.cosm.psc.production.CosmLogger;
 
 import java.util.Properties;
 import java.util.logging.Logger;
+import javax.enterprise.context.ApplicationScoped;
 
-@Singleton
-@Startup
+//@Singleton
+//@Startup
+@ApplicationScoped
 public class ProductionEventHandler {
-
+//TODO:
 	private EventConsumer eventConsumer;
 
 	@Resource
 	ManagedExecutorService mes;
 
+	@KAFKA
 	@Inject
 	Properties kafkaProperties;
 
@@ -33,8 +38,11 @@ public class ProductionEventHandler {
 	@Inject
 	ProductionService productionService;
 
+        @CosmLogger
 	@Inject
 	Logger logger;
+	
+	//private static final Logger logger = Logger.getLogger(ProductionEventHandler.class.getName());
 
 	public void handle(@Observes CosmEvent event) {
 		logger.info("Handling event " + event);

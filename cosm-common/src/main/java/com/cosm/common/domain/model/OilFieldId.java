@@ -1,20 +1,29 @@
 package com.cosm.common.domain.model;
 
+import java.io.Serializable;
 import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 @Embeddable
-public class OilFieldId {
-	private UUID id;
+public class OilFieldId implements Serializable{
+	private String id;
+	
+	public OilFieldId() {
+		
+	}
+	
+	public OilFieldId(String id) {
+		this.id = id;
+	}
 	
     @Column(name = "ID")
-    public UUID getId() {
+    public String getId() {
         return id;
     }
 
-    public void setCode(UUID id) {
+    public void setId(String id) {
         this.id = id;
     }
 

@@ -1,14 +1,18 @@
 package com.cosm.psc.entitlement.taxoil.domain.model;
 
+import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.validation.constraints.NotNull;
 
 @Embeddable
-public class Allocation {
+public class Allocation implements Serializable {
 	private double taxOilBroughtForward;
 	private double taxOilReceived;
 	private double taxOilCarriedForward;
+
+    public Allocation() {
+    }
 	
 	
 	

@@ -1,5 +1,7 @@
 package com.cosm.common.event;
 
+import javax.json.JsonObject;
+
 
 public class CostOilReady extends CosmEvent {
 
@@ -9,26 +11,33 @@ public class CostOilReady extends CosmEvent {
 	private double currentMonthOpex;
 	
 	// lifting
-	private double montlyIncome;
+	private double monthlyIncome;
 	private double contractorProceed;
 	
 	//TaxOil
 	private double educationTax;
 	
 
-	private CostOilReady(EventPeriod period, String pscId, double amortizedCapex, double currentMonthOpex, double educationTax, double montlyIncome, double contractorProceed) {
-
+	private CostOilReady(EventPeriod period, String pscId, double amortizedCapex, double currentMonthOpex, double educationTax, double monthlyIncome, double contractorProceed) {
 		super(period, pscId);
 
 		this.amortizedCapex = amortizedCapex;		
 		this.currentMonthOpex = currentMonthOpex;
 		this.educationTax = educationTax;
-		this.montlyIncome = montlyIncome;
+		this.monthlyIncome = monthlyIncome;
 		this.contractorProceed = contractorProceed;	
-
 	}
 
-	
+	public CostOilReady(JsonObject jsonObject) {
+        this(new EventPeriod(jsonObject.getJsonObject("eventPeriod")),
+                jsonObject.getString("pscId"),
+                jsonObject.getJsonNumber("amortizedCapex").doubleValue(),
+                jsonObject.getJsonNumber("currentMonthOpex").doubleValue(),
+                jsonObject.getJsonNumber("educationTax").doubleValue(),   
+                jsonObject.getJsonNumber("monthlyIncome").doubleValue(),
+                jsonObject.getJsonNumber("contractorProceed").doubleValue()
+        );
+    }
 
 	public double getAmortizedCapex() {
 		return amortizedCapex;
@@ -50,7 +59,7 @@ public class CostOilReady extends CosmEvent {
 
 
 	public double getMonthlyIncome() {
-		return montlyIncome;
+		return monthlyIncome;
 	}
 
 

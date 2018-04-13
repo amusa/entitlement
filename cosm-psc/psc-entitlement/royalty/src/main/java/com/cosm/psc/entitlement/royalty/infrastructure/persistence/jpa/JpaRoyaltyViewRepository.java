@@ -11,85 +11,113 @@ import com.cosm.common.domain.model.ProductionSharingContractId;
 import com.cosm.psc.entitlement.royalty.domain.model.RoyaltyView;
 import com.cosm.psc.entitlement.royalty.domain.model.RoyaltyViewId;
 import com.cosm.psc.entitlement.royalty.domain.model.RoyaltyViewRepository;
+import javax.persistence.NoResultException;
+import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 public class JpaRoyaltyViewRepository implements RoyaltyViewRepository {
-	
-	@PersistenceContext 
+
+    @PersistenceContext
     private EntityManager em;
-    
 
-	private EntityManager entityManager() {		
-		return em;
-	}
+    private EntityManager entityManager() {
+        return em;
+    }
 
+    @Override
+    public RoyaltyView royaltyViewOfId(RoyaltyViewId royId) {
+        RoyaltyView royView = entityManager().find(RoyaltyView.class, royId);
+        return royView;
+    }
 
-	@Override
-	public RoyaltyView royaltyViewOfId(RoyaltyViewId royId) {
-		RoyaltyView royView = entityManager().find(RoyaltyView.class, royId);
-		return royView;
-	}
+    @Override
+    public RoyaltyView royaltyViewOfFiscalPeriod(
+            FiscalPeriod fiscalPeriod, ProductionSharingContractId pscId) {
 
+        CriteriaBuilder cb = entityManager().getCriteriaBuilder();
 
-	@Override
-	public RoyaltyView royaltyViewOfFiscalPeriod(
-			FiscalPeriod fiscalPeriod, ProductionSharingContractId pscId) {
-		
-		return null;
-	}
+        RoyaltyView royView;
 
+        CriteriaQuery cq = cb.createQuery();
+        Root<RoyaltyView> e = cq.from(RoyaltyView.class);
+        try {
+            cq.select(e).where(
+                    cb.and(cb.equal(e.get("fiscalPeriod"), fiscalPeriod), cb.equal(e.get("pscId"), pscId)));
 
-	@Override
-	public void store(RoyaltyView royView) {
-		// TODO Auto-generated method stub
-		
-	}
+            Query query = entityManager().createQuery(cq);
 
+            royView = (RoyaltyView) query.getSingleResult();
+        } catch (NoResultException nre) {
+            return null;
+        }
 
-	@Override
-	public void remove(RoyaltyViewId royId) {
-		//TODO		
-	}
+        return royView;
+    }
 
+    @Override
+    public void store(RoyaltyView royView) {
+        entityManager().persist(royView);
 
-	@Override
-	public List<RoyaltyView> royaltyViewsBetween(FiscalPeriod fpFrom, FiscalPeriod fpTo, ProductionSharingContractId pscId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    }
 
+    @Override
+    public void remove(RoyaltyViewId royId) {
+        entityManager().remove(royId);
+    }
 
-	@Override
-	public List<RoyaltyView> allRoyaltyViews() {
-		javax.persistence.criteria.CriteriaQuery cq = entityManager().getCriteriaBuilder().createQuery();
+    @Override
+    public List<RoyaltyView> royaltyViewsBetween(FiscalPeriod fpFrom, FiscalPeriod fpTo, ProductionSharingContractId pscId) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public List<RoyaltyView> allRoyaltyViews() {
+        javax.persistence.criteria.CriteriaQuery cq = entityManager().getCriteriaBuilder().createQuery();
         cq.select(cq.from(RoyaltyView.class));
         return entityManager().createQuery(cq).getResultList();
-	}
+    }
 
+    @Override
+    public List<RoyaltyView> royaltyViewsOfContract(ProductionSharingContractId pscId) {
+        CriteriaBuilder cb = entityManager().getCriteriaBuilder();
 
-	@Override
-	public List<RoyaltyView> royaltyViewsOfContract(ProductionSharingContractId pscId) {
-		
-		return null;
-	}
+        List<RoyaltyView> royViiews;
 
+        CriteriaQuery cq = cb.createQuery();
+        Root<RoyaltyView> e = cq.from(RoyaltyView.class);
+        try {
+            cq.select(e).where(
+                    cb.equal(e.get("pscId"), pscId));
 
-	@Override
-	public void remove(FiscalPeriod fiscalPeriod, ProductionSharingContractId pscId) {
-		// TODO Auto-generated method stub
-		
-	}
+            Query query = entityManager().createQuery(cq);
 
+            royViiews = query.getResultList();
+        } catch (NoResultException nre) {
+            return null;
+        }
 
-	@Override
-	public void save(RoyaltyView royView) {
-		entityManager().merge(royView);		
-	}
+        return royViiews;
+    }
 
-	@Override
-	public RoyaltyViewId nextRoyaltyViewId() {
-		String random = UUID.randomUUID().toString().toUpperCase();
+    @Override
+    public void remove(FiscalPeriod fiscalPeriod, ProductionSharingContractId pscId) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void save(RoyaltyView royView) {
+        entityManager().merge(royView);
+    }
+
+    @Override
+    public RoyaltyViewId nextRoyaltyViewId() {
+        String random = UUID.randomUUID().toString().toUpperCase();
 
         return new RoyaltyViewId(random.substring(0, random.indexOf("-")));
-	}
-	
+    }
+
 }

@@ -11,49 +11,61 @@ import javax.inject.Inject;
 
 import com.cosm.common.event.CosmEvent;
 import com.cosm.common.event.TaxOilReady;
-import com.cosm.common.event.kafka.EventConsumer;
+import com.cosm.psc.entitlement.taxoil.event.kafka.EventConsumer;
+import com.cosm.psc.entitlement.taxoil.event.kafka.KAFKA;
+import com.cosm.psc.entitlement.taxoil.util.CosmLogger;
 
 import java.util.Properties;
+import java.util.UUID;
 import java.util.logging.Logger;
+import javax.annotation.PreDestroy;
+import org.apache.kafka.clients.consumer.ConsumerConfig;
 
 @Singleton
 @Startup
 public class TaxOilEventHandler {
 
-	private EventConsumer eventConsumer;
+    private EventConsumer eventConsumer;
 
-	@Resource
-	ManagedExecutorService mes;
+    @Resource
+    ManagedExecutorService mes;
 
-	@Inject
-	Properties kafkaProperties;
+    @KAFKA
+    @Inject
+    Properties kafkaProperties;
 
-	@Inject
-	Event<CosmEvent> events;
+    @Inject
+    Event<CosmEvent> events;
 
-	@Inject
-	TaxOilService taxOilService;
+    @Inject
+    TaxOilService taxOilService;
 
-	@Inject
-	Logger logger;
+    @CosmLogger
+    @Inject
+    Logger logger;
 
-	public void handle(@Observes TaxOilReady event) {
-		logger.info("Handling event " + event);
-		taxOilService.when(event);
-	}
-	
-	
-	@PostConstruct
-	private void initConsumer() {
-		kafkaProperties.put("group.id", "taxoil-handler");
-		String taxOilStage = kafkaProperties.getProperty("taxoil.stage.topic"); 
+    public void handle(@Observes TaxOilReady event) {
+        logger.info("Handling event " + event);
+        taxOilService.when(event);
+    }
 
-		eventConsumer = new EventConsumer(kafkaProperties, ev -> {
-			logger.info("firing = " + ev);
-			events.fire(ev);
-		}, taxOilStage);
+    @PostConstruct
+    private void initConsumer() {
+        kafkaProperties.put(ConsumerConfig.GROUP_ID_CONFIG, "taxoil");
+        kafkaProperties.put(ConsumerConfig.CLIENT_ID_CONFIG, UUID.randomUUID().toString());
+        String taxOilStage = kafkaProperties.getProperty("taxoil.stage.topic");
 
-		mes.execute(eventConsumer);
-	}
+        eventConsumer = new EventConsumer(kafkaProperties, ev -> {
+            logger.info("firing = " + ev);
+            events.fire(ev);
+        }, taxOilStage);
 
+        mes.execute(eventConsumer);
+    }
+
+    
+    @PreDestroy
+    public void close(){
+        eventConsumer.stop();
+    }
 }

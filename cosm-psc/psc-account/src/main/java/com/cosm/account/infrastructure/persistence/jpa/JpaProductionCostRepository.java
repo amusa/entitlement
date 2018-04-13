@@ -26,31 +26,29 @@ import com.cosm.account.domain.model.ProductionCostId;
 import com.cosm.account.domain.model.ProductionCostRepository;
 import com.cosm.common.domain.model.FiscalPeriod;
 import com.cosm.common.domain.model.ProductionSharingContractId;
-import com.cosm.common.infrastructure.persistence.jpa.JpaRepository;
-
 
 /**
  * @author 18359
  */
 @ApplicationScoped
-public class JpaProductionCostRepository extends JpaRepository<ProductionCost> implements ProductionCostRepository, Serializable {
-   	
-	private static final long serialVersionUID = 1L;
-	
-	@PersistenceContext 
+public class JpaProductionCostRepository  implements ProductionCostRepository, Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    @PersistenceContext(name = "costPU")
     private EntityManager em;
-    
-	@Override
-	protected EntityManager entityManager() {		
-		return em;
-	}
+
+   
+    protected EntityManager entityManager() {
+        return em;
+    }
 
     public JpaProductionCostRepository() {
-        super(ProductionCost.class);
+       
     }
 
     @Override
-    public List<ProductionCost> costItemsOfPeriod(FiscalPeriod fiscalPeriod, ProductionSharingContractId pscId){ //previously getProductionCost()
+    public List<ProductionCost> costItemsOfPeriod(FiscalPeriod fiscalPeriod, ProductionSharingContractId pscId) { //previously getProductionCost()
         CriteriaBuilder cb = entityManager().getCriteriaBuilder();
 
         List<ProductionCost> prodCosts;
@@ -132,7 +130,7 @@ public class JpaProductionCostRepository extends JpaRepository<ProductionCost> i
         Double costToDate;
 
         CriteriaQuery<Double> cq = cb.createQuery(Double.class);
-        Root<ProductionCost> cost = cq.from(entityClass);
+        Root<ProductionCost> cost = cq.from(ProductionCost.class);
 
         Expression<Double> sum = cb.sum(cost.<Double>get("amount"));
 
@@ -143,8 +141,8 @@ public class JpaProductionCostRepository extends JpaRepository<ProductionCost> i
                 cb.lessThanOrEqualTo(cost.get("fiscalPeriod").get("month"), fiscalPeriod.getMonth())
         );
 
-        Predicate prevYrPredicate =
-                cb.lessThan(cost.get("fiscalPeriod").get("year"), fiscalPeriod.getYear());
+        Predicate prevYrPredicate
+                = cb.lessThan(cost.get("fiscalPeriod").get("year"), fiscalPeriod.getYear());
 
         Predicate yearPredicate = cb.or(curYrPredicate, prevYrPredicate);
 
@@ -170,14 +168,14 @@ public class JpaProductionCostRepository extends JpaRepository<ProductionCost> i
         Double opex;
 
         CriteriaQuery<Double> cq = cb.createQuery(Double.class);
-        Root<ProductionCost> cost = cq.from(entityClass);
+        Root<ProductionCost> cost = cq.from(ProductionCost.class);
 
         Expression<Double> sum = cb.sum(cost.<Double>get("amount"));
         cq.select(sum.alias("amountTotal"))
                 .where(
                         cb.and(
                                 cb.equal(cost.get("pscId"), pscId),
-                                cb.equal(cost.get("fiscalPeriod"), fiscalPeriod),                                
+                                cb.equal(cost.get("fiscalPeriod"), fiscalPeriod),
                                 cb.equal(cost.get("costItem").get("costCategory").get("code"), "OPEX")
                         )
                 );
@@ -198,7 +196,7 @@ public class JpaProductionCostRepository extends JpaRepository<ProductionCost> i
         Double opex;
 
         CriteriaQuery<Double> cq = cb.createQuery(Double.class);
-        Root<ProductionCost> cost = cq.from(entityClass);
+        Root<ProductionCost> cost = cq.from(ProductionCost.class);
 
         Expression<Double> sum = cb.sum(cost.<Double>get("amount"));
 
@@ -214,9 +212,7 @@ public class JpaProductionCostRepository extends JpaRepository<ProductionCost> i
 //        Predicate priorYrPredicate = cb.and(
 //                cb.lessThan(cost.get("periodYear"), year)
 //        );
-
 //        Predicate yearsPredicate = cb.or(currYrPredicate, priorYrPredicate);
-
         Predicate opexPredicate = cb.equal(cost.get("costItem").get("costCategory").get("code"), "OPEX");
 
         Predicate predicate = cb.and(basePredicate, currYrPredicate, opexPredicate);
@@ -241,14 +237,14 @@ public class JpaProductionCostRepository extends JpaRepository<ProductionCost> i
         Double capex;
 
         CriteriaQuery<Double> cq = cb.createQuery(Double.class);
-        Root<ProductionCost> cost = cq.from(entityClass);
+        Root<ProductionCost> cost = cq.from(ProductionCost.class);
 
         Expression<Double> sum = cb.sum(cost.<Double>get("amount"));
         cq.select(sum.alias("amountTotal"))
                 .where(
                         cb.and(
                                 cb.equal(cost.get("pscId"), pscId),
-                                cb.equal(cost.get("fiscalPeriod"), fiscalPeriod),                               
+                                cb.equal(cost.get("fiscalPeriod"), fiscalPeriod),
                                 cb.equal(cost.get("costItem").get("costCategory").get("code"), "CAPEX")
                         )
                 );
@@ -269,7 +265,7 @@ public class JpaProductionCostRepository extends JpaRepository<ProductionCost> i
         Double capex;
 
         CriteriaQuery<Double> cq = cb.createQuery(Double.class);
-        Root<ProductionCost> cost = cq.from(entityClass);
+        Root<ProductionCost> cost = cq.from(ProductionCost.class);
 
         Expression<Double> sum = cb.sum(cost.<Double>get("amount"));
 
@@ -278,15 +274,13 @@ public class JpaProductionCostRepository extends JpaRepository<ProductionCost> i
 
         Predicate currYrPredicate = cb.and(
                 cb.equal(cost.get("fiscalPeriod").get("year"), fiscalPeriod.getYear()),
-                cb.lessThanOrEqualTo(cost.get("fiscalPeriod"), fiscalPeriod.getMonth())
+                cb.lessThanOrEqualTo(cost.get("fiscalPeriod").get("month"), fiscalPeriod.getMonth())
         );
 
 //        Predicate priorYrPredicate = cb.and(
 //                cb.lessThan(cost.get("periodYear"), year)
 //        );
-
 //        Predicate yearsPredicate = cb.or(currYrPredicate, priorYrPredicate);
-
         Predicate opexPredicate = cb.equal(cost.get("costItem").get("costCategory").get("code"), "CAPEX");
 
         Predicate predicate = cb.and(basePredicate, currYrPredicate, opexPredicate);
@@ -310,7 +304,7 @@ public class JpaProductionCostRepository extends JpaRepository<ProductionCost> i
         Double capitalAllowance;//Armotization to date
 
         CriteriaQuery<Double> cq = cb.createQuery(Double.class);
-        Root<ProductionCost> cost = cq.from(entityClass);
+        Root<ProductionCost> cost = cq.from(ProductionCost.class);
 
         Expression<Double> sum = cb.sum(cost.<Double>get("amount"));
         Expression<Double> prod = cb.prod(sum, (1 / 60.0));
@@ -321,7 +315,7 @@ public class JpaProductionCostRepository extends JpaRepository<ProductionCost> i
         );
 
         Predicate fullYearPredicate = cb.between(cost.get("fiscalPeriod")
-        		.get("year"), (fiscalPeriod.getYear() - 4), fiscalPeriod.getYear());
+                .get("year"), (fiscalPeriod.getYear() - 4), fiscalPeriod.getYear());
 
         Predicate rightPredicate = cb.and(
                 cb.equal(cost.get("fiscalPeriod").get("year"), fiscalPeriod.getYear()),
@@ -335,7 +329,7 @@ public class JpaProductionCostRepository extends JpaRepository<ProductionCost> i
 
         Predicate leftPredicate = cb.and(
                 cb.equal(cost.get("fiscalPeriod").get("year"), (fiscalPeriod.getYear() - 5)),
-                cb.greaterThan(cost.get("periodMonth").get("month"), (fiscalPeriod.getMonth() + 1) % 12)
+                cb.greaterThan(cost.get("fiscalPeriod").get("month"), (fiscalPeriod.getMonth() + 1) % 12)
         );
 
         Predicate lessYearPredicate = cb.or(rightPredicate, midPredicate, leftPredicate);
@@ -360,7 +354,7 @@ public class JpaProductionCostRepository extends JpaRepository<ProductionCost> i
     }
 
     @Override
-    public Double educationTaxOfCost(FiscalPeriod fiscalPeriod, ProductionSharingContractId pscId){
+    public Double educationTaxOfCost(FiscalPeriod fiscalPeriod, ProductionSharingContractId pscId) {
         CriteriaBuilder cb = entityManager().getCriteriaBuilder();
 
         Double eduTax;
@@ -377,13 +371,12 @@ public class JpaProductionCostRepository extends JpaRepository<ProductionCost> i
 
             eduTax = entityManager().createQuery(cq).getSingleResult();
         } catch (NoResultException nre) {
-            return null;
+            return new Double(0);
         }
 
         return eduTax;
     }
 
-   
     @Override
     public Map<CostItem, Double> currentYearCostItems(FiscalPeriod fiscalPeriod, ProductionSharingContractId pscId) {
 
@@ -425,13 +418,36 @@ public class JpaProductionCostRepository extends JpaRepository<ProductionCost> i
         return costItemMap;
     }
 
-	@Override
-	public ProductionCostId nextProductionCostId() {
-		String random = UUID.randomUUID().toString().toUpperCase();
+    @Override
+    public ProductionCostId nextProductionCostId() {
+        String random = UUID.randomUUID().toString().toUpperCase();
 
         return new ProductionCostId(random.substring(0, random.indexOf("-")));
-	}
+    }
 
- 
-    
+    @Override
+    public void add(ProductionCost entity) {
+        entityManager().persist(entity);
+    }
+
+    @Override
+    public void save(ProductionCost entity) {
+        entityManager().merge(entity);
+    }
+
+    @Override
+    public void remove(ProductionCost entity) {
+        entityManager().remove(entity);
+    }
+
+    @Override
+    public ProductionCost productionCostOfId(Object id) {
+        return entityManager().find(ProductionCost.class, id);
+    }
+
+    @Override
+    public List<ProductionCost> productionCosts() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }

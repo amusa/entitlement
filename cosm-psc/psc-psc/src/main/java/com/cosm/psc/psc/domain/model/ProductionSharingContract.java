@@ -20,7 +20,7 @@ import java.util.List;
 /**
  * @author 18359
  */
-@Entity
+@Entity(name="PRODUCTION_SHARING_CONTRACT")
 public class ProductionSharingContract implements Serializable{
 
     private static final long serialVersionUID = -165902073936311783L;
@@ -75,8 +75,13 @@ public class ProductionSharingContract implements Serializable{
 	public ContractTitle getContractTitle() {
 		return contractTitle;
 	}
-   
-    @Embedded
+	
+	   
+    public void setContractTitle(ContractTitle contractTitle) {
+		this.contractTitle = contractTitle;
+	}
+
+	@Embedded
     public Operator getOperator() {
         return operator;
     }
@@ -247,13 +252,13 @@ public class ProductionSharingContract implements Serializable{
         return getPetroleumProfitTaxRate(new Date());
     }
 
-    @Transient
+    //@Transient
     public double getPetroleumProfitTaxRate(Date refDate) {
         return terrain.getPetroleumProfitTaxRate(refDate, this);
     }
     
 
-    @Transient
+    //@Transient
     private int getContractDuration(Date refDate) {
         if (contractExecutionDate != null) {
             return DateUtil.yearsDiff(contractExecutionDate, refDate);
@@ -262,7 +267,7 @@ public class ProductionSharingContract implements Serializable{
         return 0;
     }
 
-    @Transient
+    //@Transient
     protected int getFirstOilDuration(Date refDate) {
         if (firstOilDate != null) {
             return DateUtil.yearsDiff(firstOilDate, refDate);

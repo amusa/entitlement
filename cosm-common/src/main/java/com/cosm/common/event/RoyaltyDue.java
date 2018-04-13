@@ -1,87 +1,80 @@
 package com.cosm.common.event;
 
+import javax.json.JsonObject;
+
 public class RoyaltyDue extends CosmEvent {
 
-	private double royaltyMonthlyCharge;
-	private double royaltyMontlyChargeToDate;	
-	private double royaltyReceived;
+    private double royaltyMonthlyCharge;
+    private double royaltyMontlyChargeToDate;
+    private double royaltyReceived;
 
+    private RoyaltyDue(EventPeriod period, String pscId, double royMonthlyCharge, double royMontlyChargeToDate, double royReceived) {
 
-	
-	private RoyaltyDue(EventPeriod period, String pscId, double royMonthlyCharge, double royMontlyChargeToDate, double royReceived) {
-		
-		super(period, pscId);
-				
-		this.royaltyMonthlyCharge = royMonthlyCharge;
-		this.royaltyMontlyChargeToDate = royMontlyChargeToDate;
-		this.royaltyReceived = royReceived;	
-		
-	}
-	
-	
+        super(period, pscId);
 
+        this.royaltyMonthlyCharge = royMonthlyCharge;
+        this.royaltyMontlyChargeToDate = royMontlyChargeToDate;
+        this.royaltyReceived = royReceived;
 
-	public double getRoyaltyMonthlyCharge() {
-		return royaltyMonthlyCharge;
-	}
+    }
 
+    public RoyaltyDue(JsonObject jsonObject) {
+        this(new EventPeriod(jsonObject.getJsonObject("eventPeriod")),
+                jsonObject.getString("pscId"),
+                jsonObject.getJsonNumber("royaltyMonthlyCharge").doubleValue(),
+                jsonObject.getJsonNumber("royaltyMontlyChargeToDate").doubleValue(),
+                jsonObject.getJsonNumber("royaltyReceived").doubleValue()
+        );
+    }
 
+    public double getRoyaltyMonthlyCharge() {
+        return royaltyMonthlyCharge;
+    }
 
+    public double getRoyaltyMontlyChargeToDate() {
+        return royaltyMontlyChargeToDate;
+    }
 
-	public double getRoyaltyMontlyChargeToDate() {
-		return royaltyMontlyChargeToDate;
-	}
+    public double getRoyaltyReceived() {
+        return royaltyReceived;
+    }
+       
+    public static class Builder {
 
+        private EventPeriod newPeriod;
+        private String newPscId;
+        private double newRoyaltyMonthlyCharge;
+        private double newRoyaltyMontlyChargeToDate;
+        private double newRoyaltyReceived;
 
+        public Builder withPeriod(EventPeriod period) {
+            this.newPeriod = period;
+            return this;
+        }
 
+        public Builder withContract(String pscId) {
+            this.newPscId = pscId;
+            return this;
+        }
 
-	public double getRoyaltyReceived() {
-		return royaltyReceived;
-	}
+        public Builder withMonthlyCharge(double mCharge) {
+            this.newRoyaltyMonthlyCharge = mCharge;
+            return this;
+        }
 
+        public Builder withMonthlyChargeToDate(double mChargeToDate) {
+            this.newRoyaltyMontlyChargeToDate = mChargeToDate;
+            return this;
+        }
 
+        public Builder withRecieved(double received) {
+            this.newRoyaltyReceived = received;
+            return this;
+        }
 
-
-	public static class Builder {
-		private EventPeriod newPeriod;
-		private String newPscId;
-		private double newRoyaltyMonthlyCharge;
-		private double newRoyaltyMontlyChargeToDate;	
-		private double newRoyaltyReceived;
-
-		
-
-		public Builder withPeriod(EventPeriod period) {
-			this.newPeriod = period;
-			return this;
-		}
-
-		public Builder withContract(String pscId) {
-			this.newPscId = pscId;
-			return this;
-		}
-
-		
-		public Builder withMonthlyCharge(double mCharge) {
-			this.newRoyaltyMonthlyCharge = mCharge;
-			return this;
-		}
-
-		public Builder withMonthlyChargeToDate(double mChargeToDate) {
-			this.newRoyaltyMontlyChargeToDate = mChargeToDate;
-			return this;
-		}
-
-		public Builder withRecieved(double received) {
-			this.newRoyaltyReceived = received;
-			return this;
-		}
-
-		
-		
-		public RoyaltyDue build() {
-			return new RoyaltyDue(newPeriod, newPscId,  newRoyaltyMonthlyCharge, newRoyaltyMontlyChargeToDate, newRoyaltyReceived);
-		}
-	}
+        public RoyaltyDue build() {
+            return new RoyaltyDue(newPeriod, newPscId, newRoyaltyMonthlyCharge, newRoyaltyMontlyChargeToDate, newRoyaltyReceived);
+        }
+    }
 
 }

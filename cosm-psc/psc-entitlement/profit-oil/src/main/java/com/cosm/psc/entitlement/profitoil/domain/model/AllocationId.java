@@ -1,24 +1,29 @@
 package com.cosm.psc.entitlement.profitoil.domain.model;
 
-import java.util.UUID;
-
+import java.io.Serializable;
 import javax.persistence.Column;
+import javax.persistence.Embeddable;
 import javax.validation.constraints.NotNull;
 
-public class AllocationId {
-	private UUID id;
+@Embeddable
+public class AllocationId implements Serializable{
 
-	public AllocationId(String id) {
-		setId(UUID.fromString(id));
-	}
+    private String id;
 
-	@NotNull
-	@Column(name = "ALLOCATION_ID")
-	public UUID getId() {
-		return id;
-	}
+    public AllocationId() {
+    }
 
-	private void setId(UUID id) {
-		this.id = id;
-	}
+    public AllocationId(String id) {
+        setId(id);
+    }
+
+    @NotNull
+    @Column(name = "ALLOCATION_ID")
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 }

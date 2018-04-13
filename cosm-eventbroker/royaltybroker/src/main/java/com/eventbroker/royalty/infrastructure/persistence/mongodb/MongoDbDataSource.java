@@ -16,30 +16,26 @@ import java.util.Properties;
 @ApplicationScoped
 public class MongoDbDataSource {
 
-	private MongoDatabase mongoCosmDataBase;
-	
-	@MONGODB
-	@Inject
+    private MongoDatabase mongoCosmDataBase;
+
+    @MONGODB
+    @Inject
     Properties mongoDbProperties;
 
     @PostConstruct
     private void initProperties() {
-     
-        	String dbURIString = mongoDbProperties.getProperty("mongodb.url");
-        	MongoClient mongoClient = new MongoClient(new MongoClientURI(dbURIString));
-        	mongoCosmDataBase = mongoClient.getDatabase("royalty");
-        	
-        
+
+        String dbURIString = mongoDbProperties.getProperty("mongodb.url");
+        MongoClient mongoClient = new MongoClient(new MongoClientURI(dbURIString));
+        mongoCosmDataBase = mongoClient.getDatabase("royalty");
+
     }
 
-   
     @Produces
-    @RequestScoped
+    //@RequestScoped
     public MongoDatabase exposeMongoDbSource() throws IOException {
-        
+
         return mongoCosmDataBase;
     }
 
 }
-
-

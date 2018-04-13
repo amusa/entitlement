@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.cosm.common.domain.model.FiscalPeriod;
 import com.cosm.common.domain.model.ProductionSharingContractId;
+import java.util.Optional;
 
 
 public interface CostOilProjectionRepository {
@@ -12,7 +13,7 @@ public interface CostOilProjectionRepository {
 	CostOilProjection costOilProjectionOfId(CostOilProjectionId coId);
 	
 
-	CostOilProjection costOilProjectionOfFiscalPeriod(FiscalPeriod fiscalPeriod, ProductionSharingContractId pscId);
+	Optional<CostOilProjection> costOilProjectionOfPeriod(FiscalPeriod fiscalPeriod, ProductionSharingContractId pscId);
 	
 
 	void store(CostOilProjection coProj);

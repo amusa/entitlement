@@ -7,6 +7,7 @@ import org.apache.kafka.common.KafkaException;
 import org.apache.kafka.common.errors.ProducerFencedException;
 
 import com.cosm.common.event.CosmEvent;
+import com.eventbroker.profitoil.util.CosmLogger;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -19,12 +20,14 @@ import java.util.logging.Logger;
 @ApplicationScoped
 public class EventProducer {
 
-	private Producer<String, CosmEvent> producer;
+    private Producer<String, CosmEvent> producer;
     private String topic;
 
+    @KAFKA
     @Inject
     Properties kafkaProperties;
 
+    @CosmLogger
     @Inject
     Logger logger;
 

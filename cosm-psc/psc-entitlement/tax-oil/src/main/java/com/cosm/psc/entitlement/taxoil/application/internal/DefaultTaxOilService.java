@@ -20,73 +20,67 @@ import com.cosm.psc.entitlement.taxoil.domain.model.TaxOilProjection;
 import com.cosm.psc.entitlement.taxoil.domain.model.TaxOilProjectionId;
 import com.cosm.psc.entitlement.taxoil.domain.model.TaxOilProjectionRepository;
 import com.cosm.psc.entitlement.taxoil.event.kafka.EventProducer;
-
-
+import java.util.Optional;
 
 @ApplicationScoped
 public class DefaultTaxOilService implements TaxOilService {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
 
-	@Inject
-	private FiscalPeriodService fiscalService;
-	
-	@Inject
-	private TaxOilProjectionRepository taxOilRepository;
-	
-	@Inject
-	EventProducer eventProducer;
-	
-	@Override
-	public void when(TaxOilReady event) {
-		FiscalPeriod prevFp = fiscalService.getPreviousFiscalPeriod(FiscalPeriodAdapter.toFiscalPeriod(event.getEventPeriod()));
-		TaxOilProjection prevTaxOilProj = taxOilRepository.taxOilProjectionOfFiscalPeriod(prevFp, new ProductionSharingContractId(event.getPscId()));
-		
-		TaxOilCalculator.Builder taxOilCalculatorBuilder = new TaxOilCalculator.Builder();
-		
-				
-		taxOilCalculatorBuilder.withFiscalPeriod(FiscalPeriodAdapter.toFiscalPeriod(event.getEventPeriod()))
-		.withContractId(new ProductionSharingContractId(event.getPscId()))
-		.withGrossIncome(event.getGrossIncome())
-		.withOpex(event.getCurrentYearOpex())
-		.withCurrentYearCapex(event.getCurrentYearCapex())
-		.withCorporationProceed(event.getCorporationProceed())
-		.withRoyalty(event.getRoyalty())
-		.withCurrentCapitalAllowance(event.getAmortizedCapex())
-		.withEducationTax(event.getEducationTax())
-		.withEducationTaxRate(0)
-		.withInvestmentTaxAllowanceRate(0)
-		.withPetroleumProtitTaxRate(0)
-		.withLossBfw(0)
-		.withPriorTaxOilProjection(prevTaxOilProj);
+    @Inject
+    private FiscalPeriodService fiscalService;
 
-		TaxOilCalculator taxOilCalculator = taxOilCalculatorBuilder.build();
-		
-		TaxOilProjectionId taxOilProjectionId = taxOilRepository.nextTaxOilProjectionId();
-		
-		TaxOilProjection taxOilProjection = new TaxOilProjection(taxOilProjectionId, taxOilCalculator);
-		
-		taxOilRepository.store(taxOilProjection);
-		
-				
-        TaxOilDue.Builder builder  = new TaxOilDue.Builder();
-		
+    @Inject
+    private TaxOilProjectionRepository taxOilRepository;
+
+    @Inject
+    EventProducer eventProducer;
+
+    @Override
+    public void when(TaxOilReady event) {
+        FiscalPeriod prevFp = fiscalService.getPreviousFiscalPeriod(FiscalPeriodAdapter.toFiscalPeriod(event.getEventPeriod()));
+        Optional<TaxOilProjection> prevTaxOilProj = taxOilRepository.taxOilProjectionOfPeriod(prevFp, new ProductionSharingContractId(event.getPscId()));
+
+        TaxOilCalculator.Builder taxOilCalculatorBuilder = new TaxOilCalculator.Builder();
+
+        taxOilCalculatorBuilder.withFiscalPeriod(FiscalPeriodAdapter.toFiscalPeriod(event.getEventPeriod()))
+                .withContractId(new ProductionSharingContractId(event.getPscId()))
+                .withGrossIncome(event.getGrossIncome())
+                .withOpex(event.getCurrentYearOpex())
+                .withCurrentYearCapex(event.getCurrentYearCapex())
+                .withCorporationProceed(event.getCorporationProceed())
+                .withRoyalty(event.getRoyalty())
+                .withCurrentCapitalAllowance(event.getAmortizedCapex())
+                .withEducationTax(event.getEducationTax())
+                .withEducationTaxRate(0)
+                .withInvestmentTaxAllowanceRate(0)
+                .withPetroleumProtitTaxRate(0)
+                .withLossBfw(0)
+                .withPriorTaxOilProjection(prevTaxOilProj);
+
+        TaxOilCalculator taxOilCalculator = taxOilCalculatorBuilder.build();
+
+        TaxOilProjectionId taxOilProjectionId = taxOilRepository.nextTaxOilProjectionId();
+
+        TaxOilProjection taxOilProjection = new TaxOilProjection(taxOilProjectionId, taxOilCalculator);
+
+        taxOilRepository.store(taxOilProjection);
+
+        TaxOilDue.Builder builder = new TaxOilDue.Builder();
+
         TaxOilDue taxOilDueEvent = builder.withPeriod(event.getEventPeriod())
-				.withContract(event.getPscId())
-				.withMonthlyCharge(taxOilProjection.getTaxOil())
-				.withMonthlyChargeToDate(taxOilProjection.getTaxOilToDate())
-				.withRecieved(taxOilProjection.getAllocation().getTaxOilReceived())
-				.withEducationTax(taxOilProjection.getEducationTax())
-				.build();
-		
-				
-		eventProducer.publish(taxOilDueEvent);
-		
-	}
+                .withContract(event.getPscId())
+                .withMonthlyCharge(taxOilProjection.getTaxOil())
+                .withMonthlyChargeToDate(taxOilProjection.getTaxOilToDate())
+                .withRecieved(taxOilProjection.getAllocation().getTaxOilReceived())
+                .withEducationTax(taxOilProjection.getEducationTax())
+                .build();
 
-	
+        eventProducer.publish(taxOilDueEvent);
+
+    }
 
 }

@@ -11,78 +11,103 @@ import com.cosm.common.domain.model.ProductionSharingContractId;
 import com.cosm.psc.entitlement.costoil.domain.model.CostOilProjection;
 import com.cosm.psc.entitlement.costoil.domain.model.CostOilProjectionId;
 import com.cosm.psc.entitlement.costoil.domain.model.CostOilProjectionRepository;
+import java.util.Optional;
+import javax.persistence.NoResultException;
+import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 public class JpaCostOilProjectionRepository implements CostOilProjectionRepository {
-	
-	@PersistenceContext 
+
+    @PersistenceContext
     private EntityManager em;
-    
 
-	private EntityManager entityManager() {		
-		return em;
-	}
+    private EntityManager entityManager() {
+        return em;
+    }
 
-	@Override
-	public CostOilProjection costOilProjectionOfId(CostOilProjectionId coId) {		
-		return entityManager().find(CostOilProjection.class, coId);
-	}
+    @Override
+    public CostOilProjection costOilProjectionOfId(CostOilProjectionId coId) {
+        return entityManager().find(CostOilProjection.class, coId);
+    }
 
-	@Override
-	public CostOilProjection costOilProjectionOfFiscalPeriod(FiscalPeriod fiscalPeriod,
-			ProductionSharingContractId pscId) {		
-		return null;
-	}
-	
+    @Override
+    public Optional<CostOilProjection> costOilProjectionOfPeriod(FiscalPeriod fiscalPeriod,
+            ProductionSharingContractId pscId) {
 
-	@Override
-	public void store(CostOilProjection coProj) {
-		entityManager().persist(coProj);
-	}
-	
+        CriteriaBuilder cb = entityManager().getCriteriaBuilder();
 
-	@Override
-	public void save(CostOilProjection coProj) {
-		entityManager().merge(coProj);
-	}
-	
+        CostOilProjection costOilProjection;
 
-	@Override
-	public void remove(CostOilProjectionId coId) {
-		
+        CriteriaQuery cq = cb.createQuery();
+        Root<CostOilProjection> e = cq.from(CostOilProjection.class);
+        try {
+            cq.select(e).where(
+                    cb.and(cb.equal(e.get("fiscalPeriod"), fiscalPeriod), cb.equal(e.get("pscId"), pscId)));
 
-	}
+            Query query = entityManager().createQuery(cq);
 
-	@Override
-	public void remove(FiscalPeriod fiscalPeriod, ProductionSharingContractId pscId) {
-		// TODO Auto-generated method stub
+            costOilProjection = (CostOilProjection) query.getSingleResult();
+        } catch (NoResultException nre) {
+            return Optional.empty();
+        }
 
-	}
+        return Optional.ofNullable(costOilProjection);
+    }
 
-	@Override
-	public List<CostOilProjection> costOilProjectionsBetween(FiscalPeriod fpFrom, FiscalPeriod fpTo,
-			ProductionSharingContractId pscId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public void store(CostOilProjection coProj
+    ) {
+        entityManager().persist(coProj);
+    }
 
-	@Override
-	public List<CostOilProjection> costOilProjectionsOfContract(ProductionSharingContractId pscId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public void save(CostOilProjection coProj
+    ) {
+        entityManager().merge(coProj);
+    }
 
-	@Override
-	public List<CostOilProjection> allCostOilProjections() {
-		javax.persistence.criteria.CriteriaQuery cq = entityManager().getCriteriaBuilder().createQuery();
+    @Override
+    public void remove(CostOilProjectionId coId
+    ) {
+
+    }
+
+    @Override
+    public void remove(FiscalPeriod fiscalPeriod, ProductionSharingContractId pscId
+    ) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public List<CostOilProjection> costOilProjectionsBetween(FiscalPeriod fpFrom, FiscalPeriod fpTo,
+             ProductionSharingContractId pscId
+    ) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public List<CostOilProjection> costOilProjectionsOfContract(ProductionSharingContractId pscId
+    ) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public List<CostOilProjection> allCostOilProjections() {
+        javax.persistence.criteria.CriteriaQuery cq = entityManager().getCriteriaBuilder().createQuery();
         cq.select(cq.from(CostOilProjection.class));
         return entityManager().createQuery(cq).getResultList();
-	}
+    }
 
-	@Override
-	public CostOilProjectionId nextCostOilProjectionId() {
-		String random = UUID.randomUUID().toString().toUpperCase();
+    @Override
+    public CostOilProjectionId nextCostOilProjectionId() {
+        String random = UUID.randomUUID().toString().toUpperCase();
 
         return new CostOilProjectionId(random.substring(0, random.indexOf("-")));
-	}
+    }
 
 }

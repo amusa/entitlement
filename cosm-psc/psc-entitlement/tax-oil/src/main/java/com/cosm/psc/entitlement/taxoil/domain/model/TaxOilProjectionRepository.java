@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.cosm.common.domain.model.FiscalPeriod;
 import com.cosm.common.domain.model.ProductionSharingContractId;
+import java.util.Optional;
 
 
 public interface TaxOilProjectionRepository {
@@ -11,7 +12,7 @@ public interface TaxOilProjectionRepository {
 	TaxOilProjection taxOilProjectionOfId(TaxOilProjectionId toId);
 	
 	
-	TaxOilProjection taxOilProjectionOfFiscalPeriod(FiscalPeriod fiscalPeriod, ProductionSharingContractId pscId);
+	Optional<TaxOilProjection> taxOilProjectionOfPeriod(FiscalPeriod fiscalPeriod, ProductionSharingContractId pscId);
 	
 	
 	void store(TaxOilProjection toProj);

@@ -6,17 +6,22 @@ import javax.inject.Inject;
 
 import com.cosm.account.application.ProductionCostService;
 import com.cosm.account.domain.model.ProductionCostRepository;
+import com.cosm.account.event.kafka.EventProducer;
+import com.cosm.account.CosmLogger;
 import com.cosm.common.domain.model.FiscalPeriod;
 import com.cosm.common.domain.model.ProductionSharingContractId;
 import com.cosm.common.event.CostPosted;
 import com.cosm.common.event.FiscalPeriodAdapter;
-import com.cosm.common.event.kafka.EventProducer;
+import javax.enterprise.context.ApplicationScoped;
 
+
+@ApplicationScoped
 public class DefaultProductionCostService implements ProductionCostService {
 
 	@Inject
 	EventProducer eventProducer;
 
+        @CosmLogger
 	@Inject
 	Logger logger;
 
@@ -34,16 +39,16 @@ public class DefaultProductionCostService implements ProductionCostService {
 		double educationTax = costRepository.educationTaxOfCost(fiscalPeriod, pscId);
 	
 
-		publish(new CostPosted(FiscalPeriodAdapter.toEventPeriod(fiscalPeriod), pscId.toString(), 
+		publish(new CostPosted(FiscalPeriodAdapter.toEventPeriod(fiscalPeriod), pscId.getId().toString(), 
 				currentYearCapex, amortizedCapex, currentYearOpex, currentMonthOpex, costToDate, educationTax )
 
 		);
 
 	}
 
-	private void publish(CostPosted productionEvent) {
+	private void publish(CostPosted productionCostEvent) {
 
-		eventProducer.publish(productionEvent);
+		eventProducer.publish(productionCostEvent);
 
 	}
 

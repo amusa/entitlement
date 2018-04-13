@@ -35,37 +35,50 @@ public class ProductionCost implements Serializable {
     }
 
     public ProductionCost(ProductionCostId costId) {
-    	this.productionCostId = costId;
+        this.productionCostId = costId;
     }
-    
+
     @EmbeddedId
     public ProductionCostId getProductionCostId() {
         return productionCostId;
     }
 
-    
+    public void setProductionCostId(ProductionCostId productionCostId) {
+        this.productionCostId = productionCostId;
+    }
 
     @Embedded
+    public FiscalPeriod getFiscalPeriod() {
+        return fiscalPeriod;
+    }
+
+    public void setFiscalPeriod(FiscalPeriod fiscalPeriod) {
+        this.fiscalPeriod = fiscalPeriod;
+    }
+
+    @Embedded
+    @AttributeOverride(name = "id", column = @Column(name = "PSC_ID"))
     public ProductionSharingContractId getPscId() {
-		return pscId;
-	}
+        return pscId;
+    }
 
-	public void setPscId(ProductionSharingContractId pscId) {
-		this.pscId = pscId;
-	}
+    public void setPscId(ProductionSharingContractId pscId) {
+        this.pscId = pscId;
+    }
 
-	@Embedded
-	public OilFieldId getOilFieldId() {
-		return oilFieldId;
-	}
+    @Embedded
+    @AttributeOverride(name = "id", column = @Column(name = "OIL_FIELD_ID"))
+    public OilFieldId getOilFieldId() {
+        return oilFieldId;
+    }
 
-	public void setOilFieldId(OilFieldId oilFieldId) {
-		this.oilFieldId = oilFieldId;
-	}
+    public void setOilFieldId(OilFieldId oilFieldId) {
+        this.oilFieldId = oilFieldId;
+    }
 
-	@ManyToOne
-    @MapsId("costCode")
-    @JoinColumn(name = "COST_CODE", referencedColumnName = "CODE", updatable = false, insertable = false)
+    @ManyToOne
+    //@MapsId("costCode")
+    @JoinColumn(name = "COST_CODE", referencedColumnName = "CODE")
     public CostItem getCostItem() {
         return costItem;
     }
@@ -100,43 +113,5 @@ public class ProductionCost implements Serializable {
         }
     }
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((fiscalPeriod == null) ? 0 : fiscalPeriod.hashCode());
-		result = prime * result + ((oilFieldId == null) ? 0 : oilFieldId.hashCode());
-		result = prime * result + ((pscId == null) ? 0 : pscId.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		ProductionCost other = (ProductionCost) obj;
-		if (fiscalPeriod == null) {
-			if (other.fiscalPeriod != null)
-				return false;
-		} else if (!fiscalPeriod.equals(other.fiscalPeriod))
-			return false;
-		if (oilFieldId == null) {
-			if (other.oilFieldId != null)
-				return false;
-		} else if (!oilFieldId.equals(other.oilFieldId))
-			return false;
-		if (pscId == null) {
-			if (other.pscId != null)
-				return false;
-		} else if (!pscId.equals(other.pscId))
-			return false;
-		return true;
-	}
-
-    
-
+   
 }

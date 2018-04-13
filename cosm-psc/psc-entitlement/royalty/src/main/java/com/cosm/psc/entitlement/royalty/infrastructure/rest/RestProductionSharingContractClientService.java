@@ -16,8 +16,8 @@ public class RestProductionSharingContractClientService implements ProductionSha
 	@Override
 	public double concessionRental(ProductionSharingContractId pscId, int year, int month) {		
 		client = ClientBuilder.newClient();	   
-	    target = client.target("http://localhost/psc/concession")
-	       .queryParam("id", pscId)
+	    target = client.target("http://localhost:8080/psc/api/concession")
+	       .queryParam("id", pscId.getId())
 	       .queryParam("year", year)
 	       .queryParam("month", month);
 	    

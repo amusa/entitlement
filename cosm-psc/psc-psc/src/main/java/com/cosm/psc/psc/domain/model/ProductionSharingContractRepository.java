@@ -5,8 +5,15 @@ import java.util.List;
 import com.cosm.common.domain.model.ProductionSharingContractId;
 import com.cosm.common.domain.repository.Repository;
 
-public interface ProductionSharingContractRepository extends Repository<ProductionSharingContract> {	
+public interface ProductionSharingContractRepository {	
 	
+	void add(ProductionSharingContract psc);
+
+    void save(ProductionSharingContract psc);
+
+    void remove(ProductionSharingContract psc);    
+        
+    List<ProductionSharingContract> allProductionSharingContracts();
     
     ProductionSharingContract productionSharingContractOfId(ProductionSharingContractId pscId); 
     

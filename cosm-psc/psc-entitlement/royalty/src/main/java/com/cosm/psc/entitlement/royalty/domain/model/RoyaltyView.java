@@ -33,7 +33,10 @@ public class RoyaltyView implements Serializable {
 	private Allocation allocation;
 	private double proceed;
 	private double cashPayment;
-	
+
+        public RoyaltyView(){
+            
+        }
 
 	private RoyaltyView(RoyaltyViewId royaltyViewId, FiscalPeriod fiscalPeriod, ProductionSharingContractId pscId,
 			double royalty, double royaltyToDate, Allocation allocation) {
@@ -66,7 +69,7 @@ public class RoyaltyView implements Serializable {
 		return royaltyViewId;
 	}
 
-	private void setRoyaltyViewId(RoyaltyViewId royaltyViewId) {
+	public void setRoyaltyViewId(RoyaltyViewId royaltyViewId) {
 		this.royaltyViewId = royaltyViewId;
 	}
 
@@ -75,16 +78,17 @@ public class RoyaltyView implements Serializable {
 		return fiscalPeriod;
 	}
 
-	private void setFiscalPeriod(FiscalPeriod fiscalPeriod) {
+	public void setFiscalPeriod(FiscalPeriod fiscalPeriod) {
 		this.fiscalPeriod = fiscalPeriod;
 	}
 
 	@Embedded
+        @AttributeOverride(name="id", column=@Column(name="PSC_ID"))
 	public ProductionSharingContractId getPscId() {
 		return pscId;
 	}
 
-	private void setPscId(ProductionSharingContractId pscId) {
+	public void setPscId(ProductionSharingContractId pscId) {
 		this.pscId = pscId;
 	}
 
@@ -94,7 +98,7 @@ public class RoyaltyView implements Serializable {
 		return royalty;
 	}
 
-	private void setRoyalty(double royalty) {
+	public void setRoyalty(double royalty) {
 		this.royalty = royalty;
 	}
 
@@ -104,7 +108,7 @@ public class RoyaltyView implements Serializable {
 		return royaltyToDate;
 	}
 
-	private void setRoyaltyToDate(double royaltyToDate) {
+	public void setRoyaltyToDate(double royaltyToDate) {
 		this.royaltyToDate = royaltyToDate;
 	}
 
@@ -113,7 +117,7 @@ public class RoyaltyView implements Serializable {
 		return allocation;
 	}
 
-	private void setAllocation(Allocation allocation) {
+	public void setAllocation(Allocation allocation) {
 		this.allocation = allocation;
 	}
 	
@@ -124,7 +128,7 @@ public class RoyaltyView implements Serializable {
 		return proceed;
 	}
 
-	private void setProceed(double proceed) {
+	public void setProceed(double proceed) {
 		this.proceed = proceed;
 	}
 
@@ -134,7 +138,7 @@ public class RoyaltyView implements Serializable {
 		return cashPayment;
 	}
 
-	private void setCashPayment(double cashPayment) {
+	public void setCashPayment(double cashPayment) {
 		this.cashPayment = cashPayment;
 	}
 

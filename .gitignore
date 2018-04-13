@@ -45,3 +45,5 @@ cosm-psc/psc-production/.settings/*
 cosm-psc/psc-psc/.settings/*
 cosm-eventbroker/taxoil-broker/.settings/*
 shipping/crude/.settings/*
+*/nb-configuration.xml
+nb-configuration.xml

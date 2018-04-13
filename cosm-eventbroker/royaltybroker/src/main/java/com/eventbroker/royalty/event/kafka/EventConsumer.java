@@ -1,6 +1,5 @@
 package com.eventbroker.royalty.event.kafka;
 
-
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
@@ -13,18 +12,27 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 
 import static java.util.Arrays.asList;
+import java.util.Collections;
+import java.util.List;
+import org.apache.kafka.clients.consumer.OffsetAndMetadata;
+import org.apache.kafka.common.TopicPartition;
 
 public class EventConsumer implements Runnable {
 
-
+//    @CosmLogger
+//    @Inject
+//    Logger logger;
     private final KafkaConsumer<String, CosmEvent> consumer;
     private final Consumer<CosmEvent> eventConsumer;
     private final AtomicBoolean closed = new AtomicBoolean();
+    private final Properties executionProperties;
 
     public EventConsumer(Properties kafkaProperties, Consumer<CosmEvent> eventConsumer, String... topics) {
         this.eventConsumer = eventConsumer;
+        this.executionProperties = kafkaProperties;
         consumer = new KafkaConsumer<>(kafkaProperties);
         consumer.subscribe(asList(topics));
+
     }
 
     @Override
@@ -42,10 +50,22 @@ public class EventConsumer implements Runnable {
 
     private void consume() {
         ConsumerRecords<String, CosmEvent> records = consumer.poll(Long.MAX_VALUE);
-        for (ConsumerRecord<String, CosmEvent> record : records) {
-            eventConsumer.accept(record.value());
+        for (TopicPartition partition : records.partitions()) {
+            List<ConsumerRecord<String, CosmEvent>> partitionRecords = records.records(partition);
+            for (ConsumerRecord<String, CosmEvent> record : partitionRecords) {
+                eventConsumer.accept(record.value());
+            }
+            long lastOffset = partitionRecords.get(partitionRecords.size() - 1).offset();
+            consumer.commitSync(Collections.singletonMap(partition, new OffsetAndMetadata(lastOffset + 1)));
         }
-        consumer.commitSync();
+
+//        ConsumerRecords<String, CosmEvent> records = consumer.poll(Long.MAX_VALUE);
+//
+//        for (ConsumerRecord<String, CosmEvent> record : records) {
+//            eventConsumer.accept(record.value());
+//        }
+//
+//        consumer.commitSync();
     }
 
     public void stop() {

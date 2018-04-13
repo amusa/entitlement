@@ -13,27 +13,25 @@ import com.cosm.common.util.DateUtil;
 import com.cosm.psc.psc.domain.model.ProductionSharingContract;
 import com.cosm.psc.psc.domain.model.ProductionSharingContractRepository;
 
-
 @Stateless
-@Path("/psc")
-public class ProductionSharingContractService{
-	
-	@Inject
-	private ProductionSharingContractRepository pscRepository;
-     
-	@Inject
-	private ProductionService productionService;
-	
-	@GET
-	@Path("/concession")
+@Path("/concession")
+public class ProductionSharingContractService {
+
+    @Inject
+    private ProductionSharingContractRepository pscRepository;
+
+    @Inject
+    private ProductionService productionService;
+
+    @GET
     @Produces({MediaType.APPLICATION_JSON, MediaType.TEXT_PLAIN})
-	public double concessionRental(@QueryParam("id") String id,
-			@QueryParam("year") Integer year, 
-			@QueryParam("month") Integer month) {
-		
-		ProductionSharingContractId pscId = new ProductionSharingContractId(id);
-		ProductionSharingContract psc = pscRepository.productionSharingContractOfId(pscId);
-    	double concessionRental = 0;
+    public double concessionRental(@QueryParam("id") String id,
+            @QueryParam("year") Integer year,
+            @QueryParam("month") Integer month) {
+
+        ProductionSharingContractId pscId = new ProductionSharingContractId(id);
+        ProductionSharingContract psc = pscRepository.productionSharingContractOfId(pscId);
+        double concessionRental = 0;
 
         if (productionService.isFirstProductionOfYear(pscId, year, month)) {
             concessionRental = psc.getOmlAnnualConcessionRental();
@@ -41,8 +39,8 @@ public class ProductionSharingContractService{
                 concessionRental += psc.getOplTotalConcessionRental();
             }
         }
-        
+
         return concessionRental;
-    }	
-	
+    }
+
 }

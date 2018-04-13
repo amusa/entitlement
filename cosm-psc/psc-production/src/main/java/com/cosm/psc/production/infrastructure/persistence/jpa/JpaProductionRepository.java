@@ -20,10 +20,7 @@ import com.cosm.common.domain.model.FiscalPeriod;
 import com.cosm.common.domain.model.FiscalYear;
 import com.cosm.common.domain.model.OilFieldId;
 import com.cosm.common.domain.model.ProductionSharingContractId;
-import com.cosm.common.event.CrudeProduced;
-import com.cosm.common.event.FiscalPeriodAdapter;
-import com.cosm.common.event.Publisher;
-import com.cosm.common.event.kafka.EventProducer;
+import com.cosm.psc.production.CosmLogger;
 import com.cosm.psc.production.domain.model.Production;
 import com.cosm.psc.production.domain.model.ProductionId;
 import com.cosm.psc.production.domain.model.ProductionRepository;
@@ -31,9 +28,7 @@ import com.cosm.psc.production.domain.model.ProductionRepository;
 @ApplicationScoped
 public class JpaProductionRepository implements ProductionRepository {
 
-	@Inject
-	EventProducer eventProducer;
-
+	@CosmLogger
 	@Inject
 	Logger logger;
 

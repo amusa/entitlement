@@ -7,15 +7,23 @@ import javax.persistence.Embeddable;
 
 @Embeddable
 public class ProductionCostId {
-	private UUID id;
-	
-	public ProductionCostId(String id) {
-		this.id = UUID.fromString(id);
-	}
-	
-	@Column(name="ID")
-	public UUID getId() {
-		return id;
-	}
+
+    private String id;
+
+    public ProductionCostId(){
+        
+    }
+    public ProductionCostId(String id) {
+        this.id = id;
+    }
+
+    @Column(name = "ID")
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
 }

@@ -4,17 +4,20 @@ import org.apache.kafka.common.errors.SerializationException;
 import org.apache.kafka.common.serialization.Deserializer;
 
 import com.cosm.common.event.CosmEvent;
+import com.cosm.psc.entitlement.royalty.util.CosmLogger;
 
 import javax.json.Json;
 import javax.json.JsonObject;
 import java.io.ByteArrayInputStream;
 import java.util.Map;
 import java.util.logging.Logger;
+import javax.inject.Inject;
 
-public class EventDeserializer implements Deserializer<CosmEvent>  {
+public class EventDeserializer implements Deserializer<CosmEvent> {
 
-
-    private static final Logger logger = Logger.getLogger(EventDeserializer.class.getName());
+    @CosmLogger
+    @Inject
+    Logger logger;
 
     @Override
     public void configure(final Map<String, ?> configs, final boolean isKey) {
@@ -37,5 +40,5 @@ public class EventDeserializer implements Deserializer<CosmEvent>  {
     public void close() {
         // nothing to do
     }
-    
+
 }
